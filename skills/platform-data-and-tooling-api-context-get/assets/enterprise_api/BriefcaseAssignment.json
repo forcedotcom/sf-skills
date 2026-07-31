@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "BriefcaseAssignment - Data API",
+  "description": "Represents the assignment of a briefcase definition to selected users and user groups. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BriefcaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the briefcase definition. Label is Briefcase Definition ID.",
+      "required": true
+    },
+    "UserOrGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the user or group requiring access to the briefcase. Label is User or Group ID.",
+      "required": true
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **BriefcaseAssignmentChangeEvent (API version 55.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"BriefcaseAssignment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Briefcase\" nillable=\"true\" minOccurs=\"0\" type=\"ens:BriefcaseDefinition\"/>\n        <element name=\"BriefcaseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserOrGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"UserOrGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "BriefcaseId": {
+      "field_label": "Briefcase Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Briefcase Assignment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserOrGroupId": {
+      "field_label": "User or Group ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

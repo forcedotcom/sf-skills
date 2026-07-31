@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "MetadataPackageVersion - Data API",
+  "description": "Represents a package version (managed or unmanaged) that has been uploaded from the org you’re logged in to.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BuildNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The build number of the version. For example, if you upload two beta versions, they have build numbers 1 and 2. Then, when you upload a non-beta version, the build number is 3. When you upload a new version, the build number resets to 1."
+    },
+    "IsDeprecated": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates whether the package version is deprecated. Available in API version 46.0 and later."
+    },
+    "MajorVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The first number in a package version number. A version number either has an x.y format or an x.y.z format. The x represents the major version, y the minor version, and z the patch version."
+    },
+    "MetadataPackageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character package ID starting with 033."
+    },
+    "MinorVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The second number in a package version number. A version number either has an x.y format or an x.y.z format. The x represents the major version, y the minor version, and z the patch version."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the package version."
+    },
+    "PatchVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The third number in a package version number, if present. A version number either has an x.y format or an x.y.z format. The x represents the major version, y the minor version, and z the patch version."
+    },
+    "ReleaseState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If the package version is a beta version, the value is Beta. Otherwise, the value is Released."
+    }
+  },
+  "usage": "Here are examples of the types of API queries you can perform. This code sample uses the Web Services Connector (WSC).\n\nJava Code Sample**\n\nSuppose you want to push version 3.4.6 of your package to all orgs. Let’s write some code to identify the orgs eligible for the upgrade. This example demonstrates how to generate the list of subscriber orgs eligible to be upgraded to version 3.4.6 of a package.\n\nNext Step**\n\nCreate a push request using PackagePushRequest."
+}

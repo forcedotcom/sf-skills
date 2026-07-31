@@ -1,0 +1,472 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "LiveChatButton - Data API",
+  "description": "Represents a button that allows visitors to request chats with Chat users. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Animation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of animation used when an automated chat invitation appears on-screen. For automated chat invitations only. Available in API version 29.0 and later. Possible values are: Appear Custom Fade Slide"
+    },
+    "AutoGreeting": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The text that is automatically sent from an agent to a visitor when a chat session starts. Note: A greeting message in the AutoGreeting field of the LiveChatButton object overrides individual users’ greeting messages in the AutoGreeting field in the LiveChatUserConfig object."
+    },
+    "ChasitorIdleTimeout": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The amount of time a customer has to respond to an agent message before the chat times out."
+    },
+    "ChasitorIdleTimeoutWarning": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The amount of time a customer has to respond to an agent message before a warning appears and a timer begins a countdown. This value must be shorter than the ChasitorIdleTimeout value. We recommend at least 30 seconds shorter."
+    },
+    "ChatPageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the custom VisualForce page that contains the custom chat window code. This field is a relationship field.",
+      "relationship_name": "ChatPage",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexPage"
+    },
+    "CustomAgentName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The custom name of the agent associated with the button. Available in API version 29.0 and later. Note: A custom agent name in the CustomAgentName field of the LiveChatButton object overrides individual users’ custom agent name in the CustomAgentName field in the LiveChatUserConfig object."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record."
+    },
+    "HasQueue": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether or not to allow queing incoming chat requests until an agent is available. The default value is false."
+    },
+    "InviteEndPosition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The position on screen where an automated chat invitation’s animation ends. Note: You don’t need to select an end position for your automated chat invitation if you use a custom animation. For automated chat invitations only. Available in API version 29.0 and later. Possible values are: Bottom BottomLeft BottomRight Center Left Right Top TopLeft TopRight"
+    },
+    "InviteImageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the static image resource displayed on your automated chat invitation. For automated chat invitations only. Available in API version 29.0 and later. This field is a relationship field.",
+      "relationship_name": "InviteImage",
+      "relationship_type": "Lookup",
+      "refers_to": "StaticResource"
+    },
+    "InviteStartPosition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort , Update",
+      "description": "The position on screen where an automated chat invitation’s animation begins. Note: You don’t need to select a start position for your automated chat invitation if you use a custom animation. For automated chat invitations only. Available in API version 29.0 and later. Possible values are: Bottom BottomLeft BottomLeftBottom BottomLeftLeft BottomRight BottomRightBottom BottomRightRight Left Top Right TopLeft TopLeftLeft TopLeftTop TopRight—Top Right TopRightRight TopRightTop"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "For automated chat invitations, specifies whether an automated chat invitation is active or not. The default value is false."
+    },
+    "IsRoutingFlowEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether routing flow is enabled or not. The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the chat. Possible values are: da—Danish de—German en_US—English es—Spanish es_MX—Spanish (Mexico) fi—Finnish fr—French it—Italian ja—Japanese ko—Korean nl_NL—Dutch no—Norwegian pt_BR—Portuguese (Brazil) ru—Russian sv—Swedish th—Thai zh_CN—Chinese (Simplified) zh_TW—Chinese (Traditional)"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Label for the chat button."
+    },
+    "NumberOfReroutingAttempts": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the number of times a chat request can be rerouted to available agents if all agents reject the chat request."
+    },
+    "OfflineImageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the static image resource that is displayed when the button is offline (inactive). This field is a relationship field.",
+      "relationship_name": "OfflineImage",
+      "relationship_type": "Lookup",
+      "refers_to": "StaticResource"
+    },
+    "OnlineImageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the static image resource that is displayed when the button is online (active). This field is a relationship field.",
+      "relationship_name": "OnlineImage",
+      "relationship_type": "Lookup",
+      "refers_to": "StaticResource"
+    },
+    "OptionsHasChasitorIdleTimeout": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether Customer Time-Out is enabled."
+    },
+    "OptionsHasInviteAfterAccept": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether an automated chat invitation can be sent to a customer after that customer has accepted a prior automated chat invitation (true) or not (false). For automated chat invitations only. Available in API version 29.0 and later."
+    },
+    "OptionsHasInviteAfterReject": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether an automated chat invitation can be sent to a customer after that customer has rejected a prior automated chat invitation (true) or not (false). For automated chat invitations only. Available in API version 29.0 and later."
+    },
+    "OptionsHasRerouteDeclinedRequest": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether a chat request that has been rejected by all available agents should be rerouted to available agents again (true) or not (false)."
+    },
+    "OptionsIsAutoAccept": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether a chat request should be automatically accepted by the agent it’s assigned to (true) or not false). For chat buttons and automated chat invitations with RoutingType set to Most Available or Least Active. Available in API version 30.0 and later."
+    },
+    "OptionsIsInviteAutoRemove": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether an automated chat invitation should be automatically removed from the screen after a certain amount of time (true) or not (false). For automated chat invitations only. Available in API version 29.0 and later."
+    },
+    "OverallQueueLength": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of chat requests allowed to queue."
+    },
+    "PerAgentQueueLength": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of chat requests allowed to queue for each agent with the required skill."
+    },
+    "PostchatPageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the custom VisualForce page displayed when the chat ends. This field is a relationship field.",
+      "relationship_name": "PostchatPage",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexPage"
+    },
+    "PostchatUrl": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The URL the user is directed to after the chat ends."
+    },
+    "PrechatFormPageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the custom VisualForce page displayed before the chat begins. This field is a relationship field.",
+      "relationship_name": "PrechatFormPage",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexPage"
+    },
+    "PrechatFormUrl": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The URL the user is directed to before the chat begins."
+    },
+    "PushTimeout": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of seconds an agent has to answer a chat request before it’s routed to the next available agent."
+    },
+    "QueueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the queue used for this chat button. This field is a relationship field.",
+      "relationship_name": "Queue",
+      "relationship_type": "Lookup",
+      "refers_to": "Group"
+    },
+    "RoutingConfigurationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the routing configuration used for this chat button. This field is a relationship field.",
+      "relationship_name": "RoutingConfiguration",
+      "relationship_type": "Lookup",
+      "refers_to": "QueueRoutingConfig"
+    },
+    "RoutingType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "How chat requests are routed to agents. The values are: Choice—Incoming chat requests are added to the queue in Live Agent in the Salesforce console and are available to any agent with the required skill. Least Active—Incoming chats are routed to the agent with the required skill who has the fewest active chats. Most Available—Incoming chats are routed to the agent with the required skill and the greatest difference between chat capacity and active chat sessions. For example, if Agent A and Agent B each have a chat capacity of five, and Agent A has three active chat sessions while Agent B has one, incoming chats will be routed to Agent B. Omni—Incoming chats are routed using Omni-Channel queues."
+    },
+    "SiteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the site used for loading static resources and custom VisualForce pages. This field is a relationship field.",
+      "relationship_name": "Site",
+      "relationship_type": "Lookup",
+      "refers_to": "Site"
+    },
+    "SkillId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record ID of the skill used to route incoming chat requests. To associate multiple skills with a chat button, reference one skill in the SkillId field and use LiveChatButtonSkill junction objects for the remaining skills. This field is a relationship field.",
+      "relationship_name": "Skill",
+      "relationship_type": "Lookup",
+      "refers_to": "Skill"
+    },
+    "TimeToRemoveInvite": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of seconds an automated invitation stays on-screen before it is automatically removed. For automated chat invitations only. Available in API version 29.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of element to display to customers. Possible values are: Invite—Automated invitation Standard—Chat button"
+    },
+    "WindowLanguage": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language used for standard chat windows. Custom chat windows use the language of the user’s browser. Possible values are: da—Danish de—German en_US—English es—Spanish es_MX—Spanish (Mexico) fi—Finnish fr—French it—Italian ja—Japanese ko—Korean nl_NL—Dutch no—Norwegian pt_BR—Portuguese (Brazil) ru—Russian sv—Swedish th—Thai zh_CN—Chinese (Simplified) zh_TW—Chinese (Traditional)"
+    }
+  },
+  "usage": "Use this object to query and manage chat buttons and automated chat invitations.",
+  "field_reference": {
+    "Animation": {
+      "field_label": "Animation",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AutoGreeting": {
+      "field_label": "Auto Greeting",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "ChasitorIdleTimeout": {
+      "field_label": "Customer Time-Out (seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "ChasitorIdleTimeoutWarning": {
+      "field_label": "Customer Time-Out Warning (seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "ChatPageId": {
+      "field_label": "Visualforce Page ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomAgentName": {
+      "field_label": "Custom Agent Name",
+      "type": "string",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "HasQueue": {
+      "field_label": "Enable queue",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Chat Button ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InviteEndPosition": {
+      "field_label": "End Position",
+      "type": "picklist",
+      "length": "255"
+    },
+    "InviteImageId": {
+      "field_label": "Static Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "InviteStartPosition": {
+      "field_label": "Start Position",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRoutingFlowEnabled": {
+      "field_label": "Use a flow for routing (recommended)",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "NumberOfReroutingAttempts": {
+      "field_label": "Number of Rerouting Attempts",
+      "type": "int",
+      "digits": "9"
+    },
+    "OfflineImageId": {
+      "field_label": "Static Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OnlineImageId": {
+      "field_label": "Static Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OptionsHasChasitorIdleTimeout": {
+      "field_label": "Enable customer timeout",
+      "type": "boolean"
+    },
+    "OptionsHasInviteAfterAccept": {
+      "field_label": "Allow invitation to be triggered again after accepting",
+      "type": "boolean"
+    },
+    "OptionsHasInviteAfterReject": {
+      "field_label": "Allow invitation to be triggered again after rejecting",
+      "type": "boolean"
+    },
+    "OptionsHasRerouteDeclinedRequest": {
+      "field_label": "Reroute Declined Requests",
+      "type": "boolean"
+    },
+    "OptionsIsAutoAccept": {
+      "field_label": "isAutoAccept",
+      "type": "boolean"
+    },
+    "OptionsIsInviteAutoRemove": {
+      "field_label": "Auto Remove Invitation",
+      "type": "boolean"
+    },
+    "OverallQueueLength": {
+      "field_label": "Overall Queue Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "PerAgentQueueLength": {
+      "field_label": "Queue Size Per Agent",
+      "type": "int",
+      "digits": "9"
+    },
+    "PostchatPageId": {
+      "field_label": "Visualforce Page ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PostchatUrl": {
+      "field_label": "Post-Chat URL",
+      "type": "string",
+      "length": "255"
+    },
+    "PrechatFormPageId": {
+      "field_label": "Visualforce Page ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PrechatFormUrl": {
+      "field_label": "Prechat Form URL",
+      "type": "string",
+      "length": "255"
+    },
+    "PushTimeout": {
+      "field_label": "Push Time-Out (seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "QueueId": {
+      "field_label": "Queue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RoutingConfigurationId": {
+      "field_label": "Routing Configuration ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RoutingType": {
+      "field_label": "Routing Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SiteId": {
+      "field_label": "Site ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SkillId": {
+      "field_label": "Skill ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeToRemoveInvite": {
+      "field_label": "Display Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "WindowLanguage": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,8 +1,8 @@
-<!-- Parent: adlc-author/SKILL.md -->
-
 # Feature Validity by Context
 
 > **Key distinction**: Many action metadata properties are valid on **action definitions with targets** (`flow://`, `apex://`) but NOT on **utility actions** (`@utils.transition`).
+>
+> Use this as a companion to `actions-reference.md`, not a replacement.
 
 | Feature | On `@utils.transition` | On action definitions with `target:` | Notes |
 |---------|------------------------|---------------------------------------|-------|

@@ -1,0 +1,151 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionPlanItem - Data API",
+  "description": "Represents the instance of an action plan item.This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionPlanId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the action plan that this item belongs to."
+    },
+    "ActionPlanTemplateItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the action plan template item this item was created from."
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this action plan item is locked or not. The default value is false."
+    },
+    "IsRequired": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this action plan item is required or not."
+    },
+    "ItemEntityType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of object used with the item. This field is available in API version 61.0 and later. Possible values are: AssessmentTask—Assessment Task DocumentChecklistItem—Document Checklist Item Event-Available only with sales action plans in API version 63.0 and later with the Sales Action Plans add-on license and the Sales Action Plans default permission set. GenericVisitTask—Generic Visit Task OtherComponentTask—Other Component Task RecordAction SignatureTask—Signature Task Task"
+    },
+    "ItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the record created by this action plan item. This field is a polymorphic relationship field.",
+      "relationship_name": "Item",
+      "refers_to": "DocumentChecklistItem, Event, RecordAction, Task"
+    },
+    "ItemState": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The action plan item’s work state. Possible values are: Canceled Completed Deleted In Progress Pending"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of this action plan item."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **ActionPlanItemChangeEvent**: Change events are available for the object.\n- **ActionPlanItemFeed**: Feed tracking is available for the object.\n- **ActionPlanItemHistory**: History is available for tracked fields of the object.\n- **ActionPlanItemOwnerSharingRule**: Sharing rules are available for the object.\n- **ActionPlanItemShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ActionPlanId": {
+      "field_label": "Action Plan ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActionPlanTemplateItemId": {
+      "field_label": "Action Plan Template Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DependencyStatus": {
+      "field_label": "Dependency Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DisplayOrder": {
+      "field_label": "Display Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Action Plan Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRequired": {
+      "field_label": "Required",
+      "type": "boolean"
+    },
+    "ItemEntityType": {
+      "field_label": "Item Entity Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ItemId": {
+      "field_label": "Action Plan Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ItemState": {
+      "field_label": "Action Plan Item State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Action Plan Item Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

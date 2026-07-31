@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsQualityGateRuleResult - Data API",
+  "description": "Stores the outcome of an individual quality gate rule evaluation performed during a quality gate assessment. It records the execution status of a specific quality gate rule and associates the result with the overall quality gate evaluation, enabling detailed tracking, monitoring, and reporting of quality gate compliance within the DevOps process. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "DevopsQualityGateResultId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the quality gate result associated with this rule result record.",
+      "relationship_name": "DevopsQualityGateResult",
+      "refers_to": "DevopsQualityGateResult"
+    },
+    "DevopsQualityGateRuleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "References the quality gate rule evaluated for this result record.",
+      "relationship_name": "DevopsQualityGateRule",
+      "relationship_type": "Parent-detail",
+      "refers_to": "DevopsQualityGateRule (the parent object)"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, such as through a related record or list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique identifier for the quality gate rule result record."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the outcome of the quality gate rule evaluation. Possible values are: Error Failed InProgress Passed The default value is Passed."
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "FieldMapping - Tooling API",
+  "description": "Represents a mapping between fields in an object in the org and fields in a data service. A data service uses two separate field maps: one controls how the data service matches records in an object, and the other controls how the data service adds or updates data for an existing record.",
+  "supported_soap_calls": "`query()`, `search()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A unique name for this FieldMapping. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Provides a globally unique identifier for the FieldMapping, which prevents conflicts with FieldMapping objects from other packages that have the same MasterLabel. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "FieldMappingClientId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A foreign key reference to a CleanRule that uses this FieldMapping."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the FieldMapping. The following values are supported: Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Master label for this object. This display value is the internal label that is not translated."
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "An object that’s acted on by this FieldMapping. The set of picklist values includes all the standard and custom object types in your org. However, if you specify an object that the data service doesn’t support, the API call returns an error."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FieldMapping\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"DeveloperName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMappingClient\" minOccurs=\"0\" type=\"ens:CleanRule\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMappingClientId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMappings\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Language\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"MasterLabel\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SobjectType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ShippingRateGroup - Data API",
+  "description": "Available shipping rates based on shipping destination. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the shipping rate group."
+    },
+    "ShippingProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the shipping profile. This field is a relationship field.",
+      "relationship_name": "ShippingProfile",
+      "relationship_type": "Lookup",
+      "refers_to": "ShippingConfigurationSet"
+    }
+  },
+  "special_access_rules": "The ShippingRateGroup object is available only if the B2B Commerce or D2C Commerce license is enabled.\n\nThe ShippingRateGroup object is available only if\n         the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Shipping Rate Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Shipping Rate Group Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ShippingProfileId": {
+      "field_label": "Shipping Configuration Set ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

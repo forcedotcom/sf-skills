@@ -1,0 +1,150 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "SurveyVersion - Data API",
+  "description": "Represents a version of a survey.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BrandingSetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the branding set associated with the survey version."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The description of this survey version."
+    },
+    "IsTemplate": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the survey version is a template. Template surveys are automatically shared with all users in your Salesforce org."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the current user last viewed a record related to the survey version."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed the survey version."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the survey that appears in the UI."
+    },
+    "SurveyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the survey associated with the survey version."
+    },
+    "SurveyStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the survey. Possible values include: Active Draft Obsolete InvalidDraft"
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The version number of the survey."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SurveyVersionChangeEvent**: Change events are available for the object.",
+  "field_reference": {
+    "BrandingSetId": {
+      "field_label": "Branding Set ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "65535"
+    },
+    "Id": {
+      "field_label": "Survey Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsTemplate": {
+      "field_label": "Template",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SurveyId": {
+      "field_label": "Survey ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SurveyStatus": {
+      "field_label": "Survey Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SurveyStyleSetId": {
+      "field_label": "Survey Style Set ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

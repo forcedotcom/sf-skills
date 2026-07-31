@@ -1,0 +1,34 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "GenAiPlannerFunctionDef - Data API",
+  "description": "Represents a relationship between the agent planner service and agent actions. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "PlannerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "This field is a relationship field.",
+      "relationship_name": "Planner",
+      "relationship_type": "Lookup",
+      "refers_to": "GenAiPlannerDefinition"
+    },
+    "Plugin": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A set of actions that contextualize the agent planner service."
+    }
+  },
+  "special_access_rules": "To access this object, Agents must be enabled in your org.\n\nTo access this object, Agents must be enabled in\n         your org."
+}

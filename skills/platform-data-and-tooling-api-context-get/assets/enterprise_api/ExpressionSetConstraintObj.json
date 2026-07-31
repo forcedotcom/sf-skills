@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExpressionSetConstraintObj - Data API",
+  "description": "Represents the association between a Product object and the constraint model tags defined in a given constraint model. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ConstraintModelTag": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The product tag that is defined in the constraint model, for example, Laptop."
+    },
+    "ConstraintModelTagType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of the product tag that is defined in the constraint model. Possible values are: Port Type The default value is Type."
+    },
+    "ExpressionSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The expression set associated with the expression set constraint object. This field is a relationship field.",
+      "relationship_name": "ExpressionSet",
+      "refers_to": "ExpressionSet"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user accessed this record or list view (LastReferencedDate) but didn’t view it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the expression set constraint."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "For internal use only. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ReferenceObjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The object associated with the expression set constraint object. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceObject",
+      "refers_to": "Product2, ProductClassification, ProductRelatedComponent"
+    }
+  },
+  "special_access_rules": "This object is available in orgs where Revenue Cloud is enabled."
+}

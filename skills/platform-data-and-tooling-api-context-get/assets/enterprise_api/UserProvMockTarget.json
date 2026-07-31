@@ -1,0 +1,122 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserProvMockTarget - Data API",
+  "description": "Represents an entity for testing user data before committing the data to a third-party system for user provisioning.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ExternalEmail": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email address as stored in the target system for the associated user account."
+    },
+    "ExternalFirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The first name as stored in the target system for the associated user account."
+    },
+    "ExternalLastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The last name as stored in the target system for the associated user account."
+    },
+    "ExternalUserId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The unique identifier for the user as stored in the target system."
+    },
+    "ExternalUsername": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The username as stored in the target system for the associated user account."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The unique name for this object."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The user ID of the owner of this object—typically a Salesforce administrator."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserProvMockTarget\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalFirstName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalLastName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalUserId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalUsername\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalEmail": {
+      "field_label": "External Email",
+      "type": "string",
+      "length": "150"
+    },
+    "ExternalFirstName": {
+      "field_label": "External First Name",
+      "type": "string",
+      "length": "150"
+    },
+    "ExternalLastName": {
+      "field_label": "External Last Name",
+      "type": "string",
+      "length": "150"
+    },
+    "ExternalUserId": {
+      "field_label": "External User Id",
+      "type": "string",
+      "length": "150"
+    },
+    "ExternalUsername": {
+      "field_label": "External Username",
+      "type": "string",
+      "length": "150"
+    },
+    "Id": {
+      "field_label": "User Provisioning Mock Target ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

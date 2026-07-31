@@ -1,0 +1,179 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "FrcstCustmzOwnerAdjustment - Data API",
+  "description": "Represents an individual forecast user’s adjustment of their own consumption forecast. Available in API version 63.0 and later. This object is different from the ForecastingOwnerAdjustment object, which represents users’ adjustments of their pipeline forecasts.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustedAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The revenue amount of an individual forecast item, after an adjustment."
+    },
+    "AdjustedQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The quantity amount of an individual forecast item, after an adjustment."
+    },
+    "AdjustmentNote": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A text note providing information about the adjustment. The maximum length is 255 characters. This field doesn’t appear in reports."
+    },
+    "CustomDimension": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the additional dimension of the forecasting adjustment. For example, account ID, use case ID. Any data imported from an external source must be exactly 15 characters."
+    },
+    "ForecastingCustomCategoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the forecasting custom category. This field is a relationship field.",
+      "relationship_name": "ForecastingCustomCategory",
+      "refers_to": "ForecastingCustomCategory"
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the related forecasting type. This field is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "refers_to": "ForecastingType"
+    },
+    "IsAmount": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, then the adjustment is made in a revenue amount. If false, IsQuantity must be set to true. The default value is false."
+    },
+    "IsQuantity": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the adjustment is made in a quantity amount. If false, IsAmount must be set to true. The default value is false."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the forecast owner. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "PeriodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Period ID for the adjustment. This field is a relationship field.",
+      "relationship_name": "Period",
+      "refers_to": "Period"
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Reserved for future use.",
+      "description": "Reserved for future use."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **FrcstCustmzOwnerAdjustmentChangeEvent**: Change events are available for the object.\n- **FrcstCustmzOwnerAdjustmentFeed**: Feed tracking is available for the object.\n- **FrcstCustmzOwnerAdjustmentHistory**: History is available for tracked fields of the object.\n- **FrcstCustmzOwnerAdjustmentOwnerSharingRule**: Sharing rules are available for the object.\n- **FrcstCustmzOwnerAdjustmentShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AdjustedAmount": {
+      "field_label": "Adjusted Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "AdjustedQuantity": {
+      "field_label": "Adjusted Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "AdjustmentNote": {
+      "field_label": "Adjustment Note",
+      "type": "textarea",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomDimension": {
+      "field_label": "Custom Dimension",
+      "type": "string",
+      "length": "40"
+    },
+    "ForecastingCustomCategoryId": {
+      "field_label": "Forecasting Custom Category ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Customized Owner Adjustment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAmount": {
+      "field_label": "Is Amount",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsQuantity": {
+      "field_label": "Is Quantity",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PeriodId": {
+      "field_label": "Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

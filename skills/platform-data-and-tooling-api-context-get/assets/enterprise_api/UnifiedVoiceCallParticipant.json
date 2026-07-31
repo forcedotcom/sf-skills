@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "UnifiedVoiceCallParticipant - Data API",
+  "description": "Represents a participant in a voice call. This object is available for reports and dashboards in the Winter ’24 release and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the voice call the person is participating in. This field is a relationship field.",
+      "relationship_name": "Activity",
+      "relationship_type": "Lookup",
+      "refers_to": "UnifiedVoiceCall"
+    },
+    "ChannelAddress": {
+      "type": "string",
+      "properties": "Filter, Nillable",
+      "description": "The phone number of the participant. The phone number is captured at the time of the communication; it doesn’t change if the contact’s phone number is updated later."
+    },
+    "ListenRatio": {
+      "type": "double",
+      "properties": "Filter, Nillable",
+      "description": "Ratio of time the participant was listening versus talking in the voice call."
+    },
+    "ParticipantType": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist",
+      "description": "The participant’s role in the activity. Possible values are: AssignedTo Attendee BCC CC From OptionalAttendee Organizer To"
+    },
+    "PersonId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the person participating in the voice call. This field is a polymorphic relationship field.",
+      "relationship_name": "Person",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead, User"
+    },
+    "TalkRatio": {
+      "type": "double",
+      "properties": "Filter, Nillable",
+      "description": "Ratio of time the participant was talking versus listening in the voice call."
+    }
+  },
+  "field_reference": {
+    "ActivityId": {
+      "field_label": "Unified Voice Call ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChannelAddress": {
+      "field_label": "Email Address or Phone Number",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Unified Voice Call Participant ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ListenRatio": {
+      "field_label": "Listen Ratio",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ParticipantType": {
+      "field_label": "Participant Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PersonId": {
+      "field_label": "Person ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TalkRatio": {
+      "field_label": "Talk Ratio",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

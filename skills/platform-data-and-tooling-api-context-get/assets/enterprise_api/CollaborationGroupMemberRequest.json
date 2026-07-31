@@ -1,0 +1,104 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CollaborationGroupMemberRequest - Data API",
+  "description": "Represents a request to join a private Chatter group. This object is available in API version 21.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CollaborationGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the private Chatter group. This is a relationship field.",
+      "relationship_name": "CollaborationGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "CollaborationGroup"
+    },
+    "RequesterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the user requesting to join the group; must be the ID of the context user. This is a relationship field.",
+      "relationship_name": "Requester",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ResponseMessage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Optional message to be included in the notification email when Status is Declined."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the request. Available values are: Accepted Declined Pending"
+    }
+  },
+  "usage": "This object represents a request to join a private Chatter group, and can be used to accept or decline requests to join private groups you own or manage. On create, an email is sent to the owner and managers of the private group to be accepted or declined. When the Status is Accepted or Declined, an email is sent to notify the requester. When the Status is Declined, a ResponseMessage is optionally included to provide additional details.\n\nNote the following when working with requests:\n\nUsers with the “Modify All Data” or “View All Data”\n            permission can view records for all groups, regardless of membership.\n\nA user can be a member of 300 groups. Requests to join groups count against this\n            limit.\n\ncan't be specified on create.\n\nYou can only update a request when the\n\nYou can't delete or update a request with a",
+  "wsdl_segment": "```xml\n<complexType name=\"CollaborationGroupMemberRequest\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CollaborationGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CollaborationGroup\"/>\n        <element name=\"CollaborationGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Requester\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"RequesterId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ResponseMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CollaborationGroupId": {
+      "field_label": "CollaborationGroup ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Group Member Request Id",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RequesterId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ResponseMessage": {
+      "field_label": "Response Message",
+      "type": "string",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

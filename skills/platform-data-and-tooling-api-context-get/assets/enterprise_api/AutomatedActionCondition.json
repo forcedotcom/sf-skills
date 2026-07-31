@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "AutomatedActionCondition - Data API",
+  "description": "Represents the logical operator details for evaluating conditions in an automated action. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AutomatedActionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the automated action. This field is a relationship field.",
+      "relationship_name": "AutomatedAction",
+      "relationship_type": "Lookup",
+      "refers_to": "AutomatedAction"
+    },
+    "ConditionNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Reference number of the condition containing advanced filter logic."
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action condition record is locked or not. The default value is false."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action condition record can be edited or not. The default value is false."
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The logical operator for this condition. Possible values are: Contains EndsWith Equal GreaterThan GreaterThanOrEqual IsChanged IsNull LessThan LessThanOrEqual NotEqual StartsWith"
+    },
+    "ReferenceField": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The field to use for this condition."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of condition. Possible values are: ExtraFilterCondition PrimaryFilterCondition"
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The value to compare to the ReferenceField."
+    }
+  }
+}

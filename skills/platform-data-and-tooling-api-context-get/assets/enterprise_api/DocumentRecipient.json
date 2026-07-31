@@ -1,0 +1,246 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "DocumentRecipient - Data API",
+  "description": "Connects a Service Report to a Digital Signature. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DigitalSignatureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Digital Signature to be used on the Service Report. This field is a relationship field.",
+      "relationship_name": "DigitalSignature",
+      "relationship_type": "Lookup",
+      "refers_to": "DigitalSignature"
+    },
+    "DigitalSignatureUrl": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Link to request signature from Experience Cloud site."
+    },
+    "DocumentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The document sent to the recipient. This field is a polymorphic relationship field.",
+      "relationship_name": "Document",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceReport"
+    },
+    "DocumentRecipient": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Number automatically assigned to a new record."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of this object. ID of the creator of this object. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "QuoteDocumentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The quote document sent to the recipient. This field is a relationship field.",
+      "relationship_name": "QuoteDocument",
+      "refers_to": "QuoteDocument"
+    },
+    "RecipientId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The recipient to sign the document. This field is a polymorphic relationship field.",
+      "relationship_name": "Recipient",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, User"
+    },
+    "SignatureIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A unique identifier that associates DocumentRecipient with a signature Lightning web component (LWC) on the report page layout, telling you where on the report the signature goes."
+    },
+    "SignatureStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the signature. The default value is Completed. Possible values are: Completed Skipped"
+    },
+    "SignatureStatusReason": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "An explanation for the signature status. For example, a reason why the signature was skipped."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the document recipient record. Possible values are: Completed Declined Delivered None Sent The default value is None."
+    },
+    "StatusReason": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The final status reason."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **DocumentRecipientFeed**: Feed tracking is available for the object.\n- **DocumentRecipientOwnerSharingRule**: Sharing rules are available for the object.\n- **DocumentRecipientShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeliveredDateTime": {
+      "field_label": "Delivered Date Time",
+      "type": "datetime"
+    },
+    "DigitalSignatureId": {
+      "field_label": "Digital Signature ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DigitalSignatureUrl": {
+      "field_label": "Digital Signature URL",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "DocumentAccessKey": {
+      "field_label": "Document Access Key",
+      "type": "string",
+      "length": "80"
+    },
+    "DocumentId": {
+      "field_label": "Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DocumentRecipient": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Email": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "FinalStatusDateTime": {
+      "field_label": "Final Status Date Time",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Document Recipient ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalName": {
+      "field_label": "Legal Name",
+      "type": "string",
+      "length": "255"
+    },
+    "LocaleCode": {
+      "field_label": "Locale Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecipientId": {
+      "field_label": "Recipient ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecipientName": {
+      "field_label": "Recipient Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RecipientSequence": {
+      "field_label": "Recipient Sequence",
+      "type": "int",
+      "digits": "9"
+    },
+    "RoutingOrder": {
+      "field_label": "Routing Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StatusReason": {
+      "field_label": "Status Reason",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "TestSuiteMembership - Data API",
+  "description": "Associates an Apex class with an ApexTestSuite. This object is available in API version 36.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The Apex class whose tests are to be executed. This is a relationship field. Relationship Name ApexClass Relationship Type Lookup Refers To ApexClass"
+    },
+    "ApexTestSuiteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The test suite to which the Apex class is assigned. This is a relationship field. Relationship Name ApexTestSuite Relationship Type Lookup Refers To ApexTestSuite"
+    }
+  },
+  "special_access_rules": "In API version 49.0 and later, users must have the View Setup and Configuration permission to access this object.",
+  "usage": "Insert a TestSuiteMembership object using an API call to associate an Apex class with an ApexTestSuite object. (ApexTestSuite and TestSuiteMembership aren’t editable through Apex DML.) To remove the class from the test suite, delete the TestSuiteMembership object. If you delete an Apex test class or test suite, all TestSuiteMembership objects that contain that class or suite are deleted.\n\nThe\n                following SOQL query returns the membership object that relates this Apex class to\n                this test\n                suite.\n\nSELECT Id FROM TestSuiteMembership WHERE ApexClassId = '01pD0000000Fhy9IAC'\n\nAND ApexTestSuiteId = '05FD00000004CDBMA2'",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"TestSuiteMembership\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApexClass\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"ApexClassId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ApexTestSuite\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexTestSuite\"/>\n        <element name=\"ApexTestSuiteId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApexClassId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ApexTestSuiteId": {
+      "field_label": "Apex Test Suite ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Test Suite Membership ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

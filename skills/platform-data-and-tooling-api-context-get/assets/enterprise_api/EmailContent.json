@@ -1,0 +1,320 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "EmailContent - Data API",
+  "description": "Represents a marketing email asset for use with Account Engagement. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ClickThroughRate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of visitors who click links contained in emails delivered (sent minus bounces) to them. Multiple clicks for a same link are counted."
+    },
+    "ClickToOpenRatio": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The number of unique clicks divided by unique HTML opens."
+    },
+    "DeliveryRate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of the emails that were delivered compared to the number that bounced (soft and hard). Note: this data includes emails that were delivered to the recipient's spam folder."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the email content, for example, Promotion Mass Mailing."
+    },
+    "HtmlBody": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The body of the email in HTML format. The field is read-only."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp that indicates when the current user last viewed the record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, the record could have been referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the email asset."
+    },
+    "OpenRate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of unique HTML opens compared to the total number of emails delivered (sent minus bounces)."
+    },
+    "OptOutRate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of users that have opted out compared to the total number of emails sent."
+    },
+    "SpamComplaintRate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of spam complaints compared to the total number emails sent."
+    },
+    "Subject": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Content of the subject line."
+    },
+    "TemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The Email Template field is mostly read-only. You can populate the Email Template field only during record create to prevent overwriting data on the email content record."
+    },
+    "TextBody": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The body of the email in plain text format. The character limit is 384, 000."
+    },
+    "TotalDelivered": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of emails minus hard and soft bounces. Note: this data includes emails that were delivered to the recipient's spam folder."
+    },
+    "TotalHardBounced": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The total number of emails that permanently returned to the sender because the address is invalid. A hard bounce can occur because the domain name doesn't exist or because the recipient is unknown."
+    },
+    "TotalOpens": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The total number of times a prospect’s email client loaded the images in the HTML version of the email. We also record an open if the prospect clicks a link within the HTML or text email without downloading images. A click indicates that they viewed the message. Some email clients (Outlook, Apple Mail, Thunderbird) do not display images by default. Account Engagement counts an open each time the images load."
+    },
+    "TotalSent": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Read-only field. The total number of list emails sent, including bounced, opted-out, and invalid To: addresses."
+    },
+    "TotalSoftBounced": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Read-only field. The total number of times a recipient’s mail server acknowledged the email, but returned it to the sender. Sometimes it is because the recipient's mailbox is full or the mail server is temporarily unavailable. After 5 soft bounces, Account Engagement opts the prospect out of emails."
+    },
+    "TotalSpamComplaints": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Read-only field. The total number of prospects that reported the email as spam."
+    },
+    "TotalTrackedLinkClicks": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Read-only field. The number of times prospects clicked a link in the email."
+    },
+    "UniqueClickThroughRate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read-only field. The percentage of visitors who clicked a link contained in an email"
+    },
+    "UniqueOpens": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Read-only field. The number of prospects who loaded the images in the HTML version of the email. The Unique Opens category counts each recipient only one time, even if the prospect loaded images more than once."
+    },
+    "UniqueOptOuts": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Read-only field. The total number of prospects that have clicked the link to unsubscribe or opted out of all emails in the Email Preference Center. They are removed from future email sends."
+    },
+    "UniqueTrackedLinkClicks": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Read-only field. The number of times a prospect clicked a link in the email. This metric doesn’t include multiple clicks of the same link."
+    }
+  },
+  "special_access_rules": "EmailContent is only available for orgs that use Account Engagement. The Manage Email Content user permission is required. Users also need the CRM User, Sales, or Service User permission set. EmailContent isn’t available for custom portal or guest users.",
+  "field_reference": {
+    "ClickThroughRate": {
+      "field_label": "Total Click Through Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "ClickToOpenRatio": {
+      "field_label": "Click to Open Ratio",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeliveryRate": {
+      "field_label": "Delivery Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "HtmlBody": {
+      "field_label": "HTML Body",
+      "type": "textarea",
+      "length": "384000"
+    },
+    "Id": {
+      "field_label": "Email Content ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ManagedContentId": {
+      "field_label": "Managed Content ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OpenRate": {
+      "field_label": "Open Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "OptOutRate": {
+      "field_label": "Opt Out Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "SpamComplaintRate": {
+      "field_label": "Spam Complaint Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "textarea",
+      "length": "3000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TextBody": {
+      "field_label": "Text Body",
+      "type": "textarea",
+      "length": "384000"
+    },
+    "TotalDelivered": {
+      "field_label": "Total Delivered",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalHardBounced": {
+      "field_label": "Total Hard Bounces",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalOpens": {
+      "field_label": "Total Opens",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalSent": {
+      "field_label": "Total Sent",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalSoftBounced": {
+      "field_label": "Total Soft Bounces",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalSpamComplaints": {
+      "field_label": "Total Spam Complaints",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalTrackedLinkClicks": {
+      "field_label": "Total Clicks",
+      "type": "int",
+      "digits": "9"
+    },
+    "UniqueClickThroughRate": {
+      "field_label": "Unique Click Through Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "UniqueOpens": {
+      "field_label": "Unique Opens",
+      "type": "int",
+      "digits": "9"
+    },
+    "UniqueOptOuts": {
+      "field_label": "Unique Opt Outs",
+      "type": "int",
+      "digits": "9"
+    },
+    "UniqueTrackedLinkClicks": {
+      "field_label": "Unique Clicks",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "WorkOrderLineItemStatus - Data API",
+  "description": "Represents a possible status of a work order line item in field service.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The API name of the status value."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the status value is the default status on work orders. Only one status value can be the default."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the picklist value that appears in the UI."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value’s position in the drop-down list of values in the UI."
+    },
+    "StatusCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status category that the value corresponds to. The Status Category field has seven values which are identical to the default Status values."
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "usage": "The Status field on work order line items comes with the following values: The WorkOrderLineItemStatus object corresponds to the Status field. Adding a value to the Status field—for example, Canceled By Customer—creates a work order line item status record, and vice versa.\n\nThe Status field on work order line items comes with the following values:\n\nNew—Line item was created, but there hasn’t yet been any\n\t\t\t\t\t\tactivity.\n\nIn Progress—Work has begun.\n\nOn Hold—Work is paused.\n\nCompleted—Work is complete.\n\nCannot Complete—Work could not be completed.\n\nClosed—All work and associated activity is complete.\n\nCanceled—Work is canceled, typically before any work began.\n\nThe WorkOrderLineItemStatus object corresponds to the Status field. Adding a\n\t\t\t\tvalue to the Status field—for example, Canceled By Customer—creates a\n\t\t\t\twork order line item status record, and vice versa.\n\nWork order line items also\n\t\t\t\t\tcome with a StatusCategory field whose values are identical to the default\n\t\t\t\t\tStatus values. If you create custom Status values, you must indicate which\n\t\t\t\t\tcategory it belongs to. For example, if you create a\n\nCustomer\n\t\t\t\t\t\tAbsent\n\nvalue, you may decide that it belongs in the\n\nCannot Complete\n\ncategory. To learn which processes\n\t\t\t\t\treference StatusCategory, see\n\nHow are Status Categories\n\t\t\t\t\t\tUsed?",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"WorkOrderLineItemStatus\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StatusCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Work Order Line Item Status Value ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Is Default",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Master Label",
+      "type": "string",
+      "length": "255"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "StatusCode": {
+      "field_label": "Status Code",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

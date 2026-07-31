@@ -1,0 +1,371 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "MessagingChannel - Data API",
+  "description": "Represents a communication channel that an end user can use to send a message to an agent. A communication channel can be an SMS number, a Facebook page, or another supported messaging channel. This object is available in API version 40.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BusinessHoursId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The operating hours for your business, when agents are available. Available only in orgs that use Einstein Bots. This is a relationship field.",
+      "relationship_name": "BusinessHours",
+      "relationship_type": "Lookup",
+      "refers_to": "BusinessHours"
+    },
+    "ChannelAddressIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A UUID that identifies a deployed messaging channel. This identifier is unique across orgs, so a channel with the same MessagingPlatformKey in a sandbox and production will have a different ChannelAddressIdentifier for each. Available in API version 59.0 and later."
+    },
+    "ChannelDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The associated conversation channel definition, which is used only in Bring Your Own Channel for Messaging and Bring Your Own Channel for CCaaS. Available in API version 58.0 and later. This field is a relationship field.",
+      "relationship_name": "ChannelDefinition",
+      "refers_to": "ConversationChannelDefinition"
+    },
+    "ConsentType": {
+      "type": "picklist",
+      "properties": "Create, defaultedOnCreate, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of consent, or opt-in, that is required to message users on this channel. This field is available in API version 48.0 and later. Possible values are: DoubleOptIn ExplicitOptIn ImplicitOptIn (default value) The property defaultedOnCreate has been removed in API version 51.0 and later. Now the consent type is defaulted to ImplicitOptIn when the consent type isn’t set on create only for channels that support consents."
+    },
+    "ConversationEndResponse": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Automated response to the customer when the agent ends the conversation. (Optional)"
+    },
+    "CriticalWaitTime": {
+      "description": "Reserved for future use. This field has been deprecated as of API version 52.0."
+    },
+    "Description": {
+      "description": "Reserved for future use."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The developer name for the messaging channel. This value is a concatenation of the messaging platform key and the message type."
+    },
+    "DoubleOptInPrompt": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Automated response to the end user to prompt them to doubly opt in to receiving messages. Available in API version 48.0 and later."
+    },
+    "EngagedResponse": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Automated response to the customer when the conversation is accepted by the agent. (Optional)"
+    },
+    "InitialResponse": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "First automated response to the customer for a new conversation. (Optional)"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether a channel is active and can receive messages."
+    },
+    "IsAuthenticated": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether a user is authenticated to a voice assistant. The org permission Live Message Voice is required to access and update this field. Available in API version 44.0 and later."
+    },
+    "IsoCountryCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Two-letter ISO 3166-1 alpha-2 code for the country that the phone number is associated with. For example, the code for United States is US. Available in API version 44.0 and later."
+    },
+    "IsRequireDoubleOptIn": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether double opt-in is required (true) or not (false) for this Messaging channel. Available in API version 48.0 and later."
+    },
+    "IsRestrictedToBusinessHours": {
+      "description": "Reserved for future use."
+    },
+    "IsUserMatchByExternalIdOnly": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether to restrict matching on customer by external ID only (and not use the full name). This field has been deprecated as of API version 52.0."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Reserved for future use."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Unique name for the MessagingChannel."
+    },
+    "MessageType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Type of message. Possible values are: AppleBusinessChat—Represents Apple Messages for Business. Custom—Represents Bring Your Own Channel for Messaging or Bring Your Own Channel for CCaaS. Available in API version 58.0 and later. EmbeddedMessaging—Represents Enhanced Chat. Available in API version 50.0 and later. Facebook Phone PSTNVoice—Represents an Agentforce Voice channel that uses PSTN. Available in API version 65.0 and later. SIPVoice—Represents an Agentforce Voice channel that uses SIP. Available in API version 65.0 and later. Text Voice WhatsApp"
+    },
+    "MessagingPlatformKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Unique key for a channel that the end user can message or call based on the MessageType. In PSTNVoice, SMS, WhatsApp, and LINE channels, the platform key is the phone number associated with this channel. In Facebook Messenger channels, the platform key is the Facebook page ID associated with this channel. In Apple Messages for Business channels, the platform key is the Apple Messages identifier. In Enhanced Chat, the platform key is identical to the Channel Address Identifier."
+    },
+    "OfflineAgentsResponse": {
+      "description": "Reserved for future use."
+    },
+    "OptInPrompt": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Automated response to the end user to prompt them to explicitly opt in to receiving messages. Available in API version 49.0 and earlier."
+    },
+    "OptInResponse": {
+      "type": "textarea",
+      "properties": "Create, Defaulted on create, Nillable, Update",
+      "description": "Automated response to the end user when they opt in to messaging. Available in API versions 48.0 and 49.0. Use the OptInConfirmation field of the MsgChannelLanguageKeyword object instead."
+    },
+    "OptionsIdentifyEndUserLanguage": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Auto-populates the Language field for this channel’s messaging users if their locale is known. Supported for Enhanced Chat and Apple Messages for Business only."
+    },
+    "OptOutResponse": {
+      "type": "textarea",
+      "properties": "Create, Defaulted on create, Nillable, Update",
+      "description": "Automated response to the end user when they opt out of messaging. Available in API version 48.0 only. Use the OptOutConfirmation field of the MsgChannelLanguageKeyword object instead."
+    },
+    "OutsideBusinessHoursResponse": {
+      "description": "Reserved for future use."
+    },
+    "PlatformType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether the channel is Standard or Enhanced. When a standard SMS or Facebook Messenger channel is upgraded, the PlatformType changes from Standard to Enhanced. When a standard WhatsApp channel is upgraded, the original channel’s PlatformType remains Standard and a new channel is created with a PlatformType of Enhanced. Enhanced Chat channels have a PlatformType of Enhanced."
+    },
+    "RoutingConfigurationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies which Omni-Channel routing configuration to use. This field is required when RoutingType is OmniSkills. To learn more, see Create Routing Configurations."
+    },
+    "RoutingType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Type used to support Omni-Channel’s different routing methods. OmniQueue (queue-based routing) OmniSkills (skills-based routing) When this value isn’t set, OmniQueue is used."
+    },
+    "SessionHandler": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The queue or Omni-Channel flow that the channel's messaging sessions are routed to. Available in API version 51.0 and later."
+    },
+    "TargetQueueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Queue in which incoming conversations are placed while waiting for an agent to accept. This is a relationship field.",
+      "relationship_name": "TargetQueue",
+      "relationship_type": "Lookup",
+      "refers_to": "Group"
+    },
+    "TargetUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Messaging User or agent for the conversation. Available in API version 50.0 and earlier."
+    }
+  },
+  "usage": "While third-party messaging channels can be created via Apex, we recommend creating channels via the Messaging Settings page in Setup. Channels created via Apex may not work and can't be deleted. In enhanced WhatsApp, Facebook Messenger, Apple Messages for Business, and LINE channels, the flow of a channel's messaging traffic is controlled by an associated MessagingChannelUsage record. The MessagingChannelUsage determines whether the channel is active or deactivated.\n\nWhile third-party messaging channels can be created via Apex, we recommend creating channels via the Messaging Settings page in Setup. Channels created via Apex may not work and can't be deleted.\n\nIn enhanced WhatsApp, Facebook Messenger, Apple Messages for Business, and LINE channels, the flow of a channel's messaging traffic is controlled by an associated MessagingChannelUsage record. The MessagingChannelUsage determines whether the channel is active or deactivated.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"MessagingChannel\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"BusinessHours\" nillable=\"true\" minOccurs=\"0\" type=\"ens:BusinessHours\"/>\n        <element name=\"BusinessHoursId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ChannelAddressIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ConsentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ConversationEndResponse\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DefaultResponse\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DoubleOptInPrompt\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EngagedResponse\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FallbackQueue\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Group\"/>\n        <element name=\"FallbackQueueId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"InitialResponse\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsLinkedRecordOpenedAsSubTab\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRequireDoubleOptIn\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRestrictedToBusinessHours\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsoCountryCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LinkingPreference\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessageType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessagingChannels\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MessagingPlatformKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MsgChannelAvailabilities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MsgChannelLanguageKeywords\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OfflineAgentsResponse\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptInPrompt\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OutsideBusinessHoursResponse\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PlatformType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RoutingType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SessionHandler\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"SessionHandlerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SetupEntityAccessItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TargetQueue\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Group\"/>\n        <element name=\"TargetQueueId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "BusinessHoursId": {
+      "field_label": "Business Hours ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChannelAddressIdentifier": {
+      "field_label": "Channel Address Identifier",
+      "type": "string",
+      "length": "36"
+    },
+    "ChannelDefinitionId": {
+      "field_label": "Conversation Channel Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConsentType": {
+      "field_label": "Consent Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ConversationEndResponse": {
+      "field_label": "End Conversation",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DefaultResponse": {
+      "field_label": "Default Response Text",
+      "type": "textarea",
+      "length": "4096"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DoubleOptInPrompt": {
+      "field_label": "Double Opt-In Prompt",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "EngagedResponse": {
+      "field_label": "Start Conversation",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "FallbackQueueId": {
+      "field_label": "Queue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Messaging Channel ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InitialResponse": {
+      "field_label": "Conversation Acknowledgement",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsLinkedRecordOpenedAsSubTab": {
+      "field_label": "Open linked record as a subtab within the Messaging Session",
+      "type": "boolean"
+    },
+    "IsRequireDoubleOptIn": {
+      "field_label": "Require Double Opt-In?",
+      "type": "boolean"
+    },
+    "IsRestrictedToBusinessHours": {
+      "field_label": "Is Restricted to Business Hours",
+      "type": "boolean"
+    },
+    "IsoCountryCode": {
+      "field_label": "ISO Country Code",
+      "type": "string",
+      "length": "2"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Modified On",
+      "type": "datetime"
+    },
+    "LinkingPreference": {
+      "field_label": "Select record type to link",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MasterLabel": {
+      "field_label": "Channel Name",
+      "type": "string",
+      "length": "80"
+    },
+    "MessageType": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MessagingPlatformKey": {
+      "field_label": "Messaging Platform Key",
+      "type": "string",
+      "length": "150"
+    },
+    "OfflineAgentsResponse": {
+      "field_label": "Offline Agents Response",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "OptInPrompt": {
+      "field_label": "Opt-In Prompt",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "OutsideBusinessHoursResponse": {
+      "field_label": "Outside Business Hours Response",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "PlatformType": {
+      "field_label": "Platform Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RoutingConfigurationId": {
+      "field_label": "Routing Configuration ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RoutingType": {
+      "field_label": "Routing Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SessionHandlerId": {
+      "field_label": "Routing Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetQueueId": {
+      "field_label": "Queue ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

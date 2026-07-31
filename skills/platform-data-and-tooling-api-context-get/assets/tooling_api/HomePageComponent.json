@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "HomePageComponent - Tooling API",
+  "description": "Represents a home page component.",
+  "supported_soap_calls": "`query()`, `retrieve()`, `search()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Body": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "If this component is an HTML page component, this field is the body of the HTML."
+    },
+    "Height": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Required for Visualforce Area components. Indicates the height (in pixels) of the component.",
+      "required": true
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Namefield, Sort",
+      "description": "The name of the home page component."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique string to distinguish this type from any others."
+    },
+    "ShowLabel": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "ID of the home page layout."
+    },
+    "ShowScrollbars": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "ID of the home page layout."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"HomePageComponent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Body\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Height\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"ManageableState\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"NamespacePrefix\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ShowLabel\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"ShowScrollbars\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

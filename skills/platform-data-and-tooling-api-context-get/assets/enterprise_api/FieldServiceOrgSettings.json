@@ -1,0 +1,210 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FieldServiceOrgSettings - Data API",
+  "description": "Represents the org settings for Field Service, such as Appointment Assistant settings. If Field Service is enabled, the org contains one read-only record of this object. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApptAssistantExpiration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The expiry time in minutes of when the customer stops seeing the mobile worker’s location. Appointment Assistant must also be enabled to see this field."
+    },
+    "ApptAssistantInfoUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The page URL that enables Appointment Assistant. Appointment Assistant must also be enabled to see this field."
+    },
+    "ApptAssistantRadiusUnit": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The unit of the radius of the service appointment that prompts the Last Mile event for Appointment Assistant. Appointment Assistant must also be enabled to see this field. Possible values are: Kilometer Meter Mile Yard"
+    },
+    "ApptAssistantRadiusValue": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The radius of the service appointment that prompts the Last Mile event for Appointment Assistant. Appointment Assistant must also be enabled to see this field."
+    },
+    "ApptAssistantStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The value that prompts the En Route event for Appointment Assistant. Appointment Assistant must also be enabled to see this field. Possible values are: Canceled Cannot Complete Completed Dispatched In Progress None Scheduled TestSharing The default value is 'None'."
+    },
+    "CanPopulateGoogleAddress": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Allows desktop and mobile to send geolocation and map data to Google and Apple. Available in API version 57.0 and later. The default value is true."
+    },
+    "CanSendAppCenterCrashReports": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Allows Salesforce to send crash reports to Microsoft App Center. Available in API version 57.0 and later. The default value is true."
+    },
+    "CanStoreMobileAnalytics": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Allows third parties to store mobile analytics. Available in API version 57.0 and later. The default value is true."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "DoesAvlCalcInclOvertime": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether overtime is included in work capacity availability calculations. Available in API version 59.0 and later. The default value is false."
+    },
+    "DoesAvlCalcInclPrimOnly": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies if primary members only are included in work capacity availability calculations. If the value is false both primary and secondary members of the service territory are included. Available in API version 59.0 and later. The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the field service org settings. The format for the values is a two-letter language code in small letters, for example, fr for French. If the language has regional dialects, add the two-letter country code in capital letters, for example, use fr_BE for Belgian French."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label of the field service org settings."
+    }
+  },
+  "special_access_rules": "To see this object, Field Service must be enabled. For specified fields in the table, Appointment Assistant must also be enabled.\n\nTo see this object, Field Service must be enabled.\n         For specified fields in the table, Appointment Assistant must also be enabled.",
+  "wsdl_segment": "```xml\n<complexType name=\"FieldServiceOrgSettings\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AdsPollingIntervalSec\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CanPopulateGoogleAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"CanSendAppCenterCrashReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"CanStoreMobileAnalytics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeepLinkPublicSecurityKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DoesAvlCalcInclOvertime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"DoesAvlCalcInclPrimOnly\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"EnrouteStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MobileFeedbackEmails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AdsPollingIntervalSec": {
+      "field_label": "Advanced Data Sync Polling Interval (sec)",
+      "type": "int",
+      "digits": "9"
+    },
+    "ApptAssistantExpiration": {
+      "field_label": "Appointment Assistant Expiration",
+      "type": "int",
+      "digits": "9"
+    },
+    "ApptAssistantInfoUrl": {
+      "field_label": "Estimated Arrival Time URL",
+      "type": "string",
+      "length": "255"
+    },
+    "ApptAssistantRadiusUnit": {
+      "field_label": "Appointment Assistant Radius Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ApptAssistantRadiusValue": {
+      "field_label": "Appointment Assistant Radius Value",
+      "type": "int",
+      "digits": "9"
+    },
+    "ApptAssistantStatus": {
+      "field_label": "Status Update",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CanPopulateGoogleAddress": {
+      "field_label": "Send geolocation and map data to Google and Apple",
+      "type": "boolean"
+    },
+    "CanSendAppCenterCrashReports": {
+      "field_label": "Send crash reports to Microsoft App Center",
+      "type": "boolean"
+    },
+    "CanStoreMobileAnalytics": {
+      "field_label": "Allow third parties to store mobile analytics data",
+      "type": "boolean"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeepLinkPublicSecurityKey": {
+      "field_label": "Deep Link Public Security Key",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DoesAvlCalcInclOvertime": {
+      "field_label": "Allow Service to Calculate the overtime in Resource Availability Calculation",
+      "type": "boolean"
+    },
+    "DoesAvlCalcInclPrimOnly": {
+      "field_label": "Allow Service to Calculate Primary and Secondary Service territory in Resource Availability Calculation",
+      "type": "boolean"
+    },
+    "EncryptionInfo": {
+      "field_label": "Encryption Info",
+      "type": "textarea",
+      "length": "10000"
+    },
+    "EnrouteStatus": {
+      "field_label": "Enroute Status",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Field Service Org Settings ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "MobileFeedbackEmails": {
+      "field_label": "Mobile Feedback Email",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

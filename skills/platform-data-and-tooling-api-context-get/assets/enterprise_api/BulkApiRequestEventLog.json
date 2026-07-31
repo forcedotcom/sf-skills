@@ -1,0 +1,118 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "BulkApiRequestEventLog - Data API",
+  "description": "The Bulk API request event captures when Bulk API requests are received to create a job, update a job, create a batch, update a batch, and when a job completes. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API version."
+    },
+    "BatchIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the Bulk API batch."
+    },
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”."
+    },
+    "ClientName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the client making the request."
+    },
+    "ConcurrencyMode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The concurrency mode selected by the user."
+    },
+    "ConnectedAppIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the connected app making a request."
+    },
+    "CpuTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of entity that the Bulk API used."
+    },
+    "IsSuccess": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Whether the batch was successful."
+    },
+    "JobIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the Bulk API job"
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The hash of the login id to allow click tracking across multiple transactions from login to action."
+    },
+    "OperationType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of Bulk API operation."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID."
+    },
+    "RequestPath": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The path of the request."
+    },
+    "RunTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of time the request took, as measured by SFDC code."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The hash of the sid to allow click tracking across multiple transactions after login to action."
+    },
+    "StatusCode": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The HTTP Status code indicating whether the batch was successful."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp at which the log event was generated."
+    },
+    "Uri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URI of the page receiving the request."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

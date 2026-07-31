@@ -16,7 +16,7 @@ LIGHTNING TYPE:
   Name: <TypeName>
   Source: <existing in local project | retrieved from org | newly created>
   Path: <pkgDir>/lightningTypes/<TypeName>/schema.json
-  Renderer (wires the Lightning Type to the widget): <pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json
+  Renderer (wires the Lightning Type to the widget): <pkgDir>/lightningTypes/<TypeName>/renderer.json
   Schema fingerprint (captured before any sub-skill runs): <hex SHA-256>   # omit when source is "newly created"
   Apex class FQN: <namespace>__<ClassName>[$<InnerClass>]   # outer-class form, or inner-class form when the CLT roots on a specific inner class
 

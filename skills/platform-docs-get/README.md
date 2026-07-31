@@ -44,7 +44,7 @@ Behavior:
 - supports optional best-effort stealth mode via `--stealth`
 
 Dependencies for the helper scripts live in:
-- `skills/platform-docs-get/requirements.txt`
+- `skills/platform-docs-get/scripts/requirements.txt`
 
 The installer sets up an isolated runtime under `~/.claude/.platform-docs-get-runtime`, installs those Python packages there, and installs the Playwright Chromium browser automatically during install/update.
 

@@ -1,0 +1,539 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "AgentWork - Data API",
+  "description": "Represents a work assignment that’s been routed to an agent. If the work is transferred to another agent, a new AgentWork record is created. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "properties",
+    "description",
+    "type",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AcceptDateTime": {
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the work item was accepted."
+    },
+    "ActiveTime": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The amount of time an agent is actively working on a work item in their console. Active time is tracked only for tasks routed using the tab-based capacity model. It's tracked only when the work tab is open and in focus in the console. If the agent switches console tabs, the time spent on the other tabs isn't counted. Active time continues to count if you switch to a new browser tab or window. Active time stops when the agent closes the work item or the after conversation work time ends, whichever happens first."
+    },
+    "AcwExtensionCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times that an agent extended the After Conversation Work (ACW) timer. This field is available in API version 55.0 and later."
+    },
+    "AcwExtensionDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The length of time (in seconds) that the After Conversation Work (ACW) timer was extended each time that the agent extended the timer. This field is available in API version 55.0 and later.To find the total extension duration, multiply this field by AcwExtensionCount or use AfterConversationActualTime."
+    },
+    "AfterConversationActualTime": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of seconds an agent spent on After Conversation Work (ACW) after customer contact ended. This field is available in API version 52.0 and later."
+    },
+    "AgentCapacityWhenDeclined": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The agent’s capacity when declining work, either explicitly or through push timeout."
+    },
+    "AssignedDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the work item was assigned to an agent"
+    },
+    "BotId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the Enhanced Einstein Bot or AI agent that performed the work. This is a relationship field. This field is available in API version 52.0 and later.",
+      "relationship_name": "Bot",
+      "relationship_type": "Lookup",
+      "refers_to": "BotDefinition"
+    },
+    "BotType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the type of bot. Valid values are: Bot. Refers to an Einstein bot. ExternalCopilot. Refers to an AI agent with whom your customers can interact. The default value is Bot. This field is available in API version 63.0 and later."
+    },
+    "CancelDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the work item was canceled."
+    },
+    "CapacityModel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the capacity model used to determine agent capacity. Valid values are StatusBased and TabBased. This field is available in API version 50.0 and later."
+    },
+    "CapacityPercentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The percentage of an agent’s capacity that’s consumed when this work item is in progress. Valid values are from 0 to 100. The agent can receive a new work item only if they have enough available capacity for the item. Voice calls must have a capacity percentage of 100, so an agent on a call doesn’t receive new work items until the call ends."
+    },
+    "CapacityWeight": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The amount of an agent’s capacity that’s consumed when this work item is in progress. For example, if cases are assigned a capacity weight of 2, an agent with a capacity of 6 can accept up to 3 cases before the agent is at capacity and can’t receive new work items. Voice calls must use the entire capacity weight."
+    },
+    "CloseDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the work item was closed."
+    },
+    "DeclineDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when the agent declined this record."
+    },
+    "DeclineReason": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The provided reason for why an agent declined the work request."
+    },
+    "ExternalBotId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the third-party bot that handles the work item. This is a relationship field. This field is available in API version 64.0 and later.",
+      "relationship_name": "ExternalBot",
+      "relationship_type": "Lookup",
+      "refers_to": "ExternalConversationBotDef"
+    },
+    "HandleTime": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The amount of time an agent had the work item open, calculated by CloseDateTime – AcceptedDateTime. Handle time stops when the agent closes the work item or the after conversation work time ends, whichever happens first."
+    },
+    "IsConference": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates whether the agent was conferenced on the work item by another agent (true) or not (false ). The default value is false. Available in API version 44.0 and later. This field is accessible in Reports, but not via the API."
+    },
+    "IsInterruptible": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a work item consumes interruptible or primary capacity. The default value is false. Available in API version 57.0 and later when the Interruptible Capacity feature is enabled."
+    },
+    "IsOwnerChangeInitiated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a work item owner change triggered the direct assignment of the work item to the agent. The default value is false. Status-Based Capacity Model has to be turned on to use this field. This field is available in API version 50.0 and later."
+    },
+    "IsPreferredUserRequired": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a work item stays with the preferred user even when the user isn’t available. The default value is false. This field is available in API version 50.0 and later."
+    },
+    "IsStatusChangeInitiated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a work item status change triggered the direct assignment of the work item to the agent. The default value is false. Status-Based Capacity Model has to be turned on to use this field. This field is available in API version 50.0 and later."
+    },
+    "IsTransfer": {
+      "type": "boolean",
+      "properties": "Filter,Group, Sort",
+      "description": "Indicates whether the agent received the work item through transfer from another agent (true) or not (false). The default value is false. Available in API version 38.0 and later. This field is accesible in Reports, but not via the API."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An automatically generated ID number that identifies the record."
+    },
+    "OriginalGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the queue that the work assignment was originally routed to. This field is a relationship field.",
+      "relationship_name": "OriginalGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "Group"
+    },
+    "OriginalQueueId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the queue that the work assignment was originally routed to. Due to API changes, OriginalQueueId is no longer recommended. Use OriginalGroupId instead."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of the AgentWork. This field is a polymorphic relationship field. This field is available in API version 50.0 and later.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PausedCapacityPercentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage of an agent’s capacity that’s consumed when this work item is paused. The paused capacity feature is available with status-based capacity and Enhanced Omni-Channel only. This field is available in API version 62.0 and later."
+    },
+    "PausedCapacityWeight": {
+      "type": "double",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "The amount of an agent’s capacity that’s consumed when this work item is paused. The paused capacity feature is available with status-based capacity and Enhanced Omni-Channel only. This field is available in API version 62.0 and later."
+    },
+    "PendingServiceRoutingId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the PendingServiceRouting from which the AgentWork was created. This field is a relationship field. This field is available in API version 50.0 and later.",
+      "relationship_name": "PendingServiceRouting",
+      "relationship_type": "Lookup",
+      "refers_to": "PendingServiceRouting"
+    },
+    "PreferredUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the preferred user to handle the work. This field is a relationship field. This field is available in API v46.0 and later.",
+      "relationship_name": "PreferredUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "PushTimeout": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The time limit set for an agent to respond to an item before it’s pushed to another agent. The time limit is measured in seconds. This field is available in API version 36.0 and later. Effective API version 57.0, for inbound Voice calls, this field represents the time limit set for an agent to respond to a call before it’s declined. The value must be between 0 and 20. The value is capped at 20, so any number greater than that is treated as 20 seconds. This applies to the following telephony models: Salesforce Voice with Amazon Connect Salesforce Voice with Partner Telephony from Amazon Connect"
+    },
+    "PushTimeoutDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time (in UTC) when the push timeout event occurred. This field is available in API version 36.0 and later."
+    },
+    "RequestDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the work was requested."
+    },
+    "RoutingModel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Determines how incoming work items are routed to agents assigned to a service channel. Possible values are: ExternalRouting LeastActive MostAvailable"
+    },
+    "RoutingPriority": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The order in which work items from the queue that are associated with the routing configuration are routed to agents."
+    },
+    "RoutingType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of Omni-Channel routing. Possible values are: QueueBased SkillsBased"
+    },
+    "SecondaryRoutingPriority": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the secondary routing priority."
+    },
+    "ServiceChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the service channel that’s associated with the work assignment. This field is a relationship field.",
+      "relationship_name": "ServiceChannel",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceChannel"
+    },
+    "ShouldSkipCapacityCheck": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether to skip checking an agent’s available capacity (true) or not (false) when an externally routed work item is created. This field is used when agents can simultaneously handle work from both Omni-Channel queues and queues using external routing. When true, the receiving agent can exceed their set capacity to accept the item, but they don’t receive more Omni-Channel routed work. When false, the receiving agent can’t exceed their set capacity and must have enough open capacity to accept the item. The default value is false."
+    },
+    "SpeedToAnswer": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The amount of time between when the work was requested and when an agent accepted it."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The working status of the work item. Valid values are: Assigned – The item is assigned to the agent but hasn’t been opened. Canceled – The item no longer needs to be routed. For example: a chat visitor cancels their Omni-Channel routed chat request before it reaches an agent. Closed – The item is closed. Declined – The item was assigned to the agent but the agent explicitly declined it. DeclinedOnPushTimeout – The item was declined because push time-out is enabled and the item request timed out with the agent. Opened – The agent opened the item. Transferred–The item was transferred from an agent to another agent, queue, or skill. Unavailable – The item was assigned to the agent but the agent became unavailable (went offline or lost connection)."
+    },
+    "TargetAcceptDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The date and time by when a rep must accept a work item. Influences backlog ordering by prioritizing work items with earlier target acceptance deadlines. The field can be dynamically set using Flow for each work item during the routing process. This allows for flexible prioritization based on case urgency, customer tier, or other business rules. Available in API version 65.0 and later."
+    },
+    "TransferRequesterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user ID of the rep who reassigned the work using the Reassign action. This field is populated in reassigned AgentWork records only, not the original AgentWork record. This is a relationship field. This field is available in API version 63.0 and later.",
+      "relationship_name": "TransferRequester",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the user that the work item was assigned to. This field is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "WorkItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the object that’s routed to the agent through Omni-Channel. This field is a polymorphic relationship field.",
+      "relationship_name": "WorkItem",
+      "relationship_type": "Lookup",
+      "refers_to": "Custom objects and these standard objects: Account, Activity, Case, Claim, ClaimCoverage, ClaimRecovery, Contact, ContactRequest, CustomEntityData, Incident, Lead, LiveChatTranscript, MessagingSession, Opportunity, Orchestration Work Items, Order, PaymentRequest, PersonTraining,Referral, SocialPost, SwarmMember, and VoiceCall. WorkOrder is available in version 58.0 and later."
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled.",
+  "usage": "AgentWork records can only be deleted if they have the status Closed, Declined, or Unavailable. They can’t be deleted if their status is Assigned or Opened because they’re active in Omni-Channel. When AgentWork records are created, they have the status Assigned. After a record is created, it’s automatically pushed to the assigned agent. While the metadata for AgentWork indicates support for upsert() and update(), these calls aren’t used with AgentWork because none of its fields can be updated. Apex triggers are supported with AgentWork.\n\nAgentWork records can only be deleted if they have the status Closed, Declined, or Unavailable. They can’t be deleted if their status is Assigned or Opened because they’re active in Omni-Channel.\n\nWhen AgentWork records are created, they have the status Assigned. After a record is created, it’s automatically pushed to the assigned agent.\n\nWhile the metadata for AgentWork indicates support for upsert() and update(), these calls aren’t used with AgentWork because none of its fields can be updated.\n\nApex triggers are supported with AgentWork.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **AgentWorkChangeEvent (API version 63.0)**: Change events are available for the object.\n- **AgentWorkOwnerSharingRule**: Sharing rules are available for the object.\n- **AgentWorkShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AbandonedDateTime": {
+      "field_label": "Abandoned Date Time",
+      "type": "datetime"
+    },
+    "AcceptDateTime": {
+      "field_label": "Accept Date",
+      "type": "datetime"
+    },
+    "ActiveTime": {
+      "field_label": "Active Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "AcwExtensionCount": {
+      "field_label": "After Conversation Work Extension Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AcwExtensionDuration": {
+      "field_label": "After Conversation Work Extension Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "AfterConversationActualTime": {
+      "field_label": "After Conversation Work Actual Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "AgentCapacityWhenDeclined": {
+      "field_label": "Agent Capacity when Declined",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "AgentIntCapacityWhenDeclined": {
+      "field_label": "Agent Interruptible Capacity when Declined",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "AssignedDateTime": {
+      "field_label": "Assign Date",
+      "type": "datetime"
+    },
+    "BotId": {
+      "field_label": "Bot ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BotType": {
+      "field_label": "Bot Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CancelDateTime": {
+      "field_label": "Cancel Date",
+      "type": "datetime"
+    },
+    "CapacityPercentage": {
+      "field_label": "Percentage of Capacity",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "CapacityWeight": {
+      "field_label": "Units of Capacity",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "CloseDateTime": {
+      "field_label": "Close Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeclineDateTime": {
+      "field_label": "Decline Date",
+      "type": "datetime"
+    },
+    "DeclineReason": {
+      "field_label": "Decline Reason",
+      "type": "string",
+      "length": "200"
+    },
+    "HandleTime": {
+      "field_label": "Handle Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Agent Work ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsInterruptible": {
+      "field_label": "Is Interruptible",
+      "type": "boolean"
+    },
+    "IsPreferredUserRequired": {
+      "field_label": "Is Preferred User Required",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OriginalGroupId": {
+      "field_label": "Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OriginalQueueId": {
+      "field_label": "Queue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PausedCapacityPercentage": {
+      "field_label": "Percentage of Capacity for Paused Work Items",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "PausedCapacityWeight": {
+      "field_label": "Units of Capacity for Paused Work Items",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "PendingServiceRoutingId": {
+      "field_label": "Pending Service Routing ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreferredUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PushTimeout": {
+      "field_label": "Push Time-Out",
+      "type": "int",
+      "digits": "9"
+    },
+    "PushTimeoutDateTime": {
+      "field_label": "Push Time-Out Date",
+      "type": "datetime"
+    },
+    "RequestDateTime": {
+      "field_label": "Request Date",
+      "type": "datetime"
+    },
+    "RoutingModel": {
+      "field_label": "Routing Model",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RoutingPriority": {
+      "field_label": "Routing Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "RoutingType": {
+      "field_label": "Routing Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ScheduledRoutingDateTime": {
+      "field_label": "Scheduled Routing Date Time",
+      "type": "datetime"
+    },
+    "ServiceChannelId": {
+      "field_label": "Service Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShouldSkipCapacityCheck": {
+      "field_label": "Should Skip Capacity Check",
+      "type": "boolean"
+    },
+    "SpeedToAnswer": {
+      "field_label": "Speed To Answer",
+      "type": "int",
+      "digits": "9"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetAcceptDateTime": {
+      "field_label": "Target Accept Date Time",
+      "type": "datetime"
+    },
+    "TransferRequesterId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WorkItemId": {
+      "field_label": "WorkItem ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

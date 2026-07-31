@@ -1,0 +1,177 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "MLModelFactorComponent - Data API",
+  "description": "Represents information about the related MLModelFactor. For example, this object can represent a field value or a field range such as “Title = CEO” or “Annual Revenue >10000000”. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "FactorLabelKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Maps the model factor component to a label that can be displayed to the user."
+    },
+    "FeatureType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "FeatureType and FeatureValue indicate a feature that doesn’t have a corresponding field. For example, to indicate the feature “Percent = 97%”, the FeatureType is Percent and the FeatureValue is 97. Possible values are: Binary Combobox Currency Date DateTime Email ID Integral MultiPicklist Percent Phone Picklist Real Text TextArea URL"
+    },
+    "FeatureValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The feature’s value. See FeatureType."
+    },
+    "LeftHandDerivedField": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the model factor component is an equation, this field represents the name of the field on the left side of the equation. For example, if the model factor component is Title = CEO, this value is Title."
+    },
+    "ModelFactorId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related MLModelFactor. This field is a relationship field.",
+      "relationship_name": "ModelFactor",
+      "relationship_type": "Lookup",
+      "refers_to": "MLModelFactor"
+    },
+    "ModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related MLModel. This field is a relationship field.",
+      "relationship_name": "Model",
+      "relationship_type": "Lookup",
+      "refers_to": "MLModel"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The automatically generated ID that uniquely identifies the model."
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If the model factor component is an equation, this field represents the operator. For example, if the model factor component is Title = CEO, the operator is Equals. Possible values are: Contains EndsWith Equals GreaterThan IsNotNull IsNull LessThan NotEquals StartsWith"
+    },
+    "RightHandDerivedField": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the model factor component is an equation, this field represents the name of the field on the right side of the equation."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the model factor has multiple model factor components, this field indicates the order in which this model factor component appears."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the model factor component specifies a value, this field represents the value. For example, if the model factor component is Title = CEO, this field is CEO."
+    }
+  },
+  "special_access_rules": "Available with Einstein Prediction Builder and Einstein Recommendation Builder.\n\nAvailable with Einstein Prediction Builder and\n         Einstein Recommendation Builder.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FactorLabelKey": {
+      "field_label": "Factor Label Key",
+      "type": "string",
+      "length": "255"
+    },
+    "FeatureType": {
+      "field_label": "Feature Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FeatureValue": {
+      "field_label": "Feature Value",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "ML Model Factor Components ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LeftHandDerivedField": {
+      "field_label": "Left Hand Derived Field",
+      "type": "string",
+      "length": "120"
+    },
+    "ModelFactorId": {
+      "field_label": "ML Model Factor ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ModelId": {
+      "field_label": "ML Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Operator": {
+      "field_label": "Operator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RightHandDerivedField": {
+      "field_label": "Right Hand Derived Field",
+      "type": "string",
+      "length": "120"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "120"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

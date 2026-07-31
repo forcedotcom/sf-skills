@@ -1,0 +1,182 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingQuota - Data API",
+  "description": "This object represents an individual user’s or territory’s quota for a specified time period. The Managed Quotas user permission is required for creating, updating, or deleting quotas. (Users can only edit their subordinates’ or child territories’ quotas, not their own.) The View All Forecasts permission is required to view any user's forecast, regardless of the forecast hierarchy. Available in API versions 25.0 and later. Forecast managers can view the forecasts of subordinates and territories below them in the forecast hierarchy.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The currency code of the quota. If omitted, the default is the importing user’s personal currency."
+    },
+    "ForecastingGroupItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If a forecast group is assigned to the forecast type, the ID of the group value that the quota belongs to. This field is a relationship field. Available in API version 60.0 and later.",
+      "relationship_name": "ForecastingGroupItem",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingGroupItem"
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the related ForecastingType."
+    },
+    "IsAmount": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, then the adjustment is made in a revenue amount. If false, then IsQuantity must be true. This field is available in API version 28.0 and later."
+    },
+    "IsQuantity": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, then the adjustment is made in a quantity amount. If false, then IsAmount must be true. This field is available in API version 28.0 and later."
+    },
+    "PeriodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Period ID for the quota. Read only."
+    },
+    "ProductFamily": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The product family for the quota. This field is available in API version 29.0 and later."
+    },
+    "QuotaAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The revenue quota amount for an individual user or territory and for a specific period."
+    },
+    "QuotaOwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID that identifies the quota owner."
+    },
+    "QuotaQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The quantity quota amount for an individual user and for a specific period. This field is available in API version 28.0 and later."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The start of the quota, expressed as month and year. The date can include any day in a given month. Stored using the first date of the month."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the territory to forecast on. Available in API version 43.0 and later."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only standard users with the View All Forecasts or Allow Forecasting permission or delegated forecast manager status can access this object.",
+  "usage": "Use this object to get an individual user’s or territory’s quota for a specified time period.\n\nBeginning with API version 30.0, organizations can have more than one forecasting\n                type enabled. The\n\nForecastingQuota\n\nForecastingAdjustment\n\nForecastingOwnerAdjustment\n\nForecastingItem\n\nForecastingFact\n\nobjects can all have records with different\n\nForecastingTypeId\n\nvalues. Use the ForecastingType object to determine the ID for each forecast type\n                and then filter\n\nForecastingQuota\n\nForecastingAdjustment\n\nForecastingItem\n\nForecastingFact\n\nrecords as\n                necessary.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ForecastingGroupItemId": {
+      "field_label": "Forecasting Group Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "ForecastingQuota ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAmount": {
+      "field_label": "Is Amount",
+      "type": "boolean"
+    },
+    "IsQuantity": {
+      "field_label": "Is Quantity",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PeriodId": {
+      "field_label": "Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductFamily": {
+      "field_label": "Product Family",
+      "type": "picklist",
+      "length": "255"
+    },
+    "QuotaAmount": {
+      "field_label": "Quota Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "QuotaOwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuotaQuantity": {
+      "field_label": "Quota Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "StartDate": {
+      "field_label": "Quota Month",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

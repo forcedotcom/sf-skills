@@ -1,0 +1,146 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "InvoiceBatchRunRecovery - Data API",
+  "description": "Provides information about an invoice batch run recovery procedure. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Comments": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Optional user-defined information about the scheduler."
+    },
+    "CompletionTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the invoice batch run recovery procedure was completed."
+    },
+    "InvoiceBatchRunId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique identifier of the invoice batch run related to this recovery run. This field is a relationship field.",
+      "relationship_name": "InvoiceBatchRun",
+      "relationship_type": "Lookup",
+      "refers_to": "InvoiceBatchRun"
+    },
+    "InvoiceBatchRunRecoveryNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The unique identifier of the invoice batch run recovery process."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it’s possible that the user indirectly accessed this record (LastReferencedDate), but did not view it."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The timestamp when the invoice batch run recovery started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The final state of the invoice batch run recovery process. Possible values are: Completed—The recovery run successfully reset all billing schedules to Ready for Invoicing. CompletedWithErrors—Some, but not all, billing schedules included in the recovery run were reset to Ready for Invoicing. The billing schedules that were recovered are included in the next scheduled invoice batch run. The billing schedules that weren’t successfully recovered must be manually reset to Ready for Invoicing so they can be processed. Failed—The recovery run was unable to complete the reset process. Started—Indicates that the recovery run reset process began, is ongoing, and has not yet produced a result. The default value is Started."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **InvoiceBatchRunRecoveryChangeEvent**: Change events are available for the object.\n- **InvoiceBatchRunRecoveryFeed**: Feed tracking is available for the object.\n- **InvoiceBatchRunRecoveryHistory**: History is available for tracked fields of the object.\n- **InvoiceBatchRunRecoveryOwnerSharingRule**: Sharing rules are available for the object.\n- **InvoiceBatchRunRecoveryShare**: Sharing is available for the object.",
+  "field_reference": {
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CompletionTime": {
+      "field_label": "Completion time",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Invoice Batch Run Recovery ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceBatchRunId": {
+      "field_label": "Invoice Batch Run ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "InvoiceBatchRunRecoveryNumber": {
+      "field_label": "Invoice Batch Run Recovery Number",
+      "type": "string",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "StartTime": {
+      "field_label": "Start time",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

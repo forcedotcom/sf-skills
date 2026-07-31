@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PricebookEntryAdjustment - Data API",
+  "description": "Read-only junction object created when you associate a price adjustment schedule with a price book entry. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only."
+    },
+    "PriceAdjustmentScheduleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the price book entry adjustment."
+    },
+    "PricebookEntryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the price book entry that this price book entry adjustment is associated with."
+    }
+  },
+  "special_access_rules": "This object is available only if the B2B Commerce license is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Price Book Entry Adjustment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Price Book Entry Adjustment Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PriceAdjustmentScheduleId": {
+      "field_label": "Price Adjustment Schedule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PricebookEntryId": {
+      "field_label": "Price Book Entry ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

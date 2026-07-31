@@ -1,0 +1,39 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "MarketingAppExtAssignment - Tooling API",
+  "description": "Represents a Marketing App Extension Business Unit assignment, which dictates which Account Engagement business unit the external activity data is available in. Available in API version 53.0 and later.",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "MarketingAppExtensionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "This is a relationship field. The Marketing App Extension the Business Unit Assignment is associated with. Appears in the UI.",
+      "relationship_name": "MarketingAppExtension",
+      "relationship_type": "Lookup",
+      "refers_to": "MarketingAppExtension"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "This is a relationship field. The ID of the Account Engagement business unit. Appears in the UI.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "PardotTenant"
+    }
+  },
+  "special_access_rules": "MarketingAppExtAssignment is available to customers with Account Engagement Plus, Advanced, or Premium editions."
+}

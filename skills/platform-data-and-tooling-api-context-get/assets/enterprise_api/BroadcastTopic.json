@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "BroadcastTopic - Data API",
+  "description": "Represents a definition of a broadcast topic. A broadcast topic is associated with a list of Experience Cloud network sites for Service Cloud and collaboration rooms for Sales Cloud. The topic is created for a specific user role. Collaboration rooms are linked to Slack channels. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BroadcastReason": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Reason for the broadcast topic. This field differentiates between Service Cloud and Sales Cloud use cases. Possible values are: FeedChannels—Used in Sales Cloud and associates the topic with collaboration rooms. IncidentCommunication—Used in Service Cloud for Customer Service Incident Management and associates the topic with networks. The default value is FeedChannels."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the broadcast topic."
+    },
+    "IsFeatured": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the broadcast topic is featured (true) or not (false). This field is applicable only when BroadcastReason is FeedChannels. A featured topic displays the associated collaboration rooms to new users. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the broadcast topic."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Owner of the broadcast topic. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "TopicType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Category for the broadcast topic. Possible values are: DealsWon—Feed of won deals to see your team's successes. This value appears when the Sales Cloud special access rules are enabled. DealsToWatch—Feed of deals that have an amount above a specified value and are likely to close. This value appears when the Sales Cloud special access rules are enabled. Incident Communication—This value appears when the Service Cloud special access rules are enabled."
+    }
+  },
+  "special_access_rules": "To access this object with Sales Cloud, enable Slack Terms of Service and Sales Cloud for Slack App. To access this object with Service Cloud, enable Incident Management in Setup and Broadcast Site Banner in the Incident Management setup.\n\nTo access this object with Sales Cloud, enable Slack Terms of Service and Sales Cloud for Slack App.\n\nTo access this object with Service Cloud, enable Incident Management in Setup and Broadcast Site Banner in the Incident Management setup."
+}

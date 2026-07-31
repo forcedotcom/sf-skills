@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ColorDefinition - Data API",
+  "description": "Represents the color-related metadata for a custom tab. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Color": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The color described in web color RGB format—for example, “00FF00”."
+    },
+    "Context": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The color context, which determines whether the color is the main color (or primary) for the tab."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique virtual Salesforce ID for the color."
+    },
+    "TabDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The TabDefinition ID. This is a relationship field.",
+      "relationship_name": "TabDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "TabDefinition"
+    },
+    "Theme": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The icon’s theme."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"ColorDefinition\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Color\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Context\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TabDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:TabDefinition\"/>\n        <element name=\"TabDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Theme\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Color": {
+      "field_label": "Color",
+      "type": "string",
+      "length": "255"
+    },
+    "Context": {
+      "field_label": "Context",
+      "type": "string",
+      "length": "255"
+    },
+    "DurableId": {
+      "field_label": "Color Definition Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Color Definition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "TabDefinitionId": {
+      "field_label": "Tab Definition ID",
+      "type": "string",
+      "length": "512"
+    },
+    "Theme": {
+      "field_label": "Theme",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

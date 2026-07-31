@@ -1,0 +1,89 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ModerationRule - Tooling API",
+  "description": "Represents a rule used in your Experience Cloud site to moderate member-generated content. Available in Tooling API version 36.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `update()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Action": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist",
+      "description": "Indicates the moderation action that you want to take. The valid values are: Block Review Replace Flag FreezeAndNotify (Reserved for future use.)",
+      "required": true
+    },
+    "ActionLimit": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the moderation action limit measured in minutes. Available in API version 39.0 and later."
+    },
+    "Active": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the moderation rule is active (true) or inactive (false).",
+      "required": true
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A description of the moderation rule."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Namefield, Sort",
+      "description": "The developer’s internal name for the moderation rule used in the API."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the moderation rule. Valid values are: Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the moderation rule."
+    },
+    "Metadata": {
+      "type": "mns:ModerationRule",
+      "properties": "Create, Nillable, Update",
+      "description": "Moderation rule metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NotifyLimit": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the notification limit (in seconds) of the moderation rule. Available in API version 39.0 and later."
+    },
+    "TimePeriod": {
+      "type": "RateLimitTimePeriod (enumeration of type string)",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The values that represent the time-frame for which a rate limiting rule is applied. The two values available represent a time periods measured in minutes: “Short” represents 3 minutes and “Medium” represents 15 minutes. Available in API version 39.0 and later. Valid values are: Short Medium"
+    },
+    "Type": {
+      "type": "ModerationRuleType (enumeration of type string)",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of moderation rule. Content rules protect your site from offensive language and inappropriate content created by spammers or malicious members. Rate rules protect your site against spammers and bots that attack your site by posting the same message multiple times in a row. Available in API version 39.0 and later. Valid values are: Content Rate"
+    },
+    "UserMessage": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The message you want your members to see when their content is blocked. Use the %BLOCKED_KEYWORD% variable to display up to five blocked words in the user message. If you don’t specify a message, the member sees the standard message: “You can’t use %BLOCKED_KEYWORD% or other inappropriate words in this site. Review your content and try again.”"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ModerationRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"action\" type=\"tns:ModerationRuleAction\"/>\n        <xsd:element name=\"actionLimit\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"entitiesAndFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ModeratedEntityField\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"notifyLimit\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"timePeriod\" minOccurs=\"0\" type=\"tns:RateLimitTimePeriod\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:ModerationRuleType\"/>\n        <xsd:element name=\"userCriteria\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"userMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ModerationRuleAction\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Block\"/>\n    <xsd:enumeration value=\"FreezeAndNotify\"/>\n    <xsd:enumeration value=\"Review\"/>\n    <xsd:enumeration value=\"Replace\"/>\n    <xsd:enumeration value=\"Flag\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ModerationRuleType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Content\"/>\n    <xsd:enumeration value=\"Rate\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"RateLimitTimePeriod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Short\"/>\n    <xsd:enumeration value=\"Medium\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

@@ -1,0 +1,148 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingCustomData - Data API",
+  "description": "Represents forecast data from external sources to display in the forecasts page. For example, risk or last year’s revenue. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ForecastOwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the forecast owner. This field is a relationship field.",
+      "relationship_name": "ForecastOwner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ForecastingGroupItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If a forecast group is assigned to the forecast type, the ID of the group value that the custom data belongs to. This field is a relationship field. Available in API version 60.0 and later.",
+      "relationship_name": "ForecastingGroupItem",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingGroupItem"
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the forecast type. This field is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingType"
+    },
+    "PeriodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read only. Period ID for the custom data. This field is a relationship field.",
+      "relationship_name": "Period",
+      "relationship_type": "Lookup",
+      "refers_to": "Period"
+    },
+    "ProductFamily": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The user-defined product family available to forecast on. Each product family is unique. Possible values are: [user-defined]–For example, Electronics or Appliances. None"
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The start of the custom data, expressed as month and year. The date can include any day in a given month. Stored using the first date of the month."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the territory to forecast on."
+    }
+  },
+  "special_access_rules": "Available in Enterprise Edition and above, and in Professional Edition with an add-on license. Access to this object requires the Manage Forecasts Custom Data user permission.",
+  "usage": "Each record displays as a custom column on the forecasts summary page.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ForecastOwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingGroupItemId": {
+      "field_label": "Forecasting Group Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Custom Data ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PeriodId": {
+      "field_label": "Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductFamily": {
+      "field_label": "Product Family",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "BusinessHours - Data API",
+  "description": "Specifies the business hours of your support organization. Escalation rules are run only during these hours.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BusinessHoursId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable,Sort",
+      "description": "ID of the BusinessHours associated with the SlaProcess."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the business hours is active (true) or not active (false)."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the business hours."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the business hours are set as the default business hours (true) or not (false)."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the business hours were last viewed."
+    },
+    "FridayEndTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business closes."
+    },
+    "FridayStartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business opens."
+    },
+    "MondayEndTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business closes."
+    },
+    "MondayStartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business opens."
+    },
+    "SaturdayEndTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business closes."
+    },
+    "SaturdayStartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business opens."
+    },
+    "SundayEndTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business closes."
+    },
+    "SundayStartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business opens."
+    },
+    "ThursdayEndTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business closes."
+    },
+    "ThursdayStartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business opens."
+    },
+    "TimeZoneSidKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The time zone of the business hours."
+    },
+    "TuesdayEndTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business closes."
+    },
+    "TuesdayStartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business opens."
+    },
+    "WednesdayEndTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business closes."
+    },
+    "WednesdayStartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time that business opens."
+    }
+  },
+  "special_access_rules": "All users, even those without the “View Setup and Configuration” user permission, can view business hours via the API.",
+  "usage": "Use this object to specify the business hours at which your support team operates. Escalation rules only run during the business hours with which they are associated. To set business hours to 24-hours a day, set the times from midnight to midnight (00:00:00 ~ 00:00:00) on each day. By default, business hours are set from 12:00 AM to 12:00 AM in the default time zone specified in your organization's profile.\n\nUse this object to specify the business hours at which your support team operates. Escalation rules only run during the business hours with which they are associated. To set business hours to 24-hours a day, set the times from midnight to midnight (00:00:00 ~ 00:00:00) on each day.\n\nBy default, business hours are set from 12:00 AM to 12:00 AM in the default time zone specified in your organization's profile.",
+  "wsdl_segment": "```xml\n<complexType name=\"BusinessHours\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Cases\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Entitlements\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FridayEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"FridayStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessagingChannels\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MondayEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"MondayStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SaturdayEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"SaturdayStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"SundayEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"SundayStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ThursdayEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"ThursdayStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"TimeZoneSidKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TuesdayEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"TuesdayStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"WednesdayEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"WednesdayStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"WorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FridayEndTime": {
+      "field_label": "Friday End",
+      "type": "time"
+    },
+    "FridayStartTime": {
+      "field_label": "Friday Start",
+      "type": "time"
+    },
+    "Id": {
+      "field_label": "Business Hours ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDefault": {
+      "field_label": "Default Business Hours",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MondayEndTime": {
+      "field_label": "Monday End",
+      "type": "time"
+    },
+    "MondayStartTime": {
+      "field_label": "Monday Start",
+      "type": "time"
+    },
+    "Name": {
+      "field_label": "Business Hours Name",
+      "type": "string",
+      "length": "80"
+    },
+    "SaturdayEndTime": {
+      "field_label": "Saturday End",
+      "type": "time"
+    },
+    "SaturdayStartTime": {
+      "field_label": "Saturday Start",
+      "type": "time"
+    },
+    "SundayEndTime": {
+      "field_label": "Sunday End",
+      "type": "time"
+    },
+    "SundayStartTime": {
+      "field_label": "Sunday Start",
+      "type": "time"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ThursdayEndTime": {
+      "field_label": "Thursday End",
+      "type": "time"
+    },
+    "ThursdayStartTime": {
+      "field_label": "Thursday Start",
+      "type": "time"
+    },
+    "TimeZoneSidKey": {
+      "field_label": "Time Zone",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TuesdayEndTime": {
+      "field_label": "Tuesday End",
+      "type": "time"
+    },
+    "TuesdayStartTime": {
+      "field_label": "Tuesday Start",
+      "type": "time"
+    },
+    "WednesdayEndTime": {
+      "field_label": "Wednesday End",
+      "type": "time"
+    },
+    "WednesdayStartTime": {
+      "field_label": "Wednesday Start",
+      "type": "time"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

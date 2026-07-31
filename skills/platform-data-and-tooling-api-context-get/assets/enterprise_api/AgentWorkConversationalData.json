@@ -1,0 +1,129 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "AgentWorkConversationalData - Data API",
+  "description": "Stores conversation data for agent work sessions, such as agent interactions, transfer information, and operational metrics. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AgentChannelRecordingId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Identifier for the recording associated with the agent channel conversation. This field is a relationship field.",
+      "relationship_name": "AgentChannelRecording",
+      "refers_to": "VoiceCallRecording"
+    },
+    "AgentConnectDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the agent connected to the conversation."
+    },
+    "AgentCustomerMergeTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when the service rep and customer conversations are merged after consultation."
+    },
+    "AgentDisconnectDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the agent disconnected from the conversation."
+    },
+    "AgentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of an agent or a rep involved in the conversation. This field is a polymorphic relationship field.",
+      "relationship_name": "Agent",
+      "refers_to": "BotDefinition, ExternalConversationBotDef, User"
+    },
+    "AgentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of agent handling the conversation. Possible values are: ExternalBot Human InternalBot"
+    },
+    "AgentWorkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the AgentWork record associated with the conversational data. This field is a relationship field.",
+      "relationship_name": "AgentWork",
+      "refers_to": "AgentWork"
+    },
+    "ChannelSessionRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Identifier of the channel session for the conversation. This field is a relationship field.",
+      "relationship_name": "ChannelSessionRecord",
+      "refers_to": "VoiceCall"
+    },
+    "LongestPauseDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Duration of the longest pause during the conversation, measured in seconds."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the agent work conversational data record."
+    },
+    "NextAgentWorkConvId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the next record in a sequence of conversations. This field is a relationship field.",
+      "relationship_name": "NextAgentWorkConv",
+      "refers_to": "AgentWorkConversationalData"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the owner of the conversational data record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "OwnershipEndDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when ownership of the conversation ended."
+    },
+    "OwnershipStartDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when ownership of this conversation started."
+    },
+    "PauseCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of times the conversation was paused."
+    },
+    "PrevAgentWorkConvId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the previous record in a sequence of conversations. This field is a relationship field.",
+      "relationship_name": "PrevAgentWorkConv",
+      "refers_to": "AgentWorkConversationalData"
+    },
+    "QualityScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Value of the Mean Opinion Score (MOS) that measures voice call quality."
+    },
+    "TotalPauseDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total duration of all pauses during the conversation, measured in seconds."
+    },
+    "TransferType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of transfer for the conversation. Possible values are: Cold Warm"
+    }
+  },
+  "special_access_rules": "You must have the Agentforce Contact Center Admin (Salesforce Voice) permission set enabled in your org."
+}

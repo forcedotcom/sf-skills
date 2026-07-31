@@ -1,0 +1,144 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "SfdcCustomerForPartner - Data API",
+  "description": "Represents a customer associated with a Salesforce partner. Records appear in the Partner Business Org (PBO) and represent a partner's customer for the purpose of storing billing information. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References a specific account from the Account object in the PBO. This field is a relationship field.",
+      "relationship_name": "Account",
+      "refers_to": "Account"
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The default billing address for the customer, used to seed the billing address into new offers. Compound field."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The customer billing city."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The customer billing country."
+    },
+    "BillingCustomerOrg": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "18 chararacter org ID that represents the billing org for a partner's customer. Must be a Paid Org.",
+      "required": true
+    },
+    "BillingEmail": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The default email address of the customer who receives billing details, used to seed new offers. This is typically someone in the accounting department."
+    },
+    "BillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of geocoded billing address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The latitude geo-coordinate for customer billing address."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The longitude geo-coordinate for customer billing address ."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal/zip code of the customer billing address."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state of the customer billing address."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street of the customer billing address."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the customer.",
+      "required": true
+    },
+    "ShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The default shipping address of the partner's customer. Compound field."
+    },
+    "ShippingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city of the customer shipping address."
+    },
+    "ShippingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country of the customer shipping address."
+    },
+    "ShippingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of geocoded shipping address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "ShippingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The latitude geo-coordinate for customer shipping address."
+    },
+    "ShippingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The longitude geo-coordinate for customer shipping address."
+    },
+    "ShippingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal/zip code of the shipping address."
+    },
+    "ShippingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state of the customer shipping address."
+    },
+    "ShippingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street of the customer shipping address."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SfdcCustomerForPartnerOwnerSharingRule**: Sharing rules are available for the object.\n- **SfdcCustomerForPartnerShare**: Sharing is available for the object."
+}

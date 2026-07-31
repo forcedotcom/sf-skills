@@ -1,0 +1,141 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "AttribModel - Data API",
+  "description": "Represents an attribution model used with Personalization, Attribution, and Campaign Influence, including model weights and touch type. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AttribModelStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates a model’s current status. The default value is Draft, and accepted values are Active Draft Inactive"
+    },
+    "AttributionModelType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the type of attribution model, which determines which touchpoints to evaluate. The default value is LastTouch, and accepted values are First touch LastTouch"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Three letter ISO currency codes for supported currencies. The default value is USD. This is an optional field."
+    },
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the data space where a model's resources originate. This is a required field.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace"
+    },
+    "Description": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Text description of the attribution model. Optional."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Auto-generated or user-generated API name for the attribution model. This is a required field."
+    },
+    "Error Code": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the issue that’s causing an error. The default value is None, and accepted values are ConfigurationMissingError indicates that a required configuration setting is missing. DpcJobError indicates a problem during processing. InternalError indicates an internal error during processing. ModelValidationError indicates that the model is invalid. None"
+    },
+    "GlobalAttributionWindowDays": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Defines a timeframe for tracking attribution-related engagement. This is a required field."
+    },
+    "IdentityResolutionMode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Defines which identity resolution method to use when tracking engagement activities. Default value is Individual, and acceptable values are Individual Unified"
+    },
+    "IsZeroDayLoadRequired": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Defines whether to sync data before the attribution window begins. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time the model was referenced by another resource."
+    },
+    "LastRefresh": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp that indicates the last time engagement data was refreshed and evaluated by the model."
+    },
+    "LastSuccessfulRefresh": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp that indicates the last time the model was successfully refreshed."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time a user viewed the model."
+    },
+    "LatestRefreshedStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Picklist value that indicates the status of last refresh process. The default value is None, and accepted values are Canceled Complete Failure None Processing"
+    },
+    "ModelContext": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the app or feature in which the attribution model is used. The default value is Personalization, and accepted values are Attribution: indicates the use with Attribution in Salesforce Personalization. CampaignInfluence: indicates the use with Campaign Influence in Unified Marketing Analytics. Personalization: indicates the use with Personalization in Salesforce Personalization."
+    },
+    "ModelRevision": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A version number that indicates the latest save of the model."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Text label that identifies the attribution model. This is a required field."
+    },
+    "Partner": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates who's using the model. This field is required if the value of ModelContext is Attribution."
+    },
+    "ProfileDataGraphId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to the profile data graph that’s used with the model.",
+      "relationship_name": "ProfileDataGraph",
+      "refers_to": "DataGraph"
+    },
+    "ScheduledFrequencyMins": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The scheduled frequency (in minutes) at which the attribution model is processed."
+    },
+    "SyncStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the current status of the attribution model while an action is being performed. The default value is Processing, and acceptable values are: Active CreateError DeleteError Deleting EditError Processing"
+    },
+    "Tags": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "User-generated strings that can be used to organize attribution models."
+    }
+  },
+  "usage": "Use this object to get information about attribution models that are in use with personalization and influence features. For example, you can:",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AttribModelChangeEvent**: Change events are available for the object.\n- **AttribModelFeed**: Feed tracking is available for the object.\n- **AttribModelHistory**: History is available for tracked fields of the object.\n- **AttribModelOwnerSharingRule**: Sharing rules are available for the object.\n- **AttribModelShare**: Sharing is available for the object."
+}

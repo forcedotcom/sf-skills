@@ -2,11 +2,11 @@
 name: platform-sharing-rules-generate
 description: "Use this skill when users need to create, edit, delete, or manage Salesforce Sharing Rules metadata. TRIGGER when: users mention sharing rules, record sharing, criteria-based sharing, role-based sharing, guest user sharing, sharingRules, sharingCriteriaRules, sharingGuestRules, sharingOwnerRules, .sharingRules-meta.xml files, or ask to share records with specific roles or groups. Also trigger when users want to modify or remove existing sharing rules, or update sharing rule criteria or access levels. DO NOT TRIGGER when user needs permission sets or profiles (use platform-permission-set-generate), or needs object-level security rather than record-level sharing (use platform-permission-set-generate)."
 metadata:
-  version: "1.1"
+  version: "1.2"
   minApiVersion: "51.0"
   relatedSkills:
-    - "platform-permission-set-generate"
     - "platform-custom-object-generate"
+    - "platform-permission-set-generate"
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"
@@ -72,10 +72,7 @@ Steps are sequential within each phase. Phase 3 branches by operation type — e
 
 2. **Check for existing sharing rules** — look for `<packageDir>/sharingRules/<ObjectName>.sharingRules-meta.xml`. If found, read it to understand existing rules and avoid duplicates.
 
-3. **If no local file exists**, retrieve from the org:
-   ```sh
-   sf project retrieve start --metadata "SharingRules:<ObjectName>" --target-org <org>
-   ```
+3. **If no local file exists**, retrieve from the org: `sf project retrieve start --metadata "SharingRules:<ObjectName>" --target-org <org>`
 
 ### Phase 2 — Determine Operation and Rule Type
 
@@ -131,7 +128,7 @@ Steps are sequential within each phase. Phase 3 branches by operation type — e
     - **Delete (rules remain)**: Write the updated file with the target rule removed.
     - **Delete (last rule)**: Remove the file `<packageDir>/sharingRules/<ObjectName>.sharingRules-meta.xml` entirely.
 
-11. **Run the verification checklist** below and consult `examples/test-cases.md` for scenario-specific expected behaviors before presenting output.
+11. **Run the verification checklist** below and consult the examples files (`examples/create-cases.md`, `examples/edit-cases.md`, `examples/delete-cases.md`) for scenario-specific expected behaviors before presenting output.
 
 ---
 
@@ -187,6 +184,7 @@ Steps are sequential within each phase. Phase 3 branches by operation type — e
 | `includeHVUOwnedRecords` is required on guest rules | Missing it causes deployment failure |
 | Criteria field values must exist as picklist values on the org | Invalid values cause: "Picklist value does not exist" |
 | Never hardcode file paths — resolve from `sfdx-project.json` | Customer projects use custom package directories |
+| For managed package custom objects, use the full API name including namespace prefix (e.g., `ns__Object__c`) | Namespace-prefixed objects store sharing rules under the prefixed name |
 | Always confirm before writing changes | Prevents accidental creation, modification, or deletion of sharing rules |
 | Edit must preserve unmodified elements | Changing only `accessLevel` must not alter `criteriaItems` or other fields |
 | Delete must remove the entire rule block | Partial deletion leaves invalid XML and causes deployment failures |
@@ -232,4 +230,6 @@ Deliverables:
 | File | When to read |
 |------|-------------|
 | `references/rule-types.md` | Phase 2 — before generating any rule, to get the complete XML schema for each rule type |
-| `examples/test-cases.md` | Phase 5, step 11 — during verification, to check expected behavior for each scenario type |
+| `examples/create-cases.md` | Phase 5, step 11 — expected behavior for create and append scenarios |
+| `examples/edit-cases.md` | Phase 5, step 11 — expected behavior for edit scenarios |
+| `examples/delete-cases.md` | Phase 5, step 11 — expected behavior for delete and confirmation flow scenarios |

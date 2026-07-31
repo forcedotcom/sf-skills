@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ForecastingFilter - Data API",
+  "description": "Represents the custom filter for including or excluding data from opportunity forecasts. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The developer name of the forecast filter."
+    },
+    "FilterLogic": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The logic that controls the evaluation of conditions. Only AND is supported. For example, 1 AND 2 AND 3."
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the forecast type. Can be linked only to forecast types created in Summer ’21 and later. This is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingType"
+    },
+    "ForecastingTypeSourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the forecast type source. Can be linked only to forecast type sources created in Summer ’21 or later and with a forecast source definition with source object of 'Opportunity.' This is a relationship field.",
+      "relationship_name": "ForecastingTypeSource",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingTypeSource"
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the forecast filter."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for this object, which displays in Setup. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only standard users with the View All Forecasts permission OR Allow Forecasting permission OR delegated forecast manager status can access this object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "FilterLogic": {
+      "field_label": "Filter Logic",
+      "type": "string",
+      "length": "255"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeSourceId": {
+      "field_label": "Forecasting Type Source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Filter ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

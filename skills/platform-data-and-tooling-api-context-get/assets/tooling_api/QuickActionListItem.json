@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "QuickActionListItem - Tooling API",
+  "description": "Represents an item in a quick action list.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "QuickActionDefinition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The enum name or ID of the QuickActionDefinition that’s associated with this list item. Valid values are: Case.ChangeStatus Case.LogACall FeedItem.ContentPost FeedItem.LinkPost FeedItem.MobileSmartActions FeedItem.PollPost FeedItem.QuestionPost FeedItem.TextPost"
+    },
+    "QuickActionListId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the QuickActionList associated with this list item."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The order in which this list item appears in the picklist. This field must be an ordinal number greater than 0, and must be unique in the list."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"QuickActionListItem\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"QuickActionDefinition\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"QuickActionList\" minOccurs=\"0\" type=\"ens:QuickActionList\" nillable=\"true\"/>\n        <xsd:element name=\"QuickActionListId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"SortOrder\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

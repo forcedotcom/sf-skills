@@ -55,8 +55,8 @@ Do not attempt to preview or deploy until validation passes.
 
 Before running the validation command, mentally check these 14 items. This checklist prevents the most common errors and speeds up the feedback loop:
 
-- Block ordering is correct: `system` → `config` → `variables` → `connections` → `knowledge` → `language` → `start_agent` → `subagent` blocks
-- `config` block has `developer_name` (required for service agents: also needs `default_agent_user`)
+- Block ordering is correct: `system` → `access` → `config` → `variables` → `connections` → `knowledge` → `language` → `start_agent` → `subagent` blocks
+- `config` has `developer_name`; service agents also need `access.default_agent_user`
 - `system` block has `messages.welcome`, `messages.error`, and `instructions`
 - `start_agent` block exists with description and at least one transition action
 - Each `subagent` has a `description` and `reasoning` block
@@ -66,9 +66,11 @@ Before running the validation command, mentally check these 14 items. This check
 - Boolean values use `True`/`False` (capitalized, not `true`/`false`)
 - `...` is used for LLM slot-filling in reasoning action inputs, not as variable defaults
 - Transition syntax is correct: `@utils.transition to` in `reasoning.actions`, bare `transition to` in directive blocks
-- Indentation is consistent (4 spaces recommended)
+- New files use 4-space structural indentation; edited files do not mix styles
 - Names follow naming rules (letters, numbers, underscores only; no spaces; start with letter)
 - No duplicate block names or action names within the same scope
+- Conditional chains use `if / else if / else`, never legacy `elif`; true
+  nested conditionals are avoided
 
 ---
 
@@ -170,6 +172,15 @@ process: @actions.process_order
 
 Post-action directives (`set`, `run`, `if`, `transition`) only work after `@actions.*` invocations. Utility actions (`@utils.*`) and subagent delegates (`@subagent.*`) do not produce outputs, so post-action directives are not applicable.
 
+**8. Conditional Syntax**
+
+Use `if / else if / else`; `elif` produces a syntax error. Agentforce lint
+rejects true nested conditionals with `unsupported-nested-if`; the compiler
+also warns about the narrower nested `if/else` condition-slot limitation. For
+examples, post-action behavior, and flattening alternatives, use the canonical
+[Conditional Control Flow Syntax](agent-script-core-language.md#conditional-control-flow-syntax)
+section rather than maintaining a second syntax guide here.
+
 ---
 
 ## 3. Preview
@@ -186,7 +197,7 @@ ALWAYS use `--json` when calling from a script or AI assistant (not interactive 
 sf agent preview start --json --authoring-bundle <BUNDLE_NAME> --use-live-actions
 ```
 
-This command returns a session ID. Capture it immediately — you need it for every subsequent command. Use `--use-live-actions` to execute real backing logic (recommended). Omit it only when backing logic doesn't exist yet and you want simulated preview.
+This command returns a session ID. Capture it immediately — you need it for every subsequent command. Use `--use-live-actions` to execute real action implementations (recommended). Omit it only when implementations don't exist yet and you want simulated preview.
 
 Example:
 
@@ -266,7 +277,7 @@ The CLI automatically uses the project's default target org. Always omit `--targ
 sf agent preview --authoring-bundle My_Bundle
 
 # CORRECT — programmatic API
-sf agent preview start --json --authoring-bundle My_Bundle
+sf agent preview start --json --authoring-bundle My_Bundle --simulate-actions
 ```
 
 The bare `sf agent preview` command is an interactive REPL for humans. Automation cannot provide terminal input (ESC), so it hangs. Use `start`/`send`/`end` with `--json`.
@@ -278,7 +289,7 @@ The bare `sf agent preview` command is an interactive REPL for humans. Automatio
 sf agent preview start --json --authoring-bundle My_Bundle --api-name My_Agent
 
 # CORRECT — choose one
-sf agent preview start --json --authoring-bundle My_Bundle
+sf agent preview start --json --authoring-bundle My_Bundle --simulate-actions
 ```
 
 These flags are mutually exclusive. Use the one matching your agent type.
@@ -288,7 +299,7 @@ These flags are mutually exclusive. Use the one matching your agent type.
 ```bash
 # WRONG — publishes, then previews from LOCAL agent script (not what's published)
 sf agent publish authoring-bundle --json --api-name My_Agent
-sf agent preview start --json --authoring-bundle My_Agent
+sf agent preview start --json --authoring-bundle My_Agent --simulate-actions
 
 # CORRECT — publishes, then previews the PUBLISHED agent users interact with
 sf agent publish authoring-bundle --json --api-name My_Agent
@@ -304,7 +315,7 @@ Use `agent preview` commands with `--api-name` to preview published agents.
 sf agent preview send --json --authoring-bundle My_Bundle -u "Hello"
 
 # CORRECT — start first, capture session ID
-sf agent preview start --json --authoring-bundle My_Bundle
+sf agent preview start --json --authoring-bundle My_Bundle --simulate-actions
 sf agent preview send --json --authoring-bundle My_Bundle --session-id <ID> -u "Hello"
 ```
 
@@ -334,6 +345,34 @@ sf agent preview send --json --authoring-bundle My_Bundle --session-id <ID> -u "
 
 If multiple agents have concurrent sessions against the same agent, omitting the session ID causes them to interfere. Always pass the session ID from `start`.
 
+**7. Omitting the action mode on `start`, or passing it to `send`/`end`**
+
+```bash
+# WRONG — MissingModeFlag: --authoring-bundle requires an action mode
+sf agent preview start --json --authoring-bundle My_Bundle
+
+# WRONG — Nonexistent flag: the mode is set once, on start
+sf agent preview send --json --authoring-bundle My_Bundle --session-id <ID> --simulate-actions -u "Hello"
+
+# CORRECT — mode on start only
+sf agent preview start --json --authoring-bundle My_Bundle --simulate-actions
+sf agent preview send --json --authoring-bundle My_Bundle --session-id <ID> -u "Hello"
+```
+
+`--simulate-actions` has the platform generate plausible action results without touching the org; `--use-live-actions` executes real Apex, Flows, and Prompt Templates. Pick one on `start` — the choice applies to the whole session.
+
+**8. Running outside a Salesforce project**
+
+```bash
+# WRONG — RequiresProjectError
+cd /tmp && sf agent preview start --json --authoring-bundle My_Bundle --simulate-actions
+
+# CORRECT — run from the project root (where sfdx-project.json lives)
+cd ~/projects/my-sfdx-project && sf agent preview start --json --authoring-bundle My_Bundle --simulate-actions
+```
+
+Every `sf agent preview` subcommand requires `sfdx-project.json` in the working directory.
+
 ### Context Variable Limitations in Preview
 
 Agent behavior requiring `@context` or `@session` variables for routing or guards CAN NOT be tested via `sf agent preview`. Commands in the `preview` command DO NOT support context or session variable injection. Flags like `--context`, `--session-var`, or `--variables` DO NOT EXIST.
@@ -344,12 +383,53 @@ Agent behavior requiring `@context` or `@session` variables for routing or guard
 
 ### Utterance Derivation
 
-Utterances provided to `sf agent preview send` must be derived from the `.agent` file using these guidelines:
+Utterances must sound like what a real human would type in a chat. Avoid keyword-style inputs — a user would never type just "upgrade" to upgrade their account. They'd say "Hey I'd like to upgrade my plan" or "Can I switch to the premium tier?" Write utterances that reflect natural conversational patterns.
 
-1. **One per non-start subagent** — based on `description:` keywords. Pick the most natural user phrasing.
-2. **One that should trigger each key action** — match the action's `description:` to a realistic user request.
-3. **One off-topic utterance** — tests guardrails (e.g., "Tell me a joke", "What's the weather?").
-4. **One multi-turn pair** — if agent has subagent transitions, send two related utterances to test handoff (e.g., "Check my order" → "Actually I want to return it").
+#### Coverage Requirements
+
+Smoke testing is not a single pass. Test broadly:
+
+1. **Every routing branch** — If the agent has branching logic (multiple subagents, conditional transitions), test ALL branches, not just the happy path.
+2. **Multiple variations per branch** — Test at least 2-3 different phrasings that should trigger the same subagent/action. Real users express the same intent differently ("I want to cancel", "How do I end my subscription?", "I don't want this anymore").
+3. **Every key action** — Send utterances that should trigger each action. Verify via trace that the action actually fired (see "Trace Evaluation" below).
+4. **Edge cases** — Ambiguous inputs, partial information, multi-intent messages, typos or informal language.
+5. **Off-topic utterance** — Tests guardrails (e.g., "What's the meaning of life?", "Can you help me write a poem?").
+6. **Multi-turn sequences** — Test subagent transitions and context carry-over across turns (e.g., "Check my order status" → "Actually I want to return it" → "Never mind, keep it").
+
+#### Realistic Phrasing
+
+Derive utterances from subagent/action `description:` keywords, but rewrite them as natural conversation:
+
+| BAD (keyword-style) | GOOD (natural) |
+|---|---|
+| "upgrade" | "Hey, I'd like to upgrade my account to premium" |
+| "check order" | "Can you look up order #12345 for me?" |
+| "weather" | "What's the weather going to be like tomorrow?" |
+| "cancel subscription" | "I'm thinking about canceling — what happens to my data?" |
+
+### Trace Evaluation
+
+After EVERY preview utterance, read the trace — not just the agent's text response. The agent's response alone is insufficient for validation because agents can claim to have performed actions without actually calling them.
+
+Never trust the chat transcript as evidence that an action ran. The LLM will confidently paraphrase action success even when no invocation occurred.
+
+For each turn, verify in the trace:
+
+1. **Action execution** — Check for `FunctionStep` entries. If the agent said it performed an action (e.g., "I've upgraded your account"), confirm the corresponding action actually fired in the trace. An agent saying it did something without a `FunctionStep` is a critical bug.
+2. **Correct subagent routing** — Check `TransitionStep` and `NodeEntryStateStep` to confirm the utterance routed to the expected subagent.
+3. **Action inputs** — In `FunctionStep`, verify the inputs sent to the action match what the user provided (no hallucinated parameters).
+4. **Action outputs used correctly** — Compare `FunctionStep` outputs to the agent's final response. The agent should be using real data from the action, not inventing values.
+5. **Persisted state (live preview)** — For actions that write data (create records, update fields), query the backing SObject directly to confirm the write happened. This is ground truth. If no record exists, the action was not invoked regardless of what the trace or chat says — investigate the router first.
+
+### Behavioral Evaluation
+
+Evaluate the agent's behavior like a human would — does this feel like a natural, competent conversation?
+
+- **Spec-defined behavior** — If the spec or user explicitly defines a behavior (e.g., "collect all required inputs before calling the action"), verify the agent follows it exactly.
+- **Natural conversation flow** — For everything NOT explicitly specified, the agent should behave naturally. Asking for confirmation multiple times, repeating information the user already provided, or over-explaining simple actions are all bugs even if the spec doesn't explicitly forbid them.
+- **Response quality** — Is the response helpful, clear, and appropriately concise? Does it match the tone/persona defined in the spec?
+
+When behavioral issues are found, identify whether the root cause is in instructions, routing, action wiring, or variable handling, and fix the `.agent` file accordingly. Then re-preview to confirm the fix.
 
 ---
 
@@ -361,7 +441,7 @@ After each utterance in a preview session, the runtime writes trace files. Trace
 
 Traces are stored locally at:
 
-```
+```text
 .sfdx/agents/<AGENT_NAME>/sessions/<SESSION_ID>/
 ├── metadata.json           # Session metadata
 ├── transcript.jsonl        # Conversation log (one JSON object per line)
@@ -573,21 +653,17 @@ reasoning:
             available when @variables.guest_interests != ""
             with Event_Type = @variables.guest_interests
 
-# CORRECT — first step collects interests, second action uses them
+# CORRECT — let the action slot-fill from the current turn and history
 reasoning:
     instructions: ->
-        | Ask about the guest's interests if you don't know them yet.
-          Once you know what they're interested in, look up matching events.
+        | If the guest has not shared an interest, ask one concise question.
+          Otherwise use the latest interest in the conversation to look up
+          matching events in this turn.
 
     actions:
-        collect_interests: @utils.setVariables
-            description: "Collect the guest's interests"
-            with guest_interests = ...
-
         check_events: @actions.check_events
             description: "Look up local events matching the guest's interests"
-            available when @variables.guest_interests != ""
-            with Event_Type = @variables.guest_interests
+            with Event_Type = ...
 ```
 
 
@@ -595,7 +671,11 @@ reasoning:
 
 **Symptom:** The agent keeps asking the same question or repeating the same response across multiple turns, even though the user already provided the requested information.
 
-**Diagnosis:** Observe the conversation output first — the behavioral symptom is often obvious (e.g., the agent asking the same question repeatedly). A common cause is instructions that collect information and act on it within the same subagent — when the subagent is re-entered, the collection logic runs again even though the data was already gathered.
+**Diagnosis:** Observe the conversation output first — the behavioral symptom
+is often obvious (e.g., the agent asking the same question repeatedly). Check
+the exact messages sent to the model. A common cause is an instruction that
+always asks rather than first using surviving conversation history. Another is
+stale mutable state overriding a later correction.
 
 **Fix Example:** In this real scenario, the `local_events` subagent asks about interests and then looks up events. But each time the subagent is re-entered, the agent asks about interests again instead of checking whether it already knows them:
 
@@ -609,33 +689,27 @@ reasoning:
           you know what the guest is interested in.
 
     actions:
-        collect_interests: @utils.setVariables
-            description: "Collect the guest's interests when they share them"
-            with guest_interests = ...
-
         check_events: @actions.check_events
-            available when @variables.guest_interests != ""
-            with Event_Type = @variables.guest_interests
+            with Event_Type = ...
 
-# AFTER — condition on the variable, not on re-asking
+# AFTER — use history directly and slot-fill the latest value
 reasoning:
     instructions: ->
-        | If @variables.guest_interests is empty, ask the guest about their interests.
-          If @variables.guest_interests is already set, use {!@actions.check_events}
-          to find matching events and present the results.
-          Do NOT ask about interests again if you already have them.
+        | Use the guest's latest stated interest from the conversation to call
+          {!@actions.check_events} and present matching events. Ask one concise
+          question only when no interest appears in the surviving history. If
+          the guest corrects an earlier interest, use the correction.
 
     actions:
-        collect_interests: @utils.setVariables
-            description: "Collect the guest's interests when they share them"
-            with guest_interests = ...
-
         check_events: @actions.check_events
-            available when @variables.guest_interests != ""
-            with Event_Type = @variables.guest_interests
+            description: "Find events for the guest's latest stated interest"
+            with Event_Type = ...
 ```
 
-The key difference: the AFTER version explicitly references the variable value to decide whether to ask or act, and includes a stop condition ("Do NOT ask about interests again").
+The key difference: the AFTER version treats surviving history as conversational
+memory and lets the action slot-fill the latest value. Add mutable state only
+if a later deterministic consumer needs a canonicalized interest after the
+history window; do not duplicate the conversation merely to prevent re-asking.
 
 Note: repeated `LLMStep` → `ReasoningStep` pairs in a trace may indicate grounding retry rather than a behavioral loop — see Diagnostic Workflow: Grounding subsection.
 
@@ -715,7 +789,7 @@ Grounding is a platform service that validates an agent's response against real 
 When the platform's grounding checker flags a response as UNGROUNDED:
 
 1. The system injects an error message as a `role: "user"` message:
-   ```
+   ```text
    Error: The system determined your original response was ungrounded.
    Reason the response was flagged: [explanation]
    Try again. Make sure to follow all system instructions.
@@ -785,7 +859,7 @@ When fixing errors through repeated preview cycles, track how the error message 
 
 **Anti-pattern: reverting a correct fix because a new error appeared.**
 
-```
+```text
 # WRONG — assumes changed error = bad fix
 Preview attempt 1: "Invalid complex_data_type_name format"
 → Fix: change complex_data_type_name to "@apexClassType/c__MyClass$Result"
@@ -802,4 +876,3 @@ Preview attempt 2: "Action output type mismatch"
 **Rule:** Compare the error message text, not just pass/fail. If the error changed, the previous fix likely resolved its target issue. Diagnose the new error as a separate problem. Only revert a fix if the *same* error persists or worsens.
 
 ---
-

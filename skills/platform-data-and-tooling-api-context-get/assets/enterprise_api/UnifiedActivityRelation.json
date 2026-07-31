@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "UnifiedActivityRelation - Data API",
+  "description": "Represents a relationship between an activity and a related record that’s a target or topic of the activity. For example, a related record can be an opportunity, account, and so on. This object is available for reports and dashboards in the Winter ’24 release and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the activity. This field is a polymorphic relationship field.",
+      "relationship_name": "Activity",
+      "relationship_type": "Lookup",
+      "refers_to": "UnifiedActivity, UnifiedVideoCall, UnifiedVoiceCall"
+    },
+    "RelatedId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the related record. This field is a polymorphic relationship field.",
+      "relationship_name": "Related",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Contact, Contract, Lead, Opportunity, User"
+    }
+  },
+  "field_reference": {
+    "ActivityId": {
+      "field_label": "Unified Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Unified Activity Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "RelatedId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingGroup - Data API",
+  "description": "Represents groups used to roll up forecast totals on the forecasts page. For example, group forecasts by industry or sales type. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The developer (API) name of the forecast group."
+    },
+    "DisplayPosition": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The order in which forecasting dimensions are displayed on the forecasts page. Each value is unique to a dimension."
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the forecast type associated with the forecasting group. This field is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "refers_to": "ForecastingType"
+    },
+    "GroupField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The field name of the custom picklist used as a group. Possible values include custom, single-selection picklists available in SourceObject."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the custom picklist identified as the group."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for this object, which displays in Setup. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    },
+    "SourceObject": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The entity the picklist used for the forecast group is on. Possible values are: Opportunity OpportunityLineItem Product2"
+    }
+  },
+  "special_access_rules": "Available for forecast types created in Spring ‘24 or later and that are based on the Opportunity and Opportunity Product objects. You can only add groups to new forecast types.\n\nAvailable for forecast types created in Spring ‘24 or later and that are based on the Opportunity and Opportunity Product objects.\n\nYou can only add groups to new forecast types.",
+  "usage": "Each forecast group can apply to only one forecast type.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DisplayPosition": {
+      "field_label": "Display Position",
+      "type": "int",
+      "digits": "9"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "GroupField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Forecasting Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "SourceObject": {
+      "field_label": "Custom Object Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

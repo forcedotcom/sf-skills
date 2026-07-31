@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "WebStoreNetwork - Data API",
+  "description": "Represents the relationship between a web store and an experience site. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the web store network."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the experience site associated with the web store. This field is a relationship field.",
+      "relationship_name": "Network",
+      "relationship_type": "Lookup",
+      "refers_to": "Network"
+    },
+    "WebStoreId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the web store associated with the experience site. This field is a relationship field.",
+      "relationship_name": "WebStore",
+      "relationship_type": "Lookup",
+      "refers_to": "WebStore"
+    }
+  },
+  "special_access_rules": "You must:",
+  "usage": "After you copy web store data between a sandbox and production, or between sandboxes, you can programmatically associate the copy with a different site by updating the corresponding WebStoreNetwork record. You can even change the association while the store is active. The site must use a template that’s compatible with the web store type, and the site can’t be associated with a store. Otherwise, you can change the association only by editing the web store in the UI.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Store Site ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Store Site Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SiteId": {
+      "field_label": "Site ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WebStoreId": {
+      "field_label": "Store ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

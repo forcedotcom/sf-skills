@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CronJobDetail - Data API",
+  "description": "Contains details about the associated scheduled job, such as the job’s name and type. This object is available in API version 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "JobType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of the associated scheduled job. The following are the available job types. Use the job type value when querying for a specific job type. 1—Data Export 3—Dashboard Refresh 4—Reporting Snapshot 6—Scheduled Flow 7—Scheduled Apex 8—Report Run 9—Batch Job A—Reporting Notification"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the associated scheduled job."
+    }
+  },
+  "usage": "Use this object to query additional information about a scheduled job, such as the job’s name and type.",
+  "wsdl_segment": "```xml\n<complexType name=\"CronJobDetail\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"JobType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Id": {
+      "field_label": "Job ID",
+      "type": "id",
+      "length": "18"
+    },
+    "JobType": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Name": {
+      "field_label": "Job Name",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

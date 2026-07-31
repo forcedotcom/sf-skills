@@ -1,0 +1,147 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ListViewChart - Data API",
+  "description": "Represents a graphical chart that’s displayed on Salesforce for Android, iOS, and mobile web list views. The chart aggregates data that is filtered based on the list view that’s currently displayed. This object is available in API version 33.0 and later and is accessible by portal users.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AggregateField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Query, Restricted picklist, Retrieve, Sort, Update",
+      "description": "The field that’s used for calculating data on each group. AggregateField can’t be the same as GroupingField."
+    },
+    "AggregateType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Query, Restricted picklist, Retrieve, Sort, Update",
+      "description": "The type of calculations to run on each group. The supported AggregateType values are Count, Sum, and Avg."
+    },
+    "ChartType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Query, Restricted picklist,Retrieve, Sort, Update",
+      "description": "The type of chart to create. The supported chart types are horizontal bar chart, vertical bar chart, and donut chart."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Query, Retrieve, Sort, Update",
+      "description": "The fully qualified developer name of the chart. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "GroupingField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Query, Restricted picklist, Retrieve, Sort, Update",
+      "description": "The field that’s used to divide the data into collections. The field must be supported by SOQL GROUP BY functionality. GroupingField can’t be the same as AggregateField."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the MasterLabel."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Query, Retrieve, Sort, Update",
+      "description": "The label for the chart."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Query, Retrieve, Sort, Update",
+      "description": "The ID of the user who owns the chart. This is a relationship field. Relationship Name Owner Relationship Type Lookup Refers To User"
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Query, Restricted picklist, Retrieve, Sort",
+      "description": "The API name of the sObject for the chart."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ListViewChart\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AggregateField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AggregateType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ChartType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GroupingField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SobjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AggregateField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AggregateType": {
+      "field_label": "Aggregate Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ChartType": {
+      "field_label": "Chart Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "80"
+    },
+    "GroupingField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "List View Chart ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "OwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SobjectType": {
+      "field_label": "Custom Object Definition ID",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

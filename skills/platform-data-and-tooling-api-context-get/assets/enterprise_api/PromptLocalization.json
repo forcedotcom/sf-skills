@@ -1,0 +1,93 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PromptLocalization - Data API",
+  "description": "Represents the translated value of a label for record details about in-app guidance when the Translation Workbench is enabled for your org. Available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the language used in the org where the in-app guidance was created."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that aren't Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the in-app guidance."
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The actual translated record details for the in-app guidance."
+    }
+  },
+  "special_access_rules": "To add, edit, manage, and view prompts and walkthroughs in Lightning Experience or in Experience Cloud sites, multiple permissions are required. See Permissions for Creating and Accessing In-App Guidance in Salesforce Help.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Translation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Language": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Value": {
+      "field_label": "Translation Text",
+      "type": "textarea",
+      "length": "32000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

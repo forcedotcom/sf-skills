@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "TaskWhoRelation - Data API",
+  "description": "Represents the relationship between a task and a lead or contacts. This object is available in API version 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the Account ID of the relation. For information on IDs, see ID Field Type."
+    },
+    "RelationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the ID of the contacts or lead related to the task."
+    },
+    "TaskId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the ID of the task."
+    },
+    "Type": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the person related to the task is a lead or contact."
+    }
+  },
+  "usage": "Here's a Java example that queries contacts associated with a task.\n\nqueryWhosOfTaskSample\n\n\"SELECT Id, Subject, (SELECT RelationId, Relation.Name, IsWhat from TaskWhoRelations) FROM Task WHERE Id = '00Tx0000005OKEN'\"\n\nQueryResult\n\nTaskWhoRelation\n\nTaskWhoRelation\n\ngetTaskWhoRelations\n\nConnectionException\n\nprintStackTrace",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Task Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RelationId": {
+      "field_label": "Relation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaskId": {
+      "field_label": "Task ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "string",
+      "length": "50"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

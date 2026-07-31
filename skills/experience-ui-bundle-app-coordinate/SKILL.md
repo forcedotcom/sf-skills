@@ -2,18 +2,29 @@
 name: experience-ui-bundle-app-coordinate
 description: "MUST activate when the user wants to build, create, or generate a React application, React app, web application, single-page application (SPA), or frontend application — even if no project files exist yet. MUST also activate when the project contains a uiBundles/*/src/ directory or sfdx-project.json and the prompt says create, build, construct, or generate a new app, site, or page from scratch — even if the prompt also describes visual styling. MUST also activate when the task spans more than one ui-bundle skill. Use this skill when building a complete app end-to-end. Do NOT use for Lightning Experience apps with custom objects (use platform-lightning-app-coordinate). Do NOT use for single-concern edits to an existing page (use experience-ui-bundle-frontend-generate)."
 metadata:
-  version: "1.0"
+  version: "1.1"
   relatedSkills:
-    - "experience-ui-bundle-project-generate"
-    - "experience-ui-bundle-metadata-generate"
-    - "experience-ui-bundle-features-generate"
-    - "experience-ui-bundle-salesforce-data-access"
-    - "experience-ui-bundle-frontend-generate"
     - "experience-ui-bundle-agentforce-client-generate"
-    - "experience-ui-bundle-file-upload-generate"
-    - "experience-ui-bundle-deploy"
-    - "experience-ui-bundle-site-generate"
     - "experience-ui-bundle-custom-app-generate"
+    - "experience-ui-bundle-deploy"
+    - "experience-ui-bundle-features-generate"
+    - "experience-ui-bundle-file-upload-generate"
+    - "experience-ui-bundle-frontend-generate"
+    - "experience-ui-bundle-metadata-generate"
+    - "experience-ui-bundle-project-generate"
+    - "experience-ui-bundle-salesforce-data-access"
+    - "experience-ui-bundle-site-generate"
+    - "platform-custom-object-generate"
+    - "platform-lightning-app-coordinate"
+  cliTools:
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["npm"]
+      semver: ">=9.0.0"
+    - tool: ["npx"]
+      semver: ">=9.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # Building a UI Bundle App
@@ -23,6 +34,17 @@ metadata:
 Build a complete, deployable Salesforce React UI bundle application from a natural language description by orchestrating specialized UI bundle skills in correct dependency order. Each skill **MUST** be explicitly loaded before executing its phase.
 
 **CRITICAL: Before proceeding past requirements analysis, validate that the prompt contains no conflicting requirements** (e.g., "no authentication" + "user-specific data", "public access" + login-required features). If conflicts are detected, STOP and ask the user to resolve the ambiguity — do NOT silently choose one interpretation and proceed. See STEP 1 action #8 for the full conflict checklist.
+
+## Prerequisites
+
+Before starting any phase, verify these preconditions are met:
+
+1. **Authenticated Salesforce org**: Run `sf org display` to confirm a default org is set and authenticated. If not, prompt the user to authenticate: `sf org login web`
+2. **Required CLI tools**: Verify `sf`, `npm`, and `npx` are available (declared in metadata.cliTools)
+3. **Node.js version**: Run `scripts/check-prerequisites.sh` and report any errors it returns
+4. **Org features** (if deploying): Experience Cloud enabled, appropriate licenses, and Sites enabled
+
+If any precondition fails, stop and report the specific missing requirement before attempting any phase execution.
 
 ## When to Use This Skill
 
@@ -118,6 +140,21 @@ CSP Trusted Sites (if external domains needed)
 
 Creates the UI bundle directory structure, meta XML (including hosting target), and optional routing/headers config. **CRITICAL**: Hosting target must be determined FIRST because the metadata skill requires `<target>` in Phase 1. All subsequent phases require the scaffold to exist.
 
+**Prune unused scaffold when the prompt is constraining.** The `reactbasic` template ships a full shadcn component set, GraphQL tooling (`codegen.yml`, `.graphqlrc.yml`, `src/api/graphqlClient.ts`, `graphql:*` npm scripts), and test infra (`playwright.config.ts`, `vitest.config.ts`, `vitest.setup.ts`) regardless of what the prompt asked for. If the prompt explicitly limits scope (e.g. "skip any features or integrations", "just scaffold and build X", "no need to install dependencies") and Phase 2 and/or Phase 3 are consequently skipped, remove the scaffold pieces those phases would have owned before Phase 4 runs:
+
+- **Phase 2 skipped** → delete shadcn components under `src/components/ui/` except the ones Phase 4's pages actually import; remove unused example/demo components.
+- **Phase 3 skipped** → delete `codegen.yml`, `.graphqlrc.yml`, `src/api/graphqlClient.ts`, `graphql:schema`/`graphql:codegen` scripts from `package.json`, and any `hooks/` data-fetching stubs (e.g. `useAsyncData.ts`) the template pre-seeded.
+- **Neither testing nor deployment requested** → leave `playwright.config.ts`/`vitest.*` only if the prompt implies testing; otherwise remove them too.
+- Rewrite `README.md` to describe the actual app built, not the generic template boilerplate — or delete it if the prompt says to do minimal work only.
+
+**Deleting a file is only half the job — every reference to it must be removed in the same pass, or you trade over-generation for broken cross-file consistency (worse: a dangling import is a functional break, not just scope creep).** Concretely, after deleting any of the above:
+
+- `vite.config.ts` — remove the `vite-plugin-graphql-codegen` import and its `codegen({ configFilePathOverride: ... })` plugin block if `codegen.yml` was deleted; remove the `test:` config block (`setupFiles`, `coverage`, etc.) if `vitest.*` was deleted.
+- `package.json` — remove now-unused dependencies (`vite-plugin-graphql-codegen`, `@graphql-codegen/*`, `playwright`, `vitest`, etc.) and their npm scripts, not just the config files.
+- Any component/page that imports a deleted hook, client, or shadcn component (e.g. `useAsyncData`, `graphqlClient`) must have that import and its usage removed or replaced — never leave an import pointing at a file that no longer exists.
+- Do NOT re-add a file you just deleted elsewhere in the same pass (e.g. deleting `codegen.yml` while still emitting `.graphqlrc.yml`) — decide scope once per concern and apply it consistently across every file that touches that concern.
+- Before finishing Phase 4, run `scripts/check-dangling-refs.sh <deleted-basename>` for each deleted file and report any errors it returns.
+
 ### Phase 2: Features (Required if prompt mentions feature keywords — see "Prompt Classification Keywords" above)
 
 ```text
@@ -136,6 +173,10 @@ Installs pre-built, tested feature packages. See "Prompt Classification Keywords
 
 Only skip this phase if the app is truly a minimal "hello world" with no interactive features (no trigger keywords present at all).
 
+### Phase 2.5: Custom Objects (Required if the prompt requires a new custom Salesforce object the org doesn't have)
+
+See `references/phase-custom-objects.md` for Phase 2.5 (Custom Objects) details.
+
 ### Phase 3: Data Access (Backend Wiring)
 
 ```text
@@ -152,7 +193,8 @@ Sets up the data layer using the **`@salesforce/platform-sdk`** Data SDK (`creat
 GraphQL is preferred for record operations; REST for Connect, Apex, or UI API endpoints. **The
 `experience-ui-bundle-salesforce-data-access` skill owns the grounding + authoring workflow — load it and follow
 it; do not substitute a local-schema grep or guessed field names.** Grounding happens against the
-**live org**, so it does not require a local `schema.graphql` to be present.
+**live org**, so it does not require a local `schema.graphql` to be present. If Phase 2.5 created a
+new object, it must be deployed before this phase's grounding step can find it.
 
 ### Phase 4: UI (Frontend)
 
@@ -292,6 +334,9 @@ SCAFFOLDING:
 FEATURES:
 - [list of features to install: auth, shadcn, search, navigation, etc.]
 
+CUSTOM OBJECTS (if applicable):
+- New objects/fields: [list any object the org does not already have, with its fields -- delegate to platform-custom-object-generate, not authored here]
+
 DATA ACCESS:
 - Objects: [Salesforce objects to query/mutate]
 - Grounding: [verify each object + its fields against the org via experience-ui-bundle-salesforce-data-access BEFORE authoring — list the objects/fields to confirm, not assumed-correct names]
@@ -315,6 +360,7 @@ SKILL LOAD ORDER:
 0. experience-ui-bundle-project-generate (offer a prebuilt template first; if chosen, Phase 1 scaffolding is skipped; if declined, run the Bootstrap check for an existing SFDX project -- no skill load required)
 1. experience-ui-bundle-metadata-generate (determines hosting target FIRST)
 2. experience-ui-bundle-features-generate (if features needed)
+2.5. platform-custom-object-generate (if the prompt requires a new custom Salesforce object the org doesn't have -- MUST complete and deploy before step 3)
 3. experience-ui-bundle-salesforce-data-access (if data access needed)
 4. experience-ui-bundle-frontend-generate
 5a. experience-ui-bundle-agentforce-client-generate (if chat requested)
@@ -326,133 +372,52 @@ SKILL LOAD ORDER:
 
 ### STEP 2: Per-Phase Execution
 
-Execute each phase sequentially. Complete all steps within a phase before moving to the next. For each phase:
-
-| Step | What to do | Why |
-|------|-----------|-----|
-| **1. Load skill** | Invoke the skill (e.g., via the Skill tool) for this phase | Gives you the current rules, patterns, constraints, and implementation guides |
-| **2. Execute** | Follow the loaded skill's workflow to generate code/config | The skill defines HOW to do the work correctly |
-| **3. Verify** | Run lint and build from the UI bundle directory | Catch errors before moving to the next phase |
-| **4. Checkpoint** | Confirm phase completion before proceeding | Ensures dependencies are satisfied for the next phase |
-
-**CRITICAL: Do NOT skip step 1 (loading the skill).** Even if you remember the skill's content, skills evolve. Always load the current version. **Skipping or reordering phases produces broken, non-deployable apps.** Phase dependencies are strict and cannot be violated.
+Execute each phase sequentially following the standard pattern in `references/phase-execution-pattern.md`. **CRITICAL: Always load the skill before executing.** Skipping or reordering phases produces broken apps.
 
 ---
 
-**Phase 0 -- Template Offer & Bootstrap** (always, before scaffolding)
-- 1. Load skill: Invoke `experience-ui-bundle-project-generate`
-- 2. Execute: Offer the two starter templates; if the user picks one, generate it into the project dir with `sf template generate project`
-- 3. Decision: If a template was used, the project is scaffolded (including a valid SFDX project structure) — skip Phase 1 and continue at the phase matching the user's customization (usually Phase 4 UI). If declined, proceed to the Bootstrap check below.
-- 4. Bootstrap (no skill load required, only if no template was used): Run `scripts/check-sfdx-project.sh` and report any errors it returns. If the script reports an error, create the SFDX project structure (`sf project generate` or manually create sfdx-project.json).
-- 5. Checkpoint: SFDX project ready -- proceed to Phase 1
+**Phase 0 -- Template Offer & Bootstrap**
+- Load `experience-ui-bundle-project-generate`, offer templates. If chosen: skip Phase 1, continue at Phase 4. If declined: run `scripts/check-sfdx-project.sh`, create project if missing.
 
-**Phase 1 -- Scaffolding** (skip if a template was generated in Phase 0)
-- 1. Load skill: Invoke `experience-ui-bundle-metadata-generate`
-- 2. Execute: Determine hosting target (Experience Site / Custom Application) FIRST. Run `sf template generate ui-bundle --template reactbasic`, install dependencies (`npm install`), configure meta XML (with `<target>`), ui-bundle.json, and CSP trusted sites.
-- 3. Verify: Confirm directory structure and metadata files exist with hosting target specified
-- 4. Checkpoint: UI bundle scaffold is ready -- proceed to Phase 2
+**Phase 1 -- Scaffolding** (skip if template used in Phase 0)
+- **Precondition**: `scripts/check-sfdx-project.sh` passes
+- Load `experience-ui-bundle-metadata-generate`. Determine hosting target FIRST. Run `sf template generate ui-bundle --template reactbasic`, configure meta XML with `<target>`.
+- **Post-verification**: `scripts/check-phase-1-complete.sh` passes
 
-**Phase 2 -- Features** (Required if prompt mentions feature keywords — see "Prompt Classification Keywords" above)
-- 1. Load skill: Invoke `experience-ui-bundle-features-generate`
-- 2. Execute: Install dependencies, search and install features, integrate example files
-- 3. Verify: Run `npm run build` to confirm features integrate cleanly
-- **Trigger conditions**: See "Prompt Classification Keywords" above for the full keyword list (by category) and how negative phrasing is handled -- negating one category does not cancel triggers from another.
+**Phase 2 -- Features** (skip if no feature keywords present — see "Prompt Classification Keywords")
+- Load `experience-ui-bundle-features-generate`. Install features, integrate examples. Verify with `npm run build`.
 
-**Phase 3 -- Data Access** (skip if no Salesforce data needed)
-- 1. Load skill: Invoke `experience-ui-bundle-salesforce-data-access`
-- 2. Execute: Check preconditions (authenticated org, npm dependencies installed). Fetch schema (`npm run graphql:schema`), guard against empty schema. Look up entities, generate queries/mutations, wire into components.
-- 3. Verify: Run `npx eslint` on files with GraphQL queries. Verify schema is non-empty.
-- 4. Checkpoint: Data layer ready -- proceed to Phase 4
+**Phase 2.5 -- Custom Objects** (skip if org has all needed objects)
+- Read `references/phase-custom-objects.md` and follow execution steps.
 
-**Phase 4 -- UI** (ALWAYS REQUIRED - CANNOT BE SKIPPED)
-- 1. Load skill: Invoke `experience-ui-bundle-frontend-generate`
-- 2. Execute: Build layout, pages, components, navigation. Replace all boilerplate.
-   - If Phase 2 was skipped: Generate UI components from scratch without feature templates
-   - If Phase 3 was skipped: Use mock data or static content for display
-   - Phase 4 MUST execute even if prior phases were skipped
-- 3. Verify: Run lint and build -- 0 errors required
-- 4. Checkpoint: UI complete -- proceed to Phase 5 if integrations needed, or stop here if building only
+**Phase 3 -- Data Access** (skip if no Salesforce data)
+- Load `experience-ui-bundle-salesforce-data-access`. Fetch schema, ground entities, generate queries/mutations. Verify with `npx eslint`.
 
-⚠️ **CRITICAL**: Phase 4 generates the actual React user interface. Skipping it results in a UI bundle with only metadata and no user-facing pages or components. ALWAYS execute Phase 4 for every UI bundle build.
+**Phase 4 -- UI** (ALWAYS REQUIRED)
+- **Precondition**: `scripts/check-phase-1-complete.sh` passes
+- Load `experience-ui-bundle-frontend-generate`. Build layout, pages, components. Replace all boilerplate.
+- **Post-verification**: `scripts/check-phase-4-complete.sh` passes
+- **CRITICAL**: Phase 4 generates the actual React UI. Never skip.
 
 **Phase 5 -- Integrations** (skip if not requested)
-- 1. Load skill(s): Invoke `experience-ui-bundle-agentforce-client-generate` (5a) and/or `experience-ui-bundle-file-upload-generate` (5b). If both are needed, they are independent and can be executed in parallel.
-- 2. Execute: Follow each skill's workflow to add the integration
-- 3. Verify: Run lint and build
-- 4. Checkpoint: Integrations complete -- proceed to Phase 6
+- Load `experience-ui-bundle-agentforce-client-generate` (5a) and/or `experience-ui-bundle-file-upload-generate` (5b) as needed.
 
 **Phase 6 -- Deployment**
-- 1. Load skill: Invoke `experience-ui-bundle-deploy`
-- 2. Execute: Check preconditions (authenticated org, successful build). Follow the 7-step deployment sequence (auth, build, deploy, permissions, data, schema, final build). When available, prefer using a project-level `scripts/org-setup.mjs` automation script over re-deriving the deployment flow each run. Guard the post-deploy schema re-fetch against an empty/stale result (Edge caching) before running final codegen -- retry rather than trusting an empty schema.
-- 3. Verify: Confirm deployment succeeds, app is accessible, and the re-fetched schema is non-empty
-- 4. Checkpoint: App deployed -- proceed to Phase 7 if hosting target deployment is needed
+- **Precondition**: `scripts/check-phase-6-ready.sh` passes
+- Load `experience-ui-bundle-deploy`. Follow 7-step sequence. Prefer `scripts/org-setup.mjs` if available.
+- **CRITICAL**: Guard against empty schema — retry fetch 3x before codegen.
 
-**Phase 7a -- Experience Site** (skip if not requested or if Custom Application chosen)
-- 1. Load skill: Invoke `experience-ui-bundle-site-generate`
-- 2. Execute: Resolve properties, generate site metadata, deploy
-- 3. Verify: Confirm site URL is accessible (hosting target already verified by `scripts/check-hosting-target.sh` in trigger evaluation)
-- 4. Checkpoint: Site live -- build complete
-- **Trigger conditions**: Run `scripts/check-hosting-target.sh` and check output for "ExperienceSite" OR prompt matches an Experience Site keyword in "Prompt Classification Keywords" above
-- **Note**: The `<target>ExperienceSite</target>` was already set in meta XML during Phase 1 -- do not add it again
+**Phase 7a -- Experience Site** (external users)
+- **Trigger**: `scripts/check-hosting-target.sh` outputs "ExperienceSite"
+- Load `experience-ui-bundle-site-generate`. Deploy site infrastructure.
 
-**Phase 7b -- Custom Application** (skip if not requested or if Experience Site chosen)
-- 1. Load skill: Invoke `experience-ui-bundle-custom-app-generate`
-- 2. Execute: Resolve app properties, generate CustomApplication metadata
-- 3. Verify: Confirm app appears in App Launcher (hosting target already verified by `scripts/check-hosting-target.sh` in trigger evaluation)
-- 4. Checkpoint: App registered -- build complete
-- **Trigger conditions**: Run `scripts/check-hosting-target.sh` and check output for "CustomApplication" OR prompt matches a Custom Application keyword in "Prompt Classification Keywords" above
-- **Note**: The `<target>CustomApplication</target>` was already set in meta XML during Phase 1 -- do not add it again
+**Phase 7b -- Custom Application** (internal users)
+- **Trigger**: `scripts/check-hosting-target.sh` outputs "CustomApplication"
+- Load `experience-ui-bundle-custom-app-generate`. Deploy app metadata.
 
 ### STEP 2.5: Phase Completion Validation
 
-Before proceeding to STEP 3 (Final Summary), validate that all required phases were executed:
-
-**Critical Validation (MUST pass):**
-- [ ] **Phase 0 (Template Offer & Bootstrap) executed**: If no template was used, run `scripts/check-sfdx-project.sh`. If it returns non-zero, STOP and report error:
-  ```text
-  ERROR: No SFDX project detected. Phase 0 (Bootstrap) is REQUIRED before scaffolding.
-  Run `sf project generate` (or create sfdx-project.json) before invoking
-  `sf template generate ui-bundle`.
-  ```
-  If a template was used in Phase 0, this check is satisfied by the template's own scaffolding — skip re-running the script.
-
-- [ ] **Phase 1 hosting target resolved**: Run `scripts/check-hosting-target.sh`. If it returns non-zero, STOP and report error:
-  ```text
-  ERROR: Hosting target was not resolved in Phase 1. A UI bundle without a <target> in its
-  meta XML will not be visible in the org. Determine Experience Site vs Custom Application
-  (see "Prompt Classification Keywords" above; ask the user if ambiguous) before proceeding
-  past Phase 1 -- do not defer this to Phase 7 and do not record "none"/"skipped".
-  ```
-
-- [ ] **Phase 4 (Frontend) executed**: If Phase 4 was NOT executed, STOP and report error:
-  ```text
-  ERROR: Phase 4 (UI/Frontend generation) is REQUIRED for all UI bundle apps.
-  Cannot complete build without generating the React user interface.
-  Please review the phase execution logic and ensure Phase 4 is always executed.
-  ```
-
-- [ ] **Phase 7 hosting infrastructure deployed**: If neither Phase 7a nor Phase 7b was executed, STOP and report error:
-  ```text
-  ERROR: Hosting target infrastructure (Phase 7a Experience Site or Phase 7b Custom
-  Application) was not deployed. The app was built but is not reachable by any user.
-  Exactly one of Phase 7a/7b must run -- it is never optional or "skipped".
-  ```
-
-**Warning Validation (log warnings, but can proceed):**
-- [ ] **Phase 2 execution**: If Phase 2 was skipped but the prompt matches any keyword in "Prompt Classification Keywords" above (data features, navigation, authentication, integrations, or UI category):
-  ```text
-  WARNING: Phase 2 (Features) was skipped but prompt contains feature keywords.
-  This may indicate a trigger detection failure. Generated UI may be missing
-  required feature functionality. Consider re-running with Phase 2 included.
-  ```
-
-- [ ] **Phase 3 execution**: If Phase 3 was skipped but prompt mentions Salesforce objects, "GraphQL", "data", or "query":
-  ```text
-  WARNING: Phase 3 (Data Access) was skipped but prompt mentions Salesforce data.
-  Generated UI may not connect to backend correctly. Verify data access is working.
-  ```
-
-**Proceed to STEP 3 only if all Critical Validation checks pass (Phase 0, hosting target, Phase 4, Phase 7).**
+Before proceeding to STEP 3 (Final Summary), validate that all required phases were executed. See `references/phase-completion-validation.md` for the full critical/warning checklist and exact error/warning text to report.
 
 ### STEP 3: Final Summary
 
@@ -465,6 +430,7 @@ PHASES COMPLETED:
 [x] Phase 0: Template Offer & Bootstrap -- [template used: <name> / declined; SFDX project verified/created]
 [x] Phase 1: Scaffolding -- [app name] UI bundle created with hosting target [Experience Site / Custom Application]
 [x] Phase 2: Features -- [list of features installed, or "skipped"]
+[x] Phase 2.5: Custom Objects -- [list of objects/fields created and deployed, or "skipped -- no new schema needed"]
 [x] Phase 3: Data Access -- [list of entities wired up]
 [x] Phase 4: UI -- [count] pages, [count] components
 [x] Phase 5: Integrations -- [list or "none"]

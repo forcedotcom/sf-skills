@@ -1,0 +1,67 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "StandardAction - Tooling API",
+  "description": "Represents the buttons, links, and actions (standard actions) for a standard or custom object. This object is available in API version 34.0 and later.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContentType": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the button or link is standard, URL, s-control, JavaScript action, or Visualforce page. This value maps to the Content Source field in the user interface."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Text displayed to an administrator in the standard action setup page. Description can be different from the Label, which is the label displayed in the user interface to end users. It can also be different from Name, which is a unique string used in merge fields."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. DurableId in queries allows you to find the right record without having to retrieve the entire record."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the standard or custom object for which this standard action is defined."
+    },
+    "IsOverridden": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this standard action has been overridden (true, or not."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The text that displays in a user interface for the standard action."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group,Sort",
+      "description": "The unique name for the button or link when referenced from a merge field. This name can contain only underscores and alphanumeric characters, and must be unique in your organization. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "OverrideContentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of an OverrideContent record."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"StandardAction\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ContentType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Description\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinition\" minOccurs=\"0\" type=\"ens:EntityDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsOverridden\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Label\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"ManageableState\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"OverrideContent\" minOccurs=\"0\" type=\"ens:sObject\" nillable=\"true\"/>\n        <xsd:element name=\"OverrideContentId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

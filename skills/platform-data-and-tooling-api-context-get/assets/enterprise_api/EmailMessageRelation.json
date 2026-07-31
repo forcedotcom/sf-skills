@@ -1,0 +1,121 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmailMessageRelation - Data API",
+  "description": "Represents the relationship between an email and contacts, leads, and users. This object is available in API version 37.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EmailMessageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the EmailMessage record. This is a relationship field.",
+      "relationship_name": "EmailMessage",
+      "relationship_type": "Lookup",
+      "refers_to": "EmailMessage"
+    },
+    "DeliveryResponse": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The delivery response from the email recipient. Possible values are: SoftBounce HardBounce OutOfOffice Available in API version 67.0 and later."
+    },
+    "RelationAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The email address of the sender or recipient. Note: If a record relates an email to an existing contact, lead, or user record in Salesforce, the value of RelationAddress is the current value of the email address. If the value is not set, it is auto-populated from RelationId."
+    },
+    "RelationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The RecordId of the sender or recipient. Note: If a record relates an email to an email address that’s not associated with an existing contact, lead, or user record in Salesforce, the value of RelationId is null. This is a polymorphic relationship field.",
+      "relationship_name": "Relation",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead, User"
+    },
+    "RelationObjectType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name of the object type of the RecordId in the RelationId field. It can be a contact, lead, or user."
+    },
+    "RelationType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of relationship the contact, lead, or user has with the email message. Possible values include: ToAddress CcAddress BccAddress FromAddress OtherAddress For an Experience Cloud site user who is not the sender of the email, no BccAddress relations are returned."
+    }
+  },
+  "special_access_rules": "EmailMessageRelation is only available for organizations that use Email-to-Case or Enhanced Email, which is automatically enabled for most customers.",
+  "usage": "EmailMessageRelation allows an email to be related to contacts, leads, and users.",
+  "wsdl_segment": "```xml\n<complexType name=\"EmailMessageRelation\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EmailMessage\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EmailMessage\"/>\n        <element name=\"EmailMessageId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Relation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelationAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RelationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RelationObjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RelationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeliveryResponse": {
+      "field_label": "Delivery Response",
+      "type": "picklist",
+      "length": "40"
+    },
+    "EmailMessageId": {
+      "field_label": "Email Message ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Email Message Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "RelationAddress": {
+      "field_label": "Relation Address",
+      "type": "string",
+      "length": "255"
+    },
+    "RelationId": {
+      "field_label": "Relation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelationObjectType": {
+      "field_label": "Relation Object Type",
+      "type": "string",
+      "length": "50"
+    },
+    "RelationType": {
+      "field_label": "Relation Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

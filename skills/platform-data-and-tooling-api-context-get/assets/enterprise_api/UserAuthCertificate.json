@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "UserAuthCertificate - Data API",
+  "description": "Represents a user authentication certificate in your org. A user certificate is a unique PEM-encoded X.509 digital certificate to authenticate individual users to your org. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CertificateChain": {
+      "type": "base64",
+      "properties": "Create, Update",
+      "description": "The uploaded PEM files can contain a single certificate or up to 10 certificates in a certificate chain. Uploaded PEM files can’t be larger than 1 MB."
+    },
+    "CertificateChainLength": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The auto-generated length of the certificate or certificate chain in the uploaded PEM file."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, Salesforce generates one for each record, which slows performance. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The expiration date of the uploaded certificate."
+    },
+    "Fingerprint": {
+      "type": "string",
+      "properties": "Filter. Group, idLookup, Sort",
+      "description": "The unique fingerprint of the uploaded certificate."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language in which to display the certificate. Possible values are: da (Danish) de (German) en_US (English) es (Spanish) es_MX (Spanish - Mexico) fi (Finnish) fr (French) it (Italian) ja (Japanese) ko (Korean) nl_NL (Dutch) no (Norwegian) pt_BR (Portuguese - Brazil) ru (Russian) sv (Swedish) th (Thai) zh_CN (Chinese - Simplified) zh_TW (Chinese - Traditional)"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A descriptive name for the certificate."
+    },
+    "SerialNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The serial number of the uploaded certificate."
+    },
+    "UserID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The user associated with the certificate."
+    }
+  },
+  "special_access_rules": "This object is only available in orgs with Let users authenticate with a certificate enabled in Identity Verification. Only users with the Manage Internal Users permission can access this object."
+}

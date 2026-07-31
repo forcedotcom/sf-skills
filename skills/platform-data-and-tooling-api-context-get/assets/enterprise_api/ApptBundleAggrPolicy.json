@@ -1,0 +1,194 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ApptBundleAggrPolicy - Data API",
+  "description": "Policy that defines how the property values of the bundle members are aggregated and assigned to the bundle. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AggregationAction": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The aggregation action to be performed. Possible values are: All default and custom Service Appointment fields."
+    },
+    "AggregationFieldType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The target field type in the bundle to which the aggregation is directed. Possible values are: Boolean Date Numeric Picklist Picklist-Multi Skills String"
+    },
+    "AggregationOrder": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The order the aggregation is triggered."
+    },
+    "BundleFieldName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Name of the target field in the bundle where the value is taken from the bundle member. Possible values are: All default and custom Service Appointment fields."
+    },
+    "BundleMemberAddiFieldName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Name of an additional source field that is connected to the initial source field in the bundle member from which the value is taken. Possible values are: All default and custom Service Appointment fields."
+    },
+    "BundleMemberFieldName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Name of the source field in the bundle member from which the value is taken. Possible values are: All default and custom Service Appointment fields."
+    },
+    "BundlePolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the parent bundle policy. This is a relationship field.",
+      "relationship_name": "BundlePolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "ApptBundlePolicy"
+    },
+    "ConstantValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The constant value that is used in the aggregation."
+    },
+    "DateValue": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Represents how the date value will be determined. Possible values are: End of Day Now Null Start of Day"
+    },
+    "DoesAllowDuplicateStrings": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if you want to allow the same string to appear more than once when using the 'Sum based on Bundle Members' action type."
+    },
+    "DownscaleSortDirection": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Applies only if the Set Downscaled Duration action is set. The downscaling sorting direction of the bundle member service appointments, according to their duration. Possible values are: Ascending Descending"
+    },
+    "FilterCriteriaId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The active recordset filter criteria used for aggregating the bundle members. This is a relationship field.",
+      "relationship_name": "FilterCriteria",
+      "relationship_type": "Lookup",
+      "refers_to": "RecordsetFilterCriteria"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "MaxBundleDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum bundle duration that can be accumulated from the bundle members (after downscaling)."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the appointment bundle aggregation policy."
+    },
+    "ShouldUpdateOnCreationOnly": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if you want to update the field in the bundle only when it is created."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"ApptBundleAggrPolicy\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AggregationAction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AggregationFieldType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApptBundleAggrDurDnscales\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BundleFieldName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BundlePolicy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApptBundlePolicy\"/>\n        <element name=\"BundlePolicyId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FilterCriteria\" nillable=\"true\" minOccurs=\"0\" type=\"ens:RecordsetFilterCriteria\"/>\n        <element name=\"FilterCriteriaId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AggregationAction": {
+      "field_label": "Aggregation Action",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AggregationFieldType": {
+      "field_label": "Aggregation Field Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BundleFieldName": {
+      "field_label": "Bundle’s Target Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BundlePolicyId": {
+      "field_label": "Appointment Bundle Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FilterCriteriaId": {
+      "field_label": "Recordset Filter Criteria ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Appointment Bundle Aggregation Policy ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

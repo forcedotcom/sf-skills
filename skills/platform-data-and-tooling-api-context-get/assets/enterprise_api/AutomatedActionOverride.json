@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "AutomatedActionOverride - Data API",
+  "description": "Represents a modified attribute of a shared automated action. For example, the modified attribute can contain customizations for your business. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "FieldName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the field to override."
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action override record is locked or not. The default value is false."
+    },
+    "IsRelatedRecordOverridable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the parent automated action record can be overridden. The default value is false."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action override record can be edited or not. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the automated action."
+    },
+    "RelatedRecordApiName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The object name of the RelatedRecordId. This field is a calculated field."
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the automated action. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "AutomatedAction, FtestUser"
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "The overridden value used for FieldName."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AutomatedActionOverrideOwnerSharingRule**: Sharing rules are available for the object.\n- **AutomatedActionOverrideShare**: Sharing is available for the object."
+}

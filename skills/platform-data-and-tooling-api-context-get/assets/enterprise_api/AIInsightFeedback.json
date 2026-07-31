@@ -1,0 +1,139 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "AIInsightFeedback - Data API",
+  "description": "Represents an Einstein prediction insight feedback. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActualValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The raw feedback value. This field is null when no recommendation is selected."
+    },
+    "AiFeedback": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The feedback user sentiment. Possible values are: Negative—Negative feedback Neutral—Neutral feedback Positive—Positive feedback"
+    },
+    "AiInsightFeedbackType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The nature of the feedback. Possible values are: Explicit—Explicit feedback. For example, a user applies and saves an Einstein recommendation on a case. Implicit—Implicit feedback. For example, a user edits or updates a case field without viewing or applying field recommendations from Einstein."
+    },
+    "AiRecordInsightId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the associated AIRecordInsight. This is a relationship field.",
+      "relationship_name": "AiRecordInsight",
+      "relationship_type": "Lookup",
+      "refers_to": "AIRecordInsight"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the AIInsightFeedback."
+    },
+    "Rank": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The feedback score."
+    },
+    "ValueId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of the associated AIInsightValue. This is a polymorphic relationship field.",
+      "relationship_name": "Value",
+      "relationship_type": "Lookup",
+      "refers_to": "AIInsightAction, AIInsightValue"
+    }
+  },
+  "special_access_rules": "Prediction insight objects are only available in orgs that have Einstein features, such as Prediction Builder or Case Classification, enabled.",
+  "usage": "Salesforce creates AIInsightFeedback records based on user responses to predictions after the prediction has been created. User feedback, such as a thumbs up/down response or accepting a recommended value, results in the creation of a feedback record in which the feedback type is explicit. An implicit feedback record is created when Einstein makes a recommendation but the field is updated in another way, for example, by a process. Once the AIInsightFeedback record has been created, it’s immutable. Custom fields can’t be added to Einstein insight objects.\n\nSalesforce creates AIInsightFeedback records based on user responses to predictions after the prediction has been created. User feedback, such as a thumbs up/down response or accepting a recommended value, results in the creation of a feedback record in which the feedback type is explicit. An implicit feedback record is created when Einstein makes a recommendation but the field is updated in another way, for example, by a process. Once the AIInsightFeedback record has been created, it’s immutable.\n\nCustom fields can’t be added to Einstein insight objects.",
+  "field_reference": {
+    "ActualValue": {
+      "field_label": "Actual Value",
+      "type": "string",
+      "length": "255"
+    },
+    "AiFeedback": {
+      "field_label": "AI Insight Feedback",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AiInsightFeedbackType": {
+      "field_label": "AI Insight Feedback Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AiRecordInsightId": {
+      "field_label": "AI Record Insight ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "AI Insight Feedback ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Rank": {
+      "field_label": "Rank",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ValueId": {
+      "field_label": "AI Insight Value ID or AI Insight Action ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "BulkApi2EventLog - Data API",
+  "description": "Bulk API 2 event logs contain details about Bulk API 2.0 requests. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CpuTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "FailedRecordCount": {
+      "type": "int",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total number of records that failed. For example: 150."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The error message returned on failure."
+    },
+    "JobIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the Bulk API 2.0 job."
+    },
+    "JobStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The job’s current status."
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "ObjectType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of event. The value is always BulkApi2."
+    },
+    "OperationType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of Bulk API 2.0 operation that was performed."
+    },
+    "ProcessedRecordCount": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Number of records processed for this event. For example: 980.The number of records processed is reported differently for ingest and query jobs. For ingest jobs: Events with a status of InProgress report (if applicable) the number of records processed. For query jobs: Events with a status of JobComplete or InProgress report (if applicable) the number of records processed."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestId. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "ResultSize": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Number of megabytes returned in query. Empty for ingest jobs. For example: 670. ResultSizeMb currently does not emit events, but is shown here as a placeholder for future enhancement."
+    },
+    "RunTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestId. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "Uri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

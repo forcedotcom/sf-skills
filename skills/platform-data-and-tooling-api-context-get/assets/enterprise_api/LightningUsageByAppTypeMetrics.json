@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "LightningUsageByAppTypeMetrics - Data API",
+  "description": "Represents number of users on Lightning Experience and Salesforce Mobile. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AppExperience": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "User’s app (Lightning Experience or Salesforce Mobile)."
+    },
+    "MetricsDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "Date user accessed Lightning Experience or Salesforce Mobile."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "UserId for user accessing Lightning Experience or Salesforce Mobile. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "Not available in sandbox orgs.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"LightningUsageByAppTypeMetrics\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppExperience\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MetricsDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AppExperience": {
+      "field_label": "App Experience",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Lightning Usage By App Type Metrics ID",
+      "type": "id",
+      "length": "18"
+    },
+    "MetricsDate": {
+      "field_label": "Metrics Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

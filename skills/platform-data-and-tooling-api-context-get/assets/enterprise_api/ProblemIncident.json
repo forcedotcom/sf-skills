@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ProblemIncident - Data API",
+  "description": "Represents a junction object that relates a Problem to an Incident. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IssueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A polymorphic relationship field that represents a related Problem or Incident. This field is a polymorphic relationship field.",
+      "relationship_name": "Issue",
+      "relationship_type": "Lookup",
+      "refers_to": "Incident, Problem"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated ID of the incident that's related to the problem."
+    },
+    "RelatedEntityType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The object type of the related entity. Possible values are: Incident Problem"
+    },
+    "RelatedIssueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A polymorphic relationship field that represents a related Problem or Incident. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedIssue",
+      "relationship_type": "Lookup",
+      "refers_to": "Incident, Problem"
+    },
+    "RelationshipType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Shows how the Problem and Incident records relate to each other. Possible values are: Caused By Similar The default value is Caused By."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ProblemIncidentChangeEvent**: Change events are available for the object.\n- **ProblemIncidentFeed**: Feed tracking is available for the object.\n- **ProblemIncidentHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Related Problem and Incident ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IssueId": {
+      "field_label": "Issue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Related Problem and Incident Number",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedEntityType": {
+      "field_label": "Related Issue Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedIssueId": {
+      "field_label": "Related Issue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelationshipType": {
+      "field_label": "Relationship Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

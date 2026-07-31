@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExtlRecShrPcklstOptn - Data API",
+  "description": "Represents a picklist option of an external record share picklist field shared between a partner and vendor for Partner Connect. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ExtlRecShrFieldId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the associated external record share field of type picklist. This field is a relationship field.",
+      "relationship_name": "ExtlRecShrField",
+      "refers_to": "ExtlRecShrField"
+    },
+    "IsDefaultOption": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this picklist option is set as the default option (true) or not (false). The default value is false."
+    },
+    "SharedOptionLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Label of the picklist option."
+    },
+    "SharedOptionValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Value of the picklist option."
+    }
+  },
+  "special_access_rules": "To see this object, enable Partner Connect or Partner Connect for Vendors. See Set Up Partner Connect as a Partner and Set Up Partner Connect as a Vendor in Salesforce Help."
+}

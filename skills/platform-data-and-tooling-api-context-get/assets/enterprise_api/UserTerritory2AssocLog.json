@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "UserTerritory2AssocLog - Data API",
+  "description": "Represents a log of when a user is assigned and unassigned from a territory. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "ISO code of currency. Possible values are: EUR—Euro INR—Indian Rupee USD—U.S. Dollar The default value is USD."
+    },
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date when the user is unassigned from a territory. If the end date is empty, the user is still assigned."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort, Update",
+      "description": "Auto-generated unique name of the log."
+    },
+    "RoleInTerritory2": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "User’s role in the territory between the start and end date. The picklist is, by default, empty. Add values to this field using Object Manager."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "Date the user is assigned to the territory."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the territory associated with the log. This field is a relationship field.",
+      "relationship_name": "Territory2",
+      "refers_to": "Territory2"
+    },
+    "Territory2ModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the territory model associated with the log. This field is a relationship field.",
+      "relationship_name": "Territory2Model",
+      "refers_to": "Territory2Model"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user associated with the log. This field is a relationship field.",
+      "relationship_name": "User",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "To see this object, enable Sales Territory and User Tracking on the Territory Settings page. Activate a territory model to start the tracking."
+}

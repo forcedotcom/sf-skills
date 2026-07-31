@@ -1,0 +1,120 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "ForecastingSubmissionItem - Data API",
+  "description": "Represents the values for each forecast category in a submitted forecast. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "For forecasting types that use Amount as the measure, the amount for the forecast category. Amounts must be provided in the corporate currency."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The currency code of the forecast submission. If omitted, the default is USD."
+    },
+    "ForecastingItemCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The category the forecast belongs to. For individual forecast category rollups, the possible values are: PipelineOnly—Rollup from Pipeline opportunities only. BestCaseOnly—Rollup from Best Case opportunities only. MostLikelyOnly—Rollup from Most Likely opportunities only. CommitOnly —Rollup from Commit opportunities only. For cumulative forecast rollups, the possible values are: OpenPipeline—Rollup from Pipeline, Best Case, Most Likely, and Commit opportunities. BestCaseForecast —Rollup from Best Case, Most Likely, Commit, and Closed opportunities. MostLikelyForecast—Rollup from Most Likely, Commit, and Closed opportunities. CommitForecast —Rollup from Commit and Closed opportunities. For either cumulative or individual forecast category rollups, the possible values are: ClosedOnly—Rollup from Closed opportunities only."
+    },
+    "ForecastingSubmissionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecast submission. This field is a relationship field.",
+      "relationship_name": "ForecastingSubmission",
+      "relationship_type": "Master-detail",
+      "refers_to": "ForecastingSubmission (the master object)"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only. The ID of this record."
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "For forecasting types that use Quantity as the measure, the quantity for the forecast category. Quantities must be provided in the corporate currency."
+    }
+  },
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ForecastingItemCategory": {
+      "field_label": "Forecasting Item Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ForecastingSubmissionId": {
+      "field_label": "Forecasting Submission ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Submission Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Forecasting Submission Item",
+      "type": "string",
+      "length": "255"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

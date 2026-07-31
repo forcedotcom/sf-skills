@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "EnvironmentHubMember - Data API",
+  "description": "Represents a member organization in the Environment Hub. This object is available in API version 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "A brief description of this org."
+    },
+    "DisplayName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable,Sort, Update",
+      "description": "The name that the user has specified for this member org."
+    },
+    "EnvironmentHubId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The Org ID of this member’s Environment Hub org."
+    },
+    "Instance": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the instance where the Environment Hub member org resides."
+    },
+    "IsFedIdSsoMatchAllowed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if single sign-on (SSO) has been enabled based on matching the Federation ID. The default is false."
+    },
+    "IsSandbox": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the member org is a sandbox (true) or not (false). This field is available in API version 36.0 and later."
+    },
+    "MemberEntity": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The unique Org ID of the member org for this record."
+    },
+    "MemberType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of member org for this record. Possible values include Branch Org, Patch Org, Release Org, Sandbox Org, Trialforce Management Org, and Trialforce Source Org. Note: Only one member type at a time is stored. Member type is determined according to this hierarchy: (1) Sandbox, (2) Release, (3) Trialforce Source Org (TSO), (4) Patch, (5) Branch, and (6) Trialforce Management Org (TMO). For example, if an org is both a sandbox and a TMO, the value of MemberType is Sandbox Org."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the member org for this record."
+    },
+    "OrgEdition": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The org’s edition, for example, Enterprise Edition or Unlimited Edition."
+    },
+    "OrgStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The licensing or creation status of this org. Possible values include Active, Demo, Deleted, Free, Inactive, and Trial."
+    },
+    "Origin": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The method by which this org was added to the Environment Hub. Possible values are autoDiscovered, userAdded, and provisioned."
+    },
+    "SSOMappedUsers": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of mapped users in this member org. This field is available in API version 36.0 and later."
+    },
+    "ServiceProviderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the service provider for this member org. This field is available in API version 36.0 and later."
+    },
+    "ShouldAddRelatedOrgs": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Status of the connection of related orgs to the hub. Possible values are done, notRequested, pending, and requested."
+    },
+    "ShouldEnableSSO": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If SSO should be enabled when this member org is added. The default is false."
+    },
+    "SsoStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If SSO has been enabled for this org. Possible values are: Enabled—Single sign-on is enabled. Disabled—Single sign-on is disabled. Pending—Single sign-on is in the process of being enabled. Failed—Single sign-on enablement failed. Contact Salesforce support for assistance."
+    },
+    "SsoUsernameFormula": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The custom formula for matching users in the hub and member orgs."
+    }
+  },
+  "usage": "Use this object to access and modify settings of member orgs in the Environment Hub."
+}

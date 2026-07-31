@@ -1,0 +1,150 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ProductMedia - Data API",
+  "description": "Represents the rich media, including images and attachments, that can be added to products.This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The default value is USD. Possible values are: USD—U.S. Dollar"
+    },
+    "ElectronicMediaGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Unique ID of the media group. This field is a relationship field.",
+      "relationship_name": "ElectronicMediaGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "ElectronicMediaGroup"
+    },
+    "ElectronicMediaId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Unique ID of the media record. This field is a polymorphic relationship field.",
+      "relationship_name": "ElectronicMedia",
+      "relationship_type": "Lookup",
+      "refers_to": "ManagedContent, ManagedContentInfo"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the media."
+    },
+    "ProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the product that the media is associated with. This field is a relationship field.",
+      "relationship_name": "Product",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The order that product media is displayed in."
+    }
+  },
+  "special_access_rules": "You must have the B2B Commerce license and a CMS workspace to access product media.",
+  "associated_objects": "- **ProductMediaChangeEvent (API version 57.0)**: Change events are available for the object.\n- **ProductMediaHistory**: History is available for tracked fields of the object.\n- **ProductMediaOwnerSharingRule**: Sharing rules are available for the object.\n- **ProductMediaShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ElectronicMediaGroupId": {
+      "field_label": "Electronic Media Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ElectronicMediaId": {
+      "field_label": "ElectronicMedia ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Product Media ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Product Media Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

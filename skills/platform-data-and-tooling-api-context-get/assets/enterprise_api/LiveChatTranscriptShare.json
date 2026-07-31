@@ -1,0 +1,84 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "LiveChatTranscriptShare - Data API",
+  "description": "Represents a sharing entry on a LiveChatTranscript object. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Level of access that the User or Group has to the LiveChatTranscript. The possible values are: Read Edit All (This value is not valid for create() or update() calls.) This value must be set to an access level that is higher than the organization’s default access level for live chat transcripts."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the parent object, if any"
+    },
+    "RowCause": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Reason that this sharing entry exists. If you’re creating a sharing entry, the only permitted value is Manual. If no value is specified, the field defaults to Manual. All other RowCause values are read-only. After the sharing entry is created, this field can’t be edited. Values can include: Manual—The User or Group has access because a user with “All” access manually shared the LiveChatTranscript with them. Owner—The User is the owner of the LiveChatTranscript or is in a role above the LiveChatTranscript owner in the role hierarchy."
+    },
+    "UserOrGroupID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the User or Group that has been given access to the LiveChatTranscript."
+    }
+  },
+  "usage": "This object lets you determine which users and groups can view and edit LiveChatTranscript records owned by other users. If you attempt to create a new record that matches an existing record, the create() call updates any modified fields and returns the existing record.\n\nThis object lets you determine which users and groups can view and edit LiveChatTranscript records owned by other users.\n\nIf you attempt to create a new record that matches an existing record, the create() call updates any modified fields and returns the existing record.",
+  "field_reference": {
+    "AccessLevel": {
+      "field_label": "Custom Object Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Custom Object Share ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RowCause": {
+      "field_label": "Row Cause",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UserOrGroupId": {
+      "field_label": "User/Group ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

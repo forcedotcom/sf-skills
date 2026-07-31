@@ -1,0 +1,118 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "WebCartAdjustmentBasis - Data API",
+  "description": "Coupons that trigger promotions for the cart. When a customer tries to add a coupon to the cart, the store looks for promotions associated with the coupon. If a promotion results in a price adjustment, a WebCartAdjusmentBasis record is created. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentBasisDetail": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Coupon code for the coupon associated with the promotion."
+    },
+    "AdjustmentBasisReferenceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Foreign key reference to the coupon. This field is a relationship field.",
+      "relationship_name": "AdjustmentBasisReference",
+      "relationship_type": "Lookup",
+      "refers_to": "Coupon"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The currency ISO code of the cart. Possible values are: EUR USD The default value is USD."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the WebCartAdjustmentBasis record."
+    },
+    "WebCartId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the cart. This field is a relationship field.",
+      "relationship_name": "WebCart",
+      "relationship_type": "Lookup",
+      "refers_to": "WebCart"
+    }
+  },
+  "special_access_rules": "This object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WebCartAdjustmentBasisChangeEvent**: Change events are available for the object.",
+  "field_reference": {
+    "AdjustmentBasisDetail": {
+      "field_label": "Adjustment Basis Detail",
+      "type": "string",
+      "length": "255"
+    },
+    "AdjustmentBasisReferenceId": {
+      "field_label": "Coupon ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Cart Adjustment Basis ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Cart Adjustment Basis Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WebCartId": {
+      "field_label": "Cart ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

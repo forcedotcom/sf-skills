@@ -1,0 +1,621 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ServiceAppointment - Data API",
+  "description": "Represents an appointment to complete work for a customer in Field Service, Lightning Scheduler,Intelligent Appointment Management, and Virtual Care.This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "(Read only) The account associated with the appointment. If the parent record is a work order or work order line item, this field’s value is inherited from the parent. Otherwise, it remains blank. This is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "ActualDuration": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The number of minutes that it took the resource to complete the appointment after arriving at the address. When values are first added to the Actual Start and Actual End fields, the Actual Duration is automatically populated to list the difference between the Actual Start and Actual End. If the Actual Start and Actual End fields are subsequently updated, the Actual Duration field doesn’t re-update, but you can manually update it."
+    },
+    "ActualEndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The actual date and time the appointment ended."
+    },
+    "ActualStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The actual date and time the appointment started."
+    },
+    "Address": {
+      "type": "address",
+      "properties": "Filter",
+      "description": "The address where the appointment is taking place. The address is inherited from the parent record if the parent record is a work order or work order line item."
+    },
+    "AppointmentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-assigned number that identifies the appointment."
+    },
+    "ArrivalWindowEndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The end of the window of time in which the technician is scheduled to arrive at the site. This window is typically larger than the Scheduled Start and End window to allow time for delays and scheduling changes. You may choose to share the Arrival Window Start and End with the customer, but keep the Scheduled Start and End internal-only."
+    },
+    "ArrivalWindowStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The beginning of the window of time in which the technician is scheduled to arrive at the site. This window is typically larger than the Scheduled Start and End window to allow time for delays and scheduling changes. You may choose to share the Arrival Window Start and End with the customer, but keep the Scheduled Start and End internal-only."
+    },
+    "BundlePolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reference to the bundle policy associated with this service appointment. This is a relationship field.",
+      "relationship_name": "BundlePolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "ApptBundlePolicy"
+    },
+    "City": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city where the appointment is completed. Maximum length is 40 characters."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The contact associated with the parent record. If needed, you can manually update the service appointment contact. This is a relationship field.",
+      "relationship_name": "Contact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country where the work order is completed. Maximum length is 80 characters."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the appointment."
+    },
+    "DueDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date by which the appointment must be completed. Earliest Start Permitted and Due Date typically reflect terms in the customer’s service-level agreement."
+    },
+    "Duration": {
+      "type": "double",
+      "properties": "Create, Nillable, Filter, Sort, Update",
+      "description": "The estimated length of the appointment. If the parent record is work order or work order line item, the appointment inherits its parent’s duration, but it can be manually updated. The duration is in minutes or hours based on the value selected in the Duration Type field."
+    },
+    "DurationType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The unit of the Duration: Minutes or Hours."
+    },
+    "EarliestStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date after which the appointment must be completed. Earliest Start Permitted and Due Date typically reflect terms in the customer’s service-level agreement."
+    },
+    "GeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The level of accuracy of a location’s geographical coordinates compared with its physical address. Usually provided by a geocoding service based on the address’s latitude and longitude coordinates. This field is available in the API only."
+    },
+    "IsAnonymousBooking": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether a service resource was automatically assigned to the appointment. The default value is false. This field is available in API version 49.0 and later."
+    },
+    "IsBundle": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if this service appointment is a bundle service appointment. The default value is false. This field is available in API version 54.0 and later."
+    },
+    "IsBundleMember": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if this service appointment is a bundle member service appointment. The default value is false. This field is available in API version 54.0 and later."
+    },
+    "IsManuallyBundled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if this bundle was created manually. The default value is false. This field is available in API version 54.0 and later."
+    },
+    "IsOffsiteAppointment": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Any type of work that can be done remotely. This field is available in API version 58.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the service appointment was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the service appointment was last viewed."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the precise geolocation of the address where the service appointments is completed. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. To integrate data from an external data source for latitude, map your data to the ServiceAppointment.Latitude and not the ServiceAppointment.FSL__InternalSLRGeolocation__Latitude__s field. This field is available in the API only."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the precise geolocation of the address where the service appointment is completed. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. To integrate data from an external data source for longitude, map your data to the ServiceAppointment.Longitude and not the ServiceAppointment.FSL__InternalSLRGeolocation__Longitude__s field. This field is available in the API only."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of the service appointment. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ParentRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The parent record associated with the appointment. The parent record can’t be updated after the service appointment is created. This is a polymorphic relationship field.",
+      "relationship_name": "ParentRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Asset, Lead, Opportunity, ServiceAppointmentGroup, WorkOrder, WorkOrderLineItem"
+    },
+    "ParentRecordStatusCategory": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "(Read only) The Status Category of the parent record. If the parent record is a work order or work order line item, this field is populated; otherwise, it remains blank."
+    },
+    "ParentRecordType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "(Read only) The type of parent record: Account, Asset, Lead, Opportunity, Work Order, or Work Order Line Item."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code where the work order is completed. Maximum length is 20 characters."
+    },
+    "RelatedBundleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The bundle that this service appointment is a member of. This is a relationship field.",
+      "relationship_name": "RelatedBundle",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceAppointment"
+    },
+    "SchedEndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time at which the appointment is scheduled to end. If you are using the Field Service managed package with the scheduling optimizer, this field is populated once the appointment is assigned to a resource. Scheduled End – Scheduled Start = Estimated Duration."
+    },
+    "SchedStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time at which the appointment is scheduled to start. If you are using the Field Service managed package with the scheduling optimizer, this field is populated once the appointment is assigned to a resource."
+    },
+    "ServiceDocumentTemplate": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The template ID which sets the template for each service document for the Document Builder feature."
+    },
+    "ServiceTerritoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service territory associated with the appointment. If the parent record is a work order or work order line item, the appointment inherits its parent’s service territory. This is a relationship field.",
+      "relationship_name": "ServiceTerritory",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceTerritory"
+    },
+    "State": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state where the service appointment is completed. Maximum length is 80 characters."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The status of the appointment. The picklist includes the following values, which can be customized: None—Default value. Scheduled—Appointment has been assigned to a service resource. Dispatched—Assigned service resource has been notified about their assignment. In Progress—Work has begun. Completed—Work is complete. Cannot Complete—Work could not be completed. Canceled—Work is canceled, typically before any work began While you can set the status to null via the API, setting the status to null returns an error. To prevent errors, use one of the picklist values."
+    },
+    "StatusCategory": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The category that each Status value falls into. The Status Category field’s values are identical to the default Status values.If you create custom Status values, you must indicate which category it belongs to. For example, if you create a Customer Absent value, you may decide that it belongs in the Cannot Complete category. To learn which processes reference StatusCategory, see How are Status Categories Used?"
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street number and name where the service appointment is completed."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A short phrase describing the appointment."
+    },
+    "Transaction": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The last transaction ID of the scheduling and optimization request that updated this object. The transaction ID is automatically generated and populated by the Enhanced Scheduling and Optimization engine. Available in API version 63.0 and later."
+    },
+    "WorkTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The work type associated with the service appointment. The work type is inherited from the appointment’s parent record if the parent is a work order or work order line item. If Lightning Scheduler is also in use, this field is editable. However, users see an error if they update it to list a different work type than the parent record’s work type. This is a relationship field.",
+      "relationship_name": "WorkType",
+      "relationship_type": "Lookup",
+      "refers_to": "WorkType"
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "usage": "Service appointments always have a parent record, which can be a work order, work order line item, opportunity, account, or asset. The type of parent record tells you about the nature of the service appointment:\n\nService appointments always have a parent record, which can be\n\t\t\ta work order, work order line item, opportunity, account, or asset. The type of parent\n\t\t\trecord tells you about the nature of the service appointment:\n\nService appointments on\n\nwork orders\n\nwork order line items\n\noffer a more detailed view of the work being performed. While work orders and\n\t\t\t\t\twork order line items let you enter general information about a task, service\n\t\t\t\t\tappointments are where you add the details about scheduling and ownership.\n\nService appointments on\n\nrepresent work being performed on the\n\t\t\t\t\tasset.\n\nService appointments on\n\nrepresent work being performed for the\n\t\t\t\t\taccount.\n\nService appointments on\n\nopportunities\n\nrepresent work that is related to\n\t\t\t\t\tthe opportunity.\n\nService appointments on\n\nrepresent work that is related to\n\t\t\t\t\tlead—for example, a site visit to pursue a promising lead.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ServiceAppointmentChangeEvent (API version 48.0)**: Change events are available for the object.\n- **ServiceAppointmentFeed**: Feed tracking is available for the object.\n- **ServiceAppointmentHistory**: History is available for tracked fields of the object.\n- **ServiceAppointmentOwnerSharingRule**: Sharing rules are available for the object.\n- **ServiceAppointmentShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"ServiceAppointment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ActualDuration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ActualEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ActualStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Address\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"AppointmentNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApptBookingInfoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ArrivalWindowEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ArrivalWindowStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BundlePolicy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApptBundlePolicy\"/>\n        <element name=\"BundlePolicyId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"BundledServiceAppointments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Contact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DigitalSignatures\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"DueDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Duration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"DurationInMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"DurationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DynamicDataCaptures\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EarliestStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GeolocationBasedActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsBundle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsBundleMember\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsManuallyBundled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOffsiteAppointment\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Latitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Longitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ParentRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ParentRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ParentRecordStatusCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ParentRecordType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedBundle\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceAppointment\"/>\n        <element name=\"RelatedBundleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SchedEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SchedStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ServiceAptCapacityUsages\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceNote\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ServiceReports\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceResources\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceTerritory\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceTerritory\"/>\n        <element name=\"ServiceTerritoryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StatusCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SwarmMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Swarms\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TimeZone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Transaction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TravelTimeBuffer\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkType\" nillable=\"true\" minOccurs=\"0\" type=\"ens:WorkType\"/>\n        <element name=\"WorkTypeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActualDuration": {
+      "field_label": "Actual Duration (Minutes)",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ActualEndTime": {
+      "field_label": "Actual End",
+      "type": "datetime"
+    },
+    "ActualStartTime": {
+      "field_label": "Actual Start",
+      "type": "datetime"
+    },
+    "AdditionalInformation": {
+      "field_label": "Additional Information",
+      "type": "string",
+      "length": "255"
+    },
+    "Address": {
+      "field_label": "Address",
+      "type": "address"
+    },
+    "AppointmentCategoryId": {
+      "field_label": "Appointment Category ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AppointmentInvitationId": {
+      "field_label": "Appointment Invitation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AppointmentMode": {
+      "field_label": "Appointment Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AppointmentNumber": {
+      "field_label": "Appointment Number",
+      "type": "string",
+      "length": "255"
+    },
+    "AppointmentType": {
+      "field_label": "Appointment Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ApptBookingInfoUrl": {
+      "field_label": "Appointment Booking URL",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "ArrivalWindowEndTime": {
+      "field_label": "Arrival Window End",
+      "type": "datetime"
+    },
+    "ArrivalWindowStartTime": {
+      "field_label": "Arrival Window Start",
+      "type": "datetime"
+    },
+    "AttendeeCount": {
+      "field_label": "Attendee Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AttendeeLimit": {
+      "field_label": "Attendee Limit",
+      "type": "int",
+      "digits": "9"
+    },
+    "BundlePolicyId": {
+      "field_label": "Appointment Bundle Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CancellationReason": {
+      "field_label": "Cancellation Reason",
+      "type": "string",
+      "length": "255"
+    },
+    "CheckedInTime": {
+      "field_label": "Checked In Time",
+      "type": "datetime"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "Comments": {
+      "field_label": "Comment",
+      "type": "string",
+      "length": "255"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DueDate": {
+      "field_label": "Due Date",
+      "type": "datetime"
+    },
+    "Duration": {
+      "field_label": "Duration",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DurationInMinutes": {
+      "field_label": "Duration in Minutes",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DurationType": {
+      "field_label": "Duration Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EarliestStartTime": {
+      "field_label": "Earliest Start Permitted",
+      "type": "datetime"
+    },
+    "Email": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "EngagementChannelTypeId": {
+      "field_label": "Engagement Channel Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "GeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "GroupAppointmentAccessType": {
+      "field_label": "Group Appointment Access Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Service Appointment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAnonymousBooking": {
+      "field_label": "Anonymous Booking",
+      "type": "boolean"
+    },
+    "IsBundle": {
+      "field_label": "Bundle",
+      "type": "boolean"
+    },
+    "IsBundleMember": {
+      "field_label": "Bundle Member",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsManuallyBundled": {
+      "field_label": "Manually Bundled",
+      "type": "boolean"
+    },
+    "IsOffsiteAppointment": {
+      "field_label": "Offsite Appointment",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentRecordId": {
+      "field_label": "Parent Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentRecordStatusCategory": {
+      "field_label": "Parent Record Status Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ParentRecordType": {
+      "field_label": "Parent Record Type",
+      "type": "string",
+      "length": "50"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PostalCode": {
+      "field_label": "Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ReceiptOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedBundleId": {
+      "field_label": "Related Bundle ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SchedEndTime": {
+      "field_label": "Scheduled End",
+      "type": "datetime"
+    },
+    "SchedStartTime": {
+      "field_label": "Scheduled Start",
+      "type": "datetime"
+    },
+    "ServiceNote": {
+      "field_label": "Service Note",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "ServiceTerritoryId": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "State": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StatusCategory": {
+      "field_label": "Status Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeZone": {
+      "field_label": "Time Zone",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Transaction": {
+      "field_label": "Transaction",
+      "type": "string",
+      "length": "255"
+    },
+    "TravelTimeBuffer": {
+      "field_label": "Travel Time Buffer (in minutes)",
+      "type": "int",
+      "digits": "9"
+    },
+    "WorkTypeId": {
+      "field_label": "Work Type ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

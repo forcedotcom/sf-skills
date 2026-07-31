@@ -1,0 +1,151 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContractLineOutcomeData - Data API",
+  "description": "Represents the contract line outcome’s captured data. It stores the data that was captured between the contract line outcome’s start date and end date. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CalculatedValue": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The value calculated based on the contract line outcome’s calculation method and the captured data."
+    },
+    "CaptureDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date and time when the data was captured."
+    },
+    "ContractLineOutcomeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The contract line outcome associated with the contract line outcome data record. This field is a relationship field.",
+      "relationship_name": "ContractLineOutcome",
+      "relationship_type": "Lookup",
+      "refers_to": "ContractLineOutcome"
+    },
+    "KeyPerformanceIndicator": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The key performance indicators (fields or asset attributes) that define the contract line outcome’s compliance status."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the contract line outcome data record was last modified. Its UI label is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the contract line outcome data record was last viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the contract line outcome data record."
+    },
+    "Value": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The actual value of the key performance indicator."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ContractLineOutcomeDataChangeEvent**: Change events are available for the object.\n- **ContractLineOutcomeDataFeed**: Feed tracking is available for the object.\n- **ContractLineOutcomeDataHistory**: History is available for tracked fields of the object.\n- **ContractLineOutcomeDataOwnerSharingRule**: Sharing rules are available for the object.\n- **ContractLineOutcomeDataShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContractLineOutcomeData\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CalculatedValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CaptureDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ContractLineOutcome\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContractLineOutcome\"/>\n        <element name=\"ContractLineOutcomeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"KeyPerformanceIndicator\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"Value\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CalculatedValue": {
+      "field_label": "Calculated Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CaptureDate": {
+      "field_label": "Capture Date",
+      "type": "datetime"
+    },
+    "ContractLineOutcomeId": {
+      "field_label": "Contract Line Outcome ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Contract Line Outcome Data ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "KeyPerformanceIndicator": {
+      "field_label": "Key Performance Indicator",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

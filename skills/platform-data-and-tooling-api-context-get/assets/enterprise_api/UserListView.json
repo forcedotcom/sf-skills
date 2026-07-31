@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserListView - Data API",
+  "description": "Represents the customizations a user made to a list view. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "description"
+  ],
+  "fields": {
+    "LastViewedChart": {
+      "description": "Properties: Create, Filter, Group, Nillable, Restricted picklist, Sort, Update; The last chart a user viewed."
+    },
+    "ListViewId": {
+      "description": "Properties: Create, Filter, Group, Sort; The ID of the list view. This is a relationship field.; Relationship Name: ListView; Relationship Type: Lookup; Refers To: ListView"
+    },
+    "SobjectType": {
+      "description": "Properties: Create, Filter, Group, Nillable, Restricted picklist, Sort, Update; The API name of the sObject for the user list view."
+    },
+    "UserId": {
+      "description": "Properties: Create, Filter, Group, Sort; The ID of the user. This is a relationship field.; Relationship Name: User; Relationship Type: Lookup; Refers To: User"
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserListView\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedChart\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ListView\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ListView\"/>\n        <element name=\"ListViewId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SobjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "User List View Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastViewedChart": {
+      "field_label": "List View Chart ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ListViewId": {
+      "field_label": "List View ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SobjectType": {
+      "field_label": "Custom Object Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

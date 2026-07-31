@@ -1,0 +1,93 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FieldPermissions - Data API",
+  "description": "Represents the enabled field permissions for the parent PermissionSet. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Field": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The field’s API name. This name must be prefixed with the SobjectType. For example, Merchandise__c.Description__c"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The Id of the field’s parent PermissionSet. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSet"
+    },
+    "PermissionsEdit": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, users assigned to the parent PermissionSet can edit this field. Requires PermissionsRead for the same field to be true."
+    },
+    "PermissionsRead": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, users assigned to the parent PermissionSet can view this field. A FieldPermissions record must have at minimum PermissionsRead set to true, or it will be deleted."
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The object’s API name. For example, Merchandise__c."
+    }
+  },
+  "special_access_rules": "In API version 49.0 and later, only users with the View Setup and Configuration permission can access this object.",
+  "usage": "FieldPermissions work similarly to ObjectPermissions. However, FieldPermissions includes a Field attribute to return the name of the field. For example, the following query returns all FieldPermissions records that have at least the “Read” permission. The results include the field, object, and permission set names. Include the field’s parent object when querying FieldPermissions. For example, to find all rows that match the Account object’s Type field, create the following query: To find which permission sets are backed by profiles with the Account object, you can use a query like the following example: Both SobjectType and Field must be included in the SELECT line of the query. Provide the full API name of the field in the form of SobjectType.Field when querying for a field.\n\nFieldPermissions work similarly to ObjectPermissions. However, FieldPermissions includes a Field attribute to return the name of the field.\n\nFor example, the following query returns all FieldPermissions records that have at least the “Read” permission. The results include the field, object, and permission set names.\n\nInclude the field’s parent object when querying FieldPermissions. For example, to find all rows that match the Account object’s Type field, create the following query:\n\nTo find which permission sets are backed by profiles with the Account object, you can use a query like the following example:\n\nBoth SobjectType and Field must be included in the SELECT line of the query. Provide the full API name of the field in the form of SobjectType.Field when querying for a field.",
+  "wsdl_segment": "```xml\n<complexType name=\"FieldPermissions\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Field\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSet\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PermissionsEdit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRead\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SobjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "Field": {
+      "field_label": "Field Name",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Field Permissions ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PermissionsEdit": {
+      "field_label": "Edit Field",
+      "type": "boolean"
+    },
+    "PermissionsRead": {
+      "field_label": "Read Field",
+      "type": "boolean"
+    },
+    "SobjectType": {
+      "field_label": "SObject Type Name",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

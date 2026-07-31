@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityFeature - Data API",
+  "description": "Stores org features across all tenants in Security Center. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the individual detail record. This field is unique across all tenants."
+    },
+    "FeatureDescription": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The description of the feature."
+    },
+    "FeatureName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the feature."
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the feature is enabled or disabled. The default value is false."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the type of metric counted. This field is unique within your organization."
+    },
+    "MetricsType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of feature collected by this metric."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the feature for which data is being collected."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant where the feature was applied."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the connected tenant where the feature was enabled or disabled."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **TenantSecurityFeatureChangeEvent**: Change events are available for the object.\n- **TenantSecurityFeatureFeed**: Feed tracking is available for the object.\n- **TenantSecurityFeatureHistory**: History is available for tracked fields of the object.\n- **TenantSecurityFeatureOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityFeatureShare**: Sharing is available for the object."
+}

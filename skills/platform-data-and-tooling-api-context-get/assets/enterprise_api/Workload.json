@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "Workload - Data API",
+  "description": "Represents the time series for work item volume and average handle time from aggregation and forecasting processes. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Additional information about the workload"
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort",
+      "description": "The end date and time of the time series represented by the Workload object."
+    },
+    "IsOmni": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the workload is Omni-based. The default value is 'false'."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The workload name."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of the workload. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort",
+      "description": "The start date and time of the time series represented by the Workload object."
+    },
+    "TimeZone": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The time zone associated with the workload. Possible values are the time zones supported by Workforce Engagement. This field is available in API version 56.0 and later."
+    },
+    "WorkloadType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of the workload. Possible values are: F—Forecasted H—Historical IH—Intraday History. This value is available in API version 55.0 and later. The default value is 'H'."
+    }
+  },
+  "special_access_rules": "The org must have the Workforce Engagement license. To view, create, edit, or delete records, the user must have the Workforce Engagement Analyst permission set.\n\nThe org must have the Workforce Engagement\n         license. To view, create, edit, or delete records, the user must have the Workforce\n         Engagement Analyst permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WorkloadOwnerSharingRule**: Sharing rules are available for the object.\n- **WorkloadShare**: Sharing is available for the object."
+}

@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "FlexiPage - Tooling API",
+  "description": "Represents a Lightning page. A Lightning page is a customizable page composed of regions containing Lightning components.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeLayout()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The page description. This field can be useful to describe the reason for creating the page or its intended use."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The API name of the Lightning page. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the standard object or ID of the custom object that the Lightning page is associated with. For Lightning pages of type AppPage or HomePage, this field is null.This field is available in API version 39.0 and later."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated FlexiPage object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The page’s label."
+    },
+    "Metadata": {
+      "type": "FlexiPageMetadata",
+      "properties": "Create, Nillable, Update",
+      "description": "Lightning page metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the package of which the FlexiPage is a part."
+    },
+    "ParentFlexiPage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the FlexiPage that this page inherits behavior from. Available in API version 37.0 or later."
+    },
+    "SobjectType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The object the Lightning page is associated with. For Lightning pages of type AppPage or HomePage, this field is null."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklistSort",
+      "description": "The type of the Lightning page. Valid values are: CdpRecordPage—A Lightning page that is used to override a CDPNearCoreObject record page in Lightning Experience. This value is available in API version 54.0 and later for orgs that have Data 360 enabled. AppPage—A Lightning page that is used as the home page for a custom app. CommAppPage—A Lightning page that is used to represent a custom page, as created in the Experience Builder. This value is available in API version 37.0 and later. CommContractDetailViewPage—This value is available in API version 64.0 and later. CommCheckoutPage—A Lightning page that is used to create a B2B Commerce checkout, as created in the Experience Builder. This value is available in API version 46.0 and later. CommFlowPage A Lightning page used to override a flow page, as created in the Experience Builder. This value is available in API version 45.0 and later. CommForgotPasswordPage—A Lightning page that’s used to override a forgot-password page, as created in Experience Builder. This value is available in API version 39.0 and later. CommFlowPage—An out-of-the-box flow page, as created in Experience Builder. This value is available in API version 45.0 and later. CommGlobalSearchResultPage A Lightning page used to override the global search result page, as created in Experience Builder. This value is available in API version 41.0 and later. CommLoginPage—A Lightning page that’s used to override the login page, as created in Experience Builder. This value is available in API version 39.0 and later. CommNoSearchResultsPage—An Experience Builder site page for B2B searches that return no results. The URL for this page is no-results/:term. The page starts out empty. You can add any component to it that accepts parameters to achieve the desired “no results” experience. For example, you can place an HTML Editor component or CMS components for recommendations, banners, help, and support. This value is available in API version 48.0 and later. CommObjectPage—A Lightning page used to override an object page, as created in Experience Builder. This value is available in API version 38.0 and later. CommOrderComfirmationPage—A Lightning page that is used to create a B2B Commerce order confirmation page in checkout, as created in the Experience Builder. This value is available in API version 46.0 and later. CommQuickActionCreatePage—A Lightning page used to override the create record page, as created in Experience Builder. This value is available in API version 38.0 and later. CommRecordPage—A Lightning page used to override a record page, as created in the Experience Builder. This value is available in API version 38.0 and later. CommRelatedListPage—A Lightning page used to override a related list page, as created in the Experience Builder. This value is available in API version 38.0 and later. CommSearchResultPage—A Lightning page used to override the search result page, as created in Experience Builder. This value is available in API version 38.0 and later. CommSelfRegisterPage—A Lightning page used to override the self-registration page, as created in Experience Builder. This value is available in API version 39.0 and later. CommThemeLayoutPage—A Lightning page used to override a theme layout page, as created in the Experience Builder. This value is available in API version 38.0 and later. EmbeddedServicePage This value is available in API version 45.0 and later. EmailContentPage — A page that contains the builder markup for your email content. When you edit email content in the builder, the FlexiPage object remembers where you put the components. Because they include builder markup, you can't retrieve or deploy FlexiPages when type is EmailContentPage. EmailTemplatePage — A page that contains the builder markup for your email template. When you edit an email template in the builder, the FlexiPage object remembers where you put the components. Because they include builder markup, you can't retrieve or deploy FlexiPages when type is EmailTemplatePage or EmailContentPage. ForecastingPage —A Lightning page that is used to override the default forecasts page in Lightning Experience. This value is available in API version 57.0 and later. HomePage—A Lightning page that is used to override the Home page in Lightning Experience. This value is available in API version 37.0 and later. MailAppAppPage—An email application pane used to override the default layout in the Outlook and Gmail integrations. This value is available in API version 38.0 and later. OmniSupervisorPageType—A Lightning page used to customize the user interface on the Omni-Channel Supervisor page. This value is available in API version 60.0 and later. RecordPage—A Lightning page used to override an object record page in Lightning Experience. This value is available in API version 37.0 and later. RecordPreview A Lightning page used to override standard lookup previews when hovering over previewable records in Lightning Experience.This value is available in API version 45.0 and later. UtilityBar—A Lightning page used as the utility bar in Lightning Experience apps. This value is available in API version 38.0 and later. VoiceExtension—A Lightning page used to customize user interfaces and agent actions in the Omni-Channel widget for Service Cloud Voice. This value is available in API version 57.0 and later.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FlexiPage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:FlexiPage\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"FlexiPage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"events\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FlexiPageEvent\"/>\n        <xsd:element name=\"flexiPageRegions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FlexiPageRegion\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentFlexiPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"platformActionlist\" minOccurs=\"0\" type=\"mns:PlatformActionList\"/>\n        <xsd:element name=\"quickActionList\" minOccurs=\"0\" type=\"mns:QuickActionList\"/>\n        <xsd:element name=\"sobjectType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"template\" type=\"mns:FlexiPageTemplateInstance\"/>\n        <xsd:element name=\"type\" type=\"tns:FlexiPageType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"FlexiPageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AppPage\"/>\n    <xsd:enumeration value=\"ObjectPage\"/>\n    <xsd:enumeration value=\"RecordPage\"/>\n    <xsd:enumeration value=\"HomePage\"/>\n    <xsd:enumeration value=\"ForecastingPage\"/>\n    <xsd:enumeration value=\"MailAppAppPage\"/>\n    <xsd:enumeration value=\"CommAppPage\"/>\n    <xsd:enumeration value=\"CommForgotPasswordPage\"/>\n    <xsd:enumeration value=\"CommLoginPage\"/>\n    <xsd:enumeration value=\"CommObjectPage\"/>\n    <xsd:enumeration value=\"CommQuickActionCreatePage\"/>\n    <xsd:enumeration value=\"CommRecordPage\"/>\n    <xsd:enumeration value=\"CommRelatedListPage\"/>\n    <xsd:enumeration value=\"CommSearchResultPage\"/>\n    <xsd:enumeration value=\"CommGlobalSearchResultPage\"/>\n    <xsd:enumeration value=\"CommSelfRegisterPage\"/>\n    <xsd:enumeration value=\"CommThemeLayoutPage\"/>\n    <xsd:enumeration value=\"UtilityBar\"/>\n    <xsd:enumeration value=\"RecordPreview\"/>\n    <xsd:enumeration value=\"EmbeddedServicePage\"/>\n    <xsd:enumeration value=\"CommCheckoutPage\"/>\n    <xsd:enumeration value=\"CommOrderConfirmationPage\"/>\n    <xsd:enumeration value=\"CommFlowPage\"/>\n    <xsd:enumeration value=\"EmailTemplatePage\"/>\n    <xsd:enumeration value=\"ApplicationLayout\"/>\n    <xsd:enumeration value=\"CommNoSearchResultsPage\"/>\n    <xsd:enumeration value=\"CommElectronicSignaturePage\"/>\n    <xsd:enumeration value=\"CommContractDocumentsPage\"/>\n    <xsd:enumeration value=\"CommContractDetailViewPage\"/>\n    <xsd:enumeration value=\"EmailContentPage\"/>\n    <xsd:enumeration value=\"ServiceDocument\"/>\n    <xsd:enumeration value=\"LandingPage\"/>\n    <xsd:enumeration value=\"CdpRecordPage\"/>\n    <xsd:enumeration value=\"SlackAppHome\"/>\n    <xsd:enumeration value=\"SlackMessage\"/>\n    <xsd:enumeration value=\"SlackModal\"/>\n    <xsd:enumeration value=\"SlackNotification\"/>\n    <xsd:enumeration value=\"EasyHomePage\"/>\n    <xsd:enumeration value=\"CardPage\"/>\n    <xsd:enumeration value=\"VoiceExtension\"/>\n    <xsd:enumeration value=\"ConfiguratorAppPage\"/>\n    <xsd:enumeration value=\"OmniSupervisorPage\"/>\n    <xsd:enumeration value=\"MobileAppPage\"/>\n    <xsd:enumeration value=\"CCShellPage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

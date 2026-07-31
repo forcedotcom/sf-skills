@@ -1,0 +1,245 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "RevenueTransactionErrorLog - Data API",
+  "description": "Contains information about errors that occurred while processing a request. The error record persists until another error with the same category, primary record, and (optionally) related record occurs. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AsyncOperationTrackerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the async operation tracker record created by the request. Async operation tracker records contain information about the status of the asynchronous process initiated by the request. This field is available in API version 60.0 and later. This field is a relationship field.",
+      "relationship_name": "AsyncOperationTracker",
+      "relationship_type": "Lookup",
+      "refers_to": "AsyncOperationTracker"
+    },
+    "BillingScheduleGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the group related to the billing schedule with errors. This field is available in API version 64.0 and later. This field is a relationship field.",
+      "relationship_name": "BillingScheduleGroup",
+      "refers_to": "BillingScheduleGroup"
+    },
+    "Category": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Provides context about the source of error. For example, if an error occurs while processing an /assets/collection/actions/initiate-cancellation request, the category is InitiateCancel. Valid values are: ApplyAPI AutomatedNegativeInvoiceLineConversion AutomaticRefunds ConvertNegativeInvoiceLineToCredit—Available in API version 56.0 and later. Core Invoice Generation Failure CreditInvoiceAPI CreditMemoRecoveryApi—Available in API version 66.0 and later. CreditTaxIntegrationAPI BulkCurrencyConversion—Available in API version 66.0 and later. InitiateAmendment—Available in API version 56.0 and later. InitiateCancel InitiateRenewal InsufficientAccess—Insufficient Access to start invoice run. InvoiceBatchRun InvoiceBatchRunDebitConversion—Available in API version 66.0 and later. InvoiceBatchRunInvoiceGeneration InvoiceBatchRunPostProcessor InvoiceBatchRunPreProcessor InvoiceBatchRunRecovery InvoiceBatchRunSelectionStep InvoiceBatchRunSplitInvoiceGeneration—Available in API version 66.0 and later. InvoiceBatchRunSummarizer InvoiceBatchRunTaxProcessor MaterialLineGeneration—Available in API version 58.0 and later. Invalid Tax API Input Invalid Tax Integration Input LoadSalesRecipientData—Available in API version 66.0 and later. OrderTaxCalculationFailure—Available in API version 61.0. OrderToAsset OrderItemToAsset—Available in API version 59.0 and later. OrderToBillingSchedule PaymentSale PaymentScheduleGeneration—Available in API version 56.0 and later ProcessAutoQuote—Available in API version 66.0 and later. PstBaseStepFailure—Available in API version 66.0 and later. QuotePriceCalculationFailure—Available in API version 61.0. QuoteTaxCalculationFailure—Available in API version 61.0. QuoteToOrder—Available in API version 56.0 and later. Post Tax API Failure Post-Credit Tax Failure Pre-Credit Tax Failure SetupEnergyAgreement—Available in API version 66.0 and later. StandaloneCreditAPI StatementOfAccountGeneration—Available in API version 66.0 and later. Tax API Failure TransactionToContract—Available in API version 59.0 and later. Unknown Failure—Available in API version 56.0 and later. VoidCreditMemo—Available in API version 66.0 and later. VoidPostedInvoiceAPI"
+    },
+    "ConfiguratorErrorMessage": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The text of the error message. This field is available in API version 66.0 and later."
+    },
+    "ErrorCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The error code; for example, INVALID_INPUT."
+    },
+    "ErrorLogNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated unique ID that identifies the error."
+    },
+    "ErrorMessage": {
+      "type": "textarea",
+      "description": "Contains information about the error and how to resolve it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user who made the request that resulted in the creation of the error log. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PrimaryRecord2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the record that’s associated with this error. For example, if the error occurred while creating an invoice line from an order line, the primary2 ID is the ID of the order line. This field is available in API version 66.0 and later. This field is a polymorphic relationship field.",
+      "relationship_name": "PrimaryRecord2",
+      "refers_to": "Account, CreditMemoInvApplication, CreditMemoLine, CreditMemoLineInvoiceLine, CreditMemoLineTax, DebitMemo, DebitMemoLine, InvoiceLine, InvoiceLineTax, LegalEntyAccountingPeriod, Order, PaymentLineInvoice, PaymentLineInvoiceLine, RefundLinePayment"
+    },
+    "PrimaryRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the record that’s associated with this error. For example, if the error occurred while creating an invoice from an order, the primary ID is the ID of the order. This field is a polymorphic relationship field.",
+      "relationship_name": "PrimaryRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset, BillingBatchScheduler, BillingSchedule, CardPaymentMethod, CreditMemo, Invoice, InvoiceBatchRun, InvoiceBatchRunRecovery, Order, Payment, PaymentBatchRun, PaymentGateway, Quote, Refund"
+    },
+    "PrimaryTextRecord": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The identifier of the primary record associated with the error log. For example, if the error occurred while creating an invoice from an order, the primary text Record ID is the ID of the order. There are two other fields in the same entity, PrimaryRecord and PrimaryRecord2, that are polymorphic fields, so they’re limited to storing IDs from objects in their respective domains. Use this text field for all objects. This field is available in API version 63.0 and later."
+    },
+    "RelatedRecord2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Optional. The ID of a record that can provide additional context about the error. For example, if PrimaryRecord2Id is the ID of an invoice line, this field could be the ID of an invoice line tax. This field is available in API version 66.0 and later. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord2",
+      "refers_to": "CreditMemoLine, CreditMemoLineInvoiceLine, CreditMemoLineTax, DebitMemo, GeneralLedgerAccount, GeneralLedgerAcctAsgntRule, InvoiceLine, InvoiceLineTax, Payment, PaymentLineInvoice, PaymentLineInvoiceLine, Refund, RefundLinePayment"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Optional. The ID of a record that can provide additional context about the error. For example, if PrimaryRecordId is the ID of an order, this field could be the ID of an order item. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "BillingBatchScheduler, BillingSchedule, BillingScheduleGroup, CreditMemo, CreditMemoLine, Invoice, InvoiceLine, OrderItem, Payment, PaymentSchedule, PaymentScheduleItem, QuoteLineItem, Refund"
+    },
+    "Request": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Optional. A field providing additional information linking the error with the request. This field is available in API version 66.0 and later."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The unique ID returned by the request. Use this ID to identify the revenue transaction error log records for a specific request. This field is available in API version 57.0 and later."
+    },
+    "RevenueAsyncOperationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the revenue async operation record created by the request. Revenue async operation records contain information about the status of the asynchronous process initiated by the request. This field is available in API version 57.0 and later. This field is a relationship field.",
+      "relationship_name": "RevenueAsyncOperation",
+      "relationship_type": "Lookup",
+      "refers_to": "RevenueAsyncOperation"
+    },
+    "Severity": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The severity type for the error message. This field is available in API version 66.0 and later. Valid values are: Error Warning"
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "AsyncOperationTrackerId": {
+      "field_label": "Revenue Async Operation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingScheduleGroupId": {
+      "field_label": "Billing Schedule Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ConfiguratorErrorMessage": {
+      "field_label": "Configurator Error Message",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ErrorCode": {
+      "field_label": "Error Code",
+      "type": "string",
+      "length": "255"
+    },
+    "ErrorLogNumber": {
+      "field_label": "Error Log Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ErrorMessage": {
+      "field_label": "Error Message",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Id": {
+      "field_label": "Revenue Transaction Error Log ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PrimaryRecord2Id": {
+      "field_label": "Primary Record 2 ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PrimaryRecordId": {
+      "field_label": "Primary Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PrimaryTextRecord": {
+      "field_label": "Primary Text Record ID",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedRecord2Id": {
+      "field_label": "Related Record 2 ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Request": {
+      "field_label": "Request",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "RequestIdentifier": {
+      "field_label": "Request Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "Severity": {
+      "field_label": "Severity",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

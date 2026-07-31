@@ -1,0 +1,132 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ProductFeaturedProduct - Data API",
+  "description": "Represents the user-defined collection of featured products that are meant to cross-sell or upsell with your product. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "FeatrProdtRelaType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines how the featured product is related to the product. Possible values are: Complete the Look Featured Products New Arrivals Top Seller"
+    },
+    "FeaturedProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the featured product that is linked to the product. This field is a relationship field.",
+      "relationship_name": "FeaturedProduct",
+      "refers_to": "Product2"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the user-defined collection of featured products."
+    },
+    "ProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the product that your company sells. This field is a relationship field.",
+      "relationship_name": "Product",
+      "refers_to": "Product2"
+    },
+    "Sequence": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Defines the order in which featured products are displayed."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ProductFeaturedProductChangeEvent**: Change events are available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FeatrProdtRelaType": {
+      "field_label": "Featured Product Relationship Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "FeaturedProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Product Featured Product ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Product Featured Product Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Sequence": {
+      "field_label": "Sequence",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

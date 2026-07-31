@@ -244,7 +244,7 @@ The `.agent` file has two levels of action definitions:
 
 Testing Center reports **Level 2 invocation names** (e.g. `check_order`), NOT Level 1 definition names (e.g. `get_order_status`). Using Level 1 names in `expectedActions` causes action assertions to FAIL even when the agent correctly invokes the action. Always use the Level 2 name from `reasoning: actions:`.
 
-```
+```agentscript
 # .agent file
 subagent order_support:
    actions:

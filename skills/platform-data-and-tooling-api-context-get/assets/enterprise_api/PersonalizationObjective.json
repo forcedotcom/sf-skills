@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "PersonalizationObjective - Data API",
+  "description": "Represents a specific business outcome that you want to achieve when creating a recommender. Available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Three letter ISO currency codes for supported currencies. The default value is USD. This is an optional field."
+    },
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the data space where an objective's resources originate. This is a required field.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace"
+    },
+    "Description": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Text description of the personalization objective. This is an optional field."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "System or user-generated API name for the personalization objective. This is a required field."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time the personalized objective was referenced by another resource."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time a user viewed the personalization objective."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The text label that identifies the personalization objective."
+    }
+  },
+  "usage": "Use this object to define a business objective. The personalized, targeted recommendations generated using deep learning algorithms are intended to help achieve this objective. For example, the objective “maximizing revenue” can return recommendations that aim to increase checkout frequency, increase cart value at checkout, or both.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PersonalizationObjectiveChangeEvent**: Change events are available for the object.\n- **PersonalizationObjectiveFeed**: Feed tracking is available for the object.\n- **PersonalizationObjectiveHistory**: History is available for tracked fields of the object.\n- **PersonalizationObjectiveOwnerSharingRule**: Sharing rules are available for the object.\n- **PersonalizationObjectiveShare**: Sharing is available for the object."
+}

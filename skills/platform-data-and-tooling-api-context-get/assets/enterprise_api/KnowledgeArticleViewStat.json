@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "KnowledgeArticleViewStat - Data API",
+  "description": "Provides certain statistics related to the number of views for the specified article across all article types. The view count statistics are for published and archived articles only. View counts for draft articles aren’t tracked. This object is read-only and available in API version 20.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Channel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The channel where the article is viewed: AllChannels for article views across all channels. App for the internal Salesforce Knowledge application. Pkb for article views in the public knowledge base. Csp for Customer Portal. Prm for article view in partner portal."
+    },
+    "NormalizedScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Article's weighted views in the selected channel. The article with most views has a score of 100. Other article views are then calculated relative to this highest view score. For example, if the best read article has 2000 views and another has 1000. The first one gets a score of 100 while the second gets 50."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the viewed article. This corresponds to a KnowledgeArticle record."
+    },
+    "ViewCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of unique views a published or archived article has received in the selected channel. An article with a high number of views may not always have a high normalized score. The normalized score for an article is calculated based on views over time, with more recent views earning a higher score. This field is available in API version 27.0 and later."
+    }
+  },
+  "special_access_rules": "Knowledge must be enabled in your org. Users must have access to the published and archived versions of an article to retrieve its views. For more information on published and archived article versions, see the PublishStatus field in KnowledgeArticleVersion.",
+  "usage": "Use this object to query or retrieve certain statistics for article views. Alternatively, client applications can use the article type API Name followed by __ViewStat to query or retrieve most viewed articles from a specific article type.\n\nUse this object to query or retrieve certain statistics for article views.\n\nAlternatively, client applications can use the article type API Name followed by __ViewStat to query or retrieve most viewed articles from a specific article type.",
+  "field_reference": {
+    "Channel": {
+      "field_label": "Channel",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "View Stat ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "NormalizedScore": {
+      "field_label": "Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "4"
+    },
+    "ParentId": {
+      "field_label": "Knowledge Article ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ViewCount": {
+      "field_label": "Total Views",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

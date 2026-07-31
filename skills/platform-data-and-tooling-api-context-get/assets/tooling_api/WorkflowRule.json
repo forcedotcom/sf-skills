@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "WorkflowRule - Tooling API",
+  "description": "Represents a workflow rule that is used to fire off a specific workflow action when the specified criteria is met. Includes access to the associated WorkflowRule object in Salesforce Metadata API.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `search()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`Query`, `DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "mns:WorkflowRule",
+      "properties": "Create, Nillable, Update",
+      "description": "Workflow rule metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The enum name or ID of entity this rule is associated with."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The namespace of the package containing the workflow rule object."
+    },
+    "TableEnumOrId": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The enum (for example, Account) or ID of the object for this workflow rule."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"WorkflowRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:WorkflowRule\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"WorkflowRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:WorkflowActionReference\"/>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FilterItem\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"failedMigrationToolVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"triggerType\" type=\"tns:WorkflowTriggerTypes\"/>\n        <xsd:element name=\"workflowTimeTriggers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:WorkflowTimeTrigger\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"WorkflowTriggerTypes\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"onCreateOnly\"/>\n    <xsd:enumeration value=\"onCreateOrTriggeringUpdate\"/>\n    <xsd:enumeration value=\"onAllChanges\"/>\n    <xsd:enumeration value=\"OnRecursiveUpdate\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

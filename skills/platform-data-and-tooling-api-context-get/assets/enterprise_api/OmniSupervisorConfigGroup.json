@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OmniSupervisorConfigGroup - Data API",
+  "description": "Represents the group of reps who are visible to the supervisors of a Command Center for Service configuration. The group, if visible, appears in the Agents tab of Command Center for Service. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "GroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "A unique identifier for the group of reps that’s made visible to the supervisors who are assigned to the Command Center for Service configuration.This is a relationship field.",
+      "relationship_name": "Group",
+      "relationship_type": "Lookup",
+      "refers_to": "Group"
+    },
+    "OmniSupervisorConfigId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A unique identifier for the Command Center for Service configuration. This is a relationship field.",
+      "relationship_name": "OmniSupervisorConfig",
+      "relationship_type": "Lookup",
+      "refers_to": "OmniSupervisorConfig"
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled. As of Spring ’20 and later, only authenticated internal and external users can access this object.\n\nTo access this object, Omni-Channel must be enabled.\n\nAs of Spring ’20 and later, only authenticated internal and external users can access this object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "GroupId": {
+      "field_label": "Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Omni Supervisor Configuration for Public Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OmniSupervisorConfigId": {
+      "field_label": "Omni Supervisor Configuration ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

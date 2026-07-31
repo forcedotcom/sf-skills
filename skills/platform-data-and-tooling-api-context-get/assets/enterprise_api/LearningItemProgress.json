@@ -1,0 +1,67 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "LearningItemProgress - Data API",
+  "description": "Represents the progress that a user has made towards completing an assigned learning item, such as a Learning Paths entry or Enablement program. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CompletedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the user completed the learning item."
+    },
+    "CompletedOnDay": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number of days that the user took to complete the learning item."
+    },
+    "CompletedPercent": {
+      "type": "percent",
+      "properties": "Filter, Sort",
+      "description": "Percentage of the learning item that’s complete."
+    },
+    "DaysInProgress": {
+      "type": "int",
+      "properties": "Nillable",
+      "description": "Number of days that have elapsed since the learning item was assigned."
+    },
+    "LearningItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the learning item. This field is a relationship field.",
+      "relationship_name": "LearningItem",
+      "relationship_type": "Lookup",
+      "refers_to": "LearningItem"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the owner of the learning item. This field is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ProgressStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the learning item assignment. Possible values are: Behind Completed CompletedLate CompletedOnTime InProgress NoLongerTracking NotStarted OnTrack Overdue For details, see Completion Statuses in Enablement Analytics."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when a user starts a Trailhead exercise in a sales program."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **LearningItemProgressChangeEvent**: Change events are available for the object.\n- **LearningItemProgressOwnerSharingRule**: Sharing rules are available for the object.\n- **LearningItemProgressShare**: Sharing is available for the object."
+}

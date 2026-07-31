@@ -1,0 +1,434 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OrderDeliveryGroupSummary - Data API",
+  "description": "Represents the current properties and state of a group of OrderItemSummaries, belonging to one OrderSummary, to be fulfilled using the same delivery method and delivered to the same address. A single shipment can include them all, but that isn’t guaranteed. Corresponds to one or more order delivery group objects, consisting of an original object and any change objects applicable to it. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "ISO code for the currency of the OrderSummary associated with the OrderDeliveryGroupSummary. The default value is USD. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar This field is available in API version 49.0 and later."
+    },
+    "DeliverToAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Address of the recipient. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "DeliverToCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address city."
+    },
+    "DeliverToCompanyName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update"
+    },
+    "DeliverToCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address country."
+    },
+    "DeliverToFullFirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update"
+    },
+    "DeliverToFullLastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update"
+    },
+    "DeliverToFullName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort"
+    },
+    "DeliverToFullSalutation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Possible values are: Dr. Mr. Mrs. Ms. Prof."
+    },
+    "DeliverToGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy of the geocode for the recipient address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "DeliverToLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with FulfilledToLongitude to specify the precise geolocation of the recipient address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "DeliverToLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with FulfilledToLatitude to specify the precise geolocation of the recipient address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "DeliverToName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name on the recipient address. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "DeliverToPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address postal code."
+    },
+    "DeliverToState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address state."
+    },
+    "DeliverToStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address street."
+    },
+    "DeliveryInstructions": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Special instructions for the delivery. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the OrderDeliveryGroupSummary. This field can be edited."
+    },
+    "DesiredDeliveryDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Desired date for delivery. This field is informational, available for customizations. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "EmailAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email address of the recipient. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "GiftMessage": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Gift message to include. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "GrandTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including adjustments and tax, of the delivery charges associated with the OrderDeliveryGroupSummary. This value only includes OrderItemSummaries of type code Charge."
+    },
+    "IsGift": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the OrderDeliveryGroupSummary represents a gift. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "OrderDeliveryGroupSummaryNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID of the OrderDeliveryGroupSummary."
+    },
+    "OrderDeliveryMethodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the order delivery method specified for the OrderDeliveryGroupSummary. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the OrderSummary associated with the OrderDeliveryGroupSummary."
+    },
+    "OriginalOrderDeliveryGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the original order delivery group associated with this summary object. Nillable=true only if the associated order summary is unmanaged. For managed order summaries, nillable=false."
+    },
+    "PhoneNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number of the recipient. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "PromisedDeliveryDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Promised date for delivery. This field is informational, available for customizations. Users with the Edit Delivery Information user permission can modify this field. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total price adjustments applied to delivery charges associated with the OrderDeliveryGroupSummary. This value only includes adjustments to OrderItemSummaries of type code Charge."
+    },
+    "TotalAdjustmentAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the delivery charges associated with the OrderDeliveryGroupSummary, inclusive of tax. This amount is equal to TotalAdjustmentAmount + TotalAdjustmentTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAdjustmentAmount."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including adjustments but not tax, of the delivery charges associated with the OrderDeliveryGroupSummary. This value only includes adjustments to OrderItemSummaries of type code Charge."
+    },
+    "TotalLineAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, not including adjustments or tax, of the delivery charges associated with the OrderDeliveryGroupSummary."
+    },
+    "TotalLineAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of the delivery charges associated with the OrderDeliveryGroupSummary, inclusive of tax. This amount is equal to TotalLineAmount + TotalLineTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalLineTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalLineAmount."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAmount."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderDeliveryGroupSummaryChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeliverToAddress": {
+      "field_label": "Shipping Address",
+      "type": "address"
+    },
+    "DeliverToCity": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "DeliverToCompanyName": {
+      "field_label": "Deliver to Company Name",
+      "type": "string",
+      "length": "255"
+    },
+    "DeliverToCountry": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "DeliverToFullFirstName": {
+      "field_label": "First Name",
+      "type": "string",
+      "length": "40"
+    },
+    "DeliverToFullLastName": {
+      "field_label": "Last Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DeliverToFullName": {
+      "field_label": "Deliver to Full Name",
+      "type": "string",
+      "length": "121"
+    },
+    "DeliverToFullSalutation": {
+      "field_label": "Salutation",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DeliverToGeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DeliverToLatitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "DeliverToLongitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "DeliverToName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "DeliverToPostalCode": {
+      "field_label": "Zip",
+      "type": "string",
+      "length": "20"
+    },
+    "DeliverToState": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "DeliverToStreet": {
+      "field_label": "Address",
+      "type": "textarea",
+      "length": "255"
+    },
+    "DeliveryInstructions": {
+      "field_label": "Delivery Instructions",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "DesiredDeliveryDate": {
+      "field_label": "Desired Delivery Date",
+      "type": "datetime"
+    },
+    "EmailAddress": {
+      "field_label": "Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "GiftMessage": {
+      "field_label": "Gift Message",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Total with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Order Delivery Group Summary ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsGift": {
+      "field_label": "Is Gift",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OrderDeliveryGroupSummaryNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderDeliveryMethodId": {
+      "field_label": "Order Delivery Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OriginalOrderDeliveryGroupId": {
+      "field_label": "Order Delivery Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PhoneNumber": {
+      "field_label": "Phone Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "PromisedDeliveryDate": {
+      "field_label": "Promised Delivery Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentAmtWithTax": {
+      "field_label": "Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentTaxAmount": {
+      "field_label": "Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Pretax Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmount": {
+      "field_label": "Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmtWithTax": {
+      "field_label": "Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineTaxAmount": {
+      "field_label": "Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "WorkFeedbackQuestion - Data API",
+  "description": "Represents a free-form text type or multiple choice question within a set of questions.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Choices": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "New-line separated list of valid choices for multiple choice questions. Maximum length is 1000 characters."
+    },
+    "Detail": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Detailed instructions on how to answer the question."
+    },
+    "IsConfidentialAnswer": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Answers to questions marked confidential will not be shared with the subject of the review. This field applies only to performance summaries."
+    },
+    "IsOptional": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If this option is selected, the question is optional and isn’t required to be answered. This field applies only to performance summaries."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "A short description of the question, which can be used as a header for reports and Calibration."
+    },
+    "Number": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The order of the question that is displayed within the question set, such as question number three in a question set that has five questions."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the WorkFeedbackQuestion."
+    },
+    "QuestionSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The question set this question is a part of."
+    },
+    "Text": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "The body of the question. Max length is 16384 characters."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Allows for either a free-form text answer or a multiple choice question defined by new-line separate choices in the ‘Choices’ field. Valid picklist values are: MultipleChoice FreeText Rating"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **WorkFeedbackQuestionOwnerSharingRule**: Sharing rules are available for the object.\n- **WorkFeedbackQuestionShare**: Sharing is available for the object."
+}

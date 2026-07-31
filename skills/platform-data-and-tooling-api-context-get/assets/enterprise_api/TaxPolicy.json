@@ -1,0 +1,131 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "TaxPolicy - Data API",
+  "description": "A tax policy contains a group of tax treatments, where each treatment represents parameters to determine how a particular product is taxed for a transaction line item. Tax policies are related to products, which pass the policy on to the resulting order items. When you activate an order, Subscription Management assigns a tax treatment to each order item based on the tax policy's DefaultTaxTreatmentId, then uses the tax treatment to calculate tax. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DefaultTaxTreatmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "When you order a product, the order product receives this tax treatment. This field is a relationship field.",
+      "relationship_name": "DefaultTaxTreatment",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxTreatment"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Optional user-defined description for providing more information about the tax policy."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Optional user-defined name for the tax policy."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "To calculate tax for order products, products must have an active tax policy. Tax policies are created with a Draft status before being assigned to a product or order product. After activating a tax policy, you can't edit certain policy fields. Possible values are: Active Draft Inactive"
+    },
+    "TreatmentSelection": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines how Subscription Management chooses a tax treatment to assign to order products related to this tax policy. In API version 55.0, only Default is supported. Possible values are: Default—The order product receives the tax treatment defined in the tax policy's DefaultTreatmentId field. LegalEntity—Assigns a tax treatment based on matching legal entities between the order product and tax treatment. Manual—Order products don't receive tax treatments based on the tax policy; users must provide the treatment on their own instead."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DefaultTaxTreatmentId": {
+      "field_label": "Tax Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "Id": {
+      "field_label": "Tax Policy ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Tax Policy Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TreatmentSelection": {
+      "field_label": "Treatment Selection",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

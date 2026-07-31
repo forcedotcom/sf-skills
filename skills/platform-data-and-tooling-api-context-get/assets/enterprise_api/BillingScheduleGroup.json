@@ -1,0 +1,595 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "BillingScheduleGroup - Data API",
+  "description": "Represents a consolidated view of all billing schedules related to the order items generated from one asset, including new orders and amendment orders. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BillDayOfMonth": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Billing Day of Month for the billing schedules that comprise the billing schedule group. Subscription Management uses the order item's billing day of month to calculate the order item’s next billing date, which the billing schedule then inherits. For example, an order item can be billed on the first day of the month."
+    },
+    "BillToContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The contact related to the billing schedule group. This field can’t be modified when related billing schedules are in processing. This field is a relationship field.",
+      "relationship_name": "BillToContact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "BillingAccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The Salesforce account for the billing schedule group. This field is a relationship field.",
+      "relationship_name": "BillingAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the billing address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of this billing schedule group. Maximum size is 40 characters."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of this billing schedule group. Maximum size is 80 characters."
+    },
+    "BillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Accuracy level of the geocode for the billing address. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used with BillingLongitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used with BillingLatitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "BillingMethod": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Shows the type of billing used for the source item. Possible values are: Evergreen OrderAmount"
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of this billing schedule group. Maximum size is 20 characters."
+    },
+    "BillingScheduleGroupNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated reference number for the billing schedule group."
+    },
+    "BillingStartMonth": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Read-only field used with annual billing. The field shows the numbers from 1 to 12, which indicate the month when billing begins for an annual subscription. For example, if billing starts in January, the value is 1; if billing starts in June, the value is 6. This field is available in API version 58.0 and later."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of this billing schedule group. Maximum size is 80 characters."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Street address for the billing address of this billing schedule group."
+    },
+    "BillingTerm": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Used with BillingTermUnit to define a billing cycle. For example, bill every 20 days or every two months. In this example, the BillingTerm is 20 and the BillingTermUnit is days"
+    },
+    "BillingTermUnit": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The frequency with which the billing schedule is invoiced. Possible values are: Day Month OneTime Quarter Semi-Annual Year Used with BillingTermUnit to define a billing cycle."
+    },
+    "BillingType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Inherited from the shared value of each billing schedule in the billing schedule group. Defines when Subscription Management bills a product or service relative to when it’s provided to the customer. Advance billing invoices a product or service before you provide it, while arrears billing invoices a product or service after you provide it. Subscription Management evaluates the billing type when it calculates an order's next billing date. Possible values are: Advance – If the billing schedule is billed in advance, Subscription Management evaluates the order’s billing day of month to choose the nearest date on or before the order product’s start date. For example, if a monthly order product’s start date is January 1, and the order’s billing day of month is 15, the next billing date is December 15. Arrears – If the billing schedule is billed in arrears, Subscription Management evaluates the order’s billing day of month to choose the nearest date after the order product’s start date. For example, if a monthly order product’s start date is January 1 and the order’s billing day of month is 15, the order product’s next billing date is January 15."
+    },
+    "CancellationDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date that a cancellation was made against the billing schedule. Subscription Management doesn't invoice billing schedules past their cancellation date."
+    },
+    "Controller": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "During the invoicing process, this field determines which date is used when the billing schedule group and billing schedule have a related field with conflicting values. For example, when Controller has a value of BillingScheduleGroup, if the billing schedule's billing day of month is 5 while the billing schedule group's billing day of month is 10, the invoice is sent on the 10th day of the month. Possible values are: BillingScheduleGroup—The date on the billing schedule group controls."
+    },
+    "CurrentBillingPeriodAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "This field was removed in Subscription Management API version 55.0."
+    },
+    "CurrentQuantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "This field was removed in Subscription Management API version 55.0."
+    },
+    "EffectiveNextBillingDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The earliest NextBillingDate from all billing schedules in the billing schedule group. This field is a reference field that isn't used for any features or calculations. This field is a calculated field."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The latest end date from all billing schedules in the billing schedule group."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The Salesforce user who owns the billing schedule group. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PaymentTermId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the payment term used in this billing schedule group. This field can’t be modified when related billing schedules are in processing. This field is a relationship field.",
+      "relationship_name": "PaymentTerm",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentTerm"
+    },
+    "PeriodBoundary": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Inherited from the order item's parent quote line item or sales transaction item. The period boundary helps determine the start and end date of the billing periods. Possible values are: AlignToCalendar—the period starts on the first day of the term unit; for example, the first day of the month. Anniversary—The start date determines the boundary. For example, if a monthly subscription starts on September 13, the subscription starts on the 13th day of each month. DayOfPeriod—the period starts on the day indicated by PeriodBoundaryDay. EndOfPeriod—the period starts on the last day of the pricing term unit."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the product for the order item represented by each billing schedule in the billing schedule group. This field is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "ProductName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the product for the order item represented by each billing schedule in the billing schedule group."
+    },
+    "ProrationPolicyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Refers to the proration policy that applies to this billing schedule group. The proration policy defines how time periods are calculated for subscription orders. For example, whether partial periods are allowed. Inherited from the shared proration policy for each billing schedule in the billing schedule group. This field is a relationship field.",
+      "relationship_name": "ProrationPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "ProrationPolicy"
+    },
+    "ReferenceEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The asset used to create the billing schedules in the billing schedule group. This field is a relationship field.",
+      "relationship_name": "ReferenceEntity",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "ShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the shipping address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "ShippingCity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the shipping address for this billing schedule group. City maximum size is 40 characters"
+    },
+    "ShippingCountry": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the shipping address for this billing schedule group. Country maximum size is 80 characters."
+    },
+    "ShippingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Accuracy level of the geocode for the shipping address. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "ShippingLatitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used with ShippingLongitude to specify the precise geolocation of a shipping address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "ShippingLongitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used with ShippingLatitude to specify the precise geolocation of an address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "ShippingPostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the shipping address for this billing schedule group. Postal code maximum size is 20 characters."
+    },
+    "ShippingState": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the shipping address for this billing schedule group. State maximum size is 80 characters."
+    },
+    "ShippingStreet": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The street address of the shipping address for this billing schedule group. Maximum of 255 characters."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The earliest start date from all billing schedules in the billing schedule group."
+    },
+    "TotalBilledAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount that has been invoiced for all billing schedules within the billing schedule group. This field is a calculated field."
+    },
+    "TotalPendingAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount that hasn't yet been invoiced for all billing schedules within the billing schedule group. This field is a calculated field."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management, Commerce Subscriptions, and Billing (Revenue Cloud). If your org has both Subscription Management and Commerce Subscriptions, then Subscription Management takes precedence. For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management, Commerce Subscriptions, and Billing (Revenue Cloud). If your org has both Subscription Management and Commerce Subscriptions, then Subscription Management takes precedence.\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "BillDayOfMonth": {
+      "field_label": "Bill Day Of Month",
+      "type": "int",
+      "digits": "9"
+    },
+    "BillToContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingAddress": {
+      "field_label": "Billing Address",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "Billing City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Billing Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Billing Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Billing Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Billing Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingMethod": {
+      "field_label": "Billing Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BillingPostalCode": {
+      "field_label": "Billing Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingResumptionDate": {
+      "field_label": "Billing Resumption Date",
+      "type": "date"
+    },
+    "BillingScheduleGroupNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "BillingStartMonth": {
+      "field_label": "Billing Start Month",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BillingState": {
+      "field_label": "Billing State",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Billing Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "BillingSuspensionDate": {
+      "field_label": "Billing Suspension Date",
+      "type": "date"
+    },
+    "BillingTerm": {
+      "field_label": "Billing Term",
+      "type": "int",
+      "digits": "9"
+    },
+    "BillingTermUnit": {
+      "field_label": "Billing Term Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BillingTreatmentId": {
+      "field_label": "Billing Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingType": {
+      "field_label": "Billing Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CancellationDate": {
+      "field_label": "Cancellation Date",
+      "type": "date"
+    },
+    "Controller": {
+      "field_label": "Controller",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EffectiveNextBillingDate": {
+      "field_label": "Effective Next Billing Date",
+      "type": "date"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "ExternalRefRecordIdentifier": {
+      "field_label": "External Reference Record Identifier",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Billing Schedule Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NextBillingDateOverride": {
+      "field_label": "Next Billing Date Override",
+      "type": "date"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PeriodBoundary": {
+      "field_label": "Period Boundary",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductName": {
+      "field_label": "Product Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ReferenceEntityId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReferenceRecordId": {
+      "field_label": "ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShipFromAddress": {
+      "field_label": "Ship From Address",
+      "type": "address"
+    },
+    "ShipFromCity": {
+      "field_label": "Ship From City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShipFromCountry": {
+      "field_label": "Ship From Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShipFromGeocodeAccuracy": {
+      "field_label": "Ship From Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShipFromLatitude": {
+      "field_label": "Ship From Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShipFromLongitude": {
+      "field_label": "Ship From Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShipFromPostalCode": {
+      "field_label": "Ship From Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShipFromState": {
+      "field_label": "Ship From State",
+      "type": "string",
+      "length": "80"
+    },
+    "ShipFromStreet": {
+      "field_label": "Ship From Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "ShippingAddress": {
+      "field_label": "Shipping Address",
+      "type": "address"
+    },
+    "ShippingCity": {
+      "field_label": "Shipping City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShippingCountry": {
+      "field_label": "Shipping Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingGeocodeAccuracy": {
+      "field_label": "Shipping Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShippingLatitude": {
+      "field_label": "Shipping Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingLongitude": {
+      "field_label": "Shipping Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingPostalCode": {
+      "field_label": "Shipping Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShippingState": {
+      "field_label": "Shipping State",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingStreet": {
+      "field_label": "Shipping Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxTreatmentId": {
+      "field_label": "Tax Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TotalBilledAmount": {
+      "field_label": "Total Billed Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPendingAmount": {
+      "field_label": "Total Pending Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

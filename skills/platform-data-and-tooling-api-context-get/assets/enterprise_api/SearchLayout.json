@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SearchLayout - Data API",
+  "description": "Represents a search layout defined for an object. This object is available in API version 35.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ButtonsDisplayed": {
+      "type": "SearchLayoutButtonsDisplayed",
+      "properties": "Nillable",
+      "description": "The list of buttons available in list views for an object. This field is equivalent to the listViewButtons field on SearchLayouts in Metadata API."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. DurableId in queries allows you to find the right record without having to retrieve the entire record."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the record in EntityDefinition. Use in subqueries. This field is a relationship field.",
+      "relationship_name": "EntityDefinition",
+      "refers_to": "EntityDefinition"
+    },
+    "FieldsDisplayed": {
+      "type": "SearchLayoutFieldsDisplayed",
+      "properties": "Nillable",
+      "description": "The list of fields displayed in a search result for the object. The name field is required. It’s always displayed as the first column header, so it isn’t included in this list; all additional fields are included. The field name relative to the object name, for example MyCustomField__c, is specified for each custom field. This field is equivalent to searchResultsAdditionalFields on SearchLayouts in Metadata API."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for this search layout."
+    },
+    "LayoutType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of search layout."
+    },
+    "ListLayout": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Identifies the list layout a search layout is related to. Available in API version 48.0 and later."
+    },
+    "Profile": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Identifies the profile to which a search layout applies. Available in API version 48.0 and later."
+    },
+    "ProfileName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the profile to which a search layout applies. Available in API version 48.0 and later."
+    }
+  },
+  "special_access_rules": "Users with the View Setup and Configuration permission can access this object.",
+  "usage": "Use the SearchLayout object to control the fields displayed and actions available to a user profile. The search layout applies to global and lookup searches.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"SearchLayout\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ButtonsDisplayed\" nillable=\"true\" minOccurs=\"0\" type=\"tns:SearchLayoutButtonsDisplayed\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EntityDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EntityDefinition\"/>\n        <element name=\"EntityDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FieldsDisplayed\" nillable=\"true\" minOccurs=\"0\" type=\"tns:SearchLayoutFieldsDisplayed\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LayoutType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ListLayout\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Profile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProfileName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"SearchLayoutButton\">\n  <sequence>\n    <element name=\"apiName\" type=\"xsd:string\"/>\n    <element name=\"label\" type=\"xsd:string\"/>\n  </sequence>\n</complexType>\n<complexType name=\"SearchLayoutButtonsDisplayed\">\n  <sequence>\n    <element name=\"applicable\" type=\"xsd:boolean\"/>\n    <element name=\"buttons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchLayoutButton\"/>\n  </sequence>\n</complexType>\n<complexType name=\"SearchLayoutField\">\n  <sequence>\n    <element name=\"apiName\" type=\"xsd:string\"/>\n    <element name=\"label\" type=\"xsd:string\"/>\n    <element name=\"sortable\" type=\"xsd:boolean\"/>\n  </sequence>\n</complexType>\n<complexType name=\"SearchLayoutFieldsDisplayed\">\n  <sequence>\n    <element name=\"applicable\" type=\"xsd:boolean\"/>\n    <element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchLayoutField\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ButtonsDisplayed": {
+      "field_label": "Buttons Displayed",
+      "type": "complexvalue"
+    },
+    "DurableId": {
+      "field_label": "Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "EntityDefinitionId": {
+      "field_label": "Entity Definition ID",
+      "type": "string",
+      "length": "70"
+    },
+    "FieldsDisplayed": {
+      "field_label": "Fields Displayed",
+      "type": "complexvalue"
+    },
+    "Id": {
+      "field_label": "Search Layout ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LayoutType": {
+      "field_label": "Layout Type",
+      "type": "string",
+      "length": "30"
+    },
+    "ListLayout": {
+      "field_label": "List Layout",
+      "type": "string",
+      "length": "15"
+    },
+    "Profile": {
+      "field_label": "Profile ID",
+      "type": "string",
+      "length": "15"
+    },
+    "ProfileName": {
+      "field_label": "Profile Name",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

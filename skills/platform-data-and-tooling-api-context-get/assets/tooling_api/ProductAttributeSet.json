@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ProductAttributeSet - Tooling API",
+  "description": "Used to group variation attributes that apply to one or more products. This object is available in API version 55.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A meaningful description of the product attribute set. Limited to 255 characters."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name. This field is automatically generated, but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record.",
+      "required": true
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated ProductAttributeSet in Metadata API. The full name can include a namespace prefix. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the product attribute set. Possible values are: da—Danish de—German en_US—English es—Spanish es_MX—Spanish (Mexico) fi—Finnish fr—French it—Italian ja—Japanese ko—Korean nl_NL—Dutch no—Norwegian pt_BR—Portuguese (Brazil) ru—Russian sv—Swedish th—Thai zh_CN—Chinese (Simplified) zh_TW—Chinese (Traditional)"
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the product attribute set."
+    },
+    "Metadata": {
+      "type": "mns:ProductAttributeSet",
+      "properties": "Create, Nillable, Update",
+      "description": "The ProductAttributeSet's metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition organization that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ProductAttributeSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"productAttributeSetItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProductAttributeSetItem\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

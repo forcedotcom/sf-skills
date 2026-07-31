@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OpportunityTeamMember - Data API",
+  "description": "Represents a User on the opportunity team of an Opportunity.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The team member name. This read-only field is available in API version 30.0 and later."
+    },
+    "OpportunityAccessLevel": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist",
+      "description": "Opportunity access level for this team member. Valid values: Read Edit All This field is supported in triggers, but not in workflows or validation rules. It’s editable in API version 36.0 and later."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the Opportunity associated with this opportunity team. This field can’t be updated.",
+      "required": true
+    },
+    "PhotoURL": {
+      "type": "URL",
+      "properties": "Filter, Nillable, Sort, Group",
+      "description": "Read only. Retrieves the users Chatter photo URL. This field is available in API version 32.0 and later."
+    },
+    "TeamMemberRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Role that the team member has on the opportunity. The org’s admin sets the valid values in the Opportunity Team Roles picklist. Label is Team Role."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort, Group",
+      "description": "Read only. Retrieves the user’s title. This field is available in API version 36.0 and later."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the User who is a member of the opportunity team. This field can’t be updated.",
+      "required": true
+    }
+  },
+  "usage": "If you create a record for this object and the OpportunityId and UserId combination matches an existing record, the system updates any modified fields and returns the existing record. In the user interface, users can set up an opportunity team for the opportunities they own. The opportunity team includes other users that are working on the opportunity with them. This object is available only in organizations that have enabled team selling.\n\nIf you create a record for this object and the OpportunityId and UserId combination matches an existing record, the system updates any modified fields and returns the existing record.\n\nIn the user interface, users can set up an opportunity team for the opportunities they own. The opportunity team includes other users that are working on the opportunity with them. This object is available only in organizations that have enabled team selling.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OpportunityTeamMemberHistory (API version 59.0)**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Opportunity Team Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Opportunity Team Member Name",
+      "type": "string",
+      "length": "361"
+    },
+    "OpportunityAccessLevel": {
+      "field_label": "Opportunity Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "OpportunityId": {
+      "field_label": "Opportunity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PhotoUrl": {
+      "field_label": "Url for thumbnail sized photo",
+      "type": "url",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TeamMemberRole": {
+      "field_label": "Team Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "80"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

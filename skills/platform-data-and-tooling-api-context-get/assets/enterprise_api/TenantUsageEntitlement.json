@@ -1,0 +1,179 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "TenantUsageEntitlement - Data API",
+  "description": "Represents a data structure that contains information about the features or functionalities that a Salesforce org has access to. This object is available in API version 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AmountUsed": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The quantity of an entitlement that has been used."
+    },
+    "CurrentAmountAllowed": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The amount of an entitlement that a tenant is allowed to use."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The end date of the setting, based on license end dates that entitle the org to that setting."
+    },
+    "Frequency": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "How often the tenant's entitlement data is automatically reviewed to see how much of the entitlement has been used. Possible values are: Daily Fortnightly Monthly Once Quarterly Weekly Yearly"
+    },
+    "HasRollover": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that a certain amount of a customer's unused entitlements from a set time period can be added to the next set time period. This field is reserved for future use. The default value is false."
+    },
+    "IsPersistentResource": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the data that will be saved and available for future use even after closing a session. The default value is false."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "The overarching name of an element in your organization. A MasterLabel is visible to customers."
+    },
+    "OverageGrace": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of the Allowed Amount that a customer can use without incurring an additional charge. The default value is 100% (no overage grace). This field is reserved for future use."
+    },
+    "ResourceGroupKey": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Tracks resource usage across different segments for the same setting. For example, a Messages entitlement that tracks email messages and SMS messages separately could have one ResourceGroupKey of SMS and another ResourceGroupKey of Email. In most cases though, TenantUsageEntitlements are configured for the org and not by segment."
+    },
+    "Setting": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "A rule or attribute that can be used to configure the appearance or actions in an organization."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "This date is the earliest start date of any license contributing to the provisioning aggregation output."
+    },
+    "UsageDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date an event occurred that deducted from the tenant's entitlement."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **TenantUsageEntitlementChangeEvent**: Change events are available for the object.\n- **TenantUsageEntitlementFeed**: Feed tracking is available for the object.\n- **TenantUsageEntitlementHistory**: History is available for tracked fields of the object.\n- **TenantUsageEntitlementOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantUsageEntitlementShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"TenantUsageEntitlement\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AmountUsed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CurrentAmountAllowed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Frequency\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HasRollover\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPersistentResource\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OverageGrace\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ResourceGroupKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Setting\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UsageDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AmountUsed": {
+      "field_label": "Amount Used",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrentAmountAllowed": {
+      "field_label": "Current Amount Allowed",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Frequency": {
+      "field_label": "Frequency",
+      "type": "picklist",
+      "length": "255"
+    },
+    "HasRollover": {
+      "field_label": "Has Rollover",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Tenant Usage Entitlement ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPersistentResource": {
+      "field_label": "Is Persistent Resource",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Setting Label",
+      "type": "string",
+      "length": "255"
+    },
+    "OverageGrace": {
+      "field_label": "Overage Grace",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "ResourceGroupKey": {
+      "field_label": "Resource Group Key",
+      "type": "string",
+      "length": "120"
+    },
+    "Setting": {
+      "field_label": "Setting",
+      "type": "string",
+      "length": "120"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UsageDate": {
+      "field_label": "Usage Date",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

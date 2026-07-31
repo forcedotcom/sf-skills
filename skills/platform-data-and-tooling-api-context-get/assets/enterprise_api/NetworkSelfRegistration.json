@@ -1,0 +1,201 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "NetworkSelfRegistration - Data API",
+  "description": "Represents the account that self-registering Experience Cloud users are associated with by default. Self-registering users in an Experience Cloud site are required to be associated with an account, which the admin must specify while setting up self-registration for the site. If an account isn’t specified, Salesforce creates person accounts (when enabled) for self-registering users. This object is available in API version 34.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the account that self-registering users in the Experience Cloud site are associated with."
+    },
+    "ApexHandlerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the Apex handler created by Configurable Self-Reg registration page type."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the org. The default value is USD."
+    },
+    "ExecuteApexHandlerAsId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user who is executing the configurable self-registration handler."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of NetworkId is unique within your org. You can use only one account per Experience Cloud site to assign self-registering users."
+    },
+    "OptionsDisableStandardRgstrComponent": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Determines whether you can use standard Aura and Lightning Web Runtime (LWR) components for self-registration. If this field is true, self-registration flows that use these components don’t work.For more control over self-registration, set this field to true if you’re not using the standard self-registration component."
+    },
+    "OptionsIncludePassword": {
+      "type": "Boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Option on Configurable Self-Reg registration page. If true, the Include Password field is selected."
+    },
+    "OptionsShowEmail": {
+      "type": "Boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Option on Configurable Self-Reg registration page. If true, the Email field appears on the self-registration form."
+    },
+    "OptionsShowFirstName": {
+      "type": "Boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Option on the Configurable Self-Reg registration page. If true, the First Name field appears on the self-registration form."
+    },
+    "OptionsShowLastName": {
+      "type": "Boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Option on the Configurable Self-Reg registration page. If true, the Last Name field appears on the self-registration form."
+    },
+    "OptionsShowMobilePhone": {
+      "type": "Boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Option on the Configurable Self-Reg registration page. If true, the Mobile field appears on the self-registration form."
+    },
+    "OptionsShowNickname": {
+      "type": "Boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Option on the Configurable Self-Reg registration page. If true, the Nickname field appears on the self-registration form."
+    },
+    "OptionsShowUsername": {
+      "type": "Boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Option on the Configurable Self-Reg registration page. If true, the Username field appears on the self-registration form."
+    },
+    "PermissionSetGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the permission set group used for the self registration. This field is a relationship field.",
+      "relationship_name": "PermissionSetGroup",
+      "refers_to": "PermissionSetGroup"
+    },
+    "VerificationMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of verification method that a user must supply when registering, which can be: SyncEmail—User must supply an email address to verify identity. SMS—User must supply a phone number to verify identity."
+    }
+  },
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ApexHandlerId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ExecuteApexHandlerAsId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Experience Self Registration Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OptionsDisableStandardRgstrComponent": {
+      "field_label": "Disable the standard components for self-registration on Aura and LWR sites",
+      "type": "boolean"
+    },
+    "OptionsIncludePassword": {
+      "field_label": "IncludePassword",
+      "type": "boolean"
+    },
+    "OptionsShowEmail": {
+      "field_label": "Email",
+      "type": "boolean"
+    },
+    "OptionsShowFirstName": {
+      "field_label": "First Name",
+      "type": "boolean"
+    },
+    "OptionsShowLastName": {
+      "field_label": "Last Name",
+      "type": "boolean"
+    },
+    "OptionsShowMobilePhone": {
+      "field_label": "Mobile",
+      "type": "boolean"
+    },
+    "OptionsShowNickname": {
+      "field_label": "ShowNickname",
+      "type": "boolean"
+    },
+    "OptionsShowUsername": {
+      "field_label": "ShowUsername",
+      "type": "boolean"
+    },
+    "PermissionSetGroupId": {
+      "field_label": "Permission Set Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "VerificationMethod": {
+      "field_label": "Verification Method",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

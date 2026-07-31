@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "FormulaOperator - Tooling API",
+  "description": "Represents an operator used when building a formula, including examples and uses. This object is available in Tooling API version 39.0 and later.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The formula operator label that appears in the user interface."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the formula operator."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value of the formula operator."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FormulaOperator\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Label\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Value\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,481 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "Promotion - Data API",
+  "description": "Represents a promotion for B2B or D2C stores. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AreQualItemsExclFromDiscounts": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Exclude qualifying items from discount. You can use this field to create buy-one-get-one promotions. The default value is false. This field is available in API version 56.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Description of the promotion."
+    },
+    "DiscountOrder": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether to apply discounts first to the least expensive products or to the most expensive products. Possible values are: LeastExpensive MostExpensive The default value is MostExpensive. This field is available in API version 56.0 and later."
+    },
+    "DiscountRestriction": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether to restrict the products that can be discounted based on the least expensive qualifying product. Possible values are: LeastExpensive None The default value is None. This field is available in API version 56.0 and later."
+    },
+    "DisplayName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Display name of the promotion."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Date and time when the promotion ends."
+    },
+    "ExclusivityType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Determines whether a promotion can be combined with other promotions. Possible values are: No - Can be combined with other promotions. Class - Can’t be combined with a promotion of the same class (product, order, or shipment), but allows for promotions of separate classes to be combined. For example, an order discount on top of a product discount. Global - Only promotion that can be applied to the order, regardless of class. The default value is Class. This field is available in API version 58.0 and later."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the promotion is active (true) or inactive (false). The default value is false."
+    },
+    "IsApproachingDiscountApplicable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates that the promotion shows an approaching discount message. Set an approaching discount threshold value on the PromotionQualifier object. This field is available in API version 64.0 and later. The default value is false."
+    },
+    "IsAutomatic": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether the promotion is automatic or manual. If the promotion is automatic, it automatically applies to eligible carts with no buyer action required. if the promotion is manual, the buyer applies a coupon to redeem the promotion. The default value is false."
+    },
+    "IsCommercePromotion": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the promotion is a B2B Commerce promotion (true) or not (false). The default value is false."
+    },
+    "IsTiered": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the promotion uses promotion tiers (true) or not (false). This value can’t be changed. The default value is false. A tiered promotion can have up to 10 associated tiers. This field is available in API version 57.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced and not directly accessed."
+    },
+    "MaximumUsageCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Maximum number of times the promotion can be applied to a cart. If left blank, the default value is 1. This field is available in API version 56.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the promotion."
+    },
+    "Objective": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "More information, if any, about the purpose of the promotion."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who created the promotion. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PriorityNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Priority for the promotion. The priority determines which promotions apply first. The lower the number, the higher the priority."
+    },
+    "QualifierCriteria": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If a promotion has multiple qualifiers, this field determines whether all qualifiers must be met or whether any must be met for the promotion to apply. Possible values are: All Any The default value is 'All'. This field is available in API version 53.0 and later."
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Date and time when the promotion begins."
+    },
+    "TargetCriteria": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If a promotion has multiple targets, indicates whether a cart must meet the criteria for any target or the criteria for all targets. Possible values are: All Any This field is available in API version 56.0 and later."
+    },
+    "TermsAndConditions": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Terms and conditions the buyer accepts before applying the promotion. This field is available in API version 53.0 and later."
+    }
+  },
+  "special_access_rules": "Some of the fields on the Promotion object are available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PromotionFeed**: Feed tracking is available for the object.\n- **PromotionHistory**: History is available for tracked fields of the object.\n- **PromotionShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AreQualItemsExclFromDiscounts": {
+      "field_label": "Exclude qualifying items from discounts",
+      "type": "boolean"
+    },
+    "BusinessUnitId": {
+      "field_label": "Internal Organization Unit ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CampaignId": {
+      "field_label": "Campaign ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CumulativeUsageTarget": {
+      "field_label": "Cumulative Usage Target",
+      "type": "int",
+      "digits": "9"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CurrentLiabilityAmount": {
+      "field_label": "Current Liability Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CurrentPointCount": {
+      "field_label": "Current Point Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "DefaultVoucherDefinitionId": {
+      "field_label": "Voucher Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "DiscountOrder": {
+      "field_label": "Discount Order",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DiscountRestriction": {
+      "field_label": "Discount Restriction",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DisplayName": {
+      "field_label": "Display Name",
+      "type": "string",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "EndDateTime": {
+      "field_label": "End Datetime",
+      "type": "datetime"
+    },
+    "EnrollmentEndDate": {
+      "field_label": "Enrollment End Date",
+      "type": "date"
+    },
+    "EnrollmentStartDate": {
+      "field_label": "Enrollment Start Date",
+      "type": "date"
+    },
+    "ExclusivityType": {
+      "field_label": "Exclusivity Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FulfillmentAction": {
+      "field_label": "Fulfillment Action",
+      "type": "picklist",
+      "length": "255"
+    },
+    "GameDefinitionId": {
+      "field_label": "Game Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Promotion ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImageUrl": {
+      "field_label": "Image URL",
+      "type": "url",
+      "length": "1000"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsApproachingDiscountApplicable": {
+      "field_label": "Approaching Discount",
+      "type": "boolean"
+    },
+    "IsAutomatic": {
+      "field_label": "Automatic",
+      "type": "boolean"
+    },
+    "IsCloned": {
+      "field_label": "Cloned",
+      "type": "boolean"
+    },
+    "IsCommercePromotion": {
+      "field_label": "Commerce Promotion",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEnrollmentRequired": {
+      "field_label": "Enrollment Required",
+      "type": "boolean"
+    },
+    "IsPointsWithFactor": {
+      "field_label": "Points With Factor",
+      "type": "boolean"
+    },
+    "IsQualCriteriaNotRequiredPerApplication": {
+      "field_label": "Qualifying Criteria Not Required Per Application",
+      "type": "boolean"
+    },
+    "IsQuickPromotion": {
+      "field_label": "Quick Promotion",
+      "type": "boolean"
+    },
+    "IsReferralPromotion": {
+      "field_label": "Referral Promotion",
+      "type": "boolean"
+    },
+    "IsTiered": {
+      "field_label": "Tiered Promotion",
+      "type": "boolean"
+    },
+    "IssuedVoucherCount": {
+      "field_label": "Issued Voucher Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LoyaltyProgramCurrencyId": {
+      "field_label": "Currency ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LoyaltyProgramId": {
+      "field_label": "Loyalty Program ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LoyaltyPromotionType": {
+      "field_label": "Loyalty Promotion Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MaximumLiabilityAmount": {
+      "field_label": "Maximum Liability Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "MaximumRewardValue": {
+      "field_label": "Maximum Reward Value",
+      "type": "int",
+      "digits": "9"
+    },
+    "MaximumUsageCount": {
+      "field_label": "Maximum Applications Per Cart",
+      "type": "int",
+      "digits": "9"
+    },
+    "MaximumVoucherCount": {
+      "field_label": "Maximum Voucher Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Objective": {
+      "field_label": "Objective",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PointFactor": {
+      "field_label": "Point Factor",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "PriorityNumber": {
+      "field_label": "Priority Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "PromotionCode": {
+      "field_label": "Promotion Code",
+      "type": "string",
+      "length": "255"
+    },
+    "PromotionConfiguration": {
+      "field_label": "Promotion Configuration",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "PromotionPageUrl": {
+      "field_label": "Promotion Page URL",
+      "type": "url",
+      "length": "1000"
+    },
+    "PromotionTemplateId": {
+      "field_label": "Promotion Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QualifierCriteria": {
+      "field_label": "Qualifier Criteria",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ReferralType": {
+      "field_label": "Referral Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RelatedPromotionId": {
+      "field_label": "Promotion ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedReferralProgramId": {
+      "field_label": "Loyalty Program ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "StartDateTime": {
+      "field_label": "Start Datetime",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetCriteria": {
+      "field_label": "Target Criteria",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TermsAndConditions": {
+      "field_label": "Terms and Conditions",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "TotalRewardPoints": {
+      "field_label": "Reward Points",
+      "type": "int",
+      "digits": "9"
+    },
+    "TransactionJournalType": {
+      "field_label": "Transaction Journal Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

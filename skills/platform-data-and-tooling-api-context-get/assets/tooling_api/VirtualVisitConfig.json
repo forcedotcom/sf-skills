@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "VirtualVisitConfig - Tooling API",
+  "description": "Represents the configuration of an external video provider, which relays events from Salesforce to the provider. This object is available in API version 56.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ComprehendServiceType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the type of service used to convert speech into text or to analyze the converted speech text. Possible values are: ComprehendMedicalService—Transcribe Medical ComprehendService—Transcribe"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for the VirtualVisitConfig object. Required. The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name."
+    },
+    "ExperienceCloudSiteUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL of the Digital Experience site where the Video Call component is available to portal or guest users."
+    },
+    "ExternalRoleIdentifier": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Enter the ID of the role that's used to allow users join a video call and to grant them temporary access to certain functions needed to participate in the call."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated VirtualVisitConfig in Metadata API. The full name can include a namespaceprefix. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the VirtualVisitConfig."
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: Possible values are: beta—Managed-Beta deleted—Managed-Proposed-Deleted deprecated—Managed-Proposed-Deprecated deprecatedEditable—SecondGen-Installed-Deprecated installed—Managed-Installed installedEditable—SecondGen-Installed-Editable released—Managed-Released unmanaged—Unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the VirtualVisitConfig. In the UI, this field is Virtual Visit Config."
+    },
+    "MessagingRegion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Specifies the region in which the waiting room and messaging channel data is processed and stored. Available in API version 57.0 and later."
+    },
+    "Metadata": {
+      "type": "EventRelayConfig",
+      "properties": "Create, Nillable, Update",
+      "description": "The VirtualVisitConfig’s metadata."
+    },
+    "NamedCredentialId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The named credential record that's used to authenticate and authorize an account of the video call vendor. This field is a relationship field.",
+      "relationship_name": "NamedCredential",
+      "relationship_type": "Lookup",
+      "refers_to": "NamedCredential"
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition organization that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values: In Developer Edition organizations, the namespace prefix is set to the namespace prefix of the organization for all objects that support it. There is an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition organization of the package developer. In organizations that are not Developer Edition organizations, NamespacePrefix is only set for objects that are part of an installed managed package. There is no namespace prefix for all other objects."
+    },
+    "StorageBucketName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the storage bucket that stores the meeting transcript."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The name of the Salesforce feature for which the video call configuration record is created. Possible values are: CHIME—Chime INTELLIGENT_FORM_READER—Intelligent Form Reader SENTIMENT_ANALYSIS—Sentiment Analysis"
+    },
+    "VideoCallApptTypeValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Default Appointment Type picklist values from the Service Appointment object that represent a video appointment type. Use semicolons to separate multiple values."
+    },
+    "VideoControlRegion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Specifies the region through which API calls related to Video Calls are made. Available in API version 57.0 and later."
+    },
+    "VisitRegion": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the region through which the Video Call video and audio data are processed. Possible values are: af-south-1—Africa (Cape Town) ap-east-1—Asia Pacific (Hong Kong) ap-northeast-1—Asia Pacific (Tokyo) ap-northeast-2—Asia Pacific (Seoul) ap-northeast-3—Asia Pacific (Osaka) ap-south-1—Asia Pacific (Mumbai) ap-southeast-1—Asia Pacific (Singapore) ap-southeast-2—Asia Pacific (Sydney) ca-central-1—Canada (Central) eu-central-1—Europe (Frankfurt) eu-north-1—Europe (Stockholm) eu-south-1—Europe (Milan) eu-west-1—Europe (Ireland) eu-west-2—Europe (London) eu-west-3—Europe (Paris) me-south-1—Middle East (Bahrain) sa-east-1—South America (São Paulo) us-east-1—US East (N. Virginia) us-east-2—US East (Ohio) us-west-1—US West (N. California) us-west-2—US West (Oregon)"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"VirtualVisitComprehendServiceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ComprehendService\"/>\n    <xsd:enumeration value=\"ComprehendMedicalService\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"VirtualVisitConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"comprehendServiceType\" minOccurs=\"0\" type=\"tns:VirtualVisitComprehendServiceType\"/>\n        <xsd:element name=\"experienceCloudSiteUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalMsgServiceIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalRoleIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalUserIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"messagingRegion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"storageBucketName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"usageType\" minOccurs=\"0\" type=\"tns:VirtualVisitUsageType\"/>\n        <xsd:element name=\"videoCallApptTypeValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"videoControlRegion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"visitRegion\" minOccurs=\"0\" type=\"tns:VirtualVisitVisitRegion\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"VirtualVisitUsageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CHIME\"/>\n    <xsd:enumeration value=\"INTELLIGENT_FORM_READER\"/>\n    <xsd:enumeration value=\"SENTIMENT_ANALYSIS\"/>\n    <xsd:enumeration value=\"KEY_PHRASE_EXTRACTION\"/>\n    <xsd:enumeration value=\"ENTITY_DETECTION\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"VirtualVisitVisitRegion\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"us-east-1\"/>\n    <xsd:enumeration value=\"us-east-2\"/>\n    <xsd:enumeration value=\"us-west-1\"/>\n    <xsd:enumeration value=\"us-west-2\"/>\n    <xsd:enumeration value=\"af-south-1\"/>\n    <xsd:enumeration value=\"ap-east-1\"/>\n    <xsd:enumeration value=\"ap-south-1\"/>\n    <xsd:enumeration value=\"ap-northeast-1\"/>\n    <xsd:enumeration value=\"ap-northeast-2\"/>\n    <xsd:enumeration value=\"ap-northeast-3\"/>\n    <xsd:enumeration value=\"ap-southeast-1\"/>\n    <xsd:enumeration value=\"ap-southeast-2\"/>\n    <xsd:enumeration value=\"ca-central-1\"/>\n    <xsd:enumeration value=\"eu-central-1\"/>\n    <xsd:enumeration value=\"eu-west-1\"/>\n    <xsd:enumeration value=\"eu-west-2\"/>\n    <xsd:enumeration value=\"eu-west-3\"/>\n    <xsd:enumeration value=\"eu-south-1\"/>\n    <xsd:enumeration value=\"eu-north-1\"/>\n    <xsd:enumeration value=\"me-south-1\"/>\n    <xsd:enumeration value=\"sa-east-1\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

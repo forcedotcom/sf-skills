@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "BroadcastTopicGroup - Data API",
+  "description": "Represents a junction object that relates a group to an alert type broadcast topic. The broadcast sends the alert to this group. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BroadcastTopicId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the broadcast topic. This field is a relationship field.",
+      "relationship_name": "BroadcastTopic",
+      "relationship_type": "Lookup",
+      "refers_to": "BroadcastTopic"
+    },
+    "GroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the group where the alert of the associated BroadcastTopic record with an Alert BroadcastType is sent to. This field is a relationship field.",
+      "relationship_name": "Group",
+      "relationship_type": "Lookup",
+      "refers_to": "Group"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Name of the broadcast topic group. This field is optional."
+    }
+  },
+  "special_access_rules": "Enable Customer Service Incident Management and Broadcast Alert. To create a BroadcastTopicGroup record, set the BroadcastReason field of the associated BroadcastTopic to Incident Communication.\n\nEnable Customer Service Incident Management and\n         Broadcast Alert. To create a BroadcastTopicGroup record, set the BroadcastReason field of\n         the associated BroadcastTopic to Incident Communication.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **BroadcastTopicGroupChangeEvent**: Change events are available for the object."
+}

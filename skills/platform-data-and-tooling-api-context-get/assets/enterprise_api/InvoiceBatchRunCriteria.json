@@ -1,0 +1,146 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "InvoiceBatchRunCriteria - Data API",
+  "description": "Represents a batch processing job and its required criteria in Subscription Management. During an invoice batch run, all billing schedules that meet the specified criteria are processed, resulting in the generation of invoices. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Comments": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Optional user-defined information about the batch run criteria."
+    },
+    "CriteriaExpression": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The formula that specifies criteria for filtering the billing schedules. For example, we can filter billing schedules by currency code."
+    },
+    "CriteriaMatchType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of matching criteria required for the batch. Valid value is MatchAll. The default value is MatchAll."
+    },
+    "ExpectedInvoiceStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of invoice a batch run generates. Valid values are: Draft Posted This field is available in API version 60.0 and later."
+    },
+    "InvoiceBatchRunCriteriaNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated sequential number."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "System-generated field. The ID of the user who created the BillingBatchScheduler record. Its UI label is Owner. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CriteriaExpression": {
+      "field_label": "Criteria Expression",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CriteriaMatchType": {
+      "field_label": "Criteria Match Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ExpectedInvoiceStatus": {
+      "field_label": "Expected Invoice Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Invoice Batch Run Criteria ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceBatchRunCriteriaNumber": {
+      "field_label": "Invoice Batch Run Criteria Number",
+      "type": "string",
+      "length": "255"
+    },
+    "InvoiceDate": {
+      "field_label": "Invoice Date",
+      "type": "date"
+    },
+    "InvoiceDateOffset": {
+      "field_label": "Invoice Date Offset",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsInvoiceDateFromRunDate": {
+      "field_label": "Invoice Date From Run Date",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetDate": {
+      "field_label": "Target Date",
+      "type": "date"
+    },
+    "TargetDateOffset": {
+      "field_label": "Target Date Offset",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

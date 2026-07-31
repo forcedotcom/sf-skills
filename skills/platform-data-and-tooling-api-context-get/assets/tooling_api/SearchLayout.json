@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SearchLayout - Tooling API",
+  "description": "Represents a search layout defined for an object.",
+  "supported_soap_calls": "`describeObjects()`, `query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ButtonsDisplayed": {
+      "type": "SearchLayoutButtonsDisplayed",
+      "properties": "Nillable",
+      "description": "The list of buttons available in list views for an object.This field is equivalent to the Buttons Displayed value in Object Name List View in the Search Layouts related list on the object detail page. It’s also equivalent to the listViewButtons field on SearchLayouts in Metadata API."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. DurableId in queries allows you to find the right record without having to retrieve the entire record."
+    },
+    "EntityDefinition": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the object associated with this search layout. Use in subqueries."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the record in EntityDefinition. Use in subqueries."
+    },
+    "FieldsDisplayed": {
+      "type": "SearchLayoutFieldsDisplayed",
+      "properties": "Nillable",
+      "description": "The list of fields displayed in a search result for the object. The name field is required. It’s always displayed as the first column header, so it isn’t included in this list; all additional fields are included. The field name relative to the object name, for example MyCustomField__c, is specified for each custom field.This field is equivalent to the Search Results in the Search Layouts related list on the object detail page in the application user interface. It’s also equivalent to searchResultsAdditionalFields in Metadata API."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for this search layout."
+    },
+    "LayoutType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of search layout."
+    },
+    "ListLayout": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Identifies the list layout a search layout is related to. Available in API version 48.0 and later."
+    },
+    "Profile": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Identifies the profile to which a search layout applies. Available in API version 48.0 and later."
+    },
+    "ProfileName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the profile to which a search layout applies. Available in API version 48.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SearchLayout\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ButtonsDisplayed\" minOccurs=\"0\" type=\"tns:SearchLayoutButtonsDisplayed\" nillable=\"true\"/>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinition\" minOccurs=\"0\" type=\"ens:EntityDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"FieldsDisplayed\" minOccurs=\"0\" type=\"tns:SearchLayoutFieldsDisplayed\" nillable=\"true\"/>\n        <xsd:element name=\"Label\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"LayoutType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ListLayout\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Profile\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ProfileName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SearchLayoutButton\">\n  <xsd:sequence>\n    <xsd:element name=\"apiName\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchLayoutButtonsDisplayed\">\n  <xsd:sequence>\n    <xsd:element name=\"applicable\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"buttons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchLayoutButton\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchLayoutField\">\n  <xsd:sequence>\n    <xsd:element name=\"apiName\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortable\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchLayoutFieldsDisplayed\">\n  <xsd:sequence>\n    <xsd:element name=\"applicable\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchLayoutField\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

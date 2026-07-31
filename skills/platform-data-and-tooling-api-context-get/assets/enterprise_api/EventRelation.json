@@ -1,0 +1,148 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EventRelation - Data API",
+  "description": "Represents a person (a user, lead, or contact) or a resource (such as a conference room) invited to an event. This object lets you add or remove invitees from an event and use the API to manage invitees’ responses to invitations. If Shared Activities is enabled, EventRelation can also represent other objects that are related to an event. EventRelation does not support triggers, workflow, or data validation rules.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Contains the Account ID of the relation. For information on IDs, see ID Field Type. AccountId is visible when Shared Activities is enabled."
+    },
+    "EventId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Contains the ID of the event. This value can’t be changed after it’s been specified. This is a relationship field.",
+      "relationship_name": "Event",
+      "relationship_type": "Lookup",
+      "refers_to": "Event"
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "IsInvitee": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the relation is an invitee. IsInvitee is visible while Shared Activities is being enabled, after it has been enabled, and while it is being disabled. IsInvitee defaults to true while Shared Activities is being enabled, after it has been enabled, and while it is being disabled if IsInvitee, IsParent, and IsWhat are not set. This configuration ensures compatibility when Shared Activities isn’t enabled and EventRelation represents event invitees only. IsInvitee defaults to false when Shared Activities is enabled if IsParent is set to true."
+    },
+    "IsParent": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "IsParent is visible only when Shared Activities is enabled. When false, indicates that the relation is an invitee (a contact, lead, or user). When true, indicates that the relation is a Who or What, as determined by IsWhat field."
+    },
+    "IsWhat": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "IsWhat is visible only when Shared Activities is enabled. The value is relevant only if IsParent is true. When IsWhat is true, the relation specified by RelationId is a What (an account, opportunity, custom object, etc.). When IsWhat is false, the relation specified by RelationId is a Who (a contact, lead, or user)."
+    },
+    "RelationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Contains the ID of the person (User, Contact, or Lead) or the resource invited to an event. When Shared Activities is enabled, RelationId can also contain the ID of an account, opportunity, or other object related to an event. This value can’t be changed after it’s been specified. This is a polymorphic relationship field.",
+      "relationship_name": "Relation",
+      "relationship_type": "Lookup",
+      "refers_to": "Calendar, Contact, Lead, User"
+    },
+    "RespondedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the most recent date and time when the invitee responded to an invitation to an event."
+    },
+    "Response": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Contains optional text that the invitee can enter when responding to an invitation to an event."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the invitee status with one of the following values: New: Invitee has received the invitation but hasn’t yet responded. This value is the default. Declined: Invitee has declined the invitation. Accepted: Invitee has accepted the invitation. Note: Uninvited and Maybe aren’t currently supported."
+    }
+  },
+  "usage": "If you use Shared Activities in your Salesforce org, use this query: where Event_Id is the child event’s ID. If you don’t use Shared Activities, use this query: These queries get the main event’s relations and display them for the given child event. To further filter the results, add a WHERE clause. If isParent, isWhat and IsInvitee are not set, and RelationId is a contact, lead, user, or calendar, IsInvitee defaults to true. This means if an EventRelation isn’t specifically inserted as a relation to a contact or lead, it’s treated as an Invitee relation by default. If you use Shared Activities in your Salesforce org, use the following query to reproduce the full site functionality in the Salesforce mobile app: where Event_Id is the child event’s ID. If you don’t use Shared Activities, use this query: These queries get the main event’s relations and display them for the given child event. To further filter the results, add a WHERE clause.\n\nIf you use Shared Activities in your Salesforce org, use this query:\n\nwhere Event_Id is the child event’s ID.\n\nIf you don’t use Shared Activities, use this query:\n\nThese queries get the main event’s relations and display them for the given child event. To further filter the results, add a WHERE clause.\n\nIf isParent, isWhat and IsInvitee are not set, and RelationId is a contact, lead, user, or calendar, IsInvitee defaults to true. This means if an EventRelation isn’t specifically inserted as a relation to a contact or lead, it’s treated as an Invitee relation by default.\n\nIf you use Shared Activities in your Salesforce org, use the following query to reproduce the full site functionality in the Salesforce mobile app:\n\nwhere Event_Id is the child event’s ID.\n\nIf you don’t use Shared Activities, use this query:\n\nThese queries get the main event’s relations and display them for the given child event. To further filter the results, add a WHERE clause.\n\n- **Assigning resource attendance status**: You can add a resource to an event only when the resource is available. The only attendance status that can be assigned to resources is Accepted. Events can’t be saved when resources you’ve added aren’t available.\n- **Create an invitee if Shared Activities is enabled (or during the process of enabling it or rolling back)**: If the invitee is already a contact or lead, update IsInvitee to true.\n- **Create an invitee if Shared Activities is not enabled**: If the invitee is not already a contact or lead, create an EventRelation object for the invitee with IsInvitee set to true.\n- **Insert a contact or lead relation**: Create an EventRelation object for the invitee.\n- **Determine what events a given invitee is attending**: EventRelation er = new EventRelation(EventId = '00UD0000005zijH', RelationId = '003D000000Q8aeV', isParent = true, isInvitee = false); insert er;`\n- **Insert an invitee relation**: To determine all the events that a particular person is attending during a given time period (for example, next week), you can have a client application query the Event object for a given date range, iterate through the results, and, for each event, query the EventRelation object to determine whether the particular person (RelationId) has accepted an invitation to that event.\n- **Query relations to a contact or a lead**: If isParent, isWhat and IsInvitee are not set, and RelationId is a contact, lead, user, or calendar, IsInvitee defaults to true. This means if an EventRelation isn’t specifically inserted as a relation to a contact or lead, it’s treated as an Invitee relation by default. EventRelation er = new EventRelation(EventId = '00UD0000005zijH', RelationId = '003D000000Q8adV'); insert er;`\n- **Query invitee relations**: List<EventRelation> whoRelations = [SELECT Id, Relation.Name FROM EventRelation WHERE EventId = '00UD0000005zijD' AND isParent = true AND isWhat = false];`\n- **Update an invitee relation to a contact or lead invitee relation**: List<EventRelation> inviteeRelations = [SELECT Id, Relation.Name FROM EventRelation WHERE EventId = '00UD0000005zijD' AND isInvitee = true];`\n- **Update a contact or lead relation to a contact or lead invitee relation**: EventRelation er = [SELECT Id FROM EventRelation WHERE EventId = '00UD0000005zijD' AND isInvitee = true and isParent = false LIMIT 1]; er.isParent = true; update er;`\n- **Reproduce invitee related list functionality in the Salesforce mobile app**: EventRelation er = [SELECT Id FROM EventRelation WHERE EventId = '00UD0000005zijD' AND isParent = true and isInvitee = false LIMIT 1]; er.isInvitee = true; update er;`\n- **Send email notifications**: Invitee related lists display slightly different content in the Salesforce mobile app and the full site. In the app, the invitee related list includes invitees only, whereas in the full site, it also includes the event owner.If you use Shared Activities in your Salesforce org, use the following query to reproduce the full site functionality in the Salesforce mobile app: SELECT RelationId FROM EventRelation WHERE isInvitee = true AND eventId='[Event_Id]'` where Event_Id is the child event’s ID. If you don’t use Shared Activities, use this query: SELECT RelationId FROM EventRelation WHERE eventId='[Event_Id]'` These queries get the main event’s relations and display them for the given child event. To further filter the results, add a WHERE clause.\n- **Syncing Events with Lightning Sync**: To send email notifications for a given event, query EventRelation for the event, iterate through the list, examine the status, and send email notifications to every person who accepted the invitation.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **EventRelationChangeEvent (API version 44.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"EventRelation\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Event\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Event\"/>\n        <element name=\"EventId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Relation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RespondedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Response\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventId": {
+      "field_label": "Event ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Event Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsInvitee": {
+      "field_label": "Is Invitee",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RelationId": {
+      "field_label": "Relation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RespondedDate": {
+      "field_label": "Response Date",
+      "type": "datetime"
+    },
+    "Response": {
+      "field_label": "Response",
+      "type": "string",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "OrderChgReasonCategMap - Data API",
+  "description": "The mapping between an order change reason and a service flow category. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The service flow that reasons are being categorized by. Possible values are: Cancel CancelAll CancelFee Discount Exchange RMA Return ReturnFee"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The currency code of the order. Possible values are: EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the mapping."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether the category mapping is active. The default value is false."
+    },
+    "IsAvailableForExternalUser": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether the mapping can be accessed and used by external users. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort"
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the mapping."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of the mapping. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "Reason": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The order change reason that’s being categorized. Possible values are: Damaged DoorLocked IncorrectPrice Rejected WrongItem The default value is Damaged."
+    }
+  },
+  "field_reference": {
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Id": {
+      "field_label": "Order Change Reason Category Mapping Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsAvailableForExternalUser": {
+      "field_label": "Available For External User",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Reason": {
+      "field_label": "Reason",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

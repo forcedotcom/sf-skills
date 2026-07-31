@@ -1,0 +1,154 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ProductItemTransaction - Data API",
+  "description": "Represents an action taken on a product item in field service. Product item transactions are auto-generated records that help you track when a product item is replenished, consumed, or adjusted.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the transaction. The description is blank when the transaction record is created, but can be updated."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it's possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "ProductItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The associated product item. This is a relationship field.",
+      "relationship_name": "ProductItem",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductItem"
+    },
+    "ProductItemTransactionNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "(Read Only) Auto-generated number identifying the product item transaction."
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort",
+      "description": "The quantity of the product item involved in the transaction. If inventory was consumed, the quantity is negative."
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "(Read Only) The product consumed or product transfer related to the action. If the action wasn’t related to consumption or transfer, the related record is blank. This is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductTransfer, Visit"
+    },
+    "TransactionType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The action that the transaction tracks. Replenished: When a part is stocked at a location. A Replenished transaction is created when a product item is created. Consumed: When parts are consumed to complete a work order. A Consumed transaction is created when a record is added to the Products Consumed related list on a work order or work order line item. Adjusted: When there’s a discrepancy or a change in consumption. An Adjusted transaction is created when a product item’s Quantity on Hand is edited, a product consumed is updated or delete, or a product transfer is deleted. Transferred: When parts are transferred between locations."
+    }
+  },
+  "associated_objects": "This object has these associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **ProductItemTransactionChangeEvent**: Change events are available for the object.\n- **ProductItemTransactionFeed**: Feed tracking is available for the object.\n- **ProductItemTransactionHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ProductItemTransaction\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProductItem\"/>\n        <element name=\"ProductItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProductItemTransactionNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Quantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TransactionType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Id": {
+      "field_label": "Product Item Transaction ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ProductItemId": {
+      "field_label": "Product Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductItemTransactionNumber": {
+      "field_label": "Product Item Transaction Number",
+      "type": "string",
+      "length": "255"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "RelatedRecordId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TransactionType": {
+      "field_label": "Transaction Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

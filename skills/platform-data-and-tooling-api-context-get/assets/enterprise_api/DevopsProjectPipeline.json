@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "DevopsProjectPipeline - Data API",
+  "description": "Represents an association between a DevOps Center project and a release pipeline. In DevOps Center, each project is associated with a pipeline to define the sequence of stages work items move through, from initial development to final release. This association is typically established during the pipeline setup. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "DevopsPipelineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the associated DevopsPipeline record. This field is a relationship field.",
+      "relationship_name": "DevopsPipeline",
+      "refers_to": "DevopsPipeline"
+    },
+    "DevopsProjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent DevopsProject record. This field is a relationship field.",
+      "relationship_name": "DevopsProject",
+      "relationship_type": "Master-detail",
+      "refers_to": "DevopsProject (the parent object)"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique identifier for the project-pipeline association."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **DevopsProjectPipelineChangeEvent**: Change events are available for the object.\n- **DevopsProjectPipelineFeed**: Feed tracking is available for the object.\n- **DevopsProjectPipelineHistory**: History is available for tracked fields of the object.\n- **DevopsProjectPipelineOwnerSharingRule**: Sharing rules are available for the object.\n- **DevopsProjectPipelineShare**: Sharing is available for the object."
+}

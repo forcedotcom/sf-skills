@@ -1,0 +1,114 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ProrationPolicy - Data API",
+  "description": "Defines how the price of a subscription is divided into time periods and how the price is calculated for each time period. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ArePartialPeriodsAllowed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a subscription can be canceled partway through a period. Set the value to True if a subscription can be canceled partway through a period. Otherwise, set the value to false. For example, if the proration period is monthly and this field is true, then customers can cancel a subscription partway through the month. If the proration period is monthly and this field is false, then the subscription is canceled at the end of the current month. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list viewLastReferencedDate but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort",
+      "description": "The name of the proration policy."
+    },
+    "ProrationPolicyType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of proration policy. Possible values are: StandardTimePeriods—Indicates that the proration policy divides the subscription into similar time periods, and prorates the subscription using the time periods. For example, a monthly subscription that's subscribed to for 12 months for a total amount of $120 is prorated as $10 per month."
+    },
+    "RemainderStrategy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates how the leftover amount from the price calculation is allocated. For example, if the total amount is $100 and the subscription has 12 periods, the price per period is $8.33, with $0.04 remaining. To indicate that the $0.04 is included in the first period, use the value AddToFirst. To indicate that the $0.04 is included in the final period, use the value AddToLast. Possible values are: AddToFirst—Add the remaining amount to the first period. AddToLast—Add the remaining amount to the last period."
+    }
+  },
+  "special_access_rules": "This object is available when Subscription Management is enabled.",
+  "field_reference": {
+    "ArePartialPeriodsAllowed": {
+      "field_label": "Allow partial proration periods",
+      "type": "boolean"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Proration Policy ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Proration Policy Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProrationPolicyType": {
+      "field_label": "Proration Policy Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RemainderStrategy": {
+      "field_label": "Remainder Strategy",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

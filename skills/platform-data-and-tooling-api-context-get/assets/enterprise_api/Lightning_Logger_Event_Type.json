@@ -1,0 +1,147 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Lightning Logger Event Type - Data API",
+  "description": "Lightning Logger events contain information from observed Lightning component logs. This event type is available in the EventLogFile object in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "APP_NAME": {
+      "type": "String",
+      "description": "The name of the application the user accessed."
+    },
+    "BROWSER_NAME": {
+      "type": "String",
+      "description": "The name of the browser that the user accessed. Example Chrome, IE, Safari, Gecko"
+    },
+    "BROWSER_VERSION": {
+      "type": "String",
+      "description": "The user’s browser version in major.minor format. Some browsers don’t provide a minor version."
+    },
+    "CLIENT_GEO": {
+      "type": "String",
+      "description": "The geolocation of the client in the form of <Country>/<State|Province>. Example United States/California"
+    },
+    "CLIENT_ID": {
+      "type": "String",
+      "description": "The API client ID."
+    },
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP, such as a login from AppExchange, is shown as “Salesforce.com IP”. Example 96.43.144.26"
+    },
+    "CONNECTION_TYPE": {
+      "type": "String",
+      "description": "The type of connection. Possible Values CDMA1x CDMA EDGE EVDO0 EVDOA EVDOB GPRS HRPD HSDPA HSUPA LTE WIFI"
+    },
+    "DEVICE_MODEL": {
+      "type": "String",
+      "description": "The name of the device model. Example iPad, iPhone"
+    },
+    "DEVICE_PLATFORM": {
+      "type": "String",
+      "description": "The type of application experience in name:experience:form format. Possible Values Name APP_BUILDER CUSTOM S1 SFX Experience BROWSER HYBRID Form DESKTOP PHONE TABLET"
+    },
+    "DEVICE_SESSION_ID": {
+      "type": "Id",
+      "description": "The unique identifier of the user’s session based on page load time. When the user reloads a page, a new session is started. Example 321a1ddfaf924803a075f1e69fc87bc06f53ccd0"
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always LightningLogger."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. Example GeJCsym5eyvtEK2I"
+    },
+    "MESSAGE": {
+      "type": "String",
+      "description": "The message passed to the lightning/logger log() method. The message can be a JSON object or a string. String length is limited to 4 KB (4096 characters). If you hit the logger limit, subsequent events are muted for a minute. During this time, the message field is replaced with this text: Rate limiting hit for this organization. Lightning Logger events resume when the limit resets in the next minute."
+    },
+    "ORGANIZATION_ID": {
+      "type": "String",
+      "description": "The 15-character ID of the org. Example 00D000000000123"
+    },
+    "OS_NAME": {
+      "type": "String",
+      "description": "The operating system name, derived from the User Agent. Example Android, iOS, OSX, Windows"
+    },
+    "OS_VERSION": {
+      "type": "String",
+      "description": "The operating system version, derived from the User Agent."
+    },
+    "PAGE_CONTEXT": {
+      "type": "String",
+      "description": "The name of the component hosting the main page content. Example clients:cardsContainer"
+    },
+    "PAGE_ENTITY_ID": {
+      "type": "Id",
+      "description": "The entity ID (if any) of the record being displayed. Example 0013000000I3zJAAAZ"
+    },
+    "PAGE_ENTITY_TYPE": {
+      "type": "String",
+      "description": "The entity type of the page being displayed. Example Task, contacts"
+    },
+    "PAGE_URL": {
+      "type": "String",
+      "description": "Relative URL of the top-level Lightning Experience or Salesforce mobile app page that the user opened. The page can contain one or more Lightning components. Multiple record IDs can be associated with PAGE_URL. Example /sObject/0064100000JXITSAA5/view"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. Example 3nWgxWbDKWWDIk0FKfF5DV"
+    },
+    "SDK_APP_TYPE": {
+      "type": "String",
+      "description": "The mobile SDK application type. Possible Values HYBRID HYBRIDLOCAL HYBRIDREMOTE NATIVE REACTNATIVE"
+    },
+    "SDK_APP_VERSION": {
+      "type": "String",
+      "description": "The mobile SDK application version number. Example 5.0"
+    },
+    "SDK_VERSION": {
+      "type": "String",
+      "description": "The mobile SDK version number. Example 2.1.0"
+    },
+    "SEQUENCE": {
+      "type": "Number",
+      "description": "An auto-incremented sequence number of the current event since the session started."
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. Use this value to identify all events in Lightning Experience within a session. When the user logs out and logs in again, a new session is started. Example cdd09305cb6babf34059e27f70e47f1b11dec868"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. Example 20130715233322.670"
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). Example 2015-07-27T11:32:59.555Z. The timezone is GMT."
+    },
+    "UI_EVENT_RELATIVE_TIMESTAMP": {
+      "type": "Number",
+      "description": "Difference in milliseconds between when the message was logged and when the browser tab was opened. Example 29322.23"
+    },
+    "UI_EVENT_TIMESTAMP": {
+      "type": "Number",
+      "description": "The time at which this event occurred, measured in milliseconds. Example 1479769912796"
+    },
+    "USER_ID": {
+      "type": "String",
+      "description": "The 15-character ID of the user accessing Salesforce services through the UI or API. Example 00530000009M943"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case-insensitive ID of the user who’s using Salesforce services through the UI or the API. Example 00590000000I1SNIA0"
+    },
+    "USER_TYPE": {
+      "type": "String",
+      "description": "The category of user license of the user accessing Salesforce services through the UI or API. Possible Values A: Automated Process b: High Volume Portal C: Customer Portal User D: External Who F: Self-Service G: Guest L: Package License Manager N: Salesforce to Salesforce n: CSN Only O: Power Custom o: Custom P: Partner p: Customer Portal Manager S: Standard X: Salesforce Administrator"
+    }
+  }
+}

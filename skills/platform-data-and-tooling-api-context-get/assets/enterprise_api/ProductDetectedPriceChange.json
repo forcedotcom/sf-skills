@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "ProductDetectedPriceChange - Data API",
+  "description": "Represents a detected change in price for a product associated with a partner account. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the partner account for which the price change was detected. This field is a relationship field.",
+      "relationship_name": "Account",
+      "refers_to": "Account"
+    },
+    "EffectiveDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Date when the new price becomes effective for the product."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the record was last referenced by the current user. Useful for activity tracking."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and the timestamp the record was last referenced by a user or system process."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Unique name or identifier for the price change record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "User or group that owns this record. This is a polymorphic relationship field. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ProcessingStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the current processing stage of the price change. Possible values are: Completed Inactive New Processing—In Progress"
+    },
+    "ProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the product for which the price change was detected. This field is a relationship field.",
+      "relationship_name": "Product",
+      "refers_to": "Product2"
+    }
+  }
+}

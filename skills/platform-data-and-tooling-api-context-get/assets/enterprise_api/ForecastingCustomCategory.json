@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "ForecastingCustomCategory - Data API",
+  "description": "Represents a custom forecasting category used for forecast rollups. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CanHaveQuotas": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether forecasts in the custom category can have quotas. The default value is false. Available in API version 63.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A user-defined description of the custom category."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer name of the custom category."
+    },
+    "DisplayPosition": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the placement of the custom category column among the other columns on the forecasts page."
+    },
+    "ForecastingSourceDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the forecasting source definition. This field is a relationship field.",
+      "relationship_name": "ForecastingSourceDefinition",
+      "refers_to": "ForecastingSourceDefinition"
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related ForecastingType. This field is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "refers_to": "ForecastingType"
+    },
+    "IsAdjustable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether forecast managers can adjust forecasts in the custom category. The default value is false."
+    },
+    "IsAmount": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, then the adjustment is made in a revenue amount. If false, then IsQuantity must be true. The default value is false. Available in API version 63.0 and later."
+    },
+    "IsHidden": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the custom category is hidden. The default value is false. Available in API version 63.0 and later."
+    },
+    "IsOwnerAdjustable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether all forecast users can adjust their own forecasts in the custom category, including the territory forecasts that they own. The default value is false."
+    },
+    "IsQuantity": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, then the adjustment is made in a quantity amount. If false, then IsAmount must be true. The default value is false. Available in API version 63.0 and later."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the custom category."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label for this column. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    },
+    "MeasureFieldOverride": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The measure that this custom category supports. Possible values are: Opportunity.Amount Opportunity.AmountCustom__c Opportunity.AmountRSF__c Opportunity.TotalOpportunityQuantity OpportunityLineItem.Quantity OpportunityLineItem.TotalPrice OpportunityLineItem.oliCustomAmount__c OpportunityLineItemSplit.SplitAmount OpportunitySplit.SplitAmount OpportunitySplit.customAmount__c"
+    },
+    "UnitOfMeasure": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unit of measure for the specified custom category measure. Available in API version 63.0 and later."
+    }
+  },
+  "field_reference": {
+    "CanHaveQuotas": {
+      "field_label": "Can Have Quotas",
+      "type": "boolean"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Forecasting Custom Category Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DisplayPosition": {
+      "field_label": "Display Position",
+      "type": "int",
+      "digits": "9"
+    },
+    "ForecastingSourceDefinitionId": {
+      "field_label": "Forecasting Source Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Custom Category ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAdjustable": {
+      "field_label": "Is Adjustable",
+      "type": "boolean"
+    },
+    "IsAmount": {
+      "field_label": "Is Amount",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsHidden": {
+      "field_label": "Is Hidden",
+      "type": "boolean"
+    },
+    "IsOwnerAdjustable": {
+      "field_label": "Is Owner Adjustable",
+      "type": "boolean"
+    },
+    "IsQuantity": {
+      "field_label": "Is Quantity",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Custom Category column header label displayed in forecasting grid UI",
+      "type": "string",
+      "length": "80"
+    },
+    "MeasureFieldOverride": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UnitOfMeasure": {
+      "field_label": "Unit Of Measure",
+      "type": "string",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

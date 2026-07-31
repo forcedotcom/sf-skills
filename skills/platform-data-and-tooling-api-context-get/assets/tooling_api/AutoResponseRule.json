@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "AutoResponseRule - Tooling API",
+  "description": "Specifies whether the autoresponse rule is active (true).",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Active": {
+      "type": "boolean",
+      "properties": "Defaulted on create Filter, Group, Sort",
+      "description": "If true, the autoresponse rule is active."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Represents the object associated with this autoresponse rule."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the name of the autoresponse rule."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AutoResponseRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Active\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinition\" minOccurs=\"0\" type=\"ens:EntityDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

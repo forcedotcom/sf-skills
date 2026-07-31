@@ -1,0 +1,112 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ChatterExtensionConfig - Data API",
+  "description": "Configuration for the Chatter extension for Experience Cloud sites. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CanCreate": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether the ChatterExtension can create an instance that appears by rendering."
+    },
+    "CanRead": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether the ChatterExtension can be viewed."
+    },
+    "ChatterExtensionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the ChatterExtension. This is a relationship field.",
+      "relationship_name": "ChatterExtension",
+      "relationship_type": "Lookup",
+      "refers_to": "ChatterExtension"
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the Experience Cloud site where the ChatterExtension is deployed."
+    },
+    "Position": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The position of the ChatterExtension icon in the Chatter publisher."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"ChatterExtensionConfig\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CanCreate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"CanRead\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ChatterExtension\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ChatterExtension\"/>\n        <element name=\"ChatterExtensionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Position\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CanCreate": {
+      "field_label": "Can Create",
+      "type": "boolean"
+    },
+    "CanRead": {
+      "field_label": "Can Read",
+      "type": "boolean"
+    },
+    "ChatterExtensionId": {
+      "field_label": "Chatter Extension ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Chatter Extension Configuration ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Position": {
+      "field_label": "Position",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

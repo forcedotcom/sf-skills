@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "EmbeddedServiceMenuItem - Tooling API",
+  "description": "Represents the information needed to configure a Channel Menu item. This object is available in API version 47.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID of an EmbeddedServiceConfig (the Embedded Service deployment) if ChannelType is one of the following. Otherwise, this field is null. EmbeddedServiceConfig MessagingChannel"
+    },
+    "ChannelType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The channel the customer uses to contact your business. The possible values are: CustomURL EmbeddedServiceConfig MessagingChannel Phone"
+    },
+    "CustomUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The custom URL of the menu item if ChannelType is CustomURL. Otherwise, this field is null."
+    },
+    "DisplayOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The order that the menu items are displayed in the UI. Only positive values are supported."
+    },
+    "EmbeddedServiceMenuId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique ID of the parent record EmbeddedServiceMenuSettings.",
+      "required": true
+    },
+    "IconUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The URL of the icon used for the menu item."
+    },
+    "IsDisplayedOnPageLoad": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether the menu item is dynamically displayed (true) or hidden (false) during runtime. The default value is false."
+    },
+    "ItemName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name used on the Setup for admins to identify the Channel Menu item. Conforms to the same properties as a developer name."
+    },
+    "OsOptionsHideInIOS": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether to hide the menu item on iOS platforms (true) or not (false)."
+    },
+    "OsOptionsHideInLinuxOS": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether to hide the menu item on Linux platforms (true) or not (false)."
+    },
+    "OsOptionsHideInMacOS": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether to hide the menu item on macOS platforms (true) or not (false)."
+    },
+    "OsOptionsHideInOtherOS": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether to hide the menu item on any other platforms not mentioned here (true) or not (false)."
+    },
+    "OsOptionsHideInWindowsOS": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether to hide the menu item on Windows platforms (true) or not (false)."
+    },
+    "PhoneNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The phone number of menu items with ChannelType value Phone. Otherwise, the value is null."
+    },
+    "ShouldOpenUrlInSameTab": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether a URL is opened in the same tab (true) or not (false). This field only applies for menu items with ChannelType value CustomURL."
+    }
+  },
+  "special_access_rules": "DELETE, GET, HEAD, PATCH, POST, Query",
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EmbeddedServiceChannelType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"EmbeddedServiceConfig\"/>\n    <xsd:enumeration value=\"MessagingChannel\"/>\n    <xsd:enumeration value=\"Phone\"/>\n    <xsd:enumeration value=\"CustomURL\"/>\n    <xsd:enumeration value=\"EmbeddedMessaging\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceMenuItem\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Channel\" minOccurs=\"0\" type=\"ens:sObject\" nillable=\"true\"/>\n        <xsd:element name=\"ChannelId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"ChannelType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"CustomUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DisplayOrder\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"EmbeddedServiceMenu\" minOccurs=\"0\" type=\"ens:EmbeddedServiceMenuSettings\" nillable=\"true\"/>\n        <xsd:element name=\"EmbeddedServiceMenuId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"IconUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDisplayedOnPageLoad\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"ItemName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"OsOptionsHideInIOS\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OsOptionsHideInLinuxOS\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OsOptionsHideInMacOS\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OsOptionsHideInOtherOS\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OsOptionsHideInWindowsOS\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"PhoneNumber\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ShouldOpenUrlInSameTab\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -2,10 +2,11 @@
 name: platform-custom-lightning-type-generate
 description: "Use this skill when users need to create Custom Lightning Types (CLTs) for Einstein Agent actions or structured input/output schemas. Trigger when users mention CLT, Custom Lightning Types, JSON schemas for agents, type definitions, lightning__objectType, or editor/renderer configurations. For widget renditions that combine a CLT with a Widget bundle, use the platform-lightning-type-widget-coordinate orchestrator instead. This is complex - always use this skill for CLT work."
 metadata:
-  version: "1.0"
+  version: "1.1"
   minApiVersion: "60.0"
   relatedSkills:
     - "platform-lightning-type-widget-coordinate"
+    - "platform-widget-generate"
 ---
 
 ## When to Use This Skill
@@ -126,7 +127,8 @@ When you need the full list of supported primitive `lightning:type` identifiers,
    - `lightningTypes/<TypeName>/schema.json`
    - (Optional) `lightningTypes/<TypeName>/lightningDesktopGenAi/editor.json`
    - (Optional) `lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json`
-   - For Gen AI / Copilot the standard path is `lightningDesktopGenAi/`. Other targets (e.g. Experience Builder, Mobile Copilot, Enhanced Web Chat) use different subfolders when supported: `experienceBuilder/`, `lightningMobileGenAi/`, `enhancedWebChat/`.
+      For Gen AI / Copilot the standard path is `lightningDesktopGenAi/`. Other targets (e.g. Experience Builder, Mobile Copilot, Enhanced Web Chat) use different subfolders when supported: `experienceBuilder/`, `lightningMobileGenAi/`, `enhancedWebChat/`.
+   - (Optional - for widget rendition only) `lightningTypes/<TypeName>/renderer.json`
 6. **Configure custom LWC components (if using custom components)**
    - **CRITICAL**: Custom LWC components referenced in editor/renderer configs MUST have the correct target configuration in their `-meta.xml` files:
      - **For editor components** (`c/<componentName>` used in `editor.json`): The LWC's `-meta.xml` file must include `<target>lightning__AgentforceInput</target>`

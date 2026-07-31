@@ -1,0 +1,106 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "TaskStatus - Data API",
+  "description": "Represents the status of a task, such as Not Started, Completed, or Closed.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Uniquely identifies a picklist value so it can be retrieved without using an ID or master label."
+    },
+    "IsClosed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this task status value represents a closed task (true) or not (false). Multiple task status values can represent a closed task."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the status is the default task status value (true) or not (false) in the picklist."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Master label for this task status value. This display value is the internal label that doesn’t get translated. Limit: 255 characters."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number used to sort this value in the task status picklist. These numbers aren’t guaranteed to be sequential, as some previous task status values might have been deleted."
+    }
+  },
+  "special_access_rules": "Customer Portal users can't access this object.",
+  "usage": "This object represents a value in the task status picklist. The task status picklist provides additional information about the status of a task , such as whether a given status value represents an open or closed task. Your client application can query this object to retrieve the set of values in the task status picklist, and then use that information while processing task records to determine more information about a given task. For example, the application could test whether a given task is open or closed based on the task Status value and the value of the IsClosed property in the associated TaskStatus record.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"TaskStatus\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsClosed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Task Status Value ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsClosed": {
+      "field_label": "Is Closed",
+      "type": "boolean"
+    },
+    "IsDefault": {
+      "field_label": "Is Default",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Master Label",
+      "type": "string",
+      "length": "255"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

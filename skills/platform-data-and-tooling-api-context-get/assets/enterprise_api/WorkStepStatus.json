@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "WorkStepStatus - Data API",
+  "description": "Represents a picklist for a status category on a work step. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the work step status.",
+      "required": true
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Controls whether this status is the default value of the picklist of the corresponding status category (true) or not (false). Default is false."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label of the work step status.",
+      "required": true
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The order in which the work step statuses are displayed in the status category's picklist.",
+      "required": true
+    },
+    "StatusCode": {
+      "type": "picklist",
+      "properties": "Required. Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status category that this status belongs to. Possible values are: Completed InProgress New NotApplicable Paused"
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"WorkStepStatus\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StatusCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Work Step Status Value ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Is Default",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Master Label",
+      "type": "string",
+      "length": "255"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "StatusCode": {
+      "field_label": "Status Code",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

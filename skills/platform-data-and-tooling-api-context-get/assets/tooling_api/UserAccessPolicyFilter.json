@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "UserAccessPolicyFilter - Tooling API",
+  "description": "Represents a user criteria filter for a user access policy. This object is available in API version 57.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`GET`, `POST`, `PATCH`, `DELETE`, `HEAD`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ColumnName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If Target is set to User, the user field that your user criteria filter is based on. Possible values are: CommunityNickname Department Division Email FirstName IsActive LastName Title Some custom fields are also supported, depending on the field type. If you don’t set Target to User, then this field isn’t used."
+    },
+    "Operation": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The operator of the user criteria filter. Possible values are: equals equalsIgnoreCase— Available in API version 59.0 and later. in— Available in API version 58.0 and later. includes— Available in API version 59.0 and later. notEquals Select in if you want to reference multiple profile or role IDs in the same user criteria filter. To do this, create multiple UserAccessPolicyFilter objects with Operation set to in and with the same SortOrder value. The only field that differs between these UserAccessPolicyFilter objects is the Value field, which references the various IDs. All of the IDs referenced in the in expression must be of the same type."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The numeric reference used to identify the specific filter."
+    },
+    "Target": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "If your user criteria filter is based on a user field, set to User. If your user criteria filter is based on a package license, permission set, permission set group, permission set license, profile, or role, then this field isn’t used."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If Target is set to User, the value of the user field specified in ColumnName that your user filter is operating on. Otherwise, the ID of the group, package license, permission set, permission set group, permission set license, profile, role, or queue that your user filter is operating on."
+    }
+  },
+  "special_access_rules": "To create or modify user access policies, users must have the Manage User Access Policies permission.",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"UserAccessPolicyFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"columnName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:UserAccessPolicyFilterOperation\"/>\n    <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n    <xsd:element name=\"target\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:UserAccessPolicyFilterTargetType\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"UserAccessPolicyFilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"equalsIgnoreCase\"/>\n    <xsd:enumeration value=\"notEquals\"/>\n    <xsd:enumeration value=\"in\"/>\n    <xsd:enumeration value=\"includes\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UserAccessPolicyFilterTargetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Group\"/>\n    <xsd:enumeration value=\"Queue\"/>\n    <xsd:enumeration value=\"PermissionSet\"/>\n    <xsd:enumeration value=\"PermissionSetGroup\"/>\n    <xsd:enumeration value=\"PermissionSetLicense\"/>\n    <xsd:enumeration value=\"Profile\"/>\n    <xsd:enumeration value=\"UserRole\"/>\n    <xsd:enumeration value=\"PackageLicense\"/>\n    <xsd:enumeration value=\"User\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

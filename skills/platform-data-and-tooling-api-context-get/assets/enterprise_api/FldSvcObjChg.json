@@ -1,0 +1,150 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FldSvcObjChg - Data API",
+  "description": "Represents a change made to one of a service appointment’s tracked fields. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Activity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The available scheduling activities for the service appointment. Possible values are: AddedToBundle—Currently not supported BundleMemberAdded—Currently not supported BundleMemberRemoved—Currently not supported Created Deleted RemovedFromBundle—Currently not supported Rescheduled—An appointment is considered rescheduled if a change is made to its assigned service resource or to its scheduled start time. Scheduled ServiceResourceAssigned StatusChanged—The service appointment status was changed. The manual activities of scheduling, rescheduling, and unscheduling are also reported as status changes because they change the status of an appointment. Unscheduled Updated—Captures changes made to one or more of the tracked scheduling fields that aren’t associated with another activity."
+    },
+    "ActivityDetails": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Details about the scheduling activity such as the scheduling policy that was used and the unscheduling reason (when applicable)."
+    },
+    "ActivityTimeStamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time of when the change to the service appointment was made."
+    },
+    "IsPrimary": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the change was made directly to the service appointment or indirectly. If the change was made directly to the appointment, it’s flagged as Primary. If it was made to another appointment and affected this one, it’s flagged as Secondary."
+    },
+    "OriginalSvcAppointment": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the service appointment that was changed. The field value isn’t deleted when the Service Appointment object is deleted."
+    },
+    "ServiceAppointmentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the service appointment that was changed. Because this is a relationship field, the field value is deleted when the Service Appointment object is deleted. This field is a relationship field.",
+      "relationship_name": "ServiceAppointment",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceAppointment"
+    },
+    "TimeZone": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The time zone of the service appointment or the assigned resource."
+    },
+    "Transaction": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The last transaction ID of the scheduling and optimization request that updated this object. The transaction ID is automatically generated and populated by the Enhanced Scheduling and Optimization engine."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user who made the change to the service appointment. If an activity is a scheduled job, it’s registered with the System Administrator user who configured it. This field is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"FldSvcObjChg\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Activity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActivityDetails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActivityTimeStamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FldSvcObjChgDtls\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsPrimary\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OriginalSvcAppointment\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ServiceAppointment\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceAppointment\"/>\n        <element name=\"ServiceAppointmentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TimeZone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Transaction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "Activity": {
+      "field_label": "Activity",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ActivityDetails": {
+      "field_label": "Activity Details",
+      "type": "string",
+      "length": "1000"
+    },
+    "ActivityTimeStamp": {
+      "field_label": "Activity Timestamp",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Field Service Object Change ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsPrimary": {
+      "field_label": "Is Primary",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OriginalSvcAppointment": {
+      "field_label": "Original Service Appointment",
+      "type": "string",
+      "length": "15"
+    },
+    "ServiceAppointmentId": {
+      "field_label": "Service Appointment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeZone": {
+      "field_label": "Time Zone",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Transaction": {
+      "field_label": "Transaction",
+      "type": "string",
+      "length": "256"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

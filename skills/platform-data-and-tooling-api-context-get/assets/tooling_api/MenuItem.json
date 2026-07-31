@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "MenuItem - Tooling API",
+  "description": "Represents a menu item.",
+  "supported_soap_calls": "`query()`, `update()`",
+  "supported_rest_api_http_methods": "`GET`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Active": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the item in the menu is active (true) or not (false)."
+    },
+    "AppId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the app that this menu item is associated with. Can be an enum (such as Feed or People) or an alphanumeric ID. Use AppId as the unique ID for the menu item, not Id."
+    },
+    "Color": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The color of the menu item that appears in the user interface. This field is described in Web color RGB format, such as 00FF00."
+    },
+    "IconURL": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL of an icon in the menu item."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The menu item label that appears in the user interface."
+    },
+    "MenuType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of menu that this menu item belongs to. Valid values are: AppSwitcher: the app menu, a drop-down menu that’s displayed at the top of every app page Salesforce1: the Salesforce mobile app navigation menu NetworkTabs: the Digital Experiences tab set This field is required for query()."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The SortOrder value determines the order in which a menu item is displayed in the user interface. This field must be an ordinal number greater than 0, and must be unique in the list. Inactive menu items have a value of -1."
+    },
+    "Theme": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The associated theme, which must be one of the following values. theme2: the Salesforce theme that was used prior to Spring ’10 theme3: the Salesforce theme that was introduced in Spring ’10 theme4: the theme that was introduced in Winter ’14 for the mobile touchscreen version of Salesforce custom: the theme that’s associated with a custom icon This field is required for query() for Color and IconURL."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"MenuItem\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Active\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"AppId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Color\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IconUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Label\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"MenuType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SortOrder\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Theme\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

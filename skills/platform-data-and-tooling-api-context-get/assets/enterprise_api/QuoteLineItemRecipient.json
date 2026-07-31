@@ -1,0 +1,287 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "QuoteLineItemRecipient - Data API",
+  "description": "Represents a site, employee, or other entity for which services are being quoted. This could include details such as the recipient's name, contact information, associated site or location, and any specific requirements or preferences for the quoted services. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BroadbandConnectionType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the broadband connection that's available at the address."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "MaxDownloadSpeed": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum download speed available at the address."
+    },
+    "MaxUploadSpeed": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum upload speed available at the address."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the customer's site or location."
+    },
+    "QuoteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The quote associated with the recipient. This field is a relationship field.",
+      "relationship_name": "Quote",
+      "relationship_type": "Master-detail",
+      "refers_to": "Quote (the master object)"
+    },
+    "RecipientType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of recipient of the service. Possible values are: Location Subscriber The default value is Location."
+    },
+    "ServiceAddrValidationDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the address was validated."
+    },
+    "Service Account": {
+      "type": "entityid",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reference to the Account Entity where the product is used, serviced, or installed."
+    },
+    "ServiceAddrValidationMsg": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The message sent after the validation of the address."
+    },
+    "ServiceAddrValidationResult": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the status of the address validation. Possible values are: Fail Partial Success Success The default value is Success."
+    },
+    "ServiceAddress": {
+      "type": "address",
+      "properties": "Filter",
+      "description": "The address where the recipient receives the service."
+    },
+    "ServiceCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city where the recipient receives the service."
+    },
+    "ServiceCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country where the recipient receives the service."
+    },
+    "ServiceGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the accuracy level of the geocoded address coordinates. Possible values are: Address Block City County ExtendedZip—Extended Zip NearAddress—Near Address Neighborhood State Street Unknown Zip"
+    },
+    "ServiceLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The latitude of the location where the recipient receives the service."
+    },
+    "ServiceLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The longitude of the location where the recipient receives the service."
+    },
+    "ServicePostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code of the address."
+    },
+    "ServiceState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state where the recipient receives the service."
+    },
+    "ServiceStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street where the recipient receives the service."
+    },
+    "ServiceabilityCheckDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the serviceability check was done."
+    },
+    "ServiceabilityData": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The information about serviciability, such as broadband connection, download, and upload speeds available at the address."
+    },
+    "SiteName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the customer's site or location."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **QuoteLineItemRecipientHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Quote Line Item Recipient ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "QuoteId": {
+      "field_label": "Quote ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecipientType": {
+      "field_label": "Recipient Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ServiceAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceAddrValidationDate": {
+      "field_label": "Service Address Validation Date",
+      "type": "datetime"
+    },
+    "ServiceAddrValidationMsg": {
+      "field_label": "Service Address Validation Message",
+      "type": "string",
+      "length": "255"
+    },
+    "ServiceAddrValidationResult": {
+      "field_label": "Service Address Validation Result",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ServiceAddress": {
+      "field_label": "Service Address",
+      "type": "address"
+    },
+    "ServiceCity": {
+      "field_label": "Service City",
+      "type": "string",
+      "length": "40"
+    },
+    "ServiceCountry": {
+      "field_label": "Service Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ServiceGeocodeAccuracy": {
+      "field_label": "Service Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ServiceLatitude": {
+      "field_label": "Service Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ServiceLongitude": {
+      "field_label": "Service Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ServicePostalCode": {
+      "field_label": "Service Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ServiceState": {
+      "field_label": "Service State",
+      "type": "string",
+      "length": "80"
+    },
+    "ServiceStreet": {
+      "field_label": "Service Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "ServiceabilityCheckDate": {
+      "field_label": "Serviceability Check Date",
+      "type": "datetime"
+    },
+    "ServiceabilityData": {
+      "field_label": "Serviceability Data",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

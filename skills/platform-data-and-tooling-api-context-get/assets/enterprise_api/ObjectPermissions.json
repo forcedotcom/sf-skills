@@ -1,0 +1,144 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ObjectPermissions - Data API",
+  "description": "Represents the enabled object permissions for the parent PermissionSet. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The Id of this object’s parent PermissionSet. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSet"
+    },
+    "PermissionsCreate": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If true, users assigned to the parent PermissionSet can create records for this object. Requires PermissionsRead for the same object to be true."
+    },
+    "PermissionsDelete": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If true, users assigned to the parent PermissionSet can delete records for this object. Requires PermissionsRead and PermissionsEdit for the same object to be true."
+    },
+    "PermissionsEdit": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If true, users assigned to the parent PermissionSet can edit records for this object. Requires PermissionsRead for the same object to be true."
+    },
+    "PermissionsModifyAllRecords": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If true, users assigned to the parent PermissionSet can edit all records for this object, regardless of sharing settings. Requires PermissionsRead, PermissionsDelete, PermissionsEdit, and PermissionsViewAllRecords for the same object to be true."
+    },
+    "PermissionsRead": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If true, users assigned to the parent PermissionSet can view records for this object."
+    },
+    "PermissionsViewAllFields": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If true, users assigned to the parent PermissionSet can view all fields and field data for this object. Available in API version 63.0 and later."
+    },
+    "PermissionsViewAllRecords": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If true, users assigned to the parent PermissionSet can view all records for this object, regardless of sharing settings. Requires PermissionsRead for the same object to be true."
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The object’s API name. For example, Merchandise__c."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users with the View Setup and Configuration permission can access this object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ObjectPermissions\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSet\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PermissionsCreate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDelete\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEdit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyAllRecords\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRead\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllFields\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllRecords\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SobjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "ObjectPermissions ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PermissionsCreate": {
+      "field_label": "Create Records",
+      "type": "boolean"
+    },
+    "PermissionsDelete": {
+      "field_label": "Delete Records",
+      "type": "boolean"
+    },
+    "PermissionsEdit": {
+      "field_label": "Edit Records",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllRecords": {
+      "field_label": "Edit All Records",
+      "type": "boolean"
+    },
+    "PermissionsRead": {
+      "field_label": "Read Records",
+      "type": "boolean"
+    },
+    "PermissionsViewAllFields": {
+      "field_label": "ViewAllFields",
+      "type": "boolean"
+    },
+    "PermissionsViewAllRecords": {
+      "field_label": "Read All Records",
+      "type": "boolean"
+    },
+    "SobjectType": {
+      "field_label": "SObject Type Name",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

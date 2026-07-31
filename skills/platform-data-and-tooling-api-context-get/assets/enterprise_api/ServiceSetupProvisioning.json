@@ -1,0 +1,140 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ServiceSetupProvisioning - Data API",
+  "description": "Represents a task completed by the Service Setup Assistant. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "JobName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of a group of tasks completed by the Service Setup Assistant."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An automatically generated ID."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the task being completed by the Service Setup Assistant. Possible values are: ` Completed—The task completed successfully. ExistingSetup—The task couldn’t be completed due to conflicting configurations. FailedFatalError—The task couldn’t be completed. InProgress—The task is in progress. PRE_CONDITION_NOT_MET—The task couldn’t be completed because one or more prerequisites weren’t met. VALIDATION_NOT_MET—The task is considered as completed but the condition defined in the implementation was not true. No retry will be executed."
+    },
+    "TaskAction": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The action taken by the task. Possible values are: updatesOrgSettings updatesOrgValues sortApps setForecastingUserFeatureLicense recalculatePermissionSetGroup deploysMetadata createsSetupEntityAccess clearGuidanceCenterCache callsConnectApi assignsPermissionSets assignsPermissionSetGroups"
+    },
+    "TaskActionContext": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Additional details about the TaskAction parameter, including how much of the action has been processed."
+    },
+    "TaskContext": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The description of the changes included in the task."
+    },
+    "TaskName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the task."
+    }
+  },
+  "special_access_rules": "ServiceSetupProvisioning is accessible only if the Service Setup Assistant is turned on. Users need the Customize Application permission to access it.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ServiceSetupProvisioning\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AttemptOrdinal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"JobName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TaskAction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TaskActionContext\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TaskContext\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TaskName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AttemptOrdinal": {
+      "field_label": "Attempt Ordinal",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Service Setup Provisioning Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JobName": {
+      "field_label": "Job Name",
+      "type": "string",
+      "length": "125"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaskAction": {
+      "field_label": "Task Action",
+      "type": "string",
+      "length": "125"
+    },
+    "TaskActionContext": {
+      "field_label": "Task Action Context",
+      "type": "string",
+      "length": "255"
+    },
+    "TaskContext": {
+      "field_label": "Task Context",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "TaskName": {
+      "field_label": "Task Name",
+      "type": "string",
+      "length": "125"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

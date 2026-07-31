@@ -18,7 +18,7 @@ Agent Script agents are defined across two independent metadata domains. Underst
 
 ### Two-Domain Entity Graph
 
-```
+```text
 AUTHORING DOMAIN (developer-owned, exists before any publish)
   AiAuthoringBundle
     ├── .agent (Agent Script source — editable text file)
@@ -129,7 +129,7 @@ sf agent generate authoring-bundle --json --no-spec --name "<Label>" --api-name 
 
 The command creates two files in a directory named after your `--api-name`:
 
-```
+```text
 aiAuthoringBundles/
   └── Local_Info_Agent/
         ├── Local_Info_Agent.agent (editable source)
@@ -214,9 +214,9 @@ Deploy/retrieve are one-way overwrites with no sync warnings. This is by design 
 When deploying backing code (Apex, Flows, Prompt Templates), NEVER include agent metadata (`.agent` files or `AiAuthoringBundle` metadata) unless you explicitly intend to update the agent.
 
 Accidental deployment of an outdated authoring bundle will overwrite in-progress work in the org.
-### `default_agent_user` Configuration: Immutable and Restricted
+### `access.default_agent_user`: Immutable and Restricted
 
-The `default_agent_user` field in your Agent Script `config` block must reference a Salesforce user with the "Einstein Agent" license type. Standard Salesforce-licensed users, even System Administrators, will fail at publish time with a misleading error message: "Internal Error, try again later."
+The `default_agent_user` field in the Agent Script `access` block must reference a Salesforce user with the "Einstein Agent" license type. Standard Salesforce-licensed users, even System Administrators, will fail at publish time with a misleading error message: "Internal Error, try again later."
 
 This error message does NOT indicate a license issue — it masks the true problem.
 
@@ -229,14 +229,14 @@ sf data query --json -q "SELECT Username FROM User WHERE Profile.UserLicense.Nam
 `default_agent_user` can be changed after publish, but only while no published version is activated. Deactivate the agent before changing `default_agent_user`, then republish and reactivate.
 ### Two Validation Layers: Compile vs. API Validation
 
-The CLI `sf agent validate authoring-bundle` checks syntax and Agent Script compilation only. It does NOT validate `default_agent_user` or backing logic references.
+The CLI `sf agent validate authoring-bundle` checks syntax and Agent Script compilation only. It does NOT validate `default_agent_user` or action implementation references.
 
-API validation runs during `sf agent publish` and in Agentforce Studio. This is where `default_agent_user` license requirements are checked and backing logic references are fully validated.
+API validation runs during `sf agent publish` and in Agentforce Studio. This is where `default_agent_user` license requirements are checked and action implementation references are fully validated.
 
-The result: A developer can validate successfully and still fail at publish due to invalid `default_agent_user` or missing backing logic.
-### Deploy Validates Backing Logic via Invocable Action Registry Lookup
+The result: A developer can validate successfully and still fail at publish due to invalid `default_agent_user` or missing action implementations.
+### Deploy Validates Actions via Invocable Action Registry Lookup
 
-When you deploy an `AiAuthoringBundle`, the deployment process validates that every backing logic reference (Apex class, Flow, Prompt Template) resolves to a registered Invocable Action in the org. The referenced class or flow or prompt must exist.
+When you deploy an `AiAuthoringBundle`, the deployment process validates that every action target reference (Apex class, Flow, Prompt Template) resolves to a registered Invocable Action in the org. The referenced class, flow, or prompt must exist.
 
 For Apex classes, the class must have an `@InvocableMethod`-annotated method.
 
@@ -249,7 +249,7 @@ A minimal stub class with `@InvocableMethod` unblocks pro-code/low-code collabor
 
 When deploying a local authoring bundle (`Local_Info_Agent.agent`), the server uses a version-suffixed filename (`Local_Info_Agent_4.agent`), triggering a CLI warning:
 
-```
+```text
 "AiAuthoringBundle, Local_Info_Agent_4.agent, returned from org, but not found in the local project"
 ```
 
@@ -305,7 +305,7 @@ When you publish, the org creates:
 
 Example directory structure after publishing:
 
-```
+```text
 bots/
   └── Local_Info_Agent/
       ├── Local_Info_Agent.bot-meta.xml
@@ -357,11 +357,11 @@ When `sf agent publish authoring-bundle` fails, run these checks in order. Stop 
 
 #### 1. Validate `default_agent_user`
 
-Read `agent_type` and `default_agent_user` from the `.agent` config block, then validate based on agent type:
+Read `agent_type` from `config` and `default_agent_user` from `access`, then validate based on agent type:
 
-**If `agent_type` is `AgentforceEmployeeAgent`:** `default_agent_user` must NOT be present. If it is set, remove the entire line.
+**If `agent_type` is `AgentforceEmployeeAgent`:** `default_agent_user` normally must NOT be present. If it is set without a capability-specific requirement, remove the `access` block.
 
-**If `agent_type` is `AgentforceServiceAgent`:** `default_agent_user` must be present. Query the org for the specified username:
+**If `agent_type` is `AgentforceServiceAgent`:** `access.default_agent_user` must be present. Query the org for the specified username:
 
 ```bash
 sf data query --json -q "SELECT Username, IsActive, Profile.UserLicense.Name FROM User WHERE Username = '<default_agent_user_value>'"
@@ -371,9 +371,9 @@ sf data query --json -q "SELECT Username, IsActive, Profile.UserLicense.Name FRO
 - `IsActive` is false → reactivate the user or set a different username.
 - `Profile.UserLicense.Name` is not `"Einstein Agent"` → wrong license. Set a user with the Einstein Agent license.
 
-#### 2. Verify all backing logic is deployed
+#### 2. Verify all action implementations are deployed
 
-Every `target` in the `.agent` file must resolve to a registered backing logic component in the org. Redeploy all backing logic:
+Every `target` in the `.agent` file must resolve to a registered implementation component in the org. Redeploy all action implementations:
 
 ```bash
 sf project deploy start --json --metadata ApexClass Flow PromptTemplate

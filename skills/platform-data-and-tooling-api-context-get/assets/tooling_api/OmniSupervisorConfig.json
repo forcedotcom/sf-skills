@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "OmniSupervisorConfig - Tooling API",
+  "description": "Represents the Omni-Channel supervisor configuration for an assigned group of supervisors. This object is available in API version 57.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name. This field is automatically generated, but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata type in Metadata API. The full name can include a namespace prefix. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsTimelineHidden": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If set to true, hides the agent timeline from the supervisors assigned to this supervisor configuration. The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Possible values are the languages that Omni-Channel supports."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label of the Omni-Channel supervisor configuration."
+    },
+    "Metadata": {
+      "type": "mns:OmniSupervisorConfig",
+      "properties": "Create, Nillable, Update",
+      "description": "The Omni-Channel supervisor configuration’s metadata."
+    },
+    "SkillVisibility": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Determines which work items based on skills are visible to the supervisors assigned to this supervisor configuration. Possible values are: AllSkills—Show work items with all skill requirements selected in this supervisor configuration. AnySkill—Show work items with at least one skill requirement selected in this supervisor configuration."
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled. Access to tooling objects requires Salesforce admin privileges or the Customize Application permission.",
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"OmniSuperSkillVisibilityType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AllSkills\"/>\n    <xsd:enumeration value=\"AnySkill\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OmniSupervisorConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isTimelineHidden\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"omniSpvsrConfigAIAgent\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OmniSpvsrConfigAIAgent\"/>\n        <xsd:element name=\"omniSupervisorConfigAction\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OmniSupervisorConfigAction\"/>\n        <xsd:element name=\"omniSupervisorConfigGroup\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OmniSupervisorConfigGroup\"/>\n        <xsd:element name=\"omniSupervisorConfigProfile\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OmniSupervisorConfigProfile\"/>\n        <xsd:element name=\"omniSupervisorConfigQueue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OmniSupervisorConfigQueue\"/>\n        <xsd:element name=\"omniSupervisorConfigSkill\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OmniSupervisorConfigSkill\"/>\n        <xsd:element name=\"omniSupervisorConfigTab\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OmniSupervisorConfigTab\"/>\n        <xsd:element name=\"omniSupervisorConfigUser\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OmniSupervisorConfigUser\"/>\n        <xsd:element name=\"skillVisibility\" minOccurs=\"0\" type=\"tns:OmniSuperSkillVisibilityType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

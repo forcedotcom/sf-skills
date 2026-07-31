@@ -1,0 +1,162 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "DataKitDeployEvent - Data API",
+  "description": "Represents a data kit deployment event that notifies subscribers of the status of the data kit component deployment. This object is available in API version 61.0 or later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataKitDeployStatus": {
+      "type": "picklist",
+      "properties": "Create, Nillable, Restricted picklist",
+      "description": "The deployment status of the components deployed from a data kit. This field is available in API version 63.0 and later. Possible values are: Active Deleting Error Inactive Processing"
+    },
+    "DataKitName": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "Name of the data kit from which a component is deployed."
+    },
+    "DataspaceName": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "Name of the data space into which a component is deployed."
+    },
+    "DeployStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Nillable",
+      "description": "The date and time the deployment starts."
+    },
+    "ErrorDetails": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "Explanation of the error."
+    },
+    "EventCreationDate": {
+      "type": "dateTime",
+      "properties": "Create, Nillable",
+      "description": "The date and time the data kit deploy creation event was created."
+    },
+    "EventPublishDate": {
+      "type": "dateTime",
+      "properties": "Create, Nillable",
+      "description": "The date and time of the data kit deploy publish event."
+    },
+    "EventType": {
+      "type": "picklist",
+      "properties": "Create, Nillable, Restricted picklist",
+      "description": "The event type action of the data kit components. Available in API version 66.0 and later. Possible values are: Deploy Undeploy"
+    },
+    "EventUuid": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The unique ID of the event."
+    },
+    "IsDataKitDeployStatusSuccess": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "Status of the data kit component deployment. Possible values are: Active Failure"
+    },
+    "JobIdentifier": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "Data kit component deployment job identifier."
+    },
+    "ReplayId": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The ID of the data kit deploy event replay."
+    },
+    "TemplateName": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The template name from which the data kit deploy event is created."
+    }
+  },
+  "special_access_rules": "Users that have access to Data Cloud.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataKitDeployStatus": {
+      "field_label": "Data Kit Deployment Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DataKitName": {
+      "field_label": "Data Kit Name",
+      "type": "string",
+      "length": "200"
+    },
+    "DataspaceName": {
+      "field_label": "Dataspace Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DeployStartTime": {
+      "field_label": "Data Kit Deployment Start Time",
+      "type": "datetime"
+    },
+    "ErrorDetails": {
+      "field_label": "Error Message",
+      "type": "textarea",
+      "length": "128000"
+    },
+    "EventCreationDate": {
+      "field_label": "Event Creation Date",
+      "type": "datetime"
+    },
+    "EventPublishDate": {
+      "field_label": "Event Publish Date",
+      "type": "datetime"
+    },
+    "EventType": {
+      "field_label": "Event Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EventUuid": {
+      "field_label": "Event UUID",
+      "type": "string",
+      "length": "36"
+    },
+    "IsDataKitDeployStatusSuccess": {
+      "field_label": "[Deprecated] Data Kit Deployment Status",
+      "type": "string",
+      "length": "200"
+    },
+    "JobIdentifier": {
+      "field_label": "Data Kit Deploy Job Identifier",
+      "type": "string",
+      "length": "200"
+    },
+    "ReplayId": {
+      "field_label": "Replay ID",
+      "type": "string",
+      "length": "1000"
+    },
+    "TemplateName": {
+      "field_label": "Data Kit Component Template Name",
+      "type": "string",
+      "length": "400"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

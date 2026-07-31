@@ -1,0 +1,506 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmailMessage - Data API",
+  "description": "Represents an email in Salesforce.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the activity that is associated with the email. Usually represents an open task that is created for the case owner when a new unread email message is received. ActivityId can only be specified for emails on cases. It’s auto-created for other entities. If an EmailMessage has a related task, and fields on the email record are updated, we may delete the related task and create a new related task."
+    },
+    "AttachmentIds": {
+      "type": "string",
+      "properties": "Create, Nillable, Update",
+      "description": "A comma-separated list of email attachments. This is used by the Send Email quick action when you use Salesforce Classic email templates. Maximum length is 32, 768 characters."
+    },
+    "AutomationType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "A picklist value that determines if an outgoing email was manually created or AI-generated. Possible values are: AiAssisted–Email is AI-generated, but sent by human. AiAutomated–Email is generated and sent by AI. Null–Email is created and sent by human."
+    },
+    "BccAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A string array of email addresses for recipients who were sent a visually impaired carbon copy of the email message. Include only email addresses that aren’t associated with Contact, Lead, or User records in Salesforce. If the recipient is a contact, lead, or user, add their ID to the BccIds field instead of adding their email address to the BccAddress field. When adding their ID, the email message is automatically associated with the contact, lead, or user. For an Experience Cloud site user who isn’t the sender of the email, this field returns null. You can’t send emails unless there’s at least one recipient."
+    },
+    "BccIds": {
+      "type": "JunctionIdList",
+      "properties": "Create, Update",
+      "description": "A string array of IDs for contacts, leads, and users who were sent a visually impaired carbon copy of the email message. Each ID is linked to an EmailMessageRelation record, which represents the relationship between an email message and a Contact, Lead, or User record. For an Experience Cloud site user who isn’t the sender of the email, this list is empty.Adding a JunctionIdList field name to the fieldsToNull property deletes all related junction records. This action can’t be undone."
+    },
+    "CcAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A string array of email addresses for recipients who were sent a carbon copy of the email message. Include only email addresses that aren’t associated with Contact, Lead, or User records in Salesforce. If the recipient is a contact, lead, or user, add their ID to the CcIds field instead of adding their email address to the CcAddress field. Then the email message is automatically associated with the contact, lead, or user. You can’t send emails unless there’s at least one recipient."
+    },
+    "CcIds": {
+      "type": "JunctionIdList",
+      "properties": "Create, Update",
+      "description": "A string array of IDs for contacts, leads, and users who were sent a carbon copy of the email message. Each ID is linked to an EmailMessageRelation record, which represents the relationship between an email message and a Contact, Lead, or User record. Adding a JunctionIdList field name to the fieldsToNull property deletes all related junction records. This action can’t be undone."
+    },
+    "ClientThreadIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A value used by third-party email clients to identify which thread an email belongs to. See Email-to-Case Threading for more information.Available in API versions 56.0 and later."
+    },
+    "ContentDocumentIds": {
+      "type": "JunctionIdList",
+      "properties": "Create, Update",
+      "description": "A string array of IDs for content documents such as files and attachments that are associated with an email. Each ID is linked to a ContentDocumentLink record, which represents the relationship between an email message and a content document record.Adding a JunctionIdList field name to the fieldsToNull property deletes all related junction records. This action can’t be undone."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "A logical segment of your organization's data. For example, if your company is organized into different business units, you could create a division for each business unit, such as “North America,” “Healthcare,” or “Consulting.” Available only if the organization has the Division permission enabled."
+    },
+    "EmailRoutingAddressId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores the ID of the email routing address used to create the email. This value is set when the email is processed by Email-to-Case service. When this field is set, EmailMessage.Incoming cannot be false.",
+      "relationship_name": "EmailRoutingAddress",
+      "relationship_type": "Lookup",
+      "refers_to": "EmailRoutingAddress"
+    },
+    "EmailTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email template, if any, that was chosen for the email. This field is populated in Lightning Experience only. This is a relationship field.",
+      "relationship_name": "EmailTemplate",
+      "relationship_type": "Lookup",
+      "refers_to": "EmailTemplate"
+    },
+    "FirstLinkClickedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when a link in the email was first clicked. Available in API version 67.0 and later."
+    },
+    "FirstOpenedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date the email was first opened."
+    },
+    "FromAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The address that originated the email. When using this field, specify an email address that exists in EmailMessageRelation, with a RelationType of FromAddress. EmailMessages in Draft status with IsPrivateDraft set to true must use the user's address, a verified org-wide email address, or a verified Email-to-Case routing address in the FromAddress field."
+    },
+    "FromId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The contact, lead, or user who sent the email. Maximum length is 18 characters."
+    },
+    "FromName": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The sender’s name. When using this field, specify an email address that exists in EmailMessageRelation, with a RelationType of FromAddress."
+    },
+    "HasAttachment": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email was sent with an attachment (true) or not (false)."
+    },
+    "HasReply": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email has a reply (true) or not (false). The default value is false. Available in API version 67.0 and later."
+    },
+    "Headers": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The Internet message headers of the incoming email. Used for debugging and tracing purposes. Doesn’t apply to outgoing emails."
+    },
+    "HtmlBody": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The body of the email in HTML format. You can’t send emails unless at least one of these fields has content. Subject field HTML Body or Text Body field As the sender, you can provide the content, or it can be automatically inserted using predefined values. An email template can also include the content for these fields."
+    },
+    "Incoming": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email was received (true) or sent (false)."
+    },
+    "IsBounced": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the email bounced.This field is set to True for bounced emails in orgs using Lightning Threading. It’s not set to True for orgs using Ref ID threading."
+    },
+    "IsClientManaged": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "If EmailMessage is created with IsClientManaged set to true, users can modify EmailMessage.ContentDocumentIds to link file attachments even when the Status of the EmailMessage isn’t set to Draft. When this field is set to true and Enhanced Email is enabled, a Task record is created for the EmailMessage regardless of Email-to-Case settings."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "IsExternallyVisible": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If the Experience Cloud site case feed is enabled, IsExternallyVisible controls the external visibility of emails in sites. When IsExternallyVisible is set to true—its default value—external users see the email message in the case feed. Emails remain visible in the Emails related list whether or not this field is set to true. For security reasons, we recommend that you remove this related list from your case page layout for external community users. Only emails with a value in the ParentId field can be made externally visible in sites. This field can’t be updated if the email’s Status is set to Draft. The Enable Case Feeds in Experience Cloud Sites organization preference in Setup makes case-related emails, comments, and updates visible to site members. When this preference is off, IsExternallyVisible is True by default for the EmailMessage. When this preference is on, IsExternallyVisible defaults to True only if the case contact email is the sender or the recipient of the EmailMessage. Otherwise, IsExternallyVisible defaults to False."
+    },
+    "IsLinkClicked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a link in the email has been clicked (true) or not (false). The default value is false. Available in API version 67.0 and later."
+    },
+    "IsLinkTracked": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether there are any URLs in the email that can be tracked (true) or not (false). The default value is false. Available in API version 67.0 and later."
+    },
+    "IsOpened": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email has been opened."
+    },
+    "IsPrivateDraft": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "If IsPrivateDraft is set to true, then only the CreatedById user can view, update, and send this email draft. If IsPrivateDraft is set to false, then any user with permissions to work on the case can see these drafts. After the email is sent, then this field is updated to be false. Public drafts are loaded and visible in Salesforce Classic while Private Drafts are only used in Lightning Experience."
+    },
+    "IsTracked": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the email is being tracked."
+    },
+    "LastLinkClickedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when a link in the email was last clicked. Available in API version 67.0 and later."
+    },
+    "LastOpenedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date the email was last opened."
+    },
+    "MessageDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date the email was created. For inbound emails, Email-to-Case sets this field using the Date header. The Date header is set by the email client and is subject to the sender's time preferences."
+    },
+    "MessageIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The ID of the email message."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "A name for the email message that's derived from the first 255 characters of the Subject field. If the Subject field is empty, a localized string of [No Subject] is used. This field is read-only and can’t be created or updated. Available in API versions 56.0 and later."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the case that’s associated with the email. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "RelatedToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The RelatedToId represents nonhuman objects such as accounts, opportunities, campaigns, cases, or custom objects. RelatedToIds are polymorphic. Polymorphic means a RelatedToId is equivalent to the ID of a related object. You must have access to at least one entity listed under Refers To to access RelatedToId. You can update RelatedToId when IsClientManaged is set to true. RelatedtoId and ParentId should have the same value when ParentId is set. You might see unexpected results otherwise. This is a polymorphic relationship field.",
+      "relationship_name": "RelatedTo",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CommSubscriptionConsent, ContactEncounter, ContactEncounterParticipant, ContactRequest, Contract, CoverageBenefit, CoverageBenefitItem, CreditMemo, DelegatedAccount, DocumentChecklistItem, EnrollmentEligibilityCriteria, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, IdentityDocument, Image, IndividualApplication, Invoice, ListEmail, Location, MemberPlan, Opportunity, Order, OtherComponentTask, PartyConsent, PersonLifeEvent, PlanBenefit, PlanBenefitItem, ProcessException, Product2, ProductItem, ProductRequest, ProductRequestLineItem, ProductTransfer, PurchaserPlan, ReceivedDocument, ResourceAbsence, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, Shift, Shipment, ShipmentItem, Solution, Visit, VisitedParty, VolunteerProject, WorkOrder, WorkOrderLineItem"
+    },
+    "ReplyToEmailMessageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the inbound or outbound email message the current email message is a reply to. It’s not possible to reply to a message whose Status is Draft. This is a relationship field. This is only set for Case related Email replies at setup.",
+      "relationship_name": "ReplyToEmailMessage",
+      "relationship_type": "Lookup",
+      "refers_to": "EmailMessage"
+    },
+    "Source": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "When Sync Email as Salesforce Activity is enabled, this value reflects from where the email was captured automatically. Available in API version 64.0 and later. Possible values are: Einstein Activity Capture–Captured as an entire email message by Einstein Activity Capture. Einstein Activity Capture Limited–Captured as a header-only email by Einstein Activity Capture. The sender, recipients, date, and time of the message were captured, not the subject or body. Email Integration App Manual-Captured to track the email message records created or edited from the mailapp. Migrated Captured Email-An email that was captured in Einstein Activity Capture and migrated to an updated version of Einstein Activity Capture in which Sync Email as Activity is turned on. Available in API version 65.0 and later. Migrated Captured Email Header Only-An email that was captured in Einstein Activity Capture and migrated as header-only data to an updated version of Einstein Activity Capture in which Sync Email as Activity is turned on. Available in API version 65.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the email. The Status field is mostly read-only. You can change the status only from New to Read. Possible values are: 0 (New) 1 (Read) 2 (Replied) 3 (Sent) 4 (Forwarded) 5 (Draft) For emails not sent as part of a case, only the status 3 (Sent) is valid."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The subject line of the email. You can’t send emails unless at least one of these fields has content. Subject field HTML Body or Text Body field As the sender, you can provide the content, or it can be automatically inserted using predefined values. An email template can also include the content for these fields."
+    },
+    "TextBody": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The body of the email, in plain text format. If TextBody isn’t set, then it’s extracted from HtmlBody. You can’t send emails unless at least one of these fields has content. Subject field HTML Body or Text Body field As the sender, you can provide the content, or it can be automatically inserted using predefined values. An email template can also include the content for these fields"
+    },
+    "ThreadIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The ID of the email thread the email message belongs to. This field is used by features that sync emails directly from an inbox into Salesforce. This field is not used by On-Demand Email-to-Case."
+    },
+    "ToAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A string array of email addresses for recipients who were sent the email message. Include only email addresses that aren’t associated with Contact, Lead, or User records in Salesforce. If the recipient is a contact, lead, or user, add their ID to the ToIds field instead of adding their email address to the ToAddress field. Then the email message is automatically associated with the contact, lead, or user. You can’t send emails unless there’s at least one recipient."
+    },
+    "ToIds": {
+      "type": "JunctionIdList",
+      "properties": "Create, Update",
+      "description": "A string array of IDs for contacts, leads, and users who were sent a carbon copy of the email message. Each ID is linked to an EmailMessageRelation record, which represents the relationship between an email message and a Contact, Lead, or User record. Adding a JunctionIdList field name to the fieldsToNull property deletes all related junction records. This action can’t be undone."
+    },
+    "ValidatedFromAddress": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "A picklist value with either the sender's address, org-wide email addresses, or Email-to-Case routing address. The email address must be verified. If the sender’s email address is used, the sender must be the current user. ValidatedFromAddress isn’t suitable for use in Group By or Sort By statements. Use FromAddress instead."
+    }
+  },
+  "special_access_rules": "EmailMessage is only available for orgs that use Email-to-Case or Enhanced Email, which is automatically enabled for most customers. To use reply and forward functionality, FromAddress must specify an email address that exists in EmailMessageRelation, with a RelationType of FromAddress. The Status field is mostly read-only. You can change the status only from New to Read. The HtmlBody and RelatedToId fields are supported in Classic list views but not in Lightning list views. In related lists and search results in Lightning Experience, these fields either don’t appear, show blank values, or result in an error. update() is supported when an email record is in Draft status, and IsPrivateDraft is false. It’s also supported if the email status is Draft, IsPrivateDraft is true, and CreatedBy is associated with the current user. When the email record isn’t in Draft status, the IsExternallyVisible field and custom fields only can be updated. Set the Update Email Messages user permission for users, such as an Automated Case User, who run automated processes that modify email message-related records. With the Update Email Message permission set, users’ processes can modify EmailMessageRelation and ContentDocumentLink records that are related to an email message that isn’t in Draft status. Don’t set this user permission for other users. Access to an email message depends on the associated object. The user who created the email is specified in CreatedById and always has access, unless that user is a guest user. Guest users have read access if the message is marked as IsExternallyVisible. The object that’s used to determine access differs for Email-to-Case and Enhanced Email. When you use the API to insert EmailMessage records in bulk, the same access rules apply: access is based on cases in ParentId fields or by tasks in ActivityId fields. When inserting a single record, set the CreatedById field to the user performing the operation or leave it blank.\n\nEmailMessage is only available for orgs that use Email-to-Case or Enhanced Email, which is automatically enabled for most customers.\n\nTo use reply and forward functionality, FromAddress must specify an email address that exists in EmailMessageRelation, with a RelationType of FromAddress.\n\nThe Status field is mostly read-only. You can change the status only from New to Read.\n\nThe HtmlBody and RelatedToId fields are supported in Classic list views but not in Lightning list views. In related lists and search results in Lightning Experience, these fields either don’t appear, show blank values, or result in an error.\n\nupdate() is supported when an email record is in Draft status, and IsPrivateDraft is false. It’s also supported if the email status is Draft, IsPrivateDraft is true, and CreatedBy is associated with the current user. When the email record isn’t in Draft status, the IsExternallyVisible field and custom fields only can be updated.\n\nSet the Update Email Messages user permission for users, such as an Automated Case User, who run automated processes that modify email message-related records. With the Update Email Message permission set, users’ processes can modify EmailMessageRelation and ContentDocumentLink records that are related to an email message that isn’t in Draft status. Don’t set this user permission for other users.\n\nAccess to an email message depends on the associated object. The user who created the email is specified in CreatedById and always has access, unless that user is a guest user. Guest users have read access if the message is marked as IsExternallyVisible.\n\nThe object that’s used to determine access differs for Email-to-Case and Enhanced Email.\n\nWhen you use the API to insert EmailMessage records in bulk, the same access rules apply: access is based on cases in ParentId fields or by tasks in ActivityId fields. When inserting a single record, set the CreatedById field to the user performing the operation or leave it blank.",
+  "usage": "EmailMessage is limited to 50 custom fields. If your org uses Email-to-Case, a case is created when an email is sent to one of your company’s addresses. The email, which is related to the case by the ParentID field, is stored as an EmailMessage record. When users view the email, they see the EmailMessage record. If your org uses Enhanced Email, each email is stored as an EmailMessage record and a Task record. When users view an email, they see the EmailMessage record. If you would like to change the recipients or contents of an outbound email, don’t use automation tools, like Flows or Apex triggers, to update EmailMessage records. Unless they are for a draft, updates to EmailMessage records will not be reflected in the actual sent email. To update an email’s data before it’s sent, use Quick Action predefined values or a QuickActionDefaultsHandler. When a Flow creates an EmailMessage with set values in the audit fields (like CreatedBy and CreatedDate), any FeedItem automatically created for that EmailMessage will not share the same audit field values.\n\nEmailMessage is limited to 50 custom fields.\n\nIf your org uses Email-to-Case, a case is created when an email is sent to one of your company’s addresses. The email, which is related to the case by the ParentID field, is stored as an EmailMessage record. When users view the email, they see the EmailMessage record.\n\nIf your org uses Enhanced Email, each email is stored as an EmailMessage record and a Task record. When users view an email, they see the EmailMessage record.\n\nIf you would like to change the recipients or contents of an outbound email, don’t use automation tools, like Flows or Apex triggers, to update EmailMessage records. Unless they are for a draft, updates to EmailMessage records will not be reflected in the actual sent email. To update an email’s data before it’s sent, use Quick Action predefined values or a QuickActionDefaultsHandler.\n\nWhen a Flow creates an EmailMessage with set values in the audit fields (like CreatedBy and CreatedDate), any FeedItem automatically created for that EmailMessage will not share the same audit field values.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **EmailMessageChangeEvent (API version 48.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"EmailMessage\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachmentIds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AutomationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BccAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BccIds\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ID\"/>\n        <element name=\"CcAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CcIds\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ID\"/>\n        <element name=\"ClientThreadIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentIds\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ID\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EmailMessageRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EmailTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EmailTemplate\"/>\n        <element name=\"EmailTemplateId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FirstOpenedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FromAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FromId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FromName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HasAttachment\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Headers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HtmlBody\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Incoming\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsBounced\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsClientManaged\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsExternallyVisible\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOpened\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTracked\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastOpenedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessageDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessageIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Case\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedTo\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelatedToId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ReplyToEmailMessage\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EmailMessage\"/>\n        <element name=\"ReplyToEmailMessageId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Source\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TextBody\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThreadIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ToAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ToIds\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ID\"/>\n        <element name=\"ValidatedFromAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ActionCadenceStepTrackerId": {
+      "field_label": "Cadence Step Tracker ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivityId": {
+      "field_label": "Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AttachmentIds": {
+      "field_label": "Attachment Ids",
+      "type": "string",
+      "length": "32768"
+    },
+    "AutomationType": {
+      "field_label": "Automation Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BccAddress": {
+      "field_label": "BCC Address",
+      "type": "string",
+      "length": "4000"
+    },
+    "CcAddress": {
+      "field_label": "CC Address",
+      "type": "string",
+      "length": "4000"
+    },
+    "ClientThreadIdentifier": {
+      "field_label": "Client Thread ID",
+      "type": "string",
+      "length": "765"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EmailRoutingAddressId": {
+      "field_label": "EmailRoutingAddress ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FirstLinkClickedDate": {
+      "field_label": "First Link Click Date",
+      "type": "datetime"
+    },
+    "FirstOpenedDate": {
+      "field_label": "First Opened",
+      "type": "datetime"
+    },
+    "FromAddress": {
+      "field_label": "From Address",
+      "type": "email",
+      "length": "1000"
+    },
+    "FromId": {
+      "field_label": "From ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FromName": {
+      "field_label": "From Name",
+      "type": "string",
+      "length": "1000"
+    },
+    "HasAttachment": {
+      "field_label": "Has Attachment",
+      "type": "boolean"
+    },
+    "HasReply": {
+      "field_label": "Has Reply",
+      "type": "boolean"
+    },
+    "Headers": {
+      "field_label": "Headers",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "HtmlBody": {
+      "field_label": "HTML Body",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Id": {
+      "field_label": "Email Message ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Incoming": {
+      "field_label": "Is Incoming",
+      "type": "boolean"
+    },
+    "IsBounced": {
+      "field_label": "Bounced?",
+      "type": "boolean"
+    },
+    "IsClientManaged": {
+      "field_label": "Is Client Managed",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsExternallyVisible": {
+      "field_label": "Is Externally Visible",
+      "type": "boolean"
+    },
+    "IsLinkClicked": {
+      "field_label": "Is Link Clicked",
+      "type": "boolean"
+    },
+    "IsLinkTracked": {
+      "field_label": "Is Link Tracked",
+      "type": "boolean"
+    },
+    "IsOpened": {
+      "field_label": "Opened?",
+      "type": "boolean"
+    },
+    "IsTracked": {
+      "field_label": "Is Tracked",
+      "type": "boolean"
+    },
+    "LastLinkClickedDate": {
+      "field_label": "Last Link Click Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastOpenedDate": {
+      "field_label": "Last Opened",
+      "type": "datetime"
+    },
+    "MessageDate": {
+      "field_label": "Message Date",
+      "type": "datetime"
+    },
+    "MessageIdentifier": {
+      "field_label": "Message ID",
+      "type": "string",
+      "length": "765"
+    },
+    "Name": {
+      "field_label": "Email Message Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedToId": {
+      "field_label": "Related To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReplyToEmailMessageId": {
+      "field_label": "Email Message ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Source": {
+      "field_label": "Email Source",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "string",
+      "length": "3000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TextBody": {
+      "field_label": "Text Body",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "ThreadIdentifier": {
+      "field_label": "Thread ID",
+      "type": "string",
+      "length": "765"
+    },
+    "ToAddress": {
+      "field_label": "To Address",
+      "type": "string",
+      "length": "4000"
+    },
+    "ValidatedFromAddress": {
+      "field_label": "From",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

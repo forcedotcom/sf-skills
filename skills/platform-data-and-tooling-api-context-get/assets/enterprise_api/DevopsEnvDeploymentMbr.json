@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "DevopsEnvDeploymentMbr - Data API",
+  "description": "Represents a metadata component or configuration data record included in a deployment to a DevOps Center pipeline environment. Use it to verify what was promoted or deployed. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ChangeType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of change for this member. Possible values are: CHANGE—Update to an existing component. DATA—Configuration data record. DELETE—A component marked for removal (destructive change). NEW—New component. The default value is NEW."
+    },
+    "ChangedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user who last modified the member. This field is a relationship field.",
+      "relationship_name": "ChangedBy",
+      "refers_to": "User"
+    },
+    "ChangedOn": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the component was last modified."
+    },
+    "DevopsEnvDeploymentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent deployment record this member belongs to. This field is a relationship field.",
+      "relationship_name": "DevopsEnvDeployment",
+      "relationship_type": "Master-detail",
+      "refers_to": "DevopsEnvDeployment (the parent object)"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "MemberName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the metadata component or data record."
+    },
+    "MemberType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The type of the component, such as CustomObject, ApexClass, or Layout."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique identifier for the deployment member record."
+    },
+    "NumberOfRecords": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of data records associated with this member, applicable when ChangeType is DATA."
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The version number of the component being deployed."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **DevopsEnvDeploymentMbrFeed**: Feed tracking is available for the object.\n- **DevopsEnvDeploymentMbrHistory**: History is available for tracked fields of the object."
+}

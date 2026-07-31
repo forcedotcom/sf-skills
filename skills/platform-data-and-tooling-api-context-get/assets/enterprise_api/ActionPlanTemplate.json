@@ -1,0 +1,224 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionPlanTemplate - Data API",
+  "description": "Represents the instance of an action plan template. This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionPlanType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "This action plan template’s type. Possible values are: Industries Sales—This value is available in API version 63.0 and later with the Sales Action Plans add-on license and the Sales Action Plans default permission set. Service"
+    },
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the category that the action plan template belongs to.Available in API version 64.0 and later. Possible values are: Onboarding Application"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The description of this action plan template."
+    },
+    "EstimatedCompletionDays": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The estimated number of days to complete the action plan.Available in API version 64.0 and later."
+    },
+    "FileBasedTemplatePath": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The path of the file based template using which the action plan template is created.Available in API version 64.0 and later."
+    },
+    "IsAdHocItemCreationEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether users can add tasks or other items to generated action plans (true) or not (false)."
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this action plan template is locked or not. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent date on which a user referenced this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent date on which a user viewed this record."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this action plan template can be edited or not. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of this action plan template."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who owns this action plan template. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "SourceType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the source type to which the action plan template belongs to.Available in API version 64.0 and later. Possible values are: CRM MigratedFromSandbox"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of this action plan template. Possible values are: Draft Final—Published Obsolete ReadOnly"
+    },
+    "Subcategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The subcategory to which the action plan template belongs.Available in API version 64.0 and later. Possible values are: Product Onboarding Customer Onboarding"
+    },
+    "TargetEntityType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Group, Restricted picklist, Sort",
+      "description": "The parent object this action plan template relates to. Possible values are organized by the API version in which they were introduced. Values are available in all versions after introduction unless noted otherwise. API Version 62.0 and later with Financial Services: AccountPlanObjective FinancialDeal PartyProfile API Version 62.0 and later with Public Sector Solutions: ApplicationFormEvaluation VettingEvaluation API version 60.0 and later with Education Cloud ProgramEnrollment API version 58.0 and later with Health Cloud CareBarrier API version 58.0 and later with Nonprofit Cloud: Benefit Program API Version 58.0 and later with Public Sector Solution and Education Cloud: ApplicationDecision ApplicationReview Benefit Program API Version 56.0 and later with Automotive Cloud: Account Asset Asset Account Participant Asset Contact Participant Asset Milestone Fleet Lead Opportunity Record Alert Vehicle Case Claim Contact API Version 58.0 and later with Grantmaking: ApplicationDecision ApplicationReview Benefit Budget BudgetAllocation CareBarrier FundingAward FundingAwardAmendment FundingAwardRequirement FundingDisbursement FundingOpportunity Program API Version 52.0 and later: BusinessLicenseApplication IndividualApplication PublicComplaint RegulatoryCodeViolation ViolationEnforcementAction API Version 47.0 and later: BusinessMilestone Claim InsurancePolicy InsurancePolicyCoverage PersonLifeEvent Visit API Version 46.0 and later: Campaign—Unsupported for Grantmaking. Case Contact Contract Lead Opportunity Custom objects with activities enabled API Version 44.0 and later: Account"
+    },
+    "UniqueName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name for this action plan template. This field is unique within your organization."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **ActionPlanTemplateChangeEvent**: Change events are available for the object.\n- **ActionPlanTemplateFeed**: Feed tracking is available for the object.\n- **ActionPlanTemplateHistory**: History is available for tracked fields of the object.\n- **ActionPlanTemplateOwnerSharingRule**: Sharing rules are available for the object.\n- **ActionPlanTemplateShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ActionPlanType": {
+      "field_label": "Action Plan Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "EstimatedCompletionDays": {
+      "field_label": "Estimated Completion Days",
+      "type": "int",
+      "digits": "9"
+    },
+    "FileBasedTemplatePath": {
+      "field_label": "File Based Template Path",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Action Plan Template ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAdHocItemCreationEnabled": {
+      "field_label": "Let users add items to action plans",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceType": {
+      "field_label": "Source Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Subcategory": {
+      "field_label": "Subcategory",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetEntityType": {
+      "field_label": "Target Object",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UniqueName": {
+      "field_label": "Unique Name",
+      "type": "string",
+      "length": "80"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

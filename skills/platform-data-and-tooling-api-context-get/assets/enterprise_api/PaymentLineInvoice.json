@@ -1,0 +1,269 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "PaymentLineInvoice - Data API",
+  "description": "Represents a payment allocated to or unallocated from an invoice. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort",
+      "description": "Total amount applied or unapplied by this payment line."
+    },
+    "AppliedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date that this line was applied to an invoice or payment. If this field is null, it inherits the value of the payment line invoice’s Date field."
+    },
+    "AssociatedAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The account for this payment line’s target invoice. This is a relationship field.",
+      "relationship_name": "AssociatedAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "AssociatedPaymentLineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The paymentLine that was unapplied. Populated only when PaymentLineInvoice’s Type field has a value of Unapplied. This is a relationship field.",
+      "relationship_name": "AssociatedPaymentLine",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentLineInvoice"
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Users can add comments to provide additional details about a record. Maximum of 1000 characters."
+    },
+    "Date": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date and time that this payment line was created."
+    },
+    "EffectiveDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Defines the date and time when the payment line application or unapplication becomes effective."
+    },
+    "EffectiveImpactAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Shows how this payment invoice line impacts a customer’s accounts receivable. This value is positive when PaymentLineInvoice’s Type field is Applied, and negative when PaymentLineInvoice’s Type is Unapplied. If there’s an unapplied line related to this record, EffectiveImpactAmount has a value of 0. Note: EffectiveImpactAmount evaluates only the applied and unapplied line pair. Therefore, the effective impact amount could be different for different lines within the same payment."
+    },
+    "HasBeenUnapplied": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Defines whether this payment line has been unapplied from the target invoice. Has a value of NA when PaymentInvoiceLine’s Type field has a value of Unapplied. Can be No or Yes if Type has a value of Applied. Possible values are: NA No Yes"
+    },
+    "ImpactAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Shows the payment’s financial impact against the customer’s accounts receivable. If PaymentLineInvoice has a Type of Applied, the ImpactAmount is the negative equivalent of the line’s Amount field. Otherwise, ImpactAmount equals Amount."
+    },
+    "InvoiceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Target invoice for this payment line. This is a relationship field.",
+      "relationship_name": "Invoice",
+      "relationship_type": "Lookup",
+      "refers_to": "Invoice"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "PaymentBalance": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total balance of this line’s parent payment record following the application or unapplication of this payment line."
+    },
+    "PaymentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Parent payment for this payment line. This is a relationship field.",
+      "relationship_name": "Payment",
+      "relationship_type": "Lookup",
+      "refers_to": "Payment"
+    },
+    "PaymentLineInvoiceNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-defined unique ID for this payment line."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Defines whether this payment line has been applied or unapplied to the target invoice. Possible values are: Applied Unapplied"
+    },
+    "UnappliedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date that this payment line was unapplied from the target invoice. Populated only when the Type field equals Unapplied. Inherits the value of the Date field."
+    }
+  },
+  "special_access_rules": "To access Commerce Payments entities, your org must have a Salesforce Order Management license with the Payment Platform org permission activated. Commerce Payments entities are available only in Lightning Experience.",
+  "usage": "Use a payment line to apply all or part of a payment’s balance to an invoice. The PaymentLineInvoice object represents the balance taken from the payment and applied toward the invoice. You can apply a payment’s balance when you create the payment record or afterward. The payment line must have the same currency as the parent payment. A payment line has an amount, which represents the total amount taken from the payment, and balance, which represents the remaining amount after the payment line has been applied to an invoice. A payment’s amount can’t be less than the sum of all of its payment line amounts. One payment can have multiple payment lines. A payment line must be related to only payment. You can create multiple payment lines on a payment apply each line to different invoices on the same account, or to invoices on different accounts. Here’s one way you could use Salesforce API to apply a payment to an invoice using a payment line.\n\nUse a payment line to apply all or part of a payment’s balance to an invoice. The PaymentLineInvoice object represents the balance taken from the payment and applied toward the invoice. You can apply a payment’s balance when you create the payment record or afterward. The payment line must have the same currency as the parent payment.\n\nA payment line has an amount, which represents the total amount taken from the payment, and balance, which represents the remaining amount after the payment line has been applied to an invoice. A payment’s amount can’t be less than the sum of all of its payment line amounts.\n\nOne payment can have multiple payment lines. A payment line must be related to only payment.\n\nYou can create multiple payment lines on a payment apply each line to different invoices on the same account, or to invoices on different accounts.\n\nHere’s one way you could use Salesforce API to apply a payment to an invoice using a payment line.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AppliedDate": {
+      "field_label": "Applied Date",
+      "type": "datetime"
+    },
+    "AssociatedAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssociatedPaymentLineId": {
+      "field_label": "Payment Line Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Date": {
+      "field_label": "Date",
+      "type": "datetime"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "datetime"
+    },
+    "EffectiveImpactAmount": {
+      "field_label": "Effective Impact Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "HasBeenUnapplied": {
+      "field_label": "Has Been Unapplied",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Payment Line Invoice ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImpactAmount": {
+      "field_label": "Impact Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "InvoiceId": {
+      "field_label": "Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityAccountingPeriodId": {
+      "field_label": "Legal Entity Accounting Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentBalance": {
+      "field_label": "Payment Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PaymentId": {
+      "field_label": "Payment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentLineInvoiceNumber": {
+      "field_label": "Payment Line Invoice Number",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UnappliedDate": {
+      "field_label": "Unapplied Date",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

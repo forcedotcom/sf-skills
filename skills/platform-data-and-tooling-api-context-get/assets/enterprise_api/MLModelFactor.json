@@ -1,0 +1,138 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "MLModelFactor - Data API",
+  "description": "Represents a field value that has a positive or negative effect on the model’s score. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Correlation": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Shows the strength of association between the variable and the outcome. The higher the correlation, the greater the association."
+    },
+    "FactorType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of factor. Possible values are: ModelFactlet—The field value strongly influences the outcome because the model determined that this field is always important. For example, the model can decide that the field Industry is always important to the outcome, regardless of its value. ModelFactor—The field value is important to the outcome because the field’s value is significant. For example, the model can decide that the Annual Revenue field value is important to the outcome because the value is above $1,000,000 or below $50,000."
+    },
+    "Importance": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Shows how much the variable influences the outcome. The higher the value, the greater the impact."
+    },
+    "ModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related model. This field is a relationship field.",
+      "relationship_name": "Model",
+      "relationship_type": "Lookup",
+      "refers_to": "MLModel"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The automatically generated ID that uniquely identifies the model."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of model factor. Possible values are: And Basic Or"
+    },
+    "Weight": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates how significant the field value is to the outcome or score. Model factlets tend to have higher weights than model factors."
+    }
+  },
+  "special_access_rules": "Available with Einstein Prediction Builder and Einstein Recommendation Builder.\n\nAvailable with Einstein Prediction Builder and\n         Einstein Recommendation Builder.",
+  "field_reference": {
+    "Correlation": {
+      "field_label": "Correlation",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FactorType": {
+      "field_label": "Factor Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "ML Model Factor ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Importance": {
+      "field_label": "Importance",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ModelId": {
+      "field_label": "ML Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Factor Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Weight": {
+      "field_label": "Weight",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

@@ -1,0 +1,342 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "Incident - Data API",
+  "description": "An Incident is any unplanned business interruption that has wide-sweeping impacts and requires an urgent fix. This object contains the details of the incident, documenting the history of the incident from registration to closure. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of incident."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the incident. This field can store up to 32 KB of data, but only the first 255 characters appear in reports."
+    },
+    "DetectedDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time (in UTC) when the incident was first detected."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time (in UTC) when the incident ended."
+    },
+    "Impact": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The incident's impact. Possible values are: High Low Medium The default value is 'High'."
+    },
+    "IncidentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The unique, system-generated number for the incident."
+    },
+    "IsMajorIncident": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the incident is business-critical. If set to true, the incident is widespread and business-critical. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time (in UTC) when the current user last accessed this record, a list view, or another related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time (in UTC) when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "A polymorphic relationship field that represents the user or group assigned to resolve the incident.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ParentIncidentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID of an incident above one or more related incidents in an incident hierarchy. This is a relationship field.",
+      "relationship_name": "ParentIncident",
+      "relationship_type": "Lookup",
+      "refers_to": "Incident"
+    },
+    "Priority": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The impact and urgency of the incident. Possible values are: Critical High Low Moderate The default value is 'Critical'."
+    },
+    "PriorityOverrideReason": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The reason why a priority should be changed or edited."
+    },
+    "ReportedMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates how the incident was reported to customer service."
+    },
+    "ResolutionDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time (in UTC) when the incident was resolved."
+    },
+    "ResolutionSummary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of possible steps to resolve the incident."
+    },
+    "ResolvedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID of the user who resolved the incident. This is a relationship field.",
+      "relationship_name": "ResolvedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time (in UTC) when the incident began."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Any custom or granular stages a customer may want to track. Possible values are: Completed In Progress New Open Problem Created Resolved The default value is 'New'."
+    },
+    "StatusCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The incident's status. Possible values are: Completed InProgress New Open ProblemCreated Resolved The default value is 'New'."
+    },
+    "SubCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of incident. One level deeper than Category. Administrators set field values."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A brief description of the incident."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of incident, for example, question or problem. Administrators set field values."
+    },
+    "Urgency": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "A measure of how long the resolution can be delayed until an incident, problem, or change has a significant business impact. Possible values are: High Low Medium The default value is 'High'."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **IncidentChangeEvent**: Change events are available for the object.\n- **IncidentFeed**: Feed tracking is available for the object.\n- **IncidentHistory**: History is available for tracked fields of the object.\n- **IncidentOwnerSharingRule**: Sharing rules are available for the object.\n- **IncidentShare**: Sharing is available for the object.",
+  "field_reference": {
+    "BusinessHoursId": {
+      "field_label": "Business Hours ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DetectedDateTime": {
+      "field_label": "Detected Date Time",
+      "type": "datetime"
+    },
+    "EndDateTime": {
+      "field_label": "End Date Time",
+      "type": "datetime"
+    },
+    "EntitlementId": {
+      "field_label": "Entitlement ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Incident ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Impact": {
+      "field_label": "Impact",
+      "type": "picklist",
+      "length": "40"
+    },
+    "IncidentNumber": {
+      "field_label": "Incident Number",
+      "type": "string",
+      "length": "255"
+    },
+    "IsClosed": {
+      "field_label": "Incident Closed",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsMajorIncident": {
+      "field_label": "Major Incident",
+      "type": "boolean"
+    },
+    "IsStopped": {
+      "field_label": "Incident Paused",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MilestoneStatus": {
+      "field_label": "Milestone Status",
+      "type": "string",
+      "length": "30"
+    },
+    "MilestoneTimer": {
+      "field_label": "Milestone Remaining Time",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentIncidentId": {
+      "field_label": "Parent Incident ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PriorityOverrideReason": {
+      "field_label": "Priority Override Reason",
+      "type": "string",
+      "length": "255"
+    },
+    "ReportedMethod": {
+      "field_label": "Reported Method",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ResolutionDateTime": {
+      "field_label": "Resolution Date Time",
+      "type": "datetime"
+    },
+    "ResolutionSummary": {
+      "field_label": "Resolution Summary",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "ResolvedById": {
+      "field_label": "Resolved By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SlaExitDate": {
+      "field_label": "Entitlement Process End Time",
+      "type": "datetime"
+    },
+    "SlaStartDate": {
+      "field_label": "Entitlement Process Start Time",
+      "type": "datetime"
+    },
+    "StartDateTime": {
+      "field_label": "Start Date Time",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StatusCode": {
+      "field_label": "Status Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StopStartDate": {
+      "field_label": "Incident Paused Since",
+      "type": "datetime"
+    },
+    "SubCategory": {
+      "field_label": "Sub Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Urgency": {
+      "field_label": "Urgency",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

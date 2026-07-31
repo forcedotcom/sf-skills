@@ -1,0 +1,189 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ListViewChartInstance - Data API",
+  "description": "Retrieves metadata for all standard and custom charts for a given entity in context of a given list view. This object is available in API versions 34.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AggregateField": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The field that’s used for calculating data on each group. AggregateField can’t be the same as GroupingField."
+    },
+    "AggregateType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of calculations to run on each group. The supported AggregateType values are Count, Sum, and Avg."
+    },
+    "ChartType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of chart to create. The supported chart types are horizontal bar chart, vertical bar chart, and donut chart."
+    },
+    "DataQuery": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The SOQL query that can be executed to fetch the data for drawing a chart."
+    },
+    "DataQueryWithoutUserFilters": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The SOQL query that can be executed to fetch the data for drawing a chart, without user filters. Available in API v43.0 and later."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "API name of the chart. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "GroupingField": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The field that’s used to divide the data into collections. The field has to be supported by SOQL GROUP BY functionality. GroupingField can’t be the same as AggregateField."
+    },
+    "IsDeletable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the chart can be deleted."
+    },
+    "IsEditable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the chart can be edited. Standard charts are not editable."
+    },
+    "IsLastViewed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if a chart is the last viewed by a user."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The display name of the chart."
+    },
+    "ListViewChartId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the chart created by a user. For standard charts, this is null. This is a relationship field.",
+      "relationship_name": "ListViewChart",
+      "relationship_type": "Lookup",
+      "refers_to": "ListViewChart"
+    },
+    "ListViewContextId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the list view in context of which the chart is generated. Required to query ListViewChartInstance. This is a relationship field.",
+      "relationship_name": "ListViewContext",
+      "relationship_type": "Lookup",
+      "refers_to": "ListView"
+    },
+    "SourceEntity": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "API name of the entity to which the chart is related. Required to query ListViewChartInstance."
+    }
+  },
+  "usage": "- **Example 1. Retrieve all custom and standard charts for Account entity for All Accounts list view**: SELECT AggregateField, AggregateType, ChartType, DataQuery, DeveloperName, ExternalId, GroupingField, Id, IsDeletable, IsEditable, IsLastViewed, Label, ListViewChartId, ListViewContextId, SourceEntity FROM ListViewChartInstance WHERE SourceEntity=’Account’ and ListViewContextId=’00BR0000000U8Hr’`\n- **Example 2. Retrieve metadata for a specific custom chart by ID for Account entity and All Accounts list view**: SELECT AggregateField, AggregateType, ChartType, DataQuery, DeveloperName, ExternalId, GroupingField, Id, IsDeletable, IsEditable, IsLastViewed, Label, ListViewChartId, ListViewContextId, SourceEntity FROM ListViewChartInstance WHERE SourceEntity=’Account’ and ListViewContextID=’00BR0000000U8Hr’ and ListViewChartId=’0DdR00000004CBxKAM’`\n- **Example 3. Retrieve metadata for a specific standard chart by its developer name for Account entity and All Accounts list view**: SELECT AggregateField, AggregateType, ChartType, DataQuery, DeveloperName, ExternalId, GroupingField, Id, IsDeletable, IsEditable, IsLastViewed, Label, ListViewChartId, ListViewContextId, SourceEntity FROM ListViewChartInstance WHERE SourceEntity=’Account’ and ListViewContextID=’00BR0000000U8Hr’ and DeveloperName=’AccountsByIndustry’`",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ListViewChartInstance\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AggregateField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AggregateType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ChartType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DataQuery\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DataQueryWithoutUserFilters\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GroupingField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeletable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsEditable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsLastViewed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ListViewChart\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ListViewChart\"/>\n        <element name=\"ListViewChartId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ListViewContext\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ListView\"/>\n        <element name=\"ListViewContextId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SourceEntity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AggregateField": {
+      "field_label": "Aggregate Field",
+      "type": "string",
+      "length": "255"
+    },
+    "AggregateType": {
+      "field_label": "Aggregate Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ChartType": {
+      "field_label": "TODO, use alias",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DataQuery": {
+      "field_label": "SOQL Query for Chart Data",
+      "type": "textarea",
+      "length": "1333"
+    },
+    "DataQueryWithoutUserFilters": {
+      "field_label": "SOQL Query for Desktop Chart Data without S1 User Filters",
+      "type": "textarea",
+      "length": "1333"
+    },
+    "DeveloperName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ExternalId": {
+      "field_label": "ListView Chart Instance ID",
+      "type": "string",
+      "length": "255"
+    },
+    "GroupingField": {
+      "field_label": "Grouping Field",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "List View Chart Instance ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeletable": {
+      "field_label": "Deletable",
+      "type": "boolean"
+    },
+    "IsEditable": {
+      "field_label": "Editable",
+      "type": "boolean"
+    },
+    "IsLastViewed": {
+      "field_label": "Last Viewed",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "ListViewChartId": {
+      "field_label": "List View Chart ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ListViewContextId": {
+      "field_label": "List View ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceEntity": {
+      "field_label": "Entity",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SiteRedirectMapping - Data API",
+  "description": "Represents a site redirect from an external site to an Experience Cloud site. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Action": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of the redirect. Possible values are: Permanent Temporary"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the redirect is enabled. Default value is false."
+    },
+    "IsDynamic": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether a redirect rule is dynamic. Default value is false. This field is available in API version 57.0 and later."
+    },
+    "SiteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the site for the redirect. This field is a relationship field.",
+      "relationship_name": "Site",
+      "relationship_type": "Lookup",
+      "refers_to": "Site"
+    },
+    "Source": {
+      "type": "url",
+      "properties": "Create, Filter, Sort",
+      "description": "The URL of the site you want to redirect."
+    },
+    "Target": {
+      "type": "url",
+      "properties": "Create, Filter, Sort",
+      "description": "The URL of the Experience Cloud site you want to users to visit."
+    }
+  },
+  "special_access_rules": "This object is available only if Digital Experiences is enabled for your org and Create and Set Up Experiences is enabled.",
+  "usage": "If you build a new site on Experience Cloud but you also have an old site on a different platform, ensure that users visit the new site. Use SiteRedirectMapping to redirect users from the external site to the Experience Cloud site.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"SiteRedirectMapping\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Action\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDynamic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Site\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Site\"/>\n        <element name=\"SiteId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Source\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Target\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Action": {
+      "field_label": "Redirect Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Site Redirect Mapping ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDynamic": {
+      "field_label": "Dynamic",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SiteId": {
+      "field_label": "Site ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Source": {
+      "field_label": "Source URL",
+      "type": "url",
+      "length": "2048"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Target": {
+      "field_label": "Target URL",
+      "type": "url",
+      "length": "2048"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

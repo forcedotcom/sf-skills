@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ApexTestResult - Data API",
+  "description": "Repres ents the result of an Apex test method execution. This object is available in API version 23.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Apex class whose test methods were executed. This is a relationship field.",
+      "relationship_name": "ApexClass",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass"
+    },
+    "ApexLogId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Points to the ApexLog for this test method execution if debug logging is enabled; otherwise, null. This is a relationship field.",
+      "relationship_name": "ApexLog",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexLog"
+    },
+    "ApexTestRunResultId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the ApexTestRunResult that represents the entire test run. This is a relationship field.",
+      "relationship_name": "ApexTestRunResult",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexTestRunResult"
+    },
+    "AsyncApexJobId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Points to the AsyncApexJob that represents the entire test run. This field points to the same object as ApexTestQueueItem.ParentJobId. This is a relationship field.",
+      "relationship_name": "AsyncApexJob",
+      "relationship_type": "Lookup",
+      "refers_to": "AsyncApexJob"
+    },
+    "IsTestSetup": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the results are for a test setup method. The default is false."
+    },
+    "Message": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The exception error message if a test failure occurs; otherwise, null."
+    },
+    "MethodName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The test method name."
+    },
+    "Outcome": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The result of the test method execution. Can be one of these values: Pass Fail CompileFail Skip"
+    },
+    "QueueItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Points to the ApexTestQueueItem, which is the class that this test method is part of. This is a relationship field.",
+      "relationship_name": "QueueItem",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexTestQueueItem"
+    },
+    "RunTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The time it took the test method to run, in milliseconds."
+    },
+    "StackTrace": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The Apex stack trace if the test failed; otherwise, null."
+    },
+    "TestCategory": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The category of the test class. This field is available in API version 65.0 and later. Possible values are: Apex—run Apex tests. Flow—run flow tests. IntegrationTest—run integration tests. This field is available as a Developer Preview in API version 67.0 and later. See Apex Integration Tests for Agentforce and Data 360 Services (Developer Preview) in the Apex Developer Guide."
+    },
+    "TestName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the test class. This field is available in API version 65.0 and later."
+    },
+    "TestNamespace": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The namespace of the test class. Apex tests are in the default namespace, so theTestNamespace value for Apex tests is null. Flow tests are in the FlowTesting namespace. If a flow test is in a namespaced package or org, the TestNamespace value is FlowTesting.<NamepacePrefix>. This field is available in API version 65.0 and later."
+    },
+    "TestTimestamp": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The start time of the test method."
+    }
+  },
+  "special_access_rules": "In API version 49.0 and later, users must have the View Setup and Configuration permission to access this object.",
+  "usage": "You can query the fields of the ApexTestResult record that corresponds to a test method executed as part of an Apex class execution. Each ApexTestResult record represents a single test method execution. For example, if an Apex test class contains six test methods, six ApexTestResult records are created. These records are in addition to the ApexTestQueueItem record that represents the Apex class. Each ApexTestResult record has an associated ApexTestResultLimits record, which captures the Apex limits used during execution of the test method.\n\nYou can query the fields of the ApexTestResult record that corresponds to a test method executed as part of an Apex class execution.\n\nEach ApexTestResult record represents a single test method execution. For example, if an Apex test class contains six test methods, six ApexTestResult records are created. These records are in addition to the ApexTestQueueItem record that represents the Apex class.\n\nEach ApexTestResult record has an associated ApexTestResultLimits record, which captures the Apex limits used during execution of the test method.",
+  "wsdl_segment": "```xml\n<complexType name=\"ApexTestResult\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApexClass\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"ApexClassId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ApexLog\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexLog\"/>\n        <element name=\"ApexLogId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ApexTestResults\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApexTestRunResult\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexTestRunResult\"/>\n        <element name=\"ApexTestRunResultId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AsyncApexJob\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AsyncApexJob\"/>\n        <element name=\"AsyncApexJobId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsTestSetup\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Message\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MethodName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Outcome\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"QueueItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexTestQueueItem\"/>\n        <element name=\"QueueItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RunTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StackTrace\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TestCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TestName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TestNamespace\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TestTimestamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ApexClassId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ApexLogId": {
+      "field_label": "Log ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ApexTestRunResultId": {
+      "field_label": "Apex Test Run Result ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AsyncApexJobId": {
+      "field_label": "Apex Job ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Application Test Result ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsTestSetup": {
+      "field_label": "Is Test Setup",
+      "type": "boolean"
+    },
+    "Message": {
+      "field_label": "Error Message",
+      "type": "string",
+      "length": "4000"
+    },
+    "MethodName": {
+      "field_label": "Method Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Outcome": {
+      "field_label": "Pass/Fail",
+      "type": "picklist",
+      "length": "40"
+    },
+    "QueueItemId": {
+      "field_label": "Apex Test Queue Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RunTime": {
+      "field_label": "Run Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "StackTrace": {
+      "field_label": "Stack Trace",
+      "type": "string",
+      "length": "4000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TestCategory": {
+      "field_label": "Test Category",
+      "type": "string",
+      "length": "81"
+    },
+    "TestName": {
+      "field_label": "Dynamic test class name",
+      "type": "string",
+      "length": "255"
+    },
+    "TestNamespace": {
+      "field_label": "Dynamic test class namespace",
+      "type": "string",
+      "length": "81"
+    },
+    "TestTimestamp": {
+      "field_label": "Time Started",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

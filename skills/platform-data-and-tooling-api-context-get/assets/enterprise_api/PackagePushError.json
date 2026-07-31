@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "PackagePushError - Data API",
+  "description": "Represents an error encountered during a push request. The number of PackagePushError records created depends on the number of push jobs in the request that result in an error.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ErrorDetails": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "Explanation of the error."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "The error code that appears in the API."
+    },
+    "ErrorSeverity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Valid values are: Error Warning"
+    },
+    "ErrorTitle": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "The error message title that appears in the API."
+    },
+    "ErrorType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Valid values are: ApexTestFailure DeployError FeatureMissing IneligibleUpgrade LimitExceeded LockingFailure PACError UnclassifiedError"
+    },
+    "PackagePushJobId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The parent push job record ID.",
+      "required": true
+    }
+  },
+  "special_access_rules": "To initiate a push upgrade for a first-generation managed package, the Upload AppExchange Packages user permission is required. To initiate a push upgrade for an unlocked or second-generation managed package, the Create and Update Second-Generation Packages user permission is required. The push upgrade feature is only available to first- and second-generation managed packages that have passed AppExchange security review. To enable push upgrades for your managed package, log a support case in the Salesforce Partner Community. For unlocked packages, push upgrades are enabled by default.\n\nTo initiate a push upgrade for a first-generation managed package, the Upload AppExchange Packages user permission is required.\n\nTo initiate a push upgrade for an unlocked or second-generation managed package, the Create and Update Second-Generation Packages user permission is required.\n\nThe push upgrade feature is only available to first- and second-generation managed packages that have passed AppExchange security review. To enable push upgrades for your managed package, log a support case in the Salesforce Partner Community.\n\nFor unlocked packages, push upgrades are enabled by default.",
+  "usage": "Suppose that your push upgrade request wasn’t successful due to some of its jobs failing. Let’s write some code to find out what those errors were.\n\nThis code sample uses the Web Services Connector\n\t\t\t\t(WSC).\n\n// Retrieves all PackagePushError objects associated with the PackagePushJob with the given\n\nPACKAGE_PUSH_ERROR_QUERY\n\n\"Select ErrorMessage, ErrorDetails, ErrorTitle,\"\n\n\" ErrorSeverity, ErrorType from PackagePushError where PackagePushJobId = '%s'\"\n\n// job is a PackagePushJob instance\n\nQueryResult\n\nqueryResult\n\nPACKAGE_PUSH_ERROR_QUERY,\n\nStringBuilder\n\nerrorMessages\n\nStringBuilder\n\nerrorMessages\n\n\"Errors for PackagePushJob [\"\n\n// There can be multiple PackagePushErrors for a given PackagePushJob\n\nqueryResult\n\nPackagePushError\n\nPackagePushError\n\nerrorMessages\n\ngetErrorTitle\n\nerrorMessages\n\n\"Severity: \"\n\ngetErrorSeverity\n\nerrorMessages\n\ngetErrorType\n\nerrorMessages\n\n\"Message: \"\n\ngetErrorMessage\n\nerrorMessages\n\n\"Details: \"\n\ngetErrorDetails\n\nerrorMessages\n\nerrorMessages"
+}

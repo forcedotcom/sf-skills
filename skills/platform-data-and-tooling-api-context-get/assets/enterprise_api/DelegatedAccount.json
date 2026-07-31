@@ -1,0 +1,158 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "DelegatedAccount - Data API",
+  "description": "Represents the external managed account. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccessBuyFor": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "The access that an admin authorizes for an external user to buy for other accounts. This field is available in API version 50.0 and later. A B2B Commerce license is required to use AccessBuyFor."
+    },
+    "AccessManageUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "The access that an admin authorizes for an external user to manage external users on other accounts. This includes managing permission sets, membership, passwords, and activation. This field is available in API version 50.0 and later. Delegated External User Administrator permission is required to use AccessManageUsers."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "ManagedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the managing user. This is a relationship field.",
+      "relationship_name": "ManagedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the external managed account."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the record owner. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the managing users account. This field is available in API version 50.0 and later. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the account being managed. This is a relationship field.",
+      "relationship_name": "Target",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    }
+  },
+  "special_access_rules": "You must have a Partner or Customer Community Plus license. You can't edit the visibility of DelegatedAccount metadata on user profiles.",
+  "field_reference": {
+    "AccessBuyFor": {
+      "field_label": "Allows user to buy for other delegated accounts",
+      "type": "boolean"
+    },
+    "AccessManageUsers": {
+      "field_label": "Allows user to manage users in delegated accounts",
+      "type": "boolean"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "External Managed Account ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ManagedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

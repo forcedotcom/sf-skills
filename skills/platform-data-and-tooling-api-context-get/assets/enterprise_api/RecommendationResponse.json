@@ -1,0 +1,207 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "RecommendationResponse - Data API",
+  "description": "Represents the user responses to a presented offer or recommendation for Einstein Next Best Action. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The full name of an action flow at the time of the response. The full name includes the action’s namespace."
+    },
+    "ContextRecord": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of context record that contains the Einstein Next Best Action component. For example, if the Einstein Next Best Action component is on a case record the ContextRecord is the ID of the case record."
+    },
+    "ContextRecordName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the context record."
+    },
+    "ContextRecordType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the object that’s associated with the value stored in the ContextRecord field. For example, Account, Case, or Contact."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the Experience Cloud site associated with the recommendation (if applicable). This is a relationship field.",
+      "relationship_name": "Network",
+      "relationship_type": "Lookup",
+      "refers_to": "Network"
+    },
+    "OnBehalfOf": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort",
+      "description": "The user ID or record that is indirectly reacting to the recommendation."
+    },
+    "OnBehalfOfName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Name of the value stored for OnBehalfOf at time of response."
+    },
+    "OnBehalfOfType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the object that’s associated with the value stored in the OnBehalfOf field. For example, Account, Case, or Contact."
+    },
+    "RecommendationKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "RecommendationId if available, otherwise a generated string that represents the recommendation name."
+    },
+    "RecommendationName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Name of the recommendation returned from the recommendation strategy."
+    },
+    "RecommendationType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Object type of the recommendation. It can be Recommendation or any object type mapped to the Recommendation object. For example, if you map Product to Recommendation, the RecommendationType is Product."
+    },
+    "Response": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The user’s response to the recommendation. Possible values are: Accepted Rejected"
+    },
+    "StrategyReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The full name of a recommendation strategy flow at the time of the response. The response is formatted as namespace underscore prefix double underscore flowname, such as namespace_prefix__flowname."
+    },
+    "StrategyVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The recommendation strategy version that’s active at the time of the response."
+    }
+  },
+  "special_access_rules": "You must have one of these user permissions to read, delete, or update recommendation responses:\n\nModify All Data\n\nManage Next Best Action Recommendations\n\nManage Next Best Action Strategies",
+  "usage": "The RecommendationResponse object can’t be customized with additional fields.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"RecommendationResponse\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActionReference\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContextRecord\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContextRecordName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContextRecordType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OnBehalfOf\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OnBehalfOfName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OnBehalfOfType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecommendationKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecommendationName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecommendationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Response\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StrategyReference\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StrategyVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActionReference": {
+      "field_label": "Action Name at Time of Response",
+      "type": "string",
+      "length": "255"
+    },
+    "ContextRecord": {
+      "field_label": "Context Record ID",
+      "type": "string",
+      "length": "15"
+    },
+    "ContextRecordName": {
+      "field_label": "Context Record Name at Time of Response",
+      "type": "string",
+      "length": "255"
+    },
+    "ContextRecordType": {
+      "field_label": "Context Object",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Recommendation Response ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OnBehalfOf": {
+      "field_label": "On Behalf of ID",
+      "type": "string",
+      "length": "15"
+    },
+    "OnBehalfOfName": {
+      "field_label": "On Behalf of Name at Time of Response",
+      "type": "string",
+      "length": "255"
+    },
+    "OnBehalfOfType": {
+      "field_label": "On Behalf of Object",
+      "type": "string",
+      "length": "255"
+    },
+    "RecommendationKey": {
+      "field_label": "Recommendation Key",
+      "type": "string",
+      "length": "255"
+    },
+    "RecommendationName": {
+      "field_label": "Recommendation Name at Time of Response",
+      "type": "string",
+      "length": "255"
+    },
+    "RecommendationType": {
+      "field_label": "Recommendation Object",
+      "type": "string",
+      "length": "255"
+    },
+    "Response": {
+      "field_label": "Response",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StrategyReference": {
+      "field_label": "Strategy Name at Time of Response",
+      "type": "string",
+      "length": "255"
+    },
+    "StrategyVersion": {
+      "field_label": "Strategy Version at Time of Response",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

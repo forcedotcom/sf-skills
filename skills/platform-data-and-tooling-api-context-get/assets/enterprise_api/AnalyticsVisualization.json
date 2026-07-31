@@ -1,0 +1,184 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AnalyticsVisualization - Data API",
+  "description": "Represents a Tableau Next viusalization. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AnalyticsWorkspaceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the Tableau Next workspace the visualization is associated with. This field is a relationship field.",
+      "relationship_name": "AnalyticsWorkspace",
+      "refers_to": "AnalyticsWorkspace"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the visualization."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The API name of the visualization."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The supported languages for the visualization. There are over 50+ supported language and dialect values."
+    },
+    "LastDraftModifiedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last modified date for the visualization in draft mode."
+    },
+    "LastPublishedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last published date for the visualization."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The label for the visualization."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix for the visualization."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The user ID of the user who created the visualization. This field is a relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "User"
+    },
+    "TemplateAssetSourceName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the visualization was created from a template, this is name of the asset source."
+    },
+    "TemplateSource": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the visualization was created from a template, this is name of the template."
+    },
+    "Version": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The API version for the visualization."
+    }
+  },
+  "special_access_rules": "To access this object, you must have Tableau Next enabled in your org and a Tableau Next permission set.",
+  "field_reference": {
+    "AnalyticsWorkspaceId": {
+      "field_label": "Analytics Workspace ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "AnalyticsVisualization ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastDraftModifiedDate": {
+      "field_label": "Last Draft Modified Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastPublishedDate": {
+      "field_label": "Last Published Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "OwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TemplateAssetSourceName": {
+      "field_label": "TemplateAssetSourceName",
+      "type": "string",
+      "length": "255"
+    },
+    "TemplateSource": {
+      "field_label": "TemplateSource",
+      "type": "string",
+      "length": "255"
+    },
+    "Version": {
+      "field_label": "Visualization Entity Version",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

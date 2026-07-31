@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentWorkspaceDoc - Data API",
+  "description": "Represents a link between a document and a public library in Salesforce CRM Content. This object is available in versions 17.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentDocumentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Read only. ID of the library document. This is a relationship field.",
+      "relationship_name": "ContentDocument",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentDocument"
+    },
+    "ContentWorkspaceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Read only. ID of the library. This is a relationship field.",
+      "relationship_name": "ContentWorkspace",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentWorkspace"
+    },
+    "IsOwner": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read only. Indicates whether the library owns the document and determines permissions for that document (true) or not (false). Documents can belong to more than one library, but only one library owns the document and determines its permissions."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"ContentWorkspaceDoc\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentDocument\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentDocument\"/>\n        <element name=\"ContentDocumentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentWorkspace\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentWorkspace\"/>\n        <element name=\"ContentWorkspaceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOwner\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ContentDocumentId": {
+      "field_label": "Content Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentWorkspaceId": {
+      "field_label": "Library ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Library Document ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Is Deleted",
+      "type": "boolean"
+    },
+    "IsOwner": {
+      "field_label": "Is Owning Library",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

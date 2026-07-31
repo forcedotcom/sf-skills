@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "SavedPaymentMethodEvent - Data API",
+  "description": "Represents a saved payment method platform event. Subscribe to these events so you can listen and respond to them when they’re published. For example, create a Salesforce Flow that is triggered when one of these events is published. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ChangeType": {
+      "type": "picklist",
+      "properties": "Restricted picklist",
+      "description": "Type of saved payment method event, which triggers an event notification. You can write code to operate conditionally on the value of this field. For example, you can ignore a create change but get notified of updates. Possible values are: Create–Saved payment method created. Delete–Saved payment method deleted. Update–Saved payment method property changed."
+    },
+    "SavedPaymentMethodId": {
+      "type": "reference",
+      "properties": "Nillable",
+      "description": "Identifies the SavedPaymentMethod record for which the event occurs. This field is a relationship field.",
+      "relationship_name": "SavedPaymentMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "SavedPaymentMethod"
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license and Payments must be enabled for your org. Salesforce Payments objects are available only in Lightning Experience.",
+  "field_reference": {
+    "ChangeType": {
+      "field_label": "Saved Payment Method Event Change Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventUuid": {
+      "field_label": "Event UUID",
+      "type": "string",
+      "length": "36"
+    },
+    "ReplayId": {
+      "field_label": "Replay Id",
+      "type": "string",
+      "length": "1000"
+    },
+    "SavedPaymentMethodId": {
+      "field_label": "Saved Payment Method ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

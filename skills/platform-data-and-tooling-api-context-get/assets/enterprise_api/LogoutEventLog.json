@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "LogoutEventLog - Data API",
+  "description": "Contains details of user sessions ending or being revoked. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "example_values",
+    "possible_values"
+  ],
+  "fields": {
+    "ApiType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of API request. Possible values are: D—Apex Class E—SOAP Enterprise M—SOAP Metadata P—SOAP Partner S—SOAP Apex T—SOAP Tooling f—Feed l—Live Agent p—SOAP ClientSync"
+    },
+    "ApiVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version of the API that’s being used. For example: 36.0."
+    },
+    "AppType": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The application type that was in use upon logging out.",
+      "example_values": "1000: Application 1007: SFDC Application 1014: Chat 2501: CTI 2514: OAuth 3475: SFDC Partner Portal"
+    },
+    "BrowserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The identifier string returned by the browser used at login. Example values are: Go-http-client/1.1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv%3A50.0) Gecko/20100101 Firefox/50.0 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36"
+    },
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "ClientVersion": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The version of the client that was in use upon logging out."
+    },
+    "IsUserInitiatedLogout": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The value is 1 if the user intentionally logged out of the organization by clicking the Logout button. If the user’s session timed out due to inactivity or another implicit logout action, the value is 0."
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "PlatformType": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The code for the client platform. If a timeout caused the logout, this field is null.",
+      "example_values": "1000: Windows 1008: Windows 2003 1013: Windows 8.1 1015: Windows 10 2003: Macintosh/Apple OSX 4000: Linux 5005: Android 5006: iPhone 5007: iPad 5200: Android 10.0"
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID."
+    },
+    "ResolutionType": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The screen resolution of the client. If a timeout caused the logout, this field is null."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started."
+    },
+    "SessionLevel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The security level of the session that was used when logging out."
+    },
+    "SessionType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The session type that was used when logging out.",
+      "possible_values": "A: API I: APIOnlyUser N: ChatterNetworks Z: ChatterNetworksAPIOnly C: Content P: OauthApprovalUI O: Oauth2 T: SiteStudio R: SitePreview S: SubstituteUser B: TempContentExchange G: TempOauthAccessTokenFrontdoor Y: TempVisualforceExchange F: TempUIFrontdoor U: UI E: UserSite V: Visualforce W: WDC_API"
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670. When a customer logs out by using the Logout button, the TIMESTAMP field records the actual logout time. However, when a customer is logged out automatically, Salesforce detects the event by using a process that runs every 15 minutes. TIMESTAMP values can reflect a logout time up to 15 minutes later than the actual automatic logout time."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943"
+    },
+    "UserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The category of user license of the user accessing Salesforce services through the UI or API."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

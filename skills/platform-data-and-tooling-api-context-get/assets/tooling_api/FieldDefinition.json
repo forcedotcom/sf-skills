@@ -1,0 +1,587 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "customfield_metadata",
+    "picklist_metadata",
+    "picklistvalue_metadata",
+    "relationshipreferenceto_type",
+    "wsdl_segment"
+  ],
+  "title": "FieldDefinition - Tooling API",
+  "description": "Represents a standard or custom field, providing row-based access to field metadata. Contrast FieldDefinition with EntityParticle, which represents each element of a field that can be presented in a user interface. FieldDefinition has parity with metadata type Field.",
+  "supported_soap_calls": "`query()`, `describeSObject()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BusinessOwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the person or group associated with this field. The business owner understands the importance of the field’s data to your company and might be responsible for determining the minimum security classification. This field is available in API version 45.0 and later."
+    },
+    "BusinessStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the field is in use. Valid values include: Active DeprecateCandidate Hidden This field is available in API version 45.0 and later."
+    },
+    "CompactLayoutItems": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Sort",
+      "description": "The CompactLayoutItemInfo records associated with this field definition. Available in Tooling API starting version 34.0. Because this field represents a relationship, use only in subqueries. Example subquery:SELECT Id, QualifiedApiName, (SELECT DurableId, SortOrder FROM CompactLayoutItems) FROM FieldDefinition WHERE EntityDefinition.QualifiedApiName = 'Account' AND QualifiedApiName = 'Name'"
+    },
+    "ComplianceGroup": {
+      "type": "multipicklist",
+      "properties": "Filter, Nillable",
+      "description": "The compliance acts, definitions, or regulations related to the field’s data. Valid values include: CCPA—California Consumer Privacy Act COPPA—Children's Online Privacy Protection Act GDPR—General Data Protection Regulation HIPAA—Health Insurance Portability and Accountability Act PCI—Payment Card Industry PersonalInfo—Personal information. For use with the Enhanced Personal Information Management feature. Only available if Enhanced Personal Information Management and Digital Experiences are enabled. PII—Personally Identifiable Information This field is available in API version 47.0 and later."
+    },
+    "ControlledFields": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Sort",
+      "description": "The controlled fields in a dependent picklist. Use in subqueries to reduce the number of queries. Available in Tooling API starting version 34.0. Because this field represents a relationship, use only in subqueries."
+    },
+    "ControllingFieldDefinition": {
+      "type": "FieldDefinition",
+      "properties": "Filter, Group, Sort",
+      "description": "The field definition of the controlling field if this field is a dependent picklist. A dependent picklist works with a controlling picklist or checkbox to filter the available options. The value chosen in the controlling field affects the values available in the dependent field. This field is available in API version 14.0 and later. Available in Tooling API starting version 34.0."
+    },
+    "ControllingFieldDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the ControllingFieldDefinition for this field. Available in Tooling API starting version 34.0."
+    },
+    "DataType": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Data type of the field, for example Text(40) or Date/Time. The values are defined as they are in the user interface, not the corresponding API data type names. Available in Tooling API starting version 34.0."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A description of the field definition."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s org. Label is Record Type Name."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, because the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "EntityDefinition": {
+      "type": "EntityDefinition",
+      "properties": "Filter, Group, Sort",
+      "description": "A relationship lookup to the object type that contains this field. For example, if the field is defined on an account, the lookup is to Account. You can’t interact directly with this field. Instead, use it in queries. SELECT EntityDefinition.Label FROM FieldDefinition WHERE EntityDefinition.QualifiedApiName='Lead'"
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The durable ID for the object defined in the EntityDefinition field."
+    },
+    "ExtraTypeInfo": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Represents further definition of a type. Available in Tooling API starting version 34.0. For type textarea: plaintextarea richtextarea For type URL, image For type reference, externallookup indirectlookup externallookup For Account, switchablepersonname personname"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsApiFilterable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be specified in the WHERE clause of a query string. Available in Tooling API starting version 34.0. You can't sort or filter compound fields. This field’s value is always false for compound fields."
+    },
+    "IsApiGroupable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be included in the GROUP BY clause of a SOQL query. Available in Tooling API starting version 34.0."
+    },
+    "IsApiSortable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, a query can sort on this field. Available in Tooling API starting version 34.0. You can't sort or filter compound fields. This field’s value is always false for compound fields."
+    },
+    "IsCalculated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field’s value is calculated. Available in Tooling API starting version 34.0."
+    },
+    "IsCompactLayoutable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be included in a compact layout. Available in Tooling API starting version 34.0."
+    },
+    "IsCompound": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is a compound of other fields. The default value is false. Available in Tooling API starting version 38.0."
+    },
+    "IsEverApiAccessible": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is describable in the API. The default value is false. Available in Tooling API starting version 49.0."
+    },
+    "IsFieldHistoryTracked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field’s history can be tracked. Available in Tooling API starting version 34.0."
+    },
+    "IsFlsEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, you can set field-level security on this field. Available in Tooling API starting version 35.0."
+    },
+    "IsHighScaleNumber": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the field stores numbers to eight decimal places regardless of what’s specified in the field details (true) or not (false). Used to handle currencies for products that cost fractions of a cent, in large quantities. If high-scale unit pricing isn’t enabled in your organization, this field isn’t returned. Available in Tooling API starting version 34.0."
+    },
+    "IsHtmlFormatted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field contains HTML. Available in Tooling API starting version 34.0."
+    },
+    "IsIndexed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is indexed in the database. Available in Tooling API version 35.0 and later. Internal (database) indexing is different from indexing for search. We recommend targeting indexed fields for better response times in SOQL queries, reports, and list views."
+    },
+    "IsListFilterable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be filtered for a related list. Available in Tooling API starting version 34.0."
+    },
+    "IsListSortable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be sorted for a related list. Available in Tooling API starting version 34.0."
+    },
+    "IsListVisible": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be included in a related list. Available in Tooling API starting version 34.0."
+    },
+    "IsNameField": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is a name field. Available in Tooling API starting version 34.0."
+    },
+    "IsNillable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be left out of queries on the object. Available in Tooling API starting version 34.0."
+    },
+    "IsPolymorphicForeignKey": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the foreign key includes multiple object types (true) or not (false). Available in Tooling API version 41.0 and later."
+    },
+    "IsSearchPrefilterable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a foreign key can be included in prefiltering (true) or not (false) when used in a SOSL WHERE clause. Prefiltering means to filter by a specific field value before executing the full search query. Available in Tooling API version 40.0 and later. Prefiltering is supported only in WHERE clauses with the equals (=) operator."
+    },
+    "IsWorkflowFilterable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be filtered for a workflow. Available in Tooling API starting version 34.0."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label that corresponds to the field in the user interface. If the label has been translated, the value returned is in the user’s language."
+    },
+    "Length": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The maximum number of bytes available to store the value in this field. Available in Tooling API starting version 34.0."
+    },
+    "LookupFilters": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The lookup filters associated with the field. Because this field represents a relationship, use only in subqueries. Example subquery:SELECT DurableId, QualifiedApiName, (SELECT Id, SourceObject, SourceFieldDefinition.Label, IsOptional, Active, DeveloperName, LastModifiedBy.Name, LastModifiedDate FROM LookupFilters) FROM EntityDefinition WHERE QualifiedApiName = 'User'\""
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Primary label for this object. This display value is the internal label that isn’t translated. Limit: 40 characters."
+    },
+    "Metadata": {
+      "type": "CustomField",
+      "properties": "Create, Nillable, Update",
+      "description": "Compact layout metadata, from the mns namespace. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation.The namespace prefix can have one of the following values: In a Developer Edition org, the namespace prefix is set to the namespace prefix of the org for all objects that support it. There’s an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In an org other than a Developer Edition org, NamespacePrefix is only set for objects that are part of an installed managed package. There’s no namespace prefix for all other objects."
+    },
+    "Particles": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Sort",
+      "description": "The EntityParticles associated with this field. Available in Tooling API starting version 34.0. Because this field represents a relationship, use only in subqueries."
+    },
+    "Precision": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The maximum number of digits allowed for this field. Available in Tooling API starting version 34.0."
+    },
+    "Publisher": {
+      "type": "Publisher",
+      "properties": "Filter, Group, Sort",
+      "description": "The publisher of this field, for example Salesforce, a user, or a package name. Available in Tooling API starting version 34.0."
+    },
+    "PublisherId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the publisher associated with this field. Available in Tooling API starting version 34.0."
+    },
+    "QualifiedApiName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "A unique external name for the field."
+    },
+    "ReferenceTargetField": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Available only for indirect lookup relationship fields on external objects. Specifies the field on the parent object to match against this indirect lookup relationship field, whose values come from an external data source. The specified custom field on the parent object must have both externalId and unique set to true. Available in Tooling API starting version 34.0."
+    },
+    "ReferenceTo": {
+      "type": "RelationshipReferenceTo",
+      "properties": "Filter, Group, Sort",
+      "description": "The array of values in this field represents the possible object types of the referenced objects. For example, if a FieldDefinition represents a field on Event.WhoId, the values in this field are Contact, Lead, and custom objects with a relationship to Events. Available in Tooling API starting version 34.0."
+    },
+    "RelationshipDomains": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Sort",
+      "description": "Metadata about the relationships this field has with other objects. Available in Tooling API starting version 34.0. Because this field represents a relationship, use only in subqueries."
+    },
+    "RelationshipName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The value for one-to-many relationships. For example, in the object MyObject with a relationship to YourObject, the relationship name is typically YourObjects. Available in Tooling API starting version 34.0."
+    },
+    "RunningUserFieldAccessId": {
+      "type": "string",
+      "description": "Reserved for internal use. Available in Tooling API starting version 34.0."
+    },
+    "Scale": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of digits to the right of the decimal in an integer. For example, 3.00 has a scale of 2. Available in Tooling API starting version 34.0."
+    },
+    "SecurityClassification": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the sensitivity of the data contained in this field. Valid values include: Public Internal Confidential Restricted MissionCritical This field is available in API version 45.0 and later."
+    },
+    "ServiceDataType": {
+      "type": "DataType",
+      "properties": "Filter, Group, Sort",
+      "description": "The service datatype for this field. Available in Tooling API starting version 34.0."
+    },
+    "ServiceDataTypeId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the ServiceDataType. Available in Tooling API version 34.0. Don’t use, provided for backward compatibility only."
+    },
+    "ServiceDataTypes": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Sort",
+      "description": "The ServiceDataTypes associated with this field. Available in Tooling API starting version 34.0. Because this field represents a relationship, use only in subqueries."
+    },
+    "ValueType": {
+      "type": "DataType",
+      "properties": "Filter, Group, Sort",
+      "description": "The data type of the field. Available in Tooling API version 35.0."
+    },
+    "ValueTypeId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the ValueType. Available in Tooling API version 35.0."
+    },
+    "WorkflowFieldUpdates": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Sort",
+      "description": "The workflow field updates for this field. Field updates allow you to automatically update a field value to one that you specify when a workflow rule is triggered. Available in Tooling API starting version 34.0. Because this field represents a relationship, use only in subqueries."
+    }
+  },
+  "customfield_metadata": {
+    "caseSensitive": {
+      "type": "boolean",
+      "description": "Indicates whether the field is case sensitive (true) or not (false). For indirect lookup relationship fields on external objects, this attribute affects how this custom field’s values are matched against the values of referenceTargetField."
+    },
+    "defaultValue": {
+      "type": "string",
+      "description": "If specified, represents the default value of the field."
+    },
+    "deleteConstraint": {
+      "type": "DeleteConstraint is an enumeration of strings",
+      "description": "Provides deletion options for lookup relationships. Valid values are: SetNull Default value. If the lookup record is deleted, the lookup field is cleared. Restrict If the record is in a lookup relationship, prevents it from being deleted. Cascade Deletes the lookup record and associated lookup fields. For more information on lookup relationships, see “Object Relationships” in Salesforce Help."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the field."
+    },
+    "displayFormat": {
+      "type": "string",
+      "description": "The display format."
+    },
+    "displayLocationInDecimal": {
+      "type": "boolean",
+      "description": "Indicates how the value of a Geolocation custom field appears in the user interface. If true, the geolocation appears in decimal notation. If false, the geolocation appears as degrees, minutes, and seconds."
+    },
+    "externalDeveloperName": {
+      "type": "string",
+      "description": "Available only for external objects. Name of the table column on the external data source that maps to this custom field in Salesforce. Corresponds to External Column Name in the user interface. This field is available in API version 32.0 and later."
+    },
+    "externalId": {
+      "type": "boolean",
+      "description": "Indicates whether the field is an external ID field (true) or not (false)."
+    },
+    "formula": {
+      "type": "string",
+      "description": "If specified, represents a formula on the field."
+    },
+    "formulaTreatBlankAs": {
+      "type": "TreatBlanksAs",
+      "description": "Indicates how to treat blanks in a formula. Valid values are BlankAsBlank or BlankAsZero."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The internal name of the object. White spaces and special characters are escaped for validity. The name must: Contain characters, letters, or the underscore (_) character Must start with a letter Can’t end with an underscore Can't contain two consecutive underscore characters",
+      "required": true
+    },
+    "indexed": {
+      "type": "boolean",
+      "description": "Indicates if the field is indexed. If this field is unique or the externalId is set to true, the isIndexed value is set to true. This field has been deprecated as of version 14.0 and is only provided for backward compatibility."
+    },
+    "inlineHelpText": {
+      "type": "string",
+      "description": "Represents the content of field-level help. For more information, see “Define Field-Level Help” in Salesforce Help."
+    },
+    "isFilteringDisabled": {
+      "type": "boolean",
+      "description": "Available only for external objects. Indicates whether the custom field is available in filters. This field is available in API version 32.0 and later."
+    },
+    "isNameField": {
+      "type": "boolean",
+      "description": "Available only for external object fields of type text. For each external object, you can specify one field as the name field. If you set this field's value to true, make sure that the external table column identified by externalDeveloperName contains name values. This field is available in API version 32.0 and later."
+    },
+    "isSortingDisabled": {
+      "type": "boolean",
+      "description": "Available only for external objects. Indicates whether the custom field is sortable. This field is available in API version 32.0 and later."
+    },
+    "reparentableMasterDetail": {
+      "type": "boolean",
+      "description": "Indicates whether the child records in a master-detail relationship on a custom object can be reparented to different parent records. The default value is false. This field is available in API version 25.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the field. You can’t update the label for standard picklist fields, such as the Industry field for accounts."
+    },
+    "length": {
+      "type": "int",
+      "description": "Length of the field."
+    },
+    "lookupFilter": {
+      "type": "LookupFilter",
+      "description": "The Lookup filter definition for the custom field. Available in API version 30.0 and later."
+    },
+    "maskChar": {
+      "type": "EncryptedFieldMaskChar",
+      "description": "For encrypted fields, specifies the character to be used as a mask. Valid values: asterisk X"
+    },
+    "maskType": {
+      "type": "EncryptedFieldMaskType",
+      "description": "For encrypted text fields, specifies the format of the masked and unmasked characters in the field. Valid values: all All characters in the field are hidden. This option is equivalent to the Mask All Characters. creditCard The first 12 characters are hidden, the last four are displayed. This option is equivalent to the Credit Card Number option. ssn The first five characters are hidden, the last four are displayed. This option is equivalent to the Social Security Number option. lastFour All characters are hidden, except the last four are displayed. This option is equivalent to the Last Four Characters Clear option. sin All characters are hidden, except the last four are displayed. This option is equivalent to the Social Insurance Number option. nino All characters are hidden. If the field contains nine characters, Salesforce automatically inserts spaces after each pair of characters. This option is equivalent to the National Insurance Number option."
+    },
+    "picklist": {
+      "type": "Picklist",
+      "description": "If specified, the field is a picklist, and this field enumerates the picklist values and labels."
+    },
+    "populateExistingRows": {
+      "type": "boolean",
+      "description": "Indicates whether existing rows are populated (true) or not (false)."
+    },
+    "precision": {
+      "type": "int",
+      "description": "The precision for number values. Precision is the number of digits in a number. For example, the precision value for the number 256.99 is 5."
+    },
+    "referenceTargetField": {
+      "type": "string",
+      "description": "Available only for indirect lookup relationship fields on external objects. Specifies the custom field on the parent object to match against this indirect lookup relationship field, whose values come from an external data source. The specified custom field on the parent object must have both externalId and unique set to true. This field is available in API version 32.0 and later."
+    },
+    "referenceTo": {
+      "type": "string",
+      "description": "If specified, indicates a reference this field has to another object."
+    },
+    "relationshipLabel": {
+      "type": "string",
+      "description": "Label for the relationship."
+    },
+    "relationshipName": {
+      "type": "string",
+      "description": "If specified, indicates the value for one-to-many relationships. For example, in the object MyObject that had a relationship to YourObject, the relationship name YourObjects makes the relationship type obvious."
+    },
+    "relationshipOrder": {
+      "type": "int",
+      "description": "This field is valid for all master-detail relationships, but the value is only non-zero for junction objects. A junction object has two master-detail relationships, and is analogous to an association table in a many-to-many relationship. Junction objects must define one parent object as primary (0), the other as secondary (1). The definition of primary or secondary affects delete behavior and inheritance of look and feel, and record ownership for junction objects. For more information, see Salesforce Help. 0 or 1 are the only valid values, and 0 is always the value for objects that aren’t junction objects."
+    },
+    "required": {
+      "type": "boolean",
+      "description": "Indicates whether the field requires a value on creation (true) or not (false)."
+    },
+    "scale": {
+      "type": "int",
+      "description": "The scale for the field. Scale is the number of digits to the right of the decimal point in a number. For example, the number 256.99 has a scale of 2."
+    },
+    "startingNumber": {
+      "type": "int",
+      "description": "If specified, indicates the starting number for the field."
+    },
+    "stripMarkup": {
+      "type": "boolean",
+      "description": "Set to true to remove markup, or false to preserve markup. Used when converting a rich text area to a long text area."
+    },
+    "summarizedField": {
+      "type": "string",
+      "description": "Represents the field on the detail row that’s being summarized. This field can’t be null unless the value of SummaryOperation is count."
+    },
+    "summaryForeignKey": {
+      "type": "string",
+      "description": "Represents the master-detail field on the child that defines the relationship between the parent and the child."
+    },
+    "summaryOperation": {
+      "type": "SummaryOperations is an enumeration of strings",
+      "description": "Represents the sum operation to be performed. Valid values: Count Min Max Sum"
+    },
+    "trackFeedHistory": {
+      "type": "boolean",
+      "description": "Indicates whether the field is enabled for feed tracking (true) or not (false). This field is available in API version 18.0 and later."
+    },
+    "trackHistory": {
+      "type": "boolean",
+      "description": "Indicates whether history tracking is enabled for the field (true) or not (false). Also available for standard object fields (picklist and lookup fields only) in API version 30.0 and later."
+    },
+    "trackTrending": {
+      "type": "boolean",
+      "description": "Indicates whether historical trending data is captured for the field (true) or not (false). If this attribute is true for at least one field, the object is enabled for historical trending. Available in API version 29.0 and later."
+    },
+    "trueValueIndexed": {
+      "type": "boolean",
+      "description": "This field is only relevant for a checkbox field. If set, true values are built into the index. This field has been deprecated as of API version 14.0 and is only provided for backward compatibility."
+    },
+    "type": {
+      "type": "FieldType is an enumeration of strings",
+      "description": "Indicates the field type for the field. Valid values: Address (beta) AutoNumber Lookup MasterDetail Checkbox Currency Date DateTime Email EncryptedText Number1 Percent Phone Picklist MultiselectPicklist Summary Text TextArea LongTextArea Summary Url Hierarchy File Html Geolocation For standard fields on standard objects, the type field is optional. This field is included for some standard field types, such as Picklist or Lookup, but not for others. The type field is included for custom fields."
+    },
+    "unique": {
+      "type": "boolean",
+      "description": "Indicates whether the field is unique (true) or not (false)."
+    },
+    "visibleLines": {
+      "type": "int",
+      "description": "Indicates the number of lines displayed for the field."
+    },
+    "writeRequiresMasterRead": {
+      "type": "boolean",
+      "description": "Sets the minimum sharing access level required on the parent record to create, edit, or delete child records. This field applies only to master-detail or junction object custom field types. true—Allows users with “Read” access to the parent record permission to create, edit, or delete child records. This setting makes sharing less restrictive. false—Allows users with “Read/Write” access to the parent record permission to create, edit, or delete child records. This setting is more restrictive than true, and is the default value. For junction objects, the most restrictive access from the two parents is enforced. For example, you set to true on both master-detail fields, but users have “Read” access to one parent record and “Read/Write” access to the other parent record. In this example, users are unable to create, edit, or delete child records."
+    }
+  },
+  "picklist_metadata": {
+    "controllingField": {
+      "type": "string",
+      "description": "The fullName of the controlling field if this field is a dependent picklist. A dependent picklist works with a controlling picklist or checkbox to filter the available options. The value chosen in the controlling field affects the values available in the dependent field. This field is available in API version 14.0 and later."
+    },
+    "picklistValues": {
+      "type": "PicklistValue[]",
+      "description": "Represents a set of values for a picklist.",
+      "required": true
+    },
+    "sorted": {
+      "type": "boolean",
+      "description": "Indicates whether values are sorted (true), or not (false).",
+      "required": true
+    }
+  },
+  "picklistvalue_metadata": {
+    "allowEmail": {
+      "type": "boolean",
+      "description": "Indicates whether this value lets users email a quote PDF (true), or not (false). This field is only relevant for the Status field in quotes. This field is available in API version 18.0 and later."
+    },
+    "closed": {
+      "type": "boolean",
+      "description": "Indicates whether this value is associated with a closed status (true), or not (false). This field is only relevant for the standard Status field in cases and tasks. This field is available in API version 16.0 and later."
+    },
+    "color": {
+      "type": "string",
+      "description": "Indicates the color assigned to the picklist value when used in charts on reports and dashboards. The color is in hexadecimal format; for example, #FF6600. If a color isn’t specified, it’s assigned dynamically during chart generation. This field is available in API version 17.0 and later."
+    },
+    "controllingFieldValues": {
+      "type": "string[]",
+      "description": "A list of values in the controlling field that are linked to this picklist value. The controlling field can be a checkbox or a picklist. This field is available in API version 14.0 and later. The values in the list depend on the field type: Checkbox: checked or unchecked. Picklist: The fullName of the picklist value in the controlling field."
+    },
+    "converted": {
+      "type": "boolean",
+      "description": "Indicates whether this value is associated with a converted status (true), or not (false). This field is relevant for only the standard Lead Status field in leads. Your organization can set its own guidelines for determining when a lead is qualified. The best practice is to convert a lead when it becomes a real opportunity that you want to forecast. For more information, see “Convert Qualified Leads” in Salesforce Help. This field is available in API version 16.0 and later."
+    },
+    "cssExposed": {
+      "type": "boolean",
+      "description": "Indicates whether this value is available in your Self-Service Portal (true), or not (false). This field is only relevant for the standard Case Reason field in cases. Self-Service provides an online support channel for your customers allowing them to resolve their inquiries without contacting a customer service representative. For more information about Self-Service, see “Setting Up Your Self-Service Portal” in Salesforce Help. Note: Starting with Spring ’12, the Self-Service portal isn’t available for new Salesforce orgs. Existing orgs continue to have access to the Self-Service portal. This field is available in API version 16.0 and later."
+    },
+    "default": {
+      "type": "boolean",
+      "description": "Indicates whether this value is the default picklist value in the specified picklist (true), or not (false).",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of a custom picklist value. This field is only relevant for the standard Stage field in opportunities. It’s useful to include a description for a customized picklist value so that the historical reason for creating it can be tracked. This field is available in API version 16.0 and later."
+    },
+    "forecastCategory": {
+      "type": "ForecastCategories, an enumeration of type string",
+      "description": "Indicates whether this value is associated with a forecast category (true), or not (false). This field is only relevant for the standard Stage field in opportunities. Valid values: Omitted Pipeline BestCase Forecast Closed This field is available in API version 16.0 and later."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from Metadata."
+    },
+    "highPriority": {
+      "type": "boolean",
+      "description": "Indicates whether this value is a high priority item (true), or not (false). This field is only relevant for the standard Priority field in tasks. For more information about tasks, see “Start Using Tasks” in Salesforce Help. This field is available in API version 16.0 and later."
+    },
+    "probability": {
+      "type": "int",
+      "description": "Indicates whether this value is a probability percentage (true), or not (false). This field is only relevant for the standard Stage field in opportunities. This field is available in API version 16.0 and later."
+    },
+    "reverseRole": {
+      "type": "string",
+      "description": "A picklist value corresponding to a reverse role name for a partner. For example, for the role “subcontractor”, a reverse role is “general contractor”. Assigning a partner role to an account in Salesforce creates a reverse partner relationship so that both accounts list the other as a partner. This field is only relevant for partner roles. For more information, see “Partner Fields” in Salesforce Help. This field is available in API version 18.0 and later."
+    },
+    "reviewed": {
+      "type": "boolean",
+      "description": "Indicates whether this value is associated with a reviewed status (true), or not (false). This field is only relevant for the standard Status field in solutions. For more information about opportunities, see “Creating Solutions” in Salesforce Help. This field is available in API version 16.0 and later."
+    },
+    "won": {
+      "type": "boolean",
+      "description": "Indicates whether this value is associated with a closed or won status (true), or not (false). This field is only relevant for the standard Stage field in opportunities. This field is available in API version 16.0 and later."
+    }
+  },
+  "relationshipreferenceto_type": {
+    "referenceTo": {
+      "description": "The objects that can have a relationship to the field represented by this FieldDefinition."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FieldDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:CustomField\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"CustomField\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"businessOwnerGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"businessOwnerUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"businessStatus\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseSensitive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"complianceGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customDataType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"deleteConstraint\" minOccurs=\"0\" type=\"tns:DeleteConstraint\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"elementType\" minOccurs=\"0\" type=\"tns:ElementType\"/>\n        <xsd:element name=\"encryptionScheme\" minOccurs=\"0\" type=\"tns:EncryptionScheme\"/>\n        <xsd:element name=\"escapeMarkup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"externalDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalId\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"formulaTreatBlanksAs\" minOccurs=\"0\" type=\"tns:TreatBlanksAs\"/>\n        <xsd:element name=\"inlineHelpText\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isAIPredictionField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isConvertLeadDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isFilteringDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isNameField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSortingDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"length\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"lookupFilter\" minOccurs=\"0\" type=\"mns:LookupFilter\"/>\n        <xsd:element name=\"maskChar\" minOccurs=\"0\" type=\"tns:EncryptedFieldMaskChar\"/>\n        <xsd:element name=\"maskType\" minOccurs=\"0\" type=\"tns:EncryptedFieldMaskType\"/>\n        <xsd:element name=\"metadataRelationshipControllingField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"populateExistingRows\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"precision\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"referenceTargetField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"referenceTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"reparentableMasterDetail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"required\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"restrictedAdminField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"scale\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"securityClassification\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"startingNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"stripMarkup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"summarizedField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"summaryFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FilterItem\"/>\n        <xsd:element name=\"summaryForeignKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"summaryOperation\" minOccurs=\"0\" type=\"tns:SummaryOperations\"/>\n        <xsd:element name=\"trackFeedHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"trackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"trackTrending\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"translateData\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:FieldType\"/>\n        <xsd:element name=\"unique\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"valueSet\" minOccurs=\"0\" type=\"mns:ValueSet\"/>\n        <xsd:element name=\"visibleLines\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"writeRequiresMasterRead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"QueryLocator\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"QueryResult\">\n  <xsd:sequence>\n    <xsd:element name=\"done\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"entityTypeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"nextRecordsUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryLocator\" type=\"tns:QueryLocator\"/>\n    <xsd:element name=\"records\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"ens:sObject\"/>\n    <xsd:element name=\"size\" type=\"xsd:int\"/>\n    <xsd:element name=\"totalSize\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelationshipReferenceTo\">\n  <xsd:sequence>\n    <xsd:element name=\"referenceTo\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,201 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "OrderItemSummaryRelationship - Data API",
+  "description": "Junction object used to track how an original order summary (created before any exchanges have occurred) relates to other order summary objects in a chain of exchange orders. This object is available in API version 60.0 and later. An exchange order is an OrderSummary object whose SourceProcess property is set to Exchange. An original order summary can have an exchange order, which in turn can have yet another exchange order, and so on. The OrderSummaryRelationship object maintains this relationship between OrderSummary objects.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "AssociatedOrderItemInventory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Controls whether the inventory of the associated order item is included in the inventory of the main order item. Possible values are: IncludedInMainInventory—Included in Main Inventory NotIncludedInMainInventory—Not Included in Main Inventory"
+    },
+    "AssociatedOrderItemSumPricing": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "An enum that describes how the related order item summary is priced relative to the primary order item summary. Possible values are: IncludedInBundlePrice—Included in Bundle Price NotIncludedInBundlePrice—Not Included in Bundle Price"
+    },
+    "AssociatedOrderItemSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The related order item summary of this order item summary relationship. For bundle relationships, this denotes the ID of the child order item summary. This field is a relationship field.",
+      "relationship_name": "AssociatedOrderItemSummary",
+      "refers_to": "OrderItemSummary"
+    },
+    "AssociatedOrderItemSummaryRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The role of the associated order item summary of this relationship. Possible values are: AddOnComponent—Addon Component BundleComponent—Bundle Component ClassificationComponent—Product Classification Component SetComponent—Set Component"
+    },
+    "AssociatedQuanScaleMethod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "An enum that describes how to scale the quantity of the associated order item summary relative to the main order item summary. Possible values are: Constant Proportional The default value is Proportional."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO code for the currency of the OrderSummary. Possible values are: USD—U.S. Dollar The default value is USD."
+    },
+    "MainOrderItemSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The primary order item summary ID of this order item summary relationship. This field is a relationship field.",
+      "relationship_name": "MainOrderItemSummary",
+      "relationship_type": "Master-detail",
+      "refers_to": "OrderItemSummary (the master object)"
+    },
+    "MainOrderItemSummaryRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The role of the primary order item summary of this relationship. Possible values are: AddOn—Addon Parent Bundle—Bundle Parent Set—Set Parent"
+    },
+    "MainOrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the main order item summary. This field is a relationship field.",
+      "relationship_name": "MainOrderSummary",
+      "refers_to": "OrderSummary"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the relationship."
+    },
+    "OrderItemRelationshipId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The order summary ID of the order item summary. This field is a relationship field.",
+      "relationship_name": "OrderItemRelationship",
+      "refers_to": "OrderItemRelationship"
+    },
+    "ProductRelatedComponentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The lookup ID from the product related component. This field is a relationship field.",
+      "relationship_name": "ProductRelatedComponent",
+      "refers_to": "ProductRelatedComponent"
+    },
+    "ProductRelationshipTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The lookup from the product relationship type. This field is a relationship field.",
+      "relationship_name": "ProductRelationshipType",
+      "refers_to": "ProductRelationshipType"
+    }
+  },
+  "field_reference": {
+    "AssociatedOrderItemInventory": {
+      "field_label": "Associated Order Product Summary Inventory",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssociatedOrderItemSumPricing": {
+      "field_label": "Associated Order Product Summary Pricing",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssociatedOrderItemSummaryId": {
+      "field_label": "Order Product Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssociatedOrderItemSummaryRole": {
+      "field_label": "Associated Order Product Summary Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssociatedQuanScaleMethod": {
+      "field_label": "Associated Order Product Summary Quantity Scale Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Order Product Summary Relationship Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MainOrderItemSummaryId": {
+      "field_label": "Order Product Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MainOrderItemSummaryRole": {
+      "field_label": "Main Order Product Summary Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MainOrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderItemRelationshipId": {
+      "field_label": "Order Product Relationship ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductRelatedComponentId": {
+      "field_label": "Product Related Component ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductRelationshipTypeId": {
+      "field_label": "Product Relationship Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

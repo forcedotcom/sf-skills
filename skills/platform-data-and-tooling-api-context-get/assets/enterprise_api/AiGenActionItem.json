@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "AiGenActionItem - Data API",
+  "description": "Represents business actions suggested by generative AI. AI-generated action items are sent to either agents for automatic execution or human users for review, depending on org preference and if there are any errors in the process. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionItemOwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID associated with the owner of the AI-generated action item. The owner can be an agent or human user, and can change during the review and execution process. By default, the owner is an agent or queue. This field is a polymorphic relationship field.",
+      "relationship_name": "ActionItemOwner",
+      "refers_to": "Group, User",
+      "required": true
+    },
+    "ActionResult": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The result generated when the agent action is executed."
+    },
+    "AgentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The specific agent that processes the AI-generated action item.",
+      "required": true
+    },
+    "AiGenActionItemInfoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the AI-generated action item information record associated with this action item. Available in API version 67.0 and later. This field is a relationship field.",
+      "relationship_name": "AiGenActionItemInfo",
+      "refers_to": "AiGenActionItemInfo",
+      "required": true
+    },
+    "BotDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The bot record with a template name that matches the value in the Sales Management agent template. This field is a relationship field.",
+      "relationship_name": "BotDefinition",
+      "refers_to": "BotDefinition"
+    },
+    "BotVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The bot version from the bot record with an ID that matches the ID of the Sales Management agent bot record. This field is a relationship field.",
+      "relationship_name": "BotVersion",
+      "refers_to": "BotVersion"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The explanation of why the action item has been suggested. The description provides additional context to guide human users and agents in their decision-making."
+    },
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date that the action item expires and is deleted. AI-generated action items are no longer visible to users after 14 days and removed from records after 30 days.",
+      "required": true
+    },
+    "GeneratedResponseIdRef": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of generated result in the GenAIGeneration DMO. This field can be used by human users to provide feedback on the AI-generated action item."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of this object. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The ID of the record that the AI-generated action item is associated with. Available in API version 67.0 and later. This field is a polymorphic relationship field.",
+      "relationship_name": "Parent",
+      "refers_to": "Account, Opportunity",
+      "required": true
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the AI-generated action item.",
+      "required": true
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The subject line that displays to users indicating what the action item is.",
+      "required": true
+    },
+    "SuggestedNewValue": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "The new field value suggested by generative AI for the action item. Available in API version 67.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The category that the action item falls under. This field can be used to search for specific action items, such as field updates or follow-up sales emails.",
+      "required": true
+    },
+    "UnmodActionItemOutput": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The unmodified output for the action item produced by AI, whether from a prompt template or other generation method.",
+      "required": true
+    },
+    "Utterance": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "The user utterance or prompt that generated this action item. Available in API version 67.0 and later."
+    }
+  },
+  "special_access_rules": "Agentforce Pipeline Management must be enabled. Only the agent user can create AiGenActionItem records.\n\nAgentforce Pipeline Management must be enabled.\n         Only the agent user can create AiGenActionItem records."
+}

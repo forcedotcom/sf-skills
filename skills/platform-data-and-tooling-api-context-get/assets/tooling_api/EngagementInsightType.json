@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields"
+  ],
+  "title": "EngagementInsightType - Tooling API",
+  "description": "Represents the configuration for engagement insight types for voice and video call insights. This object is available in API version 66.0 and later.",
+  "supported_soap_calls": "`create()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActivatedDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the insight type was activated."
+    },
+    "AdditionalConfig": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The additional configuration information specific to the insight type. For example, timing configurations for time-based insights and prompt-based configurations for generative insights."
+    },
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The category of the insight type. Possible values are: CUSTOM—Custom insights are created by the admin. SYSTEM—System insights are provided out-of-the-box by Salesforce. The default value is CUSTOM.",
+      "required": true
+    },
+    "ChannelType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The engagement channel used to generate the insight. Possible values are: Emails VideoCalls VoiceCalls The default value is VoiceCalls."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the insight type."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name for the EngagementInsightType object.",
+      "required": true
+    },
+    "ExternalIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID generated for each insight type."
+    },
+    "InsightModel": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The computational model that the user selects to generate the insight. Possible values are: FOUNDTIONAL—Foundational GENERATIVE—Generative KEYWORD—Keyword SITUATIONAL—Situational TIME_BASED—Time-Based The default value is KEYWORD.",
+      "required": true
+    },
+    "InsightName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the insight.",
+      "required": true
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language used in the insight type."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Label for the insight type.",
+      "required": true
+    },
+    "SpeakerType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies if the participant is internal (internal rep), external (customer), or either (not sure). It indicates the 'Said by' field in the UI. Possible values are: EITHER EXTERNAL INTERNAL NONE The default value is INTERNAL."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the insight type. Possible values are: ENABLED USER_DISABLED The default value is ENABLED."
+    },
+    "SupportedLanguageList": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The list of languages supported for the insight type."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The industry where the insight type is applicable. Possible values are: SALES SALES_SERVICE SERVICE The default value is SALES."
+    }
+  }
+}

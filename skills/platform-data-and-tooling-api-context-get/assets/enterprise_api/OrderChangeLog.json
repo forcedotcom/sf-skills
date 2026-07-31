@@ -1,0 +1,183 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OrderChangeLog - Data API",
+  "description": "Represents a log record of all change requests made to an order post activation. A log record is always one-to-one to change an order request. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ChangeLineId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the main change line created as a result of the change request. For example, if you change an order item, the ChangeLineId would be the change OrderItem ID, or if you change a shipping address, the ChangeLineId would be the change OrderDeliveryGroup ID. This field is a polymorphic relationship field.",
+      "relationship_name": "ChangeLine",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderAdjustmentGroup, OrderDeliveryGroup, OrderItem, OrderItemAdjustmentLineItem, OrderItemTaxLineItem"
+    },
+    "ChangeLineType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The method used to implement the change. Possible values are: Delta New"
+    },
+    "ChangeOrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the change order. This field is a relationship field.",
+      "relationship_name": "ChangeOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "ChangeRequest": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The unique ID of the request of which this change is a part."
+    },
+    "ChangeSummary": {
+      "type": "textarea",
+      "description": "A human-readable summary of the change details. Here’s an example of a change summary:Reduced quantity by -3. Change adjustment by $15. Added an adjustment of $20. Changed tax by $-0.11, effective 1/1/2020. Added a tax of $1.5, effective 1/1/2020."
+    },
+    "ChangeType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of the change request. Possible values are: NewAdjustmentGroups—Add a new header level adjustment. NewLineAdjustments—Add a new line level adjustment. NewOrderItems—Add a new order item. QuantityChange—Add or remove quantity from an original order item."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The ISO code for any currency allowed by the organization. Possible value is: USD—U.S. Dollar The default value is USD."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name for the order change log."
+    },
+    "RelatedLineId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the main line that is changed as a result of this change. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedLine",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderAdjustmentGroup, OrderDeliveryGroup, OrderItem, OrderItemAdjustmentLineItem, OrderItemTaxLineItem"
+    },
+    "RelatedOrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the order that is changed. This field is a relationship field.",
+      "relationship_name": "RelatedOrder",
+      "relationship_type": "Master-detail",
+      "refers_to": "Order (the master object)"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The order status of the change order. Possible values are: Activated Draft"
+    }
+  },
+  "usage": "Order change log entries are automatically created each time an order is modified.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderChangeLogFeed**: Feed tracking is available for the object.\n- **OrderChangeLogHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "ChangeLineId": {
+      "field_label": "Change Line ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChangeLineType": {
+      "field_label": "Change Line Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ChangeOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChangeRequest": {
+      "field_label": "Change Request",
+      "type": "string",
+      "length": "36"
+    },
+    "ChangeSummary": {
+      "field_label": "Change Summary",
+      "type": "textarea",
+      "length": "50000"
+    },
+    "ChangeType": {
+      "field_label": "Change Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Order Change Log ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedLineId": {
+      "field_label": "Related Line ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

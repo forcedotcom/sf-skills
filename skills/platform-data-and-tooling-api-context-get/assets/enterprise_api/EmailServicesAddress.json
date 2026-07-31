@@ -1,0 +1,137 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmailServicesAddress - Data API",
+  "description": "An email service address.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AuthorizedSenders": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Configures the email service address to only accept messages from the email addresses or domains listed in this field. If the email service address receives a message from an unlisted email address or domain, the email service performs the action specified in the AuthorizationFailureAction field of its associated email service. Leave this field blank if you want the email service address to receive email from any email address."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The name of the object in the API. This name can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This 25-character field must be unique among other EmailServicesAddress records under the same EmailServiceFunction parent. In managed packages, this field prevents naming conflicts on package installations. This field is automatically generated, but you can supply your own value if you create the record using the API. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance might be slow while Salesforce generates one for each record."
+    },
+    "EmailDomainName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A read only field you can query that contains the system-generated domain part of this email service address. The system generates a unique domain-part for each email service address to ensure that no two email service addresses are identical."
+    },
+    "FunctionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the email service for which the email service address receives messages. This is a relationship field.",
+      "relationship_name": "Function",
+      "relationship_type": "Lookup",
+      "refers_to": "EmailServicesFunction"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this object is active (true) or not (false)."
+    },
+    "LocalPart": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The local-part of the email service address. The local-part of the address is the string that comes before the @ symbol. For the local-part of a Salesforce email address, all alphanumeric characters are valid, plus the following special characters: ! # $ % & amp; ' * / = ? ^ _ + - ` { | } ~ , The dot character (.) is also valid as long as it's not the first or last character. Email addresses aren’t case-sensitive."
+    },
+    "RunAsUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The username of the user whose permissions the email service assumes when processing messages sent to this address."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only authenticated internal and external users can access this object.",
+  "usage": "This object supports the email services feature, which allows you to create automated processes that use Apex classes to process the contents, headers, and attachments of inbound email. For example, you can create an email service that automatically creates contact records based on contact information in messages.",
+  "wsdl_segment": "```xml\n<complexType name=\"EmailServicesAddress\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AuthorizedSenders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DkimRequiredDomains\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EmailDomainName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Function\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EmailServicesFunction\"/>\n        <element name=\"FunctionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LocalPart\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RunAsUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AuthorizedSenders": {
+      "field_label": "Accept Email From",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Email Address Name",
+      "type": "string",
+      "length": "25"
+    },
+    "DkimRequiredDomains": {
+      "field_label": "DKIM Required Domains",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "EmailDomainName": {
+      "field_label": "Email address domain",
+      "type": "string",
+      "length": "255"
+    },
+    "FunctionId": {
+      "field_label": "Email Service ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Email Services Address ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LocalPart": {
+      "field_label": "Email address",
+      "type": "string",
+      "length": "64"
+    },
+    "RunAsUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

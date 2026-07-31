@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "LearningItemSubmission - Data API",
+  "description": "Represents a link to a resource, such as a video recording, that a user submits as part of a Feedback Request exercise in an Enablement program. For peer and manager feedback, this resource can be a recording of a user’s sales patch. For Einstein Coach feedback, this resource can be a video call, and Einstein generates feedback from the call’s transcription. This object is available in API version 59.0 and later, but Einstein Coach is available only in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CallId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the video call that a user submits for Einstein Coach feedback. Einstein generates feedback for the user based on the call’s transcription. This field is a polymorphic relationship field. Available in API version 61.0 and later.",
+      "relationship_name": "Call",
+      "relationship_type": "Lookup",
+      "refers_to": "VideoCall"
+    },
+    "LearningItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the LearningItem record for the Feedback Request exercise, where the Type of the learning item is LearningPractice. This field is a relationship field.",
+      "relationship_name": "LearningItem",
+      "relationship_type": "Lookup",
+      "refers_to": "LearningItem"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the owner of the learning item submission. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Url": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "URL of the content that a user submits for peer and manager feedback. For example, a link to a video recording of a sales rep’s practice pitch."
+    }
+  },
+  "special_access_rules": "A learning item submission record is created when users take an Enablement program that includes a Feedback Request exercise for peer and manager feedback.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **LearningItemSubmissionOwnerSharingRule**: Sharing rules are available for the object.\n- **LearningItemSubmissionShare**: Sharing is available for the object."
+}

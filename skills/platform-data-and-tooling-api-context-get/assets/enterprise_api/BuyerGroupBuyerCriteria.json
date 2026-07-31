@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "BuyerGroupBuyerCriteria - Data API",
+  "description": "Associates a buyer group that is enabled for webstores supporting multiple languages and currencies with BuyerCriteria that define those languages and currencies. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BuyerCriteriaId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the buyer criteria this record is associated with. This field is a relationship field.",
+      "relationship_name": "BuyerCriteria",
+      "relationship_type": "Lookup",
+      "refers_to": "BuyerCriteria",
+      "required": true
+    },
+    "BuyerGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the buyer group this record is associated with. This field is a relationship field.",
+      "relationship_name": "BuyerGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "BuyerGroup",
+      "required": true
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Optional. Three letter ISO currency codes associated with the buyer account record or a locale. Auto populated if MultiCurrency is enabled in org."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of this record."
+    }
+  },
+  "usage": "BuyerGroupBuyerCriteria is related to objects that enable a localized buyer experience. Together, these objects provide buyers with dynamic access to the qualifiers (entitlements, price books, and promotions) associated with their buyer group when they browse and shop in webstores with localized languages and currencies. The related objects are as follows:",
+  "field_reference": {
+    "BuyerCriteriaId": {
+      "field_label": "Buyer Criteria ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BuyerGroupId": {
+      "field_label": "Buyer Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Buyer Group Buyer Criteria ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Buyer Group Buyer Criteria Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

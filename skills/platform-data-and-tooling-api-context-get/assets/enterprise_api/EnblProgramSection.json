@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "EnblProgramSection - Data API",
+  "description": "Represents an optional section in an Enablement program. A section can include other program items, such as milestones and exercises. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. The name: must be 40 characters or fewer must begin with a letter can contain only underscores and alphanumeric characters can’t include spaces can’t end with an underscore can’t contain 2 consecutive underscores In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Available in API version 61.0 and later."
+    },
+    "EnablementProgramId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The Enablement program that contains the section. This field is a relationship field.",
+      "relationship_name": "EnablementProgram",
+      "relationship_type": "Lookup",
+      "refers_to": "EnablementProgram"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The title of the section that’s visible to users when they take the program."
+    },
+    "SequenceNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "A number that specifies the order of the section, relative to other sections, starting at 0."
+    }
+  }
+}

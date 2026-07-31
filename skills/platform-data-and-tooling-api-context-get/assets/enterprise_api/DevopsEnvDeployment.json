@@ -1,0 +1,144 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "DevopsEnvDeployment - Data API",
+  "description": "Represents a record created during the promotion or deployment process to track deployment actions, status, and associated details within a DevOps Center pipeline. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "BackSyncStageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the pipeline stage from which changes are back-synced to a development environment. This is a relationship field.",
+      "relationship_name": "BackSyncStage",
+      "refers_to": "DevopsPipelineStage"
+    },
+    "CheckDeployCompletionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when a validate-only deployment completed."
+    },
+    "CheckDeployDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when a validate-only deployment started."
+    },
+    "CheckDeployRequestInfoId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The ID of the DevopsRequestInfo record tracking the status of the deployment. This is a relationship field.",
+      "relationship_name": "CheckDeployRequestInfo",
+      "refers_to": "DevopsRequestInfo"
+    },
+    "CheckDeployStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The current status of the deployment. The default value is NEW. Possible values are: CANCELLED ERROR FINALIZING INTERRUPTED IN_PROGRESS NEW SUCCESS"
+    },
+    "DeployCompletionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the deployment operation completed."
+    },
+    "DeployRequestInfoId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the DevopsRequestInfo record tracking the status of the full deployment. This is a relationship field.",
+      "relationship_name": "DeployRequestInfo",
+      "refers_to": "DevopsRequestInfo"
+    },
+    "DeployStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The current status of the deployment operation. The default value is NEW. Possible values are: CANCELLED ERROR FINALIZING INTERRUPTED IN_PROGRESS NEW SUCCESS"
+    },
+    "DeploymentDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the deployment started."
+    },
+    "DeploymentIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "A unique identifier for the deployment."
+    },
+    "DevopsPipelnStgPromId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the associated pipeline stage promotion record. This is a relationship field.",
+      "relationship_name": "DevopsPipelnStgProm",
+      "refers_to": "DevopsPipelnStgProm"
+    },
+    "EndRevisionCounter": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The revision counter value representing the end state of the source control after this deployment."
+    },
+    "IsCheckDeploy": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this is a validate-only deployment. The default value is false."
+    },
+    "IsFullDeploy": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether all changes in the branch is deployed instead of just the changes. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate isn't null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the environment deployment record."
+    },
+    "RunTests": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A comma-separated list of specific Apex tests to run if TestLevel is set to RunSpecifiedTests."
+    },
+    "StartRevisionCounter": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The revision counter value representing the starting state of the source control before this deployment."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The overall status of the deployment operation. The default value is NEW."
+    },
+    "TargetDeployOrgId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the target DevopsEnvironment where the change is deployed. This is a relationship field.",
+      "relationship_name": "TargetDeployOrg",
+      "relationship_type": "Parent-detail",
+      "refers_to": "DevopsEnvironment"
+    },
+    "TestLevel": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies which Apex tests to run during the deployment. The default value is Default. Possible values are: Default—No tests in sandboxes; all local tests in production. NoTestRun—No tests are run. RunAllTestsInOrg—All tests in the org are run, including those from installed packages. RunLocalTests—All tests in the org are run, excluding those from installed packages. RunSpecifiedTests—Only the tests specified in the RunTests field are run."
+    }
+  },
+  "usage": "Validate-only deployment is not supported in the next-generation DevOps Center.",
+  "associated_objects": "This object has the following associated objects.\n\n- **DevopsEnvDeployementHistory**: History is available for tracked fields of the object."
+}

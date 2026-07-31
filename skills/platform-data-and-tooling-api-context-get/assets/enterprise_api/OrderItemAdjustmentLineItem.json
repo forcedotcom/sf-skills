@@ -1,0 +1,262 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OrderItemAdjustmentLineItem - Data API",
+  "description": "An adjustment that has been made to an order item. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentAmountScope": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Used with AdjustmentValue to determine the amount of the adjustment. Possible values are: Total—The adjustment scope is the total price. Unit—The adjustment scope is the unit price. UnproratedTotal—The adjustment scope is the unprorated total price."
+    },
+    "AdjustmentBasisReferenceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the specific coupon applied. This is a polymorphic relationship field.",
+      "relationship_name": "AdjustmentBasisReference",
+      "relationship_type": "Lookup",
+      "refers_to": "Coupon"
+    },
+    "AdjustmentCauseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the specific promotions applied. This is a polymorphic relationship field.",
+      "relationship_name": "AdjustmentCause",
+      "relationship_type": "Lookup",
+      "refers_to": "Promotion"
+    },
+    "AdjustmentSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the origin of the adjustment. Possible values are: Discretionary—The adjustment originates from a decision made by an individual, for example, a manager’s discount granted to a client. Promotion—The adjustment originates from a promotion, for example, a holiday sale discount. Rule—Reserved for future use. System—The adjustment originates from the system, for example, a volume discount after the amount of items reaches a specific number. This field is available in API version 57.0 and later."
+    },
+    "AdjustmentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the type of mathematical adjustment to be applied to the order. Possible values are: AdjustmentAmount—The adjustment is a numerical amount, for example, a cash discount of 20. AdjustmentPercentage—The adjustment is a percentage amount, for example, a 10% discount. OverrideAmount—The adjustment is a manual price override. This field is available in API version 57.0 and later."
+    },
+    "AdjustmentValue": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The specified AdjustmentType’s amount to be applied to the order item. For example, when the AdjustmentType value is AdjustmentAmount, the AdjustmentValue is expected to equal the value of the Amount field. When the AdjustmentType value is AdjustmentPercentage, the AdjustmentValue represents the percentage number, and the Amount field’s value will show the calculated adjustment amount. This field is available in API version 57.0 and later."
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The net total value of the adjustment line. The value is rounded to the nearest possible amount associated with the currency of the order item."
+    },
+    "AppliedPromotionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time on which the promotion was applied to the asset."
+    },
+    "CouponCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the coupon code that was applied."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization. Default value is USD. Possible values are: USD—U.S. Dollar"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Users can add a custom description to the record to provide additional detail."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the adjustment line."
+    },
+    "OrderAdjustmentGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The order adjustment group that contains the order item adjustment line item."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The parent order of the order item related to the adjustment line."
+    },
+    "OrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The order item that the adjustment line applies to."
+    },
+    "Priority": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "A numeric value that represents the order of precedence of the order adjustment group. It can also represent the order of precedence when applying the AdjustmentType values. For example, an order can have two adjustments: a $100 discount and a 10% discount. This field will tell the pricing engine which adjustment needs to be applied first. This field is available in API version 57.0 and later."
+    },
+    "RelatedAdjustmentLineItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The original order item adjustment line. Useful for reference in change order scenarios."
+    },
+    "TotalAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Equals the order item’s price plus TotalTaxAmount for the order item adjustment line item. This is a gross tax field. To access Commerce Orders fields, your org must have a Salesforce Order Management license. Commerce Orders fields are available only in Lightning Experience. This field is available in API v49.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount of tax applied to the adjustment line."
+    }
+  },
+  "special_access_rules": "To access Commerce Orders entities, your org must have a Salesforce Order Management license. Commerce Orders entities are available only in Lightning Experience.",
+  "field_reference": {
+    "AdjustmentAmountScope": {
+      "field_label": "Adjustment Amount Scope",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentBasisReferenceId": {
+      "field_label": "Adjustment Basis Reference ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AdjustmentCauseId": {
+      "field_label": "Adjustment Cause ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AdjustmentSource": {
+      "field_label": "Adjustment Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentType": {
+      "field_label": "Adjustment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentValue": {
+      "field_label": "Adjustment Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AppliedPromotionDate": {
+      "field_label": "Applied Promotion Date",
+      "type": "datetime"
+    },
+    "CouponCode": {
+      "field_label": "Coupon Code",
+      "type": "string",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Id": {
+      "field_label": "Order Product Adjustment Line Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderAdjustmentGroupId": {
+      "field_label": "Order Adjustment Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemId": {
+      "field_label": "Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "RelatedAdjustmentLineItemId": {
+      "field_label": "Order Product Adjustment Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAmtWithTax": {
+      "field_label": "Total Amount with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "FieldChangeSnapshot - Data API",
+  "description": "Use this virtual object to learn which opportunities' close dates changed during the specified time period. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrentValueDateOnly": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable",
+      "description": "The current value of a date field on the opportunity."
+    },
+    "FieldName": {
+      "type": "string",
+      "properties": "Filter, Group",
+      "description": "The name of the field to get the change history for. Possible values are: CloseDate"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group",
+      "description": "The ID of the opportunity to get the change history for. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Opportunity"
+    },
+    "ValidFrom": {
+      "type": "dateTime",
+      "properties": "Filter",
+      "description": "The date and time that specifies the beginning of the time period."
+    },
+    "ValidTo": {
+      "type": "dateTime",
+      "properties": "Filter",
+      "description": "The date and time that specifies the end of the time period."
+    }
+  },
+  "special_access_rules": "To use FieldChangeSnapshot, set up historical trend reporting for opportunities in your org. You must also have the Pipeline Inspection user permission and the Pipeline Inspection setting enabled.\n\nTo use FieldChangeSnapshot, set up historical\n         trend reporting for opportunities in your org. You must also have the Pipeline Inspection\n         user permission and the Pipeline Inspection setting enabled.",
+  "usage": "Use FieldChangeSnapshot to learn about the first change made to the specified opportunity during the specified time period. Subsequent changes are not returned.",
+  "field_reference": {
+    "CurrentValueDateOnly": {
+      "field_label": "Current Value Date Only",
+      "type": "date"
+    },
+    "FieldName": {
+      "field_label": "Field Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Field Change Snapshot ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Opportunity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ValidFrom": {
+      "field_label": "From",
+      "type": "datetime"
+    },
+    "ValidTo": {
+      "field_label": "To",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

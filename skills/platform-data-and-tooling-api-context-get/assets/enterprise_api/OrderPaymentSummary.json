@@ -1,0 +1,312 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OrderPaymentSummary - Data API",
+  "description": "Represents the current properties and state of payments using a single payment method that are applied to one OrderSummary. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AuthorizationAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that has been authorized."
+    },
+    "AuthorizationReversalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the AuthorizationAmount that has been reversed."
+    },
+    "AvailableToCaptureAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that’s available to be captured. Equal to AuthorizationAmount minus (CapturedAmount and PendingCaptureAmount and AuthorizationReversalAmount and PendingReverseAuthAmount). However, if the calculated amount is a negative number, this value is 0."
+    },
+    "AvailableToRefundAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that’s available to be refunded. Equal to CapturedAmount plus PendingCaptureAmount minus (RefundedAmount and PendingRefundAmount). However, if the calculated amount is a negative number, this value is 0."
+    },
+    "BalanceAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total balance of all payments associated with this summary object."
+    },
+    "CapturedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that has been captured."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for the currency of the OrderSummary associated with the OrderPaymentSummary. Order Management APIs and actions that create an OrderPaymentSummary for an OrderSummary set this value. The default value is USD. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar This field is available in API version 49.0 and later."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The full name of the payment method user."
+    },
+    "LastPaymentGatewayLogId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the most recent payment gateway log associated with the OrderPaymentSummary."
+    },
+    "LastPaymentGatewayMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The most recent message received from the payment gateway associated with the OrderPaymentSummary."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when the current user last viewed a record related to this record. This field is available in API version 49.0 and later."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when the current user last viewed this record. A null value can mean that this record was only referenced (LastReferencedDate) and not viewed. This field is available in API version 49.0 and later."
+    },
+    "Method": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the OrderPaymentSummary."
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the OrderSummary associated with the OrderPaymentSummary."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who currently owns this OrderPaymentSummary. Default value is the user logged in to the API to perform the create."
+    },
+    "PaymentCreditedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of credit associated with this OrderPaymentSummary. This field is available in API version 65.0 and later."
+    },
+    "PaymentMethodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the payment method associated with this OrderPaymentSummary."
+    },
+    "PendingAuthorizationAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that’s pending authorization."
+    },
+    "PendingCaptureAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that’s pending capture."
+    },
+    "PendingRefundAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that’s pending refund."
+    },
+    "PendingReverseAuthAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the AuthorizationAmount that’s pending reversal."
+    },
+    "RefundedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that was refunded."
+    },
+    "ReservedBalanceTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Calculated field that summarizes the ReservedBalanceAmount for all OrderPaymentSummaryReferences for the OrderPaymentSummary."
+    },
+    "Type": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The payment method type associated with the OrderPaymentSummary. For example, visa, mastercard, check, or giftcard."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce or D2C Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **OrderPaymentSummaryChangeEvent (API version 62.0)**: Change events are available for the object.\n- **OrderPaymentSummaryFeed**: Feed tracking is available for the object.\n- **OrderPaymentSummaryOwnerSharingRule**: Sharing rules are available for the object.\n- **OrderPaymentSummaryShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AuthorizationAmount": {
+      "field_label": "Authorized",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AuthorizationReversalAmount": {
+      "field_label": "Authorization Reversed",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AvailableToCaptureAmount": {
+      "field_label": "Available to Capture",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AvailableToRefundAmount": {
+      "field_label": "Available to Refund",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BalanceAmount": {
+      "field_label": "Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CapturedAmount": {
+      "field_label": "Captured",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FullName": {
+      "field_label": "Full Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Order Payment Summary ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastPaymentGatewayLogId": {
+      "field_label": "Payment Gateway Log ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastPaymentGatewayMessage": {
+      "field_label": "Last Payment Gateway Message",
+      "type": "string",
+      "length": "1000"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Method": {
+      "field_label": "Method",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentCreditedAmount": {
+      "field_label": "Payment Credited",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PaymentMethodId": {
+      "field_label": "Payment Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PendingAuthorizationAmount": {
+      "field_label": "Pending Authorization",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PendingCaptureAmount": {
+      "field_label": "Pending Capture",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PendingRefundAmount": {
+      "field_label": "Pending Refund",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PendingReverseAuthAmount": {
+      "field_label": "Pending Authorization Reversal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "RefundedAmount": {
+      "field_label": "Refunded",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ReservedBalanceTotalAmount": {
+      "field_label": "Total Reserved Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

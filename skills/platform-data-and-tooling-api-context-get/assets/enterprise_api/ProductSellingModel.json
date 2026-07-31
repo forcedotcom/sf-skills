@@ -1,0 +1,120 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ProductSellingModel - Data API",
+  "description": "Defines one method by which a product can be sold; for example, as a one-time sale, an evergreen subscription, or a term-defined subscription. If the product is sold on subscription, this object defines the subscription’s term. A product can have multiple product selling models. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name given to the product selling model."
+    },
+    "PricingTerm": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the duration of the pricing term for a given selling model. Used with PricingTermUnit. For example, if this field’s value is 1 and the PricingTermUnit is Months, the subscription is priced monthly. If the selling model is one-time, this field must be null. Possible value is: 1"
+    },
+    "PricingTermUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The unit of time used to define the pricing term. Used with PricingTerm to define the length of the pricing term. For example, if this field is Months and PricingTerm is 1, the subscription is priced monthly. If the selling model is one-time, this field must be null. Possible values are: Annual—UI label is Years Months"
+    },
+    "SellingModelType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the product is sold as a one-time sale, an evergreen subscription, or a subscription with a defined term. Possible values are: Evergreen—A subscription without an end date. An evergreen subscription continues until the customer affirmatively cancels it. OneTime—A product that isn’t sold as a subscription. TermDefined—A subscription with a defined end date. The subscription continues for a specified time period. When the term ends, the subscription ends. The default value is OneTime."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the product selling model. Possible values are: Active—An active product selling model can’t be deleted, and only the Name and Status fields can be modified. An active product selling model can’t be changed back to draft. Draft—A draft product selling model can be modified and deleted. Inactive—An inactive product selling model can’t be deleted, and only the Name and Status fields can be modified. An inactive product selling model can’t be changed back to draft. The default value is Draft."
+    }
+  },
+  "special_access_rules": "This object is available with Revenue Cloud and Subscription Management. This object is available for Commerce when the Subscriptions (Beta) permission is enabled.\n\nThis object is available with Revenue Cloud and\n         Subscription Management. This object is available for Commerce when the Subscriptions\n         (Beta) permission is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DoesAutoRenewAssetByDefault": {
+      "field_label": "Automatically Renew Asset by Default",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Product Selling Model ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Product Selling Model Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PricingTerm": {
+      "field_label": "Pricing Term",
+      "type": "int",
+      "digits": "9"
+    },
+    "PricingTermUnit": {
+      "field_label": "Pricing Term Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SellingModelType": {
+      "field_label": "Selling Model Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserPreference - Data API",
+  "description": "Represents a functional preference for a specific user in your organization.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Preference": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The name of the user preference. Supported values are: 57 (Event Reminder Default Lead Time) 58 (Task Reminder Default Time) 91 (Prevent Logs on Load) 92 (Autocomplete Apex After Key Press) 93 (Visualforce Viewstate Inspector) 94 (Forecasting Displayed Type) 96 (Editor Theme) 97 (Editor Font Size) 98 (Pinned Folders) 99 (Enable Query Plan) 100 (Enable New Open Dialog) 101 (Email Transport Type) 102 (Pinned Wave Folders) 108 (Density) 109 (Lightning Flow Builder) 111 (Format with Tabs) 112 (Format Tab Width) 113 (Format Print Width) 114 (Record Page Activities Display) 118 (Lightning Flow Explorer) 119 (For internal use only) 120 (Simple Auth Option) 122 (Sales Alert Notifications Snooze Time) 131 (Color Scheme) 136 (Last Gong Insights Sync Time)"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the user associated with this role. The corresponding field label is User ID. Admin users can create and edit preferences for other users. Standard users can delete their own preferences only. For a standard user, the value of the UserId field must be their own UserId."
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The value of the user preference. For Event Reminder Default Lead Time, the values are increasing intervals of time from 0 minutes to 2 days. For Task Reminder Default Time, the values are half-hours from 12:00 AM to 11:30 PM. To view the respective sets of values, access the Reminders in your personal settings in the online application."
+    }
+  },
+  "special_access_rules": "Customer Portal users can't access this object.\n\nOnly users with the View All Data or Manage Users permission can access UserPreference records\n    of other users but all users can access their own UserPreference record.\n\nThis behavior does\n     not affect other types of user access such as Create or Edit.",
+  "usage": "Use this object to query the set of currently configured user preferences in your organization. In your client application, you can query the User object to obtain valid User IDs to access the UserPreference object. All users can invoke the supported calls with this object. Standard users can invoke these calls, but only on their own preferences.\n\nUse this object to query the set of currently configured user preferences in your organization. In your client application, you can query the User object to obtain valid User IDs to access the UserPreference object.\n\nAll users can invoke the supported calls with this object. Standard users can invoke these calls, but only on their own preferences.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserPreference\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Preference\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Value\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Id": {
+      "field_label": "User Preference ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Preference": {
+      "field_label": "Preference",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "textarea",
+      "length": "10000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

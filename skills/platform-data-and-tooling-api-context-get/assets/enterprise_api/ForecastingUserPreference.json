@@ -1,0 +1,169 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ForecastingUserPreference - Data API",
+  "description": "Represents the forecasting selections that a user has made, such as display options, date range, forecasting type, and currency.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A unique system-generated numerical identifier for the user."
+    },
+    "ForecastingDisplayedTypeId": {
+      "type": "reference",
+      "properties": "Create, Group, Sort, Update",
+      "description": "An identifier for the forecasting type that’s displayed."
+    },
+    "ForecastingPeriodDuration": {
+      "type": "int",
+      "properties": "Create, Group, Nillable, Sort, Update",
+      "description": "How long the forecasting period lasts."
+    },
+    "ForecastingPeriodType": {
+      "type": "picklist",
+      "properties": "Create, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The forecasting period’s type. Valid values include: Month, Quarter, Week, or Year"
+    },
+    "ForecastingStartPeriod": {
+      "type": "int",
+      "properties": "Create, Group, Nillable, Sort, Update",
+      "description": "The date when the forecasting period begins."
+    },
+    "ForecastingViewCurrency": {
+      "type": "string",
+      "properties": "Create, Group, Nillable, Sort, Update",
+      "description": "The currency shown on the forecasts page."
+    },
+    "IsForecastingHideZeroRows": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group, Sort, Update",
+      "description": "Whether the forecasts page shows zero-value rows."
+    },
+    "IsForecastingShowQuantity": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group, Sort, Update",
+      "description": "Whether the forecasts page shows forecast quantity."
+    },
+    "IsHideForecastingGuidedTour": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group, Sort, Update",
+      "description": "Whether the forecasts page shows the guided tour."
+    },
+    "IsHideForecastingQuotaColumn": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group, Sort, Update",
+      "description": "Whether the forecasts page shows a quota column."
+    },
+    "IsShowForecastingChangeSignals": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group, Sort, Update",
+      "description": "Whether the forecasts page shows changes in the last 7 days."
+    },
+    "IsShowForecastingQuotaAttainment": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group, Sort, Update",
+      "description": "Whether the forecasts page shows quota attainment information."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only standard users with the View All Forecasts or Allow Forecasting permission or delegated forecast manager status can access this object.",
+  "field_reference": {
+    "ExternalId": {
+      "field_label": "External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "ForecastAnythingPeriodDuration": {
+      "field_label": "Forecast Anything Period Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "ForecastAnythingPeriodType": {
+      "field_label": "Forecast Anything Period Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ForecastAnythingStartPeriod": {
+      "field_label": "Forecast Anything Start Period",
+      "type": "int",
+      "digits": "9"
+    },
+    "ForecastingDisplayedTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingPeriodDuration": {
+      "field_label": "Period Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "ForecastingPeriodType": {
+      "field_label": "Period Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ForecastingStartPeriod": {
+      "field_label": "Period Start",
+      "type": "int",
+      "digits": "9"
+    },
+    "ForecastingViewCurrency": {
+      "field_label": "Viewing Currency",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Forecasting User Preference ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsForecastAnythingAggrEnabled": {
+      "field_label": "Aggregate Forecasting Anything",
+      "type": "boolean"
+    },
+    "IsForecastingHideZeroRows": {
+      "field_label": "Hide Zero Rows",
+      "type": "boolean"
+    },
+    "IsForecastingShowQuantity": {
+      "field_label": "Show Quantity",
+      "type": "boolean"
+    },
+    "IsHideForecastingGuidedTour": {
+      "field_label": "Hide Guided Tour",
+      "type": "boolean"
+    },
+    "IsHideForecastingQuotaColumn": {
+      "field_label": "Hide Quota Column",
+      "type": "boolean"
+    },
+    "IsShowForecastingChangeSignals": {
+      "field_label": "Show Change Signals",
+      "type": "boolean"
+    },
+    "IsShowForecastingQuotaAttainment": {
+      "field_label": "Show Quota Attainment",
+      "type": "boolean"
+    },
+    "IsShowForecastingRoundedAmounts": {
+      "field_label": "Show Rounded Amounts",
+      "type": "boolean"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

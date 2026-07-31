@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "PardotTenant - Tooling API",
+  "description": "Represents an Account Engagement business unit. This object is available in API version 56.0 and later.",
+  "supported_soap_calls": "`create()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CreationStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The operational status of the business unit managed by Account Engagement. Possible values are: Backfilled Created Creating Deleted Deleting Deprovisioned Deprovisioning Error Updated Updating The default value is Creating."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Universally unique identifier for this object. If an object does not provide a value for this field on INSERT, a value will be auto-generated for it."
+    },
+    "InitialPardotAdminId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The Salesforce user who set up the business unit. This field is a relationship field.",
+      "relationship_name": "InitialPardotAdmin",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the business unit."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the Account Engagement business unit. This field syncs with the PardotTenantName field."
+    },
+    "PardotTenantId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The numerical identifier for the business unit."
+    },
+    "PardotTenantName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the Account Engagement business unit. This field syncs with the MasterLabel field."
+    },
+    "PardotTenantStatusCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The operational status of the business unit. Possible values are: InsufficientLicenseLimits InvalidRequest PardotAccountNotFound UnknownError UsernameCollision"
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityPackage - Data API",
+  "description": "Stores details about managed and unmanaged packages that are added, updated, or removed from a tenant in Security Center. Use this object to identify whether new packages are installed, upgraded, or uninstalled from your connected tenants. This object is available to Security Center subscribers in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Action": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The action taken on a package within a tenant. The options are: Added Removed"
+    },
+    "ActionDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the action was taken."
+    },
+    "AppExchangeReady": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the package has passed AppExchange review."
+    },
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the individual detail record. This field is unique within your org."
+    },
+    "InstalledBy": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The user that installed the package."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the type of metric that was counted."
+    },
+    "MetricsType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of data being collected."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the metric for which data is being collected."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with the package."
+    },
+    "PackageIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the package. [VERIFY WITH PM]"
+    },
+    "PackageName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the package being added to or removed from the tenant."
+    },
+    "Publisher": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the publisher that created the package."
+    },
+    "ReleaseStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The release status of the package. The options are: Beta Released"
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant that the package was added to or removed from."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the tenant that the package was added to or removed from."
+    },
+    "UninstalledBy": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The user that uninstalled the package."
+    },
+    "Version": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The current version of the package."
+    }
+  },
+  "special_access_rules": "This object can only be read and queried.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityPackageChangeEvent**: Change events are available for the object.\n- **TenantSecurityPackageFeed**: Feed tracking is available for the object.\n- **TenantSecurityPackageHistory**: History is available for tracked fields of the object.\n- **TenantSecurityPackageOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityPackageShare**: Sharing is available for the object."
+}

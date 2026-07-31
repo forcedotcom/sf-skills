@@ -1,0 +1,155 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ApplicationFormTemplate - Data API",
+  "description": "Represents the fields to capture application metadata as a template which is used in application tracking and processing. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApprovalFlowName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the flow that must be launched to approve the applications associated with the application form template."
+    },
+    "ApplicationType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of application or template. Possible values are: Contractor EVCharger—EV Charger EnergyEfficiency—Energy Efficiency NewConnection—New Connection The default value is NewConnection."
+    },
+    "ApprovalLimitAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Amount up to which the approver has the authority to approve applications."
+    },
+    "ApproverId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user who must approve the application payout. This field is a relationship field.",
+      "relationship_name": "Approver",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The description of the application form template."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the application form template."
+    }
+  },
+  "special_access_rules": "This object is available only with the EAndU Cloud Program Access permission set.\n\nThis object is available only with the EAndU Cloud\n         Program Access permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ApplicationFormTemplateChangeEvent**: Change events are available for the object.\n- **ApplicationFormTemplateFeed**: Feed tracking is available for the object.\n- **ApplicationFormTemplateHistory**: History is available for tracked fields of the object.\n- **ApplicationFormTemplateOwnerSharingRule**: Sharing rules are available for the object.\n- **ApplicationFormTemplateShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ApplicationType": {
+      "field_label": "Application Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ApprovalFlowName": {
+      "field_label": "Approval Flow Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ApprovalLimitAmount": {
+      "field_label": "Approval Limit Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ApproverId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Application Form Template ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Default",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ObjectType": {
+      "field_label": "Object Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OmniProcessId": {
+      "field_label": "Omni Process ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

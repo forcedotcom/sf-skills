@@ -1,0 +1,264 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "CartDeliveryGroupMethod - Data API",
+  "description": "Represents the selected delivery method for a cart delivery group used in Lightning B2B Commerce checkout. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AdjustedShippingFee": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Shipping fee, including TotalAdjustmentAmount, for the delivery method."
+    },
+    "Carrier": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The carrier that the buyer chose for their delivery method. Values are defined based on the user’s shipping service. This field is available in API version 59.0 or later."
+    },
+    "CartCheckoutSessionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID used to identify your cart checkout session."
+    },
+    "CartDeliveryGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the cart delivery group associated with the checkout session."
+    },
+    "ClassOfService": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The carrier class of service that the buyer chose for their delivery method. Values are defined based on the user’s shipping service. This field is available in API version 59.0 or later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The currency used for your shipping fee. Default value is USD. Possible values are: USD—U.S. Dollar"
+    },
+    "DeliveryMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the selected order delivery method."
+    },
+    "ExternalProvider": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the external shipping method provider. Optional field."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Assign new delivery groups to active delivery methods. The default value is False. This field is available in API version 59.0 or later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the delivery method."
+    },
+    "ProcessTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Merchant-specified process time for the delivery method. Process time includes the time between when an order is placed and when the shipment is given to the shipping carrier."
+    },
+    "ProcessTimeUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Unit of time used to define ProcessTime. Possible values are: Days Hours Weeks"
+    },
+    "ProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Optional. This product represents a delivery charge order product for a delivery using this delivery method. For example, you could create a product that represents an overnight express charge and assign it to an overnight express delivery method. If your store uses Salesforce Native Shipping, the ProductId is selected from a non-variation product with Shipping in its name. The term Shipping in a product name isn’t localized. If no matching product is found, a random non-variation product is used. This field is available in API version 59.0 or later."
+    },
+    "ReferenceNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reference number for an external delivery method. This field is available in API version 59.0 or later."
+    },
+    "ShippingFee": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Shipping fee associated with the delivery method. Required field."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The adjustment amount of a promotion applicable to the delivery method."
+    },
+    "TransitTimeMax": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Maximum estimate of transit time for the delivery method. Transit time includes the time between when a shipping carrier receives a shipment and when the shipment arrives at the delivery address."
+    },
+    "TransitTimeMin": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Minimum estimate of transit time for the delivery method. Transit time includes the time between when a shipping carrier receives a shipment and when the shipment arrives at the delivery address."
+    },
+    "TransitTimeUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Unit of time used to define TransitTimeMax and TransitTimeMin. Possible values are: Days Hours Weeks"
+    },
+    "WebCartId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the WebCart associated with the cart delivery group method. Required field."
+    }
+  },
+  "special_access_rules": "The CartDeliveryGroupMethod object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "usage": "Use the CartDeliveryGroupMethod object to give commerce buyers the ability to choose a delivery method for a cart delivery group. Shipping integrations populate the delivery options that are available for a cart delivery group.",
+  "field_reference": {
+    "AdjustedShippingFee": {
+      "field_label": "Adjusted Shipping Fee",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Carrier": {
+      "field_label": "Carrier",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CartCheckoutSessionId": {
+      "field_label": "Cart Checkout Session ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CartDeliveryGroupId": {
+      "field_label": "Cart Delivery Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ClassOfService": {
+      "field_label": "Class Of Service",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeliveryMethodId": {
+      "field_label": "Order Delivery Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExternalProvider": {
+      "field_label": "External Provider",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Cart Delivery Group Method ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProcessTime": {
+      "field_label": "Order Processing Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "ProcessTimeUnit": {
+      "field_label": "Unit of Order Processing Time",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReferenceNumber": {
+      "field_label": "Reference Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ShippingFee": {
+      "field_label": "Shipping Fee",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Total Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "TransitTimeMax": {
+      "field_label": "Maximum Transit Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "TransitTimeMin": {
+      "field_label": "Minimum Transit Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "TransitTimeUnit": {
+      "field_label": "Unit of Transit Time",
+      "type": "picklist",
+      "length": "255"
+    },
+    "WebCartId": {
+      "field_label": "Cart ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,189 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserProvAccount - Data API",
+  "description": "Represents information that links a Salesforce user account with an account in a third-party (target) system, such as Google, for users of connected apps with Salesforce user provisioning enabled. This object is available in API version 33.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ConnectedAppId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The 15 character application ID. This is a relationship field.",
+      "relationship_name": "ConnectedApp",
+      "relationship_type": "Lookup",
+      "refers_to": "ConnectedApplication"
+    },
+    "DeletedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the associated user account in the target system was deleted. This value is automatically updated during the provisioning and reconciling processes."
+    },
+    "ExternalEmail": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email address as stored in the target system for the associated user account."
+    },
+    "ExternalFirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The first name as stored in the target system for the associated user account."
+    },
+    "ExternalLastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The last name as stored in the target system for the associated user account."
+    },
+    "ExternalUserId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The unique identifier for the user as stored in the target system."
+    },
+    "ExternalUsername": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The username as stored in the target system for the associated user account."
+    },
+    "IsKnownLink": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Setting the IsKnownLink value to true implies the administrator or another user is managing the relationship between the Salesforce user account and the third-party user account, manually. This field helps Salesforce coordinate updates between the UserProvAccountStaging object and the UserProvAccount object while committing staged accounts. Typically, for a matching user account (the same ExternalUserId for both objects), Salesforce copies the values from the UserProvAccountStaging object to the UserProvAccount object. However, if Salesforce encounters a UserProvAccountStaging object with a matching ExternalUserId but different LinkState and SalesforceUserId values during this process, Salesforce checks the UserProvAccount IsKnownLink value. If the IsKnownLinkvalue is true, Salesforce doesn’t copy the LinkState and SalesforceUserId values from the UserProvAccountStaging object to the UserProvAccount object (all other values are copied). The default is false, meaning Salesforce manages the account relationship."
+    },
+    "LinkState": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The state of the current connection between the user account in the Salesforce organization and the associated user account in the target system. The valid values are: linked— changes to the account in the Salesforce organization are queued to be updated for the associated user account in the target system. duplicate— an associated account in the target system exists. orphaned—no associated account exists in the target system. ignored— changes to the account in the Salesforce organization have no effect on the associated user account in the target system."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The unique name for this object."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Namepointing, Sort, Update",
+      "description": "The user ID of the owner of this object—typically a Salesforce administrator."
+    },
+    "SalesforceUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user ID for the user account in the Salesforce organization that is associated with the user account in the target system. This is a relationship field.",
+      "relationship_name": "SalesforceUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the account in the target system. The valid values are: Active Deactivated Deleted"
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserProvAccount\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ConnectedApp\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ConnectedApplication\"/>\n        <element name=\"ConnectedAppId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeletedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalFirstName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalLastName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalUserId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalUsername\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsKnownLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LinkState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SalesforceUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"SalesforceUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ConnectedAppId": {
+      "field_label": "Connected App ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeletedDate": {
+      "field_label": "Deleted Date",
+      "type": "datetime"
+    },
+    "ExternalEmail": {
+      "field_label": "External Email",
+      "type": "string",
+      "length": "150"
+    },
+    "ExternalFirstName": {
+      "field_label": "External First Name",
+      "type": "string",
+      "length": "150"
+    },
+    "ExternalLastName": {
+      "field_label": "External Last Name",
+      "type": "string",
+      "length": "150"
+    },
+    "ExternalUserId": {
+      "field_label": "External User Id",
+      "type": "string",
+      "length": "150"
+    },
+    "ExternalUsername": {
+      "field_label": "External Username",
+      "type": "string",
+      "length": "150"
+    },
+    "Id": {
+      "field_label": "User Provisioning Account ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsKnownLink": {
+      "field_label": "Manual Override",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LinkState": {
+      "field_label": "Link State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SalesforceUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

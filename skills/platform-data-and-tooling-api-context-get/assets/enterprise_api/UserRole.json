@@ -1,0 +1,184 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserRole - Data API",
+  "description": "Represents a user role in your organization.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CaseAccessForAccountOwner": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The case access level for the account owner."
+    },
+    "ContactAccessForAccountOwner": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The contact access level for the account owner. Note: When DefaultContactAccess is set to Controlled by Parent, you can’t create or update this field."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object's name in a managed package and the changes are reflected in a subscriber's organization. Corresponds to Role Name in the user interface. This field is available in API version 24.0 and later. When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record."
+    },
+    "ForecastUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the forecast manager associated with this role. Label is User ID."
+    },
+    "IsPartner": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the user role is a partner who has access to the partner portal (true) or not (false). This field is not available for release 9.0 and later. Instead, use PortalType with the value Partner."
+    },
+    "MayForecastManagerShare": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the forecast manager can manually share their own forecast."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the role. Corresponds to Label on the user interface.",
+      "required": true
+    },
+    "OpportunityAccessForAccountOwner": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The opportunity access level for the account owner. Note that you can’t set a user role with an opportunity access less than that specified in organization-wide defaults.",
+      "required": true
+    },
+    "ParentRoleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the parent role."
+    },
+    "PortalAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the role’s associated portal account. This field is read-only."
+    },
+    "PortalAccountOwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the role’s associated portal account’s owner. This field is read-only."
+    },
+    "PortalRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The portal role: Executive, Manager, User, or PersonAccount."
+    },
+    "PortalType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "This value indicates the type of portal for the role: None: Salesforce application role. CustomerPortal: Customer portal role. Partner: partner portal role. The field IsPartner used in release 8.0 will map to this value. This field replaces IsPartner beginning with release 9.0."
+    },
+    "RollupDescription": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the forecast rollup. Label is Description."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users with the View Roles and Role Hierarchy permission can access this object, and only users with the Manage Roles permission can edit this object.",
+  "usage": "Use this object to query the set of currently configured user roles in your organization. Use it in your client application to obtain valid UserRole IDs to use when querying or modifying a User record.\n\nUsers with the View Roles and Role Hierarchy permission can query or describe this\n                object. If your client application logs in with the “Manage Users”\n                permission, it can query, create, update, or delete UserRole records.\n\nYou\n                    can’t update any field for a portal role.\n\nFor example, the following code finds all roles that are not assigned to any\n                users.\n\nSELECT Id, Name, DeveloperName\n\nFROM UserRole\n\nWHERE Id NOT IN (SELECT UserRoleId\n\nWHERE UserRoleId !='000000000000000')",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"UserRole\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CaseAccessForAccountOwner\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContactAccessForAccountOwner\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ForecastUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MayForecastManagerShare\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OpportunityAccessForAccountOwner\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ParentRole\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRole\"/>\n        <element name=\"ParentRoleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PortalAccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PortalAccountOwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PortalType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RollupDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Users\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CaseAccessForAccountOwner": {
+      "field_label": "Case Access Level for Account Owner",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ContactAccessForAccountOwner": {
+      "field_label": "Contact Access Level for Account Owner",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ForecastUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Role ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MayForecastManagerShare": {
+      "field_label": "May Forecast Manager Share",
+      "type": "boolean"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OpportunityAccessForAccountOwner": {
+      "field_label": "Opportunity Access Level for Account Owner",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ParentRoleId": {
+      "field_label": "Parent Role ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PortalAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PortalAccountOwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PortalRole": {
+      "field_label": "Portal Role",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PortalType": {
+      "field_label": "Portal Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RollupDescription": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

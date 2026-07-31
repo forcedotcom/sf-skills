@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "AdvAcctFrcstDisplayGroup - Tooling API",
+  "description": "Represents information about the groups for the advanced account forecast set measures or dimensions. This object is available in API version 57.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdvAccountForecastSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The forecast set associated with the advanced account forecast display group. This field is a polymorphic relationship field.",
+      "relationship_name": "AdvAccountForecastSet",
+      "relationship_type": "Lookup",
+      "refers_to": "AdvAccountForecastSet, SalesAgreementSettings"
+    },
+    "AdvAcctFrcstDisplayGroupName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the advanced account forecast group."
+    },
+    "GroupType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies the category for the display group. Possible value is: MEASURE"
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the display group is the default group. The default value is false."
+    },
+    "UserProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The profile for which the display group is applicable. This field is a relationship field.",
+      "relationship_name": "UserProfile",
+      "relationship_type": "Lookup",
+      "refers_to": "Profile"
+    }
+  }
+}

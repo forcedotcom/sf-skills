@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "BroadcastTopicNetwork - Data API",
+  "description": "Represents a link between a broadcast topic and the Experience Cloud network site for Service Cloud. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BroadcastTopicId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The BroadcastTopic ID that's linked to the Network. This field is a relationship field.",
+      "relationship_name": "BroadcastTopic",
+      "relationship_type": "Lookup",
+      "refers_to": "BroadcastTopic"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The name of the broadcast topic that's assigned to the network."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The Network ID that's linked to the BroadcastTopic.. This field is a relationship field.",
+      "relationship_name": "Network",
+      "relationship_type": "Lookup",
+      "refers_to": "Network"
+    }
+  },
+  "special_access_rules": "To access this object with Service Cloud, enable Incident Management in Setup and Broadcast Site Banner in the Incident Management setup.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **BroadcastTopicNetworkChangeEvent**: Change events are available for the object."
+}

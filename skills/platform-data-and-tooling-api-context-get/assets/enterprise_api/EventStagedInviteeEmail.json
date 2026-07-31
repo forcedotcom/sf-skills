@@ -1,0 +1,123 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "EventStagedInviteeEmail - Data API",
+  "description": "Represents the relationship between an event and an email address invited to the event that doesn’t match to a user, contact, or lead record. Data about the unmatched email address is represented in StagedInviteeEmail. This object represents event-related details, such as the invitee's attendance response to the event. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "EventId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the related event record. This field is a relationship field.",
+      "relationship_name": "Event",
+      "refers_to": "Event"
+    },
+    "IsArchived": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the event is archived (true) or not (false). This value helps manage high volumes of archived events, improving query performance. The default value is false."
+    },
+    "IsOrganizer": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the invitee is the event organizer (true) or not (false). The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The invited email address."
+    },
+    "StagedInviteeEmailId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the related invitee email address record. This field is a relationship field.",
+      "relationship_name": "StagedInviteeEmail",
+      "relationship_type": "Master-detail",
+      "refers_to": "StagedInviteeEmail"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The attendance response to the event from the invitee. Possible values are: Accepted Declined Maybe New Uninvited"
+    }
+  },
+  "special_access_rules": "This object is available with Einstein Activity Capture when Sync Email as Salesforce Activity is turned on.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventId": {
+      "field_label": "Event ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Event Staged Invitee Email ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsArchived": {
+      "field_label": "Is Archived",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsOrganizer": {
+      "field_label": "Is Organizer",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Event Staged Invitee Email Name",
+      "type": "string",
+      "length": "255"
+    },
+    "StagedInviteeEmailId": {
+      "field_label": "Staged Invitee Email ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

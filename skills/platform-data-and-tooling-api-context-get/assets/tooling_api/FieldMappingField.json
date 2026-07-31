@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "FieldMappingField - Tooling API",
+  "description": "Represents a field in an object in the org that maps to a field in a data service.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataServiceField": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The display name of the field in the data service that maps to this FieldMappingField."
+    },
+    "FieldMappingRowId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Foreign key for the object associated with this FieldMappingField object."
+    },
+    "DataServiceObjectName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "A data service object that contains the field represented by this FieldMappingField. The set of picklist values includes all the object types defined in the data service. However, if you specify a non-existent object, the API call returns an error."
+    },
+    "Priority": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Represents the priority that the data service uses when it updates the field, relative to other update rules that exist for the same field."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FieldMappingField\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"DataServiceField\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DataServiceObjectName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMappingRow\" minOccurs=\"0\" type=\"ens:FieldMappingRow\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMappingRowId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Priority\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

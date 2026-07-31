@@ -1,0 +1,281 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ChangeRequest - Data API",
+  "description": "Represents a decision to implement a formal request for a change (RFC). This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BusinessJustification": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the business reason to implement the change. This field can store up to 32 KB of data, but only the first 255 characters display in reports."
+    },
+    "BusinessReason": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The core reason for creating the change request. Possible values are: t2"
+    },
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of change request. Administrators set field values."
+    },
+    "ChangeRequestNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The unique, system-generated change request number."
+    },
+    "ChangeType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of change request. Administrators set field values. Possible values are: Emergency Major Normal Standard"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the change request. This field can store up to 32 KB of data, but only the first 255 characters display in reports."
+    },
+    "EstimatedEndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time (in UTC) when the change request is estimated to be implemented."
+    },
+    "EstimatedStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The estimated date and time (in UTC) when the change request is implemented."
+    },
+    "FinalReviewDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time (in UTC) when the change request was reviewed."
+    },
+    "FinalReviewNotes": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Notes left by the change request reviewer. This field can store up to 32 KB of data, but only the first 255 characters display in reports."
+    },
+    "Impact": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Shows the impact of a requested change. Possible values are: High Low Medium The default value is 'High'."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "A polymorphic relationship field that represents the user or group assigned as the change reviewer.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Priority": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The impact and urgency of a requested change. Possible values are: Critical High Low Moderate The default value is 'Critical'."
+    },
+    "RemediationPlan": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the steps required to resolve the incident. This field can store up to 32 KB of data, but only the first 255 characters display in reports."
+    },
+    "ReviewerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user who reviewed the change request. This is a relationship field.",
+      "relationship_name": "Reviewer",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "RiskImpactAnalysis": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "An assessment of the risk involved with the implementation of the change request. Administrators set field values, and each value can have up to 20 characters."
+    },
+    "RiskLevel": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The risk level associated with adopting the requested change. Possible values are: High Low Medium The default value is 'High'."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Represents any custom or granular stages a customer may want to track. This will be a dependent picklist. Possible values are: Approved Canceled Closed Implementing New Open Planning Rejected Reviewed Scheduled The default value is 'New'."
+    },
+    "StatusCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the change. Possible values are: Approved Canceled Closed Implementing New Open Planning Rejected Reviewed Scheduled The default value is 'New'."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A brief description of the requested change."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ChangeRequestChangeEvent (API version 59.0)**: Change events are available for the object.\n- **ChangeRequestFeed**: Feed tracking is available for the object.\n- **ChangeRequestHistory**: History is available for tracked fields of the object.\n- **ChangeRequestOwnerSharingRule**: Sharing rules are available for the object.\n- **ChangeRequestShare**: Sharing is available for the object.",
+  "field_reference": {
+    "BusinessJustification": {
+      "field_label": "Business Justification",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "BusinessReason": {
+      "field_label": "Business Reason",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ChangeRequestNumber": {
+      "field_label": "Change Request Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ChangeType": {
+      "field_label": "Type of Change",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created On",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "EstimatedEndTime": {
+      "field_label": "End Time (Estimated)",
+      "type": "datetime"
+    },
+    "EstimatedStartTime": {
+      "field_label": "Start Time (Estimated)",
+      "type": "datetime"
+    },
+    "FinalReviewDateTime": {
+      "field_label": "Reviewed On",
+      "type": "datetime"
+    },
+    "FinalReviewNotes": {
+      "field_label": "Final Review Notes",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Id": {
+      "field_label": "Change Request ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Impact": {
+      "field_label": "Impact",
+      "type": "picklist",
+      "length": "40"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified On",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RemediationPlan": {
+      "field_label": "Remediation Plan",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "ReviewerId": {
+      "field_label": "Reviewer ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RiskImpactAnalysis": {
+      "field_label": "Impact Analysis",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "RiskLevel": {
+      "field_label": "Risk Level",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StatusCode": {
+      "field_label": "Status Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

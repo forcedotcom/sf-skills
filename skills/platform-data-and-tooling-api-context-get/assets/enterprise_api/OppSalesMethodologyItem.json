@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "OppSalesMethodologyItem - Data API",
+  "description": "Represents the scored criteria for an opportunity's associated sales methodology. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the opportunity's sales methodology criteria is locked (true) or not (false). The default value is false."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a user can edit the opportunity's sales methodology criteria. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the opportunity's sales methodology stage or criteria."
+    },
+    "Note": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "This field stores details you enter when updating or scoring the opportunity's sales methodology stage or criteria."
+    },
+    "OppSalesMethodologyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the opportunity's sales methodology. This field is a relationship field.",
+      "relationship_name": "OppSalesMethodology",
+      "relationship_type": "Master-detail",
+      "refers_to": "OppSalesMethodology (the master object)",
+      "required": true
+    },
+    "SalesMethodologyDefItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the sales methodology stage or criteria. This field is a relationship field.",
+      "relationship_name": "SalesMethodologyDefItem",
+      "refers_to": "SalesMethodologyDefItem",
+      "required": true
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value associated with the opportunity's scored sales methodology stage or criteria."
+    }
+  },
+  "special_access_rules": "To access this object turn on the userHasSalesMethodologyEnabled, OrgPreferences, SalesMethodologyPref, and PipelineInspectorUser permissions. To create, edit, or delete records, users must own the associated opportunity's parent opportunity.\n\ncrudEnabled =\n\n. This\n            object isn't accessible via standard CRUD API calls."
+}

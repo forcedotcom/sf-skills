@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "LocWaitlistMsgTemplate - Data API",
+  "description": "Represents a junction object connecting LocationWaitlist to MessagingTemplate. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date on which the record was last viewed."
+    },
+    "LocationWaitlistId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Reference to the LocationWaitlist record."
+    },
+    "MessagingTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Reference to the MessagingTemplate record."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of this record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner for this record."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the queue. Possible values are: approaching—In Progress confirmation—Confirmed inactive—Inactive ready—Ready removed—Removed"
+    }
+  }
+}

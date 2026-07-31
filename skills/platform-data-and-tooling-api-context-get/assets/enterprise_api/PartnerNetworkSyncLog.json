@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "PartnerNetworkSyncLog - Data API",
+  "description": "Represents the Org Sync Log tab in Salesforce, where Salesforce administrators can track the replication of record inserts and updates being performed in Organization Sync. The Connection Detail page for the replication connection also displays the Org Sync Log’s twenty most recent entries, and provides a link to the log.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ConnectionEvent": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The action being replicated to the partner organization, such as a record insertion."
+    },
+    "ConnectionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Salesforce to Salesforce replication connection in which the replication event succeeded or failed."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A description of the replication event."
+    },
+    "EntityType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of record being inserted or updated."
+    },
+    "Error": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The code used to describe the replication failure or success."
+    },
+    "LocalRecord": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The record being inserted or updated."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "An item is added to the Organization Sync Log if it failed to be replicated to the linked organization. This picklist includes the following values: Failed: The replication continued to fail after multiple retries, and won’t be retried further. Resolved: The replication succeeded after retrying. Retrying: Salesforce is retrying the replication. This field is available in API version 35.0 and later."
+    }
+  },
+  "special_access_rules": "The Org Sync Log tab can only be added in organizations where Organization Sync has been enabled. To add the tab to the Salesforce user interface, users must also have the “Manage Connections” user permission."
+}

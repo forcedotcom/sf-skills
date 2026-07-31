@@ -1,0 +1,195 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OauthTokenExchangeHandler - Data API",
+  "description": "Represents a token exchange handler. The token exchange handler also consists of an Apex class. During the OAuth 2.0 token exchange flow, the token exchange handler is used to validate tokens from an external identity provider and to map users to Salesforce. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A description for your token exchange handler."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The API name for the handler."
+    },
+    "IsContactCreationAllowed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "For internal use only."
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the handler is enabled for the token exchange flow. The default value is false."
+    },
+    "IsUserCreationAllowed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the handler can set up new users. During the token exchange flow, the Apex handler maps users from the identity provider to Salesforce. If the IsUserCreationAllowed field is true, the canCreateUser boolean in the getUserForTokenSubject method is true, and the user doesn’t exist in Salesforce, the handler sets up a new User object, which Salesforce automatically inserts to finish creating the user. The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the language used in the org where the token exchange handler was created. Possible values are: da—Danish de—German en_US—English es—Spanish es_MX—Spanish (Mexico) fi—Finnish fr—French it—Italian ja—Japanese ko—Korean nl_NL—Dutch no—Norwegian pt_BR—Portuguese (Brazil) ru—Russian sv—Swedish th—Thai zh_CN—Chinese (Simplified) zh_TW—Chinese (Traditional)"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label of the token exchange handler record."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix."
+    },
+    "SupportedTokenTypesAccessToken": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the handler supports opaque access tokens from the identity provider."
+    },
+    "SupportedTokenTypesIdToken": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the handler supports OpenID Connect ID tokens from the identity provider."
+    },
+    "SupportedTokenTypesJwt": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the handler supports tokens from the identity provider that are in JWT format, such as JWT-based access tokens."
+    },
+    "SupportedTokenTypesRefreshToken": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the handler supports OAuth 2.0 refresh tokens from the identity provider."
+    },
+    "SupportedTokenTypesSaml2": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the handler supports SAML 2.0 assertions from the identity provider."
+    },
+    "TokenHandlerApexId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Apex class associated with the token exchange handler. The class contains methods to validate the token and map users to Salesforce. It must extend the Oauth2TokenExchangeHandler Apex class. This field is a relationship field.",
+      "relationship_name": "TokenHandlerApex",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass"
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OauthTokenExchangeHandler\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsContactCreationAllowed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsUserCreationAllowed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SupportedTokenTypesAccessToken\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SupportedTokenTypesIdToken\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SupportedTokenTypesJwt\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SupportedTokenTypesRefreshToken\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SupportedTokenTypesSaml2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TokenHandlerApex\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"TokenHandlerApexId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Oauth Token Exchange Handler ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsContactCreationAllowed": {
+      "field_label": "Allow contact creation",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEnabled": {
+      "field_label": "Enabled",
+      "type": "boolean"
+    },
+    "IsUserCreationAllowed": {
+      "field_label": "Allow user creation",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "SupportedTokenTypesAccessToken": {
+      "field_label": "Access Token",
+      "type": "boolean"
+    },
+    "SupportedTokenTypesIdToken": {
+      "field_label": "ID Token",
+      "type": "boolean"
+    },
+    "SupportedTokenTypesJwt": {
+      "field_label": "JWT",
+      "type": "boolean"
+    },
+    "SupportedTokenTypesRefreshToken": {
+      "field_label": "Refresh Token",
+      "type": "boolean"
+    },
+    "SupportedTokenTypesSaml2": {
+      "field_label": "SAML 2",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TokenHandlerApexId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

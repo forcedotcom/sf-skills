@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "OpportunitySplitType - Data API",
+  "description": "OpportunitySplitType provides unique labels and behavior for each split type. This object is available in API version 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Describes the purpose of the split type, providing context to future developers."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record.",
+      "required": true
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Enables or disables the split type."
+    },
+    "IsTotalValidated": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the split must total 100%. If false, the split can total any percentage."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates language of split labels in the user interface."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The user-interface label for the split type."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix. This field can’t be accessed unless the logged-in user has the Customize Application permission."
+    },
+    "SplitEntity": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The containing record type, such as an opportunity. Available in API version 30 and later."
+    },
+    "SplitField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates which currency field of the opportunity object is split. Available in API version 30 and later."
+    },
+    "SplitDataStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable,Restricted picklist, Sort,Update",
+      "description": "Indicates the status of the split type. Available in API version 30 and later."
+    }
+  }
+}

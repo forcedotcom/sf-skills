@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DataDetPlcyDataSrchExps - Data API",
+  "description": "Represents data search expressions for scanning DataDetect scan policies based on Java regex. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DataDetectPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the scan policy associated with the data search expression. This field is a relationship field.",
+      "relationship_name": "DataDetectPolicy",
+      "relationship_type": "Master-Detail",
+      "refers_to": "DataDetectPolicy"
+    },
+    "Expression": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Regular expression that represents sensitive data to be scanned."
+    },
+    "IsCaseSensitive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Designates whether the expression is case-sensitive (true) or not (false). The default value is false."
+    },
+    "IsKeywordSearch": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Designates whether the expression can be used as a search keyword (true) or not (false). The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the expression."
+    }
+  }
+}

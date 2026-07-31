@@ -1,0 +1,124 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "LiveChatBlockingRule - Data API",
+  "description": "Represents a rule for blocking chat visitors’ IP addresses from starting new chats with agents. This object is available in API version 34.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The description of the blocking rule—for example, the reason why the given IP address or range of addresses is being banned from starting new chats."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "FromIpAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The IP address of the user that you want to block, or the beginning of the range of IP addresses you want to block. If you want to block a range of IP addresses, indicate the end of the range in the ToIpAddress field. If you don’t indicate an IP address in the ToIpAddress field, the only IP address that will be blocked is the IP address in the FromIpAddress field."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the blocking rule."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Label for the blocking rule."
+    },
+    "ToIpAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "(Optional) The end of the range of IP addresses that you want to block. The range begins with and includes the IP address in the FromIpAddress field, and it ends with and includes the IP address in the ToIpAddress field."
+    }
+  },
+  "special_access_rules": "To create a new rule, you must be logged in with the “Customize Application” permission or as a system administrator.",
+  "usage": "Use this object to query and manage rules for blocking customers from starting new chats with agents.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "FromIpAddress": {
+      "field_label": "From IP Address",
+      "type": "string",
+      "length": "39"
+    },
+    "Id": {
+      "field_label": "Chat Blocking Rule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Chat Blocking Rule Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OwnerType": {
+      "field_label": "Owner Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ToIpAddress": {
+      "field_label": "To IP Address",
+      "type": "string",
+      "length": "39"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

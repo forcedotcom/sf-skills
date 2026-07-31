@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "CORS Violation Record Event Type - Data API",
+  "description": "CORS Violation Record events capture information about Cross-Origin Resource Sharing (CORS) violations. Cross-origin requests to Lightning apps are blocked unless the request comes from a URL listed in your CORS allowlist.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always CorsViolation."
+    },
+    "HOST": {
+      "type": "String",
+      "description": "The URL of the requested Salesforce resource. If JavaScript code at https://www.example.com requests a resource from https://www.salesforce.com, the origin is https://www.example.com and the host is https://www.salesforce.com."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000123."
+    },
+    "ORIGIN": {
+      "type": "String",
+      "description": "The URL of the site making the cross-origin request to Salesforce. If JavaScript code at https://www.example.com requests a resource from https://www.salesforce.com, the origin is https://www.example.com and the host is https://www.salesforce.com."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    }
+  }
+}

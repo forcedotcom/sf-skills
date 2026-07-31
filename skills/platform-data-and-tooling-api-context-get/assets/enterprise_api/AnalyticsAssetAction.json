@@ -1,0 +1,106 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AnalyticsAssetAction - Data API",
+  "description": "Represents a Tableau Next asset action. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of asset action. Possible values are: filter flow navigate parameter recordaction"
+    },
+    "AssetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the asset the action is associated with. This field is a polymorphic relationship field.",
+      "relationship_name": "Asset",
+      "relationship_type": "Master-detail",
+      "refers_to": "AnalyticsDashboardWidget, AnalyticsVisualization"
+    },
+    "EventType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The widget event type that triggers the action. Possible values are: click select"
+    },
+    "Version": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The version of the asset action."
+    }
+  },
+  "special_access_rules": "To access this object, you must have Tableau Next enabled in your org and a Tableau Next permission set.",
+  "field_reference": {
+    "ActionType": {
+      "field_label": "Action Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventType": {
+      "field_label": "Event Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "AnalyticsAssetAction ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Version": {
+      "field_label": "Action Input Detail Version",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

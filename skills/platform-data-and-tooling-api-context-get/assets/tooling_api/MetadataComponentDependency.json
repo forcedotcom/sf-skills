@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "limitations",
+    "wsdl_segment"
+  ],
+  "title": "MetadataComponentDependency (Beta) - Tooling API",
+  "description": "Represents dependency relationships between the metadata components in your org. You can query MetadataComponentDependency using Tooling API in API version 43.0 and later or using Bulk API 2.0 in API 49.0 and later.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`GET`, `POST`, `PATCH`, `DELETE`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "MetadataComponentId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of a metadata component that depends on another component.The component with the ID listed in the output as MetadataComponentId has a reference to the component with its ID listed as RefMetadataComponentId. MetadataComponentId is a string field that usually contains either an 18-character ID or a standard object name. Use 18-character IDs, not 15-character IDs, in your queries of this field."
+    },
+    "MetadataComponentName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of a metadata component that depends on another component. For example, YourClass for an Apex class or yourField (without the __c suffix) for a custom field.The component with the name listed in the output as MetadataComponentName has a reference to the component with its name listed as RefMetadataComponentName."
+    },
+    "MetadataComponentNamespace": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of a metadata component that depends on another component.The component with the namespace listed in the output as MetadataComponentNamespace has a reference to the component with its namespace listed as RefMetadataComponentNamespace."
+    },
+    "MetadataComponentType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of a metadata component that depends on another component.The component with the type listed in the output as MetadataComponentType has a reference to the component with its type listed as RefMetadataComponentType."
+    },
+    "RefMetadataComponentId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of a metadata component that another component depends on.The component with the ID listed in the output as RefMetadataComponentId is referenced by the component with its ID listed as MetadataComponentId. RefMetadataComponentId is a string field that usually contains either an 18-character ID or a standard object name. Use 18-character IDs, not 15-character IDs, in your queries of this field."
+    },
+    "RefMetadataComponentName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of a metadata component that another component depends on. For example, YourClass for an Apex class or yourField (without the __c suffix) for a custom field.The component with the name listed in the output as RefMetadataComponentName is referenced by the component with its name listed as MetadataComponentName."
+    },
+    "RefMetadataComponentNamespace": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of a metadata component that another component depends on.The component with the namespace listed in the output as RefMetadataComponentNamespace is referenced by the component with its namespace listed as MetadataComponentNamespace."
+    },
+    "RefMetadataComponentType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of a metadata component that another component depends on.The component with the type listed in the output as RefMetadataComponentType is referenced by the component with its type listed as MetadataComponentType."
+    }
+  },
+  "limitations": "- No more than 2000 records in a single query.\n- Reports are not included in MetadataComponentDependency queries. Use Bulk API 2.0 for dependency relationships that include reports.\n- No more than 100,000 records in a single query.\nThe following SOQL queries are not supported in both Tooling API and Bulk API 2.0\n- SOQL ORDER BY clause\n- SOQL SELECT clause: count() function\n- SOQL queryMore()\n- SOQL WHERE clause: any type of filter with MetadataComponentName\n- SOQL WHERE clause: any type of filter with RefMetadataComponentName\n- SOQL WHERE clause: contains operators other than =, !=, AND, or OR\n- SOQL WHERE clause: filter by (RefMetadataComponentType = ‘StandardEntity’)\n- SOQL WHERE clause: use of the LIKE operator with either the MetadataComponentType field or the RefMetadataComponentType field\n- SOQL OFFSET clause",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"MetadataComponentDependency\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"MetadataComponentId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataComponentName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataComponentNamespace\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataComponentType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RefMetadataComponentId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RefMetadataComponentName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RefMetadataComponentNamespace\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RefMetadataComponentType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

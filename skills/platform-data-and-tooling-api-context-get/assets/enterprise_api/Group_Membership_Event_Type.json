@@ -1,0 +1,104 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Group Membership Event Type - Data API",
+  "description": "Group Membership events capture details about changes to public group and queue membership, such as when members are added to or removed from the public group or queue.",
+  "fields_columns": [
+    "type",
+    "description",
+    "example"
+  ],
+  "fields": {
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using Salesforce services.",
+      "example": "96.43.144.26"
+    },
+    "CPU_TIME": {
+      "type": "Number",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity that took place in the app server layer."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always GroupMembership."
+    },
+    "GROUP_ID": {
+      "type": "Id",
+      "description": "ID of the group whose membership changed.",
+      "example": "00GXXXXXXXXXXXX"
+    },
+    "GROUP_TYPE": {
+      "type": "String",
+      "description": "The type of group. Valid values are: R—Public group Q—Queue",
+      "example": "R"
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring.",
+      "example": "GeJCsym5eyvtEK2I"
+    },
+    "MEMBER_ID": {
+      "type": "Id",
+      "description": "The ID of the member added to or removed from the group. Public groups can contain individual users, other groups, or users in a specified role or territory. Queues can contain individual users, roles, public groups, territories, connections, or partner users.",
+      "example": "005XXXXXXXXXXXX or 00GXXXXXXXXXXXX"
+    },
+    "OPERATION": {
+      "type": "String",
+      "description": "The operation that occurred, such as a member being added to or removed from a group. Valid values are: AddedGroupMember DeletedGroupMember",
+      "example": "DeletedGroupMember"
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization.",
+      "example": "00DXXXXXXXXXXXX"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID.",
+      "example": "3nWgxWbDKWWDIk0FKfF5DV"
+    },
+    "RUN_TIME": {
+      "type": "Number",
+      "description": "The amount of time that the request took in milliseconds.",
+      "example": "115"
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started.",
+      "example": "d7DEq/ANa7nNZZVD"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT.",
+      "example": "20130715233322.670"
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ).",
+      "example": "2015-07-27T11:32:59.555Z"
+    },
+    "URI": {
+      "type": "String",
+      "description": "The URI of the page that’s receiving the request.",
+      "example": "/home/home.jsp"
+    },
+    "URI_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case insensitive ID of the URI of the page that’s receiving the request.",
+      "example": "005XXXXXXXXXYAY"
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API.",
+      "example": "005XXXXXXXXXXXX"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case insensitive ID of the user who’s using Salesforce services through the UI or the API.",
+      "example": "005XXXXXXXXXXXXIA0"
+    }
+  }
+}

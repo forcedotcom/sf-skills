@@ -1,0 +1,127 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "Hostname Redirects Event Type - Data API",
+  "description": "Hostname Redirect events contain details about blocked and successful redirections for your previous My Domain hostnames. The Hostname Redirects event type is available in the EventLogFile object in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "example",
+    "properties",
+    "possible_values",
+    "examples",
+    "possible_values/example"
+  ],
+  "fields": {
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always HostnameRedirects."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT.",
+      "example": "20220715233322.670"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID.",
+      "example": "0000000062_0000x8Lz-"
+    },
+    "ORGANIZATION_ID": {
+      "type": "ID",
+      "description": "The 15-character ID of the org.",
+      "example": "00D000000000345"
+    },
+    "USER_ID": {
+      "type": "ID",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    },
+    "RUN_TIME": {
+      "type": "Number",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always 0."
+    },
+    "CPU_TIME": {
+      "type": "Number",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    },
+    "URI": {
+      "type": "String",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    },
+    "MESSAGE": {
+      "type": "String",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    },
+    "DOMAIN": {
+      "type": "Url",
+      "properties": "Filter, Sort",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    },
+    "SOURCE_HOSTNAME": {
+      "type": "String",
+      "description": "The hostname of the URL from which the redirection originated.",
+      "example": "If https://oldMyDomainName.my.salesforce.com is redirected to https://newMyDomainName.my.salesforce.com, the value of this field is oldMyDomainName.my.salesforce.com"
+    },
+    "TARGET_HOSTNAME": {
+      "type": "String",
+      "description": "The hostname of the URL to which the user or API was redirected.",
+      "example": "If https://oldMyDomainName.my.salesforce.com is redirected to https://newMyDomainName.my.salesforce.com, the value of this field is newMyDomainName.my.salesforce.com"
+    },
+    "PATH": {
+      "type": "String",
+      "description": "The path of the originating URL request, up to the first question mark (?). The path is also used in the redirection target URL. However, this field doesn’t include the query string, if present.",
+      "example": "If the user is redirected from https://MyOldCompany.my.site.com/shop?q=sneakers to https://MyNewCompany.my.site.com/shop?q=sneakers, the value of this field is /shop."
+    },
+    "REDIRECT_REASON": {
+      "type": "String",
+      "description": "The reason for the hostname redirect event.",
+      "possible_values": "Redirected due to a hostname mismatch.—The referring hostname was redirected to the current My Domain equivalent. Redirection suppressed to prevent Lightning Out integration failure.—The *.force.com site URL can’t be redirected for use with Lightning Out. To prevent issues, the original URL was processed as-is. To avoid issues after *.force.com site hostname redirections are stopped, update hard-coded references to the hostname in your Lightning Out integrations. For a Lightning Out code example that uses a site hostname, see Share Lightning Out Apps with Unauthenticated Users in the Salesforce Lightning Component Library. Redirection was blocked because redirections for this hostname are disabled.—Only your last set of My Domain login hostnames is redirected. Those redirections are blocked when the My Domain Routing option Redirect previous My Domain URLs to your current My Domain is deselected or because you removed your previous My Domain. That option applies to legacy (non-enhanced) hostnames in production orgs until Spring ’25. In non-production orgs, that option has no impact on redirections for legacy hostnames in Winter ’25 and later. Non-production orgs include sandboxes, Developer Edition orgs, demo orgs, patch orgs, scratch orgs, and Trailhead Playgrounds. For information If the SOURCE_HOSTNAME is a legacy *.force.com site hostname, the redirection was blocked because the Redirect previousSiteHostnames URLs to your current My Domain site URLs Routing option was deselected on the My Domain Setup page. That option is available in production orgs until Spring ’25. In non-production orgs, that option was removed in Winter ’25. Non-production orgs include sandboxes, Developer Edition orgs, demo orgs, patch orgs, scratch orgs, and Trailhead Playgrounds. Redirection was blocked because redirections for the legacy SOURCE_HOSTNAME are no longer supported.—If your org was created before June 2022, Salesforce served the org on a different set of hostnames until enhanced domains were deployed. The SOURCE_HOSTNAME is one of those hostnames. For non-production orgs, redirections for those hostnames stopped in Winter ’25."
+    },
+    "IS_BLOCKED_REDIRECTION": {
+      "type": "Boolean",
+      "description": "Indicates whether the redirection was blocked.",
+      "possible_values": "1—The redirection was blocked and returned an HTTP 404 response. 0—The redirection proceeded and returned an HTTP 301 or 307 response."
+    },
+    "REFERRER": {
+      "type": "String",
+      "description": "The absolute or partial address from which the request to the SOURCE_HOSTNAME came. The Referrer-Policy HTTP Header of the request determines how much of the URL is shared. For example, if a user clicked a link to the SOURCE_HOSTNAME from a web page, and that web page is on a different domain: if the Referrer-Policy HTTP Header is no-referrer-when-downgrade, REFERRER includes the origin, path, and query-string parameters up to the first hash (#), if present. if the Referrer-Policy HTTP Header is strict-origin-when-cross-origin, REFERRER includes the origin only. if the Referrer-Policy HTTP Header is same-origin, REFERRER is null.",
+      "examples": "https://www.example.com https://www.example.com/page/page/index.htm https://www.example.com/page/index.htm?q=\"Salesforce\""
+    },
+    "ORIGIN": {
+      "type": "String",
+      "description": "The origin (protocol, hostname, and port) that caused the request to the SOURCE_HOSTNAME. For example, if a website on a different domain makes an XMLHttpRequest (XHR) to SOURCE_HOSTNAME, ORIGIN contains the base URL of that website. The port isn’t included in the origin information with all requests. ORIGIN can be null in a number of situations, including but not limited to cross-origin requests and origins with a restrictive Referrer-Policy header. For example, if the request to the SOURCE_HOSTNAME is sent from a site external to Salesforce with a RequestMode of no-cors, ORIGIN is null.",
+      "examples": "https://www.example.com https://www.example.com:443"
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). The time zone is always GMT.",
+      "example": "2022-07-27T11:32:59.555Z."
+    },
+    "USER_ID_DERIVED": {
+      "type": "String",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    },
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that made this request.",
+      "possible_values/example": "111.43.144.26"
+    },
+    "URI_ID_DERIVED": {
+      "type": "String",
+      "description": "This field is unused in the HostnameRedirects event type. The value is always null."
+    }
+  },
+  "usage": "Use the information in the Hostname Redirects event log to determine the hostnames to update in your org after you deploy a change to your My Domain name. You can also use the log to develop communications to your customers and users about the changed hostnames. For example, you can encourage users to use the new hostnames and update their bookmarks. For more information on the steps to take after a My Domain change, see Update Your Org and Test My Domain Changes in Salesforce Help. To access the log, use the HostnameRedirects event type from the EventLogFile object. Alternatively, you can download the current hostname redirections event log by clicking Download Redirections Log on the My Domain Setup page. Each event, or each row in the redirection log, represents a redirection for a specific requested URL. Subsequent requests to the same URL within the hour following that request, however, aren’t logged. If your last My Domain change included enhanced domains deployment, the log includes redirections for the old hostnames listed on My Domain URL Format Changes with Enhanced Domains Deployment in Salesforce Help. For example, if https://MyCompany.my.site.com/shop is redirected at 02:01 PM and https://MyCompany.my.site.com/shop?q=sneakers is redirected for another user at 02:02 PM, only the redirection that occurred at 02:01 PM is captured for MyCompany.my.site.com/shop for that hour. But if https://MyCompany.my.site.com/help is redirected at 2:05 PM, that redirection is captured on a new line because the MyCompany.my.site.com/help hostname and path combination differs from MyCompany.my.site.com/shop. Similarly, if the redirection of https://MyCompany.my.site.com/contactUs is blocked at 07:02 AM and https://MyCompany.my.site.com/contactUs is redirected at 07:11 AM, only the blocked redirection for MyCompany.my.site.com/contactUs is captured in the log for that hour. Only one hostname redirection log file is available at a time. When the daily incremental event log file is generated during the daily background process, the new file replaces the existing file. When you download the redirections log from the My Domain Setup page, you get the latest daily log file in CSV format. If the log file doesn’t exist, either the log generation process hasn’t run yet or there’s no redirection data to report for that 24-hour window. The log file is generated only when at least one redirection occurred for the day. To collect hostname redirection logs for multiple days, schedule a daily query of the Hostname Redirects event type via REST API. For example, you can configure a cron job in Unix or a scheduled task in Windows to run the query.\n\nUse the information in the Hostname Redirects event log to determine the hostnames to update in your org after you deploy a change to your My Domain name. You can also use the log to develop communications to your customers and users about the changed hostnames. For example, you can encourage users to use the new hostnames and update their bookmarks. For more information on the steps to take after a My Domain change, see Update Your Org and Test My Domain Changes in Salesforce Help.\n\nTo access the log, use the HostnameRedirects event type from the EventLogFile object. Alternatively, you can download the current hostname redirections event log by clicking Download Redirections Log** on the My Domain Setup page.\n\nEach event, or each row in the redirection log, represents a redirection for a specific requested URL. Subsequent requests to the same URL within the hour following that request, however, aren’t logged. If your last My Domain change included enhanced domains deployment, the log includes redirections for the old hostnames listed on My Domain URL Format Changes with Enhanced Domains Deployment in Salesforce Help.\n\nFor example, if https://MyCompany.my.site.com/shop is redirected at 02:01 PM and https://MyCompany.my.site.com/shop?q=sneakers is redirected for another user at 02:02 PM, only the redirection that occurred at 02:01 PM is captured for MyCompany.my.site.com/shop for that hour. But if https://MyCompany.my.site.com/help is redirected at 2:05 PM, that redirection is captured on a new line because the MyCompany.my.site.com/help hostname and path combination differs from MyCompany.my.site.com/shop.\n\nSimilarly, if the redirection of https://MyCompany.my.site.com/contactUs is blocked at 07:02 AM and https://MyCompany.my.site.com/contactUs is redirected at 07:11 AM, only the blocked redirection for MyCompany.my.site.com/contactUs is captured in the log for that hour.\n\nOnly one hostname redirection log file is available at a time. When the daily incremental event log file is generated during the daily background process, the new file replaces the existing file. When you download the redirections log from the My Domain Setup page, you get the latest daily log file in CSV format.\n\nIf the log file doesn’t exist, either the log generation process hasn’t run yet or there’s no redirection data to report for that 24-hour window. The log file is generated only when at least one redirection occurred for the day.\n\nTo collect hostname redirection logs for multiple days, schedule a daily query of the Hostname Redirects event type via REST API. For example, you can configure a cron job in Unix or a scheduled task in Windows to run the query."
+}

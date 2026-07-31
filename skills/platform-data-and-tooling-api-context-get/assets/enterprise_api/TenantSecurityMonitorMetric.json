@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityMonitorMetric - Data API",
+  "description": "Stores the daily count and daily count change for a metric within Security Center. This object is available to Security Center subscribers in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ChangeCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "How much the relevant metric changed."
+    },
+    "Count": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The current metric count."
+    },
+    "EndProcessTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time that the metric count process ended."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The ID of the type of metric counted. This field is unique within your organization."
+    },
+    "MetricsType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of data collected."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the tenant."
+    },
+    "PreviousMetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The previous ID of the type of metric that was counted. This field is unique within your organization."
+    },
+    "ReferencedMetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The ID of a related metric that is referenced by this metric."
+    },
+    "StartProcessTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time that the metric count process started."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant that was scored."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityMonitorMetricChangeEvent**: Change events are available for the object.\n- **TenantSecurityMonitorMetricFeed**: Feed tracking is available for the object.\n- **TenantSecurityMonitorMetricHistory**: History is available for tracked fields of the object.\n- **TenantSecurityMonitorMetricOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityMonitorMetricShare**: Sharing is available for the object."
+}

@@ -1,0 +1,191 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ActivityFieldHistory - Data API",
+  "description": "Represents a change in a field value for a tracked object or field. This object is a big object. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Filter, Sort",
+      "description": "The ID of the task or event that changed. This field is a polymorphic relationship field.",
+      "relationship_name": "Activity",
+      "refers_to": "Event, Task"
+    },
+    "ChangedById": {
+      "type": "reference",
+      "properties": "Filter, Sort",
+      "description": "The ID of the user who made the change. This field is a relationship field.",
+      "relationship_name": "ChangedBy",
+      "refers_to": "User"
+    },
+    "ChangedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date the field value changed."
+    },
+    "DataType": {
+      "type": "picklist",
+      "properties": "Restricted picklist",
+      "description": "The type of the field with the changed value. Possible values are: Address AnyType AutoNumber Base64 BitVector Boolean Content Currency DataCategoryGroupReference DateOnly DateTime Division Double DynamicEnum Email EncryptedBase64 EncryptedText EntityId EnumOrId ExternalId Fax File HtmlMultiLineText HtmlStringPlusClob InetAddress Json Location MultiEnum MultiLineText Namespace Percent PersonName Phone Raw RecordType SfdcEncryptedText SimpleNamespace StringPlusClob Switchable_PersonName Text TimeOnly Url YearQuarter"
+    },
+    "FieldName": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "The name of the field changed."
+    },
+    "IsDataAvailable": {
+      "type": "boolean",
+      "properties": "Defaulted on create",
+      "description": "Indicates whether valid data is available in the old and new value fields. This field is false if, for example, the fields are encrypted or the changed values are too large, such as for Description field types. The default value is false."
+    },
+    "NewValueDateTime": {
+      "type": "dateTime",
+      "properties": "Nillable",
+      "description": "The new value for date type fields."
+    },
+    "NewValueNumber": {
+      "type": "double",
+      "properties": "Nillable",
+      "description": "The new value for number type fields."
+    },
+    "NewValueText": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The new value for all other field types that are not a date or number type."
+    },
+    "OldValueDateTime": {
+      "type": "dateTime",
+      "properties": "Nillable",
+      "description": "Old value for date type fields."
+    },
+    "OldValueNumber": {
+      "type": "double",
+      "properties": "Nillable",
+      "description": "Old value for number type fields."
+    },
+    "OldValueText": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The old value for all other field types that are not a date or number type."
+    },
+    "Operation": {
+      "type": "picklist",
+      "properties": "Restricted picklist",
+      "description": "The operation of the field value change. Possible values are: delete update"
+    }
+  },
+  "special_access_rules": "To see this object, users must have ViewAllData permissions.",
+  "wsdl_segment": "```xml\n<complexType name=\"ActivityFieldHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Activity\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Task\"/>\n        <element name=\"ActivityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ChangedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ChangedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ChangedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DataType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FieldName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDataAvailable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"NewValueDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"NewValueNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"NewValueText\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OldValueDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OldValueNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"OldValueText\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Operation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ActivityId": {
+      "field_label": "Task or Event ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChangedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChangedDate": {
+      "field_label": "Changed Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataType": {
+      "field_label": "Data Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FieldName": {
+      "field_label": "Field",
+      "type": "string",
+      "length": "120"
+    },
+    "Id": {
+      "field_label": "Entity History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDataAvailable": {
+      "field_label": "Data Available",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NewValueDateTime": {
+      "field_label": "New Date",
+      "type": "datetime"
+    },
+    "NewValueNumber": {
+      "field_label": "New Number Val",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "NewValueText": {
+      "field_label": "New String Val",
+      "type": "string",
+      "length": "4000"
+    },
+    "OldValueDateTime": {
+      "field_label": "Old Date",
+      "type": "datetime"
+    },
+    "OldValueNumber": {
+      "field_label": "Old Number Val",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "OldValueText": {
+      "field_label": "Old String Val",
+      "type": "string",
+      "length": "4000"
+    },
+    "Operation": {
+      "field_label": "Change Operation",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EventLogFile - Data API",
+  "description": "Represents event log files for event monitoring. The event monitoring product gathers information about your Salesforce org’s operational events, which you can use to analyze usage trends and user behavior. This object is available in API version 32.0 and later. The Interval and Sequence fields are available only in API version 37.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The specific API version for this log file. This field is available in API version 30.0 and later."
+    },
+    "EventType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The event type—API, Login, Report, URI, and so forth. Use to determine which files were generated for your org. For the corresponding LogFile schema, see EventLogFile Supported Event Types."
+    },
+    "LogDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time of the log file’s creation. For daily event log files, tracks usage activity for a 24-hour period, from 12:00 a.m. to 11:59 p.m. UTC time. For hourly event log files, indicates the hour in which the log file was generated. For example, for events that occur between 11:00 AM and 12:00 PM on 3/7/2016, this field’s value is 2016-03-07T11:00:00.000Z. Note: For hourly event log files, we recommend using CreatedDate to query the date and time that an EventLogFile object was created."
+    },
+    "LogFile": {
+      "type": "base64",
+      "description": "Encoded file data in .csv format. The EventType field defines the schema for this data."
+    },
+    "LogFileContentType": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The content type of the log file; always .csv."
+    },
+    "LogFileFieldNames": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The ordered list of fields in the log file data. Note: LogFileFieldNames and LogFileFieldTypes are specific to each EventType. For example, LogFileFieldNames has a different value for an API EventType and a Login EventType."
+    },
+    "LogFileFieldTypes": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The ordered list of field types in the log file data ( String, Id, and so forth). Note: LogFileFieldNames and LogFileFieldTypes are specific to each EventType. For example, LogFileFieldTypes has a different value for an API EventType and a Login EventType."
+    },
+    "LogFileLength": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The log file length in bytes. You can use this field to plan storage needs for your log files."
+    }
+  },
+  "special_access_rules": "Accessing this object requires View Event Log Files and API Enabled user permissions. Users with View All Data permission can view event log files.",
+  "wsdl_segment": "```xml\n<complexType name=\"EventLogFile\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EventType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Interval\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LogDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LogFile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <element name=\"LogFileContentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LogFileFieldNames\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LogFileFieldTypes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LogFileLength\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Sequence\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ApiVersion": {
+      "field_label": "API Version",
+      "type": "double",
+      "precision": "18",
+      "scale": "1"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventType": {
+      "field_label": "Event Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Event Log File ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Interval": {
+      "field_label": "Interval",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LogDate": {
+      "field_label": "Log Date",
+      "type": "datetime"
+    },
+    "LogFile": {
+      "field_label": "Log File",
+      "type": "base64"
+    },
+    "LogFileContentType": {
+      "field_label": "Log File Content Type",
+      "type": "string",
+      "length": "255"
+    },
+    "LogFileFieldNames": {
+      "field_label": "Log File Field Names",
+      "type": "string",
+      "length": "1333"
+    },
+    "LogFileFieldTypes": {
+      "field_label": "Log File Field Types",
+      "type": "string",
+      "length": "1333"
+    },
+    "LogFileLength": {
+      "field_label": "Log File Length",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Sequence": {
+      "field_label": "Sequence",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

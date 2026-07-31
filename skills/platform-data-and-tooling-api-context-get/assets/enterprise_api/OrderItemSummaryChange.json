@@ -1,0 +1,148 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OrderItemSummaryChange - Data API",
+  "description": "Represents a change to an OrderItemSummary, usually a reduction in quantity due to a cancel or return. Corresponds to a change order item. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ChangeOrderItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated change order item."
+    },
+    "ChangeType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Type of change represented by the OrderItemSummaryChange. Possible values are: Add AddTax Cancel CancelFee DeliveryChargeAdjustment FeeAdjustment Modify OrderAdjustmentGroup OrderDeliveryGroup ProductAdjustment Return ReturnFee"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "ISO code for the currency of the OrderSummary associated with the OrderItemSummaryChange. The default value is USD. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar This field is available in API version 49.0 and later."
+    },
+    "IsPreFulfillment": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the change occurs before the OrderItemSummary has been fulfilled."
+    },
+    "OrderItemSummaryChangeNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID of the OrderItemSummaryChange."
+    },
+    "OrderItemSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the OrderItemSummary to which the change applies."
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the OrderSummary to which the associated OrderItemSummary belongs."
+    },
+    "Reason": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Reason for the change. You can customize this list. The list has one default value: Unknown"
+    },
+    "ReasonText": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Details about the reason for change."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderItemSummaryChangeChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "ChangeOrderItemId": {
+      "field_label": "Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChangeType": {
+      "field_label": "Change Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Order Item Summary Change ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPreFulfillment": {
+      "field_label": "Is PreFulfillment",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OrderItemSummaryChangeNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderItemSummaryId": {
+      "field_label": "Order Product Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Reason": {
+      "field_label": "Reason",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReasonText": {
+      "field_label": "Reason Text",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

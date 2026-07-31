@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "CryptoProdCatgWalletGroup - Data API",
+  "description": "Specifies if CryptoWalletGroup is in the allowlist or airdrop for the ProductCategory. A custom object between ProductCategory and CryptoWalletGroup adding the CryptoWalletGroup to allowlist or airdrop. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CryptoWalletGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The CryptoWalletGroup ID. This field is a relationship field.",
+      "relationship_name": "CryptoWalletGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "CryptoWalletGroup"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the record."
+    },
+    "ProductCategoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the category. This field is a relationship field.",
+      "relationship_name": "ProductCategory",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductCategory"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies if CryptoProdCatgWalletGroup is active and functional, or inactive and disabled. Possible values are: Active Inactive"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Determines whether the list of wallets is for minting allowlist or for executing an airdrop. Possible values are: Airdrop Allowlist"
+    }
+  },
+  "special_access_rules": "This object has read, create, update, delete, modify all, and view all access."
+}

@@ -1,0 +1,119 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "VoiceMailContent - Data API",
+  "description": "Represents a voicemail message left by a caller to the context user.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurationInSeconds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The duration of the voicemail message in seconds."
+    },
+    "FirstHeardDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time and date when the user first listened to the voicemail message."
+    },
+    "MediaContentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related media content, a ContentDocument. The record counts toward your org’s file storage quota."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the voicemail message."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of the voicemail message."
+    },
+    "VoiceCallId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related Dialer call."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only your Salesforce org's internal users can access this object.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **VoiceMailContentOwnerSharingRule**: Sharing rules are available for the object.\n- **VoiceMailContentShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DurationInSeconds": {
+      "field_label": "Duration in Seconds",
+      "type": "int",
+      "digits": "8"
+    },
+    "FirstHeardDateTime": {
+      "field_label": "DateTime First Heard",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "VoiceMailContent ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MediaContentId": {
+      "field_label": "Content Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "VoiceMailContent Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "VoiceCallId": {
+      "field_label": "Voice Call ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

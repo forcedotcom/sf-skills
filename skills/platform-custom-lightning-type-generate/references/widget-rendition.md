@@ -37,4 +37,4 @@ Use `{!$attrs.<name>}` syntax in attribute values. `<name>` must match a propert
 - Do NOT duplicate the widget UEM body inside `renderer.json` — the widget bundle owns its own UEM tree.
 - The widget bundle (`<pkgDir>/uiWidgets/<widgetDeveloperName>/`) must exist and be deployed before the Lightning Type that references it.
 - Every attribute key in the renderer must resolve to a property in the widget's `schema.json` `properties.attributes.properties`.
-- Write the renderer to `lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json` (or the correct target subfolder for the product surface).
+- Write the renderer to `lightningTypes/<TypeName>/renderer.json` — this is the default renderer for all targets.

@@ -1,0 +1,427 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OrderDeliveryGroup - Data API",
+  "description": "A group of order items that share a delivery method and address. The delivery method and address are used during the fulfillment process, such as shipping as a gift, downloading, picking up in store, or shipping to a standard address This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DeliverToAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The delivery group’s order items are delivered to this address. Created based on the values of the other DeliverTo fields."
+    },
+    "DeliverToCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "City address value. Sent to DeliverToAddress."
+    },
+    "DeliverToCompanyName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update"
+    },
+    "DeliverToCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Country address value. Sent to DeliverToAddress"
+    },
+    "DeliverToFullFirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update"
+    },
+    "DeliverToFullLastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update"
+    },
+    "DeliverToFullName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort"
+    },
+    "DeliverToFullSalutation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Possible values are: Dr. Mr. Mrs. Ms. Prof."
+    },
+    "DeliverToGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Geocode accuracy address value. Sent to DeliverToAddress."
+    },
+    "DeliverToLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Latitude address value. Sent to DeliverToAddress."
+    },
+    "DeliverToLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Longitude address value. Sent to DeliverToAddress."
+    },
+    "DeliverToName": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Group, Sort, Update",
+      "description": "Name of the delivery recipient. Sent to DeliverToAddress."
+    },
+    "DeliverToPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Postal Code address value. Sent to DeliverToAddress."
+    },
+    "DeliverToState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "State address value. Sent to DeliverToAddress."
+    },
+    "DeliverToStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Street address value. Sent to DeliverToAddress."
+    },
+    "DeliveryInstructions": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Text field for users to add other delivery instructions."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "User-defined description for this delivery group."
+    },
+    "DesiredDeliveryDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The buyer’s target delivery date for the order items included in the delivery group."
+    },
+    "EmailAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The buyer’s email address."
+    },
+    "GiftMessage": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "An optional gift message that the buyer can define if they’re sending the order items as a gift to another recipient. Applies to all order items in the delivery group."
+    },
+    "GrandTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the group’s total delivery amount and total tax amount."
+    },
+    "IsGift": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "All items in the delivery group are gifts."
+    },
+    "OrderDeliveryGroupNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Unique number used for referencing this order delivery group."
+    },
+    "OrderDeliveryMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the order delivery method related to this order delivery group."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the parent order for this order delivery group. An order can have multiple order delivery groups."
+    },
+    "PhoneNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number of the buyer."
+    },
+    "PromisedDeliveryDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Merchant-defined date that the items in this group will be delivered to the customer. Usually defined based on an estimated date from the shipping provider."
+    },
+    "RelatedDeliveryGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The original delivery group. Used for reference in change order scenarios."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all adjustments (of type Delivery Charge) made to order items in the order delivery group."
+    },
+    "TotalAdjustmentAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all adjustments (of type Delivery Charge) made to order items in the order delivery group, including tax. This is a gross tax field. To access Commerce Orders fields, your org must have a Salesforce Order Management license. Commerce Orders fields are available only in Lightning Experience. This field is available in API v49.0 and later."
+    },
+    "TotalAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all adjustments (of type Delivery Charge) made to tax lines for order items in the order delivery group."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all Total Amount fields (of type Delivery Charge) on order items within this delivery group. On an order item, the total amount equals the quantity multiplied by the unit price, including adjustments and tax."
+    },
+    "TotalLineAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of order items (of the type Delivery Charge). On an order item, the total line amount equals the quantity multiplied by the unit price, before adjustments or tax."
+    },
+    "TotalLineAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all TotalLineAmtWithTax fields (of type Delivery Charge) on order items within this delivery group. On an order item, the total line amount with tax equals the quantity multiplied by the unit price, plus tax, before adjustments. This is a gross tax field. To access Commerce Orders fields, your org must have a Salesforce Order Management license. Commerce Orders fields are available only in Lightning Experience. This field is available in API v49.0 and later."
+    },
+    "TotalLineTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all Total Line Tax Amount fields (of type Delivery Charge) on order items within this delivery group. On an order item, the total line tax amount equals the total tax for that line."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all Total Tax Amount fields (of type Delivery Charge) on order items within this order delivery group."
+    }
+  },
+  "special_access_rules": "To access Commerce Orders entities, your org must have a Salesforce Order Management license. Commerce Orders entities are available only in Lightning Experience.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeliverToAddress": {
+      "field_label": "Deliver to Address",
+      "type": "address"
+    },
+    "DeliverToCity": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "DeliverToCompanyName": {
+      "field_label": "Deliver to Company Name",
+      "type": "string",
+      "length": "255"
+    },
+    "DeliverToCountry": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "DeliverToFullFirstName": {
+      "field_label": "First Name",
+      "type": "string",
+      "length": "40"
+    },
+    "DeliverToFullLastName": {
+      "field_label": "Last Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DeliverToFullName": {
+      "field_label": "Deliver to Full Name",
+      "type": "string",
+      "length": "121"
+    },
+    "DeliverToFullSalutation": {
+      "field_label": "Salutation",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DeliverToGeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DeliverToLatitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "DeliverToLongitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "DeliverToName": {
+      "field_label": "Deliver to Name",
+      "type": "string",
+      "length": "255"
+    },
+    "DeliverToPostalCode": {
+      "field_label": "Zip",
+      "type": "string",
+      "length": "20"
+    },
+    "DeliverToState": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "DeliverToStreet": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "DeliveryInstructions": {
+      "field_label": "Delivery Instructions",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "DesiredDeliveryDate": {
+      "field_label": "Desired Delivery Date",
+      "type": "date"
+    },
+    "EmailAddress": {
+      "field_label": "Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "GiftMessage": {
+      "field_label": "Gift Message",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Total with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Order Delivery Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsGift": {
+      "field_label": "Is Gift",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OrderDeliveryGroupNumber": {
+      "field_label": "Order Delivery Group Number",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderDeliveryMethodId": {
+      "field_label": "Order Delivery Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PhoneNumber": {
+      "field_label": "Phone Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "PromisedDeliveryDate": {
+      "field_label": "Promised Delivery Date",
+      "type": "date"
+    },
+    "RelatedDeliveryGroupId": {
+      "field_label": "Order Delivery Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Total Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentAmtWithTax": {
+      "field_label": "Total Adjustment with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentTaxAmount": {
+      "field_label": "Total Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Pretax Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmount": {
+      "field_label": "Delivery Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmtWithTax": {
+      "field_label": "Delivery Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineTaxAmount": {
+      "field_label": "Delivery Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

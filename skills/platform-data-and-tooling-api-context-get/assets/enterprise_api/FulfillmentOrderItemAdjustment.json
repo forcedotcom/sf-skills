@@ -1,0 +1,182 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "FulfillmentOrderItemAdjustment - Data API",
+  "description": "Represents a price adjustment on a FulfillmentOrderLineItem. Corresponds to an OrderItemAdjustmentLineSummary associated with the corresponding OrderItemSummary. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort",
+      "description": "Amount, not including tax, of the adjustment."
+    },
+    "CampaignName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Campaign associated with the adjustment."
+    },
+    "CouponName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Coupon associated with the adjustment."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "ISO code for the currency of the FulfillmentOrderLineItem to which the adjustment applies. The default value is USD. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar This field is available in API version 49.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Text description of the adjustment."
+    },
+    "FulfillmentOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the FulfillmentOrder associated with the FulfillmentOrderLineItem to which the adjustment applies."
+    },
+    "FulfillmentOrderItemAdjustmentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID of the FulfillmentOrderLineItemAdjustment."
+    },
+    "FulfillmentOrderLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the FulfillmentOrderLineItem to which this adjustment applies."
+    },
+    "OrderItemAdjustLineSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the OrderItemAdjustmentLineSummary associated with the adjustment."
+    },
+    "PromotionName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Promotion associated with the adjustment."
+    },
+    "TotalAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the adjustment, inclusive of tax. This amount is equal to Amount + TotalTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the Amount."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CampaignName": {
+      "field_label": "Campaign Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CouponName": {
+      "field_label": "Coupon Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "FulfillmentOrderId": {
+      "field_label": "Fulfillment Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FulfillmentOrderItemAdjustmentNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "FulfillmentOrderLineItemId": {
+      "field_label": "Fulfillment Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Fulfillment Order Item Adjustment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OrderItemAdjustLineSummaryId": {
+      "field_label": "Order Product Adjustment Line Item Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PromotionName": {
+      "field_label": "Promotion Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAmtWithTax": {
+      "field_label": "Adjustment with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

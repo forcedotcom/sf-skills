@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "EventRelayConfig - Tooling API",
+  "description": "Represents the configuration of an event relay, which relays platform events and change data capture events from Salesforce to Amazon EventBridge. This object is available in API version 56.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DestinationResourceName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer name of the named credential, which stores the AWS account information. The destinationResourceName value contains the callout: prefix. For example: callout:MyRelayNamedCredential"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name. This field is automatically generated, but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record.",
+      "required": true
+    },
+    "EventChannel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The full name of the event channel used in the event relay. For example: MyRelayChannel__chn"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated EventRelayConfig in Metadata API. The full name can include a namespace prefix. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the EventRelayConfig. Possible values are: da—Danish de—German en_US—English es—Spanish es_MX—Spanish (Mexico) fi—Finnish fr—French it—Italian ja—Japanese ko—Korean nl_NL—Dutch no—Norwegian pt_BR—Portuguese (Brazil) ru—Russian sv—Swedish th—Thai zh_CN—Chinese (Simplified) zh_TW—Chinese (Traditional)"
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label for the event relay, which corresponds to the label of the EventRelayConfig metadata type. The label is displayed in the user interface. If the label isn't provided in the metadata type, MasterLabel is the DeveloperName value."
+    },
+    "Metadata": {
+      "type": "EventRelayConfig",
+      "properties": "Create, Nillable, Update",
+      "description": "The EventRelayConfig’s metadata."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition organization that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values: In Developer Edition organizations, the namespace prefix is set to the namespace prefix of the organization for all objects that support it. There is an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition organization of the package developer. In organizations that are not Developer Edition organizations, NamespacePrefix is only set for objects that are part of an installed managed package. There is no namespace prefix for all other objects."
+    },
+    "RelayOption": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A JSON-encoded string that contains an option for resuming an event relay after the system recovers from an error. This option is used if the event relay can't resume after the last relayed event. The options available are: \"{\\\"ReplayRecovery\\\":\\\"LATEST\\\"}\"—(Default) Start relaying events from new events received in the event bus. Use this option if you aren’t interested in missed events while the relay was down. \"{\\\"ReplayRecovery\\\":\\\"EARLIEST\\\"}\"—Resend all events stored in the event bus and relay new events thereafter. The event bus stores events for up to three days. Use this option if you want to reprocess all stored events and catch up on missed events."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The execution state of the event relay. Possible values are: RUN—The event relay is running and actively relaying event messages from Salesforce to Amazon EventBridge. PAUSE—An administrator paused the event relay. No events are relayed to Amazon EventBridge during this status. All current state information is saved. STOP—(Default) The event relay is stopped and no events are relayed to Amazon EventBridge. All current state information is deleted. DELETE—Reserved for future use."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Reserved for future use."
+    }
+  },
+  "special_access_rules": "- To retrieve or query this object, you must have the View Setup and Configuration permission.\n- To create, update, or delete this object, you must have the Customize Application permission.\n- You can update only the state and relayOption fields and not eventChannel or destinationResourceName. Update the state and relayOption fields through the Metadata field.",
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EventRelayAdminState\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RUN\"/>\n    <xsd:enumeration value=\"STOP\"/>\n    <xsd:enumeration value=\"PAUSE\"/>\n    <xsd:enumeration value=\"DELETE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EventRelayConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:EventRelayConfig\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"EventRelayConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"destinationResourceName\" type=\"xsd:string\"/>\n        <xsd:element name=\"eventChannel\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relayOption\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"state\" minOccurs=\"0\" type=\"tns:EventRelayAdminState\"/>\n        <xsd:element name=\"usageType\" minOccurs=\"0\" type=\"tns:EventRelayUsageType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EventRelayUsageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AMAZON_EVENTBRIDGE\"/>\n    <xsd:enumeration value=\"INTERNAL_MANAGED_SUBSCRIPTIONS\"/>\n    <xsd:enumeration value=\"INTERNAL_REPLICATION\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

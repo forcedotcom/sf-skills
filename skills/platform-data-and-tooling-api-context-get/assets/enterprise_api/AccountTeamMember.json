@@ -1,0 +1,77 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "AccountTeamMember - Data API",
+  "description": "Represents a User who is a member of an Account team.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Level of access that the User has to the Account. The possible values are: Read Edit All This field must be set to an access level that is at least equal to the organization’s default Account access level. In addition, the users’s AccountAccessLevel, ContactAccessLevel, OpportunityAccessLevel, or CaseAccessLevel field must be set higher than the organization’s default access level."
+    },
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Account to which this user is a team member. Must be a valid account ID.",
+      "required": true
+    },
+    "CaseAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Level of access that the User has to cases associated with the account. The possible values are: None Read Edit This field must be set to an access level that is at least equal to the organization’s default case access level. In addition, the users’s AccountAccessLevel, ContactAccessLevel, OpportunityAccessLevel, or CaseAccessLevel field must be set higher than the organization’s default access level. This field is available in API version 37.0 and later."
+    },
+    "ContactAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Level of access that the User has to contacts associated with the account. The possible values are: None Read Edit Controlled By Parent This field must be set to an access level that is at least equal to the organization’s default contact access level. In addition, the users’s AccountAccessLevel, ContactAccessLevel, OpportunityAccessLevel, or CaseAccessLevel field must be set higher than the organization’s default access level. If the org-wide default for contacts is set to Controlled By Parent, users can’t see or edit the Contact Access field. This field is available in API version 37.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Filter, Restricted picklist",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the org."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "OpportunityAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Level of access that the User has to opportunities associated with the account. The possible values are: None Read Edit This field must be set to an access level that is at least equal to the organization’s default opportunity access level. In addition, the users’s AccountAccessLevel, ContactAccessLevel, OpportunityAccessLevel, or CaseAccessLevel field must be set higher than the organization’s default access level. This field is available in API version 37.0 and later."
+    },
+    "PhotoURL": {
+      "type": "URL",
+      "properties": "Filter, Nillable, Sort, Group",
+      "description": "Read only. Retrieves the users Chatter photo URL. This field is available in API version 37.0 and later."
+    },
+    "TeamMemberRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Role associated with this team member. One of the valid team member roles defined for your organization. Label is Team Role."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort, Group",
+      "description": "Read only. Retrieves the user’s title. This field is available in API version 37.0 and later."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the User who is a member of this account team. Must be a valid User ID.",
+      "required": true
+    }
+  },
+  "usage": "Use this object to manage the team members of a particular Account and to specify team member roles for those users on that account. If team members are added by a user with group-based access, those members are removed after an account’s owner is changed. This applies even if the Keep account team option is selected. A Salesforce admin, the account owner, or someone higher in the role hierarchy should add team members to keep team members related to the account. If you use SOQL statements to query all records in an organization, the ALL ROWS keywords don’t query deleted account team member records.\n\nUse this object to manage the team members of a particular Account and to specify team member roles for those users on that account.\n\nIf team members are added by a user with group-based access, those members are removed after an account’s owner is changed. This applies even if the Keep account team** option is selected. A Salesforce admin, the account owner, or someone higher in the role hierarchy should add team members to keep team members related to the account.\n\nIf you use SOQL statements to query all records in an organization, the ALL ROWS keywords don’t query deleted account team member records.",
+  "associated_objects": "This object has the following associated objects. If the API version isn't specified, they're available in the same API versions as this object.\n\n- **AccountTeamMemberChangeEvent (API version 66.0)**: Change events are available for the object."
+}

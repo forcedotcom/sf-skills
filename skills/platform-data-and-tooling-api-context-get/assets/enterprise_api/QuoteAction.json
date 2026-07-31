@@ -1,0 +1,139 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "QuoteAction - Data API",
+  "description": "Indicates the type of sales transaction that’s being quoted; for example, a renewal sale. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "ISO code of the currency. Use only one of the valid alphabetic, three-letter currency ISO codes defined by the ISO 4217 standard, such as USD, GBP, or JPY. Must be unique within your organization. Label is Currency ISO Code. The default value is USD. See Supported Currencies (ICU) for a list of currency codes Salesforce supports. This field is available in Revenue Cloud in API version 66.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user accessed this record or list view indirectly, but didn’t view it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name given to the quote action."
+    },
+    "QuoteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The quote related to this quote action. This field is a relationship field.",
+      "relationship_name": "Quote",
+      "relationship_type": "Lookup",
+      "refers_to": "Quote"
+    },
+    "SourceAssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset changed by this sales transaction. For example, if the quote action is a quantity amendment, this field contains the ID of the asset that’s amended. This field is a relationship field.",
+      "relationship_name": "SourceAsset",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "Subtype": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The subtype of the action on the quote line item. Valid values are: DowngradeFrom—Available in API version 66.0 and later. DowngradeTo—Available in API version 66.0 and later. FieldAmendment Rollback StartDateAdjustment SwapIn—Available in API version 66.0 and later. SwapOut—Available in API version 66.0 and later. TransferFrom TransferTo UpgradeFrom—Available in API version 66.0 and later. UpgradeTo—Available in API version 66.0 and later. This field is available with Revenue Cloud in API version 64.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of sales transaction that the related quote is for. Valid values are: Add Amend Association—Available in API version 66.0 and later. Cancel No Change Renew Transfer—Available with Revenue Cloud in API version 65.0 and later."
+    }
+  },
+  "special_access_rules": "This object is available in orgs with Revenue Cloud. It’s also available in Industries Automotive and Industries Field Service.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Quote Action ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "QuoteId": {
+      "field_label": "Quote ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceAssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Subtype": {
+      "field_label": "Subtype",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FolderedContentDocument - Data API",
+  "description": "Represents the relationship between a parent and child ContentFolderItem in a ContentWorkspace.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentDocumentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the ContentDocument that can be in a folder. This is a relationship field.",
+      "relationship_name": "ContentDocument",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentDocument"
+    },
+    "ContentSize": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the document in bytes for files smaller than 2 GB. In API version 66.0 and later, we recommend that you use the ContentSizeLong field even for documents smaller than 2 GB."
+    },
+    "ContentSizeLong": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the document in bytes up to 10 GB. This field is available in API version 66.0 and later."
+    },
+    "FileExtension": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "File extension of the ContentDocument."
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "File type of the ContentDocument."
+    },
+    "IsFolder": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the FolderedContentDocument is a folder, rather than a file."
+    },
+    "ParentContentFolderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the ContentFoldr the ContentDocument resides in. This is a relationship field.",
+      "relationship_name": "ParentContentFolder",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentFolder"
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Name of the file or folder in a ContentFolder."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"FolderedContentDocument\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentDocument\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentDocument\"/>\n        <element name=\"ContentDocumentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentSize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ContentSizeLong\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FileExtension\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FileType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFolder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ParentContentFolder\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentFolder\"/>\n        <element name=\"ParentContentFolderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ContentDocumentId": {
+      "field_label": "Content Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentSize": {
+      "field_label": "Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "ContentSizeLong": {
+      "field_label": "Size",
+      "type": "long",
+      "digits": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FileExtension": {
+      "field_label": "File Extension",
+      "type": "string",
+      "length": "40"
+    },
+    "FileType": {
+      "field_label": "File Type",
+      "type": "string",
+      "length": "20"
+    },
+    "Id": {
+      "field_label": "Content Folder Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsFolder": {
+      "field_label": "Is Folder",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ParentContentFolderId": {
+      "field_label": "Parent Content Folder ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

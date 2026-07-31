@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SandboxInfo - Tooling API",
+  "description": "Represents a sandbox.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `update()`",
+  "supported_rest_api_http_methods": "`GET`, `PATCH`, `POST`, `DELETE`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to",
+    "restrictions"
+  ],
+  "fields": {
+    "ActivationUserGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the ID of the public group consisting of users who can access the sandbox. The user who created the sandbox is added to the group by default. This field is a relationship field.",
+      "relationship_name": "ActivationUserGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "Group",
+      "restrictions": "You can specify this value only during sandbox creation and refresh. Available in API version 60.0 and later. Behavior change announcement: Starting in Spring ’25, this field will be required when creating or refreshing a Developer or Developer Pro sandbox. To avoid losing the ability to create or refresh Developer and Developer Pro sandboxes, use API version 60.0 or later."
+    },
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the ID of an Apex class that runs after each copy of the sandbox. Allows you to perform business logic on the sandbox to prepare it for use.",
+      "relationship_name": "ApexClass",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass",
+      "restrictions": "You can specify this value only during sandbox creation. The class must extend the System.SandboxPostCopy interface. Available in API version 36.0 and later."
+    },
+    "AutoActivate": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, you can activate a sandbox refresh immediately.",
+      "restrictions": "This field only affects behavior for update operations (Sandbox refresh)."
+    },
+    "CopyArchivedActivities": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, archived activity data is copied to the sandbox.",
+      "restrictions": "This field is visible only if your organization has purchased an option to copy archived activities for sandbox. To obtain this option, contact Salesforce Customer Support."
+    },
+    "CopyChatter": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, archived Chatter data is copied to the sandbox.",
+      "restrictions": "You can set the value to true only for a Full sandbox."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A description of the sandbox, which helps you distinguish it from other sandboxes.",
+      "restrictions": "The description length can’t exceed 1,000 characters."
+    },
+    "Features": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The add-on features to apply when creating or refreshing the sandbox. Currently there’s one valid value: ['SandboxStorage']: Increases the data storage available for Developer sandboxes from 200 MB to 400 MB and Developer Pro sandboxes from 1 GB to 2 GB. You can’t use this feature with Partial Copy or Full sandboxes."
+    },
+    "HistoryDays": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Represents the number of days of object history to be copied in the sandbox. Valid values: -1, which means all available days 0 (default) 10 20 30 60 90 120 150 180",
+      "restrictions": "This field affects behavior only for Full sandboxes."
+    },
+    "IsNonPreview": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, creates a non-preview sandbox. During the transition from one Salesforce major release to another, sandboxes get upgraded on different timelines based on their release type. Preview sandboxes provide early access to new features and are upgraded approximately six weeks before production orgs, while non-preview sandboxes are upgraded as the major release upgrade completes. Between the completion of a major release upgrade and the start of the next release upgrade, we attempt to create preview sandboxes by default when you create or refresh a sandbox. Use a non-preview sandbox to test changes in an environment that’s identical to your production org without potential issues from the next release upgrade. Note: If you create a non-preview sandbox 24 hours or less from the start of the next release upgrade, we can’t guarantee that the non-preview sandbox creation will be successful. See Salesforce Sandbox Preview Instructions in Salesforce Help for more information on release transitions and timelines.",
+      "restrictions": "Non-preview sandbox creation is a restricted feature. Contact Salesforce Customer Support to enable the feature and related API in your production org. The IsNonPreview field is valid only between the completion of a major release upgrade and the start of the next release upgrade. If you create a sandbox outside of this window of time, remove the IsNonPreview field."
+    },
+    "LicenseType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Represents the sandbox license type. Valid values: DEVELOPER DEVELOPER_PRO PARTIAL FULL"
+    },
+    "SandboxName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the sandbox.",
+      "restrictions": "Must be a unique sandbox name. Must be alphanumeric characters. Must be 10 or fewer characters. Can’t be the same as the name of a sandbox that’s pending deletion."
+    },
+    "SourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the ID of a SandboxInfo that serves as the source org for a cloned sandbox.",
+      "relationship_name": "Source",
+      "relationship_type": "Lookup",
+      "refers_to": "SandboxInfo"
+    },
+    "TemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the PartitionLevelScheme that represents the sandbox template associated with this sandbox. A sandbox template lets you select which objects to copy in a sandbox.To use the TemplateId field, you must have the ManageSandboxes user permission.",
+      "relationship_name": "Template",
+      "relationship_type": "Lookup",
+      "refers_to": "PartitionLevelScheme",
+      "restrictions": "Setting a TemplateId value for a Partial Copy sandbox is required. Setting a TemplateId value for a Full sandbox is optional. Setting a TemplateId value for other sandbox types is prohibited, because other sandbox types don’t support sandbox templates."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SandboxInfo\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

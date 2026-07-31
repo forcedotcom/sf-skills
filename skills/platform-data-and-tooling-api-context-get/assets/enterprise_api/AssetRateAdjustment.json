@@ -1,0 +1,133 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AssetRateAdjustment - Data API",
+  "description": "Stores the tier rate adjustments for the asset rate card entries.This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of rate adjustment. Valid values are: Amount—Adjusts rate by using a specific amount. Override—Adjusts rate by using the override rate. Percentage—Adjusts rate by using a percentage."
+    },
+    "AdjustmentValue": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The value of the adjustment."
+    },
+    "AssetRateCardEntryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent asset rate card entry record associated with the asset rate adjustment. This field is a relationship field.",
+      "relationship_name": "AssetRateCardEntry",
+      "relationship_type": "Master-detail",
+      "refers_to": "AssetRateCardEntry (the master object)"
+    },
+    "LowerBound": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The minimum quantity for the adjustment to be applicable."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the asset rate adjustment."
+    },
+    "UpperBound": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The maximum quantity for the adjustment to be applicable."
+    }
+  },
+  "special_access_rules": "This object is available in orgs where Revenue Cloud is enabled.",
+  "field_reference": {
+    "AdjustmentType": {
+      "field_label": "Adjustment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentValue": {
+      "field_label": "Adjustment Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "AssetRateCardEntryId": {
+      "field_label": "Asset Rate Card Entry ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Asset Rate Adjustment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LowerBound": {
+      "field_label": "Lower Bound",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UpperBound": {
+      "field_label": "Upper Bound",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

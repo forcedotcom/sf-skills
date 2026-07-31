@@ -1,0 +1,179 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "VideoCallRecording - Data API",
+  "description": "Represents a recording from a video call, such as a video recording, a voice recording, or a transcript. Video call recordings aren’t saved in Salesforce. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DurationInSeconds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The video call duration in seconds, not the recording duration."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time the call ended, in universal time coordinated (UTC)."
+    },
+    "ExpirationDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Reserved for internal use. This field is available in API version 59.0 and later."
+    },
+    "ExternalRecordingKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The ID of the video call recording, from the recording provider. For example, the Zoom ID of the recording. This value is unique."
+    },
+    "ExternalRecordingKeyLong": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The ID of the video call recording, from the recording provider, that's more than 255 characters. For example, the MS Team ID of the recording. This value is unique. If ExternalRecordingKey is null, this ID is used by default. Available in API version 61.0 and later."
+    },
+    "FileSizeInByte": {
+      "type": "long",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The size of the video call recording, in bytes. A 0-byte value for video calls with the FileType of TRANSCRIPT is expected behavior. This entity is still used with Google Meet and Microsoft Teams integrations to locate and process the vendor's data."
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The file type of the video call recording. Possible values are: MP4—Video file M4A—Audio-only file TIMELINE—Time stamp file in JSON format. TRANSCRIPT—Transcription files in VTT format. CHAT—Text file containing chat messages from the video call. CC—File containing closed captions of the video call recording. The file is in VTT format."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The name of the video call recording, entered by the sales rep."
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The start time of the video call recording."
+    },
+    "VideoCallRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the VideoCall record (the parent record). This is a relationship field.",
+      "relationship_name": "VideoCallRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "VideoCall"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **VideoCallRecordingChangeEvent (API version 51.0)**: Change events are available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DurationInSeconds": {
+      "field_label": "Recording Duration",
+      "type": "int",
+      "digits": "8"
+    },
+    "EndDateTime": {
+      "field_label": "Video Call Recording Ended",
+      "type": "datetime"
+    },
+    "ExpirationDateTime": {
+      "field_label": "Expiration Date Time",
+      "type": "datetime"
+    },
+    "ExternalRecordingKey": {
+      "field_label": "External Recording Key",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalRecordingKeyLong": {
+      "field_label": "External Recording Key for Long values",
+      "type": "string",
+      "length": "1000"
+    },
+    "FileSizeInByte": {
+      "field_label": "File Size In Bytes",
+      "type": "long",
+      "digits": "18"
+    },
+    "FileType": {
+      "field_label": "File Type",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Video Call Recording ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "StartDateTime": {
+      "field_label": "Video Call Recording Started",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "VideoCallRecordId": {
+      "field_label": "Video Call ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

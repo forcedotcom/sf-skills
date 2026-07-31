@@ -1,0 +1,171 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Group - Data API",
+  "description": "A set of User records.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The description of the group. This field is available in API version 62.0 and later."
+    },
+    "DefaultDivision": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "This record’s default division. Only applicable if divisions are enabled."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. This name is unique by group type and corresponds to Group Name in the user interface. This field is available in API version 24.0 and later. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record. Only your Salesforce org’s internal users can access this field."
+    },
+    "DoesIncludeBosses": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether records shared with users in this group are also shared with users higher in the role hierarchy (true) or not (false). This field is only available for groups of type Regular and Queue. This field corresponds to the Grant Access Using Hierarchies checkbox on the detail pages of public groups and queues.For groups of type Regular, this field available in API version 18.0 and later and has a default value of true. For groups of type Queue, this field is available in API version 67.0 and later. The default value of this field for queues depends on the value of the org-level setting “Grant access using hierarchies by default in new queues.”"
+    },
+    "DoesSendEmailToMembers": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the email is sent (true) or not sent (false) to the group members. The email is sent to queue members as well."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email address for a group of type Case. Applies only for a case queue."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the group. Corresponds to Label on the user interface.",
+      "required": true
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who owns the group. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Organization, User"
+    },
+    "QueueRoutingConfigId": {
+      "type": "reference",
+      "properties": "Create, Delete, Query, Retrieve, Update",
+      "description": "The ID of the queue routing configuration associated with the queue."
+    },
+    "RelatedId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the ID of the associated groups. For groups of type “Role,” the ID of the associated UserRole. The RelatedId field is polymorphic. This is a polymorphic relationship field.",
+      "relationship_name": "Related",
+      "relationship_type": "Lookup",
+      "refers_to": "User, UserRole"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Type of the group. One of the following values: AllCustomerPortal—Public group that includes all Customer Portal or Customer Community Plus users. This type is only available when a Customer Portal or a Customer Site is enabled for your org. ChannelProgramGroup—Public group for partners in a channel program. CollaborationGroup—Chatter group. DataAnalytics—Public group for Tableau Next and Data 360 users. Manager—Public group that includes a user’s direct and indirect managers. This group is read-only. ManagerAndSubordinatesInternal—Public group that includes a user and the user’s direct and indirect reports. This group is read-only. Organization—Public group that includes all the User records in the organization. This group is read-only. Participant—Compliant Data Sharing group that includes internal users who have the Use Compliant Data Sharing permission. A group can contain other participant groups only, or a group can contain both internal users with the Use Compliant Data Sharing permission and other participant groups. This value is only available when Compliant Data Sharing is enabled for your org. PRMOrganization—Public group that includes all the partners in an organization that has the partner site or portal feature enabled. Queue—Public group that includes all the User records that are members of a queue. Regular—Standard public group. When you create() a group, its type must be Regular or DataAnalytics, unless a partner site or portal is enabled for the organization, in which case the type can be Regular, DataAnalytics, or PRMOrganization. Role—Public group that includes all the User records in a particular UserRole. RoleAndSubordinates—Public group that includes all the User records in a particular UserRole and all the User records in any subordinate UserRole. Only available when digital experiences is enabled for your org and Experience Cloud site users are created with external account roles other than a shared person account role. RoleAndSubordinatesInternal—Public group that includes all the User records in an internal UserRole, excluding customer and partner roles, and all the User records in any subordinate internal UserRole. SharingRecordCollGroup—Public group that has access to a SharingRecordCollection. Territory—Public group that includes all the User records in an organization that has the territory feature enabled. TerritoryAndSubordinates—Public group that includes all the User records in a particular UserRole and all the User records in any subordinateUserRole in an organization that has the territory feature enabled. Only Personal, Regular, and Queue can be used when creating a group. The other values are reserved.",
+      "required": true
+    }
+  },
+  "special_access_rules": "Authenticated internal and external users can access this object.",
+  "usage": "Unlike users, this object can be deleted. Only public groups are accessible via the API. Personal groups are not available. In API version 34.0 and later, you can query a group using Related.Name to retrieve the group’s name. Related.Name is supported for public groups, user roles, territories, manager groups, and user names.\n\nUnlike users, this object can be deleted.\n\nOnly public groups are accessible via the API. Personal groups are not available.\n\nIn API version 34.0 and later, you can query a group using Related.Name to retrieve the group’s name. Related.Name is supported for public groups, user roles, territories, manager groups, and user names. In API version 13.0 and later, if you delete a public group, it is deleted even if it has been used in sharing, consistent with the behavior for UserRole. In versions before 13.0, such sharing prevents the record from being deleted.",
+  "wsdl_segment": "```xml\n<complexType name=\"Group\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AssignedWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DelegatedUsers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DoesIncludeBosses\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"DoesSendEmailToMembers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Email\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GroupMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"QueueSobjects\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Related\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelatedId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1332"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DoesIncludeBosses": {
+      "field_label": "Include Bosses",
+      "type": "boolean"
+    },
+    "DoesSendEmailToMembers": {
+      "field_label": "Send Email to Members",
+      "type": "boolean"
+    },
+    "Email": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "40"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QueueRoutingConfigId": {
+      "field_label": "Routing Configuration ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedId": {
+      "field_label": "Related ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

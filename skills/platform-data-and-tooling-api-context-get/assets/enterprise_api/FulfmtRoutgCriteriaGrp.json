@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "FulfmtRoutgCriteriaGrp - Data API",
+  "description": "Represents a logical grouping of rules for a specific business context, for example, Fulfillment routing and Delivery estimation. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "An optional description of the rule group."
+    },
+    "DraftFulfmtRoutgCritGrpVerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A reference to the draft version of the rule group. This is the unpublished version that can be edited. Only one draft version of a rule group can exist at a time. This field is a relationship field.",
+      "relationship_name": "DraftFulfmtRoutgCritGrpVer",
+      "refers_to": "FulfmtRoutgCriteriaGrpVer"
+    },
+    "ExternalReference": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "A unique reference to the Fulfillment Criteria Group record from external callers."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the rule group is active and being executed (true) or not (false). Inactive groups are excluded from DRL generation and runtime execution, even if they have published versions. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the rule group. Must be unique within the organization."
+    },
+    "PubFulfmtRoutgCritGrpVerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A reference to the published version rule group. This is the version that's active in production and being executed by the rules engine. Only one published version of a rule group can exist at a time. This field is a relationship field.",
+      "relationship_name": "PubFulfmtRoutgCritGrpVer",
+      "refers_to": "FulfmtRoutgCriteriaGrpVer"
+    },
+    "RefFulfmtRoutgCritGrpVer": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A reference to the published version rule group. This is the version that's active in production and being executed by the rules engine. Only one published version of a rule group can exist at a time. This field is a relationship field.",
+      "relationship_name": "RefFulfmtRoutgCritGrpVer",
+      "refers_to": "FulfmtRoutgCriteriaGrpVer"
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Business context that defines the domain where this rule group operates. Possible value is: Fullfillment—Rules for order fulfillment and routing."
+    }
+  },
+  "special_access_rules": "The Salesforce org must have:",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **FulfmtRoutgCriteriaGrpHistory**: History is available for tracked fields of the object.\n- **FulfmtRoutgCriteriaGrpOwnerSharingRule**: Sharing rules are available for the object.\n- **FulfmtRoutgCriteriaGrpShare**: Sharing is available for the object."
+}

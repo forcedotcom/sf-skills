@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "UnifiedActivityParticipant - Data API",
+  "description": "Represents a participant in an activity. For example, a participant in a voice call is someone who initiated the call or someone who received the call.This object is available for reports and dashboards in the Winter ’24 release and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the activity that the person participated in. This field is a polymorphic relationship field.",
+      "relationship_name": "Activity",
+      "relationship_type": "Lookup",
+      "refers_to": "UnifiedActivity, UnifiedEmail, UnifiedMeeting, UnifiedTask, UnifiedVideoCall, UnifiedVoiceCall"
+    },
+    "ChannelAddress": {
+      "type": "string",
+      "properties": "Filter, Nillable",
+      "description": "The channel-specific address used to identify the participant in an external communication. For example, an email address in an email or a phone number in a voice call. The value is captured at the time of the communication; it doesn’t change if the contact’s email address or phone number is updated later."
+    },
+    "ParticipantType": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist",
+      "description": "The role of the participant in the activity. Possible values are: AssignedTo Attendee BCC CC From OptionalAttendee Organizer To"
+    },
+    "PersonId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the person who participated in the activity. This field is a polymorphic relationship field.",
+      "relationship_name": "Person",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead, User"
+    }
+  },
+  "field_reference": {
+    "ActivityId": {
+      "field_label": "Unified Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChannelAddress": {
+      "field_label": "Email Address or Phone Number",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Unified Activity Participant ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ParticipantType": {
+      "field_label": "Participant Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PersonId": {
+      "field_label": "Person ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

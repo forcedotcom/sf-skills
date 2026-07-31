@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "ExtlIntrIdMapping - Data API",
+  "description": "Represents a mapping between a Salesforce record and its corresponding record in an external system, such as Workday. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ExternalIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The ID of the external event."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the record was last referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the record was last viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the external event’s organizer."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the creator of the external event. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "RecordIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the Salesforce record that is linked to a record in an external system."
+    },
+    "RelatedExternalIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The ID of an associated record from the external system that provides additional context for the integration."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ExtlIntrIdMappingOwnerSharingRule**: Sharing rules are available for the object.\n- **ExtlIntrIdMappingShare**: Sharing is available for the object."
+}

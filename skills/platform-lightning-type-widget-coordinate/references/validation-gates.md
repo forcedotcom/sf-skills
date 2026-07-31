@@ -20,13 +20,13 @@ Run each command below **verbatim**. Observe each command's output in the tool r
 1. **Verify file exists and parses as JSON:**
 
    ```bash
-   jq . <pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json > /dev/null && echo "PARSE: ok" || echo "PARSE: FAIL"
+   jq . <pkgDir>/lightningTypes/<TypeName>/renderer.json > /dev/null && echo "PARSE: ok" || echo "PARSE: FAIL"
    ```
 
 2. **Verify definition points at this widget.** Print the actual value and compare it to the expected one in your reasoning:
 
    ```bash
-   jq -r '.renderer.componentOverrides["$"].definition' <pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json
+   jq -r '.renderer.componentOverrides["$"].definition' <pkgDir>/lightningTypes/<TypeName>/renderer.json
    ```
 
    Expected output: `@widget/c/<widgetName>`. If output equals expected → `DEFINITION: ok`; otherwise `DEFINITION: FAIL (got <actual>, expected @widget/c/<widgetName>)`.
@@ -40,7 +40,7 @@ Run each command below **verbatim**. Observe each command's output in the tool r
 
    ```bash
    echo "RENDERER_KEYS (actual):"
-   jq -r '.renderer.componentOverrides["$"].attributes | keys[]' <pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json | sort -u
+   jq -r '.renderer.componentOverrides["$"].attributes | keys[]' <pkgDir>/lightningTypes/<TypeName>/renderer.json | sort -u
    ```
 
    Classify: same set → `ATTRIBUTES: ok`. Keys in `SCHEMA_KEYS` not in `RENDERER_KEYS` → `ATTRIBUTES: FAIL (missing: <list>)`. Keys in `RENDERER_KEYS` not in `SCHEMA_KEYS` → `ATTRIBUTES: FAIL (extra: <list>)`.
@@ -48,7 +48,7 @@ Run each command below **verbatim**. Observe each command's output in the tool r
 4. **Verify each attribute value is a well-formed binding.** Dump the attributes map and inspect each entry in your reasoning:
 
    ```bash
-   jq '.renderer.componentOverrides["$"].attributes' <pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json
+   jq '.renderer.componentOverrides["$"].attributes' <pkgDir>/lightningTypes/<TypeName>/renderer.json
    ```
 
    For every key `K`, the value must match `{!$attrs.K}` exactly (same key name, no whitespace). All match → `BINDINGS: ok`. Otherwise `BINDINGS: FAIL (<key>: got <value>, expected {!$attrs.<key>})` for each offender.

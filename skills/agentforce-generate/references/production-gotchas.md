@@ -22,37 +22,43 @@ The `before_reasoning:` and `after_reasoning:` lifecycle hooks are validated. Co
 
 ### Cost Optimization Pattern
 
-Fetch data once in `before_reasoning:`, cache in variables, reuse across subagents.
+Cache only exact external data that a named later action, guard, or instruction
+must consume. Define refresh, expiry, correction, and reset behavior. Do not
+cache conversational facts merely because `setVariables` is free; surviving
+history already carries those facts.
 
 ## Lifecycle Hooks
 
+This example assumes `verified_customer_id` is written only by a successful
+verification action and `commit_failed` is written by the protected action.
+The named consumers are the authorization guard and failure transition.
+
 ```yaml
-subagent main:
+subagent protected_operation:
    description: "Subagent with lifecycle hooks"
 
    # BEFORE: Runs deterministically BEFORE LLM sees instructions
    before_reasoning:
       # Content goes DIRECTLY here (NO instructions: wrapper!)
-      set @variables.pre_processed = True
-      set @variables.customer_tier = "gold"
+      if @variables.verified_customer_id == "":
+         transition to @subagent.verification
 
    # LLM reasoning phase
    reasoning:
-      instructions: ->
-         | Customer tier: {!@variables.customer_tier}
-         | How can I help you today?
+      instructions: | Help the verified customer with the protected operation.
 
    # AFTER: Runs deterministically AFTER LLM finishes reasoning
    after_reasoning:
       # Content goes DIRECTLY here (NO instructions: wrapper!)
-      set @variables.interaction_logged = True
-      if @variables.needs_audit == True:
-         set @variables.audit_flag = True
+      if @variables.commit_failed == True:
+         transition to @subagent.operation_recovery
 ```
 
 **Key Points:**
 - Content goes **directly** under `before_reasoning:` / `after_reasoning:` (NO `instructions:` wrapper)
-- Reliable primitives: `set`, `if`/`else`, `transition to`. `run` has inconsistent runtime behavior across bundle types — use it in `reasoning.actions:` or `instructions: ->` instead
+- Supported primitives include `set`, `if`/`else`, `transition to`, and
+  `run @actions.X` with callbacks. Validate the referenced action and its
+  bindings with the target bundle's full parser/linter.
 - `before_reasoning:` is FREE (no credit cost) - use for data prep
 - `after_reasoning:` is FREE (no credit cost) - use for logging, cleanup
 - `transition to` works in `after_reasoning:` — but if a subagent transitions mid-reasoning, the original subagent's `after_reasoning:` does NOT run
@@ -61,13 +67,13 @@ subagent main:
 ```yaml
 before_reasoning:
    instructions: ->      # ❌ NO! Don't wrap with instructions:
-      set @variables.x = True
+      transition to @subagent.verification
 ```
 
 **✅ CORRECT Syntax:**
 ```yaml
 before_reasoning:
-   set @variables.x = True   # ✅ Direct content under the block
+   transition to @subagent.verification   # ✅ Direct content under the block
 ```
 
 ## Supervision vs Handoff
@@ -103,6 +109,11 @@ When defining actions in Agentforce Assets, use these output flags:
 | `is_used_by_planner: True` | LLM **can** reason about this value | Decision-making, routing |
 
 **Zero-Hallucination Intent Classification Pattern:**
+
+Use this only when a reproduced routing failure justifies an external
+classifier. `intent` is exact classifier output consumed immediately by the
+shown transitions; do not preserve it as a conversation-focus latch.
+
 ```yaml
 # In Agentforce Assets - Action Definition outputs:
 outputs:
@@ -178,44 +189,29 @@ Parent action may complain about inputs needed by chained action - this is expec
 
 ```yaml
 process_order: @actions.create_order
-   with customer_id = @variables.customer_id
+   with customer_id = @variables.verified_customer_id
    run @actions.send_confirmation        # Chains after create_order completes
-   set @variables.order_id = @outputs.id
 ```
+
+Here `verified_customer_id` is trusted verification output consumed by the
+protected order action. Do not persist the created order ID unless a named later
+action, idempotency check, or response needs that exact value.
 
 KNOWN BUG: Chained actions with Prompt Templates don't properly map inputs using `Input:Query` format.
 
 For prompt template action definitions, input binding syntax, and grounded data patterns, see [Action Prompt Templates](action-prompt-templates.md).
 
-## Latch Variable Pattern for Subagent Re-entry
+## Focus Locks and Re-entry Latches
 
-Subagent router doesn't properly re-evaluate after user provides missing input. Use a "latch" variable to force re-entry:
+Do not add a latch merely to keep ordinary follow-up turns in a subagent. It
+duplicates conversation history and can make stale intent override the user's
+latest request.
 
-```yaml
-variables:
-   verification_in_progress: mutable boolean = False
-
-start_agent agent_router:
-   reasoning:
-      instructions: ->
-         if @variables.verification_in_progress == True:
-            transition to @subagent.verification
-         | How can I help you today?
-      actions:
-         start_verify: @subagent.verification
-            description: "Start identity verification"
-            set @variables.verification_in_progress = True
-
-subagent verification:
-   reasoning:
-      instructions: ->
-         | Please provide your email to verify your identity.
-      actions:
-         verify: @actions.verify_identity
-            with email = ...
-            set @variables.verified = @outputs.success
-            set @variables.verification_in_progress = False
-```
+Use a focus lock only after a reproduced routing trace proves it is necessary.
+Document its owner, writer, reader, reset, expiry, correction behavior, and
+cancel path. The next user turn must be able to cancel or change intent. Keep
+proof state such as `verified` separate: trusted authorization output may
+remain required even when a conversational focus lock is not.
 
 ## Loop Protection Guardrail
 
@@ -264,12 +260,17 @@ run @actions.get_station_status
     with station_name = ...
     set @variables.station = @inputs.station_name   # FAILS SILENTLY
 
-# RIGHT — use @outputs (if action echoes the value) or capture input before the call
-set @variables.station = @variables.selected_station  # capture before
+# RIGHT — consume output only in its valid immediate scope
 run @actions.get_station_status
-    with station_name = @variables.station
-    set @variables.status = @outputs.status           # @outputs is valid here
+    with station_name = ...
+    if @outputs.status == "closed":
+        transition to @subagent.station_closed
 ```
+
+If a later deterministic consumer needs the exact station, make the action
+return a canonical station identifier and persist that trusted output with its
+consumer and lifecycle documented. Otherwise, leave the user-provided station
+in conversation history.
 
 **Diagnosis:** A FunctionStep that completes with no output capture (set directives dropped) indicates an `@inputs` scope violation. The action succeeds — only the assignment fails.
 

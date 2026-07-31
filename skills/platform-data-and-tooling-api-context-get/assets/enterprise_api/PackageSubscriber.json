@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "PackageSubscriber - Data API",
+  "description": "Represents an installation of a package in an org. This object contains installation information for managed or unlocked packages developed in the org you’re logged in to.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CustomUpgradeType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of push upgrade customization. Possible values are: BlockedBySubscriber—Blocked By Subscriber None The default value is None."
+    },
+    "HasRestrictionEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the subscriber org has blocked push upgrades.The default value is false."
+    },
+    "InstalledStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If the package is installed in the org, the value is i."
+    },
+    "InstanceName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The instance that hosts the subscriber org."
+    },
+    "IsCustomUpgradeAllowed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the package developer has allowed a subscriber to opt into customized push upgrades.The default value is false."
+    },
+    "MetadataPackageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The package ID. Package Ids have a prefix of 033. This field is available in API version 49.0 and later."
+    },
+    "MetadataPackageVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character package version ID starting with 04t."
+    },
+    "OrgKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID that represents the Salesforce org."
+    },
+    "OrgName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the org where the package is installed."
+    },
+    "OrgStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Valid values are: Active Demo Free Inactive Trial Orgs with an OrgStatus of Inactive can’t receive push upgrades."
+    },
+    "OrgType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Valid values are: Production Sandbox"
+    },
+    "ParentOrg": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The production org from which a sandbox was created."
+    }
+  },
+  "special_access_rules": "To initiate a push upgrade for a first-generation managed package, the Upload AppExchange Packages user permission is required. To initiate a push upgrade for an unlocked or second-generation managed package, the Create and Update Second-Generation Packages user permission is required. The push upgrade feature is only available to first- and second-generation managed packages that have passed AppExchange security review. To enable push upgrades for your managed package, log a support case in the Salesforce Partner Community. For unlocked packages, push upgrades are enabled by default.\n\nTo initiate a push upgrade for a first-generation managed package, the Upload AppExchange Packages user permission is required.\n\nTo initiate a push upgrade for an unlocked or second-generation managed package, the Create and Update Second-Generation Packages user permission is required.\n\nThe push upgrade feature is only available to first- and second-generation managed packages that have passed AppExchange security review. To enable push upgrades for your managed package, log a support case in the Salesforce Partner Community.\n\nFor unlocked packages, push upgrades are enabled by default.",
+  "usage": "Here are examples of the types of API queries you can perform.\n\nFilter PackageSubscriber Objects by Instance**\n\nIf you have packages with many subscribers, querying PackageSubscriber objects can take a while. To improve query performance, add filters to your PackageSubscriber queries, such as an InstanceName filter. InstanceName is a field that represents the instance that the subscriber org is hosted on."
+}

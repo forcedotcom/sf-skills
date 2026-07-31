@@ -1,0 +1,199 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "UserServicePresence - Data API",
+  "description": "Represents a presence user’s real-time presence status. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AtCapacityDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The duration that the user is at full capacity. This field is updated when the agent’s capacity changes, such as when the agent is assigned, declines, or closes a work item. Available in API versions 34.0 and later."
+    },
+    "AverageCapacity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The user’s average capacity. This field is updated when the agent’s capacity changes, such as when the agent is assigned, declines, or closes a work item. Available in API versions 34.0 and later."
+    },
+    "ConfiguredCapacity": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s total configured primary capacity."
+    },
+    "ConfiguredInterruptCapacity": {
+      "type": "int"
+    },
+    "IdleDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The duration that the user is idle. This field is updated when the agent’s capacity changes, such as when the agent is assigned, declines, or closes a work item. Available in API versions 34.0 and later."
+    },
+    "IsAway": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the user’s status is Away. The default value is false."
+    },
+    "IsCurrentState": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a presence status is the user’s current state. If true, the agent is in that presence status. Available in API versions 34.0 and later. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "An automatically generated ID number that identifies the record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the owner of the UserServicePresence entity. For external routing, allows the entity to be used in the Streaming API to listen to events whenever a UserServicePresence record is created, modified, or deleted."
+    },
+    "ServicePresenceStatusId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The ID of the presence status that’s associated with the presence user that’s specified by the UserId."
+    },
+    "StatusDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The duration of the user service presence status. This field is set only when the current user service presence status ends, such as when the agent changes to another presence status or logs out. Available in API versions 34.0 and later. This field is a calculated field: StatusEndDate - StatusStartDate."
+    },
+    "StatusEndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The end date of the user service presence status. This field is set only when the current user service presence status ends, such as when the agent changes to another presence status or logs out. Available in API versions 34.0 and later."
+    },
+    "StatusStartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The start date of the user service presence status. Available in API versions 34.0 and later."
+    },
+    "UserId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the Omni-Channel user."
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled.",
+  "usage": "Apex triggers aren’t supported with UserServicePresence. In API version 41.0 or later, UserServicePresence records can be deleted programmatically. The Customize Application permission is required.\n\nApex triggers aren’t supported with UserServicePresence.\n\nIn API version 41.0 or later, UserServicePresence records can be deleted programmatically. The Customize Application permission is required.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **UserServicePresenceChangeEvent (API version 62.0)**: Change events are available for the object.\n- **UserServicePresenceOwnerSharingRule**: Sharing rules are available for the object.\n- **UserServicePresenceShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AtCapacityDuration": {
+      "field_label": "At Capacity Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "AverageCapacity": {
+      "field_label": "Average Capacity",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "ConfiguredCapacity": {
+      "field_label": "Configured Capacity",
+      "type": "int",
+      "digits": "9"
+    },
+    "ConfiguredInterruptCapacity": {
+      "field_label": "Configured Interruptible Capacity",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "User Presence ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IdleDuration": {
+      "field_label": "Idle Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsAway": {
+      "field_label": "Is Away",
+      "type": "boolean"
+    },
+    "IsCurrentState": {
+      "field_label": "Is Current State",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServicePresenceStatusId": {
+      "field_label": "Service Presence Status ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StatusDuration": {
+      "field_label": "Status Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "StatusEndDate": {
+      "field_label": "Status End Date",
+      "type": "datetime"
+    },
+    "StatusStartDate": {
+      "field_label": "Status Start Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

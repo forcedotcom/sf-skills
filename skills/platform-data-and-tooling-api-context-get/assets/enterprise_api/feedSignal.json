@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "feedSignal - Data API",
+  "description": "Attach feed signals, like UpDownVote, UserVerified, and Verified, to a feed post or comment. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "FeedEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the Feed entity."
+    },
+    "FeedItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the feed post or comment. Possible values are: FeedItem FeedComment"
+    },
+    "InsertedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of user who inserted the signal. This is a relationship field.",
+      "relationship_name": "InsertedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "SignalType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of signal. Possible values are: UpDownVote UserVerified Verified"
+    },
+    "SignalValue": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The value of the signal. For example, for UpDownVote, the value specifies whether the signal is an upvote or a downvote."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"FeedSignal\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeedEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FeedItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"InsertedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"InsertedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SignalType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SignalValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```"
+}

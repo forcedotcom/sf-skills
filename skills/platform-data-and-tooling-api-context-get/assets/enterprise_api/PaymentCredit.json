@@ -1,0 +1,275 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentCredit - Data API",
+  "description": "Tracks the amount of money returned to the customer. The return can be a store credit, a gift card, or another type of credit. It's linked to the original payment record and includes the total credit amount issued. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account of the customer who made the payment. This field is a relationship field. This is a required field.",
+      "relationship_name": "Account",
+      "refers_to": "Account"
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort",
+      "description": "The amount to be credited. This is a required field."
+    },
+    "Balance": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Balance of payment credits (NetApplied - TotalCredit TransactionAmount - TotalCredit PendingTransactionAmount)."
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Provide additional details about the payment credit transaction."
+    },
+    "CreditMemoId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the credit memo associated with the payment credit. This field is a relationship field.",
+      "relationship_name": "CreditMemo",
+      "refers_to": "CreditMemo"
+    },
+    "CreditType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Credit types available. This is a dynamic picklist that the user can define. Possible values are: Credit Gift Card Gift Certificate"
+    },
+    "CreditTypeCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "A static enum showing the credit category type. Possible value is: Credit"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Contains the ISO code for any currency allowed by the organization. Possible values are: EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD."
+    },
+    "EffectiveDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Effective date of the payment credit."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "NetApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all credit amounts apllied for this payment credit (TotalCreditApplied - TotalCreditUnapplied)."
+    },
+    "OrderPaymentSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the order payment summary. This field is a relationship field.",
+      "relationship_name": "OrderPaymentSummary",
+      "refers_to": "OrderPaymentSummary"
+    },
+    "PaymentCreditNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID of the payment credit record. This field is automatically generated. Example: PC-{000000000}."
+    },
+    "PaymentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the payment associated with the payment credit. This field is a relationship field.",
+      "relationship_name": "Payment",
+      "refers_to": "Payment"
+    },
+    "ReturnOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the return order associated with the payment credit. This field is a relationship field.",
+      "relationship_name": "ReturnOrder",
+      "refers_to": "ReturnOrder"
+    },
+    "TotalApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of all applied amounts from the payment credit line payment."
+    },
+    "TotalCreditPendingTxnAmt": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of pending payment credits."
+    },
+    "TotalCreditTxnAmt": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of processed payment credits."
+    },
+    "TotalUnapplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of all the unapplied amounts from the payment credit line payment."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce or D2C Commerce license is enabled. Users require the PaymentCredit and PaymentPlatform permission sets.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Balance": {
+      "field_label": "Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreditMemoId": {
+      "field_label": "Credit Memo ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreditType": {
+      "field_label": "Credit Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreditTypeCategory": {
+      "field_label": "Credit Type Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Payment Credit ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "NetApplied": {
+      "field_label": "Net Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "OrderPaymentSummaryId": {
+      "field_label": "Order Payment Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentCreditNumber": {
+      "field_label": "Payment Credit Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentId": {
+      "field_label": "Payment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReturnOrderId": {
+      "field_label": "Return Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalApplied": {
+      "field_label": "Total Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCreditPendingTxnAmt": {
+      "field_label": "Total Credit Pending Transaction Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCreditTxnAmt": {
+      "field_label": "Total Credit Transaction Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalUnapplied": {
+      "field_label": "Total Unapplied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "StagedUnmtchdEmailAddr - Data API",
+  "description": "Represents data about an email address identified by Einstein Activity Capture that doesn’t match to an existing user, contact, or lead record. These addresses are only stored temporarily. Related to StagedUnmtchdEmailAddrRela, which represents data about the email message or calendar event activity associated with an unmatched email. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CreatedContactOrLeadId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID for the contact or lead record created from a suggestion. Read only. This field is a polymorphic relationship field.",
+      "relationship_name": "CreatedContactOrLead",
+      "refers_to": "Contact, Lead"
+    },
+    "EmailAddress": {
+      "type": "email",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The email address of the suggested contact. This address doesn’t match any existing user, contact, or lead. (Read only.)"
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "First name of the suggested contact."
+    },
+    "IgnoreSuggestionEndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "If a user dismisses a suggestion, it isn't suggested again until this date."
+    },
+    "LastInteractionDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date the user last interacted with the unmatched email address through email or a scheduled calendar event. (Read only.)"
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Last name of the suggested contact."
+    },
+    "OccurrenceCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of times the user and the unmatched email address occur together. (Read only.)"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the user associated with the unknown email address. (Read only.) This field is a relationship field.",
+      "relationship_name": "User",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "This object is available with Einstein Activity Capture when Sync Email as Salesforce Activity is turned on. If you turn on Einstein Activity Capture in Summer ’25 or later, Sync Email as Salesforce Activity is enabled by default.\n\nThis object is available with Einstein Activity\n         Capture when Sync Email as Salesforce Activity is turned on. If you turn on Einstein\n         Activity Capture in Summer ’25 or later, Sync Email as Salesforce Activity is enabled by\n         default."
+}

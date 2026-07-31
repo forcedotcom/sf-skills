@@ -1,0 +1,202 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OrderItemAdjustmentLineSummary - Data API",
+  "description": "Represents the current properties and state of price adjustments on an OrderItemSummary. Corresponds to one or more order item adjustment line item objects, consisting of an original object and any change objects applicable to it. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentBasisReferenceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the specific coupon applied. This is a polymorphic relationship field.",
+      "relationship_name": "AdjustmentBasisReference",
+      "relationship_type": "Lookup",
+      "refers_to": "Coupon"
+    },
+    "AdjustmentCauseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the specific promotions applied. This is a polymorphic relationship field.",
+      "relationship_name": "AdjustmentCause",
+      "relationship_type": "Lookup",
+      "refers_to": "Promotion"
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Amount, not including tax, of the OrderItemAdjustmentLineSummary. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "ISO code for the currency of the OrderItemSummary to which the adjustment applies. The default value is USD. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar This field is available in API version 49.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the OrderItemAdjustmentLineSummary. This field can be edited."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the OrderItemAdjustmentLineSummary."
+    },
+    "OrderAdjustmentGroupSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If this object belongs to an OrderAdjustmentGroupSummary, this value is the ID of that OrderAdjustmentGroupSummary."
+    },
+    "OrderItemSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the OrderItemSummary to which the OrderItemAdjustmentLineSummary applies."
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the OrderSummary associated with the OrderItemSummary to which this OrderItemAdjustmentLineSummary applies."
+    },
+    "OriginalOrderItemAdjustmentLineItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the original OrderItemAdjustmentLine associated with this summary object. Nillable=true only if the associated order summary is unmanaged. For managed order summaries, nillable=false."
+    },
+    "Priority": {
+      "type": "integer",
+      "properties": "Create, Nillable",
+      "description": "Numerical rank used to apply promotions in the correct order. This field is available in API version 52.0 and later."
+    },
+    "TotalAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the adjustment, inclusive of tax. This amount is equal to Amount + TotalTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the Amount."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce license is enabled.",
+  "field_reference": {
+    "AdjustmentBasisReferenceId": {
+      "field_label": "Adjustment Basis Reference ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AdjustmentCauseId": {
+      "field_label": "Adjustment Cause ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Amount": {
+      "field_label": "Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Id": {
+      "field_label": "Order Product Adjustment Line Item Summary ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderAdjustmentGroupSummaryId": {
+      "field_label": "Order Adjustment Group Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemSummaryId": {
+      "field_label": "Order Product Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OriginalOrderItemAdjustmentLineItemId": {
+      "field_label": "Order Product Adjustment Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAmtWithTax": {
+      "field_label": "Adjustment with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmailStatus - Data API",
+  "description": "Represents the status of email sent.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EmailTemplateName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the EmailTemplate."
+    },
+    "FirstOpenDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date when the email was first opened by recipient. Label is Date Opened."
+    },
+    "LastOpenDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date when the email was last opened by recipient."
+    },
+    "TaskId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The activity (task or event) associated with the email. Label is Activity ID. This is a relationship field.",
+      "relationship_name": "Task",
+      "relationship_type": "Lookup",
+      "refers_to": "Task"
+    },
+    "TimesOpened": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Number of times the recipient opened the email."
+    },
+    "WhoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The WhoId represents a human such as a lead or a contact. WhoIds are polymorphic. Polymorphic means a WhoId is equivalent to a contact’s ID or a lead’s ID. The label is Name ID. This is a polymorphic relationship field.",
+      "relationship_name": "Who",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead"
+    }
+  },
+  "special_access_rules": "Customer Portal users can’t access this object.",
+  "wsdl_segment": "```xml\n<complexType name=\"EmailStatus\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EmailTemplateName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FirstOpenDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastOpenDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Task\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Task\"/>\n        <element name=\"TaskId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"TimesOpened\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Who\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"WhoId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EmailTemplateName": {
+      "field_label": "Email Template Name",
+      "type": "string",
+      "length": "80"
+    },
+    "FirstOpenDate": {
+      "field_label": "Date Opened",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Email Status ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastOpenDate": {
+      "field_label": "Last Opened",
+      "type": "datetime"
+    },
+    "TaskId": {
+      "field_label": "Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TimesOpened": {
+      "field_label": "# Times Opened",
+      "type": "int",
+      "digits": "9"
+    },
+    "WhoId": {
+      "field_label": "Name ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

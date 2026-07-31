@@ -1,0 +1,128 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "AnalyticsChangeEventLog - Data API",
+  "description": "Analytics Change Event Logs represent route or page changes made in the CRM Analytics. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AnalyticsMode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The location where the dashboard is displayed. In the Salesforce mobile app, embedded dashboards are logged as embedded first."
+    },
+    "AnalyticsSessionIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of a particular session of CRM Analytics. Use this field to determine which log lines originated from a particular session."
+    },
+    "AnalyticsTimestamp": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time when this log line was generated."
+    },
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CpuTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "IsMobile": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the dashboard is displayed in mobile (true) or not (false)."
+    },
+    "IsNew": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The field indicates that this action opens a new tab (true) or goes back to a previously opened tab (false). The default value is false."
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "PageContext": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the component hosting the main content of the page. For example: clients:cardsContainer."
+    },
+    "PageIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the CRM Analytics dashboard page."
+    },
+    "RecordIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Salesforce ID of the CRM Analytics object."
+    },
+    "ReopenCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If IsNew is false, the number of times that an existing page opens."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestIdentifier. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RunTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of time that the request took in milliseconds."
+    },
+    "SavedViewIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the CRM Analytics dashboard saved view."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "TabIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the particular Analytics tab in the user interface."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "Type": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of Apex callout. For example: REST or AJAX."
+    },
+    "Uri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character Identifier of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    },
+    "ViewMode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The view mode for the CRM Analytics asset. Possible values include view edit present JSON print"
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission.\n\nTo access this object, you must have the View\n         Event Log Object Data user permission."
+}

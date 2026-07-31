@@ -1,0 +1,444 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "LiveChatTranscript - Data API",
+  "description": "This object is automatically created for each Live Agent chat session and stores information about the session. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Abandoned": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The amount of time in seconds an incoming chat request remained unanswered by an agent before the chat was disconnected by the customer."
+    },
+    "AccountId": {
+      "type": "ID",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the account associated with the chat transcript."
+    },
+    "AverageResponseTimeOperator": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The agent’s average response time (in seconds) to chat messages from the visitor."
+    },
+    "AverageResponseTimeVisitor": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The visitor’s average response time (in seconds) to chat messages from the agent."
+    },
+    "Body": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The contents of the chat."
+    },
+    "Browser": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The browser the visitor used for the chat."
+    },
+    "BrowserLanguage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The language of the visitor’s browser."
+    },
+    "CaseID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the case associated with the chat transcript."
+    },
+    "ChatDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total duration of the chat in seconds."
+    },
+    "ChatKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort",
+      "description": "The session ID of the chat before it is persisted. ChatKey can be used with advanced integrations in the Salesforce console. This field is available in API version 25.0 and later."
+    },
+    "ContactID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the contact associated with the chat transcript."
+    },
+    "EndedBy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The way the chat was ended: by the operator, the visitor, or the system."
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time the chat ended."
+    },
+    "IpAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The auto-populated visitor’s IP address. Do not edit. Create a custom field if you need an IP address field for your use case."
+    },
+    "IsChatbotSession": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Whether the visitor is chatting with a chatbot (true) or not (false)."
+    },
+    "LastReferencedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "LeadID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the lead associated with the chat transcript."
+    },
+    "LiveChatButtonID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the LiveChatButton the chat session originated from."
+    },
+    "LiveChatDeploymentID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the LiveChatDeployment the chat session originated from."
+    },
+    "LiveChatVisitorID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the visitor associated with the chat transcript."
+    },
+    "Location": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The auto-populated best-guess approximation of the visitor’s location. Do not edit."
+    },
+    "MaxResponseTimeOperator": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The maximum time in seconds it took an agent to respond to a chat visitor’s message."
+    },
+    "MaxResponseTimeVisitor": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The maximum time in seconds it took a customer to respond to an agent’s message."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the transcript."
+    },
+    "OperatorMessageCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of messages sent by one or more agents during the chat."
+    },
+    "OwnerID": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the operator who participated in the chat last; for missed chats, this is a system user."
+    },
+    "Platform": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The visitor’s operating system platform."
+    },
+    "ReferrerUri": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The auto-populated URI where the chat request originated. Do not edit."
+    },
+    "RequestTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time the visitor requested the chat."
+    },
+    "ScreenResolution": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The visitor’s screen resolution."
+    },
+    "SkillId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The auto-populated record ID of the primary Skill associated with the LiveChatButton the chat session originated from. Do not edit. To associate multiple skills with a LiveChatTranscript, use LiveChatTranscriptSkill junction objects."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time the chat started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The final status of the chat: completed, missed, or blocked."
+    },
+    "SupervisorTranscriptBody": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The text body of the supervisor’s chat transcript."
+    },
+    "UserAgent": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The visitor’s user agent string."
+    },
+    "VisitorMessageCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of messages sent by the visitor during the chat."
+    },
+    "VisitorNetwork": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The network or service provider the chat visitor used for the chat."
+    },
+    "WaitTime": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total amount of time in seconds a chat request was waiting to be accepted by an agent."
+    }
+  },
+  "usage": "Use this object to query and manage live chat transcripts.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **LiveChatTranscriptChangeEvent (API version 44.0)**: Change events are available for the object.\n- **LiveChatTranscriptFeed (API version 47.0)**: Feed tracking is available for the object.\n- **LiveChatTranscriptHistory**: History is available for tracked fields of the object.\n- **LiveChatTranscriptOwnerSharingRule (API version 29.0)**: Sharing rules are available for the object.\n- **LiveChatTranscriptShare**: Sharing is available for the object.",
+  "field_reference": {
+    "Abandoned": {
+      "field_label": "Abandoned After",
+      "type": "int",
+      "digits": "9"
+    },
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AverageResponseTimeOperator": {
+      "field_label": "Agent Average Response Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "AverageResponseTimeVisitor": {
+      "field_label": "Visitor Average Response Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "Body": {
+      "field_label": "Body",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Browser": {
+      "field_label": "Browser",
+      "type": "string",
+      "length": "200"
+    },
+    "BrowserLanguage": {
+      "field_label": "Browser Language",
+      "type": "string",
+      "length": "200"
+    },
+    "CaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChatDuration": {
+      "field_label": "Chat Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "ChatKey": {
+      "field_label": "Chat Key",
+      "type": "string",
+      "length": "200"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EndTime": {
+      "field_label": "End Time",
+      "type": "datetime"
+    },
+    "EndedBy": {
+      "field_label": "Ended By",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Chat Transcript ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IpAddress": {
+      "field_label": "Visitor IP Address",
+      "type": "string",
+      "length": "39"
+    },
+    "IsChatbotSession": {
+      "field_label": "Is Chatbot Session",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LeadId": {
+      "field_label": "Lead ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LiveChatButtonId": {
+      "field_label": "Chat Button ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LiveChatDeploymentId": {
+      "field_label": "Chat Deployment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LiveChatVisitorId": {
+      "field_label": "Chat Visitor ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Location": {
+      "field_label": "Location",
+      "type": "string",
+      "length": "200"
+    },
+    "MaxResponseTimeOperator": {
+      "field_label": "Agent Maximum Response Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "MaxResponseTimeVisitor": {
+      "field_label": "Visitor Maximum Response Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Chat Transcript Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OperatorMessageCount": {
+      "field_label": "Agent Message Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Platform": {
+      "field_label": "Platform",
+      "type": "string",
+      "length": "200"
+    },
+    "ReferrerUri": {
+      "field_label": "Referring Site",
+      "type": "string",
+      "length": "200"
+    },
+    "RequestTime": {
+      "field_label": "Request Time",
+      "type": "datetime"
+    },
+    "ScreenResolution": {
+      "field_label": "Screen Resolution",
+      "type": "string",
+      "length": "200"
+    },
+    "SkillId": {
+      "field_label": "Skill ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartTime": {
+      "field_label": "Start Time",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SupervisorTranscriptBody": {
+      "field_label": "Supervisor Transcript Body",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserAgent": {
+      "field_label": "User Agent",
+      "type": "string",
+      "length": "200"
+    },
+    "VisitorMessageCount": {
+      "field_label": "Visitor Message Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "VisitorNetwork": {
+      "field_label": "Network",
+      "type": "string",
+      "length": "200"
+    },
+    "WaitTime": {
+      "field_label": "Wait Time",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

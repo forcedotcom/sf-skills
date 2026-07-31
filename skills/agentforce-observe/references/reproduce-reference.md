@@ -28,12 +28,13 @@ Use `--authoring-bundle` to compile from the local `.agent` file and generate lo
 | `--authoring-bundle <BundleName>` | Local `.agent` file | YES | Development iteration (recommended) |
 | `--api-name <name>` | Last published version | NO | Testing activated agent |
 
-> **Note:** `--authoring-bundle` must appear on all three subcommands (`start`, `send`, `end`).
+> **Note:** `--authoring-bundle` must appear on all three subcommands (`start`, `send`, `end`), and `start` also requires an action mode — `--simulate-actions` or `--use-live-actions`. That mode flag is valid on `start` only. Run all three from the Salesforce project directory.
 
 ```bash
 # Start a preview session (--authoring-bundle enables local traces)
 sf agent preview start --json \
   --authoring-bundle <AgentApiName> \
+  --simulate-actions \
   -o <org> | tee /tmp/preview_start.json
 
 # Extract the session ID
@@ -75,7 +76,7 @@ sf agent preview end --json \
 ```
 
 **Trace file location:**
-```
+```text
 .sfdx/agents/{AgentApiName}/sessions/{sessionId}/traces/{planId}.json
 ```
 
@@ -118,7 +119,7 @@ Run each test scenario **3 times** (start a new session each run) and classify:
 
 For each scenario, record before proceeding to Phase 3:
 
-```
+```text
 Scenario: <issue type from Phase 1>
 Test message: "<exact utterance sent>"
 Expected: <subagent name / action name / response behavior>

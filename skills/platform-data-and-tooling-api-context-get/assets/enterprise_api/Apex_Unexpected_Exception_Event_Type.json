@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Apex Unexpected Exception Event Type - Data API",
+  "description": "The Apex Unexpected Exception event type captures information about unexpected exceptions in Apex code execution. This event type is available in the EventLogFile object in API version 45.0 and later. Unexpected exception information is not captured in the EventLogFile object with @IsTest and anonymous Apex.",
+  "fields_columns": [
+    "type",
+    "description",
+    "example"
+  ],
+  "fields": {
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always ApexUnexpectedException."
+    },
+    "EXCEPTION_CATEGORY": {
+      "type": "String",
+      "description": "The category of the unexpected Apex exception. Provides a breakdown of unhandled exceptions based on the type. For example, the LimitException exception type is split into subcategories that indicate if you exceeded a limit, such as the total heap size or CPU time. Possible values: Subcategories of LimitException that indicate the Apex limit you’ve exceeded. Examples: LimitException: CpuTime: Maximum CPU time on the Salesforce servers. LimitException: HeapSize: Total heap size. LimitException: Queries: Total number of SOQL queries issued. LimitException: QueryRows: Total number of records retrieved by SOQL queries. LimitException: DmlStatements: Total number of DML statements issued. LimitException: Callouts: Total number of callouts (HTTP requests or web services calls) in a transaction. See Execution Governors and Limits for other limits. CustomException: Unhandled custom exception. An Apex exception that isn’t limit-related; see Exception Class and Built-In Exceptions This field is available in API version 57.0 and later.",
+      "example": "LimitException: CpuTime"
+    },
+    "EXCEPTION_MESSAGE": {
+      "type": "Text",
+      "description": "The exception’s message.",
+      "example": "Divide by 0"
+    },
+    "EXCEPTION_TYPE": {
+      "type": "String",
+      "description": "The class type of the unexpected exception.",
+      "example": "System.MathException"
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the org. For example: 00D000000000123."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "STACK_TRACE": {
+      "type": "Text",
+      "description": "The stack trace for the exception. Note: If the exception is thrown from a managed package, STACK_TRACE is omitted.",
+      "example": "Class.OpportunityUtility.insert: line 22, column 1 AnonymousBlock: line 1, column 1"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 2024-08-08T06:08:02.755+0000."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case-insensitive ID of the user who’s using Salesforce services through the UI or the API. For example: 00590000000I1SNIA0."
+    }
+  }
+}

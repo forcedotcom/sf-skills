@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ConvIntelligenceSignalSubRule - Data API",
+  "description": "Represents a condition (subrule) within a conversation intelligence signal rule. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ConvIntelligenceSignalRuleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Unique ID of the conversation intelligence signal rule. This field is a relationship field.",
+      "relationship_name": "ConvIntelligenceSignalRule",
+      "relationship_type": "Master-detail",
+      "refers_to": "ConvIntelligenceSignalRule (the master object)"
+    },
+    "OperandValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Value of the signal type used to determine if the rule condition is met. For example, escalate_level_1."
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Filter logic operator used to determine if the rule condition is met. Possible values are: Equals GreaterThan LessThan NotEquals"
+    },
+    "Order": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Order the condition appears in relation to the other conditions in the list, with zero (0) being the first condition listed. If Type is set to Keyword, the maximum value is 24. For all other Type values, the maximum value is 4. This value is used when applying filter logic to the rule."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Type of conversation intelligence signal used by the rule to determine whether to trigger an action. This value depends on the ConvIntelligenceSignalRule.ConversationChannelId and ConvIntelligenceSignalRule.Service values. If Service is set to KeywordMatch, possible values are: Keyword–A word or group of words spoken or typed. If Service is set to AmazonConnectContactLens, possible values are: Category–Category name defined in your telephony system. If Service is set to another value, contact your Salesforce representative for the conversation intelligence signal types available for your intelligence source."
+    }
+  },
+  "special_access_rules": "This type requires an add-on license for Salesforce Voice for Amazon Connect, Salesforce Voice for Partner Telephony with Amazon Connect, Salesforce Voice for Partner Telephony, or Digital Engagement.",
+  "wsdl_segment": "```xml\n<complexType name=\"ConvIntelligenceSignalSubRule\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ConvIntelligenceSignalRule\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ConvIntelligenceSignalRule\"/>\n        <element name=\"ConvIntelligenceSignalRuleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OperandValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Operator\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Order\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ConvIntelligenceSignalRuleId": {
+      "field_label": "Conversation Intelligence Signal Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Conversation Intelligence Signal Sub-Rule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OperandValue": {
+      "field_label": "Operand Value",
+      "type": "string",
+      "length": "255"
+    },
+    "Operator": {
+      "field_label": "Operator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Order": {
+      "field_label": "Order",
+      "type": "int",
+      "digits": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Conversation Intelligence Signal Source Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

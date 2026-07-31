@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "SandboxProcessStage - Tooling API",
+  "description": "Represents the status and progress during a spectific stage for a SandboxProcess record.",
+  "supported_soap_calls": "`query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to",
+    "restrictions"
+  ],
+  "fields": {
+    "SandboxProcess": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the sandbox process that this progress belongs to.",
+      "relationship_name": "SandboxProcess",
+      "relationship_type": "Lookup",
+      "refers_to": "SandboxProcess"
+    },
+    "StageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the type of stage. Valid values: In Queue Data Copy Pending Activation Activation",
+      "refers_to": "SandboxProcess"
+    },
+    "StageNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the order of the stages. 0In Queue 1Data Copy 2Pending Activation 3Activation"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the stage has completed or not. Valid values: Pending In Progress Completed"
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When the stage's status goes into In Progress."
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When the stage's status goes into Completed."
+    },
+    "InfoLastUpdated": {
+      "type": "dateTime",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When we last checked the internal system for progress information on this stage."
+    },
+    "CompletedWork": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the current amount of work completed.",
+      "restrictions": "Only used for Data Copy and Activation."
+    },
+    "ActualTotalWork": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the verified amount of work to be completed. This number calculates continuously and may represent a partial amount while IsActualWorkFinal=false.",
+      "restrictions": "Only used for Data Copy and Activation"
+    },
+    "IsActualWorkFinal": {
+      "type": "boolean",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Default false, set to true after calculation of the actual work completes."
+    },
+    "EstimatedTotalWork": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "During the In Queue stage, this represents the number of sandboxes ahead of yours. During the Data Copy and Activation stages, this represents an estimation of work while IsActualWorkFinal=false. The estimation total derives this value from a prior sandbox copy and doesn't change throughout processing. This estimation isn't available if there's no prior copy."
+    }
+  }
+}

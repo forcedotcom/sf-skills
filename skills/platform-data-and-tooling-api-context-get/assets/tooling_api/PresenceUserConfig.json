@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "PresenceUserConfig - Tooling API",
+  "description": "Represents a configuration that determines a presence user’s settings. This object is available in API version 65.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AcwExtensionDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum length of time, measured in seconds, an agent can spend on After Conversation Work (ACW) each time they extend the timer. You must set this field if HasAcwExtensionEnabled is set to true. Specify a value from 10 through 3600."
+    },
+    "AfterConvoWorkMaxTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum length of time, measured in seconds, an agent has to complete ACW. You must set this field if HasAfterConvoWorkTimer is set to true. Specify a value from 10 through 3600."
+    },
+    "Capacity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The maximum number of work units an agent can be assigned at one time."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API."
+    },
+    "HasAcwExtensionEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether agents can extend their ACW time (true) or not (false). Available only if HasAfterConvoWorkTimer is set to true. If this field is set to true, you must also set the AcwExtensionDuration and MaxExtensions fields. The default value is false."
+    },
+    "HasAfterConvoWorkTimer": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether ACW time can be configured for the agent (true) or not (false). If set to true, you must also set the AfterConvoWorkMaxTime field to true. The default value is false."
+    },
+    "InterruptibleCapacity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of work units using interruptible capacity that can be assigned to an agent at a time. If the value in this field is empty it defaults to the value set in the Capacity field. This field is available only when the Interruptible Capacity feature is enabled."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the presence configuration."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label of the presence configuration."
+    },
+    "MaxExtensions": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Maximum number of times an agent can extend their ACW time. Specify a value from 1 through 10. You must set this field if HasAcwExtensionEnabled is set to true."
+    }
+  },
+  "special_access_rules": "Available only if Omni-Channel is enabled in your org."
+}

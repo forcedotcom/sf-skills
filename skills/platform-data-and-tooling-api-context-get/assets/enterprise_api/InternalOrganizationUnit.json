@@ -1,0 +1,142 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "InternalOrganizationUnit - Data API",
+  "description": "Represents an organization that an Employee belongs to. This object is available in API version 48.0 and later. In API version 49.0 and later, this object supports reports, criteria-based sharing rules, and history tracking, plus you can exclude individual fields from custom page layouts.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A description of the organization the Employee is working in."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "OrganizationCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The code of the organization the Employee is working in.",
+      "required": true
+    },
+    "OrganizationName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the organization the Employee is working in."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who currently owns this record. Default value is the user logged in to the API to perform the create operation."
+    },
+    "ParentOrganizationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the parent organization."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether the record is for an internal or an external organization. This field is available in API version 60.0 and later. Possible values are: EXTERNAL_BUSINESS_UNIT INTERNAL_ORGANIZATION"
+    }
+  },
+  "special_access_rules": "To access this object, you have either a Workplace Command Center permission set license and the Provides access to Workplace Command Center features system permission, or the Employee Management and Employee User add-on licenses. This object is also available with the Referral Marketing license.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **InternalOrganizationUnitHistory (API version 49.0)**: History is available for tracked fields of the object.\n- **InternalOrganizationUnitOwnerSharingRule**: Sharing rules are available for the object.\n- **InternalOrganizationUnitShare (API version 49.0)**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Internal Organization Unit ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsParentCompany": {
+      "field_label": "Parent Company",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OrganizationCode": {
+      "field_label": "Organization Code",
+      "type": "string",
+      "length": "40"
+    },
+    "OrganizationName": {
+      "field_label": "Organization Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentOrganizationId": {
+      "field_label": "Internal Organization Unit ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

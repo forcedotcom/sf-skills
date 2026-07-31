@@ -1,0 +1,303 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "relationshipreferenceto_type",
+    "wsdl_segment"
+  ],
+  "title": "EntityParticle - Tooling API",
+  "description": "Represents each element of a field that can be presented in a user interface. Contrast EntityParticle with FieldDefinition, which represents each element of a field defined in the Metadata API. EntityParticle has parity with describe, which returns API accessible fields only for an entity. Available in Tooling API version 34.0 and later.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "restrictions"
+  ],
+  "fields": {
+    "ByteLength": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The maximum length of the field represented by this EntityParticle, in bytes."
+    },
+    "DataType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Data type of the field, for example textarea or datetime. The values are defined similar to the values in the user interface, not the corresponding API data type names. For example, from an object, retrieve all the fields of one data type. SELECT DataType, QualifiedApiName FROM EntityParticle WHERE DataType = 'phone' AND EntityDefinition.QualifiedApiName = 'Account'"
+    },
+    "DefaultValueFormula": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The default value specified for the field when a formula isn’t specified. If no default value is specified, this field isn’t returned."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s org. Label is Record Type Name."
+    },
+    "Digits": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Maximum number of digits for a field of type int. If an integer value exceeds the number of digits, the API returns an error."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID for the object defined in the DurableId field."
+    },
+    "ExtraTypeInfo": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents further definition of a type. For type textarea: plaintextarea richtextarea For type URL: image For type reference: externallookup indirectlookup For Account: switchablepersonname personname"
+    },
+    "FieldDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the field definition associated with this EntityParticle."
+    },
+    "InlineHelpText": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the content of field-level help. Available in Tooling API starting version 35.0."
+    },
+    "IsApiFilterable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field represented by this EntityParticle can be specified in the WHERE clause of a query string.",
+      "restrictions": "You can’t sort or filter compound fields. This field’s value is always false for compound fields."
+    },
+    "IsApiGroupable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field represented by this EntityParticle can be included in the GROUP BY clause of a SOQL query."
+    },
+    "IsApiSortable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, a query can sort on the field represented by this EntityParticle.",
+      "restrictions": "You can’t sort or filter compound fields. This field’s value is always false for compound fields."
+    },
+    "IsAutoNumber": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field’s value is assigned when the record is created. Available in Tooling API starting version 35.0."
+    },
+    "IsCalculated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field represented by this EntityParticle is calculated."
+    },
+    "IsCaseSensitive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field represented by this EntityParticle is case sensitive. Available in Tooling API starting version 35.0."
+    },
+    "IsCompactLayoutable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be included in a compact layout."
+    },
+    "IsComponent": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is a component of a compound field. The default value is false. Available in Tooling API starting version 40.0."
+    },
+    "IsCompound": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is a compound of other fields. The default value is false. Available in Tooling API starting version 38.0."
+    },
+    "IsCreatable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, a value for the field represented by this EntityParticle can be created. Available in Tooling API starting version 35.0."
+    },
+    "IsDefaultedOnCreate": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, and if no other value is supplied, a default value is applied when the record is created. Available in Tooling API starting version 35.0."
+    },
+    "IsDependentPicklist": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is a dependent picklist. Available in Tooling API starting version 35.0."
+    },
+    "IsDeprecatedAndHidden": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Reserved for future use."
+    },
+    "IsDisplayLocationInDecimal": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, and if the field represented by this EntityParticle is a Geolocation custom field, the value appears in decimal notation. If false, the value appears as degrees, minutes, and seconds. Available in Tooling API starting version 35.0.",
+      "restrictions": "This field has no effect on custom fields that aren’t Geolocation fields."
+    },
+    "IsEncrypted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is marked for Classic Encryption. Available in Tooling API starting version 35.0."
+    },
+    "IsFieldHistoryTracked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field’s history can be tracked."
+    },
+    "IsHighScaleNumber": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the field stores numbers to eight decimal places regardless of what’s specified in the field details (true) or not (false). Used to handle currencies for products that cost fractions of a cent, in large quantities. If high-scale unit pricing isn’t enabled in your org, this field isn’t returned."
+    },
+    "IsHTMLFormatted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field contains HTML."
+    },
+    "IsIdLookup": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, you can use the field to specify a record for upsert. Available in Tooling API starting version 35.0."
+    },
+    "IsLayoutable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be assigned to a layout. Available in Tooling API starting version 35.0."
+    },
+    "IsListVisible": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be included in a related list."
+    },
+    "IsNameField": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is a name field."
+    },
+    "IsNamePointing": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field represents a polymorphic relationship. Determine the object type at runtime for dynamic queries when this value is true. Available in Tooling API starting version 35.0."
+    },
+    "IsNillable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be left out of queries on the object."
+    },
+    "IsPermissionable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, you can specify field permissions for the field. Available in Tooling API starting version 35.0."
+    },
+    "IsUnique": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field is unique. Available in Tooling API starting version 35.0."
+    },
+    "IsUpdatable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, you can update the field. Available in Tooling API starting version 35.0."
+    },
+    "IsWorkflowFilterable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the field can be filtered for a workflow."
+    },
+    "IsWriteRequiresMasterRead": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, writing to the detail object requires read sharing instead of read-write sharing of the parent. Available in Tooling API starting version 35.0."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label that corresponds to the field in the user interface. If the label has translations, the label returned is in the user’s language."
+    },
+    "Length": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The maximum number of bytes available to store the value in the field represented by this EntityParticle."
+    },
+    "Mask": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "MaskType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Primary label for this object. This display value is the internal label that isn’t translated. Limit: 40 characters."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the object for the field represented by this EntityParticle. This field is available in API version 35.0 and later."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation.The namespace prefix can have one of these values: In a Developer Edition org, the namespace prefix is set to the namespace prefix of the org for all objects that support it. There’s an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In an org other than a Developer Edition org, NamespacePrefix is only set for objects that are part of an installed managed package. There’s no namespace prefix for all other objects."
+    },
+    "Precision": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The maximum number of digits allowed for the field represented by this EntityParticle."
+    },
+    "QualifiedApiName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "A unique external name for the field."
+    },
+    "ReferenceTargetField": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Specifies the custom field on the parent object to match against this indirect lookup relationship field, whose values come from an external data source. The specified custom field on the parent object must have both IsIdLookup and IsUnique set to true. This field is available in API version 35.0 and later.",
+      "restrictions": "Available only if the field represented by this EntityParticle is an indirect lookup relationship field on an external object."
+    },
+    "ReferenceTo": {
+      "type": "RelationshipReferenceTo",
+      "properties": "Nillable",
+      "description": "The array of values in this field represents the possible object types of the referenced objects. For example, if EntityParticle represents a field on Events, the values are Contact, Lead, and custom objects with a relationship to Events."
+    },
+    "RelationshipName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the field represented by this EntityParticle is a master-detail relationship field, this field’s value is the relationship name."
+    },
+    "RelationshipOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A value of 0 represents a primary relationship, and a value of 1 represents a secondary relationship. This field is relevant only for relationship fields."
+    },
+    "Scale": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of digits to the right of the decimal in an integer. For example, 3.00 has a scale of 2."
+    },
+    "ValueTypeId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the value type, if any, for the field represented by this EntityParticle."
+    }
+  },
+  "relationshipreferenceto_type": {
+    "referenceTo": {
+      "description": "The name of an object that can be referenced. For example, if EntityParticle represents Event.WhoId (the WhoId field on Event), the value of this field would be at least [Contact, Lead]."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EntityParticle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ByteLength\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"DataType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DefaultValueFormula\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DeveloperName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Digits\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinition\" minOccurs=\"0\" type=\"ens:EntityDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ExtraTypeInfo\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"FieldDefinition\" minOccurs=\"0\" type=\"ens:FieldDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"FieldDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"InlineHelpText\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsApiFilterable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsApiGroupable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsApiSortable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsAutonumber\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsCalculated\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsCaseSensitive\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsCompactLayoutable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsComponent\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsCompound\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsCreatable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDefaultedOnCreate\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDependentPicklist\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeprecatedAndHidden\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDisplayLocationInDecimal\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsEncrypted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsFieldHistoryTracked\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsHighScaleNumber\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsHtmlFormatted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsIdLookup\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsLayoutable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsListVisible\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsNameField\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsNamePointing\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsNillable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsPermissionable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsUnique\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsUpdatable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsWorkflowFilterable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsWriteRequiresMasterRead\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Label\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Length\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Mask\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"MaskType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"MasterLabel\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"NamespacePrefix\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Precision\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"QualifiedApiName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ReferenceTargetField\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ReferenceTo\" minOccurs=\"0\" type=\"tns:RelationshipReferenceTo\" nillable=\"true\"/>\n        <xsd:element name=\"RelationshipName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RelationshipOrder\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Scale\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"ValueType\" minOccurs=\"0\" type=\"ens:DataType\" nillable=\"true\"/>\n        <xsd:element name=\"ValueTypeId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"RelationshipReferenceTo\">\n  <xsd:sequence>\n    <xsd:element name=\"referenceTo\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

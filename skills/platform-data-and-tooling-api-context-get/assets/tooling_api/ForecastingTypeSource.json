@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ForecastingTypeSource - Tooling API",
+  "description": "Represents the mapping of a forecasting source definition to a forecast type. This object is available in API version 52.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer name of the forecasting source definition."
+    },
+    "ForecastingSourceDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecasting source definition. This is a relationship field.",
+      "relationship_name": "ForecastingSourceDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingSourceDefinition"
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecast type. Can be linked only to forecast types created in Summer ’21 and later. This is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingType"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the forecasting type source."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the forecasting type source."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The controlling label for this forecasting type source.",
+      "required": true
+    },
+    "Metadata": {
+      "type": "ForecastingTypeSource",
+      "properties": "Create, Nillable, Update",
+      "description": "The metadata of the forecasting source definition."
+    },
+    "ParentSourceDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For forecast types not based on the Opportunity object and not based on a custom measure, this value represents the ID of the parent ForecastingSourceDefinition of the linked ForecastingSourceDefinition. This is a relationship field.",
+      "relationship_name": "ParentSourceDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingSourceDefinition"
+    },
+    "RelationField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Represents the field that links the source objects of the parent ForecastingSourceDefinition to the child ForecastingSourceDefinition. Possible values are: OpportunityLineItem.OpportunityId OpportunityLineItem.Product2Id"
+    },
+    "SourceGroup": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Represents a grouping of forecast type source definitions.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingTypeSource\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"forecastingSourceDefinition\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingType\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentSourceDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceGroup\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

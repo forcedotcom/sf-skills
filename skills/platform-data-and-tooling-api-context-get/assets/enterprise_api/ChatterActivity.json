@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ChatterActivity - Data API",
+  "description": "ChatterActivity represents the number of posts and comments made by a user and the number of comments and likes on posts and comments received by the same user. This object is available in API version 23.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CommentCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of FeedComments made by the ParentId."
+    },
+    "CommentReceivedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of FeedComments received by the ParentId."
+    },
+    "InfluenceRawRank": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Number indicating the ParentId’s Chatter influence rank, which is calculated based on the ParentId’s ChatterActivity statistics, relative to the other users in the organization. This field is available in API version 26.0 and later."
+    },
+    "LikeReceivedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of FeedLikes received by the ParentId."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Experience Cloud site to which the ChatterActivity belongs. This field is available only if digital experiences is enabled in your org. This field is available in API version 26.0 and later."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the object type to which the ChatterActivity is related. In API version 66.0, the ParentId must be a UserId or SelfServiceUser ID."
+    },
+    "PostCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of FeedItems made by the ParentId."
+    }
+  },
+  "usage": "SELECT Id, PostCount, LikeReceivedCount\n\nFROM ChatterActivity\n\nWHERE ParentId = UserId\n\nTo query ChatterActivity, you\n      must provide the\n\n. In API version\n\nor SelfServiceUser\n      ID.",
+  "wsdl_segment": "```xml\n<complexType name=\"ChatterActivity\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CommentCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CommentReceivedCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"InfluenceRawRank\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LikeReceivedCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PostCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CommentCount": {
+      "field_label": "Comment Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "CommentReceivedCount": {
+      "field_label": "Comment Received Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Chatter Activity ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InfluenceRawRank": {
+      "field_label": "Influence Raw Rank",
+      "type": "int",
+      "digits": "9"
+    },
+    "LikeReceivedCount": {
+      "field_label": "Like Received Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PostCount": {
+      "field_label": "Post Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

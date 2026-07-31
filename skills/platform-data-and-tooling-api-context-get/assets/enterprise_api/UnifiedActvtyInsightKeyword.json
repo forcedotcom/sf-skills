@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "UnifiedActvtyInsightKeyword - Data API",
+  "description": "Represents a keyword in a communication that triggered the activity insight. This object is available for reports and dashboards in the Winter ’24 release and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "InsightId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the activity insight associated with the keyword. This field is a relationship field.",
+      "relationship_name": "Insight",
+      "relationship_type": "Lookup",
+      "refers_to": "UnifiedActivityInsight"
+    },
+    "Keyword": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Keyword mentioned in the communication."
+    },
+    "Occurrences": {
+      "type": "int",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Number of times the keyword was mentioned in the communication."
+    }
+  },
+  "field_reference": {
+    "ExternalId": {
+      "field_label": "External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Unified Activity Insight Keyword ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InsightId": {
+      "field_label": "Unified Activity Insight ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Keyword": {
+      "field_label": "Keyword",
+      "type": "string",
+      "length": "80"
+    },
+    "Occurrences": {
+      "field_label": "Occurrences",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

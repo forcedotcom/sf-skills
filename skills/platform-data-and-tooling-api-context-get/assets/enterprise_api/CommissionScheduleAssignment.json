@@ -1,0 +1,95 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "CommissionScheduleAssignment - Data API",
+  "description": "Represents the commission calculation applicable to a specific product or producer for one or multiple commissionable events.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CommissionableEventType": {
+      "type": "multipicklist",
+      "properties": "Create, Filter, Nillable, Restricted picklist, Update",
+      "description": "The event that results in the commission calculation. Possible values are: Contracting Endorsement Issue Policy Policy Issuance"
+    },
+    "CommissionScheduleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the associated Commission Schedule, which is the commission calculation tied to the product or producer. This is a relationship field.",
+      "relationship_name": "CommissionSchedule",
+      "relationship_type": "Lookup",
+      "refers_to": "CommissionSchedule"
+    },
+    "EffectiveEndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The last date when the Commission Schedule is in effect for the product or producer."
+    },
+    "EffectiveStartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The first date when the Commission Schedule is in effect for the product or producer."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "MaxCommissionAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The maximum commission calculated for the product or producer for a commissionable event. Constrains the output from the Commission Schedule."
+    },
+    "MaxCommissionRate": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The maximum commission rate that a producer receives for a commissionable event."
+    },
+    "MinCommissionAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The minimum commission calculated for the product or producer for a commissionable event. Constrains the output from the Commission Schedule."
+    },
+    "MinCommissionRate": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The minimum commission rate that a producer receives for a commissionable event."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the Commission Schedule Assignment."
+    },
+    "ProducerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The producer, broker, brokerage, or other user who receives the commission. This is a relationship field.",
+      "relationship_name": "Producer",
+      "relationship_type": "Lookup",
+      "refers_to": "Producer"
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The product for which commissions are calculated. This is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CommissionScheduleAssignmentChangeEvent**: Change events are available for the object in API version 62.0 and later.\n- **CommissionScheduleAssignmentFeed**: Feed tracking is available for the object.\n- **CommissionScheduleAssignmentHistory**: History is available for tracked fields of the object.\n- **CommissionScheduleAssignmentOwnerSharingRule**: Sharing rules are available for the object.\n- **CommissionScheduleAssignmentShare**: Sharing is available for the object."
+}

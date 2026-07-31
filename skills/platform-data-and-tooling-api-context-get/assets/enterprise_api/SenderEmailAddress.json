@@ -1,0 +1,149 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "SenderEmailAddress - Data API",
+  "description": "Represents a From address in a marketing email. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DisplayName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A descriptive name that makes the sender email address easier to identify."
+    },
+    "EmailDomainKeyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique system ID of the domain associated with the sender email address. This field is a relationship field.",
+      "relationship_name": "EmailDomainKey",
+      "refers_to": "EmailDomainKey"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique identifier for the sender email address."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The unique user ID of the user who owns the sender email address object. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The part of the email address that comes before the @ symbol."
+    }
+  },
+  "field_reference": {
+    "AutoReplyMessage": {
+      "field_label": "Auto Reply Message",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DisplayName": {
+      "field_label": "Display Name",
+      "type": "string",
+      "length": "40"
+    },
+    "EmailDomainKeyId": {
+      "field_label": "Email Domain Key ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FwdEmailAddress": {
+      "field_label": "Fwd Email Address",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Sender Email Address ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IncomingMessagingSettingCode": {
+      "field_label": "Incoming Messaging Setting Code",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsAgentConversationalActive": {
+      "field_label": "Is Agent Conversational Active",
+      "type": "boolean"
+    },
+    "IsAutoReplyEnabled": {
+      "field_label": "Is Auto Reply Enabled",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsOutboundMessagingActive": {
+      "field_label": "Is Outbound Messaging Active",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SendDefinitionKey": {
+      "field_label": "Send Definition Key",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Username": {
+      "field_label": "Username",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

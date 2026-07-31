@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "ContentDocumentListViewMapping - Data API",
+  "description": "Represents an association between a ListView and a Quip ContentDocument. Applies to Quip file types only. Maintains the mapping between a list view and Quip document when the list view is exported to a newly created Quip document. This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContentDocumentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the document."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record"
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this document."
+    },
+    "ListViewId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the list view associated with the document."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the document."
+    }
+  },
+  "special_access_rules": "To use this object, the Files Connect and Quip permissions must be enabled in the org. To insert and update this object through the API, the QuipMassAction gater permission must also be enabled.\n\nTo use this object, the Files Connect and Quip permissions must be enabled in the org.\n\nTo insert and update this object through the API, the QuipMassAction gater permission must also be enabled.",
+  "usage": "ContentDocumentListViewMapping is used primarily by the Quip list view integration feature. Only Quip file types (Quip sheets and docs) are supported. The ContentDocumentId field must point to a Quip file."
+}

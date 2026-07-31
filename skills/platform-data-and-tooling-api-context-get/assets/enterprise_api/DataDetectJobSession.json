@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "DataDetectJobSession - Data API",
+  "description": "Represents a run of a DataDetect scan policy that's triggered manually. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "DataDetectPolicyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the scan policy associated with this job session.This field is a relationship field.",
+      "relationship_name": "DataDetectPolicy",
+      "refers_to": "DataDetectPolicy"
+    },
+    "DataDetectPolicySnapshotId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the snapshot of the scan policy associated with this job session.This field is a relationship field.",
+      "relationship_name": "DataDetectPolicySnapshot",
+      "relationship_type": "Master-Detail",
+      "refers_to": "DataDetectPolicySnapshot"
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Time and date when the data scan completes."
+    },
+    "HasClassicEncryptedField": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that if the user is permitted to view classic encrypted fields, they can view these fields in the scan results. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-generated name of the job session."
+    },
+    "NamedEntityCount": {
+      "type": "int",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Aggregate count of PII found during the data scan."
+    },
+    "PolicyJobStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the data scan. Valid values are: Stopped Completed Failed PartialSuccess Running Scheduled TimedOut The default value is Scheduled."
+    },
+    "RunByUser": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "User who started the job session or data scan."
+    },
+    "SessionStartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Time and date when the data scan begins."
+    }
+  },
+  "associated_objects": "This object has this associated object. If the API version isn’t specified, it's available in the same API version as this object. Otherwise, it's available in the specified API version and later.\n\n- **DataDetectJobSessionFeed**: Feed tracking is available for the object."
+}

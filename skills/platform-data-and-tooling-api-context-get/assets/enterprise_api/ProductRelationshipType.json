@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ProductRelationshipType - Data API",
+  "description": "Defines the relationship between two sales transaction items. For example, defines a relationship between a bundle and a bundle component. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AssociatedProductRoleCat": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The position category that the associated product plays in the relationship. Possible values are: AddOnComponent—The associated product is an add-on. BundleComponent — The associated product is part of a bundle. SetComponent — The associated product is part of a set."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "MainProductRoleCat": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The position category that the main product plays in the relationship. Possible values are: AddOn—The parent of the add-on. Bundle—The bundle parent. Set—The set parent."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the relationship between two product items."
+    }
+  },
+  "special_access_rules": "In version 58.0 and later, this object is available when B2B Commerce, B2C Commerce, or Subscription Management is enabled. In version 57.0, this object is available when B2B Commerce or B2C Commerce is enabled.\n\nIn version 58.0 and later, this object is available when B2B Commerce, B2C Commerce, or Subscription Management is enabled.\n\nIn version 57.0, this object is available when B2B Commerce or B2C Commerce is enabled.",
+  "field_reference": {
+    "AssociatedProductRoleCat": {
+      "field_label": "Associated Product Role Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Product Relationship Type ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MainProductRoleCat": {
+      "field_label": "Main Product Role Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Product Relationship Type Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

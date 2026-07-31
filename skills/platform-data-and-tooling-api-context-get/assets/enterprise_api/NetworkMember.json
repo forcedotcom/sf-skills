@@ -1,0 +1,272 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "NetworkMember - Data API",
+  "description": "Represents a member of an Experience Cloud site. Members can be either users in your company or external users with portal profiles. This object is available in API version 26.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DefaultGroupNotificationFrequency": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The default frequency for sending the member’s group email notifications when the member joins groups in the Experience Cloud site. The valid values are: P—Email on every post D—Daily digests W—Weekly digests N—Never The default value is W. In sites, the Email on every post option is disabled once more than 10,000 members choose this setting for the group. All members who had this option selected are automatically switched to Daily digests. However, this field is not currently enabled. These values are reserved for future use.",
+      "required": true
+    },
+    "DigestFrequency": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The frequency for sending the member’s personal email digest for the Experience Cloud site. The valid values are: D—Daily W—Weekly N—Never The default value is D. However, daily and weekly personal digests aren’t currently available in sites. These values are reserved for future use.",
+      "required": true
+    },
+    "LastChatterActivityDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The last time the member posted or commented in the Experience Cloud site."
+    },
+    "MemberId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of a person who is a member of an Experience Cloud site."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Experience Cloud site that the member is part of."
+    },
+    "PreferencesDisableAllFeedsEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member can automatically receive email for updates in the Experience Cloud site, based on the types of feed emails and digests the member has enabled."
+    },
+    "PreferencesDisableBestAnswerEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email when someone selects their answer to a post as best. Available in API 46.0 and later."
+    },
+    "PreferencesDisableBookmarkEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone comments on a feed item after the member has bookmarked it."
+    },
+    "PreferencesDisableChangeCommentEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone comments on a change the member has made, such as an update to their profile."
+    },
+    "PreferencesDisableDirectMessageEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone sends them a direct message in the Experience Cloud site."
+    },
+    "PreferencesDisableEndorsementEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone endorses them for a topic."
+    },
+    "PreferencesDisableFollowersEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone in the Experience Cloud site starts following the member."
+    },
+    "PreferencesDisableItemFlaggedEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the user automatically receives email every time a member flags a post or comment. This setting only applies for community moderators (with the Moderate Experiences Feeds permission) and group owners or managers.This field is available in API version 29.0 and later."
+    },
+    "PreferencesDisableLaterCommentEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone comments on a feed item after the member has commented on the feed item."
+    },
+    "PreferencesDisableLikeEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone comments on a feed item after the member has liked the feed item."
+    },
+    "PreferencesDisableMarketingCloudEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives marketing emails sent by Journey Builder. Available in API version 41.0 and later."
+    },
+    "PreferencesDisableMentionsPostEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time the member is mentioned in posts."
+    },
+    "PreferencesDisableMessageEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time the member is sent a Chatter message."
+    },
+    "PreferencesDisableProfilePostEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone posts to the member’s profile."
+    },
+    "PreferencesDisableSharePostEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time the member’s post is shared."
+    },
+    "PreferencesDisCommentAfterLikeEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone comments on a post the member has liked."
+    },
+    "PreferencesDisMentionsCommentEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time the member is mentioned in comments."
+    },
+    "PreferencesDisProfPostCommentEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When false, the member automatically receives email every time someone comments on posts on the member’s profile."
+    },
+    "ReputationPoints": {
+      "type": "double",
+      "properties": "Filter, Sort, Update",
+      "description": "The number of reputation points the user has accumulated by performing actions in the Experience Cloud site."
+    }
+  },
+  "special_access_rules": "This object is available only when your org has digital experiences enabled.",
+  "usage": "Use this object to query members of a certain Experience Cloud site and to update their email notification settings. If you have Modify All Data, View All Data, or Create and Set Up Experiences, you can view all members of any Experience Cloud site, regardless of your own membership. If you have Modify All Data or Create and Set Up Experiences, you can also update any member’s email settings. Users without these permissions can update their own email settings and can see members of the Experience Cloud sites that they’re also members of. You can directly update reputation points for a member via the Salesforce API. You can also use Apex triggers to send custom notifications based on changes to reputation points.\n\nUse this object to query members of a certain Experience Cloud site and to update their email notification settings. If you have Modify All Data, View All Data, or Create and Set Up Experiences, you can view all members of any Experience Cloud site, regardless of your own membership. If you have Modify All Data or Create and Set Up Experiences, you can also update any member’s email settings. Users without these permissions can update their own email settings and can see members of the Experience Cloud sites that they’re also members of.\n\nYou can directly update reputation points for a member via the Salesforce API. You can also use Apex triggers to send custom notifications based on changes to reputation points.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DefaultGroupNotificationFrequency": {
+      "field_label": "Default Notification Frequency when Joining Groups",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DigestFrequency": {
+      "field_label": "Chatter Email Highlights Frequency",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Site Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastChatterActivityDate": {
+      "field_label": "Last Chatter Activity Date",
+      "type": "date"
+    },
+    "MemberId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreferencesDisCommentAfterLikeEmail": {
+      "field_label": "DisCommentAfterLikeEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisMentionsCommentEmail": {
+      "field_label": "DisMentionsCommentEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisProfPostCommentEmail": {
+      "field_label": "DisProfPostCommentEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableAllFeedsEmail": {
+      "field_label": "DisableAllFeedsEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableBestAnswerEmail": {
+      "field_label": "DisableBestAnswerEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableBookmarkEmail": {
+      "field_label": "DisableBookmarkEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableChangeCommentEmail": {
+      "field_label": "DisableChangeCommentEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableDirectMessageEmail": {
+      "field_label": "DisableDirectMessageEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableEndorsementEmail": {
+      "field_label": "DisableEndorsementEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableFollowersEmail": {
+      "field_label": "DisableFollowersEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableItemFlaggedEmail": {
+      "field_label": "DisableItemFlaggedEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableLaterCommentEmail": {
+      "field_label": "DisableLaterCommentEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableLikeEmail": {
+      "field_label": "DisableLikeEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableMentionsPostEmail": {
+      "field_label": "DisableMentionsPostEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableMessageEmail": {
+      "field_label": "DisableMessageEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisablePendingReviewEmail": {
+      "field_label": "DisablePendingReviewEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableProfilePostEmail": {
+      "field_label": "DisableProfilePostEmail",
+      "type": "boolean"
+    },
+    "PreferencesDisableSharePostEmail": {
+      "field_label": "DisableSharePostEmail",
+      "type": "boolean"
+    },
+    "ReputationPoints": {
+      "field_label": "Reputation Points",
+      "type": "double",
+      "precision": "15",
+      "scale": "0"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

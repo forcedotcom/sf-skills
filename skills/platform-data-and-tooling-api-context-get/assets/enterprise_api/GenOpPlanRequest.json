@@ -1,0 +1,101 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "GenOpPlanRequest - Data API",
+  "description": "Represents a request to generate a service plan. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "CopilotId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "(Optional) The ID of the Einstein Copilot associated with the plan request. This field is a relationship field.",
+      "relationship_name": "Copilot",
+      "refers_to": "GenAiPlannerDefinition"
+    },
+    "CopilotName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "(Optional) The name of the Einstein Copilot associated with the plan request."
+    },
+    "ErrorCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "(Optional) The standard error code when plan generation fails. Possible values are: AgentNotActive AgentNotFound CaseGroundingNotEnabled (Service AI Grounding isn’t enabled) InstructionsOrActionsNotFound InsufficientData InvalidRecordId NoEligibilityDefined (No eligibility criteria defined) NotEligible RagConfigurationError StepSummaryEmpty TopicIdNotFound TopicNotFound Unknown"
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "(Optional) The error message when plan generation fails."
+    },
+    "LlmModelName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "(Optional) The name of the large language model used for plan generation. The maximum length is 80 characters."
+    },
+    "LlmProviderName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "(Optional) The name of the LLM provider. The maximum length is 80 characters."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "(Required) The auto-generated name of the generated operation plan request."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "(Required) The ID of the service plan parent record. This field is a polymorphic relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Master-detail",
+      "refers_to": "Case, Incident, MessagingSession, Opportunity (the master object)"
+    },
+    "PromptTemplateDevName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "(Optional) The developer name of the prompt template used for plan generation. The maximum length is 80 characters."
+    },
+    "PromptTemplateVersionNo": {
+      "type": "int",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "(Optional) The version number of the prompt template."
+    },
+    "Reason": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "(Required) The reason why plan generation failed or returned no steps. Possible values are: CannotGeneratePlan NoEligibilityConfig (no eligibility criteria set) None (default) NoPlanGenerated PlanEmpty PlanEmptyInsufficientData RagConfigurationError ThresholdError (eligibility not met for unknown reason) ThresholdNotMet"
+    },
+    "RequestSource": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "(Optional) The source where the plan request originated. Possible values are: CASE EINSTEIN_LEX (Einstein Chat LEX component) INCIDENT"
+    },
+    "RequestType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "(Required) The type of service plan request. Possible values are: Close Generation Summary (default)"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "(Required) The status of the plan generation request. Possible values are: Error Incomplete InProgress (default) Success"
+    },
+    "Utterance": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "(Optional) The natural language input or prompt used for plan generation. The maximum length is 32,000 characters."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the Service Planner Access add-on license."
+}

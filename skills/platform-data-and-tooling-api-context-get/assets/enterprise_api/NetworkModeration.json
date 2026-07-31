@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "NetworkModeration - Data API",
+  "description": "Represents a flag on an item in a community. This object is available in API version 30.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "EntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the post, comment, or file that was flagged."
+    },
+    "ModerationType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Determines the type of flag applied to an item. Values are: FlagAsInappropriate FlagAsSpam"
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the community in which the item was flagged."
+    },
+    "Visibility": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Nillable, Sort",
+      "description": "Determines visibility of a flagged item. Values are: SelfAndModerators—The user who flagged the item and any moderators can see the flagged item. This is the default value. ModeratorsOnly—Only moderators can see the flagged item. If ModeratorsOnly is selected, only moderators can set flags using the API."
+    }
+  },
+  "special_access_rules": "This object is available only when your org has digital experiences enabled.",
+  "usage": "Use this object to view the items flagged for moderation within a community. Additionally, users with “Moderate Feeds” and “Modify All Data” can remove flags. Flags on items are created either when a member manually flags an item in a community (if flagging is enabled for that community), or when a trigger automatically flags an item because the item met the trigger criteria.\n\nUse this object to view the items flagged for moderation within a community. Additionally, users with “Moderate Feeds” and “Modify All Data” can remove flags.\n\nFlags on items are created either when a member manually flags an item in a community (if flagging is enabled for that community), or when a trigger automatically flags an item because the item met the trigger criteria.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EntityId": {
+      "field_label": "Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Community Moderation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ModerationType": {
+      "field_label": "Moderation Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Note": {
+      "field_label": "Notes",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "Visibility": {
+      "field_label": "Visibility",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

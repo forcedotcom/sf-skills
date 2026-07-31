@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "NetworkPageOverride - Data API",
+  "description": "Represents information about custom pages used to override the default pages in Experience Cloud sites. You can create Experience Builder or Visualforce pages and override the default pages in a site. Using custom pages allows you to create a more personalized experience for your users. This object is available in API version 34.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Experience Cloud site where a custom page is used to override a default page."
+    },
+    "OverrideSetting": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of the page used to override a default page in the Experience Cloud site. OverrideSetting can take the following values: Standard—The standard page that comes by default with the site. Configurable—The page created when the Configurable Self-Reg registration page type or the Login Discovery login page type is selected. Designer—A custom page created using Experience Builder. Visualforce—A custom page created using Visualforce."
+    },
+    "OverrideType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The name of the default page in the Experience Cloud site that you want to override with a custom page.OverrideType can take the following values: LoginRequired ChangePassword ForgotPassword SelfReg Home"
+    }
+  },
+  "special_access_rules": "Only users with the Create and Setup Experiences permission can update this object.\n\nYou can’t override the Change Password Page with a page created using Experience Builder.\n\t\t\t\t\t\tYou can only override it with a Visualforce page.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Experience Page Override Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OverrideSetting": {
+      "field_label": "Page Override Setting",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OverrideType": {
+      "field_label": "Page Override Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

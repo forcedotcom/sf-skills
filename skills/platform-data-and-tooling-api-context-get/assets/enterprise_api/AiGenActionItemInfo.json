@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "AiGenActionItemInfo - Data API",
+  "description": "Represents the contextual information for AI-generated actions. It tracks the agent recommendations, their rationale, and the current action status. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionItemOwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID associated with the owner of the AI-generated action item. The owner can be an agent or human user, and can change during the review and execution process. By default, the owner is an agent or queue. This field is a polymorphic relationship field.",
+      "relationship_name": "ActionItemOwner",
+      "refers_to": "Group, User"
+    },
+    "AgentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The specific agent that suggests and processes the AI-generated action item.",
+      "required": true
+    },
+    "BotDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the agent definition that can execute the AI-generated action item. This field is a relationship field.",
+      "relationship_name": "BotDefinition",
+      "refers_to": "BotDefinition"
+    },
+    "BotVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the agent version that can execute the AI-generated action item. This field is a relationship field.",
+      "relationship_name": "BotVersion",
+      "refers_to": "BotVersion"
+    },
+    "CustomAgentActionName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the custom agent action."
+    },
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The timestamp when the AI-generated action item expires.",
+      "required": true
+    },
+    "FieldName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the field to update when the AI-generated action item is a field update."
+    },
+    "GeneratedResponseIdRef": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of generated result in the GenAIGeneration DMO. This field can be used by human users to provide feedback on the AI-generated action item."
+    },
+    "OriginalValue": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The original value of the field before it's updated by the AI-generated action item."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The record that the AI-generated action item is for. This field is a polymorphic relationship field.",
+      "relationship_name": "Parent",
+      "refers_to": "Account, Opportunity",
+      "required": true
+    },
+    "ParentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The object that the AI-generated action item is for.",
+      "required": true
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the AI-generated action item.",
+      "required": true
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The subject line that displays to users indicating what the action item is.",
+      "required": true
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of AI-generated action item. For example, field update or custom agent action.",
+      "required": true
+    }
+  },
+  "special_access_rules": "Agentforce Pipeline Management must be enabled. Only the agent user can create AiGenActionItem records.\n\nAgentforce Pipeline Management must be enabled.\n         Only the agent user can create AiGenActionItem records."
+}

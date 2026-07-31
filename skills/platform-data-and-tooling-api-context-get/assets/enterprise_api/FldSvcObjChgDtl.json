@@ -1,0 +1,89 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FldSvcObjChgDtl - Data API",
+  "description": "Represents the details of a change made to one of a service appointment’s tracked fields. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "FieldChangedName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The API name of the field that was changed."
+    },
+    "FieldChangedValue": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The updated value of the field that was changed."
+    },
+    "FldSvcObjChgId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The parent record associated with the details of the change. The parent record has multiple detail records associated with it. Each record includes the name and the current value of the tracked fields. This field is a relationship field.",
+      "relationship_name": "FldSvcObjChg",
+      "relationship_type": "Lookup",
+      "refers_to": "FldSvcObjChg"
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"FldSvcObjChgDtl\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FieldChangedName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FieldChangedValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FldSvcObjChg\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FldSvcObjChg\"/>\n        <element name=\"FldSvcObjChgId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FieldChangedName": {
+      "field_label": "Field Changed Name",
+      "type": "string",
+      "length": "40"
+    },
+    "FieldChangedValue": {
+      "field_label": "Field Changed Value",
+      "type": "string",
+      "length": "1000"
+    },
+    "FldSvcObjChgId": {
+      "field_label": "Field Service Object Change ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Field Service Object Change Detail ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

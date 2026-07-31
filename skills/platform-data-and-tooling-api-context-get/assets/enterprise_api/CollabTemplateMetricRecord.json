@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "CollabTemplateMetricRecord - Data API",
+  "description": "Represents an association between a CollabTemplateMetric and a Salesforce record.It tracks which Salesforce record, such as an Account or Contact, is linked to a Quip template for which metrics were gathered using CollabTemplateMetric. CollabTemplateMetricRecord is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ParentRecord": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Salesforce record."
+    },
+    "QuipDocumentMetric": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the CollabTemplateMetric record."
+    },
+    "MetricDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date that the metric was gathered in your local time zone."
+    },
+    "MetricDateOnly": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date that the metric was gathered in UTC. Available in API version 55.0 and later."
+    },
+    "EntityType": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The object type of the Salesforce record, such as Account or Contact."
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "Knowledge__DataCategorySelection - Data API",
+  "description": "Represents a data category that classifies an article. This object is available in API version 39.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataCategoryGroupName": {
+      "type": "datacategorygroupreference",
+      "properties": "Create",
+      "description": "Unique name of the data category group which has categories associated with the article."
+    },
+    "DataCategoryName": {
+      "type": "datacategorygroupreference",
+      "properties": "Create",
+      "description": "Unique name of the data category associated with the article."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the article associated with the data category selection."
+    }
+  },
+  "special_access_rules": "Lightning Knowledge must be enabled in your org.",
+  "usage": "Every article in Salesforce Knowledge can be categorized. A data category selection represents a category that has been selected to classify an article. You can use this object to query and manage article categorization in your organization. Client applications can create a categorization for an article with a Draft status. They can also delete and query article categorizations.\n\nWhen using this object to classify an article, you can't select both a category (for\n        example USA) and one of its descendants (California) or ascendant categories (North\n        America). In this case, only the first category is selected.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataCategoryGroupName": {
+      "field_label": "Selected Data Category Group's Developer Name",
+      "type": "datacategorygroupreference",
+      "digits": "0",
+      "length": "80",
+      "precision": "0",
+      "scale": "0"
+    },
+    "DataCategoryName": {
+      "field_label": "Selected Data Category's Developer Name",
+      "type": "datacategorygroupreference",
+      "digits": "0",
+      "length": "80",
+      "precision": "0",
+      "scale": "0"
+    },
+    "Id": {
+      "field_label": "Entity Data Category Selection ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "ParentId": {
+      "field_label": "Knowledge Article Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

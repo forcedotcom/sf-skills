@@ -1,0 +1,260 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ServiceResource - Data API",
+  "description": "Represents a service technician or service crew in Field Service and Salesforce Scheduler, or an agent in Workforce Engagement. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the resource."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "When selected, this option means that the resource can be assigned to work orders. For service tracking purposes, resources can’t be deleted, so deactivating a resource is the best way to send them into retirement.Deactivating a user doesn’t deactivate the related service resource. You can’t create a service resource that is linked to an inactive user."
+    },
+    "IsCapacityBased": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Capacity-based resources are limited to a certain number of hours or appointments in a specified time period. The Capacities related list shows a resource’s capacity."
+    },
+    "IsOptimizationCapable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "This field is reserved for Field Service and the managed package. Create a custom field instead of using this field to include a service resource in optimization."
+    },
+    "LastKnownLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The latitude of the last known location."
+    },
+    "LastKnownLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The longitude of the last known location."
+    },
+    "LastKnownLocation": {
+      "type": "location",
+      "properties": "Nillable",
+      "description": "The service resource’s last known location. You can configure this field to display data collected from a custom mobile app. This field isn’t visible in the user interface, but you can expose it on service resource page layouts or set up field tracking to be able to view a resource’s location history."
+    },
+    "LastKnownLocationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The date and time of the last known location."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the service resource was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the service resource was last viewed."
+    },
+    "LocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Nillable, Update",
+      "description": "The location associated with the service resource. For example, a service vehicle driven by the service resource. LocationId is a relationship field.",
+      "relationship_name": "Location",
+      "relationship_type": "Lookup",
+      "refers_to": "Location"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The resource’s name, for example the name or title of the associated user or service crew."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of the service resource. OwnerId is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Nillable, Update",
+      "description": "The associated user. Its label in the UI is User. If the service resource represents a service crew rather than a user, leave the User field blank and select the related crew in the ServiceCrewId field. RelatedRecordId is a relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ResourceType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the resource is a Technician (T), Dispatcher (D), Crew (C), Asset (S), Agent (A), or Planner (P). The default value is Technician (T). Resources who are dispatchers can’t be capacity-based or included in scheduling optimization. Only users with the Field Service Dispatcher permission-set license can be dispatchers. You can’t add additional resource types. To create a dependent lookup filter with ServiceResource.ResourceType, use only the first letter of the picklist value, for example T for Technician."
+    },
+    "ServiceCrewId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Nillable, Update",
+      "description": "The associated service crew. If the service resource represents a crew, select the crew. This field is hidden for all users by default. To use it, update its field-level security settings in Setup and add it to your service resource page layouts."
+    }
+  },
+  "special_access_rules": "Field Service or Workforce Engagement must be enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ServiceResourceChangeEvent (API version 48.0)**: Change events are available for the object.\n- **ServiceResourceFeed**: Feed tracking is available for the object.\n- **ServiceResourceHistory**: History is available for tracked fields of the object.\n- **ServiceResourceOwnerSharingRule**: Sharing rules are available for the object.\n- **ServiceResourceShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"ServiceResource\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DynamicDataCaptures\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsCapacityBased\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOptimizationCapable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastKnownLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LastKnownLocation\" nillable=\"true\" minOccurs=\"0\" type=\"tns:location\"/>\n        <element name=\"LastKnownLocationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastKnownLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Location\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"LocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"RelatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ResourceAbsences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ResourcePreferences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ResourceType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SchedulingConstraint\" nillable=\"true\" minOccurs=\"0\" type=\"ens:SchedulingConstraint\"/>\n        <element name=\"SchedulingConstraintId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceAppointments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceCrew\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceCrew\"/>\n        <element name=\"ServiceCrewId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceCrewMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceResourceCapacities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceResourcePreferences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceResourceSkills\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceTerritories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShiftServiceResources\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TimeSheets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Id": {
+      "field_label": "Resource ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsCapacityBased": {
+      "field_label": "Capacity-Based",
+      "type": "boolean"
+    },
+    "IsOptimizationCapable": {
+      "field_label": "Include in Scheduling Optimization",
+      "type": "boolean"
+    },
+    "IsPrimary": {
+      "field_label": "Main",
+      "type": "boolean"
+    },
+    "LastKnownLatitude": {
+      "field_label": "Last Known Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "LastKnownLocation": {
+      "field_label": "Last Known Location",
+      "type": "location",
+      "digits": "0",
+      "length": "0",
+      "precision": "0",
+      "scale": "0"
+    },
+    "LastKnownLocationDate": {
+      "field_label": "Last Known Location Date",
+      "type": "datetime"
+    },
+    "LastKnownLongitude": {
+      "field_label": "Last Known Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LocationId": {
+      "field_label": "Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PayGroupId": {
+      "field_label": "Pay Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ResourceType": {
+      "field_label": "Resource Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SchedulingConstraintId": {
+      "field_label": "Scheduling Constraint ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceCrewId": {
+      "field_label": "Service Crew ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "TransactionSecurityEventLog - Data API",
+  "description": "Transaction Security event logs contain details about policy execution. Legacy transaction security policy details are supported in API version 38.0 and later. Enhanced transaction security policy details are supported in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApexIdentifier": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Apex code used to evaluate the policy."
+    },
+    "BotIdentifier": {
+      "type": "String",
+      "description": "The ID of the bot."
+    },
+    "BotSessionIdentifier": {
+      "type": "String",
+      "description": "The bot session ID."
+    },
+    "ClientIp": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that is using Salesforce services. A Salesforce internal IP, such as a login from AppExchange, is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CpuTime": {
+      "type": "Double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "EvaluationTime": {
+      "type": "Double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time in milliseconds used to evaluate the policy."
+    },
+    "EventName": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the event, which is Transaction Security Event."
+    },
+    "FlowIdentifier": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the flow used to evaluate the policy."
+    },
+    "LoginKey": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "PlannerIdentifier": {
+      "type": "String",
+      "description": "The ID of the agent planner."
+    },
+    "PolicyIdentifier": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the policy being evaluated. For example: 00530000009M943."
+    },
+    "PolicyOutcome": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The result of the transaction policy. Possible values are: Error—The policy caused an undefined error when it executed. ExemptNoAction—The user is exempt from transaction security policies, so the policy didn’t trigger. MeteringBlock—The policy took longer than 3 seconds to process, so the user was blocked from performing the operation. MeteringNoAction—The policy took longer than 3 seconds to process, but the user isn't blocked from performing the operation. NoAction—The policy didn't trigger. Notified—A notification was sent to the recipient."
+    },
+    "PolicyType": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The real time action selected for the policy."
+    },
+    "RequestIdentifier": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Globally unique id for a given request. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "Result": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The outcome of evaluating the policy. For example: NOT TRIGGERED."
+    },
+    "RunTime": {
+      "type": "Double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of time that the request took in milliseconds."
+    },
+    "SendEmailNotification": {
+      "type": "Boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether to send an email notification. The default value is false."
+    },
+    "SendInAppNotification": {
+      "type": "Boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether to send an in-app notification. The default value is false."
+    },
+    "SessionKey": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "Timestamp": {
+      "type": "DateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "TriggeredTimestamp": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The time at which the Transaction Security event was generated in ISO8601-compatible format. For example: 2015-07-27T11:32:59.555Z."
+    },
+    "Uri": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "UserIdentifier": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who is using Salesforce services through the UI or the API. For example: 00530000009M943."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

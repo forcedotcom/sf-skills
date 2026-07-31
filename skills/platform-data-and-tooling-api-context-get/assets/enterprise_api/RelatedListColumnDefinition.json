@@ -1,0 +1,142 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "RelatedListColumnDefinition - Data API",
+  "description": "Represents information about a column in a related list. A related list specifies a set of records for a related object, based on specific criteria. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Alias": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique alias of the column in the related list."
+    },
+    "ColumnSoql": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The SOQL query string used in a SELECT clause for the column."
+    },
+    "DataType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The field type of the column."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier for the related list. Always retrieve this value before using it, as the value can change from one release to the next. Simplify queries by using this field instead of making multiple queries."
+    },
+    "FieldDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the FieldDefinition associated with the column, if applicable. This is a relationship field.",
+      "relationship_name": "FieldDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "FieldDefinition"
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the column appears on the related list by default (true) or not (false). The default value is false."
+    },
+    "IsDescribable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the related list can appear in describeLayout call results (true) or not (false). The default value is false."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the column."
+    },
+    "LookupId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The lookup ID for the column."
+    },
+    "RelatedListDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the RelatedListDefinition that contains the column. This is a relationship field.",
+      "relationship_name": "RelatedListDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "RelatedListDefinition"
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "usage": "- **Find all available columns on a related list definition.**: SELECT Alias, ColumnSoql, DurableId FROM RelatedListColumnDefinition WHERE RelatedListDefinitionId = 'Account.Opportunities'`",
+  "wsdl_segment": "```xml\n<complexType name=\"RelatedListColumnDefinition\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Alias\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ColumnSoql\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DataType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FieldDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FieldDefinition\"/>\n        <element name=\"FieldDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDescribable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LookupId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RelatedListDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:RelatedListDefinition\"/>\n        <element name=\"RelatedListDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Alias": {
+      "field_label": "Related List Column Definition Alias",
+      "type": "string",
+      "length": "255"
+    },
+    "ColumnSoql": {
+      "field_label": "Related List Column Definition SOQL String",
+      "type": "string",
+      "length": "255"
+    },
+    "DataType": {
+      "field_label": "Data Type",
+      "type": "string",
+      "length": "255"
+    },
+    "DurableId": {
+      "field_label": "Durable Id",
+      "type": "string",
+      "length": "255"
+    },
+    "FieldDefinitionId": {
+      "field_label": "Field Definition ID",
+      "type": "string",
+      "length": "70"
+    },
+    "Id": {
+      "field_label": "Related List Column Definition Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Is Default",
+      "type": "boolean"
+    },
+    "IsDescribable": {
+      "field_label": "Is Describe Enabled",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "LookupId": {
+      "field_label": "Lookup Id",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedListDefinitionId": {
+      "field_label": "Related List Definition Id",
+      "type": "string",
+      "length": "70"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

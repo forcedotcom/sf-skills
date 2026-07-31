@@ -1,0 +1,92 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "RelationshipDomain - Tooling API",
+  "description": "Represents the relationship an object has with other objects. RelationshipDomain allows you to write simpler queries. For example, “which objects are the child objects for the object defined in ParentSobject” is easier using RelationshipDomain. Available in Tooling API version 34.0 and later.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ChildSobject": {
+      "type": "EntityDefinition",
+      "properties": "Filter, Group, Sort",
+      "description": "Metadata for the child object, if any."
+    },
+    "ChildSobjectId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the ChildSobject."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "Field": {
+      "type": "FieldDefinition",
+      "properties": "Filter, Group, Sort",
+      "description": "The relationship field on this object that defines the relationship to ChildSobject or ParentSobject."
+    },
+    "FieldId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of Field."
+    },
+    "IsCascadeDelete": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, this object’s parent can’t be deleted until all records for this object are deleted. Corresponds to Cascade value for DeleteConstraint in the Metadata API."
+    },
+    "IsDeprecatedAndHidden": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, this object is unavailable for the current version."
+    },
+    "IsRestrictedDelete": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, this object can’t be deleted. Corresponds to Restrict value for DeleteConstraint in the Metadata API."
+    },
+    "JunctionIdListNames": {
+      "type": "complexvalue",
+      "properties": "Nillable",
+      "description": "The names of the lists of junction IDs associated with an object. Each ID represents an object that has a relationship with the associated object."
+    },
+    "ParentSobject": {
+      "type": "EntityDefinition",
+      "properties": "Filter, Group, Sort",
+      "description": "Metadata for the parent object, if any."
+    },
+    "ParentSobjectId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the ParentSobject."
+    },
+    "RelationshipInfo": {
+      "type": "RelationshipInfo",
+      "properties": "Filter, Group, Sort",
+      "description": "Properties about the relationship."
+    },
+    "RelationshipInfoId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of RelationshipInfo for this relationship domain."
+    },
+    "RelationshipName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of this relationship."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"JunctionIdListNames\">\n  <xsd:sequence>\n    <xsd:element name=\"names\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelationshipDomain\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ChildSobject\" minOccurs=\"0\" type=\"ens:EntityDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"ChildSobjectId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Field\" minOccurs=\"0\" type=\"ens:FieldDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"FieldId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsCascadeDelete\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeprecatedAndHidden\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsRestrictedDelete\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"JunctionIdListNames\" minOccurs=\"0\" type=\"tns:JunctionIdListNames\" nillable=\"true\"/>\n        <xsd:element name=\"ParentSobject\" minOccurs=\"0\" type=\"ens:EntityDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"ParentSobjectId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RelationshipInfo\" minOccurs=\"0\" type=\"ens:RelationshipInfo\" nillable=\"true\"/>\n        <xsd:element name=\"RelationshipInfoId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RelationshipName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

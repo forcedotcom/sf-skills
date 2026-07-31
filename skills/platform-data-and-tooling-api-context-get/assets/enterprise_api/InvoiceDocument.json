@@ -1,0 +1,141 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "InvoiceDocument - Data API",
+  "description": "Tracks and displays the status of documents generated for invoices. Invoice documents are available in the related lists of invoice entity records. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ContentDocumentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the generated PDF document. This field is a relationship field.",
+      "relationship_name": "ContentDocument",
+      "refers_to": "ContentDocument"
+    },
+    "DateGenerated": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date on which the PDF is generated."
+    },
+    "DocumentGenerationProcessId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the entity that contains the information used to create the PDF invoice. This field is a relationship field.",
+      "relationship_name": "DocumentGenerationProcess",
+      "refers_to": "DocumentGenerationProcess"
+    },
+    "DocumentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The ID of the generated document."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Errors that occur during PDF generation."
+    },
+    "InvoiceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the invoice entity to which the invoice document is attached. This field is a relationship field.",
+      "relationship_name": "Invoice",
+      "relationship_type": "Master-detail",
+      "refers_to": "Invoice (the master object)"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the PDF generation process. Possible values are: Blocked Cancelled Failure Pending Success"
+    }
+  },
+  "special_access_rules": "This object is available with Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "ContentDocumentId": {
+      "field_label": "ContentDocument ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DateGenerated": {
+      "field_label": "Date Generated",
+      "type": "date"
+    },
+    "DocumentGenerationProcessId": {
+      "field_label": "Document Generation Process ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DocumentNumber": {
+      "field_label": "Invoice Document Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ErrorMessage": {
+      "field_label": "Error Message",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Invoice Document ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceId": {
+      "field_label": "Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

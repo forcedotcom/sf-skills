@@ -1,0 +1,986 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "QuoteLineItem - Data API",
+  "description": "Represents a quote line item, which is a member of the list of Product2 products associated with a quote, along with other information about those line items on that quote. Available in API version 18.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "BatchIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Identifier for a product bundle in a transaction processing batch. This value makes sure that quote lines from the same bundles process together."
+    },
+    "BillingFrequency": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The time period that indicates how often the quote line item is billed. This field is available in API version 55.0 and later. This field is available when Subscription Management is enabled. Possible values are: Annual Monthly"
+    },
+    "BillingReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Reference to the original quote for which this quote line item is created. This field is available in API version 61.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for organizations enabled for multiple currencies. Contains the ISO code for any currency allowed by the organization. If the organization has multicurrency and a Pricebook2 specified on the quote (the Pricebook2Id field isn’t blank), then the currency value of this field must match the currency of the PricebookEntry objects for any associated quote line items.This value comes from the related quote and can't be changed."
+    },
+    "CustomProductName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Custom product name for the quote line item."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Text description of the line item. Limit: 225 characters."
+    },
+    "Discount": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The optional discount percentage, specified by the sales representative at the line level. Editable number from 0 to 100."
+    },
+    "DiscountAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The fixed amount discount to apply to the quote line item. Available in API version 59.0 and later."
+    },
+    "DoesAutomaticallyRenew": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates that the quote line item is set to automatically renew (True) or not (False). The default value is false."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "A logical segment of your organization's data. For example, if your company is organized into different business units, you could create a division for each business unit, such as “North America,” “Healthcare,” or “Consulting.” Available only if the organization has the Division permission enabled."
+    },
+    "EffectiveGrantDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date on which the resources associated with the quote line item are granted."
+    },
+    "EndDate": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "If the quote line item is sold on subscription, this field indicates the date on which the subscription ends. This field is available in API version 55.0 and later. This field is available if Subscription Management is enabled in your org.You can indicate a subscription’s length by using either StartDate and EndDate, or by using StartDate and SubscriptionTerm. If you provide a value for both EndDate and SubscriptionTerm, EndDate is used to determine the subscription’s length."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The end date and time of the quote line item, which is derived from the End Date and End Time fields in the time zone specified in the Start and End Time Zone field. If the time zone isn't specified, the default is Coordinated Universal Time (UTC). This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "EndQuantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "If the quote line item is sold on a subscription, this field indicates the end quantity when the subscription ends. This field is available in API version 60.0 and later. This field is available with Subscription Management."
+    },
+    "EndTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The end time of the quote line item. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "HasQuantitySchedule": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only. Indicates whether the opportunity line item that the quote line item is synced with has a quantity schedule."
+    },
+    "HasRevenueSchedule": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only. Indicates whether the opportunity line item that the quote line item is synced with has a revenue schedule. If this object has a revenue schedule, the GrandTotal and TotalPrice fields can't be updated. In addition, the Quantity field can't be updated if this object has a quantity schedule. The system ignores any attempt to update this field. The update isn't rejected but the updated value is ignored."
+    },
+    "HasSchedule": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only. Indicates whether the line item uses schedules."
+    },
+    "IsPrimarySegment": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates whether the segment for the quote line item is a primary segment (true) or not (false). The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "LegalEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the legal entity record associated with the quote line item. This field is a relationship field.",
+      "relationship_name": "LegalEntity",
+      "refers_to": "LegalEntity"
+    },
+    "LineNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Read-only. An automatically generated number identifying the quote line item. In the form of QL-XXXXX."
+    },
+    "ListPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read-only. Corresponds to the UnitPrice on the PricebookEntry that is associated with this line item, which can be in the standard price book or a custom price book. A client app can use this information to show whether the unit price (or sales price) of the line item differs from the price book entry list price."
+    },
+    "ListPriceTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The ListPrice times the Quantity. This field is a calculated field."
+    },
+    "Margin": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The optional margin percentage, specified by the sales representative at the line item level. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "MarginAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The optional margin amount, specified by the sales representative at the line item level. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "NetTotalPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The price after all adjustments, inclusive of quantity, prorated for the duration of the subscription. This field is a calculated field equal to TotalAdjustmentAmount plus TotalLineAmount.This field is available in API version 56.0 and later. This field is available with Subscription Management."
+    },
+    "NetUnitPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The unit price after all price adjustments are applied."
+    },
+    "OpportunityLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the related opportunity line item. This field is populated by the API during creation of the quote line item. Not editable. Available in API version 40.0 and later."
+    },
+    "ParentQuoteLineItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier of the related line item in the parent quote. This field is populated by the API during creation of the quote line item. This field is available in version 58.0 and later. This field is available when Subscription Management is enabled. This field is a relationship field.",
+      "relationship_name": "ParentQuoteLineItem",
+      "relationship_type": "Lookup",
+      "refers_to": "QuoteLineItem"
+    },
+    "PartnerDiscountPercent": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The partner’s discount percent applied to the quote lines. Available in API version 59.0 and later."
+    },
+    "PartnerUnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The unit price after applying the discount given to the partner for the quote line item. Available in API version 59.0 and later."
+    },
+    "PeriodBoundary": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The period boundary helps determine the start and end date of the billing periods. This field is available in API version 55.0 and later. This field is available with Subscription Management and Revenue Cloud. Possible values are: AlignToCalendar—the period starts on the first day of the term unit; for example, the first day of the month. Anniversary—The start date determines the boundary. For example, if a monthly subscription starts on September 13, the subscription starts on the 13th day of each month. DayOfPeriod—the period starts on the day indicated by PeriodBoundaryDay. LastDayOfPeriod—the period starts on the last day of the pricing term unit. Keep these considerations in mind for amendment, renewal, and cancellations of assets in Revenue Cloud. The value of the PeriodBoundary field is copied from the AssetActionSource (initial sale), by default. For termed selling models where the PeriodBoundary value is Anniversary, the value of the PeriodBoundary field is automatically converted to DayOfPeriod. Start date adjustment operation on an asset preserves the original value without conversion."
+    },
+    "PeriodBoundaryDay": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required when PeriodBoundary is DayOfPeriod. Indicates day of the week or month that marks the period boundary. Must be an integer from 1 through 31.This field is available in API version 55.0 and later. This field is available with Subscription Management and Revenue Cloud. Keep these considerations in mind for amendment, renewal, and cancellations of assets in Revenue Cloud. The value of the PeriodBoundary field is copied from the AssetActionSource (initial sale), by default. When PeriodBoundary field value is converted from Anniversary to DayOfPeriod for termed selling models, the value of the PeriodBoundaryDay field is automatically populated with the day value from AssetActionSource.StartDate. Start date adjustment operation on an asset preserves the original value without conversion.",
+      "required": true
+    },
+    "PeriodBoundaryStartMonth": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Nillable, Sort, Update",
+      "description": "The field is populated based on input in the StartDate, PeriodBoundary, and PeriodBoundaryDay when BillingFrequency is Annual and PricingTermUnit is Annual or by manual user entry. Possible values are: 1-January 2-February 3-March 4-April 5-May 6-June 7-July 8-August 9-September 10-October 11-November 12-December Keep these considerations in mind for amendment, renewal, and cancellations of assets in Revenue Cloud. The value of the PeriodBoundary field is copied from the AssetActionSource (initial sale), by default. For termed selling models where PeriodBoundary field value is Anniversary and PricingTermUnit field value is ANNUAL, SEMI_ANNUAL, or QUARTERLY, the value of the PeriodBoundaryStartMonth field is automatically recalculated by using AssetActionSource.StartDate.month. Start date adjustment operation on an asset preserves the original value without conversion."
+    },
+    "PricebookEntryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated PricebookEntry. Exists only for orgs with Products enabled. In API 38.0 and earlier, if Product2Id is populated with PricebookEntryId data, you receive an error message. In API 39.0 and later, Product2Id is nulled, and PricebookEntryId is populated with the PricebookEntryId data.",
+      "required": true
+    },
+    "PriceRevisionPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The price uplift policy associated with this quote line item. This field is a relationship field.",
+      "relationship_name": "PriceRevisionPolicy",
+      "refers_to": "PriceRevisionPolicy"
+    },
+    "PricingContractId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The contract used for pricing that's associated with the quote line item. This field is a relationship field.",
+      "relationship_name": "PricingContract",
+      "refers_to": "Contract"
+    },
+    "PriceWaterfallIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The price waterfall identifier generated by Salesforce Pricing that's associated with the pricing of the detail record. Available in API version 60.0 and later."
+    },
+    "PricingTerm": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of terms in the subscription. For example, if a monthly subscription is priced yearly, this field is 12. This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "PricingTermCount": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A calculated field indicating the number of pricing terms in the subscription. This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "PricingTermUnit": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The unit of time for the pricing term. This field is available in API version 55.0 and later. This field is available with Subscription Management. Possible values are: Annual—Available in API version 58.0 and later. UI label is Years. Months."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Product2 associated with this QuoteLineItem. In API 38.0 and earlier, if Product2Id is populated with PricebookEntryId data, you receive an error message. In API 39.0 and later, Product2Id is nulled, and PricebookEntryId is populated with the PricebookEntryId data.",
+      "required": true
+    },
+    "ProductInstanceIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the product instance that’s added to a quote. Each quote line item created for the same product instance has the same product instance identifier value."
+    },
+    "ProductSellingModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related product selling model. This field is available in API version 55.0 and later. This field is available with Subscription Management. This field is a relationship field.",
+      "relationship_name": "ProductSellingModel",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductSellingModel"
+    },
+    "ProrationPolicyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related proration policy. This field is available in API version 55.0 and later. This field is available with Subscription Management. This field is a relationship field.",
+      "relationship_name": "ProrationPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "ProrationPolicy"
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The number of units for the line item.",
+      "required": true
+    },
+    "QuantityUnitOfMeasureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The unit of measure for the quantity, start quantity, and end quantity. This field is a relationship field.",
+      "relationship_name": "QuantityUnitOfMeasure",
+      "refers_to": "UnitOfMeasure"
+    },
+    "QuoteActionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related quote action. This field is available in API version 58.0 and later. This field is available with Subscription Management and Revenue Lifecycle Management. This field is a relationship field.",
+      "relationship_name": "QuoteAction",
+      "relationship_type": "Lookup",
+      "refers_to": "QuoteAction"
+    },
+    "QuoteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated quote.",
+      "required": true
+    },
+    "QuoteLineGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the quote line group for the quote line item. This field is a relationship field.",
+      "relationship_name": "QuoteLineGroup",
+      "refers_to": "QuoteLineGroup"
+    },
+    "QuoteLineItemRecipientId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the recipient for the quote line item. This field is a relationship field.",
+      "relationship_name": "QuoteLineItemRecipient",
+      "refers_to": "QuoteLineItemRecipient"
+    },
+    "RampIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ramp ID used to group quote line item segments."
+    },
+    "RelatedQuoteLineItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The quote line item ID related to the order item created. This field is a relationship field.",
+      "relationship_name": "RelatedQuoteLineItem",
+      "refers_to": "OrderItem"
+    },
+    "SegmentIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The ID of the segment."
+    },
+    "SegmentName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the quote line item segment."
+    },
+    "SegmentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The time period for the segment. Possible values are: Custom FreeTrial—Free Trial Prorated Yearly The default value is Yearly."
+    },
+    "SellingModelType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether the quote line item is sold as a one-time purchase, an evergreen subscription, or as a termed subscription. This field is available in API version 55.0 and later. This field is available with Subscription Management. Possible values are: Evergreen OneTime TermDefined The default value is OneTime."
+    },
+    "ServiceDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date when the product revenue is recognized and the product quantity is shipped."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of where the line item is in the sorted order such as 1, 2, 3. The SortOrder value determines the order in which a quote line item appears in the Quote Line Items related list and the Quote PDF. Client apps can use this value to match the sort order in Salesforce. This field is only available in API versions 21.0 and greater."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the quote line item is sold on subscription, this field indicates the date on which the subscription starts. This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The start date and time of the quote line item, which is derived from the Start Date and Start Time fields in the time zone specified in the Start and End Time Zone field. If the time zone isn't specified, the default is Coordinated Universal Time (UTC). This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "StartEndTimeZone": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The time zone for the quote line item's start and end dates, times, and datetimes. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "StartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The start time of the quote line item. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "StartQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "If the quote line item is sold on a subscription, this field indicates the item quantity when the subscription starts. This field is available in API version 60.0 and later. This field is available with Subscription Management."
+    },
+    "StartingPriceTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The starting unit price times the quantity."
+    },
+    "StartingUnitPriceSource": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether the starting unit price was entered manually or calculated. This field is available in API version 55.0 and later. This field is available with Subscription Management. Possible values are: Manual System Inherited"
+    },
+    "Status": {
+      "type": "dynamic picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Represents the status of the quote line item. This field is available in API version 60.0 and later. The QuoteLineItemStatus permission is required to access this field. Possible values are: In Progress Pending Approved Rejected Default value is In Progress."
+    },
+    "SubscriptionTerm": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The number of terms in the subscription.You can indicate a subscription’s length by using either StartDate and EndDate, or by using StartDate and SubscriptionTerm. If you provide a value for both EndDate and SubscriptionTerm, EndDate is used and SubscriptionTerm is ignored."
+    },
+    "SubscriptionTermUnit": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The unit of time used to define the subscription. This field is available in API version 55.0 and later. This field is available with Subscription Management. Possible values are: Annual—UI label is Years Months"
+    },
+    "Subtotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The line item's Quantity multiplied by the UnitPrice. In Revenue Cloud, Subtotal is set to TotalLineAmount when TotalLineAmount has a value."
+    },
+    "TotalAdjustment": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total discount percentage applied at the line item level. This percentage is calculated by using the formula: (Total Line Amount - Net Total Price) / Total Line Amount. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the adjustments applied to the quote line item, inclusive of quantity, prorated for the duration of the subscription. This field is available in API version 56.0 and later. This field is available with Subscription Management."
+    },
+    "TotalCost": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total cost of all products sold in the quote, calculated by multiplying the quantity by the unit cost. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "TotalLineAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total price of the quote line item, before price adjustments, inclusive of quantity, prorated for the duration of the subscription. This price is a calculated field equal to ListPrice times Quantity times PricingTermCount.This field is available in API version 56.0 and later. This field is available with Subscription Management."
+    },
+    "TotalMargin": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The effective margin percentage at the line item level. This percentage is calculated by using the formula: (Net Total Price - Total Cost) / Net Total Price. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "TotalMarginAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The effective margin amount at the line item level. This amount is calculated by subtracting total cost from net total price. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "TotalPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read-only. Calculated by applying the Discount to the Subtotal. This field is nillable, but you can't set both TotalPrice and to null in the same update. To insert the for a quote line item via the API (given only a unit price and the quantity), calculate this field as the unit price multiplied by the quantity. This field is read only if the quote line item has a revenue schedule."
+    },
+    "UnitCost": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The unit cost of a product sold as part of the quote. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "UnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The price per unit for the quote line item.",
+      "required": true
+    },
+    "UnitPriceUplift": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage increase of the quote line item's unit price."
+    },
+    "ValidationResult": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether the quote line item was configured and priced by Revenue Lifecycle Management. A quote can be activated only after all its quote line items are configured and priced by Revenue Lifecycle Management. Valid values are: Warning—Indicates that the quote line item wasn’t configured and priced by Revenue Lifecycle Management. Available in API version 60.0 and later."
+    },
+    "Visibility": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies how Salesforce shows a quote line item in the Transaction Line Editor and a quote document. Possible values are: Always—Quote line items are always displayed in the Transaction Line Editor. Never—Quote line items aren't displayed in the Transaction Line Editor or in the quote document. Quote Document Only—Quote line items are displayed only in the quote document, but not in the Transaction Line Editor. Transaction Line Editor Only—Quote line items are displayed only in the Transaction Line Editor, but not in the quote document. The default value is Always."
+    }
+  },
+  "special_access_rules": "The user must have “Edit” permissions on quote records to create or update quote line items on a quote. The user must have “Edit” permissions on quote records to delete a quote line item. Some of the fields are available when you turn on Subscription Management.\n\nThe user must have “Edit” permissions on quote records to create or update quote line items on a quote. The user must have “Edit” permissions on quote records to delete a quote line item.\n\nSome of the fields are available when you turn on Subscription Management.",
+  "usage": "A quote record can have QuoteLineItem records only if the quote has a Pricebook2. A QuoteLineItem must correspond to a Product2 that is listed in the quote's Pricebook2.\n\nIf the multicurrency option is enabled, the\n\nCurrencyIsoCode\n\nfield is\n    present. It can't be modified, it’s always set to the value of the\n\nCurrencyIsoCode\n\nof the parent quote.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **QuoteLineItemChangeEvent (API version 44.0)**: Change events are available for the object.\n- **QuoteLineItemHistory (API version 57.0)**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "AggregatedQuantity": {
+      "field_label": "Aggregated Quantity",
+      "type": "double",
+      "precision": "16",
+      "scale": "2"
+    },
+    "BatchIdentifier": {
+      "field_label": "Batch Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "BillingFrequency": {
+      "field_label": "Billing Frequency",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BillingReference": {
+      "field_label": "Billing Reference",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingTreatmentId": {
+      "field_label": "Billing Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BindingInstanceTargetId": {
+      "field_label": "BindingInstanceTarget ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConstraintEngineNodeStatus__c": {
+      "field_label": "ConstraintEngineNodeStatus",
+      "type": "textarea",
+      "length": "5000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CustomProductName": {
+      "field_label": "Custom Product Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Description": {
+      "field_label": "Line Item Description",
+      "type": "string",
+      "length": "255"
+    },
+    "Discount": {
+      "field_label": "Discount (Percentage)",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "DiscountAmount": {
+      "field_label": "Discount (Amount)",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DoesAutomaticallyRenew": {
+      "field_label": "Automatically Renew",
+      "type": "boolean"
+    },
+    "EffectiveGrantDate": {
+      "field_label": "Effective Grant Date",
+      "type": "date"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "EndDateTime": {
+      "field_label": "End Date Time",
+      "type": "datetime"
+    },
+    "EndQuantity": {
+      "field_label": "End Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "EndTime": {
+      "field_label": "End Time",
+      "type": "time"
+    },
+    "HasQuantitySchedule": {
+      "field_label": "Has Quantity Schedule",
+      "type": "boolean"
+    },
+    "HasRevenueSchedule": {
+      "field_label": "Has Revenue Schedule",
+      "type": "boolean"
+    },
+    "HasSchedule": {
+      "field_label": "Schedule",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Quote Line Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPrimarySegment": {
+      "field_label": "Is Primary Segment",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LineNumber": {
+      "field_label": "Line Item Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ListPrice": {
+      "field_label": "List Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Margin": {
+      "field_label": "Margin",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "MarginAmount": {
+      "field_label": "Margin Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "NetTotalPrice": {
+      "field_label": "Net Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "NetUnitPrice": {
+      "field_label": "Net Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "OpportunityLineItemId": {
+      "field_label": "Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentQuoteLineItemId": {
+      "field_label": "Quote Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PartnerDiscountPercent": {
+      "field_label": "Partner Discount Percent",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "PartnerUnitPrice": {
+      "field_label": "Partner Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PeriodBoundary": {
+      "field_label": "Period Boundary",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PeriodBoundaryDay": {
+      "field_label": "Period Boundary Day",
+      "type": "int",
+      "digits": "9"
+    },
+    "PeriodBoundaryStartMonth": {
+      "field_label": "Period Boundary Start Month",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PriceRevisionPolicyId": {
+      "field_label": "Price Revision Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PriceWaterfallIdentifier": {
+      "field_label": "Price Waterfall Identifier",
+      "type": "string",
+      "length": "80"
+    },
+    "PricebookEntryId": {
+      "field_label": "Price Book Entry ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PricingContractId": {
+      "field_label": "Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PricingTerm": {
+      "field_label": "Pricing Term",
+      "type": "int",
+      "digits": "9"
+    },
+    "PricingTermCount": {
+      "field_label": "Pricing Term Count",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PricingTermUnit": {
+      "field_label": "Pricing Term Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductInstanceIdentifier": {
+      "field_label": "Product Instance Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductSellingModelId": {
+      "field_label": "Product Selling Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProrationPolicyId": {
+      "field_label": "Proration Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "QuantityUnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteActionId": {
+      "field_label": "Quote Action ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteId": {
+      "field_label": "Quote ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteLineGroupId": {
+      "field_label": "Quote Line Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteLineItemRecipientId": {
+      "field_label": "Quote Line Item Recipient ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteRecipientGroupId": {
+      "field_label": "Quote Recipient Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RampIdentifier": {
+      "field_label": "Ramp Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "RecipientScaledQuantity": {
+      "field_label": "Recipient Scaled Quantity",
+      "type": "int",
+      "digits": "9"
+    },
+    "RelatedQuoteLineItemId": {
+      "field_label": "Quote Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReplacementGroupId": {
+      "field_label": "Quote Line Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RevenueCloudPackagingFlag": {
+      "field_label": "Revenue Cloud Packaging Flag",
+      "type": "string",
+      "length": "255"
+    },
+    "SegmentIdentifier": {
+      "field_label": "Segment Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "SegmentName": {
+      "field_label": "Segment Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SegmentType": {
+      "field_label": "Segment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SellingModelType": {
+      "field_label": "Selling Model Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ServiceDate": {
+      "field_label": "Date",
+      "type": "date"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "StartDateTime": {
+      "field_label": "Start Date Time",
+      "type": "datetime"
+    },
+    "StartEndTimeZone": {
+      "field_label": "Start and End Time Zone",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StartQuantity": {
+      "field_label": "Start Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "StartTime": {
+      "field_label": "Start Time",
+      "type": "time"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SubscriptionTerm": {
+      "field_label": "Subscription Term",
+      "type": "int",
+      "digits": "9"
+    },
+    "SubscriptionTermUnit": {
+      "field_label": "Subscription Term Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Subtotal": {
+      "field_label": "Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxTreatmentId": {
+      "field_label": "Tax Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TotalAdjustment": {
+      "field_label": "Total Adjustment",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Total Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCost": {
+      "field_label": "Total Cost",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmount": {
+      "field_label": "Total Line Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalMargin": {
+      "field_label": "Total Margin",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "TotalMarginAmount": {
+      "field_label": "Total Margin Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPrice": {
+      "field_label": "Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPriceWithTax": {
+      "field_label": "Total Price with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitCost": {
+      "field_label": "Unit Cost",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitPrice": {
+      "field_label": "Sales Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitPriceUplift": {
+      "field_label": "Unit Price Uplift",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "ValidationResult": {
+      "field_label": "Validation Result",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Visibility": {
+      "field_label": "Visibility",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

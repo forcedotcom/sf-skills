@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "RuleTerritory2Association - Data API",
+  "description": "Represents a record-assignment rule and its association to an object, such as Account. Available if Sales Territories has been enabled.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "IsInherited": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the rule is an inherited rule (true) or a local rule (false). Rule inheritance flows from the parent territory where the rule is created to the rule’s descendent territories (if any) in the territory model hierarchy. A local rule is created within a single territory and affects that territory only."
+    },
+    "RuleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the rule."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the territory where the rule was created."
+    }
+  },
+  "special_access_rules": "Standard users can access this object. If a territory model is in Active state, any standard user can view that model, including its territories and assignment rules. For territories in an active model, any standard user can view assigned records and assigned users subject to your Salesforce sharing settings. Users cannot view territory models in other states (such as Planning or Archived).",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Rule Territory Association ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsInherited": {
+      "field_label": "Apply to Child Territories",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RuleId": {
+      "field_label": "Object Territory Assignment Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

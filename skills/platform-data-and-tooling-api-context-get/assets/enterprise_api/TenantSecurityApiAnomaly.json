@@ -1,0 +1,120 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityApiAnomaly - Data API",
+  "description": "Stores detected anomalies in how users typically make API calls. Fore more information, see Threat Detection. This object is available to Security Center subscribers in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the individual detail record. This field is unique within your org."
+    },
+    "EventDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time when the anomaly was reported. For example, 2020-01-20T19:12:26.965Z. The most granular setting is milliseconds."
+    },
+    "EventIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The unique ID of the event, which is shared with the corresponding storage object."
+    },
+    "EventName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the event, which is Api Anomaly."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the type of metric that was counted."
+    },
+    "MetricsType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of data collected."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the metric for the data collected."
+    },
+    "Operation": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API call that generated the event. For example, Query."
+    },
+    "QueriedEntities": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The type of entities associated with the event."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events."
+    },
+    "RowsProcessed": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total row count for the current operation."
+    },
+    "Score": {
+      "type": "double",
+      "properties": "Filter, idLookup, Nillable, Sort",
+      "description": "A number from 0 through 100 that represents the anomaly score for the API execution or export tracked by this event. The anomaly score shows how the current API activity differs from the user’s typical activity. A low score indicates that the user’s current API activity is similar to the usual activity, and a high score indicates that it’s different."
+    },
+    "SecurityEventData": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The set of features about the API activity that triggered this anomaly event. For example, a user typically downloads 10 accounts at a time but then deviates from that pattern and downloads 1,000 accounts. This event is triggered, and the contributing features are captured in this field. Potential features include row count, column count, average row size, day of week, and the browser’s user agent used for the report activity. The data captured also shows how much as a percentage that the feature contributed to triggering this anomaly event. The data is in JSON format."
+    },
+    "Summary": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A text summary of the API anomaly that caused this event."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant that was targeted in the event."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the tenant that was targeted in the event."
+    },
+    "Uri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "UserAgent": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "UserAgent used in the HTTP request, post-processed by the server."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The origin user’s unique ID."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The origin username in the format of user@company.com at the time that the event was created."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityApiAnomalyChangeEvent**: Change events are available for the object.\n- **TenantSecurityApiAnomalyFeed**: Feed tracking is available for the object.\n- **TenantSecurityApiAnomalyHistory**: History is available for tracked fields of the object.\n- **TenantSecurityApiAnomalyOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityApiAnomalyShare**: Sharing is available for the object."
+}

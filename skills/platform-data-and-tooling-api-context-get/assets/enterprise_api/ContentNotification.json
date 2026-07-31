@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentNotification - Data API",
+  "description": "Represents a notification for a file. This object is available in API version 42.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EntityIdentifierId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the object with the notification."
+    },
+    "EntityType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Type of object with the notification. One of the following. ContentDocument ContentTagName ContentVersion ContentWorkspace ContentWorkspacePermission User"
+    },
+    "Nature": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Type of notification."
+    },
+    "Subject": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Subject of the notification."
+    },
+    "Text": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Text of the notification."
+    },
+    "UsersId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who received the notification. This is a relationship field.",
+      "relationship_name": "Users",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "Only users with Modify All Data permission have access to this object.\n\nOnly users with Modify All Data permission have\n      access to this object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentNotification\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EntityIdentifierId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"EntityType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Nature\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Text\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Users\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UsersId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EntityIdentifierId": {
+      "field_label": "Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EntityType": {
+      "field_label": "Entity Type",
+      "type": "string",
+      "length": "20"
+    },
+    "Id": {
+      "field_label": "ContentNotification ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Nature": {
+      "field_label": "Nature",
+      "type": "string",
+      "length": "20"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "textarea",
+      "length": "333"
+    },
+    "Text": {
+      "field_label": "Text",
+      "type": "textarea",
+      "length": "666"
+    },
+    "UsersId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

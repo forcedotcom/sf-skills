@@ -1,0 +1,137 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "LocationShippingCarrierMethod - Data API",
+  "description": "The available shipping carrier services associated with a location or location group. Allows the assignment of different shipping methods to a specific location and enables flexibility and customization in the shipping process. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the record was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the record was last viewed."
+    },
+    "LocationSourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The location source ID. This is a polymorphic relationship field.",
+      "relationship_name": "LocationSource",
+      "refers_to": "Location, LocationGroup"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the shipping carrier service associated with the location or location group."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who currently owns this LocationShippingCarrierMethod object. Default value is the user logged in to the API to perform the create. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "PickupTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time when the shipping carrier picks up the order from the associated location or location group. This field is available in API version 66.0 and later."
+    },
+    "ShippingCarrierMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Shipping carrier method ID. This is a relationship field.",
+      "relationship_name": "ShippingCarrierMethod",
+      "refers_to": "Location, ShippingCarrierMethod"
+    }
+  },
+  "special_access_rules": "The LocationShippingCarrierMethod object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Location Shipping Carrier Method ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LocationSourceId": {
+      "field_label": "Location Source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PickupTime": {
+      "field_label": "Pickup Time",
+      "type": "time"
+    },
+    "ShippingCarrierMethodId": {
+      "field_label": "Shipping Carrier Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

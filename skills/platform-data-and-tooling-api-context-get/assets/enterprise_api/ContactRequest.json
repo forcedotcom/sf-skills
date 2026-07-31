@@ -1,0 +1,220 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContactRequest - Data API",
+  "description": "Represents a customer’s request for support to get back to them about an issue. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AvailableCallbackAttempts": {
+      "type": "integer",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the number of retries that are possible for a voice callback. Applies to calls routed through Omni-Channel Unified Routing. Valid values are 0 through 5. The default is 0. Available in API version 66.0 and later."
+    },
+    "DelayBetweenCallbackAttempts": {
+      "type": "integer",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the delay between voice callback attempts in minutes. Applies to calls routed through Omni-Channel Unified Routing. Valid values are 0 through 10,080, and the default is 0. Available in API version 66.0 and later."
+    },
+    "IsCallback": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines how a voice call callback is handled after an agent accepts the callback work item. If set to true, when an agent accepts the work item, the Omni-Channel utility doesn’t immediately dial the callback phone number. Instead, the agent can determine how to handle the call. For example, after the agent accepts the work item, they can view the callback details, transfer the call, or contact the end user at another phone number. If the agent makes a call by using click-to-dial, the call appears as a Callback call in the Omni-Channel utility. If set to false, when the agent accepts the work item in the Omni-Channel utility, the contact request is opened. The agent can review callback details. If they call with click-to-dial, the call appears as an Outbound call in the Omni-Channel utility. The default value is false. Available in API version 60.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The contact request number."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the Salesforce record that owns the request. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PreferredChannel": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The channel the customer selected as their preferred method of communication in the contact request flow. For example: Phone"
+    },
+    "PreferredPhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The phone number the customer provided when requesting help in the contact request flow."
+    },
+    "RequestDescription": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the customer’s issue that they provided when requesting help in the contact request flow."
+    },
+    "RequestReason": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The reason the customer provided when requesting help in the contact request flow. These values are customizable in Object Manager. The default values are: Account Billing Case General Order Other Product"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The status of the contact request. For example: Abandoned Attempted Contacted New"
+    },
+    "WhatId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Salesforce record the contact request is related to, such as an account, case, opportunity, voice call, or work order. This is a polymorphic relationship field.",
+      "relationship_name": "What",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Case, Contact Request, Opportunity, WorkOrder"
+    },
+    "WhoId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Salesforce contact record the contact request is related to, such as a contact, lead, or user. This is a polymorphic relationship field.",
+      "relationship_name": "Who",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead, User"
+    }
+  },
+  "usage": "Contact request records are created when a customer fills out an online form. This form is created using a flow that uses the type ContactRequestFlow. There’s a guided setup experience to create this flow on the Customer Contact Requests page in Setup. You then add the flow to an Experience Cloud site using either the Flows component or the Contact Request Button & Flow component. Contact Request works in Experience Cloud sites, whether they require authentication or not. Make sure that your users have the Run Flows permission, including your Guest User profile. Without this permission, members won’t see the button or the form to submit contact requests. By default, all Standard User and System Administrator profiles have access to the object. Make sure that your users profiles, like service agents, have at least read access on the contact request object. You can create queues for contact requests and route them with Omni-Channel.\n\nContact request records are created when a customer fills out an online form. This form is created using a flow that uses the type ContactRequestFlow. There’s a guided setup experience to create this flow on the Customer Contact Requests page in Setup. You then add the flow to an Experience Cloud site using either the Flows component or the Contact Request Button & Flow component.\n\nContact Request works in Experience Cloud sites, whether they require authentication or not. Make sure that your users have the Run Flows permission, including your Guest User profile. Without this permission, members won’t see the button or the form to submit contact requests.\n\nBy default, all Standard User and System Administrator profiles have access to the object. Make sure that your users profiles, like service agents, have at least read access on the contact request object.\n\nYou can create queues for contact requests and route them with Omni-Channel.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **ContactRequestOwnerSharingRule**: Sharing rules are available for the object.\n- **ContactRequestShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContactRequest\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsCallback\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PreferredChannel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PreferredPhone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RequestDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RequestReason\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"What\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"WhatId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Who\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"WhoId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AvailableCallbackAttempts": {
+      "field_label": "Available Callback Attempts",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DelayBetweenCallbackAttempts": {
+      "field_label": "Delay Between Callback Attempts",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Contact Request ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsCallback": {
+      "field_label": "Is Callback",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPreviewCallback": {
+      "field_label": "Is Preview Callback",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Contact Request Number",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreferredChannel": {
+      "field_label": "Preferred Channel",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PreferredPhone": {
+      "field_label": "Preferred Phone Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "RequestDescription": {
+      "field_label": "Request Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "RequestReason": {
+      "field_label": "Request Reason",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Request Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WhatId": {
+      "field_label": "Related To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WhoId": {
+      "field_label": "Requestor ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

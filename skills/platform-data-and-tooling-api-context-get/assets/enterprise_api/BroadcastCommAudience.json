@@ -1,0 +1,92 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "BroadcastCommAudience - Data API",
+  "description": "Represents the audience that the broadcast communication is sent to. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AudienceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the broadcast communication audience. If BroadcastType is Alert, this value is the ID of the Group record where the message is sent to. If BroadcastType is Email, this value is the ID of the ListEmail record where the email is sent to. If BroadcastType is ExperienceSiteBanner, this value is the ID of the Network record where the banner is displayed at. If BroadcastType is Slack, this value is the ID of the CollaborationRoom record where the message is sent to. This field is a polymorphic relationship field.",
+      "relationship_name": "Audience",
+      "relationship_type": "Lookup",
+      "refers_to": "CollaborationRoom, Group, ListEmail, Network"
+    },
+    "BroadcastCommAudienceNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-generated number for the BroadcastCommAudience record."
+    },
+    "BroadcastCommunicationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the broadcast communication record. This field is a relationship field.",
+      "relationship_name": "BroadcastCommunication",
+      "relationship_type": "Lookup",
+      "refers_to": "BroadcastCommunication"
+    },
+    "BroadcastFailureReason": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The reason the broadcast communication failed to send."
+    },
+    "BroadcastType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Medium used to distribute the message. Possible values are: Alert Email ExperienceSiteBanner Slack"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "MessageTimeStamp": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If BroacastType is Slack, this value is the timestamp when the broadcast Slack message was sent."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of this object. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "SiteBannerText": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "If BroadcastType is ExperienceSiteBanner, this field contains the banner text displayed on the associated site."
+    },
+    "SiteBannerVisibility": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If BroadcastType is ExperienceSiteBanner, this field contains information about who can view the banner. Possible values are: AuthenticatedUsers GuestUsers"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the broadcast communication. Possible values are: Active—The site banner is visible on the site. Only applies if BroadcastType is ExperienceSiteBanner. Deleted—The message is successfully deleted and isn’t visible anymore. Only applies if BroadcastType is Slack. DeleteFailed—The message failed to delete but is still visible. Only applies if BroadcastType is Slack. Failed—The message failed to send. Applies to any BroadcastType. Inactive—The site banner isn’t visible on the site. Only applies if BroadcastType is ExperienceSiteBanner. Sent—The message is sent successfully. Only applies if the BroadcastType is Email or Slack. Updated—The message is successfully edited. Only applies if the BroadcastType is Slack. UpdateFailed—The message failed to edit and the update isn’t visible. Only applies if the BroadcastType is Slack."
+    }
+  },
+  "special_access_rules": "To access this object with Service Cloud, enable Incident Management in Setup and set up Broadcast Communications.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **BroadcastCommAudienceChangeEvent**: Change events are available for the object.\n- **BroadcastCommAudienceFeed**: Feed tracking is available for the object.\n- **BroadcastCommAudienceHistory**: History is available for tracked fields of the object.\n- **BroadcastCommAudienceOwnerSharingRule**: Sharing rules are available for the object.\n- **BroadcastCommAudienceShare**: Sharing is available for the object."
+}

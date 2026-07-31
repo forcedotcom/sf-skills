@@ -1,0 +1,106 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "TaskPriority - Data API",
+  "description": "Represents the importance or urgency of a task, such as High, Normal, or Low.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Uniquely identifies a picklist value so it can be retrieved without using an ID or master label."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the status is the default task priority value (true) or not (false) in the picklist. Only one value in the picklist can be the default value."
+    },
+    "IsHighPriority": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this task priority value represents a high priority task (true) or not (false). Multiple task priority values can represent a high-priority task."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Master label for this task priority value. This display value is the internal label that doesn’t get translated. Limit: 255 characters."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Nillable, Group, Sort",
+      "description": "Number used to sort this value in the task priority picklist. These numbers aren’t guaranteed to be sequential, as some previous task priority values might have been deleted."
+    }
+  },
+  "special_access_rules": "Customer and Partner Portal users can’t access this object.",
+  "usage": "This object represents a value in the task priority picklist. The task priority picklist provides additional information about the importance of a task , such as whether a given priority value represents a high priority. Your client application can query on this object to retrieve the set of values in the task priority picklist, and then use that information while processing task objects to determine more information about a given task. For example, the application could test whether a given task is high priority based on its Priority value and the value of the IsHighPriority field in the associated TaskPriority object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"TaskPriority\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsHighPriority\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Task Priority Value ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Is Default",
+      "type": "boolean"
+    },
+    "IsHighPriority": {
+      "field_label": "Is High Priority",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Master Label",
+      "type": "string",
+      "length": "255"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

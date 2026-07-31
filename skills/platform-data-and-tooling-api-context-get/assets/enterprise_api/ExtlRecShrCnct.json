@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExtlRecShrCnct - Data API",
+  "description": "Represents authentication data to make outbound calls to and inbound calls from an external system to publish events for Partner Connect. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CnctName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the connection."
+    },
+    "CnctRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "System’s role in the connection. Possible values are: Partner Vendor"
+    },
+    "CnctStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the connection. Possible values are: Disabled Enabled Error Pending Unknown"
+    },
+    "ExternalClientApplicationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of external client app representing your org’s connection to the external system. This field is a relationship field.",
+      "relationship_name": "ExternalClientApplication",
+      "refers_to": "ExternalClientApplication"
+    },
+    "ExtlSystem": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "ID of the external system."
+    },
+    "NamedCredentialId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the named credential. This field is a relationship field.",
+      "relationship_name": "NamedCredential",
+      "refers_to": "NamedCredential"
+    }
+  },
+  "special_access_rules": "To see this object, enable Partner Connect or Partner Connect for Vendors. See Set Up Partner Connect as a Partner and Set Up Partner Connect as a Vendor in Salesforce Help."
+}

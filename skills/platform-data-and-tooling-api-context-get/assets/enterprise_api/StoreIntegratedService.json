@@ -1,0 +1,95 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "StoreIntegratedService - Data API",
+  "description": "Represents an association between an integration and a store. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Integration": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The integration ID. Possible values are: If the integration is a RegisteredExternalService: The ID of the RegisteredExternalService OR [ServiceProviderType]__[DeveloperName] ServiceProviderType: Price, Inventory, Tax, or Shipment DeveloperName of RegisteredExternalService If the integration is a PaymentGateway: The ID of the PaymentGateway If the integration is a Flow: [ServiceProviderType]__[NamespacePrefix]__[ApiName] If NamespacePrefix is null, it’s [ServiceProviderType]__[ApiName] ServiceProviderType: Flow ApiName and NamespacePrefix of FlowDefinitionView If the integration is the Salesforce Standard pricing: [ServiceProviderType]__B2B_STOREFRONT__StandardPricing ServiceProviderType: Price",
+      "required": true
+    },
+    "ServiceProviderType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of integration service provider. Possible values are: Flow Inventory Payment Price Promotions (this value is available in API version 53.0 and later) Shipment Tax",
+      "required": true
+    },
+    "StoreId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique ID for the store.",
+      "required": true
+    }
+  },
+  "special_access_rules": "The StoreIntegratedService object is available only if the B2B Commerce license is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Store Integrated Service ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Integration": {
+      "field_label": "Integration ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ServiceProviderType": {
+      "field_label": "Service Provider Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StoreId": {
+      "field_label": "Store ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

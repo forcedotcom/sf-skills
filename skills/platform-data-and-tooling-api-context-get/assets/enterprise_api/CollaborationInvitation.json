@@ -1,0 +1,127 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CollaborationInvitation - Data API",
+  "description": "Represents an invitation to join Chatter, either directly or through a group. This object is available in API version 21.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "InvitedUserEmail": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The email address for the user invited to join Chatter. Label is Invited Email."
+    },
+    "InvitedUserEmailNormalized": {
+      "type": "email",
+      "properties": "Filter, Group, Sort",
+      "description": "A normalized version of the InvitedUserEmail entered. Label is Invited Email (Normalized)."
+    },
+    "InviterId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The person that initiated the invitation."
+    },
+    "OptionalMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "An optional message from the person sending the invitation to the person receiving it."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Used when the email address on the invitation is different than the one entered when the invitee accepts the invitation."
+    },
+    "SharedEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the user or group associated with this invitation. If the invitation is to join Chatter, the SharedEntityId is the ID of the User that created the invitation. The invitee will auto-follow the inviter. If the invitation is to join a group within Chatter, the SharedEntityId is the ID of the Chatter CollaborationGroup. To invite a customer, set SharedEntityId to the ID of the private CollaborationGroup with Allow Customers turned on."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the invitation. Possible values are: Sent Accepted Canceled"
+    }
+  },
+  "special_access_rules": "Invitations are available if “Allow Invitations” is enabled for your organization. Invitations are limited to your allowed domain(s) unless the invite is sent from a private group that allows customers. Allowed domains are set by the administrator. Invitations to customers are available if “Allow Customer Invitations” is enabled for your organization. Users must have the “Invite Customers to Chatter” permission to send invitations to people outside their Chatter domain.\n\nInvitations are available if “Allow Invitations” is enabled for your organization.\n\nInvitations are limited to your allowed domain(s) unless the invite is sent from a private group that allows customers. Allowed domains are set by the administrator.\n\nInvitations to customers are available if “Allow Customer Invitations” is enabled for your organization. Users must have the “Invite Customers to Chatter” permission to send invitations to people outside their Chatter domain.",
+  "usage": "The Salesforce system administrator doesn’t need to be a member of the group in order to send invitations using the API. Invited users can view profiles, post on their feed, and join groups, but they can't see your Salesforce data or records. If your organization allows groups with customers, owners and managers of private groups with the “Allow Customers” setting, as well as system administrators, can use this object to invite customers.\n\nThe Salesforce system administrator doesn’t need to be a member of the group in order to send invitations using the API.\n\nInvited users can view profiles, post on their feed, and join groups, but they can't see your Salesforce data or records.\n\nIf your organization allows groups with customers, owners and managers of private groups with the “Allow Customers” setting, as well as system administrators, can use this object to invite customers.",
+  "wsdl_segment": "```xml\n<complexType name=\"CollaborationInvitation\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"InvitedUserEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InvitedUserEmailNormalized\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InviterId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OptionalMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SharedEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Chatter Invitation Id",
+      "type": "id",
+      "length": "18"
+    },
+    "InvitedUserEmail": {
+      "field_label": "Invited Email",
+      "type": "string",
+      "length": "240"
+    },
+    "InvitedUserEmailNormalized": {
+      "field_label": "Invited Email (Normalized)",
+      "type": "email",
+      "length": "80"
+    },
+    "InviterId": {
+      "field_label": "Inviter User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Modified Date",
+      "type": "datetime"
+    },
+    "OptionalMessage": {
+      "field_label": "Optional Message",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SharedEntityId": {
+      "field_label": "Shared Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Invitation Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

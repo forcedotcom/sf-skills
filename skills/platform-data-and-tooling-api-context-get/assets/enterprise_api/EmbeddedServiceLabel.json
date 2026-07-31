@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmbeddedServiceLabel - Data API",
+  "description": "Represents a customized label in Embedded Chat or embedded Appointment Management.This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CustomLabelName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The developer name for the custom label."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique name containing EmbeddedServiceConfig.labelKey."
+    },
+    "EmbeddedServiceConfigDeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Developer name for the EmbeddedServiceConfig."
+    },
+    "LabelKey": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of label for this embedded component. The value corresponds to the label within a label group (substate of chat state or page type)."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"EmbeddedServiceLabel\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CustomLabelName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EmbeddedServiceConfigDeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LabelKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CustomLabelName": {
+      "field_label": "Custom Label Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DurableId": {
+      "field_label": "Embedded Service Label Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "EmbeddedServiceConfigDeveloperName": {
+      "field_label": "Embedded Service Config Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Embedded Service Label ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LabelKey": {
+      "field_label": "Label Key",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingFilterCondition - Data API",
+  "description": "Represents the custom filter condition logic for including or excluding data from opportunity forecasts. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The developer name of the forecast filter condition."
+    },
+    "FieldName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the opportunity field to be filtered."
+    },
+    "ForecastingFilterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the forecast filter. This is a relationship field.",
+      "relationship_name": "ForecastingFilter",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingFilter"
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the forecast filter condition."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for this object, which displays in Setup. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    },
+    "Operation": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The operator in the filter condition. Possible values are: equals greaterOrEqual – greater than or equal to greaterThan lessOrEqual – less than or equal to lessThan notEqual"
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The index value for the condition. This value represents the condition in the FilterLogic field in the ForecastingFilter object. For example, 1."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the filter condition. If multiple values are specified, they must be separated by a comma delimiter. Note: If you have multiple currencies enabled, and add a custom filter on a currency field as part of your forecast type definition, the corporate currency at the time the filter was created is used. If you have a single currency enabled, the absolute value is used in your filter condition."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only standard users with the View All Forecasts permission OR Allow Forecasting permission OR delegated forecast manager status can access this object.",
+  "usage": "A forecast type can contain up to three filter conditions.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "FieldName": {
+      "field_label": "Field Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ForecastingFilterId": {
+      "field_label": "Forecasting Filter ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Filter Condition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "Operation": {
+      "field_label": "Operation",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

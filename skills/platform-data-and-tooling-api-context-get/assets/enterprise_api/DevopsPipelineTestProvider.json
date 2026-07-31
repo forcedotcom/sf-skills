@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsPipelineTestProvider - Data API",
+  "description": "Establishes the association between a DevOps pipeline and an external test provider. It stores provider-specific configuration and project information required for integrating testing services into a pipeline. This object enables pipelines to connect with external testing platforms, manage provider settings, and facilitate the execution and synchronization of tests as part of the DevOps workflow. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DevopsPipelineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "References the DevOps pipeline associated with this test provider configuration.",
+      "relationship_name": "DevopsPipeline",
+      "relationship_type": "Parent-detail",
+      "refers_to": "DevopsPipeline (the parent object)"
+    },
+    "DevopsTestProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the external test provider linked to the pipeline.",
+      "relationship_name": "DevopsTestProvider",
+      "refers_to": "DevopsTestProvider"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, such as through a related record or list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique identifier for the pipeline test provider record."
+    },
+    "TestProviderProject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores the project name or identifier used by the external test provider for this pipeline."
+    },
+    "TestProviderSpecificConfig": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores provider-specific configuration settings required for integrating and managing the external test provider within the pipeline."
+    }
+  }
+}

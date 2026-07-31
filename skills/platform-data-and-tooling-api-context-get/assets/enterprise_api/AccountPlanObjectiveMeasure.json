@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "AccountPlanObjectiveMeasure - Data API",
+  "description": "Represents the performance of target metrics for an objective associated with the account plan. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "AccountPlanObjMeasCalcDefId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account plan objective calculation definition associated with the measure. This field is a relationship field. Available in API version 63.0 and later.",
+      "relationship_name": "AccountPlanObjMeasCalcDef",
+      "refers_to": "AccountPlanObjMeasCalcDef"
+    },
+    "AccountPlanObjectiveId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The account plan objective associated with the measure. This field is a relationship field.",
+      "relationship_name": "AccountPlanObjective",
+      "relationship_type": "Master-detail",
+      "refers_to": "AccountPlanObjective"
+    },
+    "CurrentCurrencyValue": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The current value in currency for a measure associated with the account plan objective."
+    },
+    "CurrentNumberValue": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The current numerical value for a measure associated with the account plan objective."
+    },
+    "CurrentPercentValue": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The current value in percentage for a measure associated with the account plan objective."
+    },
+    "CurrentValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The current value for a measure associated with the account plan objective."
+    },
+    "CurrentValueTimestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the current value was last updated. This field is available in API version 63.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the account plan objective measure."
+    },
+    "TargetCurrencyValue": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The target value in currency for a measure associated with the account plan objective."
+    },
+    "TargetNumberValue": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The target numerical value for a measure associated with the account plan objective."
+    },
+    "TargetPercentValue": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The target value in percentage for a measure associated with the account plan objective."
+    },
+    "TargetValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The target value for a measure associated with the account plan objective."
+    },
+    "ValueType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of value that's measured. Possible values are: Currency Number Percent"
+    }
+  },
+  "special_access_rules": "This object is available if sales account plans are turned on.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AccountPlanObjectiveMeasureChangeEvent**: Change events are available for the object.\n- **AccountPlanObjectiveMeasureHistory**: History is available for tracked fields of the object."
+}

@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ApexTrigger - Tooling API",
+  "description": "Represents the saved copy of an Apex trigger. ApexTrigger uses the cached version of the class unless one is unavailable. Available from API version 28.0 or later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`, `PATCH`, `DELETE`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The API version for this trigger. Every trigger has an API version specified at creation."
+    },
+    "Body": {
+      "type": "string",
+      "properties": "Create, Nillable, Update",
+      "description": "The Apex trigger definition. Limit: 1 million characters."
+    },
+    "BodyCrc": {
+      "type": "double",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "The CRC (cyclic redundancy check) of the class or trigger file."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Id of the EntityDefinition object associated with this object."
+    },
+    "IsValid": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether any dependent metadata has changed since the trigger was last compiled (true) or not (false)."
+    },
+    "LengthWithoutComments": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Length of the trigger without comments."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "ApexTriggerMetadata",
+      "properties": "None",
+      "description": "An object that describes the version, status, and packaged versions of the corresponding Apex trigger. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the Apex trigger. The following string values are valid: Active—The trigger is active. Inactive—The trigger is inactive, but not deleted. Deleted—The trigger is marked for deletion. This status is useful for managed packages, because it allows a class to be deleted when a managed package is updated. Note: Apex triggers cannot be deactivated using Tooling API. You can deactivate Apex triggers using Metadata API. Consider using custom metadata records and include logic in your trigger to bypass trigger configuration logic. For more information, see the Metadata API Developer Guide."
+    },
+    "UsageAfterDelete": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether the trigger is an after delete trigger (true) or not (false)."
+    },
+    "UsageAfterInsert": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether the trigger is an after insert trigger (true) or not (false)."
+    },
+    "UsageAfterUndelete": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether the trigger is an after undelete trigger (true) or not (false)."
+    },
+    "UsageAfterUpdate": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether the trigger is an after update trigger (true) or not (false)."
+    },
+    "UsageBeforeDelete": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether the trigger is a before delete trigger (true) or not (false)."
+    },
+    "UsageBeforeInsert": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether the trigger is an before insert trigger (true) or not (false)."
+    },
+    "UsageBeforeUpdate": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether the trigger is an before update trigger (true) or not (false)."
+    },
+    "UsageIsBulk": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies whether the trigger is defined as a bulk trigger (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ApexCodeUnitStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Inactive\"/>\n    <xsd:enumeration value=\"Active\"/>\n    <xsd:enumeration value=\"Deleted\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ApexTrigger\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:ApexTrigger\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"ApexTrigger\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:PackageVersion\"/>\n        <xsd:element name=\"status\" type=\"tns:ApexCodeUnitStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

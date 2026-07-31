@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "DevopsPipeline - Data API",
+  "description": "Represents a release pipeline in DevOps Center, which is the ordered path work items follow from development to production. Related DevopsPipelineStage records store the pipeline stages. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief text that explains the purpose of the pipeline or the team it supports."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the pipeline is active. When true, you can promote work items on this pipeline. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The unique name of the DevOps pipeline."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who owns the pipeline. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "PackageDirectories": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The file path to the package directories defined in the sfdx-project.json file."
+    },
+    "SourceCodeRepositoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Identifies the source control repository associated with this pipeline. This field is a relationship field.",
+      "relationship_name": "SourceCodeRepository",
+      "refers_to": "SourceCodeRepository"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **DevopsPipelineFeed**: Feed tracking is available for the object.\n- **DevopsPipelineHistory**: History is available for tracked fields of the object.\n- **DevopsPipelineShare**: Sharing is available for the object."
+}

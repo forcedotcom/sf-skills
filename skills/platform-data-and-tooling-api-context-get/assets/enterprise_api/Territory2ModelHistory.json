@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "Territory2ModelHistory - Data API",
+  "description": "Represents the history of changes to the values in the fields on a territory model. Available if Sales Territories has been enabled.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Data type of the field that was changed."
+    },
+    "Field": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The name of the field whose value was changed."
+    },
+    "NewValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The new value of the changed field."
+    },
+    "OldValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The previous value of the changed field."
+    },
+    "Territory2ModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the territory model whose history is tracked."
+    }
+  },
+  "usage": "This object is automatically generated whenever any field value changes on a territory model record. Use this object it to identify those changes.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataType": {
+      "field_label": "Datatype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Field": {
+      "field_label": "Changed Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Territory Model History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "NewValue": {
+      "field_label": "New Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "OldValue": {
+      "field_label": "Old Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "Territory2ModelId": {
+      "field_label": "Territory Model ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

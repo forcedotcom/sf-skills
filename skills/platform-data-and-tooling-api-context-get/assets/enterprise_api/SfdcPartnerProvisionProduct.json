@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerProvisionProduct - Data API",
+  "description": "Represents a product used to map licenses for customer provisioning in a Partner Business Org (PBO). This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the provisionable product.",
+      "required": true
+    },
+    "PartnerTermSetProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The partner term set product associated with this provisionable product. This field is a relationship field.",
+      "relationship_name": "PartnerTermSetProduct",
+      "refers_to": "SfdcPartnerTermSetProduct"
+    }
+  }
+}

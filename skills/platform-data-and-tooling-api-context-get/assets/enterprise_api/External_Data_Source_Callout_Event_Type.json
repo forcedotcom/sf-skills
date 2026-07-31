@@ -1,0 +1,141 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "External Data Source Callout Event Type - Data API",
+  "description": "External Data Source Callout events represent external data callouts via the Salesforce Connect adapters for Amazon DynamoDB and Amazon Athena. This event type is available in the EventLogFile object in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "possible_values",
+    "example"
+  ],
+  "fields": {
+    "ACTION": {
+      "type": "String",
+      "description": "Action performed by the callout.",
+      "possible_values": "For Amazon DynamoDB data source: query insert delete update upsert"
+    },
+    "DATA_SOURCE_NAME": {
+      "type": "String",
+      "description": "Name of the external data source being accessed."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "Type of event. Value is always ExternalDataSourceCallout."
+    },
+    "EXTERNAL_OBJECT": {
+      "type": "String",
+      "description": "Name of the external object being accessed."
+    },
+    "FETCH_MS": {
+      "type": "Number",
+      "description": "How long it took (in milliseconds) to retrieve the query results from the external data source.",
+      "example": "127"
+    },
+    "FILTER": {
+      "type": "Text",
+      "description": "Field expressions to filter which rows to return. Corresponds to WHERE in queries."
+    },
+    "LIMIT": {
+      "type": "Number",
+      "description": "Maximum number of rows to return for a query. Corresponds to Limit parameter in ExecuteStatement operation for an Amazon DynamoDB data source."
+    },
+    "MESSAGE": {
+      "type": "String",
+      "description": "Error or warning message associated with the failed call."
+    },
+    "NEXT_LINK": {
+      "type": "String",
+      "description": "Next link that the callout used to request a subsequent page of rows. A next link is provided in a previous response when the response includes only part of the result set.For requests to AWS data sources, this field stores the nextToken parameter that contains a unique hash string."
+    },
+    "OFFSET": {
+      "type": "Number",
+      "description": "Number of rows to skip when paging through a result set. Corresponds to OFFSET in queries to Amazon Athena. This field is not supported by queries to Amazon DynamoDB."
+    },
+    "OPERATION": {
+      "type": "String",
+      "description": "The operation that’s being performed."
+    },
+    "ORDERBY": {
+      "type": "String",
+      "description": "Field or column to use for sorting query results, and whether to sort the results in ascending (default) or descending order. Corresponds to ORDER BY in queries.",
+      "example": "Country ASC CustomerName DESC"
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "15-character ID of the organization.",
+      "example": "00D000000000123"
+    },
+    "PARENT_CALLOUT": {
+      "type": "String",
+      "description": "If the callout requested a subsequent page of rows, this field identifies the initial callout whose request resulted in the multi-page result set.",
+      "example": "4EoZtuBzzRIXSk-ysRdf1F-1"
+    },
+    "PROVIDER_TYPE": {
+      "type": "String",
+      "description": "Whether the callout was made by Salesforce Connect adapter for Amazon DynamoDB or Amazon Athena.",
+      "possible_values": "amazonDynamodb amazonAthena"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "Unique ID of a transaction. A transaction can contain one or more events. All events in a transaction have the same REQUEST_ID.",
+      "example": "4A13-HSKv3CKs-0FKfceaV"
+    },
+    "RESPONSE_SIZE": {
+      "type": "Number",
+      "description": "The size of the callout response, in bytes."
+    },
+    "ROWS_FETCHED": {
+      "type": "Number",
+      "description": "Number of records fetched by the callout. The records fetched by a callout can be a subset of a large result set.",
+      "example": "200"
+    },
+    "SEARCH": {
+      "type": "String",
+      "description": "Search query string."
+    },
+    "SELECT": {
+      "type": "String",
+      "description": "Comma-separated list of fields being queried. Corresponds to SELECT in queries.To query, Salesforce Connect adapter uses PartiQL with Amazon DynamoDB and SQL with Amazon Athena.",
+      "example": "CustomerID,OrderDate,OrderID,ShipCity,ShipCountry"
+    },
+    "STATUS": {
+      "type": "Boolean",
+      "description": "Whether the query was successful.",
+      "possible_values": "1—Success 0—Failed"
+    },
+    "STATUS_CODE": {
+      "type": "Number",
+      "description": "The HTTP response status code for the request."
+    },
+    "TABLE_NAME": {
+      "type": "String",
+      "description": "Name of the table being queried in the AWS data source."
+    },
+    "THROUGHPUT": {
+      "type": "Number",
+      "description": "Number of records retrieved in one second.",
+      "example": "3025.67"
+    },
+    "TIMESTAMP": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "TOTAL_MS": {
+      "type": "Number",
+      "description": "How long it took (in milliseconds) to prepare and execute the query and to retrieve the query results."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "15-character ID of the user accessing the external data source.",
+      "example": "00530000009M943"
+    }
+  }
+}

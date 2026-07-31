@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "SalesforceQuote - Data API",
+  "description": "Read-only virtual object used in the Your Account App. Represents information about your organization’s quotes with Salesforce.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "External reference ID set by Salesforce."
+    },
+    "QuoteNumber": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "A system-generated number that identifies the quote."
+    },
+    "SalesforceContractId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the contract that’s associated with the quote. This field is a relationship field.",
+      "relationship_name": "SalesforceContract",
+      "relationship_type": "Lookup",
+      "refers_to": "SalesforceContract"
+    },
+    "SalesforceQuoteStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the quote. Possible values are: Complete Expired NeedsApproval— NeedsSignature— Processing"
+    }
+  },
+  "usage": "Used by Your Account to manage quotes related to your organization’s Salesforce contract. Read-only.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later."
+}

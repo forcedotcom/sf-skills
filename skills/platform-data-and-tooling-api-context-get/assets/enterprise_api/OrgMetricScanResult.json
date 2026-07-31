@@ -1,0 +1,187 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OrgMetricScanResult - Data API",
+  "description": "Represents data or an item associated with a feature’s results in a Salesforce Optimizer evaluation. For example, for the Custom Field Limit feature, an OrgMetricScanResult object represents an object flagged for approaching the custom field limit. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "example",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Date": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date associated with an item in a feature’s Optimizer evaluation.",
+      "example": "For the Unsupported Browsers feature, Date indicates the date that the user last logged in with an unsupported browser."
+    },
+    "Flags": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The flags associated with an item in a feature’s Optimizer evaluation.",
+      "example": "For the API Versions feature, Flags indicates the API version of an object that Optimizer evaluates as outdated."
+    },
+    "ItemStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The recommended action for an item in a feature’s Optimizer evaluation. Possible values are: Action Required Immediate Action Required No Action Required Not Currently Enabled Review Required Unable to Analyze The default value is No Action Required."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort",
+      "description": "The name of the item in a feature’s Optimizer evaluation, such as an object name.",
+      "example": "For the Unassigned Roles feature, Name refers to the name of the unassigned role."
+    },
+    "Object": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The object ID associated with the item in a feature’s Optimizer evaluation. For the Release Update feature only, Object indicates the release that the update is scheduled for.",
+      "example": "For the Unused Reports feature, Object refers to the ID of the unused report."
+    },
+    "OrgMetricScanSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The feature’s OrgMetricScanSummary ID from the most recent Optimizer run. This field is a relationship field.",
+      "relationship_name": "OrgMetricScanSummary",
+      "relationship_type": "Master-detail",
+      "refers_to": "OrgMetricScanSummary (the master object)"
+    },
+    "Profile": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The profile ID associated with the item in a feature’s Optimizer evaluation."
+    },
+    "Quantity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "A quantity associated with the item in a feature’s Optimizer evaluation.",
+      "example": "For the Custom Field Limits feature, Quantity indicates the total number of fields on an object that approaches the custom field limit."
+    },
+    "Type": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The type of item or data in a feature’s Optimizer evaluation.",
+      "example": "For the Unsupported Browsers feature, Type indicates the unsupported browser and platform used."
+    },
+    "Url": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The URL associated with the item in a feature’s Optimizer evaluation.",
+      "example": "For the Unassigned Page Layouts feature, the URL represents a link to the unassigned layout."
+    },
+    "User": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The user ID or username associated with the item in a feature’s Optimizer evaluation. For the Release Update feature only, User indicates the name of the release update that requires review.",
+      "example": "For the User Logins feature, User indicates the username of a user who hasn’t recently logged in."
+    }
+  },
+  "special_access_rules": "This object is only available in orgs where Salesforce Optimizer is enabled. Requires the Modify All Data and Customize Application user permissions.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Date": {
+      "field_label": "Date",
+      "type": "datetime"
+    },
+    "Flags": {
+      "field_label": "Flags",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Org Metric Scan Result ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "ItemStatus": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Org Metric Scan Result",
+      "type": "string",
+      "length": "255"
+    },
+    "Object": {
+      "field_label": "Object",
+      "type": "string",
+      "length": "255"
+    },
+    "OrgMetricScanSummaryId": {
+      "field_label": "Org Metric Scan ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Profile": {
+      "field_label": "Profile",
+      "type": "int",
+      "digits": "9"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "string",
+      "length": "255"
+    },
+    "Url": {
+      "field_label": "Url",
+      "type": "url",
+      "length": "255"
+    },
+    "User": {
+      "field_label": "User",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Composite API Subrequest Event Type - Data API",
+  "description": "Composite API subrequest events contain details about composite API subrequests. One composite API subrequest event is generated for each subrequest or collated set of subrequests. For example, if a composite API request contains five subrequests and four of the subrequests are collated, then two composite API subrequest events are generated. This example also applies to composite graph API. This event type is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "CANCELLED_REASON": {
+      "type": "String",
+      "description": "If the subrequest was canceled, shows the reason."
+    },
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using the API."
+    },
+    "CPU_TIME": {
+      "type": "Number",
+      "description": "The CPU time in milliseconds to complete the request."
+    },
+    "DB_TOTAL_TIME": {
+      "type": "Number",
+      "description": "Time (in nanoseconds) spent waiting for database processing in aggregate for all operations in the subrequest or set of collated subrequests. Compare this field to CPU_TIME to determine whether performance issues are occurring in the database layer or in your own code."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of the event. The value is always CompositeApiSubrequest."
+    },
+    "INITIAL_REFERENCE_IDS": {
+      "type": "String",
+      "description": "The original reference IDs of subrequests that were collated into the current subrequest."
+    },
+    "IS_CANCELLED": {
+      "type": "boolean",
+      "description": "True if the subrequest call was canceled."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "Identifies all related events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I"
+    },
+    "METHOD": {
+      "type": "String",
+      "description": "The HTTP method of the request."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization that made the request. For example: 00D000000000123"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "A unique ID identifying the composite API request."
+    },
+    "REQUEST_STATUS": {
+      "type": "String",
+      "description": "The status of the subrequest or collated set of subrequests. For example: S—Success. Salesforce handled the request successfully. If an Apex controller throws an exception, this status is also returned. F—Failure. Typically 4xx or 5xx HTTP codes, such as no permission to view page, page took too long to render, page is read-only. U—Undefined A—Authorization Error R—Redirect. Typically a 3xx HTTP code, possibly initiated by an Apex controller in a Visualforce page. N—Not Found. 404 error. This field can have a blank value."
+    },
+    "RUN_TIME": {
+      "type": "Number",
+      "description": "The amount of time in milliseconds to complete the request."
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. For example: 20130715233322.670"
+    },
+    "STATUS_CODE": {
+      "type": "Number",
+      "description": "The HTTP status code for the response."
+    },
+    "SUCCESS": {
+      "type": "boolean",
+      "description": "True if the subrequest call succeeded."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The date and time that the event was generated."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The date and time, in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ), that the event was generated. The timezone is GMT. For example: 2015-07-27T11:32:59.555Z"
+    },
+    "URI": {
+      "type": "String",
+      "description": "The resource URI."
+    },
+    "URI_ID_DERIVED": {
+      "type": "ID",
+      "description": "The 18-character case insensitive ID of the URI of the page that’s receiving the request."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user that’s using the API. For example: 00530000009M943"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case insensitive ID of the user that’s using the API. For example: 00590000000I1SNIA0"
+    },
+    "USER_TYPE": {
+      "type": "String",
+      "description": "The category of user license. Possible values are: CsnOnly—Users whose access to the application is limited to Chatter. This user type includes Chatter Free and Chatter moderator users. CspLitePortal—CSP Lite Portal license. Users whose access is limited because they’re organization customers and they access the application through a customer portal or an Experience Cloud site. CustomerSuccess—Customer Success license. Users whose access is limited because they’re organization customers and they access the application through a customer portal. Guest—Users whose access is limited so that your customers can view and interact with your site without logging in. PowerCustomerSuccess—Power Customer Success license. Users whose access is limited because they’re organization customers and they access the application through a customer portal. Users with this license type can view and edit data that they directly own or data owned by or shared with users below them in the customer portal role hierarchy. PowerPartner—Power Partner license. Users whose access is limited because they’re partners and they typically access the application through a partner portal or site. SelfService—Users whose access is limited because they’re organization customers and they access the application through a self-service portal. Standard—Standard user license. This user type also includes Salesforce Platform and Salesforce Platform One user licenses and admins for this org."
+    }
+  }
+}

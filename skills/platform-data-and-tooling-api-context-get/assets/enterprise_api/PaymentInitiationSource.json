@@ -1,0 +1,278 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentInitiationSource - Data API",
+  "description": "Represents the originating source of a payment. This information helps other Salesforce products integrate with Salesforce Payments. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The account record that initiated this payment. This field is a relationship field.",
+      "relationship_name": "Account",
+      "refers_to": "Account"
+    },
+    "Application": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Salesforce application initiating the payment. Possible values are: Collections Commerce Custom FieldService OrderManagement Payments Revenue Sales Scheduler Service"
+    },
+    "Channel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The origin of the submitted payment. For example, D2C, virtual terminal, or merchant MOTO (mail order or phone order)."
+    },
+    "CollectionPlanId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The collection plan record that submitted payment. This field is available only for merchant-initiated payment collections. For example, a merchant collects an outstanding balance using a Pay Now payment link or over the phone. This field is a relationship field.",
+      "relationship_name": "CollectionPlan",
+      "refers_to": "CollectionPlan"
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The contact record of the contact that made the payment. This field is a relationship field.",
+      "relationship_name": "Contact",
+      "refers_to": "Contact"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for organizations with the multicurrency feature enabled. This field contains the ISO code for any currency allowed by the organization. Possible values are: AUD—Australian Dollar EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it’s possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the payment initiation source record. For example, d9e01178-b6878-2f4b-a14d-b0132b7ret67"
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The opportunity record that made the payment. This field is a relationship field.",
+      "relationship_name": "Opportunity",
+      "refers_to": "Opportunity"
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The order summary record that initiated the payment. This field is available with Salesforce Order Management and Commerce applications. This field is a relationship field.",
+      "relationship_name": "OrderSummary",
+      "refers_to": "OrderSummary"
+    },
+    "PaymentScheduleItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The payment schedule item record that initiated the payment. This field is available only with the Scheduler application. This field is a relationship field.",
+      "relationship_name": "PaymentScheduleItem",
+      "refers_to": "PaymentSchedleItem"
+    },
+    "Process": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Component within the application that’s initiating the payment. Maximum length of the string is 255 characters. For example, managed or custom checkout, product description page (PDP)."
+    },
+    "QuoteId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The quote record that initiated the payment. This field is a relationship field.",
+      "relationship_name": "Quote",
+      "refers_to": "Quote"
+    },
+    "ServiceAppointmentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The service appointment record that initiated the payment. This field is available only with the Field Service application. This field is a relationship field.",
+      "relationship_name": "ServiceAppointment",
+      "refers_to": "Appointment"
+    },
+    "SiteId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The site record that initiated the payment. This field is for applications that don't have a web store, but created a digital experience site to accept payments This field is a relationship field.",
+      "relationship_name": "Site",
+      "refers_to": "Site"
+    },
+    "WebCartId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The web cart record that submitted the payment. This field is a relationship field.",
+      "relationship_name": "WebCart",
+      "refers_to": "WebCart"
+    },
+    "WebStoreId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The web store record that initiated the payment. For example, a B2B, D2C, or Pay Now store. This field is a relationship field.",
+      "relationship_name": "WebStore",
+      "refers_to": "WebStore"
+    },
+    "WorkOrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The work order record that submitted the payment. This field is available only for the Field Service application. This field is a relationship field.",
+      "relationship_name": "WorkOrder",
+      "refers_to": "WorkOrder"
+    },
+    "WorkOrderLineItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The work order line item record that made the payment. This field is only available with the Field Service application. This field is a relationship field.",
+      "relationship_name": "WorkOrderLineItem",
+      "refers_to": "WorkOrderLineItem"
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license with the Payments permission enabled for your org. Salesforce Payments entities are available only in Lightning Experience.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Application": {
+      "field_label": "Application",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Channel": {
+      "field_label": "Channel",
+      "type": "string",
+      "length": "255"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Payment Initiation Source ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceId": {
+      "field_label": "Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Payment Initiation Source Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OpportunityId": {
+      "field_label": "Opportunity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentScheduleItemId": {
+      "field_label": "Payment Schedule Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Process": {
+      "field_label": "Process",
+      "type": "string",
+      "length": "255"
+    },
+    "QuoteId": {
+      "field_label": "Quote ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SiteId": {
+      "field_label": "Site ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WebCartId": {
+      "field_label": "Cart ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WebStoreId": {
+      "field_label": "Store ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WorkOrderId": {
+      "field_label": "Work Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WorkOrderLineItemId": {
+      "field_label": "Work Order Line Item ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

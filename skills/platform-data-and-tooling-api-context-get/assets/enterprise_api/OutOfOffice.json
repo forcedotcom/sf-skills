@@ -1,0 +1,104 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OutOfOffice - Data API",
+  "description": "Represents a user-set value on a profile that shows when the user intends to be out of the office. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date of the last day a person is out of the office. After the message expires, it goes away automatically."
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create",
+      "description": "Indicates whether an out-of-office message can be displayed for a user. The default value is true."
+    },
+    "Message": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The message portion of the out-of-office message. This text, along with start and end dates, is appended to the user’s name in the Salesforce user interface. The maximum length of this string is 40 characters."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date of the first day a person is out of the office."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the user associated with the out-of-office message."
+    }
+  },
+  "special_access_rules": "In Lightning Experience, lets users set a message next to their name in Chatter to show when they plan to be out of the office. The message appears in Lightning Experience, Salesforce Classic, and mobile views. Messages expire automatically after their end date. You can control whether out-of-office functionality is available to your users. Set it up in the Out of Office section in Setup | Chatter Settings. Only internal users can set an out-of-office message.\n\nIn Lightning Experience, lets users set a message next to their name in Chatter to show when they plan to be out of the office. The message appears in Lightning Experience, Salesforce Classic, and mobile views. Messages expire automatically after their end date. You can control whether out-of-office functionality is available to your users. Set it up in the Out of Office section in Setup** | Chatter Settings**.\n\nOnly internal users can set an out-of-office message.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Out Of Office ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEnabled": {
+      "field_label": "Is Enabled",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Message": {
+      "field_label": "Out Of Office Message",
+      "type": "string",
+      "length": "60"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

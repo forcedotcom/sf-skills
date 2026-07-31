@@ -1,0 +1,216 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ApexTestRunResult - Data API",
+  "description": "Contains summary information about all the test methods that were run in a particular Apex job. This object is available in API version 37.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AsyncApexJobId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The parent Apex job ID for the result. This is a relationship field.",
+      "relationship_name": "AsyncApexJob",
+      "relationship_type": "Lookup",
+      "refers_to": "AsyncApexJob"
+    },
+    "ClassesCompleted": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of classes executed during the test run."
+    },
+    "ClassesEnqueued": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The total number of classes enqueued during the test run."
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time at which the test run ended."
+    },
+    "IsAllTests": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether all Apex test classes were run."
+    },
+    "JobName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reserved for future use."
+    },
+    "MethodsCompleted": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of methods completed during the test run. This value is updated after each class is run."
+    },
+    "MethodsEnqueued": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of methods enqueued for the test run. This value is initialized before the test runs."
+    },
+    "MethodsFailed": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of methods that failed during this test run. This value is updated after each class is run."
+    },
+    "Source": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The source of the test run, such as the Developer Console."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The time at which the test run started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the test run. Values include: Queued Preparing Processing Aborted Completed Failed"
+    },
+    "TestSetupTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The time it took the setup methods to run, in milliseconds."
+    },
+    "TestTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The time it took the test to run, in milliseconds."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user who ran the test run. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "In API version 49.0 and later, users must have the View Setup and Configuration permission to access this object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ApexTestRunResult\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AsyncApexJob\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AsyncApexJob\"/>\n        <element name=\"AsyncApexJobId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ClassesCompleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ClassesEnqueued\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsAllTests\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"JobName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MethodsCompleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MethodsEnqueued\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MethodsFailed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Source\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TestSetupTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"TestTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AsyncApexJobId": {
+      "field_label": "Apex Job ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ClassesCompleted": {
+      "field_label": "Number of classes completed in this test run",
+      "type": "int",
+      "digits": "9"
+    },
+    "ClassesEnqueued": {
+      "field_label": "Number of classes enqueued in this test run",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EndTime": {
+      "field_label": "End time of the test run",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Apex Test Run Result ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAllTests": {
+      "field_label": "allTests",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JobName": {
+      "field_label": "Name of the job",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MethodsCompleted": {
+      "field_label": "Number of methods completed in this test run",
+      "type": "int",
+      "digits": "9"
+    },
+    "MethodsEnqueued": {
+      "field_label": "Number of methods enqueued in this test run",
+      "type": "int",
+      "digits": "9"
+    },
+    "MethodsFailed": {
+      "field_label": "Number of methods failed in this test run",
+      "type": "int",
+      "digits": "9"
+    },
+    "Source": {
+      "field_label": "Client that kicked off the test run",
+      "type": "string",
+      "length": "255"
+    },
+    "StartTime": {
+      "field_label": "Start time of the test run",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status of the test run",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TestSetupTime": {
+      "field_label": "Time(ms) spent running test setup",
+      "type": "int",
+      "digits": "9"
+    },
+    "TestTime": {
+      "field_label": "Time(ms) actually spent running tests",
+      "type": "int",
+      "digits": "9"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

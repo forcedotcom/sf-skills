@@ -1,0 +1,252 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SchedulingConstraint - Data API",
+  "description": "Represents scheduling constraints on each service resource. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the scheduling constraint was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the scheduling constraint was last viewed."
+    },
+    "MaxNonstandardShiftsPerMonth": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of non-standard shifts assigned to an agent in a month. This field is available in API version 54.0 and later."
+    },
+    "MaxShiftsPerDay": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of shifts an agent can have in a day."
+    },
+    "MaxShiftsPerMonth": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of shifts an agent can have in a month."
+    },
+    "MaxShiftsPerWeek": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of shifts an agent can have in a week."
+    },
+    "MaxWorkingHoursPerDay": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The maximum number of hours an agent can have in a day."
+    },
+    "MaxWorkingHoursPerMonth": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The maximum number of hours an agent can have in a month."
+    },
+    "MaxWorkingHoursPerWeek": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The maximum number of hours an agent can have in a week."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The scheduling constraint record name."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of the scheduling constraint. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RestTimeMinutes": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The minimum rest time, in minutes, between an agent’s consecutive shifts. This field is available in API versions 56.0 and later."
+    }
+  },
+  "special_access_rules": "The org requires the Workforce Engagement license. To view records, the user requires the Workforce Engagement Agent permission set. To create, edit, or delete records, the user requires the Workforce Engagement Planner permission set.\n\nThe org requires the Workforce Engagement license.\n         To view records, the user requires the Workforce Engagement Agent permission set. To\n         create, edit, or delete records, the user requires the Workforce Engagement Planner\n         permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SchedulingConstraintOwnerSharingRule**: Sharing rules are available for the object.\n- **SchedulingConstraintShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"SchedulingConstraint\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BreakEarliestStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"BreakLatestStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MaxNonstandardShiftsPerMonth\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MaxShiftsPerDay\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MaxShiftsPerMonth\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MaxShiftsPerWeek\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MaxWorkHrPerShftPerWk\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"MaxWorkingHoursPerDay\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"MaxWorkingHoursPerMonth\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"MaxWorkingHoursPerWeek\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RestTimeMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ServiceResources\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceTerritories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "BreakEarliestStartTime": {
+      "field_label": "Earliest Break Start Time",
+      "type": "time"
+    },
+    "BreakLatestStartTime": {
+      "field_label": "Latest Break Start Time",
+      "type": "time"
+    },
+    "CalculationMode": {
+      "field_label": "Calculation Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Scheduling Constraint ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAllTravelIncluded": {
+      "field_label": "Include All Travel",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsLunchBreaksIncluded": {
+      "field_label": "Include Lunch Breaks",
+      "type": "boolean"
+    },
+    "IsResourceAbsencesIncluded": {
+      "field_label": "Include Resource Absences",
+      "type": "boolean"
+    },
+    "IsTravelFromHomeExcluded": {
+      "field_label": "Exclude Travel From Home",
+      "type": "boolean"
+    },
+    "IsTravelToHomeExcluded": {
+      "field_label": "Exclude Travel To Home",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MaxContractValueForPayPeriod": {
+      "field_label": "Max Contract Value For Pay Period",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "MaxNonstandardShiftsPerMonth": {
+      "field_label": "Maximum Non-Standard Shifts Per Month",
+      "type": "int",
+      "digits": "9"
+    },
+    "MaxShiftsPerDay": {
+      "field_label": "Maximum Shifts Per Day",
+      "type": "int",
+      "digits": "9"
+    },
+    "MaxShiftsPerMonth": {
+      "field_label": "Maximum Shifts Per Month",
+      "type": "int",
+      "digits": "9"
+    },
+    "MaxShiftsPerWeek": {
+      "field_label": "Maximum Shifts Per Week",
+      "type": "int",
+      "digits": "9"
+    },
+    "MaxWorkHrPerShftPerWk": {
+      "field_label": "Maximum Working Hours Per Shift Per Work Activities",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "MaxWorkingHoursPerDay": {
+      "field_label": "Maximum Working Hours Per Day",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "MaxWorkingHoursPerMonth": {
+      "field_label": "Maximum Working Hours Per Month",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "MaxWorkingHoursPerWeek": {
+      "field_label": "Maximum Working Hours Per Week",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "MinContractValueForPayPeriod": {
+      "field_label": "Min Contract Value For Pay Period",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "200"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ResourceAbsenceFieldToSum": {
+      "field_label": "Resource Absence Field to Include in Sum",
+      "type": "string",
+      "length": "80"
+    },
+    "RestTimeMinutes": {
+      "field_label": "Rest Time in Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "SvcAppointmentFieldToSum": {
+      "field_label": "Service Appointment Field to Include in Sum",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

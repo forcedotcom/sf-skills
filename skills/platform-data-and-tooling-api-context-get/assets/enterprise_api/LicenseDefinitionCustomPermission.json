@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment"
+  ],
+  "title": "LicenseDefinitionCustomPermission (Developer Preview) - Data API",
+  "description": "Represents a licensed custom permission that controls access to a license's features when included in a custom permission set license definition. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "LicenseDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the custom permission set license definition that contains the licensed custom permission. This is a relationship field.",
+      "relationship_name": "LicenseDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSetLicenseDefinition"
+    },
+    "LicensedCustomPermissionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the licensed custom permission that you're including in the permission set license definition. On the CustomPermission object, the isLicensed field must equal true. This is a relationship field.",
+      "relationship_name": "LicensedCustomPermission",
+      "relationship_type": "Lookup",
+      "refers_to": "CustomPermission"
+    }
+  },
+  "special_access_rules": "To access LicenseDefinitionCustomPermission, you must have the Partner Licensing Platform developer preview enabled. To participate in this developer preview, submit a participation request via the Partner Community group.\n\nTo access LicenseDefinitionCustomPermission, you must have the Partner Licensing\n            Platform developer preview enabled. To participate in this developer preview, submit a\n            participation request via the\n\nPartner Licensing Platform Developer Preview\n\nPartner Community group.\n\nThe Partner Licensing Platform is available as a developer\n               preview. The Partner Licensing Platform isn’t generally available unless or until\n               Salesforce announces its general availability in documentation or in press releases\n               or public statements. All commands, parameters, and other features are subject to\n               change or deprecation at any time, with or without notice. Don't implement\n               functionality developed with these commands or tools in your production\n               package.",
+  "usage": "For more information, see the Partner Licensing Platform Developer Guide (Developer Preview).",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"LicenseDefinitionCustomPermission\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LicenseDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSetLicenseDefinition\"/>\n        <element name=\"LicenseDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LicensedCustomPermission\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CustomPermission\"/>\n        <element name=\"LicensedCustomPermissionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```"
+}

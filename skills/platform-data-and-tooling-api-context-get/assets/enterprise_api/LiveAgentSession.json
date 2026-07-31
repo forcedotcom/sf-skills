@@ -1,0 +1,246 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "LiveAgentSession - Data API",
+  "description": "This object is automatically created for each Chat session and stores information about the session. This object is available in API versions 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AgentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the agent associated with the session."
+    },
+    "ChatReqAssigned": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of chat requests that were assigned to an agent during a session."
+    },
+    "ChatReqDeclined": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of chat requests that were declined by an agent during a session."
+    },
+    "ChatReqEngaged": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of chats in which an agent was engaged during a session."
+    },
+    "ChatReqTimedOut": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of chat requests that timed out in an agent’s queue during a session."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the session record was last referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the session record was last viewed."
+    },
+    "LoginTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date and time an agent logged in during the session."
+    },
+    "LogoutTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date and time an agent logged out during a session."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookupSort",
+      "description": "The name of the session."
+    },
+    "NumFlagLoweredAgent": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of assistance flags lowered by the agent."
+    },
+    "NumFlagLoweredSupervisor": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of assistance flags lowered by the supervisor."
+    },
+    "NumFlagRaised": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of assistance flags raised by the agent."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the session record."
+    },
+    "TimeAtCapacity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The amount of time an agent spent with the maximum number of chats in his or her queue."
+    },
+    "TimeIdle": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The amount of time an agent spent idle during the session."
+    },
+    "TimeInAwayStatus": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The amount of time an agent spent with a status of “Away” during a session."
+    },
+    "TimeInChats": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The amount of time an agent spent engaged in chats during a session."
+    },
+    "TimeInOnlineStatus": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The amount of time an agent spent with a status of “Online” during a session."
+    }
+  },
+  "usage": "Use this object to query and manage chat session records.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **LiveAgentSessionHistory**: History is available for tracked fields of the object.\n- **LiveAgentSessionOwnerSharingRule**: Sharing rules are available for the object.\n- **LiveAgentSessionShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AgentId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChatReqAssigned": {
+      "field_label": "Chat Requests Assigned",
+      "type": "int",
+      "digits": "9"
+    },
+    "ChatReqDeclined": {
+      "field_label": "Chat Requests Declined (Manually)",
+      "type": "int",
+      "digits": "9"
+    },
+    "ChatReqEngaged": {
+      "field_label": "Chat Requests Engaged",
+      "type": "int",
+      "digits": "9"
+    },
+    "ChatReqTimedOut": {
+      "field_label": "Chat Requests Declined (Push Timeout)",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Chat Session ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LoginTime": {
+      "field_label": "Login Time",
+      "type": "datetime"
+    },
+    "LogoutTime": {
+      "field_label": "Logout Time",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Chat Session Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NumFlagLoweredAgent": {
+      "field_label": "Assistance Flags Lowered (Agent)",
+      "type": "int",
+      "digits": "9"
+    },
+    "NumFlagLoweredSupervisor": {
+      "field_label": "Assistance Flags Lowered (Supervisor)",
+      "type": "int",
+      "digits": "9"
+    },
+    "NumFlagRaised": {
+      "field_label": "Assistance Flags Raised",
+      "type": "int",
+      "digits": "9"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeAtCapacity": {
+      "field_label": "Time Spent at Capacity",
+      "type": "int",
+      "digits": "9"
+    },
+    "TimeIdle": {
+      "field_label": "Time Idle",
+      "type": "int",
+      "digits": "9"
+    },
+    "TimeInAwayStatus": {
+      "field_label": "Time Spent Away",
+      "type": "int",
+      "digits": "9"
+    },
+    "TimeInChats": {
+      "field_label": "Time Spent in Chats",
+      "type": "int",
+      "digits": "9"
+    },
+    "TimeInOnlineStatus": {
+      "field_label": "Time Spent Online",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

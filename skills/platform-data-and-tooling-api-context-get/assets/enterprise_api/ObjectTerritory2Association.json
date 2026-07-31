@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ObjectTerritory2Association - Data API",
+  "description": "Represents an association (by assignment) between a territory and an object record such as an account or a lead.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssociationCause": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The means by which the record was associated with the territory. User interface field label is Method. Possible values are: Territory2AssignmentRule—Territory assignment rule association Territory2Manual—Manual association"
+    },
+    "ObjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the object assigned to the territory. Object Availability Account API version 30.0 and later Lead API version 55.0 and later This is a polymorphic relationship field.",
+      "relationship_name": "Object",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Account": {
+      "description": "API version 30.0 and later"
+    },
+    "Lead": {
+      "description": "API version 55.0 and later"
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of the object. Possible values are: Account Lead"
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the territory that the record is assigned to. This is a relationship field.",
+      "relationship_name": "Territory2",
+      "relationship_type": "Lookup",
+      "refers_to": "Territory2"
+    }
+  },
+  "special_access_rules": "Available after enabling Sales Territories. Standard and partner users can access this object. If a territory model is in Active state, any standard or partner user can view that model, including its territories and assignment rules. For territories in an active model, any standard or partner user can view assigned records and assigned users subject to your sharing settings. If you delete associations, you can query them for up to 12 hours. Keep in mind that deleted associations bypass the recycle bin.\n\nAvailable after enabling Sales Territories.\n\nStandard and partner users can access this object. If a territory model is in Active state, any standard or partner user can view that model, including its territories and assignment rules. For territories in an active model, any standard or partner user can view assigned records and assigned users subject to your sharing settings.\n\nIf you delete associations, you can query them for up to 12 hours. Keep in mind that deleted associations bypass the recycle bin.",
+  "field_reference": {
+    "AssociationCause": {
+      "field_label": "Association Cause",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Object Territory Association ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ObjectId": {
+      "field_label": "Object ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SobjectType": {
+      "field_label": "Object Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

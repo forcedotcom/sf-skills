@@ -1,0 +1,154 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "MLModel - Data API",
+  "description": "Represents an AI model that can be used in Einstein Prediction Builder, Einstein Recommendation Builder, and other Einstein features. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApprovalStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether the model is approved, pending approval, or rejected. Possible values are: Approved Pending Rejected The default value is Pending."
+    },
+    "Dataset": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the dataset used to create the model."
+    },
+    "ModelType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the type of model. Possible values are: BinaryClassification DecisionTree DeepLearningIntent DeepLearningNER GeneralizedLinearModels GlobalDeepLearningIntent GlobalDeepLearningNER GlobalLanguageDetection GradientBoostedTrees LinearRegression LinearSupportVectorClassifiers LogisticRegression MulticlassClassification NaiveBayes NeuralNet PopularityCount RandomForest Regression XGBoost"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The automatically generated ID that uniquely identifies the model."
+    },
+    "PredictionDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related prediction definition. This field is a relationship field.",
+      "relationship_name": "PredictionDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "MLPredictionDefinition"
+    },
+    "RecommendationDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related recommendation definition. This field is a relationship field.",
+      "relationship_name": "RecommendationDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "MLRecommendationDefinition"
+    },
+    "ScoringStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether scoring is enabled or disabled. Possible values are: Disabled Enabled"
+    },
+    "TrainingEndTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates the date and time when the training ended."
+    },
+    "TrainingStartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates the date and time when the training started."
+    }
+  },
+  "special_access_rules": "Available with Einstein Prediction Builder and Einstein Recommendation Builder.\n\nAvailable with Einstein Prediction Builder and\n         Einstein Recommendation Builder.",
+  "field_reference": {
+    "ApprovalStatus": {
+      "field_label": "Approval Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Dataset": {
+      "field_label": "Dataset Id",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "ML Model ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ModelType": {
+      "field_label": "Model Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PredictionDefinitionId": {
+      "field_label": "ML Prediction Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecommendationDefinitionId": {
+      "field_label": "ML Recommendation Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScoringStatus": {
+      "field_label": "Scoring Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TrainingEndTime": {
+      "field_label": "Training End Time",
+      "type": "datetime"
+    },
+    "TrainingStartTime": {
+      "field_label": "Training Start Time",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

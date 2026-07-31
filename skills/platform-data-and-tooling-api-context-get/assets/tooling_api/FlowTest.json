@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "FlowTest - Tooling API",
+  "description": "Represents the description of a flow test associated with a flow definition. This object is available in API version 55.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The description of the flow test. This field can be useful to describe the reason for creating the test or its intended use."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name. This field is automatically generated, but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record.",
+      "required": true
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated FlowTest type in Metadata API. The full name can include a namespaceprefix."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the flow test."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the flow test. In the UI, this field is Label."
+    },
+    "Metadata": {
+      "type": "FlowTest",
+      "properties": "Create, Nillable, Update",
+      "description": "The flow test's metadata."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition organization that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values: In Developer Edition organizations, the namespace prefix is set to the namespace prefix of the organization for all objects that support it. There is an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition organization of the package developer. In organizations that are not Developer Edition organizations, NamespacePrefix is only set for objects that are part of an installed managed package. There is no namespace prefix for all other objects."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FlowTest\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:FlowTest\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"FlowTest\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"doesCommitChanges\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesSkipStartConditions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesTestWaitElement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"flowApiName\" type=\"xsd:string\"/>\n        <xsd:element name=\"flowTestDataSources\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FlowTestDataSource\"/>\n        <xsd:element name=\"flowTestFlowVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FlowTestFlowVersion\"/>\n        <xsd:element name=\"isSubflowUseLatestFlowVer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isolatedObjectExternalKeys\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FlowTestIsolObjExtlKey\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"runTestAsUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"testPoints\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FlowTestPoint\"/>\n        <xsd:element name=\"testType\" minOccurs=\"0\" type=\"tns:FlowTestType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"FlowTestType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"WithAssertion\"/>\n    <xsd:enumeration value=\"WithoutAssertion\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

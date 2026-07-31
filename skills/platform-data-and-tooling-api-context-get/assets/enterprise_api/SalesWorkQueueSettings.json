@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "SalesWorkQueueSettings - Data API",
+  "description": "Represents settings used to customize work queue options for third-party scoring. Third-party scoring enables custom number fields on person accounts, contacts, and leads. You must be a Sales Engagement customer to update this object. Previously, you could only use the Einstein Intelligence Score for third-party scoring. Available starting in Version 47.0.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "FeatureName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "A value that represents the name of the work queue settings. To use custom number fields in the work queue, the value must be entered as ThirdPartyScore."
+    },
+    "TargetEntity": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The related record object of the custom number field. Acceptable SObjects include PersonAccount, Contact, and Lead."
+    },
+    "TargetField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A value that represents the DeveloperName of the custom number field related to the TargetEntity. Custom fields must have a custom number data type. To use Einstein Intelligence Score for lead scoring, enter ScoreIntelligence.Score for the DeveloperName. To remove custom number fields from the work queue, enter None."
+    }
+  },
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FeatureName": {
+      "field_label": "Feature Name",
+      "type": "string",
+      "length": "75"
+    },
+    "Id": {
+      "field_label": "SalesWorkQueueSettings ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetEntity": {
+      "field_label": "Custom Object Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TargetField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

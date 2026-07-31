@@ -1,0 +1,245 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "SubscriberPackageVersion - Tooling API",
+  "description": "Represents a package version (first- or second-generation) across all Salesforce instances. Available in API version 41.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AppExchangeDescription": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "The AppExchange description for this package.If the AppExchange listing for the package doesn’t contain a value for this field, the field’s value is null."
+    },
+    "AppExchangeLogoUrl": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "The URL that AppExchange uses to display the logo for this package.If the AppExchange listing for the package doesn’t contain a value for this field, the field’s value is null."
+    },
+    "AppExchangePackageName": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "The AppExchange name for this package.If the AppExchange listing for the package doesn’t contain a value for this field, the field’s value is null."
+    },
+    "AppExchangePublisherName": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "The AppExchange publisher name for this package.If the AppExchange listing for the package doesn’t contain a value for this field, the field’s value is null."
+    },
+    "BuildNumber": {
+      "type": "int",
+      "properties": "Group, Nillable, Sort",
+      "description": "Part of the version number of a package version. The complete version number format is major.minor.patch.build—for example, in 1.2.0.5 the build number is 5."
+    },
+    "CspTrustedSites": {
+      "type": "SubscriberPackageCspTrustedSites",
+      "properties": "Nillable",
+      "description": "List of new Trusted URLs (CspTrustedSite) that the user must authorize before installing the package version. Package upgrades don't include previously installed Trusted URLs."
+    },
+    "Dependencies": {
+      "type": "SubscriberPackageDependencies",
+      "properties": "Nillable",
+      "description": "Other subscriber package versions that this subscriber package version depends on.Available in API version 44.0 and later."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "Description of the package."
+    },
+    "InstallationKey": {
+      "type": "RAW",
+      "properties": "Not applicable",
+      "description": "Installation key for a key-protected package.This field is hidden. It’s not queryable, but you can include it in the WHERE clause of SOQL queries. In some queries, it’s required. To query unlocked packages that have installation keys, you must include the correct InstallationKey value in your WHERE clause. However, if the unlocked package version is already installed in your org you can query it without specifying an InstallationKey value. For managed packages, an InstallationKey value in the WHERE clause is optional."
+    },
+    "InstallValidationStatus": {
+      "type": "picklist",
+      "properties": "Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the validation tests that are run during the package version install. Valid values are: NoErrorsDetected BetaInstallIntoProductionOrg CannotInstallEarlierVersion CannotUpgradeBeta CannotUpgradeUnmanaged DeprecatedInstallPackage ExtensionsOnLocalPackages PackageNotInstalled PackageHasInDevExtensions InstallIntoDevOrg NoAccess PackagingDisabled PackagingNoAccess PackageUnavailable UninstallInProgress UnknownError NamespaceCollision"
+    },
+    "IsBeta": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group, Sort",
+      "description": "Indicates whether the package version is released (false)."
+    },
+    "IsDeprecated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group, Sort",
+      "description": "Specifies whether this package version has been marked as deprecated (true) or not (false)."
+    },
+    "IsManaged": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group, Sort",
+      "description": "Specifies whether this package is managed (true) or not (false)."
+    },
+    "IsPasswordProtected": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group, Sort",
+      "description": "Specifies whether installation of this package version requires the user to provide an installation key (true) or not (false)."
+    },
+    "IsSecurityReviewed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group, Sort",
+      "description": "Specifies whether the package has passed the security review required for publishing in AppExchange."
+    },
+    "MajorVersion": {
+      "type": "int",
+      "properties": "Group, Nillable, Sort",
+      "description": "Part of the version number of a package version. The complete version number format is major.minor.patch.build—for example, in 1.2.0.5 the major version is 1."
+    },
+    "MinorVersion": {
+      "type": "int",
+      "properties": "Group, Nillable, Sort",
+      "description": "Part of the version number of a package version. The complete version number format is major.minor.patch.build—for example, in 1.2.0.5 the minor version is 2."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Group, idLookup, Sort",
+      "description": "Name of the package."
+    },
+    "Package2ContainerOptions": {
+      "type": "picklist",
+      "properties": "Group, Nillable, Restricted picklist, Sort",
+      "description": "Container options for the second-generation package. These options determine the upgrade and editability rules. Valid values are: Managed Unlocked"
+    },
+    "PatchVersion": {
+      "type": "int",
+      "properties": "Group, Nillable, Sort",
+      "description": "Part of the version number of a package version. The complete version number format is major.minor.patch.build—for example, in 1.2.0.5 the patch version is 0."
+    },
+    "PostInstallUrl": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "The fully qualified URL of the post-installation instructions. Instructions are shown as a link after installation and are available from the package detail view."
+    },
+    "Profiles": {
+      "type": "SubscriberPackageProfiles",
+      "properties": "Nillable",
+      "description": "List of profiles for which the package was installed."
+    },
+    "PublisherName": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "The name of the publisher of this package."
+    },
+    "ReleaseNotesUrl": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "The fully qualified URL of the package release notes. Release notes are shown as a link during the installation process and are available from the package detail view after installation."
+    },
+    "ReleaseState": {
+      "type": "picklist",
+      "properties": "Group, Nillable, Restricted picklist, Sort",
+      "description": "If the package version is a beta version, the value is Beta. Otherwise, the value is Released."
+    },
+    "RemoteSiteSettings": {
+      "type": "SubscriberPackageRemoteSiteSettings",
+      "properties": "Nillable",
+      "description": "List of new Remote Site Settings that the user must authorize before installing the package. Package upgrades don’t include previously installed Remote Site Settings."
+    },
+    "SubscriberPackageId": {
+      "type": "ID",
+      "properties": "Group, Nillable, Sort",
+      "description": "ID of the parent SubscriberPackage. The ID starts with the string 033.This value is case-sensitive and must be unique."
+    },
+    "IsOrgDependent": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group, Sort",
+      "description": "Indicates whether the package depends on unpackaged metadata in the installation org (true) or not (false). This field applies to unlocked packages only. The default value is false. Available in API version 49.0 and later."
+    }
+  },
+  "sub_types": {
+    "SubscriberPackageCspTrustedSites": {
+      "settings": {
+        "type": "SubscriberPackageCspTrustedSite",
+        "description": "List of Trusted URLs (CspTrustedSite) that have been added to the package. These sites must be authorized before installation.If the AppExchange listing for the package doesn’t contain a value for this field, the field’s value is null."
+      }
+    },
+    "SubscriberPackageCspTrustedSite": {
+      "endpointUrl": {
+        "type": "string",
+        "description": "The URL associated with the CspTrustedSite."
+      }
+    },
+    "SubscriberPackageDependencies": {
+      "ids": {
+        "type": "SubscriberPackageDependency",
+        "description": "List of SubscriberPackageDependency IDs: 04t IDs for the package versions that a subscriber package version depends on."
+      }
+    },
+    "SubscriberPackageProfiles": {
+      "destinationProfiles": {
+        "type": "SubscriberPackageDestinationProfile",
+        "description": "The profiles that the administrator installing the package in a target subscriber org actually applies."
+      },
+      "sourceProfiles": {
+        "type": "SubscriberPackageSourceProfile",
+        "description": "The profiles that are contained in the package that is being installed."
+      }
+    },
+    "SubscriberPackageDestinationProfile": {
+      "description": {
+        "type": "string",
+        "description": "The description of the profile."
+      },
+      "displayName": {
+        "type": "string",
+        "description": "The display name of this profile."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the profile."
+      },
+      "noAccess": {
+        "type": "boolean",
+        "description": "Returns true if the profile is internal."
+      },
+      "profileId": {
+        "type": "string",
+        "description": "The ID of the profile."
+      },
+      "type": {
+        "type": "string",
+        "description": "The API name of the profile."
+      }
+    },
+    "SubscriberPackageSourceProfile": {
+      "label": {
+        "type": "string",
+        "description": "The profile label."
+      },
+      "value": {
+        "type": "string",
+        "description": "The name of the profile."
+      }
+    },
+    "SubscriberPackageRemoteSiteSettings": {
+      "settings": {
+        "type": "SubscriberPackageRemoteSiteSettingSubscriberPackageRemoteSiteSetting",
+        "description": "List of RSS added to the package since the last version."
+      }
+    },
+    "SubscriberPackageRemoteSiteSetting": {
+      "secure": {
+        "type": "boolean",
+        "description": "Returns true if the URL uses the https protocol. Applies only if protocol security is enabled."
+      },
+      "url": {
+        "type": "string",
+        "description": "The URL of the remote service."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SubscriberPackageVersion\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"AppExchangeDescription\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"AppExchangeLogoUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"AppExchangePackageName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"AppExchangePublisherName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"BuildNumber\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"CspTrustedSites\" minOccurs=\"0\" type=\"ens:SubscriberPackageCspTrustedSites\" nillable=\"true\"/>\n        <xsd:element name=\"Dependencies\" minOccurs=\"0\" type=\"ens:SubscriberPackageDependencies\" nillable=\"true\"/>\n        <xsd:element name=\"Description\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"InstallValidationStatus\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsBeta\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeprecated\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsManaged\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsOrgDependent\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsPasswordProtected\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsSecurityReviewed\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"MajorVersion\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"MinorVersion\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Package2ContainerOptions\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"PatchVersion\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"PostInstallUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Profiles\" minOccurs=\"0\" type=\"ens:SubscriberPackageProfiles\" nillable=\"true\"/>\n        <xsd:element name=\"PublisherName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ReleaseNotesUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ReleaseState\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RemoteSiteSettings\" minOccurs=\"0\" type=\"ens:SubscriberPackageRemoteSiteSettings\" nillable=\"true\"/>\n        <xsd:element name=\"SubscriberPackageId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

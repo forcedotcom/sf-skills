@@ -1,0 +1,77 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "BroadcastCommunication - Data API",
+  "description": "Represents a broadcast communication related to an incident. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Body": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "If BroadcastType is Alert, this field contains the alert message. If BroadcastType is Email, this field contains the email body text. If BroadcastType is ExperienceSiteBanner, this field is empty. If BroadcastType is Slack, this field contains the Slack message."
+    },
+    "BroadcastCommunicationNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-generated number for every BroadcastCommunication record."
+    },
+    "BroadcastType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Medium used to distribute the message. Possible values are: Alert Email ExperienceSiteBanner Slack"
+    },
+    "CustomNotificationTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the custom notification template used to frame the Slack message. Only applies if BroadcastType is Slack. Available in API version 58.0 and later. This field is a relationship field.",
+      "relationship_name": "CustomNotificationType",
+      "relationship_type": "Lookup",
+      "refers_to": "CustomNotificationType"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "ID of the owner of this object. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the incident associated with the broadcast communication. This field is a relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Incident"
+    },
+    "Subject": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "If BroadcastType is Alert, this field is the alert message in the format “Incident Alert | <Incident subject> | <Incident Number>.” If BroadcastType is Email, this field is the subject of the email sent. If BroadcastType is ExperienceSiteBanner, this field is empty. If BroadcastType is Slack, this field is in the format “Incident Alert | <Incident Subject>.\""
+    }
+  },
+  "special_access_rules": "To access this object with Service Cloud, enable Incident Management in setup and set up Broadcast Communications.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **BroadcastCommunicationChangeEvent**: Change events are available for the object.\n- **BroadcastCommunicationFeed**: Feed tracking is available for the object.\n- **BroadcastCommunicationHistory**: History is available for tracked fields of the object.\n- **BroadcastCommunicationOwnerSharingRule**: Sharing rules are available for the object.\n- **BroadcastCommunicationShare**: Sharing is available for the object."
+}

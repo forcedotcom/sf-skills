@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ColorDefinition - Tooling API",
+  "description": "Represents color metadata for a tab. Available in API version 43.0 and later.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Color": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The color specified in web color RGB format—for example, 00FF00."
+    },
+    "Context": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The color context, which determines whether the color is the main color (or primary) for the tab."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "TabDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The ID of the tab this definition belongs to. Defaults to null."
+    },
+    "Theme": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user interface theme this definition is associated with."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ColorDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Color\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Context\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"TabDefinition\" minOccurs=\"0\" type=\"ens:TabDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"TabDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Theme\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

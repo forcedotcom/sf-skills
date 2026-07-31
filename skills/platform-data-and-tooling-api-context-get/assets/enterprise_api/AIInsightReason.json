@@ -1,0 +1,204 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "AIInsightReason - Data API",
+  "description": "Represents an Einstein prediction insight reason. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AiInsightValueId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the associated AIInsightValue. This is a relationship field.",
+      "relationship_name": "AiInsightValue",
+      "relationship_type": "Lookup",
+      "refers_to": "AIInsightValue"
+    },
+    "Contribution": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The contribution weight for this insight reason."
+    },
+    "FeatureType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of the feature, such as BOOL."
+    },
+    "FeatureValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value of the feature, such as TRUE or FALSE."
+    },
+    "FieldName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the field the insight uses for its evaluation."
+    },
+    "FieldValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value for the field the insight uses for its evaluation."
+    },
+    "Intensity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The intensity weight for this insight reason."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the AIInsightReason."
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The logical operator the insight uses to compare the field value with the expression value. For example, if the prediction evaluates whether the fieldValue for the field bonus__c is greater than $5,000, the logical operator is greater than."
+    },
+    "ReasonLabelKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The key used to map an Einstein Key Accounts Identification (Beta) insight phrase or phrases to the correct messaging template."
+    },
+    "RelatedInsightReasonId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID used to relate multiple insights to a single model reason in the Einstein Key Accounts Identification (Beta) feature. This is a relationship field.",
+      "relationship_name": "RelatedInsightReason",
+      "relationship_type": "Lookup",
+      "refers_to": "AIInsightReason"
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A number value used to organize the phrases in the model’s insights message in the Einstein Key Accounts Identification (Beta) feature."
+    },
+    "Variance": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The variance weight for this insight reason."
+    }
+  },
+  "special_access_rules": "Prediction insight objects are only available in orgs that have Einstein features, such as Prediction Builder or Case Classification, enabled.",
+  "usage": "When an Einstein feature makes a prediction and saves the results, the following events happen in a single atomic operation: When Einstein writes prediction results back to AI prediction fields, record save custom logic, such as Apex triggers, workflow rules, and assignment rules, aren’t run. To add custom logic based on Einstein prediction results, use a platform event subscriber, such as Process Builder, to get notifications for AIPredictionEvents that contain references to Einstein insight objects. Custom fields can’t be added to Einstein insight objects. Einstein insights contain information about target fields and predicted value. Your org may have created Einstein predictions that are associated with target fields with field-level security restrictions. To control how users access Einstein insights records, use Salesforce data access features such as user profiles and permission sets.\n\nWhen an Einstein feature makes a prediction and saves the results, the following events happen in a single atomic operation:\n\nWhen Einstein writes prediction results back to AI prediction fields, record save custom logic, such as Apex triggers, workflow rules, and assignment rules, aren’t run. To add custom logic based on Einstein prediction results, use a platform event subscriber, such as Process Builder, to get notifications for AIPredictionEvents that contain references to Einstein insight objects.\n\nCustom fields can’t be added to Einstein insight objects.\n\nEinstein insights contain information about target fields and predicted value. Your org may have created Einstein predictions that are associated with target fields with field-level security restrictions. To control how users access Einstein insights records, use Salesforce data access features such as user profiles and permission sets.",
+  "field_reference": {
+    "AiInsightValueId": {
+      "field_label": "AI Insight Value ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Contribution": {
+      "field_label": "Contribution",
+      "type": "double",
+      "precision": "4",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FeatureType": {
+      "field_label": "Feature Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FeatureValue": {
+      "field_label": "Feature Value",
+      "type": "string",
+      "length": "255"
+    },
+    "FieldName": {
+      "field_label": "Field Name",
+      "type": "string",
+      "length": "255"
+    },
+    "FieldValue": {
+      "field_label": "Field Value",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "AI Insight Reason ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Intensity": {
+      "field_label": "Intensity",
+      "type": "double",
+      "precision": "4",
+      "scale": "2"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Operator": {
+      "field_label": "Operator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ReasonLabelKey": {
+      "field_label": "Reason Label Key",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedInsightReasonId": {
+      "field_label": "AI Insight Reason ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "8"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Variance": {
+      "field_label": "Variance",
+      "type": "double",
+      "precision": "4",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

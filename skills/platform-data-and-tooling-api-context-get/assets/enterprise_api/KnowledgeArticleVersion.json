@@ -1,0 +1,459 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "KnowledgeArticleVersion - Data API",
+  "description": "Provides a global view of standard article fields across all types of articles depending on their version. This object is available in API version 18.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ArchivedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who archived the article."
+    },
+    "ArchivedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the article version was archived."
+    },
+    "ArticleArchivedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who archived the article."
+    },
+    "ArticleArchivedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the article was archived."
+    },
+    "ArticleCaseAttachCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of cases where this article is attached."
+    },
+    "ArticleCreatedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who created the article."
+    },
+    "ArticleCreatedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the article was created."
+    },
+    "ArticleMasterLanguage": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The article's original language. Only accessible if your knowledge base supports multiple languages."
+    },
+    "ArticleNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, Sort",
+      "description": "The unique number automatically assigned to the article when it's created. You can't change the format or value for this field."
+    },
+    "ArticleTotalViewCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of views for the article."
+    },
+    "ArticleType": {
+      "type": "string",
+      "properties": "Defaulted on createFilter",
+      "description": "Indicates the API Name of the article type. The ArticleType is assigned to the article when it's created. You can't change the value of this field. This field is available in orgs using Knowledge in Salesforce Classic in API version 26.0 and later."
+    },
+    "AssignedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who assigned the article."
+    },
+    "AssignedToId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user assigned to the article."
+    },
+    "AssignmentDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the article was assigned to a user."
+    },
+    "AssignmentDueDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The due date when an article is assigned."
+    },
+    "AssignmentNote": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Notes to the assignee from the user who assigned the article."
+    },
+    "FirstPublishedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the article was first published."
+    },
+    "IsLatestVersion": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the article is the most current version. (true) or not (false). This field can be true on the online or published version, a draft version in the primary language, a draft version in a translation, and the latest archived version. However, you can’t filter by (PublishState=’Online’) and (IsLatestVersion=false) because the online version is also the latest version. This field is available in API version 24.0 and later."
+    },
+    "IsMasterLanguage": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the article has one or more translations associated with it (true) or not (false). Only accessible if your knowledge base supports multiple languages."
+    },
+    "IsOutOfDate": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the source article has been updated since this translated version was created (true) or not (false). Only accessible if your knowledge base supports multiple languages."
+    },
+    "IsVisibleInApp": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the article is visible in the Articles tab (true) or not (false).",
+      "required": true
+    },
+    "IsVisibleInCsp": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the article is visible in the Customer Portal (true) or not (false).",
+      "required": true
+    },
+    "IsVisibleInPkb": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the article is visible in the public knowledge base (true) or not (false).",
+      "required": true
+    },
+    "IsVisibleInPrm": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the article is visible in the partner portal (true) or not (false).",
+      "required": true
+    },
+    "KnowledgeArticleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the article independent from its version. The value for this field is retrieved from the Id field of the KnowledgeArticle object."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language that the article is written in, such as French or Chinese (Traditional).Querying or searching articles in SOSL require that you specify the Language field in the WHERE clause. The language must be the same for all article types. Before API version 47.0, you must include the Language field to filter queries on Knowledge article versions. In API version 47.0 and later, you can filter queries on Knowledge article versions with or without Language depending on what you are querying."
+    },
+    "LargeLanguageModel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Shows the LLM used to create an article version. This object is available in API version 59.0 and later."
+    },
+    "LastPublishedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the article was last published."
+    },
+    "MasterVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the source article, if the article is the translation of a source article. Only accessible if your knowledge base supports multiple languages."
+    },
+    "MigratedToFromArticleVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID for the corresponding pre- or post-migration article version. Contains values only in orgs that migrate from Classic to Lightning Knowledge. Available in API version 43.0 and later."
+    },
+    "NextReviewDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the article must next be reviewed for accuracy. Available in API version 58.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the article's owner."
+    },
+    "PublishStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The publication status for the article: Draft: any draft articles. Online: articles published in Salesforce Knowledge. Archived: archived articles. A user must have the “Manage Articles” permission enabled to use Online. Article queries and searches in SOQL or SOSL require that you specify either the PublishStatus or the Id field in the WHERE clause. You can search for only one publication status per article type in a single SOSL query. When searching for articles with a PublishStatus of Archived, also check that IsLatestVersion equals false in your WHERE clause."
+    },
+    "SourceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the source from which the article was created (Case or Reply)."
+    },
+    "Summary": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Summary of the article. Maximum size is 1000 characters."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Article's title. Maximum size is 255 characters.",
+      "required": true
+    },
+    "TranslationCompletedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when the article was last translated. Only accessible if your knowledge base supports multiple languages."
+    },
+    "TranslationExportedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when the article was last exported for translation. Only accessible if your knowledge base supports multiple languages."
+    },
+    "TranslationImportedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when the article was last imported for translation. Only accessible if your knowledge base supports multiple languages."
+    },
+    "UrlName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Represents the article's URL. Can contain alphanumeric characters and hyphens but can't begin or end with a hyphen. This value must be unique regardless of context. (For example, a unique value allows you to get expected results when running an Apex test with SeeAllData set to false.) UrlName is case-sensitive and its maximum size is 255 characters.",
+      "required": true
+    },
+    "ValidationStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group",
+      "description": "Shows whether the content of the article has been validated. Possible values are Validated and Not Validated. The default value is Not Validated. This field is available in API version 24.0 or later."
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Group, Sort",
+      "description": "The number assigned to a version of an article. This field is available in API version 24.0 and later."
+    }
+  },
+  "special_access_rules": "Knowledge must be enabled in your org. A user must have the View Articles permission enabled. Salesforce Knowledge users, unlike customer and partner users, must also be granted the Knowledge User feature license.",
+  "usage": "Use this object to query, retrieve, or search for articles across all types of articles depending on their version. You can update draft primary articles. Also, you can delete articles that aren’t drafts. Client applications can use KnowledgeArticleVersion with describeDataCategoryGroups() and describeDataCategoryGroupStructures() to return the category groups and the category structure associated with Salesforce Knowledge. To access an article independent of its version, use the KnowledgeArticle object. In Lightning Knowledge, the type of article is determined by the RecordType field on the concrete derived object (for example, Knowledge__kav). For Knowledge in Salesforce Classic, the type of article is determined by the ArticleType field and the concrete derived object uses the prefix of the article type name (for example, FAQ__kav for the FAQ article type).\n\nUse this object to query, retrieve, or search for articles across all types of articles depending on their version. You can update draft primary articles. Also, you can delete articles that aren’t drafts. Client applications can use KnowledgeArticleVersion with describeDataCategoryGroups() and describeDataCategoryGroupStructures() to return the category groups and the category structure associated with Salesforce Knowledge.\n\nTo access an article independent of its version, use the KnowledgeArticle object.\n\nIn Lightning Knowledge, the type of article is determined by the RecordType field on the concrete derived object (for example, Knowledge__kav). For Knowledge in Salesforce Classic, the type of article is determined by the ArticleType field and the concrete derived object uses the prefix of the article type name (for example, FAQ__kav for the FAQ article type).",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **KnowledgeArticleVersionHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "ArchivedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ArchivedDate": {
+      "field_label": "Archived Date",
+      "type": "datetime"
+    },
+    "ArticleArchivedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ArticleArchivedDate": {
+      "field_label": "Article Archived Date",
+      "type": "datetime"
+    },
+    "ArticleCaseAttachCount": {
+      "field_label": "Article Case Association Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ArticleCreatedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ArticleCreatedDate": {
+      "field_label": "Article Created Date",
+      "type": "datetime"
+    },
+    "ArticleMasterLanguage": {
+      "field_label": "Article Primary Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ArticleNumber": {
+      "field_label": "Article Number",
+      "type": "string",
+      "length": "30"
+    },
+    "ArticleTotalViewCount": {
+      "field_label": "Article Total View Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AssignedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssignedToId": {
+      "field_label": "Assigned To",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssignmentDate": {
+      "field_label": "Assignment Date",
+      "type": "datetime"
+    },
+    "AssignmentDueDate": {
+      "field_label": "Assignment Due Date",
+      "type": "datetime"
+    },
+    "AssignmentNote": {
+      "field_label": "Assignment Note",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalRef": {
+      "field_label": "External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalSourceId": {
+      "field_label": "External Knowledge Connector ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExternalUrl": {
+      "field_label": "External URL",
+      "type": "url",
+      "length": "2400"
+    },
+    "FirstPublishedDate": {
+      "field_label": "First Published Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Knowledge Article Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Is Deleted",
+      "type": "boolean"
+    },
+    "IsExternalData": {
+      "field_label": "Is External Data",
+      "type": "boolean"
+    },
+    "IsLatestVersion": {
+      "field_label": "Is Latest Version",
+      "type": "boolean"
+    },
+    "IsVisibleInApp": {
+      "field_label": "Visible In Internal App",
+      "type": "boolean"
+    },
+    "IsVisibleInCsp": {
+      "field_label": "Visible to Customer",
+      "type": "boolean"
+    },
+    "IsVisibleInPkb": {
+      "field_label": "Visible In Public Knowledge Base",
+      "type": "boolean"
+    },
+    "IsVisibleInPrm": {
+      "field_label": "Visible to Partner",
+      "type": "boolean"
+    },
+    "KnowledgeArticleId": {
+      "field_label": "Knowledge Article ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "KnowledgeGenerationSrc": {
+      "field_label": "Knowledge Generation Source",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Language": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LargeLanguageModel": {
+      "field_label": "Large Language Model",
+      "type": "string",
+      "length": "100"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastPublishedDate": {
+      "field_label": "Last Published Date",
+      "type": "datetime"
+    },
+    "MigratedToFromArticleVersion": {
+      "field_label": "Mapping info between old Article Version and migrated Article Version",
+      "type": "string",
+      "length": "15"
+    },
+    "NextReviewDate": {
+      "field_label": "Next Review Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PublishStatus": {
+      "field_label": "Publication Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SourceId": {
+      "field_label": "Source",
+      "type": "reference",
+      "length": "18"
+    },
+    "Summary": {
+      "field_label": "Summary",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "255"
+    },
+    "UrlName": {
+      "field_label": "URL Name",
+      "type": "string",
+      "length": "255"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "6"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VideoCallInsight - Data API",
+  "description": "Represents the video call insight data associated with a video call. Each record represents the call insight of a specific recording or transcript within a call. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EngagementInsightType": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique identifier of the platform setup entity that defines the configuration for this engagement insight type.",
+      "required": true
+    },
+    "GenerationDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The timestamp when the call insight was generated.",
+      "required": true
+    },
+    "InsightConfigName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the insight configuration, or category, used to classify the insight."
+    },
+    "InsightLanguage": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language associated with the insight type. Each insight type is currently limited to a single language. If the same insight type is mapped to a different language, a new insight type is created."
+    },
+    "InsightModel": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The category of the insight type. Possible values are: FOUNDTIONAL—Foundational GENERATIVE—Generative KEYWORD—Keyword SITUATIONAL—Situational TIME_BASED—Time-Based The default value is KEYWORD.",
+      "required": true
+    },
+    "InsightOccurrenceCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times a particular insight occurred in the transcript."
+    },
+    "InsightSubject": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The specific text, phrase, or subject identified in the video call transcript that serves as the basis for the insight."
+    },
+    "InsightText": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The text content of the insight derived from the video call transcript."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The display name of the insight type."
+    },
+    "Scope": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The scope of the insight type. Possible values are: Organization User The default value is Organization.",
+      "required": true
+    },
+    "VideoCallId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated parent VideoCall record. This field is a relationship field.",
+      "relationship_name": "VideoCall",
+      "relationship_type": "Master-detail",
+      "refers_to": "VideoCall (the master object)",
+      "required": true
+    },
+    "VideoCallRecordingId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the associated parent VideoCallRecording record. This field is a relationship field.",
+      "relationship_name": "VideoCallRecording",
+      "refers_to": "VideoCallRecording"
+    },
+    "VideoCallTranscriptId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the associated VideoCallTranscript record. This field is a relationship field.",
+      "relationship_name": "VideoCallTranscript",
+      "refers_to": "VideoCallTranscript"
+    }
+  },
+  "special_access_rules": "Einstein Conversation Insight must be enabled and the user requires the Conversation Insights for Sales permission set."
+}

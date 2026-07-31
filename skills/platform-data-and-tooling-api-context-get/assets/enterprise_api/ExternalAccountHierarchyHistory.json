@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ExternalAccountHierarchyHistory - Data API",
+  "description": "Represents the history of changes to values in the fields of an external account hierarchy. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Possible values are: Address AnyType AutoNumber Base64 BitVector Boolean Content Currency DataCategoryGroupReference DateOnly DateTime Division Double DynamicEnum Email EncryptedBase64 EncryptedText EntityId EnumOrId ExternalId Fax File HtmlMultiLineText HtmlStringPlusClob InetAddress Json Location MultiEnum MultiLineText Namespace Percent PersonName Phone Raw RecordType SfdcEncryptedText SimpleNamespace StringPlusClob Switchable_PersonName Text TimeOnly Url YearQuarter"
+    },
+    "ExternalAccountHierarchyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the external account hierarchy."
+    },
+    "Field": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Possible values are: Account HierarchyType - Hierarchy Type IsAccessibleToParent - Is Accessible to Parent IsActive - Is Hierarchy Active Name Owner Parent Created - Created. FeedEvent - Feed Event IndividualMerged - Individual Merged Locked - Record Locked OwnerAccepted - Owner (Accepted) OwnerAssignment - Owner (Assignment) Unlocked - Record unlocked"
+    },
+    "NewValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The updated value of the changed field."
+    },
+    "OldValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The previous value of the changed field."
+    }
+  },
+  "special_access_rules": "You must have a Partner or Customer Community Plus license.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataType": {
+      "field_label": "Datatype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ExternalAccountHierarchyId": {
+      "field_label": "External Account Hierarchy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Field": {
+      "field_label": "Changed Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "External Account Hierarchy History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "NewValue": {
+      "field_label": "New Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "OldValue": {
+      "field_label": "Old Value",
+      "type": "anyType",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DataDetectPolicy - Data API",
+  "description": "Represents a set of parameters that specifies the types of sensitive data for search with in a data scan. DataDetect scan policies can also apply filters to a data scan, along with specific objects and fields for scanning. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the scan policy."
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time and date when the data scan completes."
+    },
+    "IsScheduled": {
+      "type": "Boolean",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Determines if the policy is scheduled or not."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the scan policy."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The UserID of the person who owns the record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ScanType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Designates whether the data scan type is AIInference or PatternMatching. The default value is PatternMatching."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time and date when the data scan begins. Data scans can start anytime within a 30-day window from the current date."
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExternalStringLocalization - Tooling API",
+  "description": "Represents the translation of custom labels for a UI component represented by the ExternalString object. This object is available in API version 49.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ExternalStringId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the ExternalString associated with the custom label that is being translated."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The language for this translated text. Note: You can’t change the language of an existing ExternalString."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the package of which the custom label is a part."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The translated string value, limited to 32,000 characters or 96,000 bytes of data, up to the length of the translated string."
+    }
+  },
+  "special_access_rules": "- Your organization must be using Professional, Enterprise, Performance, Unlimited, or Developer edition.\n- Translation Workbench and data translation must be enabled in your org.\n- To view this object, you must have the “View Setup and Configuration” permission."
+}

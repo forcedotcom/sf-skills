@@ -1,0 +1,134 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ContactCenterChannel - Data API",
+  "description": "Represents a junction object that relates a Bring Your Own Channel for Contact Center as a Service (CCaaS) messaging channel to a CallCenter object for Bring Your Own Channel for CCaaS. This object also represents the routing details for a voicemail configuration and routing information for callback requests. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "For Bring Your Own Channel for CCaaS, this field represents the unique ID of the Bring Your Own Channel messaging channel (MessagingChannel) that’s associated with the contact center (CallCenterId). Available in API version 60.0 and later. This field is a relationship field.",
+      "relationship_name": "Channel",
+      "refers_to": "MessagingChannel"
+    },
+    "ContactCenterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "This field is a relationship field. For Bring Your Own Channel for CCaaS, this field represents the unique ID of the contact center (CallCenterId) that’s associated with the Bring Your Own Channel messaging channel (MessagingChannel). Available in API version 60.0 and later. This field is a relationship field.",
+      "relationship_name": "ContactCenter",
+      "relationship_type": "Master-detail",
+      "refers_to": "CallCenter (the master object)"
+    },
+    "OmniCallbackFallbackQueueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If callbacks are configured for the contact center and the contact center uses Omni-Channel Unified Routing, this field represents the unique ID of the fallback queue to use if contact request routing through an Omni-Channel flow fails. Don't change the value in this field. Instead, configure contact request routing in Lightning Experience. Available in API version 65.0 and later. This field is a relationship field.",
+      "relationship_name": "OmniCallbackFallbackQueue",
+      "refers_to": "Group"
+    },
+    "OmniCallbackHandler": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If callbacks are configured for the contact center and the contact center uses Omni-Channel Unified Routing, this field represents the unique ID of the flow or queue used to route contact requests. Don't change the value in this field. Instead, configure contact request routing in Lightning Experience. Available in API version 65.0 and later."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Available in API version 63.0 only. For internal use."
+    },
+    "VoicemailFallbackQueueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If voicemail routing is configured for the contact center, this field represents the unique ID of the fallback queue to use if voicemail routing fails. Don't change the value in this field. Instead, configure voicemail routing in Lightning Experience. This field is a relationship field.",
+      "relationship_name": "VoicemailFallbackQueue",
+      "refers_to": "Group"
+    },
+    "VoicemailHandler": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If voicemail routing is configured for the contact center, this field represents the unique ID of the flow used to route voicemails. Don't change the value in this field. Instead, configure voicemail routing in Lightning Experience."
+    }
+  },
+  "special_access_rules": "To access this object, Salesforce Voice with Amazon Connect, Salesforce Voice with Partner Telephony, Salesforce Voice with Partner Telephony from Amazon Connect, or Bring Your Own Channel for Contact Center as a Service (CCaaS) must be enabled. To access this object, you must be a SysAdmin user or have ViewSetup user permissions.",
+  "field_reference": {
+    "ChannelId": {
+      "field_label": "Messaging Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContactCenterId": {
+      "field_label": "Call Center ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Contact Center Channel ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OmniCallbackFallbackQueueId": {
+      "field_label": "Queue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OmniCallbackHandler": {
+      "field_label": "Omni callback handler",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "VoicemailFallbackQueueId": {
+      "field_label": "Queue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "VoicemailHandler": {
+      "field_label": "Voicemail handler",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

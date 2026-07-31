@@ -1,0 +1,173 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "PartnerFundClaim - Data API",
+  "description": "Represents a claim of funds from the partner marketing budget by a channel partner. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AllocationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the partner fund allocation."
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Amount of the claim."
+    },
+    "BudgetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the partner marketing budget."
+    },
+    "ChannelPartnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the channel partner."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the fund claim."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it's possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the fund claim."
+    },
+    "RequestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the partner fund request."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable Restricted picklist, Sort, Update",
+      "description": "Status of the fund claim. Values are: Draft Approved Rejected Paid"
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Title of the fund claim."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **PartnerFundClaimFeed**: Feed tracking is available for the object.\n- **PartnerFundClaimHistory**: History is available for tracked fields of the object.\n- **PartnerFundClaimOwnerSharingRule**: Sharing rules are available for the object.\n- **PartnerFundClaimShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AllocationId": {
+      "field_label": "Partner Fund Allocation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BudgetId": {
+      "field_label": "Partner Marketing Budget ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChannelPartnerId": {
+      "field_label": "Channel Partner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Partner Fund Claim ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RequestId": {
+      "field_label": "Partner Fund Request ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Title": {
+      "field_label": "Partner Fund Claim Name",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

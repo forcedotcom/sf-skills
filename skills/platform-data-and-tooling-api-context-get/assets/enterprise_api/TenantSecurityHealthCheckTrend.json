@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityHealthCheckTrend - Data API",
+  "description": "Stores the history of Security Health Check scores for a connected tenant within Security Center. Health Check in Security Center displays Health Check scores and the average risk settings for all your tenants in one place. This object belongs to the parent tenant and stores Health Check data pushed from child tenants. This object is available for Security Center subscribers in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Baseline": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The definition of an org’s security settings standards."
+    },
+    "HighRisk": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates that fields with this picklist value contain data highly sensitive to your company."
+    },
+    "Informational": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates that fields with this picklist value contain data that isn't sensitive for your company."
+    },
+    "LowRisk": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates that fields with this picklist value contain data with low sensitivity for your company."
+    },
+    "MediumRisk": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates that fields with this picklist value contain data with moderate sensitivity for your company."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the tenant that was scored."
+    },
+    "ProcessedTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time when the Health Check score was calculated."
+    },
+    "Score": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The summary score that shows how your org measures against a security baseline."
+    },
+    "ScoreDelta": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage amount that the Health Check score changed."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the tenant that was scored."
+    },
+    "TenantOriginalIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The ID of the Health Check Trend record for a tenant. This field is unique within your org."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityHealthCheckTrendChangeEvent**: Change events are available for the object.\n- **TenantSecurityHealthCheckTrendFeed**: Feed tracking is available for the object.\n- **TenantSecurityHealthCheckTrendHistory**: History is available for tracked fields of the object.\n- **TenantSecurityHealthCheckTrendOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityHealthCheckTrendShare**: Sharing is available for the object."
+}

@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "Territory2ObjSharingConfig - Data API",
+  "description": "Represents the sharing access level of objects assigned to a particular territory. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccessLevel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The access level of the object for the particular territory."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The territory on which the access level is defined. This field is a relationship field.",
+      "relationship_name": "Territory2",
+      "relationship_type": "Lookup",
+      "refers_to": "Territory2"
+    },
+    "TerritoryMgmtObjectConfigId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The object configuration record the territory access level is related to. This field is a relationship field.",
+      "relationship_name": "TerritoryMgmtObjectConfig",
+      "relationship_type": "Lookup",
+      "refers_to": "TerritoryMgmtObjectConfig"
+    }
+  },
+  "special_access_rules": "Only standard and partner users can access this object. Any standard or partner user can view object sharing configuration records in an active model. Users without the Manage Territories permission can’t view territory records in the or state.\n\nOnly standard and partner users can access this\n         object. Any standard or partner user can view object sharing configuration records in an\n         active model. Users without the Manage Territories permission can’t view territory records\n         in the",
+  "field_reference": {
+    "AccessLevel": {
+      "field_label": "Access Level",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Territory2 Object Sharing Configuration ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TerritoryMgmtObjectConfigId": {
+      "field_label": "Territory Management Object Configuration ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

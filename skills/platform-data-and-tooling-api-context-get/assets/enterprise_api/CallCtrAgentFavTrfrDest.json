@@ -1,0 +1,117 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "CallCtrAgentFavTrfrDest - Data API",
+  "description": "Represents a transfer destination that has been marked (starred) as a favorite in the Omni-Channel softphone by a contact center agent for voice call transfers. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AgentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique ID of the contact center agent who marked the transfer destination as a favorite. This field is a relationship field.",
+      "relationship_name": "Agent",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "CallCenterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID of the contact center from where the agent starred the transfer destination as a favorite. This field is a relationship field.",
+      "relationship_name": "CallCenter",
+      "relationship_type": "Lookup",
+      "refers_to": "CallCenter"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the transfer destination record that’s marked as a favorite."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The unique ID of the user who owns this object. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "TransferDestination": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique ID of the transfer destination that’s marked as a favorite. This is an external ID."
+    }
+  },
+  "field_reference": {
+    "AgentId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CallCenterId": {
+      "field_label": "Call Center ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Call Center Agent Favorite Transfer Destination ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TransferDestination": {
+      "field_label": "Transfer Destination",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

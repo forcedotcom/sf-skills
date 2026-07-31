@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "BusinessProcessDefinition - Data API",
+  "description": "Setup object that stores information about stages in a customer lifecycle map. The stages are associated with surveys and questions created using Salesforce Surveys. This object is reserved for internal use, and is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BusinessProcessGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier of the customer lifecycle map associated with the stage."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Developer name of the stage."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the MasterLabel. Possible values are: da—Danish de—German en_US—English es—Spanish es_MX—Spanish (Mexico) fi—Finnish fr—French it—Italian ja—Japanese ko—Korean nl_NL—Dutch no—Norwegian pt_BR—Portuguese (Brazil) ru—Russian sv—Swedish th—Thai zh_CN—Chinese (Simplified) zh_TW—Chinese (Traditional)"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label of the stage."
+    },
+    "ProcessDescription": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Description of the stage."
+    },
+    "SequenceNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The position of the stage in the associated customer lifecycle map."
+    }
+  },
+  "field_reference": {
+    "BusinessProcessGroupId": {
+      "field_label": "Business Process Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Object Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Business Process Definition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "ProcessDescription": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "SequenceNumber": {
+      "field_label": "Sequence Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

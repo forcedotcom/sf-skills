@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FeedAttachment - Data API",
+  "description": "Represents an attachment to a feed item, such as a file attachment or a link. Use FeedAttachment to add various attachments to one feed item. This object is available in API version 36.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "FeedEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the associated feed entity that contains this attachment."
+    },
+    "RecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the record that this feed attachment contains. For inline images, RecordId is a ContentDocument ID. For content attachments, RecordId is a ContentVersion ID, For feed items, RecordId is a FeedItem ID."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The title of this feed attachment. When Type is Link, Title value is the label for the attachment link. Otherwise, Title value isn’t used."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of this feed attachment. Valid values are: 0 Content—A content attachment. 1 InlineImage—An inline image. The system creates an inline image attachment when an image is added to the body of the associated FeedItem. You can’t add an inline image directly using FeedAttachment. 2 Link—A link. 3 FeedEntity—A feed entity, for example, a post that is shared. Available in API version 39 and later in Lightning Experience. 4 ChatterExtension—a Rich Publisher App that’s integrated with the Chatter publisher. 5 Record—A record."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The string value of this FeedAttachment. This field is optional. If the feed attachment is a Link FeedAttachment, the value is the link URL string."
+    }
+  },
+  "usage": "Then insert the attachment.\n\n//create and insert post\n\nFeedItem post =\n\nFeedItem();\npost.Body =\n\n'HelloThere'\n\n;\npost.ParentId =\n\nID_OF_LEAD_ENTITY\n\npost.Title =\n\nThen insert the\n\t\t\t\t\t\tattachment.\n\n//create and associate a content attachment to the post\n\nFeedAttachment feedAttachment =\n\nFeedAttachment();\nfeedAttachment.FeedEntityId = post.Id;\nfeedAttachment.RecordId =\n\nID_OF_CONTENT_VERSION\n\nfeedAttachment.Title =\n\nfeedAttachment.Type =\n\nfeedAttachment;\n\nSELECT Id FROM FeedAttachment WHERE FeedEntityId = '\n\nsome_feedItem_id\n\nSELECT Body, (SELECT RecordId, Title, Type, Value FROM FeedAttachments) \nFROM FeedItem \nWHERE Id = '\n\nsome_feedItem_id",
+  "wsdl_segment": "```xml\n<complexType name=\"FeedAttachment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"FeedEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"RecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Value\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "FeedEntityId": {
+      "field_label": "Feed Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Feed Attachment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "RecordId": {
+      "field_label": "Attachment Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Title": {
+      "field_label": "Feed Attachment Title",
+      "type": "string",
+      "length": "255"
+    },
+    "Type": {
+      "field_label": "Feed Attachment Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Value": {
+      "field_label": "Feed Attachment Value",
+      "type": "string",
+      "length": "1000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

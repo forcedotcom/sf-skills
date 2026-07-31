@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "WorkPerformanceCycle - Data API",
+  "description": "Represents feedback that is gathered to assess the performance of a specific set of employees.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActivityFrom": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The date that you want to start filtering the WDC objects to help requesters create accurate summaries. The start of the evaluation period."
+    },
+    "ActivityTo": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The date that you want to stop filtering the WDC objects to help requesters create accurate summaries. The end of the evaluation period."
+    },
+    "CurrentTask": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The current task that the performance summary cycle is engaged in, including deploying and sharing."
+    },
+    "LastManagerRequestsSharedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when all manager requests are set to be shared."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time stamp that indicates when the current user last viewed a record that is related to this WorkPerformanceCycle."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time stamp that indicates when the current user last viewed this WorkPerformanceCycle. If this value is null, this record might have been only referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the performance summary cycle that employees will participate in. This name is created by the administrator and is visible on all respective notifications and in the UI."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the WorkPerformanceCycle."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The state that the performance summary cycle is in. Available pick list values: Setup: The summary is in draft. In Progress: The summary is deployed and people are answering the questions that were created. Finished: The summary is no longer in progress. Error: The summary encountered an error."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **WorkPerformanceCycleFeed**: Feed tracking is available for the object.\n- **WorkPerformanceCycleHistory**: History is available for tracked fields of the object.\n- **WorkPerformanceCycleOwnerSharingRule**: Sharing rules are available for the object.\n- **WorkPerformanceCycleShare**: Sharing is available for the object."
+}

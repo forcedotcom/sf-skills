@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ApexExecutionEventLog - Data API",
+  "description": "Apex Execution event logs contain details about Apex classes that are used. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BotIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the bot."
+    },
+    "BotSessionIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The bot session ID."
+    },
+    "CalloutTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Time spent waiting on webservice callouts, in milliseconds."
+    },
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. If the user’s session context isn't available, this field returns a blank value."
+    },
+    "CpuTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "DatabaseTotalTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Time (in milliseconds) spent waiting for database processing in aggregate for all operations in the request. Compare this field to CpuTime to determine whether performance issues are occurring in the database layer or in your own code."
+    },
+    "EntryPoint": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The entry point for this Apex execution. For example, GeneralCloner.cloneAndInsertRecords or VF- /apex/CloneUser."
+    },
+    "ExecutionTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The end-to-end Apex execution time (in milliseconds)."
+    },
+    "IsLongRunningRequest": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the request is counted against your org’s concurrent long-running Apex request limit (true) or not (false). Asynchronous Apex jobs (batch, queueable, scheduled, and future), background processes, and bulk API requests are not counted against the concurrent long-running limit."
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "PlannerIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the agent planner."
+    },
+    "Quiddity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of outer execution associated with this event. For example: A–ACS Batch Apex C–Scheduled Apex E–Inbound Email Service F–Future H–Apex REST I–Invocable Action K–Quick Action L–Lightning M–Remote Action P–Bulk Apex jobs running in parallel Q–Queueable R–Synchronous uncategorized (which is where all transactions not specified elsewhere end up) S–QueryLocator Batch Apex (Batch Apex jobs run faster when the start method returns a QueryLocator object that doesn't include related records via a subquery. See Batch Apex Best Practices in Using Batch Apex.) T–Tests Apex V–Visualforce W–SOAP Webservices X–Execute Anonymous Implementations of the Process.Plugin interface use the quiddity value R."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestId. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RunTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of time the request took, as measured by SFDC code."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "SoqlQueryCount": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The number of SOQL queries that were executed during the event.This value is the aggregate across all namespaces, and can exceed the per-namespace limits. For test executions, the aggregate total value across all test methods executed in the request is used. If you are using this value to track limit consumption, consider filtering out test execution quiddities (indicated by the Quiddity field)."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "Uri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

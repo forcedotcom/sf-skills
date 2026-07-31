@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ApexTestQueueItem - Data API",
+  "description": "Represents a single Apex class in the Apex job queue. This object is available in API version 23.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The Apex class whose tests are to be executed. This is a relationship field. Relationship Name ApexClass Relationship Type Lookup Refers To ApexClass"
+    },
+    "ExtendedStatus": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The pass rate of the test run. For example: “(4/6)”. This means that four out of a total of six tests passed. If the class fails to execute, this field contains the cause of the failure."
+    },
+    "ParentJobId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Points to the AsyncApexJob that represents the entire test run. If you insert multiple Apex test queue items in a single bulk operation, the queue items share the same parent job. This means that a test run can consist of the execution of the tests of several classes if all the test queue items are inserted in the same bulk operation."
+    },
+    "ShouldSkipCodeCoverage": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether to opt out of collecting code coverage information during Apex test runs. Available in API version 43.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the job. Valid values are: Holding1 Queued Preparing Processing Aborted Completed Failed 1 This status applies to batch jobs in the Apex flex queue."
+    },
+    "TestRunResultId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the associated ApexTestRunResult object."
+    }
+  },
+  "special_access_rules": "In API version 49.0 and later, users must have the View Setup and Configuration permission to access this object.",
+  "usage": "Insert an ApexTestQueueItem object to place its corresponding Apex class in the Apex job queue for execution. The Apex job executes the test methods in the class. To abort a class that is in the Apex job queue, perform an update operation on the ApexTestQueueItem object and set its Status field to Aborted.\n\nInsert an ApexTestQueueItem object to place its corresponding Apex class in the Apex job queue for execution. The Apex job executes the test methods in the class.\n\nTo abort a class that is in the Apex job queue, perform an update operation on the ApexTestQueueItem object and set its Status field to Aborted. If you insert multiple Apex test queue items in a single bulk operation, the queue items share the same parent job. This means that a test run can consist of the execution of the tests of several classes if all the test queue items are inserted in the same bulk operation.",
+  "wsdl_segment": "```xml\n<complexType name=\"ApexTestQueueItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApexClass\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"ApexClassId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExtendedStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ParentJobId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ShouldSkipCodeCoverage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TestRunResultId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ApexClassId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExtendedStatus": {
+      "field_label": "Status Detail",
+      "type": "string",
+      "length": "1000"
+    },
+    "Id": {
+      "field_label": "Apex Test Queue Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ParentJobId": {
+      "field_label": "Apex Job ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShouldSkipCodeCoverage": {
+      "field_label": "Should Skip Code Coverage",
+      "type": "boolean"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TestRunResultId": {
+      "field_label": "Apex Test Run Result ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

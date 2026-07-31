@@ -1,0 +1,179 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "MobileSecurityPolicy - Data API",
+  "description": "Enables mobile security policies on the Salesforce mobile app with Enhanced Mobile Security. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "EffectiveDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date a mobile security policy is enforced."
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "A value indicating whether a mobile security policy is enabled. The default value is 'false'."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The two-to five-character code that represents the language and locale ISO."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label of the mobile security policy."
+    },
+    "MobilePlatform": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The mobile operating system. Possible values are: Android iOS"
+    },
+    "MobileSecurityAssignmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the ID of the mobile security assignment. This is a relationship field.",
+      "relationship_name": "MobileSecurityAssignment",
+      "relationship_type": "Lookup"
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that aren’t Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix."
+    },
+    "RuleValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Value of the mobile security policy rule."
+    },
+    "RuleValueType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of mobile security policy rule. Possible values are: Boolean Text TextList"
+    },
+    "SeverityLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The severity level of a mobile security policy. Possible values are: Critical Error Info Warn"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of mobile security policy. Possible values are: AllowedDeviceList—Allowed Device List Block3dTouch—Block 3D Touch BlockCalendar—Block Calendar BlockCamera—Block Camera BlockContacts—Block Contacts BlockCustomKeyboard—Block Custom Keyboard BlockFileBackup—Block File Backup BlockMicrophone—Block Microphone BlockOsSharing—Block OS Share Actions BlockedDeviceList—Blocked Device List BrowserUriScheme—Mobile Browser URI Scheme CheckBiometric—Check Biometric Login Data DevicePasscode—Require Device Passcode DisableUrlCaching—Disable URL Caching JailbrokenDevice—Block Jailbroken Device LogCertPin—Log Certificate Pinning LogEmail—Log Email LogPhonecall—Log Phone Call LogPolicyResult—Log Security Policy Evaluation Result LogScreenshot—Log Screenshot LogTextmessage—Log SMS LogoutAfterRestart—Log Out User After Device Restart LogoutOnBiometricChange—Log Out User After Changing Biometric Login Data MalwareDetection—Malware Detection ManInMiddle—Block Man In The Middle Attack MaxOffline—Maximum Days Offline Without Policy Refresh MaximumAppVersion—Maximum Application Version MaximumOsVersion—Maximum OS Version MinimumAppVersion—Minimum Application Version MinimumOsVersion—Minimum OS Version MinimumSecurityPatchVersion—Minimum Security Patch Version PhonecallUriScheme—Phone Call Application Handler Screenshot—Block Screenshot"
+    }
+  },
+  "special_access_rules": "Accessing this object requires the Enhanced Mobile App Security add-on subscriptions and the Enforce Enhanced Mobile App Security user permission.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Mobile Security Policy ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEnabled": {
+      "field_label": "Is Enabled",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "MobilePlatform": {
+      "field_label": "Mobile Platform",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MobileSecurityAssignmentId": {
+      "field_label": "Mobile Security Assignment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "RuleValue": {
+      "field_label": "Rule Value",
+      "type": "string",
+      "length": "255"
+    },
+    "RuleValueType": {
+      "field_label": "Rule Value Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SeverityLevel": {
+      "field_label": "Severity Level",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

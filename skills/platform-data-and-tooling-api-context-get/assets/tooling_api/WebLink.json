@@ -1,0 +1,153 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "WebLink - Tooling API",
+  "description": "Represents a custom button or link. Available in the Tooling APIfrom API version 34.0 or later.",
+  "supported_soap_calls": "`getUpdated()`, `query()`, `retrieve()`, `search()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A description of the button or link."
+    },
+    "DisplayType": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Represents how the button or link is rendered. Valid values are: link for a hyperlink button for a button massActionButton for a button attached to a related list"
+    },
+    "EncodingKey": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "Valid values include: UTF-8—Unicode (UTF-8) ISO-8859-1—General US & Western Europe (ISO-8859–1, ISO-LATIN-1) Shift_JIS—Japanese (Shift-JIS) ISO-2022-JP—Japanese (JIS) EUC-JP—Japanese (EUC-JP) x-SJIS_0213—Japanese (Shift-JIS_2004) ks_c_5601-1987—Korean (ks_c_5601-1987) Big5—Traditional Chinese (Big5) GB2312—Simplified Chinese (GB2312) Big5-HKSCS—Traditional Chinese Hong Kong (Big5–HKSCS)"
+    },
+    "EntityDefinition": {
+      "type": "EntityDefinition",
+      "properties": "Filter, Group, Sort.",
+      "description": "Available in API version 34.0. The entity definition for the object associated with this button or link.",
+      "required": true
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort.",
+      "description": "ID of the record associated with the button or link. The record’s object type is in EntityDefinition.",
+      "required": true
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort.",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "HasMenubar": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort.",
+      "description": "If OpenType is newWindow, this field indicates whether to show the browser menu bar for the popup window (true, or not (false). For other values of OpenType, don't specify a value here."
+    },
+    "HasScrollbars": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort.",
+      "description": "If the value of OpenType is newWindow, this field indicates whether to show the scroll bars for the window (true) or not (false). For other values of OpenType, don’t specify a value here."
+    },
+    "HasToolbar": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort.",
+      "description": "If the value of OpenType is newWindow, this field indicates whether to show the browser toolbar for the window (true) or not (false). For other values of OpenType, don’t specify a value here."
+    },
+    "Height": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort.",
+      "description": "Required if the value of OpenType is newWindow. Height in pixels of the window opened by the button or link. For other values of OpenType, don’t specify a value here.",
+      "required": true
+    },
+    "IsResizable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort.",
+      "description": "If the value of OpenType is newWindow, this field indicates whether to allow resizing of the window (true) or not (false). For other values of OpenType, don’t specify a value here."
+    },
+    "LinkType": {
+      "type": "WebLinkType enumerated list",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Represents whether the content of the button or link is specified by a URL, an sControl, a JavaScript code block, or a Visualforce page. url sControl javascript page flow—Reserved for future use.",
+      "required": true
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Master label for this object. This display value is the internal label that is not translated. Limit: 240 characters."
+    },
+    "Metadata": {
+      "type": "mns:WebLink",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The metadata for this object as defined in the Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Name to display on the page.",
+      "required": true
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Sort.",
+      "description": "The namespace prefix associated with this object. Each Developer Edition organization that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values: In Developer Edition organizations, the namespace prefix is set to the namespace prefix of the organization for all objects that support it. There is an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition organization of the package developer. In organizations that are not Developer Edition organizations, NamespacePrefix is only set for objects that are part of an installed managed package. There is no namespace prefix for all other objects."
+    },
+    "OpenType": {
+      "type": "WebLinkWindowType enumerated list",
+      "properties": "Filter, Group, Sort",
+      "description": "The window style used to display the content. Valid values are: newWindow sidebar noSidebar replace onClickJavaScript"
+    },
+    "Position": {
+      "type": "WebLinkPosition enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If the value of OpenType is newWindow, this field indicates how the new window should be displayed. Otherwise, don’t specify a value. Valid values are: fullScreen none topLeft"
+    },
+    "RequireRowSelection": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If the value of OpenType is massAction, this field indicates whether to require individual row selection to execute the action for this button (true) or not (false). Otherwise, leave this field empty."
+    },
+    "Scontrol": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "If the value of LinkType is sControl, this field represents the name of the sControl. Otherwise, leave this field empty."
+    },
+    "ShowsLocation": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "If the value of OpenType is newWindow, this field indicates whether to show the browser location bar for the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "ShowsStatus": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "If the value of OpenType is newWindow, show the browser status bar for the window (true. Otherwise, don’t specify a value."
+    },
+    "Url": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the URL of the page to link to. Can include fields as tokens within the URL. Limit: 1,024 KB.If the value of LinkType is url, this field represents the URL value. If the value of LinkType is javascript, this field represents the JavaScript content. For other values of LinkType, leave this field empty. Content must be escaped in a manner consistent with XML parsing rules.",
+      "required": true
+    },
+    "Width": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The width in pixels of the window opened by the button or link.Required if the value of OpenType is newWindow. Otherwise, leave this field empty."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"Encoding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UTF-8\"/>\n    <xsd:enumeration value=\"ISO-8859-1\"/>\n    <xsd:enumeration value=\"Shift_JIS\"/>\n    <xsd:enumeration value=\"ISO-2022-JP\"/>\n    <xsd:enumeration value=\"EUC-JP\"/>\n    <xsd:enumeration value=\"ks_c_5601-1987\"/>\n    <xsd:enumeration value=\"Big5\"/>\n    <xsd:enumeration value=\"GB2312\"/>\n    <xsd:enumeration value=\"Big5-HKSCS\"/>\n    <xsd:enumeration value=\"x-SJIS_0213\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"WebLink\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:WebLink\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"WebLink\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"availability\" type=\"tns:WebLinkAvailability\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayType\" type=\"tns:WebLinkDisplayType\"/>\n        <xsd:element name=\"encodingKey\" minOccurs=\"0\" type=\"tns:Encoding\"/>\n        <xsd:element name=\"hasMenubar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasScrollbars\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasToolbar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"isResizable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"linkType\" type=\"tns:WebLinkType\"/>\n        <xsd:element name=\"masterLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"openType\" type=\"tns:WebLinkWindowType\"/>\n        <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"position\" minOccurs=\"0\" type=\"tns:WebLinkPosition\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"requireRowSelection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"scontrol\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"showsLocation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showsStatus\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"url\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"WebLinkAvailability\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"online\"/>\n    <xsd:enumeration value=\"offline\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkDisplayType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"link\"/>\n    <xsd:enumeration value=\"button\"/>\n    <xsd:enumeration value=\"massActionButton\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"fullScreen\"/>\n    <xsd:enumeration value=\"none\"/>\n    <xsd:enumeration value=\"topLeft\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"url\"/>\n    <xsd:enumeration value=\"sControl\"/>\n    <xsd:enumeration value=\"javascript\"/>\n    <xsd:enumeration value=\"page\"/>\n    <xsd:enumeration value=\"flow\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkWindowType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"newWindow\"/>\n    <xsd:enumeration value=\"sidebar\"/>\n    <xsd:enumeration value=\"noSidebar\"/>\n    <xsd:enumeration value=\"replace\"/>\n    <xsd:enumeration value=\"onClickJavaScript\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

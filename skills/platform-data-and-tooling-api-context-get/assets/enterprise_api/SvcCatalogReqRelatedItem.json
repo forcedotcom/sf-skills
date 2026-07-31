@@ -1,0 +1,111 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "SvcCatalogReqRelatedItem - Data API",
+  "description": "Represents an item related to a Service Catalog Request. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the related item."
+    },
+    "RelatedExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Text containing an ID from any external system."
+    },
+    "RelatedInternalRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Salesforce record related to this request. This reference must be for an object that has the following characteristics. It's a standard object. It must allow custom fields. It's referencable (that is, it can be the target of a lookup). It can be the target of a custom lookup field. It contains a Name field. It isn't dependent on a junction object. It isn't a virtual object or a setup object. This is a polymorphic relationship field.",
+      "relationship_name": "RelatedInternalRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Address, Asset, AssociatedLocation, AuthorizationForm, AuthorizationFormConsent, AuthorizationFormDataUse, AuthorizationFormText, BusinessBrand, Case, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, Contact, ContactPointAddress, ContactPointConsent, ContactPointEmail, ContactPointPhone, ContactPointTypeConsent, Contract, ContractLineItem, Customer, DataUseLegalBasis, DataUsePurpose, Employee, EngagementChannelType, Entitlement, Idea, Individual, InternalOrganizationUnit, Lead, Location, MessagingEndUser, Opportunity, Order, OrderItem, PartyConsent, Pricebook2, ProcessException, Product2, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, QuickText, Recommendation, Seller, ServiceContract, SocialPersona, SocialPost, Solution, SurveyInvitation, SurveySubject, UserProvisioningRequest, VoiceCall"
+    },
+    "SvcCatalogRequestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The SvcCatalogRequest record. This is a relationship field.",
+      "relationship_name": "SvcCatalogRequest",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogRequest"
+    }
+  },
+  "special_access_rules": "To access this object, get the Service Catalog permission set license, Employee Productivity Starter license, or Employee Productivity Plus add-on license.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Service Catalog Request Related Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Service Catalog Request Related Item Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedChildProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedExternalId": {
+      "field_label": "Related External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedInternalRecordId": {
+      "field_label": "Related Internal Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SvcCatalogRequestId": {
+      "field_label": "Service Catalog Request ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

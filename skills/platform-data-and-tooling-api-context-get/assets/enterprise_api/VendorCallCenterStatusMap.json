@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "VendorCallCenterStatusMap - Data API",
+  "description": "Stores a mapping between a call center vendor agent status and a Salesforce presence status for an associated call center. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CallCenterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Reference to a call center. This is a relationship field.",
+      "relationship_name": "CallCenter",
+      "relationship_type": "Lookup",
+      "refers_to": "CallCenter"
+    },
+    "ExternalStatus": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Status value to set for the call center vendor agent."
+    },
+    "ServicePresenceStatusId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Reference to a presence status that can be assigned to a service channel. This is a relationship field.",
+      "relationship_name": "ServicePresenceStatus",
+      "relationship_type": "Lookup",
+      "refers_to": "ServicePresenceStatus"
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel and Salesforce Voice must be enabled.\n\nTo access this object, Omni-Channel and Salesforce\n         Voice must be enabled.",
+  "field_reference": {
+    "CallCenterId": {
+      "field_label": "Call Center ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalStatus": {
+      "field_label": "External Presence Status",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Vendor Call Center Status Mapping ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ServicePresenceStatusId": {
+      "field_label": "Service Presence Status ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "MobileSecurityUserMetric - Data API",
+  "description": "Represents the metrics for users who have Enhanced Mobile Security policies enforced. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "MetricsDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "The date the metrics were collected."
+    },
+    "UserCount": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The number of users who have mobile security policies enforced."
+    }
+  },
+  "special_access_rules": "Accessing this object requires the Enhanced Mobile App Security add-on subscriptions and the Enforce Enhanced Mobile App Security user permission.",
+  "usage": "A user with the Manage Enhanced Mobile App Security permission can run this SOQL query.\n\nSELECT MetricsDate, UserCount\n\nFROM MobileSecurityUserMetric\n\nORDER BY MetricsDate DESC",
+  "field_reference": {
+    "Id": {
+      "field_label": "Mobile Security User Metric ID",
+      "type": "id",
+      "length": "18"
+    },
+    "MetricsDate": {
+      "field_label": "Metrics Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserCount": {
+      "field_label": "User Count",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

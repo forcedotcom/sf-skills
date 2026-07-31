@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "WorkReward - Data API",
+  "description": "Used to store reward codes tied to a Reward Fund. Reward Funds must have at least one WorkReward record.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Code": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Represents a singe reward code tied to a RewardFundId."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Represents the User ID of Owner of WorkReward record"
+    },
+    "RecipientId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Salesforce User ID for User associated with this WorkReward record."
+    },
+    "RedemptionDisclaimer": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The disclaimer information about the WorkReward."
+    },
+    "RedemptionInfo": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The instructions for redeeming the WorkReward."
+    },
+    "RedemptionUrl": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The URL for redeeming the WorkReward."
+    },
+    "RewardFundId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Salesforce unique ID for WorkRewardFund record that is associated with WorkReward record."
+    },
+    "RewardFundTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Salesforce unique ID of the WorkRewardFundType associated with the WorkReward."
+    },
+    "Value": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The value of the WorkReward."
+    }
+  },
+  "special_access_rules": "You must have the Reward permission enabled in order to use the Rewards feature, including WorkRewardFund and WorkReward.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **WorkRewardHistory**: History is available for tracked fields of the object.\n- **WorkRewardOwnerSharingRule**: The original WDC feature is unavailable as of Spring '22. This object isn't available as of API version 54.0. For more information, see Phased WDC (legacy Work.com) Feature Retirement.\n- **WorkRewardShare**: Sharing rules are available for the object."
+}

@@ -1,0 +1,117 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "WebStoreSearchProdSettings - Data API",
+  "description": "Search settings for a WebStore product search. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "ISO code for the store’s currency. The default value is USD. Possible values are: USD—U.S. Dollar The default value is USD."
+    },
+    "IsExcludedFromSearch": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the product is excluded from searches. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the search settings for the WebStore product search."
+    },
+    "ProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the product to search. This field is a relationship field.",
+      "relationship_name": "Product",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "WebStoreId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Webstore to search. This field is a relationship field.",
+      "relationship_name": "WebStore",
+      "relationship_type": "Lookup",
+      "refers_to": "WebStore"
+    }
+  },
+  "special_access_rules": "You must have a B2B Commerce or D2C Commerce commerce license to create a web store.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WebStoreSearchProdSettingsChangeEvent**: Change events are available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Store Search Product Settings ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsExcludedFromSearch": {
+      "field_label": "Is Excluded From Search",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Store Search Product Settings",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WebStoreId": {
+      "field_label": "Store ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

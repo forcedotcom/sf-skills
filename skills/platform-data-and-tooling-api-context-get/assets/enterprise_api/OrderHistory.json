@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OrderHistory - Data API",
+  "description": "Represents historical information about changes that have been made to the standard fields of the associated order, or to any custom fields with history tracking enabled.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DataType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Data type of the field that was changed."
+    },
+    "Field": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Name of the order field that was modified, or a special value to indicate some other modification to the order."
+    },
+    "NewValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "New value of the modified order field. Maximum of 255 characters."
+    },
+    "OldValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "Previous value of the modified order field. Maximum of 255 characters."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the order associated with this record. This is a relationship field.",
+      "relationship_name": "Order",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    }
+  },
+  "usage": "Order history entries are automatically created each time an order is modified. Two rows are added to this record when foreign key fields change. One row contains the foreign key object names that display in the online application. For example, Jane Doe is recorded as the name of a Contact. The other row contains the actual foreign key ID that is only returned to and visible from the API. This object respects field-level security on the parent object.\n\nOrder history entries are automatically created each time an order is modified.\n\nTwo rows are added to this record when foreign key fields change. One row contains the foreign key object names that display in the online application. For example, Jane Doe is recorded as the name of a Contact. The other row contains the actual foreign key ID that is only returned to and visible from the API.\n\nThis object respects field-level security on the parent object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OrderHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DataType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Field\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"NewValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:anyType\"/>\n        <element name=\"OldValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:anyType\"/>\n        <element name=\"Order\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Order\"/>\n        <element name=\"OrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataType": {
+      "field_label": "Datatype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Field": {
+      "field_label": "Changed Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Order History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "NewValue": {
+      "field_label": "New Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "OldValue": {
+      "field_label": "Old Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

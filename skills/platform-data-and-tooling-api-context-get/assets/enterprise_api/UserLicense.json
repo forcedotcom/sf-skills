@@ -1,0 +1,125 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserLicense - Data API",
+  "description": "Represents a user license in your organization. A user license entitles a user to specific functionality and determines the profiles and permission sets available to the user.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "LicenseDefinitionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "A string that uniquely identifies a particular user license. Label is License Def. ID. Values are:AUL: corresponds to the Salesforce Platform user license AUL1: corresponds to the Salesforce Platform One user license AUL_LIGHT corresponds to the Salesforce Platform Light user license FDC_ONE corresponds to the Lightning Platform - One App user license FDC_SUB corresponds to the Lightning Platform App Subscription user license Overage_Platform_Portal_User corresponds to the Overage Authenticated Website user license PID_STRATEGIC_PRM: corresponds to the Gold Partner user license PID_CHATTER corresponds to the Chatter Only user license PID_CONTENT corresponds to the Content Only user license PID_Customer_Portal_Basic: corresponds to the Customer Portal Manager Standard user license and the Customer Portal User license PID_Customer_Portal_Standard: corresponds to the Customer Portal Manager Custom user license PID_FDC_FREE corresponds to the Lightning Platform Free user license PID_IDEAS corresponds to the Ideas Only user license PID_Ideas_Only_Portal corresponds to the Ideas Only Portal user license PID_Ideas_Only_Site corresponds to the Ideas Only Site user license PID_KNOWLEDGE corresponds to the Knowledge Only user license PID_Customer_Community corresponds to the Customer Community license. PID_Customer_Community_Login corresponds to the Customer Community Login license. PID_Partner_Community corresponds to the Partner Community license. PID_Partner_Community_Login corresponds to the Partner Community Login license. PID_Limited_Customer_Portal_Basic: corresponds to the Limited Customer Portal Manager Standard user license PID_Limited_Customer_Portal_Standard: corresponds to the Limited Customer Portal Manager Custom user license PID_Overage_Customer_Portal_Basic: corresponds to the Overage Customer Portal Manager Standard user license PID_Overage_High Volume Customer Portal corresponds to the Overage High Volume Customer Portal user license Platform_Portal_User: corresponds to the Authenticated Website user license POWER_PRM: corresponds to the Partner user license POWER_SSP: corresponds to the Customer Portal Manager user license SFDC: corresponds to the Full CRM user license"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The user license label. This field is available in API version 32.0 and later."
+    },
+    "MonthlyLoginsEntitlement": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The maximum number of customer or partner portal logins allowed per month. A null value in this field means the user license is charged according to the number of users rather than the number of logins. This field is available in API version 20.0 and later. Note: To be visible and queryable, this field requires:"
+    },
+    "MonthlyLoginsUsed": {
+      "type": "int",
+      "properties": "Group, Nillable, Sort",
+      "description": "The number of successful logins for all users associated with a customer or partner portal user license. This field has a non-null value if MonthlyLoginsEntitlement has a non-null value. This field is available in API version 20.0 and later. Note: To be visible and queryable, this field requires:"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The internal name of the user license. Note: Your organization may also include custom user licenses."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The current status of the user license. Valid values for this field are Active and Disabled. This field is available in API version 32.0 and later."
+    },
+    "TotalLicenses": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of user licenses in the organization. This field is available in API version 32.0 and later."
+    },
+    "UsedLicenses": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of user licenses that are assigned to active users in the organization. This field is available in API version 32.0 and later. This field isn’t filterable in API version 64.0 or later when using it in a WHERE clause in a SOQL query. Instead, you have to process the data after fetching all the records."
+    },
+    "UsedLicensesLastUpdated": {
+      "type": "dateTime",
+      "properties": "aggregate, Filter, Sort",
+      "description": "The timestamp of the query. If your license count exceeds your org’s allotted threshold, the count timestamp reflects the previous day, otherwise the timestamp reflects the current day and time. This field is available in API version 41.0 and later."
+    }
+  },
+  "usage": "Users with the “View Setup and Configuration” permission can use the UserLicense object to view the set of currently defined user licenses in your organization. The UserLicense object is currently used by bulk user creation to determine the user license to which each profile and permission set belongs. For example, if you use the API to create portal users and you want to know which profile belongs to each portal user license, you can query this object for each profile and check the LicenseDefinitionKey to identify the associated user license.\n\nUsers with the “View Setup and Configuration” permission can use the UserLicense object to view the set of currently defined user licenses in your organization.\n\nThe UserLicense object is currently used by bulk user creation to determine the user license to which each profile and permission set belongs. For example, if you use the API to create portal users and you want to know which profile belongs to each portal user license, you can query this object for each profile and check the LicenseDefinitionKey to identify the associated user license.",
+  "wsdl_segment": "```xml\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"UserLicense\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LicenseDefinitionKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalLicenses\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"UsedLicenses\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"UsedLicensesLastUpdated\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"userlicenses\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "User License ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LicenseDefinitionKey": {
+      "field_label": "License Def. ID",
+      "type": "string",
+      "length": "40"
+    },
+    "MasterLabel": {
+      "field_label": "Master Label",
+      "type": "string",
+      "length": "80"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalLicenses": {
+      "field_label": "Total Licenses",
+      "type": "int",
+      "digits": "9"
+    },
+    "UsedLicenses": {
+      "field_label": "Used Licenses",
+      "type": "int",
+      "digits": "9"
+    },
+    "UsedLicensesLastUpdated": {
+      "field_label": "Used Licenses Last Updated",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

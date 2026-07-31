@@ -1,0 +1,99 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Invocable Action Event Type - Data API",
+  "description": "Invocable Action events capture the calls to Salesforce Invocable Actions. This is particularly useful to monitor actions invoked during Agentforce flows. This event type is available in API versions 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "ACTION_NAME": {
+      "type": "String",
+      "description": "Name of the action."
+    },
+    "ACTION_TYPE": {
+      "type": "String",
+      "description": "InvocableActionType being referenced."
+    },
+    "ACTION_VERSION": {
+      "type": "String",
+      "description": "The invocable action version."
+    },
+    "AGENT_ACTION": {
+      "type": "String",
+      "description": "The API name of the agent action that invoked the action. This field is available in API version 66.0 or later."
+    },
+    "API_CALLER": {
+      "type": "String",
+      "description": "Identifier of the API caller. This is only populated when the action is invoked from a REST API call. This field is available in API version 66.0 or later."
+    },
+    "BOT_IDENTIFIER": {
+      "type": "string",
+      "description": "The ID of the bot."
+    },
+    "BOT_SESSION_IDENTIFIER": {
+      "type": "string",
+      "description": "The bot session ID."
+    },
+    "DURATION": {
+      "type": "String",
+      "description": "Time (in nanos) taken to process this set of requests."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always InvocableAction."
+    },
+    "FLOW_PROCESS_TYPE": {
+      "type": "String",
+      "description": "The process type of the calling flow."
+    },
+    "FLOW_VERSION_ID": {
+      "type": "String",
+      "description": "The ID of the version of the calling flow."
+    },
+    "INVOCATION_SOURCE": {
+      "type": "String",
+      "description": "Indicates the source type that invoked the action. Valid values are: Agent Action Apex Bot Flow Internal Prompt Template REST This field is available in API version 66.0 or later."
+    },
+    "INVOKING_APEX_CLASS_NAME": {
+      "type": "String",
+      "description": "The fully qualified name of the Apex class that invoked the action. This field is available in API version 66.0 or later."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The number of invoked requests."
+    },
+    "PLANNER_IDENTIFIER": {
+      "type": "string",
+      "description": "The ID of the agent planner."
+    },
+    "PROMPT_TEMPLATE": {
+      "type": "string",
+      "description": "The API name of the prompt template that invoked the action. This field is available in API version 66.0 or later."
+    },
+    "REQUEST_COUNT": {
+      "type": "Number",
+      "description": "The number of invoked requests."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "USER_ID": {
+      "type": "String",
+      "description": "ID of the user employing salesforce.com services, whether through the user interface or API"
+    }
+  }
+}

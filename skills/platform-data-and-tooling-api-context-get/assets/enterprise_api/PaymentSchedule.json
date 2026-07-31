@@ -1,0 +1,292 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentSchedule - Data API",
+  "description": "The payment schedule represents a collection of payments that a customer wants to collect at different times for a certain record. A schedule contains one or more payment schedule items, where each item represents one payment to be processed. Each of a schedule’s items can have different payment configuration fields, such as payment methods, payment dates, and payment accounts. When a payment scheduler launches a payment run, the run evaluates active payment schedule items, and picks them up for payment processing if they align with the scheduler’s payment criteria. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AvailableRequestedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The payment schedule’s remaining amount available for the creation of payment schedule items. Equals TotalRequestedAmount–TotalLineRequestedAmount."
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Optional user-defined comments."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code associated with the payment group record."
+    },
+    "DefaultPaymentAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "When a payment run creates payments from a payment schedule item, it sets the payment’s account to the item’s PaymentAccountId. Upon payment schedule item creation, the item’s PaymentAccountId inherits the schedule’s DefaultPaymentAccountId. However, you can override the PaymentAccountId with a different account as needed. If you do, future payments made from the item use the new account. This is a relationship field.",
+      "relationship_name": "DefaultPaymentAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "DefaultPaymentMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "When a payment run creates payments from a payment schedule ID, it sets the payment’s account to the item’s PaymentMethodId. Upon payment schedule item creation, the item’s PaymentMethoId inherits the schedule’s DefaultPaymentMethodId. However, you can override the PaymentMethodId with a different account as needed. If you do, future payments made from the item will use the new account.",
+      "relationship_name": "DefaultPaymentMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "CardPaymentMethod, DigitalWallet"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The user who created the payment schedule. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PaymentScheduleNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated reference number for the payment schedule."
+    },
+    "PaymentScheduleTreatmentDtlId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The payment schedule treatment detail associated with the payment schedule record. This field is a relationship field. Available in API version 65.0 and later with Financial Services and Automotive Cloud.",
+      "relationship_name": "PaymentScheduleTreatmentDtl",
+      "refers_to": "PaymentScheduleTreatmentDtl"
+    },
+    "PaymentSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the name of the funding source that is used to fulfill a payment commitment. Available in API version 63.0 and later with Financial Services and Automotive Cloud."
+    },
+    "ReferenceEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The object that receives payments as a result of payment schedule items processed from the payment schedule. This is a polymorphic relationship field.",
+      "relationship_name": "ReferenceEntity",
+      "relationship_type": "Lookup",
+      "refers_to": "API version 55.0 and later: Contract Order Invoice API version 62.0 and later with Financial Services and Automotive Cloud: CollectionPlan"
+    },
+    "RemainingAmountToBeProcessed": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total pending amount of payment schedule items that haven’t yet been processed for payment. Equals TotalLineRequestedAmount – TotalProcessedAmount."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the payment schedule. Possible values are: Accepted: The payment schedule is approved and is ready for payment run evaluation. Available in API version 65.0 and later with Financial Services and Automotive Cloud. Approval Pending: The payment schedule needs approval. Available in API version 65.0 and later with Financial Services and Automotive Cloud. Canceled: Payment runs can’t evaluate payment schedules or use them to create payments. Completed: All of the payment schedule’s payment schedule items have been processed for payments. Draft: The payment schedule can be edited and configured. Payment runs don’t evaluate draft payment schedules. On Hold: The payment schedule can't be considered for payment runs due to missing information, the need for additional review, or other unresolved external factors.Available in API version 65.0 and later with Financial Services and Automotive Cloud. Open: The payment schedule is available for payment run evaluation. Rejected: The payment schedule isn't approved and can't be considered for payment run evaluation. Available in API version 65.0 and later with Financial Services and Automotive Cloud."
+    },
+    "TotalAppliedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of all payment schedule items that have been applied to payments. This is a calculated field."
+    },
+    "TotalCanceledAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all RequestedAmount values on payment schedule items with a status of Canceled."
+    },
+    "TotalPaymentsReceived": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The cumulative sum of payments received for all payment schedule items linked to a payment schedule. This field is a calculated field. Available in API version 63.0 and later with Financial Services and Automotive Cloud."
+    },
+    "TotalPaymentScheduleItemAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort\\",
+      "description": "The total amount allocated from the payment schedule to its payment schedule items. Equals the sum of each payment schedule item’s RequestedAmount – the sum of each payment schedule item’s Canceled Amount."
+    },
+    "TotalProcessedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of ProcessedAmount values on payment schedule items with a status of Processed."
+    },
+    "TotalRequestedAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The total amount available for a payment schedule to distribute to its payment schedule items. The sum of payment schedule items can’t be greater than the TotalLineRequestedAmount of the parent payment schedule."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of payment for which the payment schedule is created. Available in API version 65.0 and later with Financial Services and Automotive Cloud. Possible values are: PaymentPlan—Payment Plan PromiseToPay—Promise to Pay"
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the usage type for the record. Possible value is: CollectionPlan Available in API version 62.0 and later with Financial Services and Automotive Cloud."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "AvailableRequestedAmount": {
+      "field_label": "Available Requested Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DefaultPaymentAccountId": {
+      "field_label": "Default Payment Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DefaultPaymentMethodId": {
+      "field_label": "Default Payment Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Payment Schedule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentScheduleNumber": {
+      "field_label": "Payment Schedule Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentSource": {
+      "field_label": "Payment Source",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReferenceEntityId": {
+      "field_label": "Reference Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RemainingAmountToBeProcessed": {
+      "field_label": "Remaining Amount To Be Processed",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAppliedAmount": {
+      "field_label": "Total Applied Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCanceledAmount": {
+      "field_label": "Total Canceled Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPaymentScheduleItemAmount": {
+      "field_label": "Total Payment Schedule Item Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPaymentsReceived": {
+      "field_label": "Total Payments Received",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProcessedAmount": {
+      "field_label": "Total Processed Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalRequestedAmount": {
+      "field_label": "Total Requested Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

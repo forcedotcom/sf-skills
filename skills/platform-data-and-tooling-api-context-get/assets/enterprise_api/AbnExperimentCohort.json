@@ -1,0 +1,163 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "AbnExperimentCohort - Data API",
+  "description": "Represents the specified audience that's participating in an A/B/n experiment. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AbnExperimentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to a related experiment. This field is a relationship field.",
+      "relationship_name": "AbnExperiment",
+      "relationship_type": "Parent-detail",
+      "refers_to": "AbnExperiment (the parent object)"
+    },
+    "AllocationWeight": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Percentage of an audience to experience the selected part of the experiment."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Three letter ISO currency codes for supported currencies. Optional. Possible values are: USD—U.S. Dollar"
+    },
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to the data space where an experiment cohort's resources originate. Required. This field is a relationship field.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Text description of the experiment."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "System or user-generated API name for the experiment. Required."
+    },
+    "IsControl": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Whether the cohort is used as the control group that performance is checked against. The default value is false."
+    },
+    "IsFallThrough": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this cohort captures users who don't meet the criteria for other cohorts in the experiment. When true, this cohort serves as the fallback option. When false, users must explicitly qualify for this cohort. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Text label that identifies the experiment cohort. Required."
+    },
+    "PersonalizerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to the personalizer that’s related to the experiment cohort. This field is a relationship field.",
+      "relationship_name": "Personalizer",
+      "refers_to": "PersonalizationRecommender"
+    }
+  },
+  "usage": "Use this object to describe experiment cohorts or to change allocation weights.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AbnExperimentCohortChangeEvent**: Change events are available for the object.\n- **AbnExperimentCohortFeed**: Feed tracking is available for the object.\n- **AbnExperimentCohortHistory**: History is available for tracked fields of the object.\n- **AbnExperimentCohortOwnerSharingRule**: Sharing rules are available for the object.\n- **AbnExperimentCohortShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AbnExperimentId": {
+      "field_label": "Experiment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AllocationWeight": {
+      "field_label": "Allocation Weight",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataSpaceId": {
+      "field_label": "Data Space ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Experiment Cohort API Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Experiment Cohort ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsControl": {
+      "field_label": "Is Control",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsFallThrough": {
+      "field_label": "Is Fall Through",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "ABn Experiment Cohort Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

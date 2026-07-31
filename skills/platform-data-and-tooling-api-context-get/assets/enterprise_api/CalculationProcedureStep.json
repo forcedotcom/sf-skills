@@ -1,0 +1,303 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CalculationProcedureStep - Data API",
+  "description": "Defines a step in an Expression Set. The label for this object is Expression Set Step. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CalculationMatrixId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the Decision Matrix this step calls. Applicable only if the StepType is MatrixLookupor GroupMatrixLookup. This is a relationship field.",
+      "relationship_name": "CalculationMatrix",
+      "relationship_type": "Lookup",
+      "refers_to": "CalculationMatrix"
+    },
+    "CalculationMatrixType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of the Decision Matrix this step calls. Applicable only if this step calls a Decision Matrix. If the StepType is MatrixLookup, the value of this field is Standard. If the StepType is GroupMatrixLookup, the value of this field is Grouped."
+    },
+    "CalculationProcedure": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Expression Set to which this step belongs."
+    },
+    "CalculationProcedureVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Expression Set Version to which this step belongs. This is a relationship field.",
+      "relationship_name": "CalculationProcedureVersion",
+      "relationship_type": "Lookup",
+      "refers_to": "CalculationProcedureVersion"
+    },
+    "ConditionsConvertedText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The condition expression converted to postfix notation. Applicable only if the StepType is Condition."
+    },
+    "ConditionsExpressionText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The condition expression as the user entered it. Applicable only if the StepType is Condition."
+    },
+    "ConditionsUiFormattedText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The condition expression converted to JSON format for UI display. Applicable only if the StepType is Condition."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A text description of the Expression Set Step."
+    },
+    "FormulaConvertedText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The formula expression converted to postfix notation. Applicable only if the StepType is Calculation."
+    },
+    "FormulaExpressionText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The formula expression as the user entered it. Applicable only if the StepType is Calculation."
+    },
+    "FormulaUiFormattedText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The formula expression converted to JSON format for UI display. Applicable only if the StepType is Calculation."
+    },
+    "InputVariablesFormatText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A list of the input matrix columns or procedure variables applicable to the step."
+    },
+    "IsConditionalStep": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies that this step is conditional. The default value is false."
+    },
+    "IsResultIncluded": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies that the result of this step is included in the Expression Set output. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The step name."
+    },
+    "OutputVariablesFormatText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A list of the output matrix columns or procedure variables applicable to the step. Applicable only if the StepType is MatrixLookup, GroupMatrixLookup, or ReferenceProcedure."
+    },
+    "OutputVariablesMappingText": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Maps Decision Matrix output variables to Expression Set variables. Applicable only if the StepType is MatrixLookupor GroupMatrixLookup."
+    },
+    "ReferenceProcedureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the child Expression Set this step calls. Applicable only if the StepType is ReferenceProcedure. This is a relationship field.",
+      "relationship_name": "ReferenceProcedure",
+      "relationship_type": "Lookup",
+      "refers_to": "CalculationProcedure"
+    },
+    "ReturnMessageValueSet": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A set of messages to return based on the result of a step with a StepType of Condition."
+    },
+    "Stage": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The stage of Expression Set invocation. The Aggregation stage applies only to steps with a StepType of Aggregation. Possible values are: Aggregation Calculation"
+    },
+    "StageStepSequence": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Sequence order of the step within the Expression Set. Used only for Expression Sets migrated from a Salesforce Industries package. New Expression Sets use Expression Set Step Relationship objects to order their steps."
+    },
+    "StepType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of action this step performs. Possible values are: Aggregation—Returns an average, maximum, minimum, or sum of a list of values. Calculation—Performs a mathematical operation, which can include variables and constants. Condition—Defines a condition that determines whether other steps are invoked. GroupMatrixLookup—Calls a Grouped Decision Matrix. MatrixLookup—Calls a Standard Decision Matrix. ReferenceProcedure—Calls a child Expression Set."
+    }
+  },
+  "special_access_rules": "Access to Expression Sets requires OmniStudio licenses.",
+  "field_reference": {
+    "CalculationMatrixId": {
+      "field_label": "Decision Matrix ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CalculationMatrixType": {
+      "field_label": "Decision Matrix Type",
+      "type": "string",
+      "length": "255"
+    },
+    "CalculationProcedure": {
+      "field_label": "Expression Set",
+      "type": "string",
+      "length": "255"
+    },
+    "CalculationProcedureVersionId": {
+      "field_label": "Calculation Procedure Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConditionsConvertedText": {
+      "field_label": "Conditions Converted Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "ConditionsExpressionText": {
+      "field_label": "Conditions Expression Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "ConditionsUiFormattedText": {
+      "field_label": "Conditions UI Formatted Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DecisionTableId": {
+      "field_label": "Decision Table ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "FormulaConvertedText": {
+      "field_label": "Formula Converted Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "FormulaExpressionText": {
+      "field_label": "Formula Expression Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "FormulaUiFormattedText": {
+      "field_label": "Formula UI Formatted Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Id": {
+      "field_label": "Calculation Procedure Step ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InputVariablesFormatText": {
+      "field_label": "Input Variables Format Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "IsConditionalStep": {
+      "field_label": "Conditional Step",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsResultIncluded": {
+      "field_label": "Result Included",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Namespace": {
+      "field_label": "Namespace",
+      "type": "string",
+      "length": "255"
+    },
+    "OutputVariablesFormatText": {
+      "field_label": "Output Variables Format Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "OutputVariablesMappingText": {
+      "field_label": "Output Variables Mapping Text",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "ReferenceProcedureId": {
+      "field_label": "Calculation Procedure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReturnMessageValueSet": {
+      "field_label": "Return Message Value Set",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Stage": {
+      "field_label": "Stage",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StageStepSequence": {
+      "field_label": "Stage Step Sequence",
+      "type": "int",
+      "digits": "9"
+    },
+    "StepType": {
+      "field_label": "Step Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

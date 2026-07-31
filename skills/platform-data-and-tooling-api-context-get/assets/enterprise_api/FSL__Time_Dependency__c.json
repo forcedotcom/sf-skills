@@ -1,0 +1,34 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "FSL__Time_Dependency__c - Data API",
+  "description": "Represents a dependency between two service appointments. This object is used to define scheduling relationships between two appointments. It allows you to determine the order and timing in which dependent appointments should be scheduled.",
+  "fields_columns": [
+    "description"
+  ],
+  "fields": {
+    "FSL__Dependency__c": {
+      "description": "Type: picklist Properties: Create, Defaulted on create, Filter, Group, Nillable, Sort, Update Description: The type of the dependency. Possible values are: Immediately Follow Same Start Start After Finish Start After Finish And Same Day The default value is Same Start."
+    },
+    "FSL__Root_Service_Appointment__c": {
+      "description": "Type: reference Properties: Create, Filter, Group, Nillable, Sort, Update Description: The service appointment that’s the root appointment of the entire dependency chain. The root appointment is the same service appointment for all the dependencies in the chain. This field is automatically populated by the system when creating a dependency. When creating a dependency via API, the API user must have permissions for this field. We recommend leaving this field empty when a dependency is created and avoiding any custom modifications. This field is a relationship field. Relationship Name: FSL__Root_Service_Appointment__r Relationship Type: Lookup Refers To: ServiceAppointment"
+    },
+    "FSL__Same_Resource__c": {
+      "description": "Type: boolean Properties: Create, Defaulted on create, Filter, Group, Sort, Update Description: An indication of whether the two service appointments that share a dependency should be assigned to the same service resource. The default value is false."
+    },
+    "FSL__Service_Appointment_1__c": {
+      "description": "Type: reference Properties: Create, Filter, Group, Sort Description: The first service appointment on which the second service appointment is dependent. This field is a relationship field. Relationship Name: FSL__Service_Appointment_1__r Relationship Type: Master-detail Refers To: ServiceAppointment (the master object)"
+    },
+    "FSL__Service_Appointment_2__c": {
+      "description": "Type: reference Properties: Create, Filter, Group, Nillable, Sort, Update Description: The second service appointment that’s dependent on the first service appointment. This field is a relationship field. Relationship Name: FSL__Service_Appointment_2__r Relationship Type: Lookup Refers To: ServiceAppointment"
+    },
+    "Name": {
+      "description": "Type: string Properties: Autonumber, Defaulted on create, Filter, idLookup, Sort Description: An auto-generated unique identifier for the appointment dependency record."
+    }
+  },
+  "special_access_rules": "This object is available in orgs that have the Field Service managed package installed. Records of this object are subject to standard sharing and security settings."
+}

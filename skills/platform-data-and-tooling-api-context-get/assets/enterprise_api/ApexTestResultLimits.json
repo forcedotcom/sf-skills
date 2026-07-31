@@ -1,0 +1,198 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ApexTestResultLimits - Data API",
+  "description": "Captures the Apex test limits used for a particular test method execution. An instance of this object is associated with each ApexTestResult record. This object is available in API version 37.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApexTestResultId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the associated ApexTestResult object. This is a relationship field.",
+      "relationship_name": "ApexTestResult",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexTestResult"
+    },
+    "AsyncCalls": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of asynchronous calls made during the test run."
+    },
+    "Callouts": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of callouts made during the test run."
+    },
+    "Cpu": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The amount of CPU used during the test run, in milliseconds."
+    },
+    "Dml": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of DML statements made during the test run."
+    },
+    "DmlRows": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of rows accessed by DML statements during the test run."
+    },
+    "Email": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of email invocations made during the test run."
+    },
+    "LimitContext": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates whether the test run was synchronous or asynchronous."
+    },
+    "LimitExceptions": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates whether your org has any limits that differ from the default limits."
+    },
+    "MobilePush": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of mobile push calls made during the test run."
+    },
+    "QueryRows": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of rows queried during the test run."
+    },
+    "Soql": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of SOQL queries made during the test run."
+    },
+    "Sosl": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of SOSL queries made during the test run."
+    }
+  },
+  "special_access_rules": "In API version 49.0 and later, users must have the View Setup and Configuration permission to access this object.",
+  "usage": "The ApexTestResultLimits object is populated for each test method execution, and it captures the limits used between the Test.startTest() and Test.stopTest() methods. If startTest() and stopTest() aren’t called, limits usage isn’t captured. Note the following:\n\nThe ApexTestResultLimits object is populated for each test method\n                execution, and it captures the limits used between the Test.startTest() and\n                Test.stopTest() methods. If startTest() and stopTest() aren’t called, limits usage\n                isn’t captured. Note the following:\n\nThe associated test method must be run asynchronously.\n\nLimits for asynchronous Apex operations (batch, scheduled, future, and\n                        queueable) that are called within test methods aren’t captured.\n\nLimits are captured only for the default namespace.",
+  "wsdl_segment": "```xml\n<complexType name=\"ApexTestResultLimits\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApexTestResult\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexTestResult\"/>\n        <element name=\"ApexTestResultId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AsyncCalls\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Callouts\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Cpu\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Dml\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DmlRows\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Email\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LimitContext\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LimitExceptions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MobilePush\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"QueryRows\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Soql\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Sosl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ApexTestResultId": {
+      "field_label": "Application Test Result ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AsyncCalls": {
+      "field_label": "Total number of async calls",
+      "type": "int",
+      "digits": "9"
+    },
+    "Callouts": {
+      "field_label": "Total number of callouts",
+      "type": "int",
+      "digits": "9"
+    },
+    "Cpu": {
+      "field_label": "Maximum CPU time on the Salesforce servers",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Dml": {
+      "field_label": "Total number of DML statements issued",
+      "type": "int",
+      "digits": "9"
+    },
+    "DmlRows": {
+      "field_label": "Total number of records processed as a result of DML statements",
+      "type": "int",
+      "digits": "9"
+    },
+    "Email": {
+      "field_label": "Total number of sendEmail methods allowed",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Apex Test Result Limits ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LimitContext": {
+      "field_label": "Limit Context",
+      "type": "string",
+      "length": "255"
+    },
+    "LimitExceptions": {
+      "field_label": "Limit Exceptions",
+      "type": "string",
+      "length": "255"
+    },
+    "MobilePush": {
+      "field_label": "Maximum number of push notification method calls allowed per Apex transaction",
+      "type": "int",
+      "digits": "9"
+    },
+    "QueryRows": {
+      "field_label": "Total number of records retrieved by SOQL queries",
+      "type": "int",
+      "digits": "9"
+    },
+    "Soql": {
+      "field_label": "Total number of SOQL queries issued",
+      "type": "int",
+      "digits": "9"
+    },
+    "Sosl": {
+      "field_label": "Total number of SOSL queries issued",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

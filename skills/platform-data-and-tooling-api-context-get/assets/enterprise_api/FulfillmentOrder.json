@@ -1,0 +1,684 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "FulfillmentOrder - Data API",
+  "description": "Represents a group of products, fees, and delivery charges on a single order that share the same fulfillment location, delivery method, and recipient. The FulfillmentOrderLineItems belonging to a FulfillmentOrder are associated with OrderItemSummary objects belonging to a single OrderSummary. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the Account or Person Account associated with the FulfillmentOrder. It represents the shopper in the storefront. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "ActiveDate": {
+      "type": "datetime",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Date when the FulfillmentOrder becomes active. This field is available in API version 61.0 and later."
+    },
+    "BillToContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the Contact associated with the FulfillmentOrder. It represents the shopper in the storefront when not using person accounts. This field is available in API version 49.0 and later. This field is a relationship field.",
+      "relationship_name": "BillToContact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "ClosedDate": {
+      "type": "datetime",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Date the FulfillmentOrder closed. Automatically entered. This field is available in API version 61.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. ISO code for the currency of the OrderSummary associated with the FulfillmentOrder. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD. This field is available in API version 49.0 and later."
+    },
+    "DeliveryDate": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the FulfillmentOrder was delivered. This field is a relationship field."
+    },
+    "DeliveryMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the DeliveryMethod used for this FulfillmentOrder. This field is a relationship field.",
+      "relationship_name": "DeliveryMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderDeliveryMethod"
+    },
+    "FulfilledFromLocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Location handling this FulfillmentOrder. This field is a relationship field.",
+      "relationship_name": "FulfilledFromLocation",
+      "relationship_type": "Lookup",
+      "refers_to": "Location"
+    },
+    "FulfilledToAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Address of the recipient."
+    },
+    "FulfilledToCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address city."
+    },
+    "FulfilledToCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address country."
+    },
+    "FulfilledToEmailAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email address of the recipient."
+    },
+    "FulfilledToGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy of the geocode for the recipient address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "FulfilledToLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with FulfilledToLongitude to specify the precise geolocation of the recipient address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "FulfilledToLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with FulfilledToLatitude to specify the precise geolocation of the recipient address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "FulfilledToName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Name on the recipient address."
+    },
+    "FulfilledToPhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number of the recipient."
+    },
+    "FulfilledToPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address postal code."
+    },
+    "FulfilledToState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address state."
+    },
+    "FulfilledToStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Recipient address street."
+    },
+    "FulfillmentOrderNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID of the FulfillmentOrder."
+    },
+    "GrandTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including adjustments and tax, of the products, fees, and delivery charges on the FulfillmentOrder. This amount includes all FulfillmentOrderLineItems associated with the FulfillmentOrder. This amount is equal to TotalAmount + TotalTaxAmount."
+    },
+    "InvoiceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Invoice associated with the FulfillmentOrder. This field is a relationship field.",
+      "relationship_name": "Invoice",
+      "relationship_type": "Lookup",
+      "refers_to": "Invoice"
+    },
+    "IsReship": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the FulfillmentOrder is for a reshipment. The default value is false. This field is available in API version 53.0 and later."
+    },
+    "IsSuspended": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the FulfillmentOrder is suspended. The default value is false."
+    },
+    "ItemCount": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of the quantities of the FulfillmentOrderLineItems included in the FulfillmentOrder."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the current user last viewed this record. A null value can mean that this record has only been referenced (LastReferencedDate) and not viewed."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the original Order that generated the FulfillmentOrder. This field is a relationship field.",
+      "relationship_name": "Order",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the OrderSummary associated with the FulfillmentOrder. This field is a relationship field.",
+      "relationship_name": "OrderSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderSummary"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the User who currently owns this FulfillmentOrder. Default value is the User logged in to the API to perform the create. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ProcessingTimeInMinutes": {
+      "type": "long",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "How many minutes it took to process the FulfillmentOrder, from the start of processing to completion."
+    },
+    "StartFulfillmentDate": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the fulfillment process was started for the FulfillmentOrder."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Status of the FulfillmentOrder. Each status corresponds to one status category, shown here in parentheses. You can customize the status picklist to represent your business processes, but the status category picklist is fixed because processing is based on those values. If you customize the status picklist, include at least one status value for each status category. Default values are: Allocated (Activated) Assigned (Fulfilling) Cancelled (Cancelled) Draft (Draft) Fulfilled (Closed) Pick Complete (Fulfilling) This value is available in API v56.0 and later. Pickpack (Fulfilling) Printed (Fulfilling) This value is available in API v56.0 and later. Rejected (Rejected) This value is available in API v56.0 and later."
+    },
+    "StatusCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Status category of the FulfillmentOrder. Processing of the FulfillmentOrder depends on this value. Each status category corresponds to one or more statuses. Possible values are: ACTIVATED—Activated CANCELLED—Cancelled CLOSED—Closed DRAFT—Draft FULFILLING—Fulfilling REJECTED—Rejected This value is available in API v56.0 and later."
+    },
+    "TaxLocaleType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The system used to handle tax on the original Order associated with the FulfillmentOrder. Gross usually applies to taxes like value-added tax (VAT), and Net usually applies to taxes like sales tax. Possible values are: Gross (displays most prices and taxes as combined values) Net (displays most prices and taxes as separate values) This field is available in API version 49.0 and later."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the products on the FulfillmentOrder. This value only includes adjustments to FulfillmentOrderLineItems of type code Product, not adjustments to delivery charges or fees."
+    },
+    "TotalAdjustmentAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the products on the Fulfillment Order, inclusive of tax. This value only includes adjustments to FulfillmentOrderLineItems of type code Product. This amount is equal to TotalAdjustmentAmount + TotalAdjustmentTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAdjustmentAmount."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Adjusted total, not including tax, of the FulfillmentOrderLineItems, including products, fees, and delivery charges, on the Fulfillment Order."
+    },
+    "TotalDeliveryAdjustAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the delivery charges on the Fulfillment Order. This value only includes adjustments to FulfillmentOrderLineItems of type Delivery Charge."
+    },
+    "TotalDeliveryAdjustAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the delivery charges on the Fulfillment Order, inclusive of tax. This value only includes adjustments to FulfillmentOrderLineItems of type Delivery Charge. This amount is equal to TotalDeliveryAdjustAmount + TotalDeliveryAdjustTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalDeliveryAdjustTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalDeliveryAdjustAmount."
+    },
+    "TotalDeliveryAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of the delivery charges on the FulfillmentOrder. This value only includes FulfillmentOrderLineItems of type Delivery Charge."
+    },
+    "TotalDeliveryAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the delivery charges on the FulfillmentOrder, inclusive of tax. This value only includes FulfillmentOrderLineItems of type Delivery Charge. This amount is equal to TotalDeliveryAmount + TotalDeliveryTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalDeliveryTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalDeliveryAmount."
+    },
+    "TotalFeeAdjustAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the fees on the FulfillmentOrder. This value only includes adjustments to FulfillmentOrderLineItems of type Fee. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAdjustAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the fees on the FulfillmentOrder, inclusive of tax. This value only includes adjustments to FulfillmentOrderLineItems of type Fee. This amount is equal to TotalFeeAdjustAmount + TotalFeeAdjustTaxAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAdjustTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalFeeAdjustAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the fees on the FulfillmentOrder, excluding adjustments and tax. This value only includes FulfillmentOrderLineItems of type Fee. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total price of the fees on the FulfillmentOrder, inclusive of tax. This value only includes FulfillmentOrderLineItems of type Fee. This amount is equal to TotalFeeAmount + TotalFeeTaxAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalFeeAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalProductAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total price of the products on the FulfillmentOrder, excluding order adjustments, delivery charges, and fees. This value only includes FulfillmentOrderLineItems of type code Product."
+    },
+    "TotalProductAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total price of the products on the FulfillmentOrder, inclusive of tax. This value only includes FulfillmentOrderLineItems of type code Product. This amount is equal to TotalProductAmount + TotalProductTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalProductTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalProductAmount."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAmount."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of the FulfillmentOrder. Each type corresponds to one type category, shown here in parentheses. You can customize the type picklist to represent your business processes, but the type category picklist is fixed because processing is based on those values. If you customize the type picklist, include at least one type value for each type category. Default values are: Download (Digital) Email (Digital) In Store Pickup (Physical) Retail Store (Physical) Supplier (Drop Ship) Warehouse (Physical)"
+    },
+    "TypeCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type category of the FulfillmentOrder. Processing of the FulfillmentOrder depends on this value. Each type category corresponds to one or more types. Possible values are: DIGITAL—Digital DROPSHIP—Drop Ship PHYSICAL—Physical"
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **FulFillmentOrderChangeEvent (API version 62.0)**: Change events are available for the object.\n- **FulfillmentOrderFeed**: Feed tracking is available for the object.\n- **FulfillmentOrderOwnerSharingRule**: Sharing rules are available for the object.\n- **FulfillmentOrderShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivatedDate": {
+      "field_label": "Activated Date",
+      "type": "datetime"
+    },
+    "BillToContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ClosedDate": {
+      "field_label": "Closed Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeliveryDate": {
+      "field_label": "Delivery Date",
+      "type": "datetime"
+    },
+    "DeliveryMethodId": {
+      "field_label": "Delivery Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FulfilledFromLocationId": {
+      "field_label": "Fulfilled From Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FulfilledToAddress": {
+      "field_label": "Fulfilled To Address",
+      "type": "address"
+    },
+    "FulfilledToCity": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "FulfilledToCountry": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "FulfilledToEmailAddress": {
+      "field_label": "Fulfilled To Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "FulfilledToGeocodeAccuracy": {
+      "field_label": "Fulfilled To Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "FulfilledToLatitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "FulfilledToLongitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "FulfilledToName": {
+      "field_label": "Order Recipient",
+      "type": "string",
+      "length": "255"
+    },
+    "FulfilledToPhone": {
+      "field_label": "Fulfilled To Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "FulfilledToPostalCode": {
+      "field_label": "Zip",
+      "type": "string",
+      "length": "20"
+    },
+    "FulfilledToState": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "FulfilledToStreet": {
+      "field_label": "Address",
+      "type": "textarea",
+      "length": "255"
+    },
+    "FulfillmentOrderNumber": {
+      "field_label": "Fulfillment Order Number",
+      "type": "string",
+      "length": "255"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Total with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Fulfillment Order ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceId": {
+      "field_label": "Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsReship": {
+      "field_label": "Reship",
+      "type": "boolean"
+    },
+    "IsSuspended": {
+      "field_label": "Is Suspended",
+      "type": "boolean"
+    },
+    "ItemCount": {
+      "field_label": "Total Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProcessingTimeInMinutes": {
+      "field_label": "Processing Time In Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "StartFulfillmentDate": {
+      "field_label": "Start Fulfillment Date",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StatusCategory": {
+      "field_label": "Status Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxLocaleType": {
+      "field_label": "Tax Locale Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Product Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentAmtWithTax": {
+      "field_label": "Product Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentTaxAmount": {
+      "field_label": "Product Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Pretax Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjustAmount": {
+      "field_label": "Shipping Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjustAmtWithTax": {
+      "field_label": "Shipping Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjustTaxAmount": {
+      "field_label": "Shipping Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAmount": {
+      "field_label": "Shipping Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAmtWithTax": {
+      "field_label": "Shipping Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryTaxAmount": {
+      "field_label": "Shipping Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjustAmount": {
+      "field_label": "Fee Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjustAmtWithTax": {
+      "field_label": "Fee Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjustTaxAmount": {
+      "field_label": "Fee Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAmount": {
+      "field_label": "Fee Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAmtWithTax": {
+      "field_label": "Fee Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeTaxAmount": {
+      "field_label": "Fee Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAmount": {
+      "field_label": "Product Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAmtWithTax": {
+      "field_label": "Product Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductTaxAmount": {
+      "field_label": "Product Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TypeCategory": {
+      "field_label": "Type Category",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FormulaFunctionAllowedType - Data API",
+  "description": "Represents the functions that are supported in the given formula context. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "FunctionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the supported function. This is a relationship field.",
+      "relationship_name": "Function",
+      "relationship_type": "Lookup",
+      "refers_to": "FormulaFunction"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The name of the formula type in which the function is supported. Possible values are: FLOW VALIDATION VISUALFORCE"
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"FormulaFunctionAllowedType\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Function\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FormulaFunction\"/>\n        <element name=\"FunctionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "DurableId": {
+      "field_label": "Formula Function Allowed Type Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "FunctionId": {
+      "field_label": "Formula Function ID",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Formula Function Allowed Type ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

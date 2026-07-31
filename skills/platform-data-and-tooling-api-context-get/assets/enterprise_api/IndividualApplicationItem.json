@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "IndividualApplicationItem - Data API",
+  "description": "Captures individual application input data that is used during run-time. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IndividualApplicationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Individual Application parent object associated with the Individual Application Item. This field is a relationship field.",
+      "relationship_name": "IndividualApplication",
+      "relationship_type": "Lookup",
+      "refers_to": "IndividualApplication"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the object related to the Individual Application."
+    },
+    "RelatedItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The related object associated with the Individual Application Item. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedItem",
+      "relationship_type": "Lookup",
+      "refers_to": "Benefit, ProgramProduct"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the approval status of the Individual Application. Possible values are: Approved Declined In Progress Pending"
+    }
+  },
+  "special_access_rules": "This object is available only with the EAndU Cloud Program Access permission set.\n\nThis object is available only with the EAndU Cloud\n         Program Access permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **IndividualApplicationItemChangeEvent**: Change events are available for the object.\n- **IndividualApplicationItemFeed**: Feed tracking is available for the object.\n- **IndividualApplicationItemHistory**: History is available for tracked fields of the object.\n- **IndividualApplicationItemOwnerSharingRule**: Sharing rules are available for the object.\n- **IndividualApplicationItemShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Individual Application Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IndividualApplicationId": {
+      "field_label": "Individual Application ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedItemId": {
+      "field_label": "ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SelectedValues": {
+      "field_label": "Selected Values",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WorkReportLineItemId": {
+      "field_label": "Work Report Line Item ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

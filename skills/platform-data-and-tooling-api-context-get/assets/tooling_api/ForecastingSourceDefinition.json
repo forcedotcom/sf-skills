@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ForecastingSourceDefinition - Tooling API",
+  "description": "Represents the object, measure, date type, and hierarchy that a forecast uses to project sales. This object is available in API version 52.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CategoryField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Name of the forecast category that is associated with the forecast type. Possible values are: Opportunity.ForecastCategoryName"
+    },
+    "DateField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Field that is used for the forecast type’s date type. For example, the CloseDate field on Opportunity is used for opportunity close date–based forecast types. Possible values are: Opportunity.CloseDate OpportunityLineItem.ServiceDate"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the forecasting source definition.",
+      "required": true
+    },
+    "FamilyField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Use this field to group forecasts by product family. Possible values are: Product2.Family"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the forecasting source definition."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the forecasting source definition."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Controlling label for this forecasting source definition.",
+      "required": true
+    },
+    "MeasureField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Field that is used for the forecast type’s measure. For example, the Amount field on Opportunity is associated with revenue-based forecast types. Possible values are*: Opportunity.Amount Opportunity.Custom Opportunity.TotalOpportunityQuantity OpportunityLineItem.Custom OpportunityLineItem.Quantity OpportunityLineItem.TotalPrice *Where Custom represents the name of the custom field that a forecast type’s measure is based on. Example: Use the Megawatts__c custom field to forecast energy consumption."
+    },
+    "Metadata": {
+      "type": "ForecastingSourceDefinition",
+      "properties": "Create, Nillable, Update",
+      "description": "The metadata of the forecasting source definition."
+    },
+    "SourceObject": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Object associated with this forecasting source definition. Possible values are: Opportunity OpportunityLineItem Product2",
+      "required": true
+    },
+    "Territory2Field": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "For a territory-based forecast type, indicates the field that is used for territory information.For user role–based forecast types, this value is null."
+    },
+    "UserField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies who owns the forecast. Possible values are: Opportunity.OwnerId"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingSourceDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"categoryField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"cdpDataspace\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dateField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSourceObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"familyField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"measureField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"territory2Field\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"userField\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

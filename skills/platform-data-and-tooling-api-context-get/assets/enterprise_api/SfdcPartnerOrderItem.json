@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerOrderItem - Data API",
+  "description": "Represents a line item within a partner order, including provisioning information and billing details from a customer's purchase, in a Partner Business Org (PBO). This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CustomerUnitPricePerMonth": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The customer unit price per month."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "LineItemPeriodTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Derived field. The line item period total, calculated as CustomerUnitPricePerMonth * Quantity."
+    },
+    "LineItemTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Derived field. The line item total, calculated as CustomerUnitPricePerMonth * Quantity * ContractTerm on the Order object."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Auto-generated ID number for the order item."
+    },
+    "OrderItemNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, Sort",
+      "description": "Auto-generated order item number."
+    },
+    "PartnerOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The associated partner order that this order item belongs to. This field is a relationship field.",
+      "relationship_name": "PartnerOrder",
+      "relationship_type": "Master-detail",
+      "refers_to": "SfdcPartnerOrder (the master object)"
+    },
+    "PartnerProvisionProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A provisionable product included in this order item. This field is a relationship field.",
+      "relationship_name": "PartnerProvisionProduct",
+      "refers_to": "SfdcPartnerProvisionProduct"
+    },
+    "PartnerProvisionProductName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field. The name of the Partner Provision Product from SfdcPartnerProvisionProduct object."
+    },
+    "PartnerPurchaseOrderNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Partner purchase order number for this order item."
+    },
+    "PartnerTenantId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Salesforce org ID that purchased products from the partner. This field is a relationship field.",
+      "relationship_name": "PartnerTenant",
+      "refers_to": "SfdcPartnerTenant"
+    },
+    "ProvisionedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the order item is provisioned."
+    },
+    "ProvisionedDateSyncStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the provisioned date sync process."
+    },
+    "ProvisioningStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The provisioning status of the order item. Possible values are: Error Expired New Pending Provisioned The default value is New.",
+      "required": true
+    },
+    "Quantity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of units sold.",
+      "required": true
+    },
+    "ServiceDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date range when the service is active. Used to assist provisioning."
+    }
+  }
+}

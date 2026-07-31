@@ -1,0 +1,67 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ApexExecutionOverlayAction - Tooling API",
+  "description": "Specifies an Apex code snippet or SOQL query to execute at a specific line of code in an Apex class or trigger. Optionally, generates a heap dump.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`, `PATCH`, `DELETE`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActionScript": {
+      "type": "string",
+      "properties": "Create, Nillable, Update",
+      "description": "The Apex code or SOQL query to run when execution reaches the line in the Apex class or trigger at the specified iteration. Results are included in the heap dump file."
+    },
+    "ActionScriptType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the ActionScript is written in Apex or SOQL. Valid values are: None Apex SOQL If a value for this field is not supplied, or if an empty string is supplied for this value, a default value of None is used."
+    },
+    "ExecutableEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Apex class or trigger being executed. This field is required if ExecutableEntityName is not provided. If both ExecutableEntityName and ExecutableEntityId are provided, ExecutableEntityId takes precedence."
+    },
+    "ExecutableEntityName": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The Apex typeRef of the class or trigger being executed. A type lookup is done and, if the typeRef is valid, ExecutableEntityId is set to the ID of the class or trigger.For a trigger, the typeRef must begin with the SFDC trigger prefix __sfdc_trigger/. For example, __sfdc_trigger/YourTriggerName or __sfdc_trigger/YourNamespace/YourTriggerName. For a class, use the format YourClass, YourClass$YourInnerClass, or YourNamespace/YourClass$YourInnerClass. This field is required if ExecutableEntityId is not provided. If both ExecutableEntityName and ExecutableEntityId are provided, ExecutableEntityId takes precedence."
+    },
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The expiration date of the overlay action.If no value is provided for this field, a default value of 30 minutes from the current time is used."
+    },
+    "IsDumpingHeap": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether a heap dump is generated (true) or not (false). To execute the ActionScript without generating a heap dump, set this field to false. If no value for this field is provided, a default value of true is used."
+    },
+    "Iteration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number of times to execute the specified line execute before the heap dump is generated. This field is required."
+    },
+    "Line": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The line number of the heap dump marker. This field is required."
+    },
+    "ScopeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The user who executed the action.If no value for this field is provided, ScopeId is set to your UserId value."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexExecutionOverlayAction\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ActionScript\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ActionScriptType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"ExecutableEntity\" minOccurs=\"0\" type=\"ens:sObject\" nillable=\"true\"/>\n        <xsd:element name=\"ExecutableEntityId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"ExecutableEntityName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ExpirationDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDumpingHeap\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Iteration\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Line\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Scope\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"ScopeId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

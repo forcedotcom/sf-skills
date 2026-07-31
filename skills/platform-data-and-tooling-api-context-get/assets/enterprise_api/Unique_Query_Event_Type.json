@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Unique Query Event Type - Data API",
+  "description": "Unique Query events capture specific search queries (SOQL), filter IDs, and report IDs that are processed, along with the underlying database queries (SQL). This event type is available in API versions 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "BOT_IDENTIFIER": {
+      "type": "string",
+      "description": "The ID of the bot."
+    },
+    "BOT_SESSION_IDENTIFIER": {
+      "type": "string",
+      "description": "The bot session ID."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000123."
+    },
+    "PLANNER_IDENTIFIER": {
+      "type": "string",
+      "description": "The ID of the agent planner."
+    },
+    "QUERY_IDENTIFIER": {
+      "type": "String",
+      "description": "The text of the SOQL query run or the Id of the report or list view run."
+    },
+    "QUERY_TYPE": {
+      "type": "String",
+      "description": "The input type to the optimizer that was translated. Possible Values soql filter report"
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "SQL_ID": {
+      "type": "String",
+      "description": "The unique identifier generated for the database query."
+    }
+  }
+}

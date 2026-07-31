@@ -1,0 +1,293 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerOffer - Data API",
+  "description": "Represents a private offer that an ISV partner creates and sends to a customer. This object includes information about the offer, and is parent to multiple Partner Offer line items, and includes information used in the Partner Business Org (BPO) transaction. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AcceptedDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date the offer is accepted by the customer."
+    },
+    "BillingCustomerOrg": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field. Formula field that returns the BillingCustomerOrg value from the related SfdcCustomerForPartner record."
+    },
+    "BillingFrequency": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The frequency with which the customer is billed for their purchases. Possible values are: Annually"
+    },
+    "ContractTerm": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The duration of the contract between the customer and the partner in months. The max value is 12."
+    },
+    "CustBillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Compound field used for the customer billing address."
+    },
+    "CustBillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The customer billing city."
+    },
+    "CustBillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The customer billing country."
+    },
+    "CustBillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of geocoded billing address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "CustBillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The latitude geo-coordinate for customer billing address."
+    },
+    "CustBillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The longitude geo-coordinate for customer billing address ."
+    },
+    "CustBillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal/zip code of the customer billing address."
+    },
+    "CustBillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state of the customer billing address."
+    },
+    "CustBillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The billing street of the customer."
+    },
+    "CustShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Compound field for the customer shipping address."
+    },
+    "CustShippingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city of the customer shipping address."
+    },
+    "CustShippingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country of the customer shipping address."
+    },
+    "CustShippingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocoded shipping address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "CustShippingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The latitude geo-coordinate for customer shipping address."
+    },
+    "CustShippingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The longitude geo-coordinate for customer shipping address."
+    },
+    "CustShippingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal/zip code of the shipping address."
+    },
+    "CustShippingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state of the customer shipping address."
+    },
+    "CustShippingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street of the customer shipping address."
+    },
+    "CustomerBillingEmailAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The default email address of the customer who receives billing details, used to seed new offers. This is typically someone in the accounting department."
+    },
+    "CustomerEmailAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The customer email address that receives the offer notification. This email can be different from customer billing email address."
+    },
+    "CustomerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The associated Customer record where licenses are provisioned and invoices are sent. This field is a relationship field.",
+      "relationship_name": "Customer",
+      "refers_to": "SfdcCustomerForPartner"
+    },
+    "CustomerName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field. Returns the company name, which is stored in the Name field from the related SfdcCustomerForPartner record."
+    },
+    "CustomerOrgSyncError": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Stores information about any error that occurs during syncing to make support easier."
+    },
+    "CustomerOrgSyncLastUpdate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Tracks the timestamp of the last time the customer org performed the sync operation."
+    },
+    "CustomerOrgSyncStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Status of the customer org sync operation. Possible values are: READY IN_PROGRESS COMPLETE ERROR TERMINAL_ERROR The default value is READY."
+    },
+    "CustomerPaymentTerms": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The terms of payment for the customer. Indicates that the customer has 30 days from the invoice date to pay for services. Provides invoice due date. Possible values are: NET 30 The default value is NET 30."
+    },
+    "CustomerPurchaseOrderNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The purchase order number that is internal to customer's organization and provided during private offer process. This value is added to the customer invoice."
+    },
+    "ExpirationDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date when the offer expires. When expired, the offer moves to the Expired status and is no longer actionable."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The autogenerated number of the offer."
+    },
+    "OfferType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of offer, which indicates whether an offer is net new or an addition to a previous order. Possible values are: Add-On Initial The default value is Initial."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the associated opportunity. This field is a relationship field.",
+      "relationship_name": "Opportunity",
+      "refers_to": "Opportunity"
+    },
+    "OrderPrebillDays": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Represents the number of days, before the service date, that an invoice is sent to a customer."
+    },
+    "ParentOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the associated initial order. This field is a relationship field.",
+      "relationship_name": "ParentOrder",
+      "refers_to": "SfdcPartnerOrder"
+    },
+    "PartnerPurchaseOrderNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The purchase order number provided during private offer creation. This value is available to Salesforce but is not shared with the customer and can be used by the partner to reconcile transactions."
+    },
+    "PartnerTermSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Partner term set associated with the offer. This field is a relationship field.",
+      "relationship_name": "PartnerTermSet",
+      "refers_to": "SfdcPartnerTermSet"
+    },
+    "PaymentMethod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The possible payment methods available to the customer. Possible values are: ACH The default value is ACH."
+    },
+    "RespondingEmail": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email of the user that responded to the offer."
+    },
+    "RespondingFirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "First name of the user that responded to the offer"
+    },
+    "RespondingLastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Last name of the user that responded to the offer."
+    },
+    "SentToCustomerById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "User ID for the user that sent the offer to the customer. This field is a relationship field.",
+      "relationship_name": "SentToCustomerBy",
+      "refers_to": "User"
+    },
+    "SentToCustomerDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Date and time when the offer was sent to the customer."
+    },
+    "ServiceEndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field. The date when the contract terms end. Service end date is calculated as ServiceStartDate + ContractTerm in months."
+    },
+    "ServiceStartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date and time when the order is activated, if it is converted from an offer."
+    },
+    "ServiceTerm": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Period between Service Start date and Service End date."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the offer. Possible values are: Accepted Draft Rejected Sent SentError The default value is Draft."
+    },
+    "SubTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Derived field. Formula summing all offer item line item totals and the contract term. Excludes taxes."
+    },
+    "TermsAndConditions": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The terms and conditions set forth by the partner."
+    }
+  }
+}

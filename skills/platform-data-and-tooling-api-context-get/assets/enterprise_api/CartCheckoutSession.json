@@ -1,0 +1,164 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CartCheckoutSession - Data API",
+  "description": "Represents a checkout session used in Lightning B2B Commerce checkout. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BackgroundOperationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the in progress background operation."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The currency used for the checkout session. Default value is USD. Possible values are: USD—U.S. Dollar"
+    },
+    "IsArchived": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether checkout processing is archived (true) or not (false). After a session is archived, it can’t be unarchived. Default value is false."
+    },
+    "IsError": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the session is in error state (true) or not (false). Default value is false."
+    },
+    "IsProcessing": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether checkout processing is in progress (true) or not (false). Default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the checkout session."
+    },
+    "NextState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The next state of the checkout session."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of a created order after the checkout session has gone from cart to order."
+    },
+    "OrderReferenceNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Unique reference number the shopper can use to refer to the order. In API version 63.0 and later, LWR stores don't populate this field upon checkout. Instead, the InitialOrderReferenceNumber field on the WebCart object is populated."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The current state of the checkout session."
+    },
+    "WebCartId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the cart that is used to create the checkout session."
+    }
+  },
+  "special_access_rules": "This object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "BackgroundOperationId": {
+      "field_label": "Background Operation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Cart Checkout Session ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsArchived": {
+      "field_label": "Is Archived",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsError": {
+      "field_label": "Is Error",
+      "type": "boolean"
+    },
+    "IsProcessing": {
+      "field_label": "Is Processing",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NextState": {
+      "field_label": "Next State",
+      "type": "string",
+      "length": "30"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderReferenceNumber": {
+      "field_label": "Order Reference Number",
+      "type": "string",
+      "length": "36"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "string",
+      "length": "30"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WebCartId": {
+      "field_label": "Cart ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

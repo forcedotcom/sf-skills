@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "DatedConversionRate - Data API",
+  "description": "Represents the dated exchange rates used by an organization for which the multicurrency and the effective dated currency features are enabled.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ConversionRate": {
+      "type": "double",
+      "properties": "Filter, Update",
+      "description": "Conversion rate of this currency type against the corporate currency.",
+      "required": true
+    },
+    "IsoCode": {
+      "type": "picklist",
+      "properties": "Filter, Restricted picklist",
+      "description": "ISO code of the currency. Must be one of the valid alphabetic, three-letter currency ISO codes defined by the ISO 4217 standard, such as USD, GBP, or JPY. Must be unique within your organization. Label is Currency ISO Code. The CUC (Cuban Convertible Peso) picklist value is not available in API version 65.0 and later. Existing DatedConversionRate records for CUC are no longer supported.",
+      "required": true
+    },
+    "NextStartDate": {
+      "type": "date",
+      "properties": "Filter, Nillable",
+      "description": "Read only. The date on which the next effective dated exchange rate will start. Effectively the day after the end date for this exchange rate."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Filter",
+      "description": "The date on which the effective dated exchange rate starts. The timestamp is determined by the base calendar of the API."
+    }
+  },
+  "special_access_rules": "Customer Portal users can't access this object.",
+  "usage": "This object is for multicurrency organizations with advanced currency management enabled. Use this object to define the exchange rates your organization uses for a date range. This object is not available in single-currency organizations, nor is it available if the organization does not have advanced currency management enabled.",
+  "field_reference": {
+    "ConversionRate": {
+      "field_label": "Exchange Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "DatedConversion Rate ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsoCode": {
+      "field_label": "Currency Code",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NextStartDate": {
+      "field_label": "Next Start Date",
+      "type": "date"
+    },
+    "StartDate": {
+      "field_label": "Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PendingServiceRoutingInteractionInfo - Data API",
+  "description": "Represents PendingServiceRouting interaction information that’s used when work is routed to an agent. For a screen pop, it specifies which records to open when work is routed to an agent from a specific channel. PendingServiceRoutingInteractionInfo is read-only. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsFocused": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this record shows on the agent’s screen when multiple records open at the same time."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the PendingServiceRoutingInteractionInfo."
+    },
+    "PendingServiceRoutingId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the PendingServiceRouting from which the AgentWork is created. This is a relationship field.",
+      "relationship_name": "PendingServiceRouting",
+      "relationship_type": "Lookup",
+      "refers_to": "PendingServiceRouting"
+    },
+    "PrimaryRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the object that’s routed to the agent through Omni-Channel.",
+      "relationship_name": "PrimaryRecord",
+      "relationship_type": "Lookup"
+    },
+    "TargetFlowName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name and namespace prefix, if any, of the screen flow to open when work is routed to the agent. This field and the TargetFlowId field can't be populated at the same time. Available in API version 57.0 and later."
+    },
+    "TargetObjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The record to open when work is routed to the agent. This field is required in API version 56.0 and earlier. In API version 57.0 and later, this field is optional and can’t be populated at the same time as the TargetFlowName field.",
+      "relationship_name": "TargetObject",
+      "relationship_type": "Lookup"
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled. To view this object, you must have the “Manage Flow” user permission.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Pending Service Routing Interaction Information ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsFocused": {
+      "field_label": "Is Focused",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PendingServiceRoutingId": {
+      "field_label": "Pending Service Routing ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PrimaryRecordId": {
+      "field_label": "Primary Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetFlowName": {
+      "field_label": "Target Flow Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TargetObjectId": {
+      "field_label": "Target Object ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

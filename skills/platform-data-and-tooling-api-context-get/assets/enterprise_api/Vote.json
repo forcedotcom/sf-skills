@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Vote - Data API",
+  "description": "Represents a vote that a user has made on a Knowledge Article, Idea, or Reply.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "LastModifiedById": {
+      "type": "reference",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "ID of the user most recently associated with this vote."
+    },
+    "LastModifiedDate": {
+      "type": "dateTime",
+      "properties": "Defaulted on create, Filter, Sort",
+      "description": "The datetime when this vote was last modified."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Group, Sort, Create, Filter",
+      "description": "ID of the Knowledge Article, Idea, or Reply associated with this vote. This is a polymorphic relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Idea, IdeaComment, KnowledgeArticle, Solution"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Group, Sort, Create, Filter, Restricted picklist, Update",
+      "description": "Picklist that indicates the type of vote. The value Up indicates that the vote is a user's positive endorsement of the associated idea or reply. The value Down indicates that the vote is a user's negative endorsement of the associated idea or reply."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only authenticated internal and external users can access this object. Voting on Knowledge articles is available only when Knowledge is enabled.\n\nAs of Summer ’20 and later, only authenticated internal and external users can access this object.\n\nVoting on Knowledge articles is available only when Knowledge is enabled.",
+  "usage": "For Knowledge Articles, one vote record is inserted per user per Knowledge Article. Voting for another article version overrides the vote for the previous version. In version 12.0 and later, use this object to track the votes that users made on ideas. For more information on ideas, see “Understand and Work with Ideas” in the Salesforce Help . In version 17.0 and later, you must filter using the following syntax when querying this object in a SOQL query: ParentId = single ID, Parent.Type = single Type, Id = single ID, or Id IN (list of IDs). See Comparison Operators in the Salesforce SOQL and SOSL Reference Guide for a sample query. A SOQL query must filter using one of the following Parent or Id clauses.\n\nFor Knowledge Articles, one vote record is inserted per user per Knowledge Article. Voting for another article version overrides the vote for the previous version.\n\nIn version 12.0 and later, use this object to track the votes that users made on ideas. For more information on ideas, see “Understand and Work with Ideas” in the Salesforce Help .\n\nIn version 17.0 and later, you must filter using the following syntax when querying this object in a SOQL query: ParentId = single ID, Parent.Type = single Type, Id = single ID, or Id IN (list of IDs). See Comparison Operators in the Salesforce SOQL and SOSL Reference Guide for a sample query.\n\nA SOQL query must filter using one of the following Parent or Id clauses.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"Vote\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Vote ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Vote Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

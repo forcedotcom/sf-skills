@@ -1,0 +1,76 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "PriceProtectionTerm - Data API",
+  "description": "Represents a configuration record that defines the rules, types, and eligible conditions for price protection. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CalculationReferenceRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Rebate type that's applicable for the claim amount calculation. This field is a relationship field.",
+      "relationship_name": "CalculationReferenceRecord",
+      "refers_to": "ProgramRebateType"
+    },
+    "IsPayable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the inventory is eligible for payment or refund after a price protection adjustment. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort"
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and the timestamp when the record was last viewed by the user. Helps in understanding record engagement."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Unique name for the Price Protection Term. This is typically used as a primary identifier for UI display or business logic."
+    },
+    "NewSalePriceType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Defines the type of new sale price applicable after a price protection scenario. This helps classify how the adjusted sale price can be handled."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifier for the user or group who owns the record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "PriceProtectionType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines the type of price protection applied. Possible values are: PriceProtection—Price Protection ReversePriceProtection—Reverse Price Protection The default value is PriceProtection."
+    },
+    "SalePriceType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the type of sale price before price protection is applied. This helps calculate the protection delta during claim processing."
+    },
+    "SupportedPricePercent": {
+      "type": "percent",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the percentage of the price that is supported for price protection. Helps calculate eligible claim amounts."
+    },
+    "SupportedQuantityPercent": {
+      "type": "percent",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the percentage of quantity that is eligible for price protection. Used to determine prorated reimbursement."
+    }
+  }
+}

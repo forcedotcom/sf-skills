@@ -1,0 +1,389 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CampaignMember - Data API",
+  "description": "The CampaignMember object represents the relationship between a campaign and either a lead or a contact. If the Accounts as Campaign Members setting is enabled in an org, CampaignMember can also represent the relationship between a campaign and an account.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the account related to the campaign. This field is available only if the Accounts as Campaign Members setting is enabled in the org. This field is a relationship field.",
+      "relationship_name": "Related Record ID",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "CampaignId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the campaign related to the lead or contact. This field is a relationship field.",
+      "relationship_name": "Campaign",
+      "relationship_type": "Lookup",
+      "refers_to": "Campaign",
+      "required": true
+    },
+    "City": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The city for the address of the lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the city for the account."
+    },
+    "CompanyOrAccount": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The company or account of the lead or contact."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of a contact that's related to the campaign. This field is a relationship field.",
+      "relationship_name": "Contact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact",
+      "required": true
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for organizations with the multicurrency feature enabled. This field contains the ISO code for any currency allowed by the organization."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The country for the address of the lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the country for the account."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The description of the associated lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the description of the account."
+    },
+    "DoNotCall": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the lead or contact doesn’t want to be called. In orgs with the Accounts as Campaign Members setting enabled, this field can indicate the account doesn’t want to be called."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Email address for the lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the email address for the account."
+    },
+    "Fax": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Fax number for the lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the fax number for the account."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The first name of the lead or contact."
+    },
+    "FirstRespondedDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field indicates the date that the campaign member received a status of Responded."
+    },
+    "HasOptedOutOfEmail": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "This field indicates the email opt-out preference for the lead or contact. A value of false indicates that the lead or contact is opted in to emails. A value of true indicates that they’re opted out. In orgs with the Accounts as Campaign Members setting enabled, this field can be the opt-out preference for the account email address."
+    },
+    "HasOptedOutOfFax": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "This field indicates the fax opt-out preferences for the lead or contact. A value of false indicates that the lead or contact is opted in to receiving faxes. A value of true indicates that they’re opted out. In orgs with the Accounts as Campaign Members setting enabled, this field can indicate the account has opted out of faxes."
+    },
+    "HasResponded": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "This field indicates whether the campaign member has responded to the campaign (true) or not (false). Label is Responded."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The last name of the lead or contact. The limit is 80 characters."
+    },
+    "LeadId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of a lead that's related to the campaign. This field is a relationship field.",
+      "relationship_name": "Lead",
+      "relationship_type": "Lookup",
+      "refers_to": "Lead",
+      "required": true
+    },
+    "LeadOrContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of a lead or contact that's related to the campaign. In orgs with the Accounts as Campaign Members setting enabled, this field also accepts an account ID."
+    },
+    "LeadOrContactOwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the owner of the associated lead or contact owner. In orgs with the Accounts as Campaign Members setting enabled, this field can be the owner of the account. This field is a polymorphic relationship field.",
+      "relationship_name": "LeadOrContactOwner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "LeadSource": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The source where the lead was obtained."
+    },
+    "MobilePhone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The mobile phone number of the lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the mobile phone number for the account."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The first and last name of the lead or contact that's related to the campaign member."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The phone number of the lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the phone number for the account."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The postal code for the lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the postal code for the account."
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "ID of the record type assigned to this object. To change the record type, modify the CampaignMemberRecordTypeId field on the associated Campaign."
+    },
+    "Salutation": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Salutation for the lead or contact."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The state for the address of the lead or contact. The limit is 80 characters. In orgs with the Accounts as Campaign Members setting enabled, this field can be the state of the account address."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Controls the HasResponded flag on this object. You can't directly set the HasResponded flag, as it’s read-only. You can set it indirectly by setting this field in a create or update call. Each predefined value implies a HasResponded flag value. Each time you update this field, you implicitly update the HasResponded flag. In the Salesforce user interface, Marketing users can define valid status values for the Status picklist. They can choose one status as the default status. For each Status field value, they can also select which values to count as “Responded,” meaning that the HasResponded flag is set to true for those values. The limit is 40 characters.When you create or update campaign members, use the text value for Status instead of the ID from the CampaignMemberStatus object."
+    },
+    "Street": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The street for the address of the lead or contact. In orgs with the Accounts as Campaign Members setting enabled, this field can be the street of the account address."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Title for the lead or contact."
+    },
+    "Type": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates if the campaign member is a lead or a contact. In orgs with the Accounts as Campaign Members setting enabled, this field can indicate an account."
+    }
+  },
+  "special_access_rules": "Customer Portal users can’t access this object.",
+  "usage": "Each record has a unique ID, and must contain either a ContactId or a LeadId, but can't contain both. Any attempt to create a single record with both results in a successful insert but only the ContactId is inserted. However, you can create two separate records on a Campaign—one for the Lead and one for the Contact. In orgs with the Accounts as Campaign Members setting enabled, the unique ID can be an AccountID. This object is defined only for orgs that have the marketing feature and valid marketing licenses. If your org doesn’t have the marketing feature or valid marketing licenses, this object doesn’t appear in the describeGlobal() call, and you can't use describeSObjects() or query() with this object. To issue create() requests to the API, your account only requires read access to campaigns. If the record doesn’t exist for the specified ContactId or LeadId, then a new record is created. If the record exists, an error is returned and no update is made. To update an existing record, specify the ID of the CampaignMember record to update. To delete a record, specify the ID of the CampaignMember record. When creating or updating records, the Status field value specified in the call is verified as a valid status for the given Campaign:\n\nEach record has a unique ID, and must contain either a ContactId or a LeadId, but can't contain both. Any attempt to create a single record with both results in a successful insert but only the ContactId is inserted. However, you can create two separate records on a Campaign—one for the Lead and one for the Contact.\n\nIn orgs with the Accounts as Campaign Members setting enabled, the unique ID can be an AccountID.\n\nThis object is defined only for orgs that have the marketing feature and valid marketing licenses. If your org doesn’t have the marketing feature or valid marketing licenses, this object doesn’t appear in the describeGlobal() call, and you can't use describeSObjects() or query() with this object.\n\nTo issue create() requests to the API, your account only requires read access to campaigns.\n\nIf the record doesn’t exist for the specified ContactId or LeadId, then a new record is created. If the record exists, an error is returned and no update is made. To update an existing record, specify the ID of the CampaignMember record to update.\n\nTo delete a record, specify the ID of the CampaignMember record.\n\nWhen creating or updating records, the Status field value specified in the call is verified as a valid status for the given Campaign:",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CampaignMemberChangeEvent (API version 46.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"CampaignMember\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Campaign\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Campaign\"/>\n        <element name=\"CampaignId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CompanyOrAccount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Contact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DoNotCall\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Email\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Fax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FirstName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FirstRespondedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"HasOptedOutOfEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasOptedOutOfFax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasResponded\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Lead\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Lead\"/>\n        <element name=\"LeadId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LeadOrContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LeadOrContactOwner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"LeadOrContactOwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LeadSource\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ListEmailIndividualRecipients\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MobilePhone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Salutation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CampaignId": {
+      "field_label": "Campaign ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "CompanyOrAccount": {
+      "field_label": "Company (Account)",
+      "type": "string",
+      "length": "255"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DoNotCall": {
+      "field_label": "Do Not Call",
+      "type": "boolean"
+    },
+    "Email": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "Fax": {
+      "field_label": "Fax",
+      "type": "phone",
+      "length": "40"
+    },
+    "FirstName": {
+      "field_label": "First Name",
+      "type": "string",
+      "length": "40"
+    },
+    "FirstRespondedDate": {
+      "field_label": "First Responded Date",
+      "type": "date"
+    },
+    "HasOptedOutOfEmail": {
+      "field_label": "Email Opt Out",
+      "type": "boolean"
+    },
+    "HasOptedOutOfFax": {
+      "field_label": "Fax Opt Out",
+      "type": "boolean"
+    },
+    "HasResponded": {
+      "field_label": "Responded",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Campaign Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastName": {
+      "field_label": "Last Name",
+      "type": "string",
+      "length": "80"
+    },
+    "LeadId": {
+      "field_label": "Lead ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LeadOrContactId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LeadOrContactOwnerId": {
+      "field_label": "Related Record Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LeadSource": {
+      "field_label": "Lead Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MobilePhone": {
+      "field_label": "Mobile",
+      "type": "phone",
+      "length": "40"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PostalCode": {
+      "field_label": "Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "Salutation": {
+      "field_label": "Salutation",
+      "type": "picklist",
+      "length": "255"
+    },
+    "State": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "128"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "string",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

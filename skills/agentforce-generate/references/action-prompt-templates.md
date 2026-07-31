@@ -2,6 +2,9 @@
 
 Invoking Salesforce Prompt Templates as actions within Agent Script.
 
+> Specialized reference for `generatePromptResponse://` actions.
+> For general action metadata and property rules, see `actions-reference.md`.
+
 ---
 
 ## Overview

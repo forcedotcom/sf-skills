@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "SOSSession - Data API",
+  "description": "This object is automatically created for each SOS session and stores information about the session. This object is available in API versions 34.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AppVersion": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The version of the customer’s mobile application in which SOS is implemented."
+    },
+    "CaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the case that’s associated with the SOS session."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the contact that’s associated with the SOS session."
+    },
+    "DeploymentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the SOS deployment that the SOS session originated from."
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time that the SOS session ended."
+    },
+    "IpAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "To protect the customer’s privacy, this field is now blank."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the session record was last referenced by a user."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the session record was last viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, Sort",
+      "description": "The name of the session."
+    },
+    "OpentokSession": {
+      "type": "encryptedstring",
+      "properties": "Create, Nillable, Update",
+      "description": "The ID of the OpenTok session that’s associated with the SOS video call."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the session record’s owner."
+    },
+    "SessionDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The amount of time that the SOS session lasted."
+    },
+    "SessionRecordingUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The URL where the SOS session recording is stored."
+    },
+    "SosVersion": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The version of SOS that was used in your organization’s mobile application when this session occurred."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time that the SOS session began."
+    },
+    "SystemInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Information about the customer’s mobile device from which the SOS call originated, such as the device’s operating system."
+    },
+    "WaitDuration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The amount of time the customer waited before an agent accepted the SOS session and the call began."
+    }
+  },
+  "usage": "Use this object to query and manage SOS session records.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **SOSSessionFeed**: Feed tracking is available for the object.\n- **SOSSessionHistory**: History is available for tracked fields of the object.\n- **SOSSessionOwnerSharingRule**: Sharing rules are available for the object.\n- **SOSSessionShare**: Sharing is available for the object."
+}

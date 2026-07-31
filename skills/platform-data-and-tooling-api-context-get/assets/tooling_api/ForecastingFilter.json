@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ForecastingFilter - Tooling API",
+  "description": "Represents the custom filter for including or excluding data from opportunity forecasts. This object is available in API version 55.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer name of the forecast filter."
+    },
+    "FilterLogic": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The logic that controls the evaluation of conditions. Only AND is supported. For example, 1 AND 2 AND 3."
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecast type. Can be linked only to forecast types created in Summer ’21 and later. This is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingType"
+    },
+    "ForecastingTypeSourceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecast type source. Can be linked only to forecast type sources created in Summer ’21 or later and with a forecast source definition with source object of 'Opportunity’. This is a relationship field.",
+      "relationship_name": "ForecastingTypeSource",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingTypeSource"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the forecast filter."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the forecast filter."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label for this object, which displays in Setup. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    },
+    "Metadata": {
+      "type": "ForecastingFilter",
+      "properties": "Create, Nillable, Update",
+      "description": "The metadata of the forecast filter."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingFilter\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"filterLogic\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingCustomCategory\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingType\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingTypeSource\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingTypeSourceCategory\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

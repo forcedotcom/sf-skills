@@ -1,0 +1,1172 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "DandBCompany - Data API",
+  "description": "Represents a Dun & Bradstreet® company record, which is associated with an account added from Data.com. This object is available in API version 25.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city where a company is physically located. Maximum size is 40 characters."
+    },
+    "CompanyCurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The code used to represent a company’s local currency. This data is provided by the International Organization for Standardization (ISO) and is based on their three-letter currency codes. For example, USD is the ISO code for United States Dollar. Maximum size is 3 characters."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country where a company is physically located. Maximum size is 40 characters."
+    },
+    "CountryAccessCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The required code for international calls. Maximum size is 4 characters."
+    },
+    "CurrencyCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The currency in which the company’s sales volume is expressed. The full list of values can be found at the Optimizer Resources page maintained by Dun & Bradstreet. Maximum size is 4 characters."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A brief description of the company, which may include information about its history, its products and services, and its influence on a particular industry. Maximum size is 32000 characters."
+    },
+    "DomesticUltimateBusinessName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The primary name of the Domestic Ultimate, which is the highest ranking subsidiary, specified by country, within an organization’s corporate structure. Maximum size is 255 characters."
+    },
+    "DomesticUltimateDunsNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The D-U-N-S Number for the Domestic Ultimate, which is the highest ranking subsidiary, specified by country, within an organization’s corporate structure. Maximum size is 9 characters."
+    },
+    "DunsNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Data Universal Numbering System (D-U-N-S) number is a unique, nine-digit number assigned to every business location in the Dun & Bradstreet database that has a unique, separate, and distinct operation. D-U-N-S numbers are used by industries and organizations around the world as a global standard for business identification and tracking. Maximum size is 9 characters."
+    },
+    "EmployeeQuantityGrowthRate": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The yearly growth rate of the number of employees in a company expressed as a decimal percentage. The data includes the total employee growth rate for the past two years."
+    },
+    "EmployeesHere": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The number of employees at a specified location, such as a branch location. Maximum size is 15 characters."
+    },
+    "EmployeesHereReliability": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The reliability of the EmployeesHere figure. Available values include: 0—Actual number 1—Low 2—Estimated (for all records) 3—Modeled (for non-US records)"
+    },
+    "EmployeesTotal": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The total number of employees in the company, including all subsidiary and branch locations. This data is only available on records that have a value of Headquarters/Parent in the LocationStatus field. Maximum size is 15 characters."
+    },
+    "EmployeesTotalReliability": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The reliability of the EmployeesTotal figure. Available values include: 0—Actual number 1—Low 2—Estimated (for all records) 3—Modeled (for non-US records) A blank value indicates this data is unavailable."
+    },
+    "FamilyMembers": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of family members, worldwide, within an organization, including the Global Ultimate, its subsidiaries (if any), and its branches (if any). Maximum size is 5 characters."
+    },
+    "Fax": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The company’s facsimile number."
+    },
+    "FifthNaics": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional NAICS code used to further classify an organization by industry. Maximum size is 6 characters."
+    },
+    "FifthNaicsDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding NAICS code. Maximum size is 120 characters."
+    },
+    "FifthSic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "FifthSic8": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "FifthSic8Desc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "FifthSicDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "FipsMsaCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Federal Information Processing Standards (FIPS) and the Metropolitan Statistical Area (MSA) codes identify the organization’s location. The MSA codes are defined by the US Office of Management and Budget. Maximum size is 5 characters."
+    },
+    "FipsMsaDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s FIPS MSA code. Maximum size is 255 characters."
+    },
+    "FortuneRank": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The numeric value of the company’s Fortune 1000 ranking. A null or blank value means that the company isn’t ranked as a Fortune 1000 company."
+    },
+    "FourthNaics": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional NAICS code used to further classify an organization by industry. Maximum size is 6 characters."
+    },
+    "FourthNaicsDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding NAICS code. Maximum size is 120 characters."
+    },
+    "FourthSic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "FourthSic8": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "FourthSic8Desc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "FourthSicDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "GeoCodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The level of accuracy of a location’s geographical coordinates compared with its physical address. Available values include: A – Non-US rooftop accuracy B – Block level C – Places the address in the correct city D – Rooftop level I – Street intersection M – Mailing address level N – Not matched P – PO BOX location S – Street level T – Census tract level Z – ZIP code level 0 (zero)– Geocode could not be assigned"
+    },
+    "GlobalUltimateBusinessName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The primary name of the Global Ultimate, which is the highest entity within an organization’s corporate structure and may oversee branches and subsidiaries. Maximum size is 255 characters."
+    },
+    "GlobalUltimateDunsNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The D-U-N-S Number of the Global Ultimate, which is the highest entity within an organization’s corporate structure and may oversee branches and subsidiaries. Maximum size is 9 characters."
+    },
+    "GlobalUltimateTotalEmployees": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The total number of employees at the Global Ultimate, which is the highest entity within an organization’s corporate structure and may oversee branches and subsidiaries. Maximum size is 15 characters."
+    },
+    "ImportExportAgent": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Identifies whether a business imports goods or services, exports goods or services, and/or is an agent for goods. Available values include: A—Importer/exporter/agent B—Importer/exporter C—Importer D—Importer/agent E—Exporter/agent F—Agent (keeps no inventory and does not take title goods) G—None or data not available H—Exporter"
+    },
+    "IncludedInSnP500": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A true or false value. If true, the company is listed in the S&P 500 Index. If false, the company isn’t listed in the S&P 500 Index."
+    },
+    "Latitude": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used with longitude to specify a precise location, which is then used to assess the Geocode Accuracy. Maximum size is 11 characters."
+    },
+    "LegalStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Identifies the legal structure of an organization."
+    },
+    "LocationStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Identifies the organizational status of a company. Available values are Single location, Headquarters/Parent, and Branch. Available values include: 0—Single location (no other entities report to the business) 1—Headquarters/parent (branches and/or subsidiaries report to the business) 2—Branch (secondary location to a headquarters location)"
+    },
+    "Longitude": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used with latitude to specify a precise location, which is then used to assess the Geocode Accuracy. Maximum size is 11 characters."
+    },
+    "MailingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the mailing address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "MailingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city where a company has its mail delivered. Maximum size is 40 characters."
+    },
+    "MailingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country where a company has its mail delivered. Maximum size is 40 characters."
+    },
+    "MailingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code that a company uses on its mailing address. Maximum size is 20 characters."
+    },
+    "MailingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state where a company has its mail delivered. Maximum size is 20 characters."
+    },
+    "MailingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street address where a company has its mail delivered. Maximum size is 255 characters."
+    },
+    "MarketingPreScreen": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The probability that a company will pay with a significant delay compared to the agreed terms. The risk level is based on the standard Commercial Credit Score, and ranges from low risk to high risk. Available values include: L—Low risk of delinquency M—Moderate risk of delinquency H—High risk of delinquency Important: Use this information for marketing pre-screening purposes only."
+    },
+    "MarketingSegmentationCluster": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Twenty-two distinct, mutually exclusive profiles, created as a result of cluster analysis of Dun & Bradstreet data for US organizations."
+    },
+    "MinorityOwned": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether an organization is owned or controlled by a member of a minority group. Available values include: Y—Minority owned N—Not minority owned"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The primary or registered name of a company. Maximum size is 255 characters."
+    },
+    "NationalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The identification number used in some countries for business registration and tax collection. Maximum size is 255 characters."
+    },
+    "NationalIdType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "A code value that identifies the type of national identification number used. The full list of resources can be found at the Optimizer Resources page maintained by Dun & Bradstreet. Maximum size is 5 characters."
+    },
+    "OutOfBusiness": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the company at the specified address has discontinued operations. Available values include: Y—Out of business N—Not out of business"
+    },
+    "OwnOrRent": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether a company owns or rents the building it occupies. Available values include: 0—Unknown or not applicable 1—Owns 2—Rents"
+    },
+    "ParentOrHqBusinessName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The primary name of the parent or headquarters company. Maximum size is 255 characters."
+    },
+    "ParentOrHqDunsNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The D-U-N-S Number for the parent or headquarters. Maximum size is 9 characters."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A company’s primary telephone number."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code that corresponds to a company’s physical location. Maximum size is 20 characters."
+    },
+    "PremisesMeasure": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A numeric value for the measurement of the premises."
+    },
+    "PremisesMeasureReliability": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A descriptive accuracy of the measurement such as actual, estimated, or modeled."
+    },
+    "PremisesMeasureUnit": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A descriptive measurement unit such as acres, square meters, or square feet."
+    },
+    "PrimaryNaics": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The six-digit North American Industry Classification System (NAICS) code is the standard used by business and government to classify business establishments according to their economic activity for the purpose of collecting, analyzing, and publishing statistical data related to the US business economy. The full list of values can be found at the Optimizer Resources page maintained by Dun & Bradstreet. Maximum size is 6 characters."
+    },
+    "PrimaryNaicsDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on its NAICS code. Maximum size is 120 characters."
+    },
+    "PrimarySic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The four-digit Standard Industrial Classification (SIC) code is used to categorize business establishments by industry. The full list of values can be found at the Optimizer Resources page maintained by Dun & Bradstreet. Maximum size is 4 characters."
+    },
+    "PrimarySic8": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The eight-digit Standard Industrial Classification (SIC) code is used to categorize business establishments by industry. The full list of values can be found at the Optimizer Resources page maintained by Dun & Bradstreet. Maximum size is 8 characters."
+    },
+    "PrimarySic8Desc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on its SIC code. The full list of values can be found at the Optimizer Resources page maintained by Dun & Bradstreet. Maximum size is 80 characters."
+    },
+    "PrimarySicDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on its SIC code. Maximum size is 80 characters."
+    },
+    "PriorYearEmployees": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of employees for the prior year."
+    },
+    "PriorYearRevenue": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The annual revenue for the prior year."
+    },
+    "PublicIndicator": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether ownership of the company is public or private. Available values include: Y—Public N—Private"
+    },
+    "SalesTurnoverGrowthRate": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The increase in annual revenue from the previous value for an equivalent period expressed as a decimal percentage."
+    },
+    "SalesVolume": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The total annual sales revenue in the headquarters’ local currency. Dun & Bradstreet tracks revenue data for publicly traded companies, Global Ultimates, Domestic Ultimates, and some headquarters."
+    },
+    "SalesVolumeReliability": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The reliability of the SalesVolume figure. Available values include: 0—Actual number 1—Low 2—Estimated (for all records) 3—Modeled (for non-US records)"
+    },
+    "SecondNaics": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional NAICS code used to further classify an organization by industry. Maximum size is 6 characters."
+    },
+    "SecondNaicsDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding NAICS code. Maximum size is 120 characters."
+    },
+    "SecondSic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "SecondSic8": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "SecondSic8Desc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "SecondSicDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "SixthNaics": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional NAICS code used to further classify an organization by industry. Maximum size is 6 characters."
+    },
+    "SixthNaicsDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding NAICS code. Maximum size is 120 characters."
+    },
+    "SixthSic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "SixthSic8": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "SixthSic8Desc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "SixthSicDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "SmallBusiness": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the company is designated a small business as defined by the Small Business Administration of the US government. Available values include: Y—Small business site N—Not small business site"
+    },
+    "State": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state where a company is physically located. Maximum size is 20 characters."
+    },
+    "StockExchange": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The corresponding exchange for a company’s stock symbol. For example: NASDAQ or NYSE. Maximum size is 16 characters."
+    },
+    "StockSymbol": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The abbreviation used to identify publicly traded shares of a particular stock. Maximum size is 6 characters."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street address where a company is physically located. Maximum size is 255 characters."
+    },
+    "Subsidiary": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether a company is more than 50 percent owned by another organization. Available values include: 0—Not subsidiary of another organization 3—Subsidiary of another organization"
+    },
+    "ThirdNaics": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional NAICS code used to further classify an organization by industry. Maximum size is 6 characters."
+    },
+    "ThirdNaicsDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding NAICS code. Maximum size is 120 characters."
+    },
+    "ThirdSic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "ThirdSic8": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional SIC code used to further classify an organization by industry. Maximum size is 8 characters."
+    },
+    "ThirdSic8Desc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "ThirdSicDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an organization’s line of business, based on the corresponding SIC code. Maximum size is 80 characters."
+    },
+    "TradeStyle1": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A name, different from its legal name, that an organization may use for conducting business. Similar to “Doing business as” or “DBA”. Maximum size is 255 characters."
+    },
+    "TradeStyle2": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional tradestyle used by the organization. Maximum size is 255 characters."
+    },
+    "TradeStyle3": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional tradestyle used by the organization. Maximum size is 255 characters."
+    },
+    "TradeStyle4": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional tradestyle used by the organization. Maximum size is 255 characters."
+    },
+    "TradeStyle5": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An additional tradestyle used by the organization. Maximum size is 255 characters."
+    },
+    "URL": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An organization’s primary website address. Maximum size is 104 characters."
+    },
+    "UsTaxId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The identification number for the company used by the Internal Revenue Service (IRS) in the administration of tax laws. Also referred to as Federal Taxpayer Identification Number. Maximum size is 9 characters."
+    },
+    "WomenOwned": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether a company is more than 50 percent owned or controlled by a woman. Available values include: Y—Owned by a woman N—Not owned by a woman, or unknown"
+    },
+    "YearStarted": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The year the company was established or the year when current ownership or management assumed control of the company. Maximum size is 4 characters."
+    }
+  },
+  "special_access_rules": "Only organizations with Data.com Premium Prospector or Data.com Premium Clean can access this object.",
+  "usage": "Use this object to manage D&B Company records in your organization.",
+  "wsdl_segment": "```xml\n<complexType name=\"DandBCompany\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Accounts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Address\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CompanyCurrencyIsoCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CountryAccessCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CurrencyCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DomesticUltimateBusinessName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DomesticUltimateDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EmployeeQuantityGrowthRate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"EmployeesHere\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"EmployeesHereReliability\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EmployeesTotal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"EmployeesTotalReliability\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FamilyMembers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Fax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FifthNaics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FifthNaicsDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FifthSic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FifthSic8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FifthSic8Desc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FifthSicDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FipsMsaCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FipsMsaDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FortuneRank\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FourthNaics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FourthNaicsDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FourthSic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FourthSic8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FourthSic8Desc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FourthSicDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GeoCodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GeocodeAccuracyStandard\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GlobalUltimateBusinessName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GlobalUltimateDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GlobalUltimateTotalEmployees\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ImportExportAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IncludedInSnP500\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Latitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Leads\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"LegalStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LocationStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Longitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MailingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"MailingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MailingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MailingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MailingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MailingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MailingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MarketingPreScreen\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MarketingSegmentationCluster\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MinorityOwned\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NationalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NationalIdType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OutOfBusiness\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OwnOrRent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ParentOrHqBusinessName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ParentOrHqDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PremisesMeasure\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"PremisesMeasureReliability\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PremisesMeasureUnit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PrimaryNaics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PrimaryNaicsDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PrimarySic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PrimarySic8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PrimarySic8Desc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PrimarySicDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PriorYearEmployees\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"PriorYearRevenue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"PublicIndicator\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SalesTurnoverGrowthRate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SalesVolume\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SalesVolumeReliability\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SecondNaics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SecondNaicsDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SecondSic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SecondSic8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SecondSic8Desc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SecondSicDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SixthNaics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SixthNaicsDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SixthSic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SixthSic8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SixthSic8Desc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SixthSicDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SmallBusiness\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StockExchange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StockSymbol\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subsidiary\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ThirdNaics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThirdNaicsDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThirdSic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThirdSic8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThirdSic8Desc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThirdSicDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TradeStyle1\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TradeStyle2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TradeStyle3\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TradeStyle4\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TradeStyle5\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"URL\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UsTaxId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WomenOwned\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"YearStarted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "Address": {
+      "field_label": "Primary Address",
+      "type": "address"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "CompanyCurrencyIsoCode": {
+      "field_label": "Local Currency ISO Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CountryAccessCode": {
+      "field_label": "International Dialing Code",
+      "type": "string",
+      "length": "4"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyCode": {
+      "field_label": "Local Currency Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Company Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DomesticUltimateBusinessName": {
+      "field_label": "Domestic Ultimate Business Name",
+      "type": "string",
+      "length": "255"
+    },
+    "DomesticUltimateDunsNumber": {
+      "field_label": "Domestic Ultimate D-U-N-S Number",
+      "type": "string",
+      "length": "9"
+    },
+    "DunsNumber": {
+      "field_label": "D-U-N-S Number",
+      "type": "string",
+      "length": "9"
+    },
+    "EmployeeQuantityGrowthRate": {
+      "field_label": "Employee Growth",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "EmployeesHere": {
+      "field_label": "Number of Employees - Location",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "EmployeesHereReliability": {
+      "field_label": "Number of Employees - Location Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EmployeesTotal": {
+      "field_label": "Number of Employees - Total",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "EmployeesTotalReliability": {
+      "field_label": "Number of Employees - Total Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FamilyMembers": {
+      "field_label": "Number of Business Family Members",
+      "type": "int",
+      "digits": "5"
+    },
+    "Fax": {
+      "field_label": "Facsimile Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "FifthNaics": {
+      "field_label": "Fifth NAICS Code",
+      "type": "string",
+      "length": "6"
+    },
+    "FifthNaicsDesc": {
+      "field_label": "Fifth NAICS Description",
+      "type": "string",
+      "length": "120"
+    },
+    "FifthSic": {
+      "field_label": "Fifth SIC Code",
+      "type": "string",
+      "length": "4"
+    },
+    "FifthSic8": {
+      "field_label": "Fifth SIC8 Code",
+      "type": "string",
+      "length": "8"
+    },
+    "FifthSic8Desc": {
+      "field_label": "Fifth SIC8 Description",
+      "type": "string",
+      "length": "80"
+    },
+    "FifthSicDesc": {
+      "field_label": "Fifth SIC Description",
+      "type": "string",
+      "length": "80"
+    },
+    "FipsMsaCode": {
+      "field_label": "FIPS MSA Code",
+      "type": "string",
+      "length": "5"
+    },
+    "FipsMsaDesc": {
+      "field_label": "FIPS MSA Code Description",
+      "type": "string",
+      "length": "255"
+    },
+    "FortuneRank": {
+      "field_label": "Fortune 1000 Rank",
+      "type": "int",
+      "digits": "4"
+    },
+    "FourthNaics": {
+      "field_label": "Fourth NAICS Code",
+      "type": "string",
+      "length": "6"
+    },
+    "FourthNaicsDesc": {
+      "field_label": "Fourth NAICS Description",
+      "type": "string",
+      "length": "120"
+    },
+    "FourthSic": {
+      "field_label": "Fourth SIC Code",
+      "type": "string",
+      "length": "4"
+    },
+    "FourthSic8": {
+      "field_label": "Fourth SIC8 Code",
+      "type": "string",
+      "length": "8"
+    },
+    "FourthSic8Desc": {
+      "field_label": "Fourth SIC8 Description",
+      "type": "string",
+      "length": "80"
+    },
+    "FourthSicDesc": {
+      "field_label": "Fourth SIC Description",
+      "type": "string",
+      "length": "80"
+    },
+    "GeoCodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "255"
+    },
+    "GeocodeAccuracyStandard": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "GlobalUltimateBusinessName": {
+      "field_label": "Global Ultimate Business Name",
+      "type": "string",
+      "length": "255"
+    },
+    "GlobalUltimateDunsNumber": {
+      "field_label": "Global Ultimate D-U-N-S Number",
+      "type": "string",
+      "length": "9"
+    },
+    "GlobalUltimateTotalEmployees": {
+      "field_label": "Number of Employees - Global",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Id": {
+      "field_label": "D&B Company ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImportExportAgent": {
+      "field_label": "Import/Export",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IncludedInSnP500": {
+      "field_label": "S&P 500",
+      "type": "string",
+      "length": "10"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "string",
+      "length": "11"
+    },
+    "LegalStatus": {
+      "field_label": "Legal Structure",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LocationStatus": {
+      "field_label": "Location Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "string",
+      "length": "11"
+    },
+    "MailingAddress": {
+      "field_label": "Mailing Address",
+      "type": "address"
+    },
+    "MailingCity": {
+      "field_label": "Mailing City",
+      "type": "string",
+      "length": "40"
+    },
+    "MailingCountry": {
+      "field_label": "Mailing Country",
+      "type": "string",
+      "length": "80"
+    },
+    "MailingGeocodeAccuracy": {
+      "field_label": "Mailing Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "MailingPostalCode": {
+      "field_label": "Mailing Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "MailingState": {
+      "field_label": "Mailing State",
+      "type": "string",
+      "length": "80"
+    },
+    "MailingStreet": {
+      "field_label": "Mailing Street Address",
+      "type": "textarea",
+      "length": "255"
+    },
+    "MarketingPreScreen": {
+      "field_label": "Delinquency Risk",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MarketingSegmentationCluster": {
+      "field_label": "Marketing Segmentation Cluster",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MinorityOwned": {
+      "field_label": "Minority-Owned Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Primary Business Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NationalId": {
+      "field_label": "National Identification Number",
+      "type": "string",
+      "length": "255"
+    },
+    "NationalIdType": {
+      "field_label": "National Identification System",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OutOfBusiness": {
+      "field_label": "Out Of Business Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OwnOrRent": {
+      "field_label": "Location Ownership Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ParentOrHqBusinessName": {
+      "field_label": "Parent Company Business Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentOrHqDunsNumber": {
+      "field_label": "Parent Company D-U-N-S Number",
+      "type": "string",
+      "length": "9"
+    },
+    "Phone": {
+      "field_label": "Telephone Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "PostalCode": {
+      "field_label": "Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "PremisesMeasure": {
+      "field_label": "Location Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "PremisesMeasureReliability": {
+      "field_label": "Location Size Accuracy",
+      "type": "string",
+      "length": "64"
+    },
+    "PremisesMeasureUnit": {
+      "field_label": "Location Size Unit of Measure",
+      "type": "string",
+      "length": "64"
+    },
+    "PrimaryNaics": {
+      "field_label": "Primary NAICS Code",
+      "type": "string",
+      "length": "6"
+    },
+    "PrimaryNaicsDesc": {
+      "field_label": "Primary NAICS Description",
+      "type": "string",
+      "length": "120"
+    },
+    "PrimarySic": {
+      "field_label": "Primary SIC Code",
+      "type": "string",
+      "length": "4"
+    },
+    "PrimarySic8": {
+      "field_label": "Primary SIC8 Code",
+      "type": "string",
+      "length": "8"
+    },
+    "PrimarySic8Desc": {
+      "field_label": "Primary SIC8 Description",
+      "type": "string",
+      "length": "80"
+    },
+    "PrimarySicDesc": {
+      "field_label": "Primary SIC Description",
+      "type": "string",
+      "length": "80"
+    },
+    "PriorYearEmployees": {
+      "field_label": "Prior Year Number of Employees - Total",
+      "type": "int",
+      "digits": "9"
+    },
+    "PriorYearRevenue": {
+      "field_label": "Prior Year Revenue",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "PublicIndicator": {
+      "field_label": "Ownership Type Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SalesTurnoverGrowthRate": {
+      "field_label": "Annual Revenue Growth",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "SalesVolume": {
+      "field_label": "Annual Sales Volume",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "SalesVolumeReliability": {
+      "field_label": "Annual Sales Volume Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SecondNaics": {
+      "field_label": "Second NAICS Code",
+      "type": "string",
+      "length": "6"
+    },
+    "SecondNaicsDesc": {
+      "field_label": "Second NAICS Description",
+      "type": "string",
+      "length": "120"
+    },
+    "SecondSic": {
+      "field_label": "Second SIC Code",
+      "type": "string",
+      "length": "4"
+    },
+    "SecondSic8": {
+      "field_label": "Second SIC8 Code",
+      "type": "string",
+      "length": "8"
+    },
+    "SecondSic8Desc": {
+      "field_label": "Second SIC8 Description",
+      "type": "string",
+      "length": "80"
+    },
+    "SecondSicDesc": {
+      "field_label": "Second SIC Description",
+      "type": "string",
+      "length": "80"
+    },
+    "SixthNaics": {
+      "field_label": "Sixth NAICS Code",
+      "type": "string",
+      "length": "6"
+    },
+    "SixthNaicsDesc": {
+      "field_label": "Sixth NAICS Description",
+      "type": "string",
+      "length": "120"
+    },
+    "SixthSic": {
+      "field_label": "Sixth SIC Code",
+      "type": "string",
+      "length": "4"
+    },
+    "SixthSic8": {
+      "field_label": "Sixth SIC8 Code",
+      "type": "string",
+      "length": "8"
+    },
+    "SixthSic8Desc": {
+      "field_label": "Sixth SIC8 Description",
+      "type": "string",
+      "length": "80"
+    },
+    "SixthSicDesc": {
+      "field_label": "Sixth SIC Description",
+      "type": "string",
+      "length": "80"
+    },
+    "SmallBusiness": {
+      "field_label": "Small Business Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "string",
+      "length": "80"
+    },
+    "StockExchange": {
+      "field_label": "Stock Exchange",
+      "type": "string",
+      "length": "16"
+    },
+    "StockSymbol": {
+      "field_label": "Ticker Symbol",
+      "type": "string",
+      "length": "6"
+    },
+    "Street": {
+      "field_label": "Street Address",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Subsidiary": {
+      "field_label": "Subsidiary Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ThirdNaics": {
+      "field_label": "Third NAICS Code",
+      "type": "string",
+      "length": "6"
+    },
+    "ThirdNaicsDesc": {
+      "field_label": "Third NAICS Description",
+      "type": "string",
+      "length": "120"
+    },
+    "ThirdSic": {
+      "field_label": "Third SIC Code",
+      "type": "string",
+      "length": "4"
+    },
+    "ThirdSic8": {
+      "field_label": "Third SIC8 Code",
+      "type": "string",
+      "length": "8"
+    },
+    "ThirdSic8Desc": {
+      "field_label": "Third SIC8 Description",
+      "type": "string",
+      "length": "80"
+    },
+    "ThirdSicDesc": {
+      "field_label": "Third SIC Description",
+      "type": "string",
+      "length": "80"
+    },
+    "TradeStyle1": {
+      "field_label": "Primary Tradestyle",
+      "type": "string",
+      "length": "255"
+    },
+    "TradeStyle2": {
+      "field_label": "Second Tradestyle",
+      "type": "string",
+      "length": "255"
+    },
+    "TradeStyle3": {
+      "field_label": "Third Tradestyle",
+      "type": "string",
+      "length": "255"
+    },
+    "TradeStyle4": {
+      "field_label": "Fourth Tradestyle",
+      "type": "string",
+      "length": "255"
+    },
+    "TradeStyle5": {
+      "field_label": "Fifth Tradestyle",
+      "type": "string",
+      "length": "255"
+    },
+    "URL": {
+      "field_label": "URL",
+      "type": "url",
+      "length": "255"
+    },
+    "UsTaxId": {
+      "field_label": "US Tax ID Number",
+      "type": "string",
+      "length": "9"
+    },
+    "WomenOwned": {
+      "field_label": "Woman-Owned Indicator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "YearStarted": {
+      "field_label": "Year Started",
+      "type": "string",
+      "length": "4"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

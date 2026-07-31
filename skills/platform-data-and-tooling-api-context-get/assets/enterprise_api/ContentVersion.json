@@ -1,0 +1,498 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentVersion - Data API",
+  "description": "Represents a specific version of a document in Salesforce CRM content or Salesforce Files. This object is available in versions 17.0 and later for Salesforce CRM content documents. This object is available in versions 20.0 and later for Salesforce Files.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Checksum": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "MD5 checksum for the file."
+    },
+    "ContentBodyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Allows inserting a file version independently of the file blob being uploaded. This field is available for query and insert only. It can only point to a ContentBody record. This field is available in API version 40.0 and later. This is a relationship field.",
+      "relationship_name": "ContentBody",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentBody"
+    },
+    "ContentDocumentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the document. This is a relationship field.",
+      "relationship_name": "ContentDocument",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentDocument"
+    },
+    "ContentLocation": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Origin of the document. Valid values are: S—Document is located within Salesforce. Label is Salesforce. E—Document is located outside of Salesforce. Label is External. L—Document is located on a social network and accessed via Social Customer Service. Label is Social Customer Service. SfDrive—For internal use only. SCS—For internal use only."
+    },
+    "ContentModifiedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the user who modified the document. This is a relationship field.",
+      "relationship_name": "ContentModifiedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ContentModifiedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Date the document was modified. ContentModifiedDate updates when, for example, the document is renamed or a new document version is uploaded. When uploading the first version of a document, ContentModifiedDate can be set to the current time or any time in the past."
+    },
+    "ContentSize": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the document in bytes for documents smaller than 2 GB. The value is zero for links.In API version 66.0 and later, we recommend that you use the ContentSizeLong field even for documents smaller than 2 GB."
+    },
+    "ContentSizeLong": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the document in bytes up to 10 GB. The value is zero for links. This field is available in API version 66.0 and later."
+    },
+    "ContentUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "URL for links. This is only set for links. One of the fields that determines the FileType. The character limit in API versions 33.0 and later is 1,300. The character limit in API versions 32.0 and earlier was 255."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Description of the content version."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A logical segment of your organization's data. For example, if your company is organized into different business units, you could create a division for each business unit, such as “North America,” “Healthcare,” or “Consulting.” Available only if the org has the Division permission enabled."
+    },
+    "ExternalDataSourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the external document referenced in the ExternalDataSource object. This is a relationship field.",
+      "relationship_name": "ExternalDataSource",
+      "relationship_type": "Lookup",
+      "refers_to": "ExternalDataSource"
+    },
+    "ExternalDocumentInfo1": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Stores the URL of the file in the external content repository. The integration from the external source determines the content for this string. After the reference or copy is created, the URL of the external file is updated when you: Republish a file reference in Lightning Experience Open the document Create a file reference in the Connect REST API with reuseReference set to true. When the file is updated, the shared link is updated to the most current version."
+    },
+    "ExternalDocumentInfo2": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Contains the external file ID. Salesforce determines the content for this string, which is private. The content can change without notice, depending on the external system. After the file reference is created, this field isn’t updated, even if the file path changes."
+    },
+    "FeaturedContentBoost": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read only. Designates a document as featured."
+    },
+    "FeaturedContentDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Date the document was featured."
+    },
+    "FileExtension": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "File extension of the document. This field is available in API version 31.0 and later."
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Type of content determined by ContentUrl for links or PathOnClient for documents."
+    },
+    "FirstPublishLocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the location where the version was first published. If the version is first published into a user's personal library or My Files, the field will contain the ID of the user who owns the personal library or My Files. In Lightning Experience, if the first version is published into a public library, the field will contain the ID of that library. Accepts all record IDs supported by ContentDocumentLink (anything a file can be attached to, like records and groups). Setting FirstPublishLocationId allows you to create a file and share it with an initial record/group in a single transaction, and have the option to create more links to share the file with other records or groups later. When a file is created, it’s automatically linked to the record, and PublishStatus will change to Public from Pending/Personal. This field is only set the first time a version is published via the API. FirstPublishLocationId can’t be set to another ID when a new content version is inserted. Note: Salesforce updates the FirstPublishLocationId updates automatically when a new OwnerId is added to the ContentVersion. For example, when you publish a new version with a different OwnerId than the current OwnerId, the FirstPublishLocationId of all previous versions updates to the previous OwnerId. The new published version sets the FirstPublishLocationId to the new OwnerId. This is a polymorphic relationship field.",
+      "relationship_name": "FirstPublishLocation",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, ActivationTarget, ActivationTrgtIntOrgAccess, ApiAnomalyEventStore, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskIndDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CodeSet, CollaborationGroup, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, ConsumptionSchedule, Contact, ContactEncounter, ContactEncounterParticipant, ContentWorkspace, Contract, ConversationEntry, CoverageBenefit, CoverageBenefitItem, CredentialStuffingEventStore, CreditMemo, CreditMemoLine, Dashboard, DashboardComponent, DataStream, DelegatedAccount, DocumentChecklistItem, EmailMessage, EmailTemplate, EngagementChannelType, EnhancedLetterhead, EnrollmentEligibilityCriteria, Event, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, Identifier, Image, IndividualApplication, Invoice, InvoiceLine, Lead, ListEmail, Location, MarketSegment, MarketSegmentActivation, MemberPlan, MessagingSession, MktCalculatedInsight, OperatingHours, Opportunity, Order, OrderItem, Organization, OtherComponentTask, OutgoingEmail, PartyConsent, PersonEducation, PersonLanguage, PersonLifeEvent, PersonName, PlanBenefit, PlanBenefitItem, Product2, ProductFulfillmentLocation, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, ProviderSearchSyncLog, PurchaserPlan, PurchaserPlanAssn, ReceivedDocument, Report, ReportAnomalyEventStore, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, ServiceTerritoryWorkType, SessionHijackingEventStore, Shift, Shipment, ShipmentItem, Site, SkillRequirement, SocialPost, Solution, Task, ThreatDetectionFeedback, Topic, User, Visit, VisitedParty, Visitor, VoiceCall, VolunteerProject, WorkBadgeDefinition, WorkOrder, WorkOrderLineItem, WorkType, WorkTypeGroup, WorkTypeGroupMember"
+    },
+    "IsAssetEnabled": {
+      "type": "boolean",
+      "properties": "Create, Group, Defaulted on create",
+      "description": "Can be specified on insert of ContentVersion to automatically convert a ContentDocument file into a ContentAsset. This field can be SOQL queried, but it can’t be edited. This field is available in API version 38.0 and later."
+    },
+    "IsLatest": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this is the latest version of the document (true) or not (false)."
+    },
+    "IsMajorVersion": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "true if the document is a major version; false if the document is a minor version. Major versions can’t be replaced."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language for this document. This field defaults to the org’s default language unless the multi language setting is enabled. Specifies the language of the labels returned. The value must be a valid user locale (language and country), such as de_DE or en_GB. For more information on locales, see the Language field on the CategoryNodeLocalization object."
+    },
+    "MalwareScanDate": {
+      "type": "dateTime",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date the document was scanned for malware. This field is available as a beta feature in API version 66.0 and later. Note: The MalwareScanDate field is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "MalwareScanStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates whether the document was scanned for malware and whether it’s safe or malicious. This field is available in API version 66.0 and later.Valid values are: NotScanned—The file hasn’t yet been scanned for malware. This is the default value. Scheduled—The file scan is in progress. Clean—The file was scanned and doesn’t contain malware. Malicious—The file was scanned and it contains malware. Skipped—The file can’t be scanned because it’s either larger than 100 MB or it’s a Salesforce-generated file, such as a Content Note. Failed—The file wasn’t scanned because of an error. Note: The MalwareScanStatus field is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "NegativeRatingCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read only. The number of times different users have given the document a thumbs down.Rating counts for the latest version are not version-specific. If Version 1 receives 10 thumbs-down votes, and Version 2 receives 2 thumbs-down votes, the NegativeRatingCount on Version 2 is 12. However, rating counts are not retroactive for prior versions. The NegativeRatingCount on Version 1 is 10."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the Experience Cloud site that this file originated from. This field is available in API version 26.0 and later, if digital experiences is enabled for your org.You can add a NetworkId only when creating a file. You can’t change or add a NetworkId for an existing file."
+    },
+    "Origin": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The source of the content version. Valid values are: C—Content document from the user's personal library. Label is Content. The FirstPublishLocationId must be the user's ID. If FirstPublishLocationId is left blank, it defaults to the user's ID. H—Salesforce file from the user's My Files. Label is Chatter. The FirstPublishLocationId must be the user's ID. If FirstPublishLocationId is left blank, it defaults to the user's ID. Origin can only be set to H if Chatter is enabled for your organization. This field defaults to C. Label is Content Origin."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of this document. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "PathOnClient": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The complete path of the document. One of the fields that determines the FileType. Note: Specify a complete path including the file extension in order for the document to be visible in the Preview tab."
+    },
+    "PositiveRatingCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read only. The number of times different users have given the document a thumbs up.Rating counts for the latest version are not version-specific. If Version 1 receives 10 thumbs-up votes, and Version 2 receives 2 thumbs-up votes, the PositiveRatingCount on Version 2 is 12. However, rating counts are not retroactive for prior versions. The PositiveRatingCount on Version 1 is 10."
+    },
+    "PublishStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates if and how the document is published. Valid values are: P—The document is published to a public library and is visible to other users. Label is Public. R—The document is published to a personal library and is not visible to other users. Label is Personal Library. U—The document is not published because publishing was interrupted. Label is Upload Interrupted."
+    },
+    "RatingCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read only. Total number of positive and negative ratings."
+    },
+    "ReasonForChange": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The reason why the document was changed. This field can only be set when inserting a new version (revising) a document."
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "ID of the record type of the version.Custom fields are restricted in RecordTypeId. When an administrator creates a custom field via the API it must be added to at least one page layout: If the custom field is added to the page layout associated with the General record type, the RecordTypeId that corresponds to that record type does not have to be set on the version record. If the custom field is added to the page layout associated with a custom record type, the RecordTypeId that corresponds to that record type must be set on the version record."
+    },
+    "SharingOption": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Controls whether sharing is frozen for a file. Only administrators and file owners with Collaborator access to the file can modify this field. Default is Allowed, which means that new shares are allowed. When set to Restricted, new shares are prevented without affecting existing shares.This field is available in API versions 35.0 and later."
+    },
+    "SharingPrivacy": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Controls sharing privacy for a file. Only administrators and file owners with Collaborator access to the file can modify this field. Default is Visible to Anyone With Record Access. When set to Private on Records, the file is private on records but can be shared selectively with others.This field is available in API versions 41.0 and later."
+    },
+    "TagCsv": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Sort, Update",
+      "description": "Text used to apply tags to a content version via the API."
+    },
+    "TextPreview": {
+      "type": "string",
+      "properties": "Nillable, Filter,Group, Sort",
+      "description": "A preview of a document. Available in API version 35.0 and later."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The title of a document."
+    },
+    "VersionData": {
+      "type": "base64",
+      "properties": "Create, Nillable, Update",
+      "description": "The content or body of the note, which can include properly formatted HTML or plain text. When a document is uploaded or downloaded via the API, it should be base64 encoded (for upload) or decoded (for download). Any special characters within plain text in the Content field must be escaped. You can escape special characters by calling content.escapeHtml4(). This field can't be set for links.The maximum file size you can upload via the SOAP API is 50 MB. When a document is uploaded or downloaded via the API, it is converted to base64 and stored in VersionData. This conversion increases the document size by approximately 37%. Account for the base64 conversion increase so that the file you plan to upload is less than 50 MB after conversion. If a custom Apex download handler is active, this field is accessed from the API, and the download is not allowed, Salesforce will return a CONTENT_CUSTOMIZED_DOWNLOAD_EXCEPTION error."
+    },
+    "VersionDataURL": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL used to fetch a file from the binary data endpoint. This field is only populated on direct queries to ContentVersion, and not when queried through a related entity’s foreign key to ContentVersion. If available, access preview images of a file by appending a thumb query parameter to this URL. For example:myContentVersion.VersionDataUrl + '?thumb=THUMB240BY180' Available thumb parameter values are: THUMB720BY480 — corresponds to the big-thumbnail preview format THUMB240BY180 — corresponds to the thumbnail preview format THUMB120BY90 — corresponds to the tiny-thumbnail preview format See File Preview in the Connect REST API Developer Guide for additional details about file previews. This field can't be set for links. This field is available in API versions 55.0 and later."
+    },
+    "VersionNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version number. The number increments with each version of the document, for example, 1, 2, 3."
+    }
+  },
+  "special_access_rules": "Enable the Query All Files permission to let your\n\t\t\t\t\t\t\tView All Data users bypass the restrictions on querying files.\n\nQuery All Files returns all files, including files in non-member\n\t\t\t\t\t\t\t\tlibraries and files in unlisted groups.\n\nUsers can’t edit, upload new versions, or delete files they don’t\n\t\t\t\t\t\t\t\thave access to.\n\nView All Data permission is required to enable Query All Files.",
+  "usage": "For example,\n\nSELECT FileExtension, Title FROM ContentVersion\n\nWHERE (ContentDocumentId = '<ContentDocumentId>' or Id='<ContentVersionId>') and IsLatest=true\n\nSELECT Id, VersionData, FileExtension, Title FROM ContentVersion\n\nWHERE ContentDocumentId='<ContentDocumentId>' AND FirstPublishLocationId = '<FirstPublishLocationId>'\n\nAn administrator can rename the\n\t\t\t\t\t\tdefault (\n\nContent Version Layout\n\n) page layout.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentVersion\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AuthorizationFormConsents\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Checksum\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContentBody\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentBody\"/>\n        <element name=\"ContentBodyId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentDocument\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentDocument\"/>\n        <element name=\"ContentDocumentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentLocation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContentModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ContentModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ContentSize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ContentSizeLong\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"ContentUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalDataSource\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ExternalDataSource\"/>\n        <element name=\"ExternalDataSourceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ExternalDocumentInfo1\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalDocumentInfo2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeaturedContentBoost\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FeaturedContentDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"FileExtension\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FileType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FirstPublishLocation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"FirstPublishLocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsAssetEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsLatest\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsMajorVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MalwareScanDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MalwareScanStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NegativeRatingCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Origin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PathOnClient\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PositiveRatingCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"PublishStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RatingCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ReasonForChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SharingOption\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SharingPrivacy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TagCsv\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TextPreview\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"VersionData\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <element name=\"VersionDataUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"VersionNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "Checksum": {
+      "field_label": "Checksum",
+      "type": "string",
+      "length": "50"
+    },
+    "ContentBodyId": {
+      "field_label": "Content Body ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentDocumentId": {
+      "field_label": "Content Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentLocation": {
+      "field_label": "Content Location",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ContentModifiedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentModifiedDate": {
+      "field_label": "Content Modified Date",
+      "type": "datetime"
+    },
+    "ContentSize": {
+      "field_label": "Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "ContentSizeLong": {
+      "field_label": "Size",
+      "type": "long",
+      "digits": "18"
+    },
+    "ContentUrl": {
+      "field_label": "Content URL",
+      "type": "url",
+      "length": "1333"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "ExternalDataSourceId": {
+      "field_label": "External Data Source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExternalDocumentInfo1": {
+      "field_label": "External Document Info1",
+      "type": "string",
+      "length": "1000"
+    },
+    "ExternalDocumentInfo2": {
+      "field_label": "External Document Info2",
+      "type": "string",
+      "length": "1000"
+    },
+    "FeaturedContentBoost": {
+      "field_label": "Featured Content Boost",
+      "type": "int",
+      "digits": "9"
+    },
+    "FeaturedContentDate": {
+      "field_label": "Featured Content Date",
+      "type": "date"
+    },
+    "FileExtension": {
+      "field_label": "File Extension",
+      "type": "string",
+      "length": "40"
+    },
+    "FileType": {
+      "field_label": "File Type",
+      "type": "string",
+      "length": "20"
+    },
+    "FirstPublishLocationId": {
+      "field_label": "First Publish Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Content Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAssetEnabled": {
+      "field_label": "Asset File Enabled",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Is Deleted",
+      "type": "boolean"
+    },
+    "IsLatest": {
+      "field_label": "Is Latest",
+      "type": "boolean"
+    },
+    "IsMajorVersion": {
+      "field_label": "Major Version",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MalwareScanDate": {
+      "field_label": "Malware Scan Date",
+      "type": "datetime"
+    },
+    "MalwareScanStatus": {
+      "field_label": "Malware Scan Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "NegativeRatingCount": {
+      "field_label": "Negative Rating Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Origin": {
+      "field_label": "Content Origin",
+      "type": "picklist",
+      "length": "40"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PathOnClient": {
+      "field_label": "Path On Client",
+      "type": "string",
+      "length": "500"
+    },
+    "PositiveRatingCount": {
+      "field_label": "Positive Rating Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "PublishStatus": {
+      "field_label": "Publish Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RatingCount": {
+      "field_label": "Rating Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ReasonForChange": {
+      "field_label": "Reason For Change",
+      "type": "string",
+      "length": "1000"
+    },
+    "SharingOption": {
+      "field_label": "Prevent others from sharing and unsharing",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SharingPrivacy": {
+      "field_label": "File Privacy on Records",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TagCsv": {
+      "field_label": "Tags",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "TextPreview": {
+      "field_label": "Text Preview",
+      "type": "string",
+      "length": "255"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "255"
+    },
+    "VersionData": {
+      "field_label": "Version Data",
+      "type": "base64"
+    },
+    "VersionDataUrl": {
+      "field_label": "Version Data URL",
+      "type": "string",
+      "length": "255"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "string",
+      "length": "20"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

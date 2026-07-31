@@ -1,0 +1,168 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "GtwyProvPaymentMethodType - Data API",
+  "description": "The gateway provider payment method type allows integrators and payment providers to choose an active payment to receive an order's payment data rather than allowing the Salesforce Order Management platform to select a default payment method. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Users can provide additional details about the gateway provider payment method type record. Supports a maximum of 1000 characters."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, Salesforce generates one for each record, which slows performance."
+    },
+    "GtwyProviderPaymentMethodType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Links the Salesforce payment method to the payment method used in the Salesforce Order Management storefront. Your payment gateway integration uses this field when finding a payment method to link to a payment. The value of GtwyProviderPaymentMethodType must match the payment method value sent to the order's Payment Instrument in Salesforce Order Management. Listed below are several examples of payment method values that Salesforce could receive from Salesforce Order Management. CREDIT_CARD BASIC_CREDIT CreditCard GooglePay ApplePay"
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Language of the payment gateway integration."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The gateway provider payment method type name that appears in the user interface.",
+      "required": true
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Namespace of the payment gateway integration classes."
+    },
+    "PaymentGatewayProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the payment gateway provider that Salesforce Order Management should use when processing payments. One payment gateway provider can be related to multiple payment method types. This is a relationship field.",
+      "relationship_name": "PaymentGatewayProvider",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGatewayProvider"
+    },
+    "PaymentMethodType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of payment method used on an order in Salesforce Order Management. Possible values are: AlternativePaymentMethod CardPaymentMethod DigitalWallet"
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the record type entity related to the gateway provider payment method type. This is a relationship field.",
+      "relationship_name": "RecordType",
+      "relationship_type": "Lookup",
+      "refers_to": "RecordType"
+    }
+  },
+  "usage": "The Salesforce Order Management payment record must have a ProcessorId field with the same value as the payment gateway's ExternalReferenceId field. The gateway provider payment method type record must have a PaymentMethodType field that looks up to the payment method that you want to associate to your payment. Finally, the payment gateway and gateway provider payment method type must have matching PaymentGatewayProviderId fields. When you've established these relationships, the payment record can infer your payment method from the gateway provider payment method type record.\n\nThe Salesforce Order Management payment record must have a\n\nProcessorId\n\nfield with the same value as the payment gateway's\n\nExternalReferenceId\n\nfield. The gateway provider payment method type\n        record must have a\n\nPaymentMethodType\n\nfield that looks up to the payment\n        method that you want to associate to your payment. Finally, the payment gateway and gateway\n        provider payment method type must have matching\n\nPaymentGatewayProviderId\n\nfields. When you've established these\n        relationships, the payment record can infer your payment method from the gateway provider\n        payment method type record.",
+  "wsdl_segment": "```xml\n<complexType name=\"GtwyProvPaymentMethodType\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GtwyProviderPaymentMethodType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentGatewayProvider\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PaymentGatewayProvider\"/>\n        <element name=\"PaymentGatewayProviderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentMethodType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordType\" nillable=\"true\" minOccurs=\"0\" type=\"ens:RecordType\"/>\n        <element name=\"RecordTypeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "GtwyProviderPaymentMethodType": {
+      "field_label": "Gateway Provider Payment Method Type",
+      "type": "string",
+      "length": "60"
+    },
+    "Id": {
+      "field_label": "Gateway Provider Payment Method Type ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "PaymentGatewayProviderId": {
+      "field_label": "Payment Gateway Provider ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodType": {
+      "field_label": "Payment Method Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecordTypeId": {
+      "field_label": "Record Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

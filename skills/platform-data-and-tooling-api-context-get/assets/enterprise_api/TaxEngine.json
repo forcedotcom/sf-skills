@@ -1,0 +1,268 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "TaxEngine - Data API",
+  "description": "A tax engine represents both an instance of a tax engine provider as well as the merchant credentials for that specific instance. When Subscription Management calculates tax on an order item, it sends a request through Subscription Management Tax Calculation API to an external tax engine. The Salesforce tax engine record contains information passed to the external tax engine, such as This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The description of the tax engine provider and merchant credential."
+    },
+    "ExternalReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Shows information about the external platform used for the tax engine."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "MerchantCredentialId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Looks up to the merchant credential setup entity in Salesforce. CommerceTax Tax Calculation API sends this information to the external tax engine for use in the tax calculation process. This field is a relationship field.",
+      "relationship_name": "MerchantCredential",
+      "relationship_type": "Lookup",
+      "refers_to": "NamedCredential"
+    },
+    "SellerCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Seller code of the transaction for which the tax engine integration log was captured."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Shows the status of the tax engine. Possible values are: Active—This tax engine is available for use. Inactive—This tax engine isn't available for use."
+    },
+    "TaxEngineAddress": {
+      "type": "address",
+      "properties": "Filter",
+      "description": "The compound form of the tax engine address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "TaxEngineCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the tax engine address. Maximum size is 40 characters."
+    },
+    "TaxEngineCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the tax engine address. Maximum size is 80 characters."
+    },
+    "TaxEngineGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the tax engine address. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "TaxEngineLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with TaxEngineLongitude to specify the precise geolocation of a tax engine address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "TaxEngineLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with TaxEngineLatitude to specify the precise geolocation of a tax engine address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "TaxEngineName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the tax engine."
+    },
+    "TaxEnginePostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the tax engine address. Postal code maximum size is 20 characters."
+    },
+    "TaxEngineProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Id of the tax engine provider. This field is a relationship field.",
+      "relationship_name": "TaxEngineProvider",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxEngineProvider"
+    },
+    "TaxEngineState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the tax engine address. State maximum size is 80 characters."
+    },
+    "TaxEngineStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the tax engine address. Maximum of 255 characters."
+    },
+    "TaxPrvdAccountIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique identifier of the external tax provider’s account. This field is only available if Commerce Subscriptions is enabled for your org. Available in API version 63.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the tax engine used to calculate tax. This field is only available if Commerce Subscriptions is enabled for your org. Available in API version 63.0 and later. Possible values are: CommerceTaxExtension—Commerce Tax Extension RevenueCloudTaxExtension—Revenue Cloud Tax Extension StandardTaxEngine—Standard Tax Extension StripeNative—Stripe Native"
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management, Commerce Subscriptions, and Billing (Revenue Cloud). If your org has Subscription Management and Commerce Subscriptions enabled, then Subscription Management takes precedence. For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management, Commerce Subscriptions, and Billing (Revenue Cloud). If your org has Subscription Management and Commerce Subscriptions enabled, then Subscription Management takes precedence.\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "ExternalReference": {
+      "field_label": "External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Tax Engine ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MerchantCredentialId": {
+      "field_label": "Named Credential ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SellerCode": {
+      "field_label": "Seller Code",
+      "type": "string",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Tax Engine Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxEngineAddress": {
+      "field_label": "Tax Engine Address",
+      "type": "address"
+    },
+    "TaxEngineCity": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "TaxEngineCountry": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "TaxEngineGeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TaxEngineLatitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "TaxEngineLongitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "TaxEngineName": {
+      "field_label": "Tax Engine Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TaxEnginePostalCode": {
+      "field_label": "Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "TaxEngineProviderId": {
+      "field_label": "Tax Engine Provider ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TaxEngineState": {
+      "field_label": "State",
+      "type": "string",
+      "length": "80"
+    },
+    "TaxEngineStreet": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "TaxPrvdAccountIdentifier": {
+      "field_label": "Tax Provider Account Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

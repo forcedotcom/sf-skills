@@ -1,0 +1,144 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "EmbeddedServiceLiveAgent - Tooling API",
+  "description": "Represents a setup node for creating an Embedded Chat deployment. Available in Tooling API version 38.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeLayout()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `PUT`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AvatarImg": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the image used as the agent avatar image. Available in API version 43.0 and later."
+    },
+    "CustomPrechatComponent": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Removed. The ID of the custom Lightning Component that’s used for the pre-chat page in this embedded deployment. Available in API versions 38.0 to 45.0. Removed in API version 46.0 and later."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for the EmbeddedServiceLiveAgent object. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is automatically generated, but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "EmbeddedServiceConfigId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique name for the embedded chat deployment ID."
+    },
+    "Enabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this embedded chat deployment is enabled (true). Available in API version 43.0 and later."
+    },
+    "FontSize": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Font size for the chat window. Available in API version 43.0 and later.Possible values are: Small Medium Large Available in API version 43.0 and later."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The unique name used for this embedded chat deployment. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "HeaderBackgroundImg": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Removed. URL of the image used for the header background in the embedded chat window. Available in API version 43.0. Removed in API version 49.0 and later."
+    },
+    "IsOfflineCaseEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether offline support is enabled for this embedded chat deployment (true) or not (false). Available in API version 43.0 and later."
+    },
+    "IsQueuePositionEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether queue position (displaying the customer’s place in line while they wait for an agent) is enabled for this embedded chat deployment (true) or not (false). Available in API version 43.0 and later."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Languages supported in the embedded chat deployment. Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "LiveAgentChatUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The REST endpoint for Chat. Available in API version 43.0 and later."
+    },
+    "LiveAgentContentUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The REST endpoint for Chat content. Available in API version 43.0 and later."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Name of the embedded chat deployment."
+    },
+    "Metadata": {
+      "type": "mns:EmbeddedServiceLiveAgent",
+      "properties": "Create, Nillable, Update",
+      "description": "The embedded chat metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix. Available in API version 43.0 and later."
+    },
+    "OfflineCaseBackgroundImg": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the image used for the background for the offline support case form in an embedded chat window. Available in API version 43.0 and later."
+    },
+    "PrechatBackgroundImg": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the image used for the background for the pre-chat form in an embedded chat window. Available in API version 43.0 and later."
+    },
+    "PreChatEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the pre-chat form is enabled for this embedded chat deployment."
+    },
+    "PrechatJson": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "JSON object of all the fields of the selected pre-chat form in Chat setup. Available in API version 43.0 and later."
+    },
+    "Scenario": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of use case that is selected for the pre-chat form. Valid values are: Basic Sales Service"
+    },
+    "SmallCompanyLogoImg": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the logo image used with embedded chat. Available in API version 43.0 and later."
+    },
+    "WaitingStateBackgroundImg": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the image used for the background image in an embedded chat window while the customer waits to be connected with a support agent. Available in API version 43.0 and later."
+    }
+  },
+  "special_access_rules": "To access EmbeddedServiceLiveAgent, your org must have Service Cloud with Chat enabled.",
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EmbeddedServiceFontSize\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Small\"/>\n    <xsd:enumeration value=\"Medium\"/>\n    <xsd:enumeration value=\"Large\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceLiveAgent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"avatarImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"embeddedServiceConfig\" type=\"xsd:string\"/>\n        <xsd:element name=\"embeddedServiceQuickActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:EmbeddedServiceQuickAction\"/>\n        <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"fontSize\" type=\"tns:EmbeddedServiceFontSize\"/>\n        <xsd:element name=\"isOfflineCaseEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isQueuePositionEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"liveAgentChatUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"liveAgentContentUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"liveChatButton\" type=\"xsd:string\"/>\n        <xsd:element name=\"liveChatDeployment\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"offlineCaseBackgroundImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"prechatBackgroundImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"prechatEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"prechatJson\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"scenario\" type=\"tns:EmbeddedServiceScenario\"/>\n        <xsd:element name=\"smallCompanyLogoImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"waitingStateBackgroundImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceScenario\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sales\"/>\n    <xsd:enumeration value=\"Service\"/>\n    <xsd:enumeration value=\"Basic\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

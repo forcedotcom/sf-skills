@@ -1,0 +1,129 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "AutomatedAction - Data API",
+  "description": "Represents the configuration of an automated action, such as a workflow rule. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "API version to use for executing the automated action.",
+      "required": true
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the automated action."
+    },
+    "ErrorDetail": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The source of the error encountered when executing the automated action. Possible values are: invalidCondition invalidConditionReference invalidConditionValue invalidInvocableAction invalidInvocableActionParam invalidReferenceEntity unknownError"
+    },
+    "ErrorMessage": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the error encountered when executing the automated action."
+    },
+    "EvalType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "When the automated action runs. Possible values are: OnCreate OnCreateAndUpdate"
+    },
+    "ExecutionType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Whether the action runs automatically or generates a reminder. Possible values are: Automatic Reminder"
+    },
+    "ExtraFilterExpression": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Additional condition logic for cross-object filters."
+    },
+    "ExtraFilterType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Additional criteria for cross-object filters. Possible values are: Advanced And Or"
+    },
+    "FilterExpression": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If FilterType is Advanced, this field contains the condition logic."
+    },
+    "FilterType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Criteria for filters. Possible values are: Advanced And Or"
+    },
+    "InvocationName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Invocable action to execute."
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action record is locked or not. The default value is false."
+    },
+    "LastEditedDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the automated action had a change that impacted rule evaluation."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record was likely referenced (LastReferencedDate) and not viewed."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action record can be edited or not. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the automated action."
+    },
+    "ReferenceEntity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Entity on which the automated action operates."
+    },
+    "RuleType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of workflow rule. Possible values are: ManagerAssigned ManagerSubscribed Personal SdrAgent"
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the alert. Possible values are: Active Error Inactive"
+    },
+    "SubscriptionState": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "For users who don’t have an override, the default value of the subscription. Possible values are: Active Inactive"
+    },
+    "Summary": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A human-readable explanation of the automated action, its conditions, and its parameters."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AutomatedActionOwnerSharingRule**: Sharing rules are available for the object.\n- **AutomatedActionShare**: Sharing is available for the object."
+}

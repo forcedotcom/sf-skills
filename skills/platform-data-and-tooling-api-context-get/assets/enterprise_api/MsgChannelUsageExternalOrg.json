@@ -1,0 +1,95 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "MsgChannelUsageExternalOrg - Data API",
+  "description": "Represents the Enterprise ID (EID) and Business Unit (MID) for Marketing Cloud connections in a Unified Messaging channel. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ExternalOrgIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The Enterprise ID (EID) of a Marketing Cloud connection."
+    },
+    "ExternalSubOrgIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Business Unit (MID) of a Marketing Cloud connection."
+    },
+    "MessagingChannelUsageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The associated MessagingChannelUsage record, which must have a DeploymentType of MJ (referring to Marketing Cloud Journey Builder). This field is a relationship field.",
+      "relationship_name": "MessagingChannelUsage",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingChannelUsage"
+    }
+  },
+  "usage": "MsgChannelUsageExternalOrg records apply only to MessagingChannelUsage records related to Marketing Cloud. Only one MsgChannelUsageExternalOrg record can exist for each MessagingChannelUsage record with a DeploymentType of MJ. MsgChannelUsageExternalOrg records are created when an admin enters the EID and MID for a Marketing Cloud application in Unified Messaging Setup and then clicks Connect. The data saved in a MsgChannelUsageExternalOrg record is used for making a connection to Marketing Cloud. If an admin disconnects a Marketing Cloud application in Unified Messaging Setup, the saved EID and MID are used during deprovisioning.\n\nMsgChannelUsageExternalOrg records apply only to MessagingChannelUsage records related to Marketing Cloud.\n\nOnly one MsgChannelUsageExternalOrg record can exist for each MessagingChannelUsage record with a DeploymentType of MJ. MsgChannelUsageExternalOrg records are created when an admin enters the EID and MID for a Marketing Cloud application in Unified Messaging Setup and then clicks Connect**.\n\nThe data saved in a MsgChannelUsageExternalOrg record is used for making a connection to Marketing Cloud. If an admin disconnects a Marketing Cloud application in Unified Messaging Setup, the saved EID and MID are used during deprovisioning.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"MsgChannelUsageExternalOrg\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalOrgIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalSubOrgIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessagingChannelUsage\" nillable=\"true\" minOccurs=\"0\" type=\"ens:MessagingChannelUsage\"/>\n        <element name=\"MessagingChannelUsageId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalOrgIdentifier": {
+      "field_label": "External Organization Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalSubOrgIdentifier": {
+      "field_label": "External Sub Organization Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Messaging Channel Usage External Org ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Modified On",
+      "type": "datetime"
+    },
+    "MessagingChannelUsageId": {
+      "field_label": "Messaging Channel Usage ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

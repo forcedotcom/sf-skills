@@ -1,0 +1,153 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "DeployRequest - Tooling API",
+  "description": "Uses file representations of metadata components to create, update, or delete those components in a Salesforce org. This object is available in API version 49.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`, `HEAD`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type"
+  ],
+  "fields": {
+    "AllowMissingFiles": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If files that are specified in package.xml are not in the .zip file, specifies whether a deployment can still succeed (true) or not (false).Do not set this argument to true for deployment to production orgs. The default value is false."
+    },
+    "AutoUpdatePackage": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If a file is in the .zip file but not specified in package.xml, specifies whether the file is automatically added to the package (true) or not (false). A retrieve() is issued with the updated package.xml that includes the .zip file. Do not set this argument to true for deployment to production orgs. The default value is false."
+    },
+    "CanceledById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who canceled the deployment. This is a relationship field.",
+      "relationship_name": "CanceledBy",
+      "relationship_type": "Lookup"
+    },
+    "ChangeSetName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Specifies the name of the change set for the deployment."
+    },
+    "CheckOnly": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this deployment is being used to check the validity of the deployed files without making any changes in the organization (true) or not (false). A check-only deployment does not deploy any components or change the organization in any way. The default value is false."
+    },
+    "CompletedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the deployment process ended."
+    },
+    "DeployTestResults": {
+      "type": "QueryResult",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Specifies the deployment test result."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Message corresponding to the values in the ErrorStatusCode field, if any."
+    },
+    "ErrorStatusCode": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If an error occurred during the deploy() call, a status code is returned, and the message corresponding to the status code is returned in the ErrorMessagefield.For a description of each StatusCode value, see “StatusCode” in the SOAP API Developer Guide."
+    },
+    "IgnoreWarnings": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether a deployment should continue even if the deployment generates warnings (true) or not (false).Do not set this argument to true for deployments to production organizations. The default value is false."
+    },
+    "NumberComponentErrors": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of components that generated errors during this deployment."
+    },
+    "NumberComponentsDeployed": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of components deployed in the deployment process. Use this value with the NumberComponentsTotal value to get an estimate of the deployment’s progress."
+    },
+    "NumberComponentsTotal": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of components in the deployment. Use this value with the NumberComponentsDeployed value to get an estimate of the deployment’s progress."
+    },
+    "NumberTestErrors": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of Apex tests that have generated errors during this deployment."
+    },
+    "NumberTestsCompleted": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of completed Apex tests for this deployment. Use this value with the NumberTestsTotal value to get an estimate of the deployment’s test progress."
+    },
+    "NumberTestsTotal": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of Apex tests for this deployment. Use this value with the NumberTestsCompleted value to get an estimate of the deployment’s test progress. The value in this field is not accurate until the deployment has started running tests for the components being deployed."
+    },
+    "PurgeOnDelete": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether to purge on delete (true) or not (false). The default value is false."
+    },
+    "RollbackOnError": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether any failure causes a complete rollback (true) or not (false). If false, whatever set of actions can be performed without errors are performed, and errors are returned for the remaining actions. This parameter must be set to true if you are deploying to a production organization. The default value is false."
+    },
+    "RunTestsEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether Apex tests were run as part of this deployment (true) or not (false). Tests are either automatically run as part of a deployment or can be set to run in DeployOptions for the deploy() call. For information on when tests are automatically run, see Running Tests in a Deployment. The default value is false."
+    },
+    "SinglePackage": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether to deploy as a single package (true) or not (false) The default value is false."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the deployment process began."
+    },
+    "StateDetail": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates which component is being deployed or which Apex test class is running."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The current state of the deployment. Possible values are: Canceled Canceling Failed InProgress Pending Succeeded SucceededPartial"
+    },
+    "TestLevel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates which tests to run. Possible values are: NoTestRun RunAllTestsInOrg RunLocalTests RunSpecifiedTests"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of deployment to perform. Possible values are: Api (default) Changeset"
+    }
+  },
+  "special_access_rules": "Your client application must be logged in with the Modify Metadata Through Metadata API Functions OR Modify All Data permission.",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DeployRequest\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"AllowMissingFiles\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"AutoUpdatePackage\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"CanceledBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CanceledById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"ChangeSetName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"CheckOnly\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"CompletedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"DeployTestResults\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"ErrorMessage\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ErrorStatusCode\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IgnoreWarnings\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"NumberComponentErrors\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumberComponentsDeployed\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumberComponentsTotal\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumberFiles\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumberTestErrors\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumberTestsCompleted\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumberTestsTotal\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"PurgeOnDelete\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"RollbackOnError\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"RunTestsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"SinglePackage\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"StartDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"StateDetail\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Status\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"TestLevel\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Type\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ZipSize\" minOccurs=\"0\" type=\"xsd:long\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"QueryLocator\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"QueryResult\">\n  <xsd:sequence>\n    <xsd:element name=\"done\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"entityTypeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"nextRecordsUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryLocator\" type=\"tns:QueryLocator\"/>\n    <xsd:element name=\"records\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"ens:sObject\"/>\n    <xsd:element name=\"size\" type=\"xsd:int\"/>\n    <xsd:element name=\"totalSize\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

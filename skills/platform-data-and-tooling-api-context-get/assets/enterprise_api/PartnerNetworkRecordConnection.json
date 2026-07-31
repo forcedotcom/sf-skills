@@ -1,0 +1,77 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "PartnerNetworkRecordConnection - Data API",
+  "description": "Represents a record shared between Salesforce organizations using Salesforce to Salesforce.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ConnectionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the connection a record is shared with.",
+      "required": true
+    },
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date that sharing of the record was stopped."
+    },
+    "LocalRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the shared record.",
+      "required": true
+    },
+    "ParentRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the parent record of the shared record."
+    },
+    "PartnerRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the shared record in the connection's organization."
+    },
+    "RelatedRecords": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "A comma-separated list of API names for child records to be shared with a parent record."
+    },
+    "SendClosedTasks": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Forwards closed tasks related to the shared record."
+    },
+    "SendEmails": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Sends an email notifying the connection's representative that you have forwarded the record to them. Only new recipients of a record will receive a notification email."
+    },
+    "SendOpenTasks": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Forwards open tasks related to the shared record."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date that the shared record was accepted."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the shared record. One of the following values: Active (received) Active (sent) Connected Inactive Inactive (converted) Inactive (deleted) Pending (sent)"
+    }
+  },
+  "special_access_rules": "As of Winter ’21 and later, only authenticated internal and external users can access this object.",
+  "usage": "If the organization does not have Salesforce to Salesforce enabled, the PartnerNetworkRecordConnection object is not available, and you can’t access it using the API.\n\nWhen you create a PartnerNetworkRecordConnection, you forward a record to a\n                    connection.\n\nAttempting to forward a record from an object to which the\n                    connection is not subscribed results in an\n\nInvalid Partner Network\n                        Status\n\nWhen you delete a\n                PartnerNetworkRecordConnection, you stop sharing a record with a connection."
+}

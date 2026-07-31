@@ -1,0 +1,285 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CollaborationGroup - Data API",
+  "description": "Represents a Chatter group. This object is available in API version 19.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AnnouncementId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Contains the ID of the Announcement last associated with the group. This field is available in API version 30.0 and later. This is a relationship field.",
+      "relationship_name": "Announcement",
+      "relationship_type": "Lookup",
+      "refers_to": "Announcement"
+    },
+    "BannerPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the group's banner photo.The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo has been uploaded, the URL returned for an older photo is not guaranteed to return a photo. Query this field for the URL of the most recent photo. This field is available in API version 36.0 and later."
+    },
+    "CanHaveGuests": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If set to true, indicates that a group allows customers. Chatter customers are people outside your company's email domains. Customers can see only the groups they're invited to. They can interact only with members of those groups. Customers can’t see any Salesforce information.This field is available starting in API version 23.0, but groups that allow customers are accessible from earlier API versions. However, when accessed from earlier API versions, groups that allow customers aren't distinguishable from private groups. We strongly recommend that you upgrade to the latest API version. If you must use an earlier version, name groups that allow customers to indicate that they include customers."
+    },
+    "CollaborationType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of Chatter group. Available values are: Public—Anyone can see and post updates. Anyone can join a public group. Private—Only members can see the group feed and post updates. Non-members can only see the group name and a few other details in list views, search, and on the group page. The group's owner or managers must add members who request to join the group. Unlisted—Only members and users with the Manage Unlisted Groups permission can see the group and post updates. Other users can’t access the group or see it in lists, search, and feeds."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Description of the group."
+    },
+    "FullPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the group's profile photo.The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo has been uploaded, the URL returned for an older photo is not guaranteed to return a photo. Query this field for the URL of the most recent photo. This field is available in API version 20.0 and later."
+    },
+    "GroupEmail": {
+      "type": "email",
+      "properties": "Nillable, Sort",
+      "description": "The email address for posting to the group. For private groups, only visible to members and users with Modify All Data or View All Data permissions.This field is available in API version 29.0 and later."
+    },
+    "HasPrivateFieldsAccess": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If set to true, indicates that a user can see the InformationBody and InformationTitle fields in a private group. This field is set to true for members of a private group and users with Modify All Data or View All Data permissions."
+    },
+    "InformationBody": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The text of the Information section. For private groups, only visible to members and users with Modify All Data or View All Data permissions."
+    },
+    "InformationTitle": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The title of the Information section. For private groups, only visible to members and users with Modify All Data or View All Data permissions."
+    },
+    "IsArchived": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the group is archived (true) or not (false).This field is available in API version 28.0 and later."
+    },
+    "IsAutoArchiveDisabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether automatic archiving is disabled for the group (true) or not (false).This field is available in API version 29.0 and later."
+    },
+    "IsBroadcast": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the group is a broadcast group (true) or not (false).This field is available in API version 36.0 and later."
+    },
+    "LastFeedModifiedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date of the last post or comment on the group."
+    },
+    "LastReferencedDate": {
+      "type": "datetime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "datetime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "MediumPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the larger, cropped photo size."
+    },
+    "MemberCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of members in the group."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the group. Group names must be unique across public and private groups. Unlisted groups don’t require unique names."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the Experience Cloud site that this group is part of. This field is available only if digital experiences is enabled in your org.You can only add a NetworkId when creating a group. You can’t change or add a NetworkId for an existing group. This field is available in API version 26.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the group. Only the current group owner or people with the Modify All Data permission can update the OwnerId. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "SmallPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for a thumbnail of the group's profile photo.The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo has been uploaded, the URL returned for an older photo is not guaranteed to return a photo. Query this field for the URL of the most recent photo. This field is available in API version 20.0 and later."
+    }
+  },
+  "special_access_rules": "The visibility of information in groups depends on the type of group and the user’s permissions.\n\nThe visibility of information in groups depends on\n\t\t\t\tthe type of group and the user’s permissions.\n\n: Any user with the Create and Own New Chatter Groups permission\n\t\t\t\t\tcan create public, private, and unlisted groups, including in any Experience\n\t\t\t\t\tCloud sites they belong to.\n\nOwners and managers\n\n: Users can modify group details for any group they\n\t\t\t\t\town or manage. Owners can also delete groups they own.\n\n: These user permissions allow group access regardless of group\n\t\t\t\t\tmembership.\n\nView All Data—Allows users to view all public and private groups\n\t\t\t\t\t\t\tacross their org and its Experience Cloud sites. Users with this\n\t\t\t\t\t\t\tpermission can’t view unlisted group information, unless they have the\n\t\t\t\t\t\t\tModify Unlisted Groups permission as well.\n\nModify All Data—Allows users to view, modify, and delete all\n\t\t\t\t\t\t\tpublic and private groups across their org and its Experience Cloud\n\t\t\t\t\t\t\tsites. Users with this permission can’t view or modify unlisted group\n\t\t\t\t\t\t\tinformation, unless they have the Manage Unlisted Groups permission as\n\t\t\t\t\t\t\twell.\n\nCreate and Set Up Experiences—Allows users to view, modify, and\n\t\t\t\t\t\t\tdelete all public and private groups in Experience Cloud sites.\n\nManage Unlisted Groups—Allows users to search for, access, and\n\t\t\t\t\t\t\tmodify any unlisted group in an org and its Experience Cloud sites.\n\nData Export—Allows users to export any data from Salesforce,\n\t\t\t\t\t\t\tincluding private and unlisted group data from an org and its Experience\n\t\t\t\t\t\t\tCloud sites.\n\nApex and Visualforce\n\n: Apex code runs in system mode, which means that the\n\t\t\t\t\tpermissions of the current user aren’t taken into account.\n\nVisualforce pages that display groups might expose unlisted or private\n\t\t\t\t\t\t\tgroup data to users who aren’t members.\n\nBecause system mode disregards the user’s permissions, all users\n\t\t\t\t\t\t\twho are accessing a Visualforce page that’s showing a group can act as\n\t\t\t\t\t\t\tan owner of that group.\n\nAppExchange apps that are written in Apex and that access all groups\n\t\t\t\t\t\t\twill expose unlisted groups to users who aren’t members.\n\nTo limit and manage access to the unlisted and private groups in your org:\n\nExplicitly filter out unlisted and private group information from SOQL queries\n\t\t\t\t\tin all Apex code.\n\nUse permission sets, profile-level permissions, and sharing checks in your code\n\t\t\t\t\tto further limit group access.\n\nUse Apex triggers on the CollaborationGroup object to monitor and manage the\n\t\t\t\t\tcreation of groups. In Setup, enter\n\nGroup Triggers\n\nbox, then select\n\nGroup\n\t\t\t\t\t\tTriggers\n\nto add triggers.",
+  "usage": "Use this object to create, edit, or delete groups in an org or Experience Cloud site. Deleting a group permanently deletes all posts and comments to the group. It also deletes all files and links posted to the group and removes the files from other locations where they were shared. As a Chatter group member, you can post to the group using the CollaborationGroupFeed object. As a Chatter group owner or manager, you can add or remove group members using the CollaborationGroupMember object, post announcements to the group using the Announcement object, and accept or decline requests to join private groups using the CollaborationGroupMemberRequest object. Additionally, the group owner, manager, or your Salesforce system administrator can invite people to join the group using the CollaborationInvitation object.\n\nUse this object to create, edit, or delete groups in an org or Experience Cloud site. Deleting a group permanently deletes all posts and comments to the group. It also deletes all files and links posted to the group and removes the files from other locations where they were shared.\n\nAs a Chatter group member, you can post to the group using the CollaborationGroupFeed object. As a Chatter group owner or manager, you can add or remove group members using the CollaborationGroupMember object, post announcements to the group using the Announcement object, and accept or decline requests to join private groups using the CollaborationGroupMemberRequest object. Additionally, the group owner, manager, or your Salesforce system administrator can invite people to join the group using the CollaborationInvitation object.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **CollaborationGroupFeed**: Feed tracking is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"CollaborationGroup\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Announcement\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Announcement\"/>\n        <element name=\"AnnouncementId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BannerPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CanHaveGuests\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ChatterGroup\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CollaborationGroupRecords\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CollaborationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FullPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GroupEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GroupMemberRequests\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GroupMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"HasPrivateFieldsAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"InformationBody\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InformationTitle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsArchived\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsAutoArchiveDisabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsBroadcast\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastFeedModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MediumPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MemberCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SmallPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AnnouncementId": {
+      "field_label": "Announcement ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BannerPhotoUrl": {
+      "field_label": "Banner Photo URL",
+      "type": "url",
+      "length": "1024"
+    },
+    "CanHaveGuests": {
+      "field_label": "Allow customers",
+      "type": "boolean"
+    },
+    "CollaborationType": {
+      "field_label": "Access Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "FullPhotoUrl": {
+      "field_label": "Url for full-sized Photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "GroupEmail": {
+      "field_label": "Group Email",
+      "type": "email",
+      "length": "1000"
+    },
+    "HasPrivateFieldsAccess": {
+      "field_label": "Has Private Fields Access",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Group Id",
+      "type": "id",
+      "length": "18"
+    },
+    "InformationBody": {
+      "field_label": "Information",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "InformationTitle": {
+      "field_label": "Information Title",
+      "type": "string",
+      "length": "30"
+    },
+    "IsActivityGroup": {
+      "field_label": "Enable email and event sharing",
+      "type": "boolean"
+    },
+    "IsArchived": {
+      "field_label": "Archive",
+      "type": "boolean"
+    },
+    "IsAutoArchiveDisabled": {
+      "field_label": "Disable automatic archiving",
+      "type": "boolean"
+    },
+    "IsBroadcast": {
+      "field_label": "Broadcast Only",
+      "type": "boolean"
+    },
+    "LastFeedModifiedDate": {
+      "field_label": "Last Feed Modified Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MediumPhotoUrl": {
+      "field_label": "URL for medium profile photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "MemberCount": {
+      "field_label": "Member Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "40"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SmallPhotoUrl": {
+      "field_label": "Photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

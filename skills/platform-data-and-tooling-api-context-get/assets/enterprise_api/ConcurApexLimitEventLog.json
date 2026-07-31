@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ConcurApexLimitEventLog - Data API",
+  "description": "Concurrent Apex Limit event logs contain information about long-running concurrent Apex requests in your org that Salesforce terminated after reaching your org’s concurrency limit. Requests with an established Apex context that execute for 5 seconds are counted towards your org’s limit of concurrent long-running requests. (Asynchronous requests don’t count towards the limit.) When the long-running requests exceed the org default limit, additional long-running requests are denied. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "RequestCount": {
+      "type": "int",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Count of requests with an established Apex context executing for longer than 5 seconds in your org."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestIdentifier. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RequestLimit": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Maximum count of requests with an established Apex context that can execute for longer than 5 seconds. When RequestCount reaches this limit, then additional long-running Apex requests are terminated. (Asynchronous requests don’t count towards the limit.) See Apex Developer Guide: Lightning Platform Apex Limits. For example: 10."
+    },
+    "RequestUri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the long-running Apex request that Salesforce terminated. For example: /apex/ApexClassName."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

@@ -1,0 +1,210 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "SurveyQuestionScore - Data API",
+  "description": "Represents the aggregate of responses for the following question types: date, multiple choice, picklist, radio, ranking, rating, scoring, slider, and Net Promoter Score® (NPS®).",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CumulativeScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of the responses provided by all the participants for a question of the following types: rating, scoring, and slider. For a question of the type ranking, sum of the weights provided by all the participants for each item."
+    },
+    "DateResponse": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date selected by one or more participants for a question of the type date."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "For an overall score type record: Name of a question. Name of an item in a question of the type ranking. For an individual score type record: Name of an item in a question of the type ranking. Name of a question of the type date. Response provided by one or more participants for questions of the following types: picklist, multiple choice, rating, ranking, score, slider, NPS."
+    },
+    "QuestionChoiceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier of the answer choice selected by one or more participants. For an individual score type record, this field is applicable for questions of the following types: picklist, radio, multi choice, ranking and rating. For an overall score type record, this field is applicable for questions of the type ranking."
+    },
+    "QuestionDeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name of the question for which response is recorded. The API name must be unique within a particular version of the survey."
+    },
+    "QuestionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier of the question for which response is recorded."
+    },
+    "QuestionName": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Name of the question for which response is recorded."
+    },
+    "QuestionSkippedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number of participants who didn’t respond to the question."
+    },
+    "ResponseCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For an overall score type record, number of participants who responded to the question. For an individual score type record, number of participants who selected a particular answer choice."
+    },
+    "ResponseValue": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Answer choice selected by one or more participants for a question of the following types: rating, slider, score, NPS. Rank provided by the participant for an item in a question of the type ranking. Note: This field is only applicable for the individual score type."
+    },
+    "Score": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "For an individual score type record, percentage of participants who selected a particular answer choice. Note: For questions of the type ranking, the percentage of participants who have provided the same rank to an item. For overall score type record: Average score of questions of the following question types: rating, scoring, and slider. Score of an NPS type question. Average weight provided by all participants for each item in question of the type ranking. Number of participants who responded to the question for the following question types: date, radio, multi choice, and picklist."
+    },
+    "ScoreType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of the score calculated for a record. Possible values are: Individual Overall"
+    },
+    "SurveyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier of the survey that contains the question for which scores are calculated."
+    },
+    "SurveyInvitationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier of the survey invitation for which scores are calculated."
+    },
+    "SurveyVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier of the survey version for which scores are calculated."
+    }
+  },
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CumulativeScore": {
+      "field_label": "Cumulative Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "DateResponse": {
+      "field_label": "Date Response",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Question Score ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "QuestionChoiceId": {
+      "field_label": "Survey Question Choice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuestionDeveloperName": {
+      "field_label": "Question Developer Name",
+      "type": "string",
+      "length": "255"
+    },
+    "QuestionId": {
+      "field_label": "Survey Question ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuestionName": {
+      "field_label": "Question Name",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "QuestionSkippedCount": {
+      "field_label": "Question Skipped Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ResponseCount": {
+      "field_label": "Response Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ResponseValue": {
+      "field_label": "Response Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Score": {
+      "field_label": "Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ScoreType": {
+      "field_label": "Question Score Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SurveyId": {
+      "field_label": "Survey ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SurveyInvitationId": {
+      "field_label": "Survey Invitation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SurveyVersionId": {
+      "field_label": "Survey Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

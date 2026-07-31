@@ -1,0 +1,145 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ExtKnowledgeConnector - Data API",
+  "description": "Represents a connector to a third-party knowledge source for Unified Knowledge. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action condition record is locked or not. The default value is false."
+    },
+    "LastSyncDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the connector last synced with the third-party knowledge source to import articles into Salesforce."
+    },
+    "LastSyncStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the status of the connector’s last sync of articles from the third-party knowledge source into Salesforce. Possible values are: articleLimitExceeded—Exceeded article or version limits completed—Completed completedWithErrors—Completed with errors ended—Ended failed—Failed initiating—Started invalidCredentials—Invalid credentials polling—Polling for Zoomin sync to complete queued—Queued syncing—Syncing timedOut—Timed Out unavailable—Zoomin unavailable"
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated import article condition record can be edited or not. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The connector’s label in Unified Knowledge setup."
+    },
+    "NamedCredentialId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Salesforce ID of the named credential that’s used for a request. The named credential identifies the third-party system and the third-party authentication settings. This field is a relationship field.",
+      "relationship_name": "NamedCredential",
+      "relationship_type": "Lookup",
+      "refers_to": "NamedCredential"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The user ID of the owner of the connector. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PartnerConnectorIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort"
+    },
+    "ShouldOpenInSource": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether articles imported into Salesforce open in the third-party source from links in Salesforce. The default value is false."
+    }
+  },
+  "special_access_rules": "Knowledge must be enabled in your org. Salesforce Knowledge users, unlike customer and partner users, must also be granted the Knowledge User feature license.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ExtKnowledgeConnectorOwnerSharingRule**: Sharing rules are available for the object.\n- **ExtKnowledgeConnectorShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "External Knowledge Connector ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastSyncDate": {
+      "field_label": "Last Sync Date",
+      "type": "datetime"
+    },
+    "LastSyncStatus": {
+      "field_label": "Last Sync Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Source Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NamedCredentialId": {
+      "field_label": "Named Credential ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PartnerConnectorIdentifier": {
+      "field_label": "Partner Connector Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "ShouldOpenInSource": {
+      "field_label": "Open articles in their original source",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

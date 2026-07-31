@@ -1,0 +1,142 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AnalyticsWorkspaceAsset - Data API",
+  "description": "Represents a Tableau Next asset in a workspace. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ActivePromotionRequestId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the active promotion request for the workspace asset. This field is a relationship field.",
+      "relationship_name": "ActivePromotionRequest",
+      "refers_to": "DataAssetPromotionRequest"
+    },
+    "AnalyticsWorkspaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Tableau Next workspace the asset is associated with. This field is a relationship field.",
+      "relationship_name": "AnalyticsWorkspace",
+      "relationship_type": "Master-detail",
+      "refers_to": "AnalyticsWorkspace (the master object)"
+    },
+    "AssetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the asset. This field is a polymorphic relationship field.",
+      "relationship_name": "Asset",
+      "refers_to": "AnalyticsDashboard, AnalyticsVisualization"
+    },
+    "AssetType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of asset. Possible values are: AnalyticsDashboard—Analytics Dashboard AnalyticsVisualization—Analytics Visualization MktCalculatedInsightObject—Calculated Insight Object MktDataConnection—Data Cloud Connection MktDataLakeObject—Data Lake Object MktDataModelObject—Data Model Object SemanticModel—Semantic Model"
+    },
+    "AssetUsageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of usage for the asset. Possible values are: Created Referenced"
+    },
+    "HistoricalPromotionStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The historical promotion status for the asset. Possible values are: pending promoted unpromoted"
+    },
+    "MetadataSourceType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The source type of the asset metadata. Possible values are: Promoted Reused"
+    }
+  },
+  "special_access_rules": "To access this object, you must have Tableau Next enabled in your org and a Tableau Next permission set.",
+  "field_reference": {
+    "ActivePromotionRequestId": {
+      "field_label": "Data Asset Promotion Request ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AnalyticsWorkspaceId": {
+      "field_label": "Analytics Workspace ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssetType": {
+      "field_label": "Asset Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssetUsageType": {
+      "field_label": "Asset Usage Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "HistoricalPromotionStatus": {
+      "field_label": "Historical Promotion Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Analytics Workspace Asset ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MetadataSourceType": {
+      "field_label": "Metadata Source Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SourceOrgId": {
+      "field_label": "Organization ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

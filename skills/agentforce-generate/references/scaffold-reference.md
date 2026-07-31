@@ -10,7 +10,7 @@ Generates stub metadata files (Flow XML, Apex classes) for Agent Script targets 
 
 Generate stub metadata files directly using the type mapping and action classification rules below. Parse the `.agent` file to extract action targets and their I/O schemas, then generate Flow XML or Apex classes as appropriate.
 
-For automated scaffold generation, see the [Advanced](#advanced-requires-adlc-repo-clone) section at the bottom.
+For automated scaffold generation, see the [Automated Scaffold](#automated-scaffold-bundled-script) section at the bottom.
 
 ## What it does
 
@@ -53,7 +53,7 @@ When connected to an org:
 
 ## Output Structure
 
-```
+```text
 force-app/main/default/
   flows/
     Get_Order_Status.flow-meta.xml
@@ -101,7 +101,7 @@ Recommended order: `apiVersion` -> `description` -> `label` -> `variables` -> `a
 3. Update test classes with meaningful assertions
 4. Add error handling and FLS/CRUD checks
 
-## Backing Logic Selection Criteria
+## Action Implementation Selection Criteria
 
 | Criteria | Choose Flow | Choose Apex |
 |----------|-------------|-------------|
@@ -112,7 +112,7 @@ Recommended order: `apiVersion` -> `description` -> `label` -> `variables` -> `a
 | Maintenance | Admins maintain | Developers maintain |
 | Testing | Flow test coverage built-in | Requires Apex test class (75%+ coverage) |
 
-**Rule of thumb:** If the action does a single record lookup or update with no callouts, use Flow. If it involves callouts, complex logic, or bulk operations, use Apex. When in doubt, prefer Apex — it's more debuggable and less constrained.
+**Rule of thumb:** If the action does a single record lookup or update with no callouts, Flow is often a good fit. If it involves callouts, complex logic, or bulk operations, Apex is often a better fit. Choose based on requirement fit and team ownership, not a default preference.
 
 ## Integration Workflow
 
@@ -126,8 +126,7 @@ sf api request rest --json "/services/data/v63.0/tooling/query?q=SELECT+Name+FRO
 sf project deploy start --json --source-dir force-app/main/default -o myorg
 # 5. Verify targets exist
 sf api request rest --json "/services/data/v63.0/tooling/query?q=SELECT+DeveloperName+FROM+Flow+WHERE+IsActive=true+AND+ProcessType='AutoLaunchedFlow'" -o myorg
-# 6. Publish agent
-sf agent publish authoring-bundle --json --api-name MyAgent -o myorg
+# 6. Continue draft testing (publish/activate only with explicit release approval)
 ```
 
 ## Exit Codes
@@ -138,12 +137,12 @@ sf agent publish authoring-bundle --json --api-name MyAgent -o myorg
 | 1 | Some stubs failed |
 | 2 | Critical failure |
 
-## Advanced (requires ADLC repo clone)
+## Automated Scaffold (bundled script)
 
-The `scaffold.py` script automates stub generation with SObject-aware field discovery. It is NOT bundled with the skill — requires cloning the ADLC repo.
+The `scaffold.py` script automates stub generation with SObject-aware field discovery. It is bundled with this skill under `scripts/` — no external clone required. Run it from the skill directory (stdlib only, no extra dependencies):
 
 ```bash
-# From ADLC repo root — scaffold missing targets (runs discover first)
+# Scaffold missing targets (runs discover first)
 python3 scripts/scaffold.py \
   --agent-file path/to/Agent.agent -o <org-alias> --output-dir force-app/main/default
 

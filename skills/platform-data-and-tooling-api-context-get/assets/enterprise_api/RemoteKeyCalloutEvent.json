@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "RemoteKeyCalloutEvent - Data API",
+  "description": "The documentation has moved to RemoteKeyCalloutEvent in the Platform Events Developer Guide.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"RemoteKeyCalloutEvent\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Details\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EventUuid\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReplayId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RequestIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StatusCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Details": {
+      "field_label": "Details",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "EventUuid": {
+      "field_label": "Event UUID",
+      "type": "string",
+      "length": "36"
+    },
+    "ReplayId": {
+      "field_label": "Replay ID",
+      "type": "string",
+      "length": "1000"
+    },
+    "RequestIdentifier": {
+      "field_label": "Request Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "StatusCode": {
+      "field_label": "Status Code",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

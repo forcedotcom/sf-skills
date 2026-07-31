@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "LearningItem - Data API",
+  "description": "Represents an item that requires users to take action, including a Learning Paths entry, an Enablement program, or an exercise with linked content in an Enablement program. For Learning Paths, users are assigned a learning item to complete. For Enablement programs and exercises, users are assigned a program or can self-enroll in shared programs. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CustomLearningItemTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of a learning item type record if this learning item represents a custom exercise type in an Enablement program. This field is required when the Type field’s value is CustomContent.This field is a relationship field. Available in API version 62.0 and later.",
+      "relationship_name": "CustomLearningItemType",
+      "relationship_type": "Lookup",
+      "refers_to": "LearningItemType"
+    },
+    "EnablementProgramId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of an Enablement program that contains the outcome, milestone, or exercise. This field is a relationship field.",
+      "relationship_name": "EnablementProgram",
+      "relationship_type": "Lookup",
+      "refers_to": "EnablementProgram"
+    },
+    "LearningContentId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the record that represents a Trailhead module or video in a sales program exercise. This field is a relationship field.",
+      "relationship_name": "LearniningContent",
+      "refers_to": "LearningContent"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the owner of the program. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "StandardCustomContentMetadata": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Reserved for future use."
+    },
+    "StandardCustomLearningItemType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Reserved for future use."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of learning item. Possible values are: CustomContent—Custom exercise content in an Enablement program, such as a screen flow, content from external repositories, or other custom content sources. Available in API version 62.0 and later. EnablementProgram LearningContent—Trailhead module LearningLesson—Lesson exercise in an Enablement program LearningLink—Audio Recording, Document, Scheduled Event, or Other exercise in an Enablement program LearningPractice—Feedback Request exercise in an Enablement program StandardCustomContent—Standard Custom exercise content in an Enablement program. Reserved for future use."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **LearningItemOwnerSharingRule (API version 60.0)**: Sharing rules are available for the object.\n- **LearningItemShare (API version 60.0)**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Learning Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

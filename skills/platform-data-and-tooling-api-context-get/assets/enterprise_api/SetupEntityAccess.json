@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SetupEntityAccess - Data API",
+  "description": "Represents the enabled setup entity access settings (such as for Apex classes) for the parent PermissionSet. This object is available in API version 25.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the entity’s parent PermissionSet. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSet"
+    },
+    "SetupEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the entity for which access is enabled, such as an Apex class or Visualforce page."
+    },
+    "SetupEntityType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of setup entity for which access is enabled. Valid values are: ApexClass for Apex classes ApexPage for Visualforce pages In API version 64.0 and later, BotDefinition for agents In API version 28.0 and later, ConnectedApplication for OAuth connected apps In API version 48.0 and later, CustomEntityDefinition for Custom Settings and Custom Metadata Types In API version 31.0 and later, CustomPermission for custom permissions In API version 62.0 and later, EmailRoutingAddress for email routing addresses. In API version 60.0 and later, ExternalClientApplication for external client apps. In API version 58.0 and later, ExternalCredentialParameter for external credential principals. In API version 58.0 and later, FlowDefinition for flows In API version 62.0 and later, MessagingChannel for messaging channels In API version 58.0 and later, OrgWideEmailAddress for organization-wide email addresses In API version 28.0 and later, ServiceProvider for service providers In API version 60.0 and later, StandardInvocableActionType for standard invocable actions. In API version 28.0 and later, TabSet for apps"
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only users with \"View Setup and Configuration\" permission can access this object.",
+  "usage": "Because SetupEntityAccess is a child of the PermissionSet object, the usage is similar to other PermissionSet child objects like FieldPermissions and ObjectPermissions.\n\nFor example, the following code returns all permission sets that grant access to any\n            setup entities for which access is\n            enabled:\n\nSELECT Id, ParentId, Parent.Name, SetupEntityId\n\nFROM SetupEntityAccess\n\nThe following code returns permission sets that grant access only to Apex\n            classes:\n\nSELECT Id, ParentId, Parent.Name, SetupEntityId\n\nFROM SetupEntityAccess\n\nWHERE SetupEntityType='ApexClass'\n\nThe following code returns permission sets that grant access to any setup entities, and\n            are not owned by a\n            profile:\n\nSELECT Id, ParentId, Parent.Name, SetupEntityId\n\nFROM SetupEntityAccess\n\nWHERE ParentId\n\nIN (SELECT Id\n\nFROM PermissionSet\n\nWHERE isOwnedByProfile = false)\n\nYou may want to return only those permission sets that have access to a specific setup\n            entity. To do this, query the parent object. For example, this code returns all\n            permission sets that grant access to the\n\nApex\n            class:\n\nSELECT Id, Name,\n\n(SELECT Id, Parent.Name, Parent.Profile.Name\n\nFROM SetupEntityAccessItems)\n\nFROM ApexClass\n\nWHERE Name = 'helloWorld'\n\nWhile it’s possible to return permission sets that have access to a\n\nConnectedApplication\n\nServiceProvider\n\nSetupEntityId\n\n, it’s not possible\n            to return permission sets that have access to these\n\nSetupEntityType\n\nfields by any other AppMenuItem attribute, such as\n\nDescription\n\n. For example, to find out if a user has access to\n            the Recruiting app, you’d run two queries. First, query to get the AppMenuItem\n            ID:\n\nSELECT Id, Name, Label\n\nFROM AppMenuItem\n\nWHERE Name = 'Recruiting'\n\nLet’s say the previous query returned the AppMenuItem\n\nApplicationId\n\n02uD0000000GIiMIAW. Using this ID, you can now run a query to find out if a user has\n            access to the Recruiting\n            app:\n\nSELECT Id, SetupEntityId, SetupEntityType\n\nFROM SetupEntityAccess\n\nWHERE ParentId\n\n(SELECT PermissionSetId\n\nFROM PermissionSetAssignment\n\nWHERE AssigneeId = '005D0000001QOzF')\n\nAND (SetupEntityId = '02uD0000000GIiMIAW')",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"SetupEntityAccess\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSet\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SetupEntity\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"SetupEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SetupEntityType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Id": {
+      "field_label": "SetupEntityAccess ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SetupEntityId": {
+      "field_label": "Setup Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SetupEntityType": {
+      "field_label": "Setup Entity Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

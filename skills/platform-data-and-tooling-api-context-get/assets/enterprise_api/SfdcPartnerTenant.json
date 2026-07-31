@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerTenant - Data API",
+  "description": "Represents a Salesforce org that contains information about a partner's customer's tenants and is stored in a Partner Business Org (PBO). This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CustomerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the customer associated with this tenant. This field is a relationship field.",
+      "relationship_name": "Customer",
+      "refers_to": "SfdcCustomerForPartner"
+    },
+    "IsSandbox": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Derived field. Describes whether this tenant is a sandbox org. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the tenant record.",
+      "required": true
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The core org 18 character ID. This field is unique within your organization.",
+      "required": true
+    },
+    "TenantStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field. The current status of the tenant."
+    },
+    "TimeZoneSidKey": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Derived field. The timezone of the tenant org."
+    }
+  }
+}

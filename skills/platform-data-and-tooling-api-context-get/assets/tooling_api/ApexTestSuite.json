@@ -1,0 +1,31 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ApexTestSuite - Tooling API",
+  "description": "Represents a suite of Apex classes to include in a test run. A TestSuiteMembership object associates each class with the suite. Available in the ens namespace in Tooling API version 36.0 and later. Also, available in the mns namespace in Tooling API version 38.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`, `PATCH`, `DELETE`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "TestSuiteName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Unique, Update",
+      "description": "The name of the Apex test suite. This label appears in the user interface. This value is case-sensitive and must be unique."
+    },
+    "testClassName": {
+      "type": "string[]",
+      "description": "A list of Apex test classes, specified by name, to include in this test suite."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexTestSuite\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ApexClassIds\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"ApexClassJunctions\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"TestSuiteName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

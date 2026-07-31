@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "EnblProgramTaskProgress - Data API",
+  "description": "Represents a user’s progress towards completing an outcome, a milestone, or an exercise in an Enablement program. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CompletedDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date that the user completed the outcome, milestone, or exercise."
+    },
+    "CompletedOnDay": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number of days that the user took to complete the outcome, milestone, or exercise."
+    },
+    "CompletedPercent": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Percentage of the outcome, milestone, or exercise that’s complete."
+    },
+    "ContributingRecordCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of records that qualify for a user’s progress towards completing an outcome or milestone. To qualify, the activity must meet the criteria that the corresponding Enablement measure defines for specific objects, fields, and field values. Available in API version 61.0 and later."
+    },
+    "DueDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "The date the outcome, milestone, or exercise is due."
+    },
+    "EnblProgramTaskDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the outcome, milestone, or exercise definition. This field is a relationship field.",
+      "relationship_name": "EnblProgramTaskDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "EnblProgramTaskDefinition"
+    },
+    "IsCompleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Whether the outcome, milestone, or exercise is complete (true) or not (false). The default value is false."
+    },
+    "IsNoLongerTracking": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If the user hasn’t completed the outcome or milestone and 30 days have elapsed since the program’s due date, the value is true. Otherwise, the value is false. The default value is false. For details, see Completion Statuses in Enablement Analytics."
+    },
+    "LearningItemProgressId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the record that tracks the user's progress through the program that includes this outcome, milestone, or exercise. This field is a relationship field.",
+      "relationship_name": "LearningItemProgress",
+      "relationship_type": "Lookup",
+      "refers_to": "LearningItemProgress"
+    },
+    "MilestoneComputationResult": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Derived from the associated EnblProgramTaskDefinition record. For example, if a milestone has a single measure A with a result of 5, this field’s value is 5."
+    },
+    "ProgressStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the outcome, milestone, or exercise progress. Possible values are: Behind Completed Late Completed On Time No Longer Tracking Not Completed Overdue For details, see Completion Statuses in Enablement Analytics."
+    }
+  }
+}

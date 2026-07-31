@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "FulfmtRoutgCriteriaActnVar - Data API",
+  "description": "Maps variable identifiers used in fulfillment criteria action expressions to entity fields. Stores the binding between symbolic variable names (e.g., $availableCapacity, $location) in action expression and the actual entity and field paths (e.g., Location.availableCapacity) used at runtime. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Entity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The name of the object that contains the field being referenced. For example \"Order\" or \"OrderItem\". This identifies the context object that the field value is retrieved from at runtime. Must match an object name in the system. Possible values are: Calendar Config FulfillmentRoutingSpec Location LocationProductInventory ProductItem"
+    },
+    "Field": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the specific field within the object that this variable maps to. For example \"availableCapacity\". For filter rules where the action expression reference an object instead of a specific field, this can be null. For weighted rules with mathematical expressions, this field is required and must reference a numeric field. Must match a field name on the specified object."
+    },
+    "FulfmtRoutgCriteriaId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "A foreign key reference to the parent FulfillmentRoutingCriteria entity. Each action variable must belong to exactly one rule. This field is a relationship field.",
+      "relationship_name": "FulfmtRoutgCriteria",
+      "relationship_type": "Master-detail",
+      "refers_to": "FulfmtRoutgCriteria (the master object)"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the variable. The name isn't required to be unique and can be customized by users."
+    },
+    "VariableName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The variable identifier that's used in the action expression. This is the symbolic name that appears in the action_expression field of the parent rule. For example $availableCapacity, $location. Must include the $ prefix to distinguish it from numeric condition identifiers. Must be unique within a rule."
+    }
+  },
+  "special_access_rules": "The Salesforce org must have:"
+}

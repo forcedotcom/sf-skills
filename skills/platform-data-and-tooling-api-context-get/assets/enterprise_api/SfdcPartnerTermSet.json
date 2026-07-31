@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "SfdcPartnerTermSet - Data API",
+  "description": "Represents a set of contractual terms for a partner relationship. SfdcPartnerTermSet is a Partner Business Org (PBO) standard object storing partner contract terms that are propagated from the Channel Orders Application (COA). This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CoaSyncTimestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates when the PBO refreshed data from the COA."
+    },
+    "DefaultBillingFrequency": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Determines the default billing frequency in months for this channel contract."
+    },
+    "DefaultCancellationTerms": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Default number of days that the customer has to cancel an order."
+    },
+    "DefaultContractCurrency": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Determines the default currency for this channel contract. Possible values are: AUD EUR GBP INR JPY SEK USD"
+    },
+    "DefaultRenewalLength": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Default renewal length in months."
+    },
+    "IsDefaultContractAutoRenew": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Default value for whether a contracts auto-renews. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the partner term set.",
+      "required": true
+    },
+    "OverrideLevel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Determines the level of override allowed for contract terms on orders. Possible values are: Order"
+    },
+    "PartnerApiKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API Key for the channel contract record on used to validate a request."
+    },
+    "PartnerContractTerm": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Partner term set copied from the COA."
+    },
+    "PartnerContractTermPbo": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "18 character ID that references the PBO."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the Partner Contract Terms record in the COA. Possible values are: Active Inactive Retired"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of Partner Contract Terms record in the COA, which determines where the partner sells. Possible values are: ISVForce_TM"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SfdcPartnerTermSetOwnerSharingRule**: Sharing rules are available for the object.\n- **SfdcPartnerTermSetShare**: Sharing is available for the object."
+}

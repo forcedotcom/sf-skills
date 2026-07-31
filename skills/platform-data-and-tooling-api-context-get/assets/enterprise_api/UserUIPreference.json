@@ -1,0 +1,131 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "UserUIPreference - Data API",
+  "description": "Represents user preferences for Salesforce components. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AsyncOperationTrackers": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "Stores a JSON object that maps each quote ID to its asynchronous sales transaction request details, which includes a tracker ID and the start date. This field is available with Revenue Cloud in API version 66.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The system-generated number for the user preferences. Read-only."
+    },
+    "ObjectScope": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of the object that the preference applies to. For example, the preference applies to the Quote object."
+    },
+    "PreferenceAttribute": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of preference."
+    },
+    "SourceScope": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies the component, feature, or product that the preference is for. For example, a preference for column widths that's associated with the Transaction Line Table component in Revenue Cloud."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The user associated with the user preferences. This field is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Master-detail",
+      "refers_to": "User (the master object)"
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "The JSON for the user's preferences."
+    }
+  },
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "User UI Preference ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ObjectScope": {
+      "field_label": "Object API Name",
+      "type": "string",
+      "length": "40"
+    },
+    "PreferenceAttribute": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SourceScope": {
+      "field_label": "Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "textarea",
+      "length": "131072"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

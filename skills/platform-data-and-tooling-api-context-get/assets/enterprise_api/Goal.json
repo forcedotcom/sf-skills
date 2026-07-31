@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "Goal - Data API",
+  "description": "The Goal object represents the components of a goal such as its name, description, and status.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CompletionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The completion date of the goal."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the goal. The maximum length is 65,535 characters."
+    },
+    "DueDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date the goal is due."
+    },
+    "ImageUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The URL for the goal image. The image must be stored in Documents and set as externally available. Applicable only to Goal objects of Type: Goal."
+    },
+    "IsKeyCompanyGoal": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the goal is a key company goal."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp that indicates when a user last viewed a record that is related to this goal."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp that indicates when a user last viewed this goal. If this value is null, this record might have been only referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the goal. The maximum length is 255 characters."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who owns the goal."
+    },
+    "Progress": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The progress of the goal measured as a percentage."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The start date of the goal."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the goal.Possible values: Draft Published Completed Canceled Not Completed"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **GoalFeed**: Feed tracking is available for the object.\n- **GoalHistory**: History is available for tracked fields of the object.\n- **GoalOwnerSharingRule**: Sharing rules are available for the object.\n- **GoalShare**: The original WDC feature is unavailable as of Spring '22. This object isn't available as of API version 54.0. For more information, see Phased WDC (legacy Work.com) Feature Retirement."
+}

@@ -1,0 +1,158 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "QuoteItemTaxItem - Data API",
+  "description": "The tax that is applied to a quote line item. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The tax amount for the quote line item."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the org. Possible values are: BHD—Bahraini Dinar EUR—Euro JPY—Japanese Yen USD—U.S. Dollar The default value is 'USD'."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "User-defined description of the tax. For example, state sales tax or value-added tax (VAT)."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the tax."
+    },
+    "ProductSurchargeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The product surcharge associated with the quote item tax item. This field is a relationship field. This field is available with Digital Insurance.",
+      "relationship_name": "ProductSurcharge",
+      "refers_to": "ProductSurcharge"
+    },
+    "ProratedSurchargeAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The prorated portion of the tax amount based on the quote line item's effective dates. This field is available with Digital Insurance."
+    },
+    "QuoteLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the related quote line item. This is a relationship field.",
+      "relationship_name": "QuoteLineItem",
+      "relationship_type": "Lookup",
+      "refers_to": "QuoteLineItem"
+    },
+    "Rate": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "If the tax is a percentage tax, then this field contains the percent value. If the tax is a fixed amount, then this field is null."
+    },
+    "TaxEffectiveDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The date used to calculate the tax rate."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Whether the tax is estimated or calculated by the tax provider. Possible values are: Actual Estimated"
+    }
+  },
+  "special_access_rules": "This object is available if Subscription Management is enabled in your org. This object is also available in Enterprise, Unlimited, and Developer Editions of Revenue Cloud.\n\nThis object is available if Subscription\n         Management is enabled in your org. This object is also available in Enterprise, Unlimited,\n         and Developer Editions of Revenue Cloud.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Id": {
+      "field_label": "Quote Item Tax Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Tax Name",
+      "type": "string",
+      "length": "255"
+    },
+    "QuoteLineItemId": {
+      "field_label": "Quote Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Rate": {
+      "field_label": "Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxEffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "date"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

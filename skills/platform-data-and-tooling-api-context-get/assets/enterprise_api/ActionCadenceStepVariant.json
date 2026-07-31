@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "ActionCadenceStepVariant - Data API",
+  "description": "Represents an email template or call script variant associated with an action cadence step. Email and call steps can have up to 3 variants associated so sales teams can compare the engagement results. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionCadenceStepId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the related action cadence step. This is a relationship field.",
+      "relationship_name": "ActionCadenceStep",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadenceStep"
+    },
+    "SplitPercentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage of emails to send or calls to make using this email template or call script variant. The total for all variants must be 100%."
+    },
+    "TemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the associated email template or call script. This is a polymorphic relationship field.",
+      "relationship_name": "Template",
+      "relationship_type": "Lookup",
+      "refers_to": "CallTemplate, EmailTemplate"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of the associated action cadence step. Possible values are: AutoSendAnEmail Branch Copilot CreateTask DaisyChain LinkedInConnection LinkedInMail ListenerBranch MakeACall PlatformScreenFlow—Available in version 55.0 and later. Root SendAMessage SendAnEmail Terminal Wait Only email and call steps can have an associated action cadence step variant."
+    }
+  },
+  "special_access_rules": "Sales Engagement and Allow Email Template and Call Script Variant Testing must be enabled.\n\nSales Engagement and Allow Email Template and\n         Call Script Variant Testing must be enabled.",
+  "usage": "Use ActionCadenceStepVariant to retrieve the email template or call script for an action cadence step: Use ActionCadenceStepVariant to retrieve the call scripts from all call steps:\n\nUse ActionCadenceStepVariant to retrieve the email template or call script for an action cadence step:\n\nSELECT SplitPercentage, TemplateId FROM ActionCadenceStepVariant WHERE ActionCadenceStepId=:[idValue]\n\nUse ActionCadenceStepVariant to retrieve the call scripts from all call\n            steps:\n\nSELECT SplitPercentage, TemplateId, ActionCadenceStepId FROM ActionCadenceStepVariant WHERE Type='MakeACall'"
+}

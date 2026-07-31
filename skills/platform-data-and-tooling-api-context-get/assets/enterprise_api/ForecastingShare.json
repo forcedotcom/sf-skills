@@ -1,0 +1,99 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingShare - Data API",
+  "description": "Represents forecasts shared between a forecast manager and a user. Available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Whether the user you’re sharing your forecasts with can view and adjust the forecasts or view only. This field is new since the pilot. Picklist values: ViewAndEdit ViewOnly"
+    },
+    "SharedForecastManagerRoleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of either: The role of the manager whose forecasts you want to share. The territory whose forecasts you want to share."
+    },
+    "RoleType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of hierarchy associated with the forecast share. R - Role-based T - Territory-based Y - Territory2-based"
+    },
+    "UserOrGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the user with whom the forecast is shared."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only standard users with the View All Forecasts or Allow Forecasting permission or delegated forecast manager status can access this object.",
+  "usage": "Use this object to let any stakeholder at your company view and adjust forecast managers’ forecasts.",
+  "field_reference": {
+    "AccessLevel": {
+      "field_label": "Forecasting Share Access Level",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Forecasting Share ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RoleType": {
+      "field_label": "Role Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SharedForecastManagerRoleId": {
+      "field_label": "SharedForecastManagerRole ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserOrGroupId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

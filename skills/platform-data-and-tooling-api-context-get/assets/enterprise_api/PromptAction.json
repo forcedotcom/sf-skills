@@ -1,0 +1,216 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PromptAction - Data API",
+  "description": "Represents how the user interacted with the in-app guidance prompt or walkthrough. Available in API version 46.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "LastDisplayDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date the in-app guidance was last displayed to the user."
+    },
+    "LastResult": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the last user interaction. Valid values are: CustomAction Dismiss Error Finish—(walkthroughs only) NoAction NotSeen Snooze"
+    },
+    "LastResultDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date the in-app guidance was last interacted with."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the in-app guidance."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PromptVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the PromptVersion object. This is a relationship field.",
+      "relationship_name": "PromptVersion",
+      "relationship_type": "Lookup",
+      "refers_to": "PromptVersion"
+    },
+    "SnoozeUntil": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the user’s snooze request expires. The user won’t see the prompt again until they navigate to the page after the snooze time expires."
+    },
+    "StepCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the total number of steps in the walkthrough. Available in API version 49.0 and later."
+    },
+    "StepNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the number of the last step the user viewed or interacted with in a walkthrough. Maximum value is 10. Available in API version 49.0 and later."
+    },
+    "TimesActionTaken": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of times that the user took action on the in-app guidance."
+    },
+    "TimesDismissed": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of times that the user dismissed the in-app guidance."
+    },
+    "TimesDisplayed": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of times that the in-app guidance was displayed to the user."
+    },
+    "TimesSnoozed": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of times the user snoozes the prompt."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the user. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "To add, edit, manage, and view prompts and walkthroughs in Lightning Experience or in Experience Cloud sites, multiple permissions are required. See Permissions for Creating and Accessing In-App Guidance in Salesforce Help.",
+  "associated_objects": "This object has the following associated objects. They are available in API version 46.0 and later.\n\n- **PromptActionOwnerSharingRule**: Sharing rules are available for the object.\n- **PromptActionShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PromptAction\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastDisplayDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastResult\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastResultDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PromptVersion\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PromptVersion\"/>\n        <element name=\"PromptVersionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SnoozeUntil\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"StepCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StepNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TimesActionTaken\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"TimesDismissed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"TimesDisplayed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"TimesSnoozed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Prompt Action ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastDisplayDate": {
+      "field_label": "Last Display Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastResult": {
+      "field_label": "Last Result",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastResultDate": {
+      "field_label": "Last Result Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PromptVersionId": {
+      "field_label": "Prompt Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SnoozeUntil": {
+      "field_label": "Snooze Until",
+      "type": "datetime"
+    },
+    "StepCount": {
+      "field_label": "Step Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "StepNumber": {
+      "field_label": "Step Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimesActionTaken": {
+      "field_label": "Times Action Taken",
+      "type": "int",
+      "digits": "9"
+    },
+    "TimesDismissed": {
+      "field_label": "Times Dismissed",
+      "type": "int",
+      "digits": "9"
+    },
+    "TimesDisplayed": {
+      "field_label": "Times Displayed",
+      "type": "int",
+      "digits": "9"
+    },
+    "TimesSnoozed": {
+      "field_label": "Times Snoozed",
+      "type": "int",
+      "digits": "9"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

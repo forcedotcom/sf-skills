@@ -1,0 +1,394 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AssetAction - Data API",
+  "description": "Represents a change made to a lifecycle-managed asset. The fields can’t be edited. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date when an asset action change is recorded. This date can differ from the start date of the related asset state period. For example, suppose that a customer cancels a subscription in June, and the subscription expires in October. The date the customer cancels the subscription (June) is the action date of the asset action. The cancellation's effective date (October) is the start date of the asset state period."
+    },
+    "ActualTaxChange": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The rollup of actual tax from all asset action sources. This field is populated by the system. Label is Change in Actual Tax. This field is a calculated field."
+    },
+    "AdjustmentAmountChange": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The rollup of adjustment amount from all asset action sources. This field is populated by the system. Label is Change in Adjustment Amount. This field is a calculated field."
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The delta in the total asset amount resulting from an asset action."
+    },
+    "AssetActionNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The ID of the asset action. Label is Name."
+    },
+    "AssetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related lifecycle-managed asset. Label is Asset. This field is a relationship field.",
+      "relationship_name": "Asset",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "CanRollBack": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the last asset action can be rolled back (true). If this property is set to false, the asset and the last asset action can’t be rolled back. The default value is false. This field is available in API version 65.0 and later."
+    },
+    "CategoryEnum": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The business category of the asset action, for use in reporting. Asset action totals are broken out by the picklist values on this required field, and those totals are in turn reflected on assets. These categories are available and aren’t customizable. Label is Business Category. Possible values are: Cancellations Cross-Sells Downgrades Indicates a transition to a lower-level version or tier of an asset. Downsells Indicates a negative quantity amendment or a decreased Line Item total price with no change in quantity. Initial Sale Indicates that the asset is initially purchased by an account. Other Renewals Swaps Indicates the exchange of one asset for another. Applies to both swapped-out and swapped-in actions. Terms And Conditions Changes Transfers Indicates that an asset is transferred from one account to another. Upgrades Indicates a transition to a higher-level version or tier of an asset. Upsells Indicates a positive quantity amendment or an increased Line Item total price with no change in quantity."
+    },
+    "EstimatedTaxChange": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The rollup of estimated tax from all asset action sources. This field is populated by the system. Label is Change in Estimated Tax. This field is a calculated field."
+    },
+    "MrrChange": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The delta in the asset’s monthly recurring revenue resulting from an asset action. For example, suppose that the MRR during an asset state period is $200 and the next asset action adds $100. Then this field’s value is $100. Label is Change in Monthly Recurring Revenue."
+    },
+    "ProductAmountChange": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The rollup of product amount from all asset action sources. This field is populated by the system. Label is Change in Product Amount. This field is a calculated field."
+    },
+    "QuantityChange": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The delta in the asset quantity resulting from an asset action. For example, suppose that the asset quantity during an asset state period is 20 and the next asset action adds 10. Then this field’s value is 10. Label is Change in Quantity."
+    },
+    "RolledbackAssetAction": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The last asset action rolled back in the current rollback transaction. This field is available in API version 65.0 and later."
+    },
+    "SubtotalChange": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The rollup of subtotal from all asset action sources. This field is populated by the system. Label is Change in Subtotal. This field is a calculated field."
+    },
+    "Subtype": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The subtype of the action on the asset. Valid values are: DowngradeFrom—Available in API version 66.0 and later. DowngradeTo—Available in API version 66.0 and later. FieldAmendment Rollback StartDateAdjustment SwapIn—Available in API version 66.0 and later. SwapOut—Available in API version 66.0 and later. TransferFrom TransferTo UpgradeFrom—Available in API version 66.0 and later. UpgradeTo—Available in API version 66.0 and later. This field is available in API version 65.0 and later."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the current and previous asset action amount. This field is populated by the system. This field is a calculated field."
+    },
+    "TotalCancellationsAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Cancellations. This field is populated by the system."
+    },
+    "TotalCrossSellsAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Cross-Sells. This field is populated by the system."
+    },
+    "TotalDowngradesAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Downgrades. This field is populated by the system and is available in API version 66.0 and later."
+    },
+    "TotalDownsellsAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Downsells. This field is populated by the system."
+    },
+    "TotalInitialSaleAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Initial Sale. This field is populated by the system."
+    },
+    "TotalMrr": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the monthly recurring revenue for the current and previous asset action. This field is populated by the system. Label is Total Monthly Recurring Revenue."
+    },
+    "TotalOtherAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Other. This field is populated by the system."
+    },
+    "TotalQuantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the changes in quantity for the current and previous asset action. This field is populated by the system."
+    },
+    "TotalRenewalsAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Renewals. This field is populated by the system."
+    },
+    "TotalSwapsAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Swaps. This field is populated by the system and is available in API version 66.0 and later."
+    },
+    "TotalTermsAndConditionsAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Terms and Conditions Changes. This field is populated by the system. Label is Total Terms and Conditions Changes Amount."
+    },
+    "TotalTransfersAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Transfers. This field is populated by the system."
+    },
+    "TotalUpgradesAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Upgrades. This field is populated by the system and is available in API version 66.0 and later."
+    },
+    "TotalUpsellsAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of current and previous asset action amounts categorized as Upsells. This field is populated by the system."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The REST API used to generate the asset action. This field is populated by the system. Valid values are: Cancel Change Convert Generate"
+    }
+  },
+  "special_access_rules": "To use Customer Asset Lifecycle Management APIs, you must have the Access Customer Asset Lifecycle Management APIs permission and Read access to the Asset, Asset Action, Asset Action Source, and Asset State Period objects.\n\nTo use Customer Asset Lifecycle Management APIs,\n         you must have the Access Customer Asset Lifecycle Management APIs permission and Read\n         access to the Asset, Asset Action, Asset Action Source, and Asset State Period\n         objects.",
+  "wsdl_segment": "```xml\n<complexType name=\"AssetAction\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActionDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ActualTaxChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"AdjustmentAmountChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Amount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Asset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"AssetActionNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AssetActionSources\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CategoryEnum\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EstimatedTaxChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MrrChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductAmountChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"QuantityChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SubtotalChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Subtype\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalCancellationsAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalCrossSellsAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalDowngradesAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalDownsellsAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalInitialSaleAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalMrr\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalOtherAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalQuantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalRenewalsAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalSwapsAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalTermsAndConditionsAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalTransfersAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalUpgradesAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalUpsellsAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ActionDate": {
+      "field_label": "Action Date",
+      "type": "datetime"
+    },
+    "ActualTaxChange": {
+      "field_label": "Change in Actual Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AdjustmentAmountChange": {
+      "field_label": "Change in Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AssetActionNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CategoryEnum": {
+      "field_label": "Business Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EstimatedTaxChange": {
+      "field_label": "Change in Estimated Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Asset Action ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MrrChange": {
+      "field_label": "Change in Monthly Recurring Revenue",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ProductAmountChange": {
+      "field_label": "Change in Product Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "QuantityChange": {
+      "field_label": "Change in Quantity",
+      "type": "double",
+      "precision": "14",
+      "scale": "2"
+    },
+    "SubtotalChange": {
+      "field_label": "Change in Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Subtype": {
+      "field_label": "Subtype",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAmount": {
+      "field_label": "Total Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCancellationsAmount": {
+      "field_label": "Total Cancellations Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCrossSellsAmount": {
+      "field_label": "Total Cross-Sells Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDowngradesAmount": {
+      "field_label": "Total Downgrades Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDownsellsAmount": {
+      "field_label": "Total Downsells Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalInitialSaleAmount": {
+      "field_label": "Total Initial Sale Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalMrr": {
+      "field_label": "Total Monthly Recurring Revenue",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalOtherAmount": {
+      "field_label": "Total Other Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalQuantity": {
+      "field_label": "Total Quantity",
+      "type": "double",
+      "precision": "14",
+      "scale": "2"
+    },
+    "TotalRenewalsAmount": {
+      "field_label": "Total Renewals Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalSwapsAmount": {
+      "field_label": "Total Swaps Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTermsAndConditionsAmount": {
+      "field_label": "Total Terms And Conditions Changes Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTransfersAmount": {
+      "field_label": "Total Transfers Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalUpgradesAmount": {
+      "field_label": "Total Upgrades Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalUpsellsAmount": {
+      "field_label": "Total Upsells Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

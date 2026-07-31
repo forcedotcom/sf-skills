@@ -1,0 +1,177 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "MailmergeTemplate - Data API",
+  "description": "Represents a mail merge template (a Microsoft Word document) used for performing mail merges for your organization.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Body": {
+      "type": "base64",
+      "properties": "Create",
+      "description": "Microsoft Word document to use as a mail merge template. Due to limitations with Microsoft Word mail merge templates, your client application can specify the Body field when creating these records, but not when updating them. Limit: 5 MB.",
+      "required": true
+    },
+    "BodyLength": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Length of the Microsoft Word document."
+    },
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of document template. Possible values are: Document Envelope Label The default value is Document."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter,Group, Nillable, Sort, Update",
+      "description": "Text description of this mail merge template. Limit: 255 characters.",
+      "required": true
+    },
+    "Filename": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "File name of the Microsoft Word document that was uploaded as a mail merge template. Limit: 255 characters in length.",
+      "required": true
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "LastUsedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when this MailmergeTemplate was last used."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of this mail merge template.",
+      "required": true
+    },
+    "SecurityOptionsAttachmentHasFlash": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "True if Flash Injection was detected in the attachment.",
+      "required": true
+    },
+    "SecurityOptionsAttachmentHasXSSThreat": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "True if a cross site scripting threat was detected in the attachment.",
+      "required": true
+    },
+    "SecurityOptionsAttachmentScannedforFlash": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "True if the attachment has been scanned for Flash Injection.",
+      "required": true
+    },
+    "SecurityOptionsAttachmentScannedForXSS": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "True if the attachment has been scanned for a cross site scripting threat.",
+      "required": true
+    }
+  },
+  "usage": "Use this object to manage mail merge templates for your organization.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"MailmergeTemplate\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Body\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <element name=\"BodyLength\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Category\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Filename\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastUsedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SecurityOptionsAttachmentHasFlash\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SecurityOptionsAttachmentHasXSSThreat\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SecurityOptionsAttachmentScannedForXSS\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SecurityOptionsAttachmentScannedforFlash\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Body": {
+      "field_label": "Body",
+      "type": "base64"
+    },
+    "BodyLength": {
+      "field_label": "Body Length",
+      "type": "int",
+      "digits": "8"
+    },
+    "Category": {
+      "field_label": "Document Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "Filename": {
+      "field_label": "File",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Mail Merge Template ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastUsedDate": {
+      "field_label": "Last Used Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "SecurityOptionsAttachmentHasFlash": {
+      "field_label": "Flash Injection was detected in the attachment",
+      "type": "boolean"
+    },
+    "SecurityOptionsAttachmentHasXSSThreat": {
+      "field_label": "XSS threat was detected in the attachment",
+      "type": "boolean"
+    },
+    "SecurityOptionsAttachmentScannedForXSS": {
+      "field_label": "Attachment has been scanned for XSS",
+      "type": "boolean"
+    },
+    "SecurityOptionsAttachmentScannedforFlash": {
+      "field_label": "Attachment has been scanned for Flash Injection",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

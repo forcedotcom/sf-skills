@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "MarketingAppExtAction - Tooling API",
+  "description": "Represents an Action Type, which is an action that you can add to Engagement Studio programs in Account Engagement and execute in a third-party app. This object is available in API version 56.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeLayout()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the action for internal use. Appears in the UI."
+    },
+    "ActionParams": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The parameters for the invocable action. Appears in the UI."
+    },
+    "ActionSchema": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The JSON schema for the invocable action. Appears in the UI."
+    },
+    "ActionSelector": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Invocable action selector. Appears in the UI."
+    },
+    "ApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is automatically generated, but you can supply your own value if you create the record using the API. Appears in the UI."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the action for internal reference. Appears in the UI."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The default value is false. Appears in the UI."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MarketingAppExtensionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "This field is a relationship field.",
+      "relationship_name": "MarketingAppExtension",
+      "relationship_type": "Lookup",
+      "refers_to": "MarketingAppExtension"
+    },
+    "Version": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Reserved for future use."
+    }
+  },
+  "special_access_rules": "MarketingAppExtAction is available to customers with Account Engagement Plus, Advanced, or Premium editions."
+}

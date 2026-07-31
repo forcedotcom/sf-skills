@@ -1,0 +1,627 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Payment - Data API",
+  "description": "Represents a single event when a shopper makes a payment. For credit cards, this event is a payment capture or payment sale, but it doesn't appear on the shopper's credit card statement. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account of the customer who made the payment. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The amount to be debited or captured."
+    },
+    "Balance": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount – the net applied amount."
+    },
+    "CancellationDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date that the payment was voided."
+    },
+    "CancellationEffectiveDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the cancellation of this payment takes effect."
+    },
+    "CancellationGatewayDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The gateway provides this date following a successful cancellation request."
+    },
+    "CancellationGatewayRefNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "System-provided unique transaction ID from the payment gateway."
+    },
+    "CancellationGatewayResultCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Gateway-specific result code. Must be mapped to a Salesforce-specific result code."
+    },
+    "CancellationSfResultCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A Salesforce result code that can be mapped to one or more gateway result codes. We recommend that the payment gateway adapter layer maps gateway-specific codes to the Salesforce result code."
+    },
+    "ClientContext": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Contains caller context for payment APIs. Useful for re-establishing context during an asynchronous payment transaction."
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Users can provide additional details about the payment record. Supports a maximum of 1000 characters."
+    },
+    "CorporateCurrencyCvsnDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The date on which the invoiceʼs total amount with tax was converted to the corporate currency. Available in API version 63.0 and later."
+    },
+    "CorporateCurrencyCvsnRate": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The exchange rate thatʼs used to convert the invoiceʼs total amount with tax to the corporate currency. Available in version 63.0 and later."
+    },
+    "CorporateCurrencyISOCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The currency ISO code of the corporate currency. Available in version 63.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code associated with the payment group record."
+    },
+    "Date": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when this payment record was created."
+    },
+    "EffectiveDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date that this payment takes effect."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email address of the user who initiated the payment."
+    },
+    "GatewayDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The gateway provides this date for reference following a successful gateway communication."
+    },
+    "GatewayRefDetails": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Additional data that can’t be stored in other fields on the payment record. You can use this field for transactions following the initial transaction that creates the payment record. You can use any data that isn’t normalized in financial entities. This field has a maximum length of 1000 characters and can store data as JSON or XML."
+    },
+    "GatewayRefNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Unique transaction ID created by the payment gateway."
+    },
+    "GatewayResultCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Gateway-specific result code that must map to a Salesforce-specific result code. One Salesforce result code can map to multiple gateway result codes."
+    },
+    "GatewayResultCodeDescription": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the gateway’s result code."
+    },
+    "ImpactAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Shows the payment’s financial impact against the customer’s accounts receivable. If the payment is valid, this value is the negative of the payment amount. If the payment is voided, this value is 0."
+    },
+    "IpAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The IP address of the user who initiated the payment."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record is possibly referenced (LastReferencedDate) but not viewed."
+    },
+    "LegalEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The legal entity used in this invoice. Available in API version 65.0 and later. This field is a relationship field.",
+      "relationship_name": "LegalEntity",
+      "refers_to": "LegalEntity"
+    },
+    "MacAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The MAC address of the person who initiated the payment."
+    },
+    "NetApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total payment amount that has been applied, including adjustments."
+    },
+    "NetPaymentCreditApplied": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Total payment amount that has been credited. This amount is equal to TotalPaymentCreditApplied - TotalPaymentCreditUnapplied. This field is a calculated field. This field is available in API version 65.0 and later."
+    },
+    "NetRefundApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total refund amount that has been applied to the payment, including adjustments."
+    },
+    "OrderPaymentSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Order payment summaries show the balances of each authorization, capture, and refund made against an order."
+    },
+    "PaymentAuthorizationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The authorization record for this payment. If there's a delayed capture (when the capture occurs after the authorization), all captures must be made against a previously successful authorization transaction. This field is a relationship field.",
+      "relationship_name": "PaymentAuthorization",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentAuthorization"
+    },
+    "PaymentGatewayId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the payment gateway that processed the payment. If there’s a delayed payment, the field is populated from the authorization record. This field is a relationship field.",
+      "relationship_name": "PaymentGateway",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGateway"
+    },
+    "PaymentGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Payment groups organize all the payment transactions that have been made against a record such as an account or contract. If there’s a delayed payment, the field is populated from the authorization record. This field is a relationship field.",
+      "relationship_name": "PaymentGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGroup"
+    },
+    "PaymentIntentGuid": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort",
+      "description": "Unique ID of the payment sent to Stripe or PayPal. Links the Payments Merchant Account record with the payment at the payment provider."
+    },
+    "PaymentMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The payment method that the customer used to provide this payment information. This field is a relationship field.",
+      "relationship_name": "PaymentMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentMethod"
+    },
+    "PaymentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-created unique ID for this payment record."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number of the customer who initiated the payment."
+    },
+    "ProcessingMode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Defines whether the payment has been made outside of the payment platform. Possible values are: External: Transactions happened outside of the Salesforce payments platform. Salesforce: Salesforce made and recorded an external call to the payment gateway."
+    },
+    "SfResultCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Salesforce-specific result code that can map to one or more gateway result codes. We recommend configuring the payment gateway adapter layer to map gateway result codes to the appropriate Salesforce result code. Possible values are: Decline: The gateway call failed, but if the problem is fixed and the transaction is retried, it can work. For example, the customer had insufficient funds or briefly lost their connection. Indeterminate: The gateway didn’t respond to the call. This response usually happens when Salesforce times out while waiting for a response from the gateway. PermanentFail: The gateway call failed. If tried again, it still doesn't work. Gateway calls fail permanently for one of two reasons: Hard Decline: The customer’s payment account has been closed or terminated. Fraud: The gateway recognized the payment or payment method as known fraud. RequiresReview: The customer bank requires more information before completing the payment. Success: The gateway call succeeded. SystemError: Salesforce ended the payment request before receiving a response. For example, Salesforce lost credentials or access to its server. Salesforce ends payment calls if it doesn’t receive a response from the gateway within two minutes. ValidationError: Customer payment data was incorrect, such as a misspelling in the credit card address or an incorrect CVV."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines the state of this payment. Possible values are: Canceled: This payment has been unapplied from its target and can no longer be allocated. Draft: The payment can be edited before posting it and allocating it to a target. The payment can also be deleted. Processed: This payment has been finalized and can be allocated against a target. Users can manually change the Status field’s values as follows: Draft to Processed Processed to Canceled Draft to Canceled"
+    },
+    "TotalApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount of this payment’s balance that has been applied against an invoice."
+    },
+    "TotalPaymentCreditApplied": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The total amount of all credit types that have been applied against this payment. This field is a calculated field. This field is available in API version 65.0 and later."
+    },
+    "TotalPaymentCreditUnapplied": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The total amount of all credit types that haven't been applied against this payment. This field is a calculated field. This field is available in API version 65.0 and later."
+    },
+    "TotalRefundApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount of a refund that has been applied against this payment."
+    },
+    "TotalRefundUnapplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount of a previously applied refund that has since been unapplied from this payment."
+    },
+    "TotalUnapplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount of this payment that was previously applied and then unapplied."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines how the customer used this payment. Possible values are: Capture Sale"
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects with the API, your org must have one or more of these licenses: Salesforce Payments, Salesforce Order Management, B2B Commerce, or D2C Commerce. Salesforce Payments objects are available only in Lightning Experience.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"Payment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Amount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Balance\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CancellationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CancellationEffectiveDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CancellationGatewayDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CancellationGatewayRefNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CancellationGatewayResultCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CancellationSfResultCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ClientContext\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Date\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DestinationFinanceTransactions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EffectiveDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Email\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FinanceBalanceSnapshots\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FinanceTransactions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GatewayDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"GatewayRefDetails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayRefNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayResultCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayResultCodeDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ImpactAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"IpAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MacAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NetApplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"NetPaymentCreditApplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"NetRefundApplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ParentFinanceTransactions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PaymentAuthorization\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PaymentAuthorization\"/>\n        <element name=\"PaymentAuthorizationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentGateway\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PaymentGateway\"/>\n        <element name=\"PaymentGatewayId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentGatewayLogs\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PaymentGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PaymentGroup\"/>\n        <element name=\"PaymentGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentIntentGuid\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethod\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PaymentMethod\"/>\n        <element name=\"PaymentMethodId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessExceptions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessingMode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RefundLinePayments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SfResultCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SourceFinanceTransactions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalApplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalPaymentCreditApplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalPaymentCreditUnapplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalRefundApplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalRefundUnapplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TotalUnapplied\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Balance": {
+      "field_label": "Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CancellationDate": {
+      "field_label": "Cancellation Date",
+      "type": "datetime"
+    },
+    "CancellationEffectiveDate": {
+      "field_label": "Cancellation Effective Date",
+      "type": "datetime"
+    },
+    "CancellationGatewayDate": {
+      "field_label": "Cancellation Gateway Date",
+      "type": "datetime"
+    },
+    "CancellationGatewayRefNumber": {
+      "field_label": "Cancellation Gateway Reference Number",
+      "type": "string",
+      "length": "255"
+    },
+    "CancellationGatewayResultCode": {
+      "field_label": "Cancellation Gateway Result Code",
+      "type": "string",
+      "length": "64"
+    },
+    "CancellationSfResultCode": {
+      "field_label": "Cancellation Salesforce Result Code",
+      "type": "string",
+      "length": "64"
+    },
+    "ClientContext": {
+      "field_label": "Client Context",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CorporateCurrencyCnvAmount": {
+      "field_label": "Corporate Currency Converted Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "CorporateCurrencyCvsnDate": {
+      "field_label": "Corporate Currency Conversion Date",
+      "type": "date"
+    },
+    "CorporateCurrencyCvsnRate": {
+      "field_label": "Corporate Currency Conversion Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "10"
+    },
+    "CorporateCurrencyIsoCode": {
+      "field_label": "Corporate Currency ISO Code",
+      "type": "string",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Date": {
+      "field_label": "Date",
+      "type": "datetime"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "datetime"
+    },
+    "Email": {
+      "field_label": "Audit Email",
+      "type": "email",
+      "length": "80"
+    },
+    "FunctionalCurrencyCnvAmount": {
+      "field_label": "Functional Currency Converted Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "FunctionalCurrencyCvsnDate": {
+      "field_label": "Functional Currency Conversion Date",
+      "type": "date"
+    },
+    "FunctionalCurrencyCvsnRate": {
+      "field_label": "Functional Currency Conversion Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "10"
+    },
+    "FunctionalCurrencyIsoCode": {
+      "field_label": "Functional Currency ISO Code",
+      "type": "string",
+      "length": "40"
+    },
+    "GatewayDate": {
+      "field_label": "Gateway Date",
+      "type": "datetime"
+    },
+    "GatewayRefDetails": {
+      "field_label": "Gateway Reference Details",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "GatewayRefNumber": {
+      "field_label": "Gateway Reference Number",
+      "type": "string",
+      "length": "255"
+    },
+    "GatewayResultCode": {
+      "field_label": "Gateway Result Code",
+      "type": "string",
+      "length": "64"
+    },
+    "GatewayResultCodeDescription": {
+      "field_label": "Gateway Result Code Description",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Payment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImpactAmount": {
+      "field_label": "Impact Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "IpAddress": {
+      "field_label": "IP Address",
+      "type": "string",
+      "length": "39"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityAccountingPeriodId": {
+      "field_label": "Legal Entity Accounting Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MacAddress": {
+      "field_label": "MAC Address",
+      "type": "string",
+      "length": "32"
+    },
+    "NetApplied": {
+      "field_label": "Net Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "NetPaymentCreditApplied": {
+      "field_label": "Net Payment Credit Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "NetRefundApplied": {
+      "field_label": "Net Refund Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "OrderPaymentSummaryId": {
+      "field_label": "Order Payment Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentAuthorizationId": {
+      "field_label": "Payment Authorization ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGatewayId": {
+      "field_label": "Payment Gateway ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGroupId": {
+      "field_label": "Payment Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentInitiationSourceId": {
+      "field_label": "Payment Initiation Source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentIntentGuid": {
+      "field_label": "Payment Intent Guid",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentIntentId": {
+      "field_label": "Payment Intent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodId": {
+      "field_label": "Payment Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentNumber": {
+      "field_label": "Payment Number",
+      "type": "string",
+      "length": "255"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "ProcessingMode": {
+      "field_label": "Processing Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SfResultCode": {
+      "field_label": "Salesforce Result Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalApplied": {
+      "field_label": "Total Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPaymentCreditApplied": {
+      "field_label": "Total Payment Credit Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPaymentCreditUnapplied": {
+      "field_label": "Total Payment Credit Unapplied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalRefundApplied": {
+      "field_label": "Total Refund Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalRefundUnapplied": {
+      "field_label": "Total Refund Unapplied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalUnapplied": {
+      "field_label": "Total Unapplied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

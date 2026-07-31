@@ -1,0 +1,88 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ObjectDataImportReference - Data API",
+  "description": "Represents the relationships to the associated reference objects showing the source from which the data is imported. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ObjectDataImportId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Foreign key to the ObjectDataImport object. This field is a relationship field.",
+      "relationship_name": "ObjectDataImport",
+      "relationship_type": "Lookup",
+      "refers_to": "ObjectDataImport"
+    },
+    "ObjectDataImportReferenceNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Foreign key to the reference object. For example, AsyncApiJob or DatasetImportRequest."
+    }
+  },
+  "special_access_rules": "ObjectDataImportReference is read only and can only be queried.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Object Data Import Reference ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ObjectDataImportId": {
+      "field_label": "Object Data Import ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ObjectDataImportReferenceNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

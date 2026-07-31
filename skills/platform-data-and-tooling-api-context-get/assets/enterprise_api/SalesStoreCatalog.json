@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "SalesStoreCatalog - Data API",
+  "description": "Represents the catalog associated with a store. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The default value is USD. Possible values are: USD—U.S. Dollar"
+    },
+    "ImplementorType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of implementor. WebStoreCatalog is the only available implementor type for SalesStoreCatalog."
+    },
+    "ProductCatalogId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID that references the product catalog."
+    },
+    "SalesStoreId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID that references the store."
+    }
+  },
+  "special_access_rules": "You must have the B2B Commerce license and a CMS workspace to access a store.",
+  "field_reference": {
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Sales Store Catalog ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImplementorType": {
+      "field_label": "Implementor Type",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductCatalogId": {
+      "field_label": "Catalog ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SalesStoreId": {
+      "field_label": "Sales Store ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

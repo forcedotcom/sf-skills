@@ -1,0 +1,76 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlexQueueItem - Data API",
+  "description": "Represents an asynchronous Apex job in the Apex flex queue. Provides information about the job type and flex queue position of the AsyncApexJob. This object is available in API version 36.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AsyncApexJobId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of an AsyncApexJob that’s waiting in the flex queue. This is a relationship field. Relationship Name AsyncApexJob Relationship Type Lookup Refers To AsyncApexJob"
+    },
+    "FlexQueueItemId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The primary key for this FlexQueueItem."
+    },
+    "JobPosition": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The position in the flex queue of the waiting job. The highest-priority job in the queue is at position 0."
+    },
+    "JobType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of the job. Valid values are: ApexToken BatchApex BatchApexWorker Future Queueable ScheduledApex SharingRecalculation TestRequest TestWorker Currently, queries are supported only on BatchApex jobs."
+    }
+  },
+  "special_access_rules": "In API version 49.0 and later, users must have the View Setup and Configuration permission to access this object.",
+  "usage": "To find the position of an AsyncApexJob in the flex queue, query . For example: To find the job at a given position, query . For example: To find all batch jobs in the flex queue, query . To get other information about the jobs, include AsyncApexJob in your query. For example:\n\nTo find the position of an AsyncApexJob in the flex queue, query\n\nJobPosition\n\n. For\n                example:\n\nSELECT JobPosition FROM FlexQueueItem WHERE JobType = 'BatchApex' AND AsyncApexJobId = '707xx000000DABC'\n\nTo find the job at a given position, query\n\nAsyncApexJobId\n\n. For\n                example:\n\nSELECT AsyncApexJobId FROM FlexQueueItem WHERE JobType = 'BatchApex' AND JobPosition = '2'\n\nTo find all batch jobs in the flex queue, query\n\n. To get other information about the jobs, include\n                AsyncApexJob in your query. For\n                example:\n\nSELECT JobType, JobPosition, AsyncApexJob.ApexClass.Name, AsyncApexJob.CreatedDate,\n\nAsyncApexJob.CreatedById FROM FlexQueueItem WHERE JobType='BatchApex' AND\n\nAsyncApexJob.ApexClass.Name LIKE '%BatchAJob%' ORDER BY JobPosition DESC",
+  "wsdl_segment": "```xml\n<complexType name=\"FlexQueueItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AsyncApexJob\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AsyncApexJob\"/>\n        <element name=\"AsyncApexJobId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlexQueueItemId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"JobPosition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"JobType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AsyncApexJobId": {
+      "field_label": "Apex Job ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FlexQueueItemId": {
+      "field_label": "Flex Queue Item Id",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Flex Queue Item Id",
+      "type": "id",
+      "length": "18"
+    },
+    "JobPosition": {
+      "field_label": "Job Position",
+      "type": "int",
+      "digits": "9"
+    },
+    "JobType": {
+      "field_label": "Job Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

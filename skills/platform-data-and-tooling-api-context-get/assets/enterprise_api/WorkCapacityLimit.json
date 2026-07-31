@@ -1,0 +1,303 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "WorkCapacityLimit - Data API",
+  "description": "Represents the capacity limit in a specific service territory for a workstream or for the whole service territory in a given period. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CapacityLimitRelaxation": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Defines the relaxation behavior that determines the limit override policy for this limit if the limit override policy is set per limit in Field Service Settings. If the limit override policy isn’t set per limit, this value is ignored. Valid strings are: Empty value - no limit override 0 - limit override starts at midnight on the day of service Positive integer - limit override starts this number of hours after midnight. the maximum value is 23. Negative integer - limit override starts this number of hours before midnight. The maximum value is 336."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the work capacity limit."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "End date of the work capacity limit. If no EndDate is set this work capacity limit is without an expiration date."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the work capacity limit is active or inactive. When creating a record, save the record, and then activate it. You can't update fields in an active record. The default value is false."
+    },
+    "IsFriday": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the limitation is applied on Fridays. The default value is false."
+    },
+    "IsMonday": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the limitation is applied on Mondays. The default value is false."
+    },
+    "IsSaturday": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the limitation is applied on Saturdays. The default value is false."
+    },
+    "IsSunday": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the limitation is applied on Sundays. The default value is false."
+    },
+    "IsSvcTerrOnlyLimit": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Apply this work capacity limit to the entire service territory. The default value is false."
+    },
+    "IsThursday": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the limitation is applied on Thursdays. The default value is false."
+    },
+    "IsTuesday": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the limitation is applied on Tuesdays. The default value is false."
+    },
+    "IsWednesday": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the limitation is applied on Wednesdays. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate isn’t null, the user accessed this record or list view indirectly."
+    },
+    "LimitationUnits": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Unit of the LimitationValue. Possible values are: Hours Percentage The default value is Hours."
+    },
+    "LimitationValue": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "If the LimitationUnits is Hours, LimitationValue is the threshold that represents how many hours of total work capacity can be scheduled for a specific workstream in a service territory. Enter the number of hours for the daily limitation as a whole number. If the LimitationUnits is Percentage this threshold represents the percentage of the total work capacity that can be scheduled for a specific workstream in a service territory. Enter the percentage for the daily limitation as a whole number."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the creator of the work capacity limit. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ServiceTerritoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the service territory of the work capacity workstream for which the limit is defined. This field is a relationship field.",
+      "relationship_name": "ServiceTerritory",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceTerritory"
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The start date of the Work Capacity Limit."
+    },
+    "SvcApptField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Work-specific criteria used to define the capacity limit for the workstream. The service appointment field is set for the organization when the first work capacity limit instance is created. Possible values are: ServiceAppointment.AccountId ServiceAppointment.ActualDuration—Actual duration (in minutes) ServiceAppointment.Duration—Duration ServiceAppointment.DurationInMinutes ServiceAppointment.FSL__Appointment_Grade__ce ServiceAppointment.FSL__Auto_Schedule__c ServiceAppointment.FSL__Duration_In_Minutes__c—Scheduled duration ServiceAppointment.FSL__Emergency__c ServiceAppointment.FSL__GanttColor__c ServiceAppointment.FSL__GanttLabel__c ServiceAppointment.FSL__InJeopardyReason__c ServiceAppointment.FSL__InJeopardy__c ServiceAppointment.FSL__IsFillInCandidate__c ServiceAppointment.FSL__IsMultiDay__c ServiceAppointment.FSL__Last_Updated_Epoch__c ServiceAppointment.FSL__MDS_Calculated_length__c—Multiday work calculated length ServiceAppointment.FSL__Pinned__c ServiceAppointment.FSL__Prevent_Geocoding_For_Chatter_Actions__c ServiceAppointment.FSL__Related_Service__c ServiceAppointment.FSL__Same_Day__c ServiceAppointment.FSL__Same_Resource__c ServiceAppointment.FSL__Schedule_Mode__c ServiceAppointment.FSL__Schedule_over_lower_priority_appointment__c ServiceAppointment.FSL__Scheduling_Policy_Used__c ServiceAppointment.FSL__Time_Dependency__c ServiceAppointment.FSL__UpdatedByOptimization__c ServiceAppointment.FSL__Use_Async_Logic__c ServiceAppointment.FSL__Virtual_Service_For_Chatter_Action__c ServiceAppointment.IsOffsiteAppointment ServiceAppointment.Subject ServiceAppointment.WorkTypeId—Work Type ID"
+    },
+    "SvcApptFieldValDplyNm": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The workstream display name of SvcApptFieldValue. If SvcApptField is a lookup to a service appointment, SvcApptFieldValue is an ID and the display name describes the value for the user."
+    },
+    "SvcApptFieldValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of SvcApptField, the work-specific criteria of the capacity limit."
+    },
+    "TimePeriod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Duration for defining the capacity limitation on the workstream in the service territory. Possible values are: Day The default value is Day."
+    },
+    "WorkCapacityLimitNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Read-only. Auto populated, unique identifying number."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WorkCapacityLimitChangeEvent (API version 62.0)**: Change events are available for the object.\n- **WorkCapacityLimitFeed**: Feed tracking is available for the object.\n- **WorkCapacityLimitHistory**: History is available for tracked fields of the object.\n- **WorkCapacityLimitShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"WorkCapacityLimit\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CapacityLimitRelaxation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFriday\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsMonday\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsSaturday\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsSunday\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsSvcTerrOnlyLimit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsThursday\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTuesday\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsWednesday\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LimitationUnits\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LimitationValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceTerritory\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceTerritory\"/>\n        <element name=\"ServiceTerritoryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SvcApptField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SvcApptFieldValDplyNm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SvcApptFieldValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TimePeriod\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkCapacityLimitNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CapacityLimitRelaxation": {
+      "field_label": "Limit Override Policy",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Work Capacity Limit ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsFriday": {
+      "field_label": "Friday",
+      "type": "boolean"
+    },
+    "IsMonday": {
+      "field_label": "Monday",
+      "type": "boolean"
+    },
+    "IsSaturday": {
+      "field_label": "Saturday",
+      "type": "boolean"
+    },
+    "IsSunday": {
+      "field_label": "Sunday",
+      "type": "boolean"
+    },
+    "IsSvcTerrOnlyLimit": {
+      "field_label": "Service Territory Limit",
+      "type": "boolean"
+    },
+    "IsThursday": {
+      "field_label": "Thursday",
+      "type": "boolean"
+    },
+    "IsTuesday": {
+      "field_label": "Tuesday",
+      "type": "boolean"
+    },
+    "IsWednesday": {
+      "field_label": "Wednesday",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LimitationUnits": {
+      "field_label": "Limitation Units",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LimitationValue": {
+      "field_label": "Limitation Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceTerritoryId": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SvcApptField": {
+      "field_label": "Service Appointment Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SvcApptFieldValDplyNm": {
+      "field_label": "Field Value Display Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SvcApptFieldValue": {
+      "field_label": "Field Value",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimePeriod": {
+      "field_label": "Time Period",
+      "type": "picklist",
+      "length": "255"
+    },
+    "WorkCapacityLimitNumber": {
+      "field_label": "Limit Number",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

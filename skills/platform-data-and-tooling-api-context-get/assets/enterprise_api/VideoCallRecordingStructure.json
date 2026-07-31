@@ -1,0 +1,73 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VideoCallRecordingStructure - Data API",
+  "description": "Represents the structure of a video call recording, having relation to a video call participant, speaking order, start offset, and end offset. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ListenRatio": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The ratio of the time the speaker spent listening versus talking on the call.",
+      "required": true
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the video call recording."
+    },
+    "ParticipantSpeakingOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The sequence in which participants first spoke during the call. Only the initial speaking turn of each participant is captured.",
+      "required": true
+    },
+    "TalkRatio": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The ratio of the time that the speaker spent talking versus listening on the call.",
+      "required": true
+    },
+    "TalkSegment": {
+      "type": "textarea",
+      "properties": "None",
+      "description": "The transcript of specific segments that the participant was speaking."
+    },
+    "VideoCallId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated VideoCall. This field is a relationship field.",
+      "relationship_name": "VideoCall",
+      "relationship_type": "Master-detail",
+      "refers_to": "VideoCall (the master object)",
+      "required": true
+    },
+    "VideoCallParticipantId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the associated VideoCallParticipant. This field is a relationship field.",
+      "relationship_name": "VideoCallParticipant",
+      "refers_to": "VideoCallParticipant"
+    },
+    "VideoCallRecordingId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated VideoCallRecording. This field is a relationship field.",
+      "relationship_name": "VideoCallRecording",
+      "refers_to": "VideoCallRecording",
+      "required": true
+    }
+  },
+  "special_access_rules": "Einstein Conversation Insight must be enabled and the user requires the Conversation Insights for Sales permission set."
+}

@@ -1,0 +1,187 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "SearchActivity - Data API",
+  "description": "Represents search activity on a Knowledge article. Also known as KnowledgeSearchActivity. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AvgNumResults": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The number of search results returned for the search term. If Period is also included, this value is aggregated based on the time period specified."
+    },
+    "ClickRank": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The order that the article appeared in the search results when the user sorted the results by relevance and clicked it from the list of results."
+    },
+    "ClickedRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the clicked article. This field is a polymorphic relationship field.",
+      "relationship_name": "ClickedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Knowledge__kav"
+    },
+    "ClickedRecordName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The title of the clicked article taken when the user sorts the search results by relevance."
+    },
+    "CountQueries": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of searches for the period (day, month, or year)."
+    },
+    "CountUsers": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of individual users who clicked the article."
+    },
+    "KbChannel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The channel that’s applicable to the article. Possible values are: AllChannels—All Channels App—Internal App Csp—Customer Pkb—Public Knowledge Base Prm—Partner"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of search activity."
+    },
+    "Period": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The time period that the search count is applied to. For example, a record where the Count is 70 and the Period is Monthly indicates that 70 searches took place over the past month. Totals are aggregated daily for the current month, monthly from the past full month through the past full year, and yearly beyond that. Activity totals are collected nightly and aren’t in real time. Possible values are: DAY MONTH YEAR"
+    },
+    "QueryDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "The date of the search."
+    },
+    "QueryLanguage": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language filter that’s applied to the user’s search."
+    },
+    "SearchTerm": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The first 100 characters of the search term that was used to search published articles in the knowledge base."
+    }
+  },
+  "special_access_rules": "The Knowledge Base Search Dashboard permission must be enabled in your org.",
+  "field_reference": {
+    "AvgNumResults": {
+      "field_label": "Number of Results",
+      "type": "double",
+      "precision": "18",
+      "scale": "4"
+    },
+    "ClickRank": {
+      "field_label": "Average Click Rank",
+      "type": "double",
+      "precision": "18",
+      "scale": "4"
+    },
+    "ClickedRecordId": {
+      "field_label": "Clicked Article ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ClickedRecordName": {
+      "field_label": "Clicked Article Title",
+      "type": "string",
+      "length": "255"
+    },
+    "CountQueries": {
+      "field_label": "Number of Searches",
+      "type": "int",
+      "digits": "9"
+    },
+    "CountUsers": {
+      "field_label": "Number of Users",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Search Activity ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "KbChannel": {
+      "field_label": "Channel",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Search Activity Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Period": {
+      "field_label": "Duration",
+      "type": "picklist",
+      "length": "255"
+    },
+    "QueryDate": {
+      "field_label": "Search Date",
+      "type": "date"
+    },
+    "QueryLanguage": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SearchTerm": {
+      "field_label": "Search Term",
+      "type": "string",
+      "length": "100"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "Audience - Data API",
+  "description": "Represents an audience that is defined by criteria and can be assigned and used for targeting in an Experience Cloud site. This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AudienceName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "Name of the audience."
+    },
+    "ContainerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the site or org that contains the audience. ContainerId is nillable in API versions 47.0 and earlier."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the audience."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The unique name of the audience in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is automatically generated, but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "FormulaFilterType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Formula filter for the criteria used to define the audience. Valid values are: AllCriteriaMatch—Matching all the conditions (AND). AnyCriterionMatches—Matching at least one condition (OR). CustomLogicMatches—Matching condition logic (AND and OR) and numbered criteria groups. This value is available in API version 45.0 and later."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Language of the audience. Valid values are: Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "Master label for the audience. This internal name doesn’t get translated."
+    }
+  },
+  "field_reference": {
+    "AudienceName": {
+      "field_label": "Audience Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ContainerId": {
+      "field_label": "Container ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "FormulaFilterType": {
+      "field_label": "Formula Filter Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Audience ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

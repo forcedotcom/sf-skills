@@ -1,0 +1,182 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserAppMenuItem - Data API",
+  "description": "Represents the organization-wide settings for items in the app menu or App Launcher that the requesting user has access to in Setup. This object is available in API version 35.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AppMenuItemId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID for the menu item."
+    },
+    "ApplicationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID for the application associated with the menu item."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A description of this menu item."
+    },
+    "IconUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The icon for the menu item’s application."
+    },
+    "InfoUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL for more information about the application."
+    },
+    "IsUsingAdminAuthorization": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the app is pre-authorized for certain users by the administrator."
+    },
+    "IsVisible": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the app is visible to the user."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The app’s name."
+    },
+    "LogoUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The logo for the menu item’s application. The default is the initials of the Label value."
+    },
+    "MobileStartUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The location mobile users are directed to after they’ve authenticated. This is only used with connected apps."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name of the item."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The index value that controls where this item appears in the menu. For example, a menu item with a sort order value of 5 will appear between items with sort order values of 3 and 9."
+    },
+    "StartUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The location users are directed to after they’ve authenticated. For a connected app, this is the location specified by the StartUrl. Otherwise it’s the application’s default start page."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of application represented by this item. The types are: ConnectedApplication Network ServiceProvider TabSet"
+    },
+    "UserSortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The index value that represents where the user set this item in the menu (or App Launcher). For example, an item with a sort order value of 5 will appear between items with sort order values of 3 and 9. This value is separate from SortOrder so you can create logic incorporating both values. For example, if you want the user-sorted items to appear first, followed by the organization order for the rest, use: SELECT ApplicationId,SortOrder,UserSortOrder FROM AppMenuItem order by userSortOrder NULLS LAST, sortOrder NULLS LAST"
+    }
+  },
+  "usage": "See the AppMenuItem object for the organization-wide default settings This object contains the fields the requesting user has permission to see.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserAppMenuItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppMenuItemId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApplicationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IconUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InfoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsUsingAdminAuthorization\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsVisible\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LogoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MobileStartUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StartUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserSortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AppMenuItemId": {
+      "field_label": "AppMenuItem ID",
+      "type": "string",
+      "length": "255"
+    },
+    "ApplicationId": {
+      "field_label": "Application ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "250"
+    },
+    "IconUrl": {
+      "field_label": "Icon URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Application ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InfoUrl": {
+      "field_label": "Info URL",
+      "type": "url",
+      "length": "255"
+    },
+    "IsUsingAdminAuthorization": {
+      "field_label": "IsUsingAdminAuthorization",
+      "type": "boolean"
+    },
+    "IsVisible": {
+      "field_label": "Is Visible",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "LogoUrl": {
+      "field_label": "Logo Image URL",
+      "type": "url",
+      "length": "255"
+    },
+    "MobileStartUrl": {
+      "field_label": "Mobile Start URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "250"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "StartUrl": {
+      "field_label": "Start URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Type": {
+      "field_label": "App Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UserSortOrder": {
+      "field_label": "User Sort Order",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

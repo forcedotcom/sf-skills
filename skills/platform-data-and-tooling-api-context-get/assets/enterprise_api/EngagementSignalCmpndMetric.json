@@ -1,0 +1,74 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "EngagementSignalCmpndMetric - Data API",
+  "description": "Represents a rate metric that measures the ratio between two engagement signal metrics, such as product orders and product views to calculate a conversion rate, or email clicks and email opens to determine a click-through rate. Use this object to create complex measurements for A/B testing and web experimentation. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CompoundMetricFormula": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "A read-only formula field that concatenates the three core components of a Compound Metric—the primary metric, the operator, and the secondary metric—into a single string. This field is unique within your Salesforce org. This field is a calculated field."
+    },
+    "DenomEngmtSignalMetricId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Points to the EngagementSignalMetric record that serves as the denominator of the compound metric. This field is a relationship field.",
+      "relationship_name": "DenomEngmtSignalMetric",
+      "refers_to": "EngagementSignalMetric"
+    },
+    "IsRemote": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the engagement signal compound metric object is owned by a different org in Data 360. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time the engagement signal compound metric was referenced by the current user."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time the current user viewed the engagement signal compound metric record."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Text label that identifies the engagement signal compound metric.",
+      "required": true
+    },
+    "NumerEngmtSignalMetricId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Points to the EngagementSignalMetric record that serves as the numerator of the compound metric. This field is a relationship field.",
+      "relationship_name": "NumerEngmtSignalMetric",
+      "refers_to": "EngagementSignalMetric"
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Represents the mathematical operation that combines the numerator and denominator metrics in the compound metric formula. Possible values are: Ratio The default value is Ratio."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Represents the ID of the user or group that owns the engagement signal compound metric. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    }
+  },
+  "usage": "Use this object to create rate metrics for A/B testing and web experimentation. To measure the effectiveness of personalization experiences, divide the numerator metric by the denominator metric. These metrics help you make data-driven decisions to compare content performance. This object is used for measurement and isn’t used for machine learning model training.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **EngagementSignalCmpndMetricShare**: Sharing is available for the object."
+}

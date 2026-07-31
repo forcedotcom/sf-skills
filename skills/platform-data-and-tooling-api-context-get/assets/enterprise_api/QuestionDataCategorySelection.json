@@ -1,0 +1,89 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "QuestionDataCategorySelection - Data API",
+  "description": "A data category selection represents a data category that classifies a question.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataCategoryGroupName": {
+      "type": "DataCategoryGroupReference",
+      "properties": "Create",
+      "description": "Unique name of the data category group which has a category associated with the question."
+    },
+    "DataCategoryName": {
+      "type": "DataCategoryGroupReference",
+      "properties": "Create",
+      "description": "Unique name of the data category associated with the question."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the question associated with the data category selection."
+    }
+  },
+  "special_access_rules": "To create, read or update data category selection, you must have create, read or update permission on the categorized question. Users who can update question can also delete its category selection. Users who can create questions can only select categories visible to their role.",
+  "usage": "Every question can be categorized in a data category. You can use the QuestionDataCategorySelection object to query and manage question categorization. Client applications can create categorization for a question. They can also delete, query, and retrieve question categorization.\n\nEven though the API lets you select more than one category for QuestionDataCategorySelection, the\n                Answers tab only supports one data category selection for questions. Selecting\n                multiple categories through QuestionDataCategorySelection may\n                result in unexpected behavior in the Answers tab, such as losing your multiple\n                selections. You should only select one data category when using QuestionDataCategorySelection.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataCategoryGroupName": {
+      "field_label": "Selected Data Category Group's Developer Name",
+      "type": "datacategorygroupreference",
+      "digits": "0",
+      "length": "80",
+      "precision": "0",
+      "scale": "0"
+    },
+    "DataCategoryName": {
+      "field_label": "Selected Data Category's Developer Name",
+      "type": "datacategorygroupreference",
+      "digits": "0",
+      "length": "80",
+      "precision": "0",
+      "scale": "0"
+    },
+    "Id": {
+      "field_label": "Entity Data Category Selection ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "ParentId": {
+      "field_label": "Question ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

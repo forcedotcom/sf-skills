@@ -1,0 +1,347 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "InvoiceBatchRun - Data API",
+  "description": "Represents a batch processing job in Subscription Management or Billing (Revenue Cloud). During an invoice batch run, all billing schedules that meet the specified criteria are processed, resulting in the generation of invoices. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BillingBatchSchedulerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related billing batch scheduler. This field is a relationship field.",
+      "relationship_name": "BillingBatchScheduler",
+      "relationship_type": "Lookup",
+      "refers_to": "BillingBatchScheduler"
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Optional user-defined information about the scheduler."
+    },
+    "CompletionTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when the invoice batch run finished processing."
+    },
+    "InvoiceBatchRunNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated sequential number."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the invoice batch run was last modified. Its UI label is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the invoice batch run was last viewed."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "System-generated field. The ID of the user who created the BillingBatchScheduler record. Its UI label is Owner. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RecoveryStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the state of the invoice batch run recovery process. This field is available in API version 56.0 and later. Possible values are: CompletelyRecovered—All billing schedules included in the recovery run were reset to Ready for Invoicing. These billing schedules are included in the next scheduled invoice batch run. PartiallyRecovered—Some, but not all, billing schedules that were part of the recovery run were reset to Ready for Invoicing. The billing schedules that were recovered are included in the next scheduled invoice batch run. The billing schedules that weren’t successfully recovered must be manually reset to Ready for Invoicing so they can be processed. RecoveryFailed—The recovery job was unsuccessful. This value is available in API version 57.0 and later. RecoveryStarted—The recovery job is in process."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "Timestamp when the invoice batch run started processing."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The state of the invoice batch run. Possible values are: Canceled—This value is available in API version 57.0 and later. Completed Failed Started Stopped—This value is available in API version 57.0 and later. The default value is Started."
+    },
+    "TotalBillSchedRecovered": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of billing schedules that were part of the recovery run that were reset to Ready for Invoicing. These billing schedules are included in the next scheduled invoice batch run. This field is available in API version 57.0 and later."
+    },
+    "TotalBillSchedUnrecovered": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of billing schedules that were part of the recovery run that weren't reset to Ready for Invoicing. These billing schedules that weren’t successfully recovered must be manually reset to Ready for Invoicing so they can be processed. This field is available in API version 57.0 and later."
+    },
+    "TotalBillingSchedulesFailed": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of billing schedules that weren’t successfully processed. When a billing schedule isn’t successfully processed, then the system doesn’t generate an invoice for it. For details about errors, check the Revenue Transaction Error Log. This field is available in API version 56.0 and later."
+    },
+    "TotalBsSuccessfullyProcessed": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of billing schedules for which the system was able to generate and process invoices. This field is available in API version 56.0 and later."
+    },
+    "TotalDraftInvoiceAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the invoice amounts for invoices in Draft status. This field is available when Billing (Revenue Cloud) is enabled. This field is available in API version 62.0 and later."
+    },
+    "TotalDraftInvoices": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of invoices in Draft status generated in the batch run. This field is available when Billing (Revenue Cloud) is enabled. This field is available in API version 62.0 and later."
+    },
+    "TotalFilteredBillingSchedules": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of billing schedules that met the invoice run scheduler’s matching criteria. The matching criteria specify which billing schedules are included in the invoice batch run. Its field label is Total Matching Billing Schedules. This field is available in API version 56.0 and later."
+    },
+    "TotalInvSuccessfullyProcessed": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of invoices that were successfully processed. When Billing (Revenue Cloud) is enabled, the field's value is either the same as TotalPostedInvoices or TotalDraftInvoices based on the Invoice Status selected when the Invoice Scheduler is set up. This field is available in API version 56.0 and later."
+    },
+    "TotalInvoicedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount of income including taxes represented by the successfully processed invoices. This field is available in API version 56.0 and later."
+    },
+    "TotalInvoicesCanceled": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of invoices that weren't processed. To find out what went wrong, check the Revenue Transaction Error Log. Fix the errors, then run the invoice batch run recovery process. This field is available in API version 57.0 and later."
+    },
+    "TotalInvoicesFailed": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of invoices that weren’t processed successfully. To find out what went wrong, check the Revenue Transaction Error Log. Then fix the errors and run the invoice batch run recovery process. This field is available in API version 56.0 and later."
+    },
+    "TotalInvoicesGenerated": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of invoices that were generated from the billing schedules processed by the invoice batch run. This field is available in API version 56.0 and later."
+    },
+    "TotalPostedInvoices": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of invoices in Posted status generated during the batch run. This field is available when Billing (Revenue Cloud) is enabled. This field is available in API version 62.0 and later."
+    },
+    "TotBillSchdUpdtDurDrftToPost": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total billing schedules updated during the draft to posted run. This field is available when Billing (Revenue Cloud) is enabled. This field is available in API version 62.0 and later."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **InvoiceBatchRunChangeEvent**: Change events are available for the object.\n- **InvoiceBatchRunFeed**: Feed tracking is available for the object.\n- **InvoiceBatchRunHistory**: History is available for tracked fields of the object.\n- **InvoiceBatchRunOwnerSharingRule**: Sharing rules are available for the object.\n- **InvoiceBatchRunShare**: Sharing is available for the object.",
+  "field_reference": {
+    "BillingBatchSchedulerId": {
+      "field_label": "Billing Scheduler ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CompletionTime": {
+      "field_label": "Completion time",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreditApplicationStatus": {
+      "field_label": "Credits Application Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DocGenCompletionTime": {
+      "field_label": "Invoice Document Generation Completion Time",
+      "type": "datetime"
+    },
+    "DocGenStartTime": {
+      "field_label": "Invoice Document Generation Start Time",
+      "type": "datetime"
+    },
+    "DocGenStatus": {
+      "field_label": "Invoice Document Generation Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Invoice Batch Run ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceBatchRunNumber": {
+      "field_label": "Invoice Batch Run Number",
+      "type": "string",
+      "length": "255"
+    },
+    "InvoiceDocsGenFailed": {
+      "field_label": "Invoice Document Generation Failures",
+      "type": "int",
+      "digits": "9"
+    },
+    "InvoiceDocsGenerated": {
+      "field_label": "Invoice Documents Generated",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecoveryStatus": {
+      "field_label": "Recovery Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StartTime": {
+      "field_label": "Start time",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StatusSubtype": {
+      "field_label": "Status Subtype",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotBillSchdUpdtDurDrftToPost": {
+      "field_label": "Total Billing Schedules Updated During Draft to Posted",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalBillSchedRecovered": {
+      "field_label": "Total Billing Schedules Recovered",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalBillSchedUnrecovered": {
+      "field_label": "Total Billing Schedules Unrecovered",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalBillingSchedulesFailed": {
+      "field_label": "Total Billing Schedules Failed",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalBsSuccessfullyProcessed": {
+      "field_label": "Total Billing Schedules Successfully Processed",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalDraftInvoiceAmount": {
+      "field_label": "Total Draft Invoice Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDraftInvoices": {
+      "field_label": "Total Draft Invoices",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalFilteredBillingSchedules": {
+      "field_label": "Total Matching Billing Schedules",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalInvSuccessfullyProcessed": {
+      "field_label": "Total Invoices Successfully Processed",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalInvoicedAmount": {
+      "field_label": "Total Invoiced Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalInvoicesCanceled": {
+      "field_label": "Total Invoices Canceled",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalInvoicesFailed": {
+      "field_label": "Total Invoices Failed",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalInvoicesGenerated": {
+      "field_label": "Total Invoices Generated",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalPostedInvoices": {
+      "field_label": "Total Posted Invoices",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

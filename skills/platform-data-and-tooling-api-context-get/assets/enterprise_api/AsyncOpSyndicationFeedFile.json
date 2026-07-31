@@ -1,0 +1,77 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "AsyncOpSyndicationFeedFile - Data API",
+  "description": "Represents the sync status of file-related information shared with external channels such as Facebook and Instagram. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AsyncOpSyndicationFeedFileNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID assigned to each syndication feed file record, and used for tracking and reference purposes."
+    },
+    "AsyncOperationTrackerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID assigned to the Async Operation Tracker record, which monitors and manages the lifecycle of the syndication process. This field is a relationship field.",
+      "relationship_name": "AsyncOperationTracker",
+      "refers_to": "AsyncOperationTracker"
+    },
+    "FeedContentBody": {
+      "type": "base64",
+      "properties": "Nillable",
+      "description": "The content of the feed file that is syndicated to the external platform."
+    },
+    "FeedContentContentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the format of the feed file to ensure proper processing. For example, CSV, JSON, or XML files."
+    },
+    "FeedContentLength": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the feed file in bytes, which is used for validation and processing requirements."
+    },
+    "FeedContentName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the feed file, which includes identifiers like timestamp or sequence number."
+    },
+    "FeedScope": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Defines the scope or category of the feed. For example, if the feed applies to main, country-specific, or language-specific catalog segments. Possible values are: CountryFeed LanguageFeed MainFeed"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "For internal use only."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "For internal use only."
+    },
+    "PlatformConnections": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The external channel or destination for syndication. Possible values are: Meta"
+    },
+    "SyncMode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies the type of sync being performed. Possible values are: FullSync"
+    }
+  },
+  "special_access_rules": "This object is available only if the B2B Commerce or D2C Commerce license is enabled.\n\nThis object is available only if the B2B Commerce\n         or D2C Commerce license is enabled."
+}

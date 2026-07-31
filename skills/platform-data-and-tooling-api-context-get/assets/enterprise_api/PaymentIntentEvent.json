@@ -1,0 +1,135 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentIntentEvent - Data API",
+  "description": "Represents a payment intent platform event. Subscribe to these events so you can listen and respond to them when they’re published. For example, create a Salesforce Flow that is triggered when one of these events is published. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ChangeType": {
+      "type": "picklist",
+      "properties": "Restricted picklist",
+      "description": "Type of payment intent event that triggers an event notification. You can write code to operate conditionally on the value of this field. For example, you can ignore an authorization but get notified of captures. Possible values are: Authorize–Payment is authorized. AuthorizeFailure–There’s an error preventing the payment authorization Capture–Payment is captured. CaptureFailure– An error prevented the payment capture. Refund–Payment is refunded. RefundFailure–An error prevented the payment refund."
+    },
+    "PaymentInitiationSourceApplication": {
+      "type": "picklist",
+      "properties": "Nillable, Restricted picklist",
+      "description": "Salesforce application initiating the payment. This field is available in API version 63.0 and later. Possible values are: Collections Commerce Custom FieldService OrderManagement Payments Revenue Sales Scheduler Service"
+    },
+    "PaymentInitiationSourceChannel": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "Identifies the channel in the Payment Initiation Source record for which the event occurs. This field is available in API version 63.0 and later."
+    },
+    "PaymentInitiationSource": {
+      "type": "reference",
+      "properties": "Nillable",
+      "description": "Identifies the Payment Initiation Source record for which the event occurs. This field is available in API version 63.0 and later. This field is a relationship field.",
+      "relationship_name": "PaymentInitiationSource",
+      "refers_to": "PaymentInitiationSource"
+    },
+    "PaymentInitiationSourceProcess": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "Identifies the process in the Payment Initiation Source record for which the event occurs."
+    },
+    "PaymentIntentGuid": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "Identifies the GUID in the Payment Initiation Source record for which the event occurs. This field is available in API version 63.0 and later."
+    },
+    "PaymentIntent": {
+      "type": "reference",
+      "properties": "Nillable",
+      "description": "Identifies the PaymentIntent record for which the event occurs. This field is available in API version 63.0 and later. This field is a relationship field.",
+      "relationship_name": "PaymentIntent",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentIntent"
+    },
+    "PaymentLink": {
+      "type": "reference",
+      "properties": "Nillable",
+      "description": "Identifies the payment link record for which the event occurs. This field is available in API version 63.0 and later. This field is a relationship field.",
+      "relationship_name": "PaymentLink",
+      "refers_to": "PaymentLink"
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license and Payments must be enabled for your org. Salesforce Payments objects are available only in Lightning Experience.",
+  "field_reference": {
+    "ChangeType": {
+      "field_label": "Payment Intent Event Change Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventUuid": {
+      "field_label": "Event UUID",
+      "type": "string",
+      "length": "36"
+    },
+    "PaymentInitiationSourceApplication": {
+      "field_label": "Application",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PaymentInitiationSourceChannel": {
+      "field_label": "Channel",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentInitiationSourceId": {
+      "field_label": "Payment Initiation Source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentInitiationSourceProcess": {
+      "field_label": "Process",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentIntentGuid": {
+      "field_label": "Guid",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentIntentId": {
+      "field_label": "Payment Intent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentLinkId": {
+      "field_label": "Payment Link ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReplayId": {
+      "field_label": "Replay Id",
+      "type": "string",
+      "length": "1000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ApexResult - Tooling API",
+  "description": "A complex type that represents the result of Apex code executed as part of an ApexExecutionOverlayAction , returned in an ApexExecutionOverlayResult. Available from API version 28.0 or later.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apexError": {
+      "type": "string",
+      "description": "The error text returned if the execution was unsuccessful."
+    },
+    "apexExecutionResult": {
+      "type": "ExecuteAnonymousResult",
+      "description": "The structured result returned from a successful execution. ExecuteAnonymousResult includes the following fields: column compileProblem compiled exceptionMessage exceptionStackTrace line success Note: ExecuteAnonymousResult is outside the current execution context and does not provide access to variables in the heap."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexExecutionOverlayResult\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ActionScript\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ActionScriptType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ApexResult\" minOccurs=\"0\" type=\"tns:ApexResult\" nillable=\"true\"/>\n        <xsd:element name=\"ClassName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"ExpirationDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"HeapDump\" minOccurs=\"0\" type=\"tns:HeapDump\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDumpingHeap\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Iteration\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Line\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Namespace\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"OverlayResultLength\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"RequestedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"RequestedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"SOQLResult\" minOccurs=\"0\" type=\"tns:SOQLResult\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"User\" minOccurs=\"0\" type=\"ens:sObject\" nillable=\"true\"/>\n        <xsd:element name=\"UserId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ApexResult\">\n  <xsd:sequence>\n    <xsd:element name=\"apexError\" type=\"xsd:string\"/>\n    <xsd:element name=\"apexExecutionResult\" type=\"tns:ExecuteAnonymousResult\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExecuteAnonymousResult\">\n  <xsd:sequence>\n    <xsd:element name=\"column\" type=\"xsd:int\"/>\n    <xsd:element name=\"compileProblem\" type=\"xsd:string\" nillable=\"true\"/>\n    <xsd:element name=\"compiled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"exceptionMessage\" type=\"xsd:string\" nillable=\"true\"/>\n    <xsd:element name=\"exceptionStackTrace\" type=\"xsd:string\" nillable=\"true\"/>\n    <xsd:element name=\"line\" type=\"xsd:int\"/>\n    <xsd:element name=\"success\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

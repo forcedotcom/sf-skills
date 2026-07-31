@@ -1,0 +1,208 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmailServicesFunction - Data API",
+  "description": "An email service.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AddressInactiveAction": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates what the email service does with messages received at an email address that is inactive.One of the following values: UseSystemDefault—The system default is used. (In API version 41.0 and earlier, the value specified for this choice is 0.) Bounce—The email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 1.) Discard—The email service deletes the message without notifying the sender. (In API version 41.0 and earlier, the value specified for this choice is 2.) Requeue—The email service queues the message for processing in the next 24 hours. If the message is not processed within 24 hours, the email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 3.)"
+    },
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the Apex class that the email service uses to process inbound messages.This field is required for API version 12.0 and later.",
+      "required": true
+    },
+    "AttachmentOption": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates the types of attachments the email service accepts. One of the following values: None—The email service accepts the message but discards any attachment. (In API version 41.0 and earlier, the value specified for this choice is 0.) NoContent—The attachment metadata (filename, MIME type, and so on) is provided to the Apex class, but the body is set to null. There was no previous numeric value for this choice. TextOnly—The email service only accepts the following types of attachments: Attachments with a Multipurpose Internet Mail Extension (MIME) type of text. Attachments with a MIME type of application/octet-stream and a file name that ends with either a .vcf or .vcs extension. These are saved as text/x-vcard and text/calendar MIME types, respectively. (In API version 41.0 and earlier, the value specified for this choice is 1.) BinaryOnly—The email service only accepts binary attachments, such as image, audio, application, and video files. (In API version 41.0 and earlier, the value specified for this choice is 2.) All—The email service accepts any type of attachment. (In API version 41.0 and earlier, the value specified for this choice is 3.)"
+    },
+    "AuthenticationFailureAction": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates what the email service does with messages that fail or do not support any of the authentication protocols if the IsAuthenticationRequired field is true. One of the following values: UseSystemDefault—The system default is used. (In API version 41.0 and earlier, the value specified for this choice is 0.) Bounce—The email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 1.) Discard—The email service deletes the message without notifying the sender. (In API version 41.0 and earlier, the value specified for this choice is 2.) Requeue—The email service queues the message for processing in the next 24 hours. If the message is not processed within 24 hours, the email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 3.)"
+    },
+    "AuthorizationFailureAction": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Group, Sort, Create, Filter, Nillable, Restricted picklist, Update",
+      "description": "Indicates what the email service does with messages received from senders who are not listed in the AuthorizedSenders field on either the email service or email service address.One of the following values: UseSystemDefault—The system default is used. (In API version 41.0 and earlier, the value specified for this choice is 0.) Bounce—The email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 1.) Discard—The email service deletes the message without notifying the sender. (In API version 41.0 and earlier, the value specified for this choice is 2.) Requeue—The email service queues the message for processing in the next 24 hours. If the message is not processed within 24 hours, the email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 3.)"
+    },
+    "AuthorizedSenders": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Configures the email service to only accept messages from the email addresses or domains listed in this field. If the email service receives a message from an unlisted email address or domain, the email service performs the action specified in the AuthorizationFailureAction field. Leave this field blank if you want the email service to receive email from any email address."
+    },
+    "ErrorRoutingAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The destination email address for error notification email messages when IsErrorRoutingEnabled is true."
+    },
+    "FunctionInactiveAction": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates what the email service does with messages it receives when the email service itself is inactive. One of the following values: UseSystemDefault—The system default is used. (In API version 41.0 and earlier, the value specified for this choice is 0.) Bounce—The email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 1.) Discard—The email service deletes the message without notifying the sender. (In API version 41.0 and earlier, the value specified for this choice is 2.) Requeue—The email service queues the message for processing in the next 24 hours. If the message is not processed within 24 hours, the email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 3.)"
+    },
+    "FunctionName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the email service."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this object is active (true) or not (false)."
+    },
+    "IsAuthenticationRequired": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Configures the email service to verify the legitimacy of the sending server before processing a message. The email service uses the SPF, SenderId, and DomainKeys protocols to verify the sender's legitimacy: If the sending server passes at least one of these protocols and does not fail any, the email service accepts the email. If the server fails a protocol or does not support any of the protocols, the email service performs the action specified in the AuthenticationFailureAction field."
+    },
+    "IsErrorRoutingEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "When incoming email messages can’t be processed, indicates whether error notification email messages are routed to a chosen address or to the senders."
+    },
+    "IsTextAttachmentsAsBinary": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, text attachments are supplied to the Apex code as a Messaging.BinaryAttachment instead of as a Messaging.TextAttachment. This means that the body is supplied as an Apex Blob instead of as an Apex String."
+    },
+    "IsTextTruncated": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "This field is deprecated. It is not available as of API version 23.0 and is deprecated and hidden in versions 17.0 through 22.0. In all API versions, the email service now accepts inbound email messages up to the 10 MB size limit, without truncating the text. Previously, it indicated whether the email service truncated and accepted email messages with HTML body text, plain body text, and text attachments over approximately 100,000 characters (true) or rejected these email messages and notified the sender (false)."
+    },
+    "IsTlsRequired": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Not currently in use."
+    },
+    "OverLimitAction": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates what the email service does with messages if the total number of messages processed by all email services combined has reached the daily limit for your organization. One of the following values: UseSystemDefault—The system default is used. (In API version 41.0 and earlier, the value specified for this choice is 0.) Bounce—The email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 1.) Discard—The email service deletes the message without notifying the sender. (In API version 41.0 and earlier, the value specified for this choice is 2.) Requeue—The email service queues the message for processing in the next 24 hours. If the message is not processed within 24 hours, the email service returns the message to the sender with a notification that explains why the message was rejected. (In API version 41.0 and earlier, the value specified for this choice is 3.) The system calculates the limit by multiplying the number of user licenses by 1,000."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only authenticated internal and external users can access this object.",
+  "usage": "This object supports the email services feature, which allows you to create automated processes that use Apex classes to process the contents, headers, and attachments of inbound email. For example, you can create an email service that automatically creates contact records based on contact information in messages.",
+  "wsdl_segment": "```xml\n<complexType name=\"EmailServicesFunction\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AddressInactiveAction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Addresses\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApexClassId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttachmentOption\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AuthenticationFailureAction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AuthorizationFailureAction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AuthorizedSenders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ErrorRoutingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FunctionInactiveAction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FunctionName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsAuthenticationRequired\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsErrorRoutingEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTextAttachmentsAsBinary\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTlsRequired\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OverLimitAction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AddressInactiveAction": {
+      "field_label": "Deactivated Email Address Action",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ApexClassId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AttachmentOption": {
+      "field_label": "Accept Attachments",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AuthenticationFailureAction": {
+      "field_label": "Unauthenticated sender action",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AuthorizationFailureAction": {
+      "field_label": "Unauthorized sender action",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AuthorizedSenders": {
+      "field_label": "Accept Email From",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ErrorRoutingAddress": {
+      "field_label": "Route Error Emails to This Email Address",
+      "type": "email",
+      "length": "270"
+    },
+    "FunctionInactiveAction": {
+      "field_label": "Deactivated Email Service Action",
+      "type": "picklist",
+      "length": "40"
+    },
+    "FunctionName": {
+      "field_label": "Email Service Name",
+      "type": "string",
+      "length": "64"
+    },
+    "Id": {
+      "field_label": "Email Service ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsAuthenticationRequired": {
+      "field_label": "Advanced Email Security Settings",
+      "type": "boolean"
+    },
+    "IsErrorRoutingEnabled": {
+      "field_label": "Enable Error Routing",
+      "type": "boolean"
+    },
+    "IsTextAttachmentsAsBinary": {
+      "field_label": "Convert Text Attachments to Binary Attachments",
+      "type": "boolean"
+    },
+    "IsTlsRequired": {
+      "field_label": "TLS Required",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OverLimitAction": {
+      "field_label": "Over email rate limit action",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

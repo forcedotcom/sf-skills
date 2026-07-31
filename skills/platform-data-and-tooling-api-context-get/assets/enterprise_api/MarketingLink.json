@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "MarketingLink - Data API",
+  "description": "Represents an Account Engagement marketing link record, either a custom redirect or a file, that has been synced to Salesforce. This object is available in API version 42.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CampaignId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related campaign."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp that indicates when the current user last viewed a record that is related to this marketing link."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the current user last viewed this record. If this value is null, this record might only have been referenced (see LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the marketing link."
+    },
+    "TargetUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Sort",
+      "description": "The target URL of the marketing link."
+    },
+    "TotalTrackedLinkClicks": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The total number of clicks for the redirect. Includes clicks from visitors and identified prospects. When a person clicks the link multiple times, each click is counted in this number."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies the type of marketing link record, either a custom redirect or file."
+    },
+    "UniqueTrackedLinkClicks": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The number of unique clicks for the redirect. Includes clicks from visitors and identified prospects. Only the first click is counted in this number."
+    }
+  },
+  "special_access_rules": "To access this object, your org must use Account Engagement and users need the CRM User or Sales User permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **MarketingFormEvent (API version 44.0)**: Change events are available for the object.\n- **MarketingLinkFeed**: Feed tracking is available for the object."
+}

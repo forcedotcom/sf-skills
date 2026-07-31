@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "Employee2 - Data API",
+  "description": "Represents an employee within a company or an organization. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AlternateEmail": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s alternate email address."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The contact associated with the employee.",
+      "relationship_name": "Contact",
+      "relationship_type": "Master-detail",
+      "refers_to": "Contact (the master object)"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO currency code for the post-authorization request. Valid value is: USD—U.S. Dollar The default value is USD."
+    },
+    "EmployeeNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The employee's unique ID for their organization."
+    },
+    "EmployeeStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The employee's current work status. Valid values are: Active Inactive Leave Terminated"
+    },
+    "EmployeeType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The employee's full-time or part-time status. Valid values are: Alumnus Contractor Permanent Intern Temporary"
+    },
+    "EmploymentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee's full-time or part-time status. Valid values are: Full-Time Part-Time"
+    },
+    "InternalOrganizationUnitId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The internal organization unit associated with the employee.",
+      "relationship_name": "InternalOrganizationUnit",
+      "refers_to": "InternalOrganizationUnit"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that the user only accessed the record or a related list view (LastReferencedDate), but not viewed the record itself."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the employee record."
+    },
+    "StatusEndDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The planned end date for the employee’s status."
+    },
+    "StatusStartDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The start date of the employee’s current status."
+    },
+    "User": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "User",
+      "relationship_name": "User"
+    }
+  },
+  "special_access_rules": "This object is available if Talent Recruitment Management is enabled in your org. It’s also available to customers who purchase the Unified Employee license.To access the object, you need one of these permission sets.\n\nEmployee Hub Community User\n\nOR\n\nUnified Employee Permission Set\n\nOR\n\nWork.com License"
+}

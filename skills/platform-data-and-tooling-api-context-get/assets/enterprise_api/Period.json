@@ -1,0 +1,133 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Period - Data API",
+  "description": "Represents a fiscal period defined in FiscalYearSettings.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "The last date of the fiscal period."
+    },
+    "FiscalYearSettingsId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Group, Sort",
+      "description": "The parent record for this period. This is a relationship field.",
+      "relationship_name": "FiscalYearSettings",
+      "relationship_type": "Lookup",
+      "refers_to": "FiscalYearSettings"
+    },
+    "FullyQualifiedLabel": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "Represents the period’s complete name in the UI. For example, “September FY 2016”."
+    },
+    "IsForecastPeriod": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the period is associated with Salesforce Forecasting (true) or not (false)."
+    },
+    "Number": {
+      "type": "int",
+      "properties": "Filter, Nillable, Group, Sort",
+      "description": "If the labeling scheme of your fiscal year's quarters or months is numbered, this field indicates the relative number of the row."
+    },
+    "PeriodLabel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the months in your fiscal year use custom names, then this field contains the appropriate name for rows of type Month."
+    },
+    "QuarterLabel": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "If the quarters in your fiscal year use custom names, then this field contains the appropriate name for rows of type Quarter."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "The first date of the fiscal period."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether the period is of type Month, Quarter, Week, or Year. Label is the field value."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only Chatter Free users and standard users can access this object.",
+  "usage": "In API version 36.0 and earlier, querying the Period object yields no results. In API version 37.0 and later, a query returns period records.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"Period\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"FiscalYearSettings\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FiscalYearSettings\"/>\n        <element name=\"FiscalYearSettingsId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FullyQualifiedLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsForecastPeriod\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Number\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"PeriodLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"QuarterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "FiscalYearSettingsId": {
+      "field_label": "Fiscal Year Settings ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FullyQualifiedLabel": {
+      "field_label": "Fully Qualified Label",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Period ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsForecastPeriod": {
+      "field_label": "Is Forecast Period",
+      "type": "boolean"
+    },
+    "Number": {
+      "field_label": "Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "PeriodLabel": {
+      "field_label": "Period Name",
+      "type": "picklist",
+      "length": "255"
+    },
+    "QuarterLabel": {
+      "field_label": "Quarter Name",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

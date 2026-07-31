@@ -1,0 +1,117 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmailDomainFilter - Data API",
+  "description": "Represents a filter that determines whether an email relay is restricted to a specific list of domains. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EmailRelayId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the EmailRelay record. This is a relationship field.",
+      "relationship_name": "EmailRelay",
+      "relationship_type": "Lookup",
+      "refers_to": "EmailRelay"
+    },
+    "FromDomain": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Restricts the email relay to send emails based on the sender domains (FromDomain) listed in this field. This field is optional, accepts a list of comma-separated values, and supports the wildcard character."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the email domain filter is active (true) or not (false). Use this field to enable or disable the email domain filter."
+    },
+    "PriorityNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Indicates the order in which the email domain filter is processed. Filters are evaluated in ascending order. The priority number must be unique. If this field is left blank, it is assigned the next available number and is processed last. Processing stops after the first matching filter is applied."
+    },
+    "ToDomain": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Restricts the email relay to send emails based on the recipient domains (ToDomain) listed in this field. This field is optional, accepts a list of comma-separated values, and supports the wildcard character."
+    }
+  },
+  "special_access_rules": "You must have the “Email Administration,” “Customize Application,” and “View Setup” user permissions to use this object. You must create an email relay in Setup or through the EmailRelay object before you can use the EmailDomainFilter object.\n\nYou must have the “Email Administration,” “Customize Application,” and “View Setup” user permissions to use this object.\n\nYou must create an email relay in Setup or through the EmailRelay object before you can use the EmailDomainFilter object.",
+  "usage": "If you also plan to activate Bounce Management and Email Compliance Management,\n\t\t\t\tconfirm with your email admin that your company allows relaying email sent from\n\t\t\t\tSalesforce. For more information on bounce management, see\n\nConfigure Deliverability Settings for Emails Sent from\n\t\t\t\tSalesforce",
+  "wsdl_segment": "```xml\n<complexType name=\"EmailDomainFilter\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EmailRelay\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EmailRelay\"/>\n        <element name=\"EmailRelayId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FromDomain\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PriorityNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ToDomain\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EmailRelayId": {
+      "field_label": "Email Relay ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FromDomain": {
+      "field_label": "Sender Domain",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "Id": {
+      "field_label": "Email Domain Filter ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PriorityNumber": {
+      "field_label": "Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ToDomain": {
+      "field_label": "Recipient Domain",
+      "type": "textarea",
+      "length": "4000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ActionCadenceRule - Data API",
+  "description": "Represents the logic that a branch step uses to determine which branch an action cadence tracker follows in an action cadence. Use ActionCadenceRule to learn about a branch step, including its logic and what the next step is. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionCadenceStepId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ActionCadenceStep that this rule is associated with. This field is a relationship field.",
+      "relationship_name": "ActionCadenceStep",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadenceStep"
+    },
+    "ConditionLogic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The logical operator used to evaluate the rule conditions. Possible values are: ANDIf this rule has several conditions, all of them must be true for this step to be true."
+    },
+    "GlobalEventType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the action cadence rule contains a global exit condition, this field contains the type of event that the rule represents. Possible values are: EmailReply EmailHardBounce EmailSoftBounce CallMeaningfulConnect CallNotInterested CallUnqualified CallLeftVoicemail CallCallBackLater This field is available in API version 49.0 and later."
+    },
+    "GraphState": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Represents the state of the ActionCadenceRule within the step graph, or sequence, of the related action cadence. Available in API version 53.0 and later. Possible values are: Included—This step rule is part of the step graph. Orphaned—This step rule was removed from the step graph before the action cadence was activated. Orphaned step rules are deleted upon activation. Pending—This step rule has been created but hasn’t been added to the step graph. Pending step rules can be added to the step graph in the future. Retired—This step rule was previously part of an active action cadence step graph and was removed during an edit after activation. Retired step rules can have associated step trackers."
+    },
+    "OutcomeNextStepName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The next step in the action cadence if this rule evaluates as true. If this rule evaluates as false, the next step is ActionCadenceStep.BranchDefaultStepName."
+    },
+    "ParentRuleName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the RuleName field of the previous rule in the action cadence. Must contain a valid rule name value unless this rule is the root rule. null if this rule is a root rule. This field is available in API version 49.0 and later."
+    },
+    "RuleName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name given to the rule. Every rule in an action cadence must have a unique name."
+    },
+    "RuleType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of step that this rule applies to. Possible values are: BranchStep — The rule evaluates the condition of a branch step. A branch step is an ActionCadenceStep record with the field type equal to Branch. RepeatedStep— The rule evaluates the repeat steps for quick cadence. Available in API version 58.0 and later. RootStep— The rule evaluates a global exit condition. SubRootStep—Available in API version 58.0 and later. This field is available in API version 49.0 and later."
+    }
+  },
+  "usage": "Use ActionCadenceRule to see all the rules associated with a branch step:\n\nUse ActionCadenceRule to see all the rules associated with a branch\n        step:\n\nselect RuleName from ActionCadenceRule  where ActionCadenceStep.ActionCadence.Name = \"High Priority CFO\"",
+  "field_reference": {
+    "ActionCadenceStepId": {
+      "field_label": "Cadence Step ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConditionLogic": {
+      "field_label": "Condition Logic",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "GlobalEventType": {
+      "field_label": "Global Event Type",
+      "type": "string",
+      "length": "25"
+    },
+    "GraphState": {
+      "field_label": "Graph State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Cadence Rule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OutcomeNextStepName": {
+      "field_label": "Outcome Next Step Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentRuleName": {
+      "field_label": "Parent Rule Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RuleName": {
+      "field_label": "Cadence Rule Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RuleType": {
+      "field_label": "Rule Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

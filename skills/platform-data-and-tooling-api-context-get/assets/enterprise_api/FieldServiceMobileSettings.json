@@ -1,0 +1,599 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FieldServiceMobileSettings - Data API",
+  "description": "Represents a configuration of settings that control the Field Service iOS and Android mobile app experience. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AscAutomaticMode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Describes how status changes are handled. Possible values are: Off—No automatic status changes. Manual—The mobile worker can cancel or update the status change. Timed—The mobile worker has a time period to prevent the status change. When the timer ends, the status changes. Automated—The mobile worker is notified that the status has changed."
+    },
+    "AscCancellationTimerInSec": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "For the Timed mode only. Time that the user has to cancel the appointment status change."
+    },
+    "AscCompletedStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Status that indicates that a mobile worker completed a service appointment. Possible values are: Canceled Cannot Complete Completed Dispatched In Progress None Scheduled"
+    },
+    "AscOnSiteStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Status that indicates that a mobile worker is at a service appointment. Possible values are: Canceled Cannot Complete Completed Dispatched In Progress None Scheduled"
+    },
+    "AscRadiusInMeters": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Service appointment radius that can trigger a status change."
+    },
+    "AscTimeLimitationInMin": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "A time period when status changes can occur, before an appointment’s scheduled start time and after the scheduled end time. The time is applied only if IsAscTimeLimitEnabled is true."
+    },
+    "AscTravelStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Status that indicates that a mobile worker is traveling to a service appointment. Possible values are: Canceled Cannot Complete Completed Dispatched In Progress None Scheduled"
+    },
+    "BgGeoLocationAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The accuracy of geolocation tracking of services resources while the app is running in the background. Lowering accuracy reduces battery consumption for mobile devices. Available in API version 41.0 and later. Picklist options: Medium—Accurate to within about 100 meters. Coarse—Accurate to within about 1 kilometer. Very Coarse—Accurate to within about 3 kilometers. The default value is Coarse."
+    },
+    "BgGeoLocationMinUpdateFreqMins": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The frequency of geolocation poling of services resources while the app is running in the background. Less frequent poling decreases battery consumption for mobile devices. The label in the UI is Minimum Update Frequency of Geo Location in Minutes (Background). Available in API version 41.0 and later."
+    },
+    "BrandInvertedColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of toasts and the contrast color of the floating action button."
+    },
+    "ContrastInvertedColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of secondary backgrounds in the UI."
+    },
+    "ContrastPrimaryColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of primary text."
+    },
+    "ContrastQuaternaryColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of secondary lines that delineate different areas of the UI."
+    },
+    "ContrastQuinaryColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of primary backgrounds in the UI."
+    },
+    "ContrastSecondaryColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of secondary text."
+    },
+    "ContrastTertiaryColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of the icons on the settings screen and of primary lines that delineate different areas of the UI."
+    },
+    "DaysBeforeCurrentServiceDate": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Days before the current service date during which to prime service documents for offline use."
+    },
+    "DayAfterCurrentServiceDate": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Days after the current service date during which to prime service documents for offline use."
+    },
+    "DefaultListViewDeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of the default service appointment list view on the schedule screen."
+    },
+    "DestinationType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Determines if the mobile worker navigates to the destination based on the address or based on the latitude and longitude. Possible values are: Address Latitude and Longitude The default value is Address."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The API name of the set of field service mobile settings. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "FeedbackPrimaryColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of error messages."
+    },
+    "FeedbackSecondaryColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of success messages."
+    },
+    "FeedbackSelectedColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Group, Sort, Update",
+      "description": "The color indicating the user’s current selection."
+    },
+    "FutureDaysInDatePicker": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The number of days into the future that a user can select from the date picker on the schedule screen."
+    },
+    "GeoLocationAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The accuracy of service resource geolocation tracking. Lowering accuracy reduces battery consumption for mobile devices. Picklist values: Fine—Accurate to within 10 meters. Medium—Accurate to within 100 meters. Coarse—Accurate to within 1 kilometer. The default value is Medium."
+    },
+    "GeoLocationMinUpdateFreqMins": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The minimum number of minutes between attempts to poll geolocation."
+    },
+    "IsAscTimeLimitEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether AscTimeLimitationInMin is applied. Default is true"
+    },
+    "IsAssignmentNotification": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Controls whether service appointment notifications are sent when the service resource is assigned the appointment. Default is false. This field is available in API version 46.0 and later."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the set of field service mobile settings is the default set that is automatically assigned to users. You can’t make a different settings record the default, but you can modify the default settings record. Default is false. Available in API version 41.0 and later."
+    },
+    "IsDispatchNotification": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Controls whether service appointment notifications are sent when the service resource is dispatched for the appointment. Default is false. This field is available in API version 46.0 and later."
+    },
+    "IsLimitedLocTrackingEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "When limited tracking for Appointment Assistant is enabled, the mobile worker’s location is shown only on the way to a service appointment. The default value is false."
+    },
+    "IsOptimizedImageUploadEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether to configure the size of images uploaded by your mobile workers. To optimize upload speeds, you can limit your file size to a defined maximum size using the OptimizeImageSizeInMb field. Resizing your images affects the resolution of your images. The default value is false."
+    },
+    "IsScheduleViewResourceAbsences": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether resource absences appear in the Schedule tab of the mobile app. This field is available in API version 55.0 and later."
+    },
+    "IsSendLocationHistory": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Controls whether geolocation tracking of services resources is enabled. Default is false."
+    },
+    "IsShowEditFullRecord": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Controls whether users can edit records with the field service mobile app. Default is false."
+    },
+    "IsTimeSheetEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Controls whether users can access time sheets on their mobile devices (Beta). Default is false."
+    },
+    "IsTimeZoneEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Controls whether the time zone of timesheet entries on the mobile app is recorded. The current time zone is recorded in the LocationTimeZone field of the TimeSheetEntry object. Default is false. Available in API version 50.0 and later."
+    },
+    "IsUseSalesforceMobileActions": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Reserved for future use."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The localization preference for a user. The format is a two letter language code and, if there’s a dialect, followed by the two letter dialect, for example, fr for French, and fr_BE for Belgian French"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label in the UI for the set of field service mobile settings. Available in API version 41.0 and later."
+    },
+    "MaxNumberOfServiceAppointments": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Sets the maximum number of service appointments to use for offline priming of service documents. If you don’t have dates on your service appointments, this setting helps to optimize offline priming in place of DaysBeforeCurrentServiceDate and DaysBeforeCurrentServiceDate fields."
+    },
+    "MetadataCacheTimeDays": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The number of days that org metadata, such as layouts, is kept in the app’s local cache of memory."
+    },
+    "NavbarBackgroundColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of the top bar in the app."
+    },
+    "NavbarInvertedColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Group, Sort, Update",
+      "description": "The secondary color of the tap bar in the app."
+    },
+    "OptimizeImageSizeInMb": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Configure the size of images uploaded by your mobile workers. To optimize upload speeds, you can limit your file size to a defined maximum size. Resizing your images affects the resolution of your images. Enter 0.2 or higher. Used only if IsOptimizedImageUploadEnabled is true."
+    },
+    "PastDaysInDatePicker": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The number of days into the past that a user can select from the date picker on the schedule screen."
+    },
+    "PrimaryBrandColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The main branding color used throughout the UI."
+    },
+    "QuickStatusChangeFlowName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of an existing Field Service flow with a Quick Status Change action to change the work order or service appointment status or both. This applies to flows invoked on the mobile app only. This field is available in API version 51.0 and later."
+    },
+    "RecordDataCacheTimeMins": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The number of minutes that record data is kept in the app’s local cache of memory."
+    },
+    "SecondaryBrandColor": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The color of action buttons."
+    },
+    "TimeIntervalSetupMins": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Controls the spacing of picklist options for time values such as when creating resource absences."
+    },
+    "UpdateScheduleTimeMins": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The minimum number of minutes between attempts to update a user’s schedule.The user’s schedule might not refresh on this cadence if the user’s device isn’t connected to a network or doesn’t have adequate battery life."
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "usage": "Field Service Mobile settings allow you to create sets of settings to apply to different field service mobile users. The settings apply to both the Android and iOS versions of the app. For example, suppose you want to accommodate workers that are color blind, or who work in dark or bright conditions. You can choose different branding options for different workers to suit their needs, and assign them to their profiles.\n\nField Service Mobile settings allow you to create sets of settings to apply to different field service mobile users. The settings apply to both the Android and iOS versions of the app.\n\nFor example, suppose you want to accommodate workers that are color blind, or who work in dark or bright conditions. You can choose different branding options for different workers to suit their needs, and assign them to their profiles.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **FieldServiceMobileSettingsChangeEvent (API version 55.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"FieldServiceMobileSettings\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppExtensions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AscAutomaticMode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AscCancellationTimerInSec\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"AscCompletedStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AscOnSiteStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AscRadiusInMeters\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"AscTimeLimitationInMin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"AscTravelStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BgGeoLocationAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BgGeoLocationMinUpdateFreqMins\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"BrandInvertedColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContrastInvertedColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContrastPrimaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContrastQuaternaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContrastQuinaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContrastSecondaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContrastTertiaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DaysAfterCurrentServiceDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DaysBeforeCurrentServiceDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DefaultListViewDeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DestinationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedbackPrimaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedbackSecondaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedbackSelectedColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedbackTertiaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FieldSvcAddlMobSettingses\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FutureDaysInDatePicker\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"GeoLocationAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GeoLocationMinUpdateFreqMins\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"IsAscTimeLimitEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsAssignmentNotification\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDispatchNotification\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFeedDisabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFeedPrimingDisabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsLimitedLocTrackingEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOptimizedImageUploadEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsScheduleViewResourceAbsences\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsSendLocationHistory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsShowEditFullRecord\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTimeSheetEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTimeZoneEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsUseSalesforceMobileActions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsVirtualMeasurement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MaxNumberOfServiceAppointments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MetadataCacheTimeDays\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MobileSettingsAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NavbarBackgroundColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NavbarInvertedColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptimizeImageSizeInMb\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PastDaysInDatePicker\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"PrimaryBrandColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"QuickStatusChangeFlowName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordDataCacheTimeMins\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SecondaryBrandColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TimeIntervalSetupMins\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UpdateScheduleTimeMins\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AscAutomaticMode": {
+      "field_label": "Status Change Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AscCancellationTimerInSec": {
+      "field_label": "Cancellation Period  (in seconds, 10-600)",
+      "type": "int",
+      "digits": "9"
+    },
+    "AscCompletedStatus": {
+      "field_label": "Completed Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AscOnSiteStatus": {
+      "field_label": "On-Site Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AscRadiusInMeters": {
+      "field_label": "Radius (in meters, 10-5000)",
+      "type": "int",
+      "digits": "9"
+    },
+    "AscTimeLimitationInMin": {
+      "field_label": "Time from Service Appointment (in minutes, 1-1440)",
+      "type": "int",
+      "digits": "9"
+    },
+    "AscTravelStatus": {
+      "field_label": "Travel Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BgGeoLocationAccuracy": {
+      "field_label": "Geolocation Accuracy (Background Mode)",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BgGeoLocationMinUpdateFreqMins": {
+      "field_label": "Geolocation Update Frequency in Minutes (Background Mode)",
+      "type": "int",
+      "digits": "9"
+    },
+    "BrandInvertedColor": {
+      "field_label": "Brand Inverted Color",
+      "type": "string",
+      "length": "7"
+    },
+    "ContrastInvertedColor": {
+      "field_label": "Contrast Inverted Color",
+      "type": "string",
+      "length": "7"
+    },
+    "ContrastPrimaryColor": {
+      "field_label": "Contrast Primary Color",
+      "type": "string",
+      "length": "7"
+    },
+    "ContrastQuaternaryColor": {
+      "field_label": "Contrast Quaternary Color",
+      "type": "string",
+      "length": "7"
+    },
+    "ContrastQuinaryColor": {
+      "field_label": "Contrast Quinary Color",
+      "type": "string",
+      "length": "7"
+    },
+    "ContrastSecondaryColor": {
+      "field_label": "Contrast Secondary Color",
+      "type": "string",
+      "length": "7"
+    },
+    "ContrastTertiaryColor": {
+      "field_label": "Contrast Tertiary Color",
+      "type": "string",
+      "length": "7"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DaysAfterCurrentServiceDate": {
+      "field_label": "Days After Current Service Date",
+      "type": "int",
+      "digits": "9"
+    },
+    "DaysBeforeCurrentServiceDate": {
+      "field_label": "Days Before Current Service Date",
+      "type": "int",
+      "digits": "9"
+    },
+    "DefaultListViewDeveloperName": {
+      "field_label": "Default List View Developer Name",
+      "type": "string",
+      "length": "255"
+    },
+    "DestinationType": {
+      "field_label": "Destination Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "FeedbackPrimaryColor": {
+      "field_label": "Feedback Primary Color",
+      "type": "string",
+      "length": "7"
+    },
+    "FeedbackSecondaryColor": {
+      "field_label": "Feedback Secondary Color",
+      "type": "string",
+      "length": "7"
+    },
+    "FeedbackSelectedColor": {
+      "field_label": "Feedback Selected Color",
+      "type": "string",
+      "length": "7"
+    },
+    "FeedbackTertiaryColor": {
+      "field_label": "Feedback Tertiary Color",
+      "type": "string",
+      "length": "7"
+    },
+    "FutureDaysInDatePicker": {
+      "field_label": "Future Days in the Date Picker",
+      "type": "int",
+      "digits": "9"
+    },
+    "GeoLocationAccuracy": {
+      "field_label": "Geolocation Accuracy",
+      "type": "picklist",
+      "length": "255"
+    },
+    "GeoLocationMinUpdateFreqMins": {
+      "field_label": "Geolocation Update Frequency in Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Field Service Mobile Settings ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAscTimeLimitEnabled": {
+      "field_label": "Enable Time from Service Appointment",
+      "type": "boolean"
+    },
+    "IsAssignmentNotification": {
+      "field_label": "Send appointment notifications on assignment",
+      "type": "boolean"
+    },
+    "IsDefault": {
+      "field_label": "Default",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDispatchNotification": {
+      "field_label": "Send appointment notifications on dispatch",
+      "type": "boolean"
+    },
+    "IsFeedDisabled": {
+      "field_label": "Enable Feed",
+      "type": "boolean"
+    },
+    "IsFeedPrimingDisabled": {
+      "field_label": "Enable Feed Priming",
+      "type": "boolean"
+    },
+    "IsLimitedLocTrackingEnabled": {
+      "field_label": "Enable Limited Tracking",
+      "type": "boolean"
+    },
+    "IsOptimizedImageUploadEnabled": {
+      "field_label": "Limit image file size",
+      "type": "boolean"
+    },
+    "IsScheduleViewResourceAbsences": {
+      "field_label": "Display resource absences in the Schedule page",
+      "type": "boolean"
+    },
+    "IsSendLocationHistory": {
+      "field_label": "Collect service resource geolocation history",
+      "type": "boolean"
+    },
+    "IsShowEditFullRecord": {
+      "field_label": "Enable full edit on records",
+      "type": "boolean"
+    },
+    "IsTimeSheetEnabled": {
+      "field_label": "Enable mobile time sheets",
+      "type": "boolean"
+    },
+    "IsTimeZoneEnabled": {
+      "field_label": "Collect time zones for time sheet entries",
+      "type": "boolean"
+    },
+    "IsUseSalesforceMobileActions": {
+      "field_label": "Use Salesforce mobile actions",
+      "type": "boolean"
+    },
+    "IsVirtualMeasurement": {
+      "field_label": "Virtual Measurement",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "MaxNumberOfServiceAppointments": {
+      "field_label": "Max Number of Service Appointments",
+      "type": "int",
+      "digits": "9"
+    },
+    "MetadataCacheTimeDays": {
+      "field_label": "Metadata Cache Time in Days",
+      "type": "int",
+      "digits": "9"
+    },
+    "NavbarBackgroundColor": {
+      "field_label": "Navbar Background Color",
+      "type": "string",
+      "length": "7"
+    },
+    "NavbarInvertedColor": {
+      "field_label": "Navbar Inverted Color",
+      "type": "string",
+      "length": "7"
+    },
+    "OptimizeImageSizeInMb": {
+      "field_label": "Maximum Image File Size (in MB)",
+      "type": "string",
+      "length": "7"
+    },
+    "PastDaysInDatePicker": {
+      "field_label": "Past Days in the Date Picker",
+      "type": "int",
+      "digits": "9"
+    },
+    "PrimaryBrandColor": {
+      "field_label": "Primary Brand Color",
+      "type": "string",
+      "length": "7"
+    },
+    "QuickStatusChangeFlowName": {
+      "field_label": "Flow Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RecordDataCacheTimeMins": {
+      "field_label": "Record Data Cache Time in Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "SecondaryBrandColor": {
+      "field_label": "Secondary Brand Color",
+      "type": "string",
+      "length": "7"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeIntervalSetupMins": {
+      "field_label": "Picklist Time Interval in Minutes",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UpdateScheduleTimeMins": {
+      "field_label": "Schedule Update Frequency in Minutes",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "WorkType - Data API",
+  "description": "Represents a type of work to be performed in Field Service and Lightning Scheduler. Work types are templates that can be applied to work order or work order line items. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the work type. Try to add details about the task or tasks that this work type represents."
+    },
+    "DurationType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Defaulted on create, Restricted picklist, Sort, Update",
+      "description": "The unit of the Estimated Duration: Minutes or Hours."
+    },
+    "EstimatedDuration": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The estimated length of the work. The estimated duration is in minutes or hours based on the value selected in the Duration Type field."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the work type was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the work type was last viewed by the current user."
+    },
+    "MinimumCrewSize": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The minimum crew size allowed for a crew assigned to the work. Work orders and work order line items inherit their work type’s minimum crew size.If you’re not using the Field Service managed package, this field serves as a suggestion rather than a rule. If you are using the managed package, the scheduling optimizer counts the number of service crew members on a service crew to determine whether it fits the minimum crew size requirement."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the work type. Try to use a name that helps users quickly understand the type of work orders that can be created from the work type. For example, “Annual Refrigerator Maintenance” or “Valve Replacement.”"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The work type’s owner. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RecommendedCrewSize": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The recommended number of people on the service crew assigned to the work. For example, you might have a Minimum Crew Size of 2 and a Recommended Crew Size of 3. Work orders and work order line items inherit their work type’s recommended crew size."
+    },
+    "SaDocumentTemplate": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The document template ID. If ServiceDocumentTemplateId isn’t specified, this document template ID determines which service document template is used for service documents generated from a service appointment. The ID is 15 to 18 characters long."
+    },
+    "ServiceReportTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service report template associated with the work type. When users create service reports from a work order or work order line item that uses this work type, the reports use this template."
+    },
+    "ShouldAutoCreateSvcAppt": {
+      "type": "boolean",
+      "properties": "Create, Filter, Group, Defaulted on create, Sort, Update",
+      "description": "Select this option to have a service appointment automatically created on work orders and work order line items that use the work type. By default, the Due Date on auto-created service appointments is seven days after the created date. Admins can adjust this offset from the Field Service Settings page in Setup. If a work type with the Auto-Create Service Appointment option selected is added to an existing work order or work order line item, a service appointment is only created for the work order or work order line item if it doesn’t yet have one. If someone updates an existing work type by selecting the Auto-Create Service Appointment option, service appointments aren’t created on work orders and work order line items that were already using the work type. Note"
+    },
+    "WoDocumentTemplate": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The document template ID. If ServiceDocumentTemplateId isn’t specified, this document template ID determines which service document template is used for service documents generated from a work order. The ID is 15 to 18 characters long."
+    },
+    "WoliDocumentTemplate": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The document template ID. If ServiceDocumentTemplateId isn’t specified, this document template ID determines which service document template is used for service documents generated from a work order line item. The ID is 15 to 18 characters long."
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "usage": "Adding a work type to a work order or work order line item causes the record to inherit the work type’s duration values and required skills and products.\n\nAdding a work type to a work order or work order line item\n\t\t\tcauses the record to inherit the work type’s duration values and required skills and products.\n\nIf needed, you can update the duration values and required skills and\n\t\t\t\t\t\tproducts on a work order or work order line item after they’re inherited\n\t\t\t\t\t\tfrom the work type.\n\nIf a work order or work order line item already has required skills or\n\t\t\t\t\t\tproducts, associating it with a work type doesn’t cause it to inherit the\n\t\t\t\t\t\twork type’s requirements.\n\nIf a work order or work order line item already has a duration value in its\n\nfield, associating it with a work type\n\t\t\t\t\t\tdoesn’t cause it to inherit the work type’s duration value.\n\nCustomizations to required skills or products, such as validation rules or\n\t\t\t\t\t\tApex triggers, are not carried over from work types to work orders and work\n\t\t\t\t\t\torder line items.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WorkTypeChangeEvent (API version 48.0)**: Change events are available for the object.\n- **WorkTypeFeed**: Feed tracking is available for the object.\n- **WorkTypeHistory**: History is available for tracked fields of the object.\n- **WorkTypeOwnerSharingRule**: Sharing rules are available for the object.\n- **WorkTypeShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"WorkType\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppointmentTopicTimeSlots\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurationInMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"DurationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EstimatedDuration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MaintenanceAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MaintenancePlans\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MaintenanceWorkRules\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MinimumCrewSize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductServiceCampaignWorkTypes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductsRequired\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecommendedCrewSize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceReportTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceReportLayout\"/>\n        <element name=\"ServiceReportTemplateId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShouldAutoCreateSvcAppt\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SkillRequirements\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkPlanSelectionRules\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkTypeGroupMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AppointmentCategoryId": {
+      "field_label": "Appointment Category ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ApptStartTimeIntvlInMin": {
+      "field_label": "Appointment Start Time Interval (Min)",
+      "type": "int",
+      "digits": "9"
+    },
+    "AttendeeLimit": {
+      "field_label": "Attendee Limit",
+      "type": "int",
+      "digits": "9"
+    },
+    "BlockTimeAfterAppointment": {
+      "field_label": "Block Time After Appointment",
+      "type": "int",
+      "digits": "9"
+    },
+    "BlockTimeAfterUnit": {
+      "field_label": "Block Time After Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BlockTimeBeforeAppointment": {
+      "field_label": "Block Time Before Appointment",
+      "type": "int",
+      "digits": "9"
+    },
+    "BlockTimeBeforeUnit": {
+      "field_label": "Block Time Before Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DefaultAppointmentType": {
+      "field_label": "Default Appointment Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DurationInMinutes": {
+      "field_label": "Duration in Minutes",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DurationType": {
+      "field_label": "Duration Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EstimatedDuration": {
+      "field_label": "Estimated Duration",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Work Type ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MinimumCrewSize": {
+      "field_label": "Minimum Crew Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Work Type Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OperatingHoursId": {
+      "field_label": "Operating Hour ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecommendedCrewSize": {
+      "field_label": "Recommended Crew Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "ServiceReportTemplateId": {
+      "field_label": "Service Report Layout ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShouldAutoCreateSvcAppt": {
+      "field_label": "Auto-Create Service Appointment",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeFrameEndUnit": {
+      "field_label": "Time Frame End Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TimeFrameStartUnit": {
+      "field_label": "Time Frame Start Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TimeframeEnd": {
+      "field_label": "Timeframe End",
+      "type": "int",
+      "digits": "9"
+    },
+    "TimeframeStart": {
+      "field_label": "Timeframe Start",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

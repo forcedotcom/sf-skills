@@ -1,0 +1,67 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "CustomObject - Tooling API",
+  "description": "Represents a custom object that stores data unique to your organization. Includes access to the associated CustomObject object and related fields in Salesforce Metadata API. Available from API version 31.0 or later.",
+  "supported_soap_calls": "`query()`, `retrieve()`, `search()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CustomHelpId": {
+      "type": "ID",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The control that contains the help content if this custom object has customized help content."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The object’s description. This can be useful to describe the reason for creating the object or its intended use."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer’s internal name for the custom object. For example, the internal name for the custom object CO__c is CO."
+    },
+    "ExternalName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Maps to a table in the external data source. If you created the external object using Validate and Sync for the data source, this name is automatically created."
+    },
+    "ExternalRepository": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Maps to a table in the external data source. If you created the external object using Validate and Sync for the data source, this name is automatically created; do not modify it."
+    },
+    "Language": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the action. Valid values are: Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the package of which the custom object is a part."
+    },
+    "SharingModel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The sharing model. Values are: Edit ControlledByparent None Read"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomObject\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"CustomHelpId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"Description\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DeveloperName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ExternalDataSource\" minOccurs=\"0\" type=\"ens:ExternalDataSource\" nillable=\"true\"/>\n        <xsd:element name=\"ExternalDataSourceId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"ExternalName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ExternalRepository\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Language\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"ManageableState\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"NamespacePrefix\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SharingModel\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CustomSettingsType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"List\"/>\n    <xsd:enumeration value=\"Hierarchy\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DeploymentStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"InDevelopment\"/>\n    <xsd:enumeration value=\"Deployed\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"Gender\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Neuter\"/>\n    <xsd:enumeration value=\"Masculine\"/>\n    <xsd:enumeration value=\"Feminine\"/>\n    <xsd:enumeration value=\"AnimateMasculine\"/>\n    <xsd:enumeration value=\"ClassI\"/>\n    <xsd:enumeration value=\"ClassIII\"/>\n    <xsd:enumeration value=\"ClassV\"/>\n    <xsd:enumeration value=\"ClassVII\"/>\n    <xsd:enumeration value=\"ClassIX\"/>\n    <xsd:enumeration value=\"ClassXI\"/>\n    <xsd:enumeration value=\"ClassXIV\"/>\n    <xsd:enumeration value=\"ClassXV\"/>\n    <xsd:enumeration value=\"ClassXVI\"/>\n    <xsd:enumeration value=\"ClassXVII\"/>\n    <xsd:enumeration value=\"ClassXVIII\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PlatformEventPublishBehavior\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PublishAfterCommit\"/>\n    <xsd:enumeration value=\"PublishImmediately\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PlatformEventType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"HighVolume\"/>\n    <xsd:enumeration value=\"StandardVolume\"/>\n    <xsd:enumeration value=\"ExternalEvent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SetupObjectVisibility\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PackageProtected\"/>\n    <xsd:enumeration value=\"Protected\"/>\n    <xsd:enumeration value=\"Public\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SharingModel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Private\"/>\n    <xsd:enumeration value=\"Read\"/>\n    <xsd:enumeration value=\"ReadSelect\"/>\n    <xsd:enumeration value=\"ReadWrite\"/>\n    <xsd:enumeration value=\"ReadWriteTransfer\"/>\n    <xsd:enumeration value=\"FullAccess\"/>\n    <xsd:enumeration value=\"ControlledByParent\"/>\n    <xsd:enumeration value=\"ControlledByLeadOrContact\"/>\n    <xsd:enumeration value=\"ControlledByCampaign\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"StartsWith\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Consonant\"/>\n    <xsd:enumeration value=\"Vowel\"/>\n    <xsd:enumeration value=\"Special\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

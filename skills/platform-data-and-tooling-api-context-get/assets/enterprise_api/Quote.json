@@ -1,0 +1,895 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "Quote - Data API",
+  "description": "Represents a quote, which is a record showing proposed prices for products and services. Available in API version 18.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the account that’s associated with the quote."
+    },
+    "AdditionalAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Compound form of the additional address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "AdditionalCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "City for the quote's additional address. Up to 40 characters allowed."
+    },
+    "AdditionalCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Country for the quote's additional address. Up to 80 characters allowed."
+    },
+    "AdditionalCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO country code for the quote’s additional address."
+    },
+    "AdditionalLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with AdditionalLongitude to specify the precise geolocation of an additional address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "AdditionalLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with AdditionalLatitude to specify the precise geolocation of an additional address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "AdditionalName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name associated with the quote's additional address. Limited: 255 characters."
+    },
+    "AdditionalPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Postal Code for the quote's additional address."
+    },
+    "AdditionalState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "State for the quote's additional address. Up to 80 characters allowed."
+    },
+    "AdditionalStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO state code for the quote’s additional address."
+    },
+    "AdditionalStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Group, Sort, Update",
+      "description": "Street name for the quote's additional address."
+    },
+    "BillToContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Group, Sort, Update",
+      "description": "ID of the contact that the order is billed to. This field is available in API version 56.0 and later. This field is available with Subscription Management."
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Compound form of the billing address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "City for the quote's billing address. Up to 40 characters allowed."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Country for the quote's billing address. Up to 80 characters allowed."
+    },
+    "BillingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO country code for the quote’s billing address."
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLongitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLatitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "BillingName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Entity that the quote is billed to."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Postal Code for the quote's billing address."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "State for the quote's billing address. Up to 80 characters allowed."
+    },
+    "BillingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO state code for the quote’s billing address."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Street name for the quote's billing address."
+    },
+    "CalculationStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Price calculations are performed by Salesforce. Tax calculations are performed by a third-party tax provider integration with Salesforce. Both of these calculations are asynchronous, and you can use this field to see the status of the asynchronous processes. This field is available with Subscription Management or Revenue Cloud. Possible values are: CompletedWithPricing—Indicates that pricing is complete and tax will now be calculated. CompletedWithTax—Indicates that pricing and tax calculation are complete. CompletedWithoutPricing—Indicates that pricing and tax calculation were skipped. ConfigurationFailed—Indicates that configuration failed. Available in API version 62.0 ConfigurationInProgress—Indicates that the configuration is in progress. Available in API version 62.0 GroupRampConfigurationFailed—Indicates that the checks for group ramps have failed. Available in API version 65.0 and later. NotStarted PriceCalculationFailed—Indicates that pricing failed. Available in API version 58.0 and later. PriceCalculationInProgress—Available in API version 58.0 and later. PriceCalculationQueued—The request is sent to the asynchronous price calculation process, but the process hasn’t started. Available in API version 58.0 and later. QuoteRequestFailed—Indicates that the requested quote changes weren’t saved. Available in API version 62.0 QuoteRequestPartiallySaved—Indicates that the requested quote changes were partially saved. Available in API version 62.0 ReconciliationFailed—Indicates that the arrangement of quote data failed. Available in API version 62.0 ReconciliationInProgress—Indicates that the arrangement of data is in progress. For a sales rep, this value appears as Saving on the quote page. Available in API version 62.0 SaveFailedOrIncomplete—Some or all of the records couldn’t be saved. For example, some of the quote line item records weren’t saved. Available in API version 58.0 and later. Saving TaxCalculationFailed TaxCalculationInProcess TaxCalculationSuccess—Available in API versions 56.0 and 57.0 TaxCalculationWaiting The default value is NotStarted."
+    },
+    "CanCreateQuoteLineItems": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group",
+      "description": "This field isn’t used."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the contact that’s associated with the quote."
+    },
+    "ContractId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the contract that’s associated with the quote."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Restricted picklist",
+      "description": "Available only for organizations with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization.If the organization has multicurrency and a Pricebook2Id specified on the quote, then the currency value of this field must match the currency of the PricebookEntry objects that are associated with any quote line items it has. This value is copied from the related Opportunity and can't be changed."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Text description of the quote. Limit: 32,000 characters."
+    },
+    "Discount": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The difference between the QuoteLineItem record’s subtotal and its discounted total, divided by the QuoteLineItem’s subtotal. Expressed as a percentage."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The email address of the contact who’s associated with the quote."
+    },
+    "ExpirationDate": {
+      "type": "date",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The date when this quote is no longer valid."
+    },
+    "Fax": {
+      "type": "phone",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The fax number for the contact who’s associated with the quote."
+    },
+    "GrandTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable",
+      "description": "The total price of the quote plus shipping and taxes. Note: The GrandTotal is a system-calculated summary field and is not directly referenceable or usable in custom formula fields on the Quote object. Attempts to do so result in an error message. For example, \"Error: Field GrandTotal does not exist. Check spelling.\" To perform calculations based on the total value of a quote, consider using a Roll-Up Summary field from related Quote Line Items or performing calculations directly on the QuoteLineItem object."
+    },
+    "IsSyncing": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the quote is syncing with an opportunity."
+    },
+    "LastReferencedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view but not viewed it directly."
+    },
+    "LineItemCount": {
+      "type": "int",
+      "properties": "Filter, Nillable",
+      "description": "The number of line items on the quote."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, idLookup, Update",
+      "description": "Name for the quote. Limit: 225 characters.",
+      "required": true
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID for the opportunity associated with the quote."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The phone number of the contact who’s associated with the quote."
+    },
+    "Pricebook2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "ID of the price book associated with the quote."
+    },
+    "QuoteAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the account associated with the quote. This field is available in API version 58.0 and later only when the Create Quotes Without a Related Opportunity setting on the Quotes Settings page is enabled. This field is a relationship field.",
+      "relationship_name": "QuoteAccount",
+      "refers_to": "Account"
+    },
+    "QuoteNumber": {
+      "type": "string",
+      "properties": "Defaulted on create, Filter",
+      "description": "A system-generated number that identifies the quote."
+    },
+    "QuoteToAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Compound form of the quote to address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "QuoteToCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "City for the address to send the quote to for approval, such as a third party-agency representing a buyer. Up to 40 characters allowed."
+    },
+    "QuoteToCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Country for the address to send the quote to for approval. Up to 80 characters allowed."
+    },
+    "QuoteToLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with QuoteToLongitude to specify the precise geolocation of a quote to address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "QuoteToLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with QuoteToLatitude to specify the precise geolocation of a quote to address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "QuoteToName": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The name of the entity (such as a person or business) that the quote is sent to for approval. Limit: 255 characters."
+    },
+    "QuoteToPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Postal code for the address to send the quote to for approval."
+    },
+    "QuoteToState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "State for the address to send the quote to for approval. Up to 80 characters allowed."
+    },
+    "QuoteToStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Street name for the address to send the quote to for approval."
+    },
+    "RecordSource": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the source application context for the record. This field is available with Digital Insurance in API version 66.0 and later. Possible values are: DigitalInsurance Null"
+    },
+    "RecordTypeID": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "ID of the record type assigned to the object."
+    },
+    "RelatedWorkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Relationship field that’s visible only if Field Service and Quotes are enabled in the Salesforce org. This field refers to the work order that the quote is created from. When a mobile worker creates a quote using the New Quote action in the Field Service mobile app, this field is automatically populated. This field is used in the related list that shows all of the quotes related to the work order."
+    },
+    "ShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Compound form of the shipping address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "ShippingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "City for the quote's shipping address. Up to 40 characters allowed."
+    },
+    "ShippingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Country for the quote's shipping address. Up to 80 characters allowed."
+    },
+    "ShippingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO country code for the quote’s shipping address."
+    },
+    "ShippingHandling": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The total shipping and handling costs for the quote."
+    },
+    "ShippingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLongitude to specify the precise geolocation of a shipping address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "ShippingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLatitude to specify the precise geolocation of an address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "ShippingName": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The name of the entity (such as a person or business) that the quote is sent to for approval."
+    },
+    "ShippingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Postal code for the quote's shipping address."
+    },
+    "ShippingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "State for the quote's shipping address. Up to 80 characters allowed."
+    },
+    "ShippingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO state code for the quote’s shipping address."
+    },
+    "ShippingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Street name for the quote's shipping address."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Update",
+      "description": "The status of the quote. The standard options are: —None— Draft Needs Review In Review Approved Rejected Presented Accepted Denied"
+    },
+    "Subtotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable",
+      "description": "The sum of sales price multiplied by quantity for line items, not including the discount."
+    },
+    "Tax": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The total taxes for the quote."
+    },
+    "TotalPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable",
+      "description": "The total of the quote line items after discounts and before taxes and shipping."
+    },
+    "TotalPriceWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of TotalPrice and TotalTaxAmount. This field is available in API version 55.0 and later. This field is available if Subscription Management is enabled in your org."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount of all taxes. This field is available in API version 55.0 and later. This field is available if Subscription Management is enabled in your org. This field is a calculated field."
+    }
+  },
+  "usage": "Use Quote to manage proposed product prices for customers. To update a Quote, your client application needs “Edit” permission.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **QuoteChangeEvent (API version 44.0)**: Change events are available for the object.\n- **QuoteFeed (API version 39.0)**: Feed tracking is available for the object.\n- **QuoteHistory (API version 57.0)**: History is available for tracked fields of the object.\n- **QuoteOwnerSharingRule (API version 41.0)**: Sharing rules are available for the object.\n- **QuoteShare (API version 41.0)**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AdditionalAddress": {
+      "field_label": "Additional To",
+      "type": "address"
+    },
+    "AdditionalCity": {
+      "field_label": "Additional To City",
+      "type": "string",
+      "length": "40"
+    },
+    "AdditionalCountry": {
+      "field_label": "Additional To Country",
+      "type": "string",
+      "length": "80"
+    },
+    "AdditionalGeocodeAccuracy": {
+      "field_label": "Additional To Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AdditionalLatitude": {
+      "field_label": "Additional To Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "AdditionalLongitude": {
+      "field_label": "Additional To Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "AdditionalName": {
+      "field_label": "Additional To Name",
+      "type": "string",
+      "length": "255"
+    },
+    "AdditionalPostalCode": {
+      "field_label": "Additional To Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "AdditionalState": {
+      "field_label": "Additional To State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "AdditionalStreet": {
+      "field_label": "Additional To Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "AdjustmentDistributionLogic": {
+      "field_label": "Adjustment Distribution Logic",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AppliedDiscount": {
+      "field_label": "Applied Discount",
+      "type": "percent",
+      "precision": "12",
+      "scale": "2"
+    },
+    "AppliedDiscountAmount": {
+      "field_label": "Applied Discount Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BillToContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingAddress": {
+      "field_label": "Bill To",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "Bill To City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Bill To Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Bill To Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Bill To Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Bill To Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingName": {
+      "field_label": "Bill To Name",
+      "type": "string",
+      "length": "255"
+    },
+    "BillingPostalCode": {
+      "field_label": "Bill To Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingState": {
+      "field_label": "Bill To State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Bill To Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "CalculationStatus": {
+      "field_label": "Calculation Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CanCreateQuoteLineItems": {
+      "field_label": "Can Create Quote Line Items",
+      "type": "boolean"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContractId": {
+      "field_label": "Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Discount": {
+      "field_label": "Discount",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "Email": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "ExpirationDate": {
+      "field_label": "Expiration Date",
+      "type": "date"
+    },
+    "Fax": {
+      "field_label": "Fax",
+      "type": "phone",
+      "length": "40"
+    },
+    "GrandTotal": {
+      "field_label": "Grand Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Quote ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsSyncing": {
+      "field_label": "Syncing",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastPricedDate": {
+      "field_label": "Last Priced Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LineGroupCount": {
+      "field_label": "Line Groups",
+      "type": "int",
+      "digits": "9"
+    },
+    "LineItemCount": {
+      "field_label": "Line Items",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Quote Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OpportunityId": {
+      "field_label": "Opportunity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OriginalActionType": {
+      "field_label": "Original Action Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PartnerAccountId": {
+      "field_label": "Partner Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "Pricebook2Id": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PricingContractId": {
+      "field_label": "Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteNumber": {
+      "field_label": "Quote Number",
+      "type": "string",
+      "length": "30"
+    },
+    "QuoteToAddress": {
+      "field_label": "Quote To",
+      "type": "address"
+    },
+    "QuoteToCity": {
+      "field_label": "Quote To City",
+      "type": "string",
+      "length": "40"
+    },
+    "QuoteToCountry": {
+      "field_label": "Quote To Country",
+      "type": "string",
+      "length": "80"
+    },
+    "QuoteToGeocodeAccuracy": {
+      "field_label": "Quote To Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "QuoteToLatitude": {
+      "field_label": "Quote To Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "QuoteToLongitude": {
+      "field_label": "Quote To Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "QuoteToName": {
+      "field_label": "Quote To Name",
+      "type": "string",
+      "length": "255"
+    },
+    "QuoteToPostalCode": {
+      "field_label": "Quote To Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "QuoteToState": {
+      "field_label": "Quote To State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "QuoteToStreet": {
+      "field_label": "Quote To Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "RelatedQuoteId": {
+      "field_label": "Quote ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedQuoteType": {
+      "field_label": "Related Quote Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedWorkId": {
+      "field_label": "Work Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SalesTransactionTypeId": {
+      "field_label": "Sales Transaction Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceDocumentTemplate": {
+      "field_label": "Service Document Template",
+      "type": "string",
+      "length": "18"
+    },
+    "ShippingAddress": {
+      "field_label": "Ship To",
+      "type": "address"
+    },
+    "ShippingCity": {
+      "field_label": "Ship To City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShippingCountry": {
+      "field_label": "Ship To Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingGeocodeAccuracy": {
+      "field_label": "Ship To Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShippingHandling": {
+      "field_label": "Shipping and Handling",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ShippingLatitude": {
+      "field_label": "Ship To Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingLongitude": {
+      "field_label": "Ship To Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingName": {
+      "field_label": "Ship To Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ShippingPostalCode": {
+      "field_label": "Ship To Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShippingState": {
+      "field_label": "Ship To State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingStreet": {
+      "field_label": "Ship To Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Subtotal": {
+      "field_label": "Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Tax": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPrice": {
+      "field_label": "Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPriceOverride": {
+      "field_label": "Total Price Override",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPriceWithTax": {
+      "field_label": "Total Price With Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TransactionType": {
+      "field_label": "Transaction Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ValidationResult": {
+      "field_label": "Validation Result",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

@@ -1,0 +1,1223 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "ispersonaccount_fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Account - Data API",
+  "description": "Represents an individual account, which is an organization or person involved with your business (such as customers, competitors, and partners).",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "AccountNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Account number assigned to this account (not the unique, system-generated ID assigned during creation). Maximum size is 40 characters."
+    },
+    "AccountSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The source of the account record. For example, Advertisement or Trade Show. The source is selected from a picklist of available values, which are set by an administrator. Each picklist value can have up to 40 characters."
+    },
+    "ActivityMetricId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When Einstein Activity Capture with Activity Metrics is enabled, the ID of the related activity metric. This field is a relationship field.",
+      "relationship_name": "ActivityMetric",
+      "refers_to": "ActivityMetric"
+    },
+    "ActivityMetricRollupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When Einstein Activity Capture with Activity Metrics is enabled, the ID of the related activity metric rollup. This field is a relationship field.",
+      "relationship_name": "ActivityMetricRollup",
+      "refers_to": "ActivityMetricRollup"
+    },
+    "AnnualRevenue": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Estimated annual revenue of the account."
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the billing address. Read-only. For details on compound address fields, see Address Compound Fields."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address of this account. Maximum size is 40 characters."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address of this account. Maximum size is 80 characters."
+    },
+    "BillingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country code for the account’s billing address."
+    },
+    "BillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the billing address. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLongitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLatitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address of this account. Maximum size is 20 characters."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address of this account. Maximum size is 80 characters."
+    },
+    "BillingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO state code for the account’s billing address."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Street address for the billing address of this account."
+    },
+    "ChannelProgramLevelName": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "Read only. Name of the channel program level the account has enrolled. If this account has enrolled more than one channel program level, the oldest channel program name is displayed."
+    },
+    "ChannelProgramName": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "Read only. Name of the channel program the account has enrolled. If this account has enrolled more than one channel program, the oldest channel program name is displayed."
+    },
+    "CleanStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the record’s clean status as compared with Data.com.. Possible values are: AcknowledgedThe label on the account record detail page is Reviewed. Different Inactive Matched—The label on the account record detail page is In Sync. NotFound PendingThe label on the account record detail page is Not Compared. SelectMatch Skipped"
+    },
+    "CommerceCustomerReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The external Commerce ID of the individual. To update or create field values, you need the Manage Shopper Profile Sync System Fields user permission. Available in API version 67.0 and later."
+    },
+    "CommerceGroupReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The external name of the Commerce customer group. To update or create field values, you need the Manage Shopper Profile Sync System Fields user permission. Available in API version 67.0 and later."
+    },
+    "CommerceOrganizationReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The external organization ID of the Commerce instance. To update or create field values, you need the Manage Shopper Profile Sync System Fields user permission. Available in API version 67.0 and later."
+    },
+    "ConnectionReceivedId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the PartnerNetworkConnection that shared this record with your organization. This field is available if you enabled Salesforce to Salesforce."
+    },
+    "ConnectionSentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the PartnerNetworkConnection that you shared this record with. This field is available if you enabled Salesforce to Salesforce. This field is supported using API versions earlier than 15.0. In all other API versions, this field’s value is null. You can use the new PartnerNetworkRecordConnection object to forward records to connections."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Text description of the account. Limited to 32,000 KB."
+    },
+    "DunsNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Data Universal Numbering System (D-U-N-S) number is a unique, nine-digit number assigned to every business location in the Dun & Bradstreet database that has a unique, separate, and distinct operation. D-U-N-S numbers are used by industries and organizations around the world as a global standard for business identification and tracking. Maximum size is 9 characters. This field is available on business accounts, not person accounts. Note: This field is only available to organizations that use Data.com Prospector or Data.com Clean."
+    },
+    "Fax": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Fax number for the account."
+    },
+    "Industry": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An industry associated with this account. For example, Biotechnology. Maximum size is 40 characters."
+    },
+    "IsBuyer": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the account is enabled as a buyer for Lightning B2B Commerce. The default value is false. This field is available in API version 48.0 and later. Note: This field is only available to organizations that have the B2B Commerce license enabled."
+    },
+    "IsCustomerPortal": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the account has at least one contact enabled to use the org's Experience Cloud site or Customer Portal (true) or not (false). This field is available if Customer Portal is enabled OR digital experiences is enabled. If your org is enabled to use Content Security Policy (CSP) features, then this field is visible on the Account object even if those features are later disabled. If you change this field's value from true to false, you can disable up to 100 Experience Cloud site or Customer Portal users associated with the account and permanently delete all of the account's site roles and groups. You can't restore deleted site roles and groups. Exclude this field when merging accounts. This field can be updated in API version 16.0 and later. Tip: We recommend that you update up to 50 contacts simultaneously when changing the accounts on contacts enabled for an Experience Cloud site. We also recommend that you make this update after business hours."
+    },
+    "IsPartner": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the account has at least one contact enabled to use the org's partner portal (true) or not (false). This field is available if partner relationship management (partner portal) is enabled OR digital experiences is enabled and you have partner portal licenses. If you change this field's value from true to false, you can disable up to 15 partner portal users associated with the account and permanently delete all of the account's partner portal roles and groups. You can't restore deleted partner portal roles and groups. Disabling a partner portal user in the Salesforce user interface or the API doesn’t change this field's value from true to false. Even if this field's value is false, you can enable a contact on an account as a partner portal user via the API. Exclude this field when merging accounts. This field can be updated in API version 16.0 and later. Tip: We recommend that you update up to 50 contacts simultaneously when changing the accounts on contacts enabled for an Experience Cloud site. We also recommend that you make this update after business hours."
+    },
+    "IsPersonAccount": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read only. Label is Is Person Account. Indicates whether this account has a record type of Person Account (true) or not (false)."
+    },
+    "IsPriorityRecord": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group",
+      "description": "Shows whether the user has marked the account as important (True) or not (False). The default value is false. Available in API version 60.0 and later."
+    },
+    "Jigsaw": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the ID of a company in Data.com. If an account has a value in this field, it means that the account was imported from Data.com. If the field value is null, the account was not imported from Data.com. Maximum size is 20 characters. Available in API version 22.0 and later. Label is Data.com Key. This field is available on business accounts, not person accounts. Important: The Jigsaw field is exposed in the API to support troubleshooting for import errors and reimporting of corrected data. Do not modify the value in the Jigsaw field."
+    },
+    "JigsawCompanyId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the company in reference to Jigsaw. Important: The Jigsaw field is exposed in the API to support troubleshooting for import errors and reimporting of corrected data. Don’t modify the value in the Jigsaw field."
+    },
+    "LastActivityDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Value is one of the following, whichever is the most recent: Due date of the most recent event logged against the record. Due date of the most recently closed task associated with the record."
+    },
+    "LastReferencedDate": {
+      "type": "datetime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "datetime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "MasterRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If this object was deleted as the result of a merge, this field contains the ID of the record that was kept. If this object was deleted for any other reason, or has not been deleted, the value is null. This is a relationship field.",
+      "relationship_name": "MasterRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "NaicsCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The six-digit North American Industry Classification System (NAICS) code is the standard used by business and government to classify business establishments into industries, according to their economic activity for the purpose of collecting, analyzing, and publishing statistical data related to the U.S. business economy. Maximum size is 8 characters. This field is available on business accounts, not person accounts. Note: This field is only available to organizations that use Data.com Prospector or Data.com Clean."
+    },
+    "NaicsDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an org’s line of business, based on its NAICS code. Maximum size is 120 characters. This field is available on business accounts, not person accounts. Note: This field is only available to organizations that use Data.com Prospector or Data.com Clean."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Label is Account Name. Name of the account. Maximum size is 255 characters. If the account has a record type of Person Account: This value is the concatenation of the FirstName, MiddleName, LastName, and Suffix of the associated person contact. You can't modify this value.",
+      "required": true
+    },
+    "NumberOfEmployees": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Label is Employees. Number of employees working at the company represented by this account. Maximum size is eight digits."
+    },
+    "OperatingHoursId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The operating hours associated with the account. Available only if Field Service is enabled. This is a relationship field.",
+      "relationship_name": "OperatingHours",
+      "relationship_type": "Lookup",
+      "refers_to": "OperatingHours"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who currently owns this account. Default value is the user logged in to the API to perform the create.If you have set up account teams in your org, updating this field has different consequences depending on your version of the API: For API version 12.0 and later, sharing records are kept, as they are for all objects. For API version before 12.0, sharing records are deleted. For API version 16.0 and later, users must have the “Transfer Record” permission in order to update (transfer) account ownership using this field. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Ownership": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Ownership type for the account, for example Private, Public, or Subsidiary."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the parent object, if any. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "PersonActionCadenceAssigneeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the sales rep designated to work the lead through their assigned cadence. This field is available in API version 47.0 and later when the Sales Engagement license is enabled. To see this field, the user also needs the Sales Engagement User or Sales Engagement Quick Cadence Creator user permission set. This field is a polymorphic relationship field.",
+      "relationship_name": "PersonActionCadenceAssignee",
+      "refers_to": "Group, User"
+    },
+    "PersonActionCadenceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the lead’s assigned cadence. This field is available in API version 46.0 and later when the Sales Engagement license is enabled. To see this field, the user also needs the Sales Engagement User or Sales Engagement Quick Cadence Creator user permission set. This is a relationship field.",
+      "relationship_name": "PersonActionCadence",
+      "refers_to": "ActionCadence"
+    },
+    "PersonActionCadenceState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The state of the current action cadence tracker. This field is available in API version 50.0 and later when the Sales Engagement license is enabled. To see this field, the user also needs the Sales Engagement User or Sales Engagement Quick Cadence Creator user permission set. Possible values are: Complete Error Initializing Paused Processing Running"
+    },
+    "PersonIndividualId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the data privacy record associated with this person’s account. This field is available if you enabled Data Protection and Privacy in Setup. Available in API version 42.0 and later."
+    },
+    "PersonScheduledResumeDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the action cadence tracker is going to resume after it’s paused or on a wait step. This field is available in API version 54.0 and later when the Sales Engagement license is enabled. To see this field, the user also needs the Sales Engagement User or Sales Engagement Quick Cadence Creator user permission set."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number for this account. Maximum size is 40 characters."
+    },
+    "PhotoUrl": {
+      "type": "url"
+    },
+    "Rating": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account’s prospect rating, for example Hot, Warm, or Cold."
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the record type assigned to this object."
+    },
+    "Salutation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Honorific added to the name for use in letters, etc. This field is available on person accounts."
+    },
+    "ShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the shipping address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "ShippingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address for this account. City maximum size is 40 characters"
+    },
+    "ShippingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address for this account. Country maximum size is 80 characters."
+    },
+    "ShippingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country code for the account’s shipping address."
+    },
+    "ShippingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the shipping address. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "ShippingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLongitude to specify the precise geolocation of a shipping address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "ShippingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLatitude to specify the precise geolocation of an address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "ShippingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address for this account. Postal code maximum size is 20 characters."
+    },
+    "ShippingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address for this account. State maximum size is 80 characters."
+    },
+    "ShippingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO state code for the account’s shipping address."
+    },
+    "ShippingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street address of the shipping address for this account. Maximum of 255 characters."
+    },
+    "Sic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Standard Industrial Classification code of the company’s main business categorization, for example, 57340 for Electronics. Maximum of 20 characters. This field is available on business accounts, not person accounts."
+    },
+    "SicDesc": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A brief description of an org’s line of business, based on its SIC code. Maximum length is 80 characters. This field is available on business accounts, not person accounts."
+    },
+    "Site": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the account’s location, for example Headquarters or London. Label is Account Site. Maximum of 80 characters."
+    },
+    "TickerSymbol": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The stock market symbol for this account. Maximum of 20 characters. This field is available on business accounts, not person accounts."
+    },
+    "Tradestyle": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A name, different from its legal name, that an org may use for conducting business. Similar to “Doing business as” or “DBA”. Maximum length is 255 characters. This field is available on business accounts, not person accounts. Note: This field is only available to organizations that use Data.com Prospector or Data.com Clean."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of account, for example, Customer, Competitor, or Partner."
+    },
+    "Website": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The website of this account. Maximum of 255 characters."
+    },
+    "YearStarted": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date when an org was legally established. Maximum length is 4 characters. This field is available on business accounts, not person accounts. Note: This field is only available to organizations that use Data.com Prospector or Data.com Clean."
+    }
+  },
+  "ispersonaccount_fields": {
+    "FirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "First name of the person for a person account. Maximum size is 40 characters."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Last name of the person for a person account. Required if the record type is a person account record type. Maximum size is 80 characters."
+    },
+    "MiddleName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Middle name of the person for a person account. Maximum size is 40 characters."
+    },
+    "PersonAssistantName": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The person account’s assistant name. Label is Assistant. Maximum size is 40 characters."
+    },
+    "PersonAssistantPhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The person account’s assistant phone. Label is Asst. Phone. Maximum size is 40 characters."
+    },
+    "PersonBirthDate": {
+      "type": "date",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The birthday of the contact associated with this person account. Label is Birthdate. The year portion of the PersonBirthDate field is ignored in filter criteria, including report filters, list view filters, and SOQL queries. For example, the following SOQL query returns person accounts with birthdays later in the year than today:SELECT FirstName, LastName, PersonBirthDate FROM Account WHERE Birthdate > TODAY"
+    },
+    "PersonContactId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID for the contact associated with this person account. Label is Contact ID."
+    },
+    "PersonDepartment": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The department. Label is Department. Maximum size is 80 characters."
+    },
+    "PersonEmail": {
+      "type": "email",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Email address for this person account. Label is Email."
+    },
+    "PersonEmailBouncedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "If bounce management is activated and an email sent to the person account bounces, the date and time the bounce occurred."
+    },
+    "PersonEmailBouncedReason": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "If bounce management is activated and an email sent to the person account bounces, the reason the bounce occurred"
+    },
+    "PersonGenderIdentity": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The person’s internal experience of their gender, which may or may not correspond to the person’s designated sex at birth. Label is Gender Identity."
+    },
+    "PersonHasOptedOutOfEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Indicates whether the person account has opted out of email (true) or not (false). Label is Email Opt Out."
+    },
+    "PersonHomePhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The home phone number for this person account. Label is Home Phone."
+    },
+    "PersonLeadSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The person account’s lead source. Label is Lead Source."
+    },
+    "PersonMailingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the person account mailing address. Read-only. For details on compound address fields, see Address Compound Fields."
+    },
+    "PersonMailingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Details about the mailing address for this person account. Labels are Mailing City, Mailing Country, Postal Code, and State. Maximum size for city and country is 40 characters. Maximum size for postal code and state is 20 characters."
+    },
+    "PersonMailingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country or state code for the mailing address of the person account."
+    },
+    "PersonMailingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Retrieve, Query, Restricted picklist, Nillable",
+      "description": "Accuracy level of the geocode for the person’s mailing address. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "PersonMailingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with PersonMailingLongitude to specify the precise geolocation of a person account’s mailing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "PersonMailingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with PersonMailingLatitude to specify the precise geolocation of a person account’s mailing address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "PersonMailingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The mailing street address for this person account. Label is Mailing Street. Maximum size is 255 characters."
+    },
+    "PersonMobilePhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The mobile phone number for this person account. Label is Mobile."
+    },
+    "PersonOtherCity": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Details about the alternate address for this person account. Labels are Other City, Other Country, Other Zip/Postal Code, and Other State."
+    },
+    "PersonOtherCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country or state code for the alternate address of the person account."
+    },
+    "PersonOtherLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with PersonOtherLongitude to specify the precise geolocation of a person account’s alternate address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "PersonOtherLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with PersonOtherLatitude to specify the precise geolocation of a person account’s alternate address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "PersonOtherPhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The alternate phone number for this person account. Label is Other Phone."
+    },
+    "PersonOtherStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The person account’s alternate street address. Label is Other Street."
+    },
+    "PersonPronouns": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The individual’s personal pronouns, reflecting their gender identity. Others can use these pronouns to refer to the individual in the third person. The entry is selected from a picklist of available values, which the administrator sets. Maximum 40 characters. Label is Pronouns. Possible values are: He/Him He/They Not Listed She/Her She/They They/Them"
+    },
+    "PersonReportsToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort Update",
+      "description": "ID of the person account or contact that this person account reports to. This field doesn't appear if enableReportsToOnPersonAccount in the AccountSettings metadata type is false. Available in API version 62.0 and later. This is a relationship field.",
+      "relationship_name": "PersonReportsTo",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "PersonTitle": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The person account’s title. Label is Title. Maximum size is 80 characters. When converting a lead to a person account, the conversion fails if the lead’s Title field contains more than 80 characters."
+    },
+    "Suffix": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name suffix of the person for a person account. Maximum size is 40 characters."
+    }
+  },
+  "special_access_rules": "Experience Cloud site or Customer Portal users can access their own accounts and any account shared with them.",
+  "usage": "Use this object to query and manage accounts in your org. Client applications can create, update, delete, or query Attachment records associated with an account via the API. Client applications can also create or update account objects by converting a Lead via the convertLead() call. If the values in the IsPersonAccount Fields are not null, you can't change IsPersonAccount to false or an error occurs.\n\nUse this object to query and manage accounts in your org. Client applications can create, update, delete, or query Attachment records associated with an account via the API.\n\nClient applications can also create or update account objects by converting a Lead via the convertLead() call.\n\nIf the values in the IsPersonAccount Fields are not null, you can't change IsPersonAccount to false or an error occurs.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AccountChangeEvent (API version 44.0)**: Change events are available for the object.\n- **AccountFeed (API version 18.0)**: Feed tracking is available for the object.\n- **AccountHistory (API version 11.0)**: History is available for tracked fields of the object.\n- **AccountOwnerSharingRule**: Sharing rules are available for the object.\n- **AccountShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"Account\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AccountCleanInfos\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AccountContactRoles\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AccountNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AccountPartnersFrom\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AccountPartnersTo\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AccountSource\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Accounts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Active__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AlternativePaymentMethods\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AnnualRevenue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetAccountParticipantAccount\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Assets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssociatedLocations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AuthorizationFormConsents\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BillingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"BillingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"BillingLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"BillingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CardPaymentMethods\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Cases\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ChildAccounts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CleanStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CommSubscriptionConsents\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContactPointAddresses\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContactPointEmails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContactPointPhones\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContactRequests\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Contacts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Contracts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomerPriority__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DandbCompany\" nillable=\"true\" minOccurs=\"0\" type=\"ens:DandBCompany\"/>\n        <element name=\"DandbCompanyId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DigitalWallets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"DunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DuplicateRecordItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Entitlements\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Expenses\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Fax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FinanceBalanceSnapshots\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FinanceTransactions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Industry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Jigsaw\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"JigsawCompanyId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastActivityDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Locations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MaintenancePlans\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MasterRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"MasterRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MessagingEndUsers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MessagingSessions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NaicsCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NaicsDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NumberOfEmployees\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"NumberofLocations__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OperatingHours\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OperatingHours\"/>\n        <element name=\"OperatingHoursId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Opportunities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpportunityPartnersTo\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Orders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Ownership\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ParentRecords\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PartnersFrom\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PartnersTo\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PaymentAuthAdjustments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PaymentAuthorizations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Payments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductRequestLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductRequests\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProvidedAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Rating\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordAssociatedGroups\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RefundLinePayments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Refunds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedAuthorizationFormConsents\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ResourcePreferences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SLAExpirationDate__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SLASerialNumber__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SLA__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ScorecardAssociations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceAppointmentAccount\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceAppointments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceContracts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceResources\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServicedAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShippingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ShippingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShippingLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShippingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Sic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SicDesc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Site\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SwarmMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Swarms\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TickerSymbol\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Tradestyle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UpsellOpportunity__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserDefinedLabelAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"Users\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Website\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"WorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkPlanSelectionRules\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"YearStarted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountNumber": {
+      "field_label": "Account Number",
+      "type": "string",
+      "length": "40"
+    },
+    "AccountSource": {
+      "field_label": "Account Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Active__c": {
+      "field_label": "Active",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ActivityMetricId": {
+      "field_label": "Activity Metric ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivityMetricRollupId": {
+      "field_label": "Activity Metric Rollup ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AnnualRevenue": {
+      "field_label": "Annual Revenue",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "BillingAddress": {
+      "field_label": "Billing Address",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "Billing City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Billing Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Billing Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Billing Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Billing Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingPostalCode": {
+      "field_label": "Billing Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingState": {
+      "field_label": "Billing State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Billing Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "ChannelProgramLevelName": {
+      "field_label": "Channel Program Level Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ChannelProgramName": {
+      "field_label": "Channel Program Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CleanStatus": {
+      "field_label": "Clean Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Account Currency",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CustomerPriority__c": {
+      "field_label": "Customer Priority",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DandbCompanyId": {
+      "field_label": "D&B Company ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Account Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DunsNumber": {
+      "field_label": "D-U-N-S Number",
+      "type": "string",
+      "length": "9"
+    },
+    "Fax": {
+      "field_label": "Account Fax",
+      "type": "phone",
+      "length": "40"
+    },
+    "FirstName": {
+      "field_label": "First Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Account ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Industry": {
+      "field_label": "Industry",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsBuyer": {
+      "field_label": "Buyer Account",
+      "type": "boolean"
+    },
+    "IsCustomerPortal": {
+      "field_label": "Customer Portal Account",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPartner": {
+      "field_label": "Partner Account",
+      "type": "boolean"
+    },
+    "IsPersonAccount": {
+      "field_label": "Is Person Account",
+      "type": "boolean"
+    },
+    "IsPriorityRecord": {
+      "field_label": "Important",
+      "type": "boolean"
+    },
+    "Jigsaw": {
+      "field_label": "Data.com Key",
+      "type": "string",
+      "length": "20"
+    },
+    "JigsawCompanyId": {
+      "field_label": "Jigsaw Company ID",
+      "type": "string",
+      "length": "20"
+    },
+    "LastActivityDate": {
+      "field_label": "Last Activity",
+      "type": "date"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastName": {
+      "field_label": "Last Name",
+      "type": "string",
+      "length": "80"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MasterRecordId": {
+      "field_label": "Master Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NaicsCode": {
+      "field_label": "NAICS Code",
+      "type": "string",
+      "length": "8"
+    },
+    "NaicsDesc": {
+      "field_label": "NAICS Description",
+      "type": "string",
+      "length": "120"
+    },
+    "Name": {
+      "field_label": "Account Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NumberOfEmployees": {
+      "field_label": "Employees",
+      "type": "int",
+      "digits": "8"
+    },
+    "NumberofLocations__c": {
+      "field_label": "Number of Locations",
+      "type": "double",
+      "precision": "3",
+      "scale": "0"
+    },
+    "OperatingHoursId": {
+      "field_label": "Operating Hour ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Ownership": {
+      "field_label": "Ownership",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ParentId": {
+      "field_label": "Parent Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PersonActionCadenceAssigneeId": {
+      "field_label": "Cadence Assignee ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PersonActionCadenceId": {
+      "field_label": "Cadence ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PersonActionCadenceState": {
+      "field_label": "Cadence State",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PersonActiveTrackerCount": {
+      "field_label": "Total Cadences",
+      "type": "int",
+      "digits": "9"
+    },
+    "PersonAssistantName": {
+      "field_label": "Assistant",
+      "type": "string",
+      "length": "40"
+    },
+    "PersonAssistantPhone": {
+      "field_label": "Asst. Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PersonBirthdate": {
+      "field_label": "Birthdate",
+      "type": "date"
+    },
+    "PersonContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PersonDepartment": {
+      "field_label": "Department",
+      "type": "string",
+      "length": "80"
+    },
+    "PersonEmail": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "PersonEmailBouncedDate": {
+      "field_label": "Email Bounced Date",
+      "type": "datetime"
+    },
+    "PersonEmailBouncedReason": {
+      "field_label": "Email Bounced Reason",
+      "type": "string",
+      "length": "255"
+    },
+    "PersonGender": {
+      "field_label": "Gender",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PersonGenderIdentity": {
+      "field_label": "Gender Identity",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PersonHasOptedOutOfEmail": {
+      "field_label": "Email Opt Out",
+      "type": "boolean"
+    },
+    "PersonHasOptedOutOfFax": {
+      "field_label": "Fax Opt Out",
+      "type": "boolean"
+    },
+    "PersonHomePhone": {
+      "field_label": "Home Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PersonIndividualId": {
+      "field_label": "Individual ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PersonLastCURequestDate": {
+      "field_label": "Last Stay-in-Touch Request Date",
+      "type": "datetime"
+    },
+    "PersonLastCUUpdateDate": {
+      "field_label": "Last Stay-in-Touch Save Date",
+      "type": "datetime"
+    },
+    "PersonLeadSource": {
+      "field_label": "Lead Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PersonMailingAddress": {
+      "field_label": "Mailing Address",
+      "type": "address"
+    },
+    "PersonMailingCity": {
+      "field_label": "Mailing City",
+      "type": "string",
+      "length": "40"
+    },
+    "PersonMailingCountry": {
+      "field_label": "Mailing Country",
+      "type": "string",
+      "length": "80"
+    },
+    "PersonMailingGeocodeAccuracy": {
+      "field_label": "Mailing Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PersonMailingLatitude": {
+      "field_label": "Mailing Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "PersonMailingLongitude": {
+      "field_label": "Mailing Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "PersonMailingPostalCode": {
+      "field_label": "Mailing Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "PersonMailingState": {
+      "field_label": "Mailing State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "PersonMailingStreet": {
+      "field_label": "Mailing Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "PersonMobilePhone": {
+      "field_label": "Mobile",
+      "type": "phone",
+      "length": "40"
+    },
+    "PersonOtherAddress": {
+      "field_label": "Other Address",
+      "type": "address"
+    },
+    "PersonOtherCity": {
+      "field_label": "Other City",
+      "type": "string",
+      "length": "40"
+    },
+    "PersonOtherCountry": {
+      "field_label": "Other Country",
+      "type": "string",
+      "length": "80"
+    },
+    "PersonOtherGeocodeAccuracy": {
+      "field_label": "Other Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PersonOtherLatitude": {
+      "field_label": "Other Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "PersonOtherLongitude": {
+      "field_label": "Other Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "PersonOtherPhone": {
+      "field_label": "Other Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PersonOtherPostalCode": {
+      "field_label": "Other Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "PersonOtherState": {
+      "field_label": "Other State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "PersonOtherStreet": {
+      "field_label": "Other Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "PersonPronouns": {
+      "field_label": "Pronouns",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PersonScheduledResumeDateTime": {
+      "field_label": "Cadence Resume Time",
+      "type": "datetime"
+    },
+    "PersonTitle": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "80"
+    },
+    "Phone": {
+      "field_label": "Account Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PhotoUrl": {
+      "field_label": "Photo URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Rating": {
+      "field_label": "Account Rating",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecordTypeId": {
+      "field_label": "Record Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SLAExpirationDate__c": {
+      "field_label": "SLA Expiration Date",
+      "type": "date"
+    },
+    "SLASerialNumber__c": {
+      "field_label": "SLA Serial Number",
+      "type": "string",
+      "length": "10"
+    },
+    "SLA__c": {
+      "field_label": "SLA",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Salutation": {
+      "field_label": "Salutation",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShippingAddress": {
+      "field_label": "Shipping Address",
+      "type": "address"
+    },
+    "ShippingCity": {
+      "field_label": "Shipping City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShippingCountry": {
+      "field_label": "Shipping Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingGeocodeAccuracy": {
+      "field_label": "Shipping Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShippingLatitude": {
+      "field_label": "Shipping Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingLongitude": {
+      "field_label": "Shipping Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingPostalCode": {
+      "field_label": "Shipping Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShippingState": {
+      "field_label": "Shipping State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingStreet": {
+      "field_label": "Shipping Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Sic": {
+      "field_label": "SIC Code",
+      "type": "string",
+      "length": "20"
+    },
+    "SicDesc": {
+      "field_label": "SIC Description",
+      "type": "string",
+      "length": "80"
+    },
+    "Site": {
+      "field_label": "Account Site",
+      "type": "string",
+      "length": "80"
+    },
+    "SourceSystemIdentifier": {
+      "field_label": "Source System ID",
+      "type": "string",
+      "length": "85"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TickerSymbol": {
+      "field_label": "Ticker Symbol",
+      "type": "string",
+      "length": "20"
+    },
+    "Tradestyle": {
+      "field_label": "Tradestyle",
+      "type": "string",
+      "length": "255"
+    },
+    "Type": {
+      "field_label": "Account Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UpsellOpportunity__c": {
+      "field_label": "Upsell Opportunity",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Website": {
+      "field_label": "Website",
+      "type": "url",
+      "length": "255"
+    },
+    "YearStarted": {
+      "field_label": "Year Started",
+      "type": "string",
+      "length": "4"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

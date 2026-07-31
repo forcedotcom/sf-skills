@@ -1,0 +1,131 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "AIInsightAction - Data API",
+  "description": "Represents an Einstein prediction insight action. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of the associated action, such as the ID of a Macro. This is a polymorphic relationship field.",
+      "relationship_name": "Action",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass, AuraDefinitionBundle"
+    },
+    "ActionName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The ID of the action. For example, a value of “Case.SendEmail” indicates a send email quick action on Case."
+    },
+    "AiRecordInsightId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the associated AIRecordInsight. This is a relationship field.",
+      "relationship_name": "AiRecordInsight",
+      "relationship_type": "Lookup",
+      "refers_to": "AIRecordInsight"
+    },
+    "Confidence": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Relative confidence strength of the generated prediction insight. Higher values (near 1.0) indicate stronger confidence."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the AIInsightAction."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of action. Possible values are: InvocableAction—Invocable Action Macro—Macro QuickAction—Quick action. StandardAction—Standard Action. An example standard action would be to update a record."
+    }
+  },
+  "special_access_rules": "Prediction insight objects are only available in orgs that have Einstein features, such as Prediction Builder or Case Classification, enabled.",
+  "usage": "When an Einstein feature makes a prediction and saves the results, the following events happen in a single atomic operation: When Einstein writes prediction results back to AI prediction fields, record save custom logic, such as Apex triggers, workflow rules, and assignment rules, aren’t run. To add custom logic based on Einstein prediction results, use a platform event subscriber, such as Process Builder, to get notifications for AIPredictionEvents that contain references to Einstein insight objects. Custom fields can’t be added to Einstein insight objects. Einstein insights contain information about target fields and predicted value. Your org may have created Einstein predictions that are associated with target fields with field-level security restrictions. To control how users access Einstein insights records, use Salesforce data access features such as user profiles and permission sets.\n\nWhen an Einstein feature makes a prediction and saves the results, the following events happen in a single atomic operation:\n\nWhen Einstein writes prediction results back to AI prediction fields, record save custom logic, such as Apex triggers, workflow rules, and assignment rules, aren’t run. To add custom logic based on Einstein prediction results, use a platform event subscriber, such as Process Builder, to get notifications for AIPredictionEvents that contain references to Einstein insight objects.\n\nCustom fields can’t be added to Einstein insight objects.\n\nEinstein insights contain information about target fields and predicted value. Your org may have created Einstein predictions that are associated with target fields with field-level security restrictions. To control how users access Einstein insights records, use Salesforce data access features such as user profiles and permission sets.",
+  "field_reference": {
+    "ActionId": {
+      "field_label": "Action ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActionName": {
+      "field_label": "Action Name",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AiRecordInsightId": {
+      "field_label": "AI Record Insight ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Confidence": {
+      "field_label": "Confidence",
+      "type": "double",
+      "precision": "4",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "AIInsightAction ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Action Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

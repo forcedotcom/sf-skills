@@ -1,0 +1,172 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CombinedAttachment - Data API",
+  "description": "This read-only object contains all notes, attachments, Google Docs, documents uploaded to libraries in Salesforce CRM content, and files added to Chatter that are associated with a record.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentSize": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the document in bytes for documents smaller than 2 GB. In API version 66.0 and later, we recommend that you use the ContentSizeLong field even for documents smaller than 2 GB."
+    },
+    "ContentSizeLong": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the document in bytes up to 10 GB. This field is available in API version 66.0 and later."
+    },
+    "ContentUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL for links and Google Docs. This field is set only for links and Google Docs, and is one of the fields that determine the FileType. This field is available in API version 31.0 and later."
+    },
+    "ExternalDataSourceName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the external data source in which the document is stored. This field is set only for external documents that are connected to Salesforce.This field is available in API version 32.0 and later."
+    },
+    "ExternalDataSourceType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of external data source in which the document is stored. This field is set only for external documents that are connected to Salesforce.This field is available in API version 35.0 and later."
+    },
+    "FileExtension": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "File extension of the document. This field is available in API version 31.0 and later."
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Type of document, which is determined by the file extension."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the parent object. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, ActivationTarget, ActivationTrgtIntOrgAccess, ApiAnomalyEventStore, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskIndDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CodeSet, CollaborationGroup, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, ConsumptionSchedule, Contact, ContactEncounter, ContactEncounterParticipant, ContentWorkspace, Contract, ConversationEntry, CoverageBenefit, CoverageBenefitItem, CredentialStuffingEventStore, CreditMemo, CreditMemoLine, Dashboard, DashboardComponent, DataStream, DelegatedAccount, DocumentChecklistItem, EmailMessage, EmailTemplate, EngagementChannelType, EnhancedLetterhead, EnrollmentEligibilityCriteria, Event, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, Identifier, IdentityDocument, Image, IndividualApplication, Invoice, InvoiceLine, Lead, ListEmail, Location, MarketSegment, MarketSegmentActivation, MemberPlan, MessagingSession, MktCalculatedInsight, OperatingHours, Opportunity, Order, OrderItem, Organization, OtherComponentTask, PartyConsent, PersonEducation, PersonLanguage, PersonLifeEvent, PersonName, PlanBenefit, PlanBenefitItem, Product2, ProductFulfillmentLocation, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, ProviderSearchSyncLog, PurchaserPlan, PurchaserPlanAssn, ReceivedDocument, Report, ReportAnomalyEventStore, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, ServiceTerritoryWorkType, SessionHijackingEventStore, Shift, Shipment, ShipmentItem, Site, SkillRequirement, SocialPost, Solution, Task, ThreatDetectionFeedback, User, Visit, VisitedParty, Visitor, VoiceCall, VolunteerProject, WorkBadgeDefinition, WorkOrder, WorkOrderLineItem, WorkType, WorkTypeGroup, WorkTypeGroupMember"
+    },
+    "RecordType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The parent object type."
+    },
+    "SharingOption": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Controls whether sharing is frozen for a file. Only Salesforce admins and file owners with Collaborator access to the file can modify this field. The default is Allowed, which means that new shares are allowed. When set to Restricted, new shares are prevented without affecting existing shares.This field is available in API versions 35.0 and later."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Title of the attached file."
+    }
+  },
+  "usage": "Use this object to list all notes, attachments, documents uploaded to libraries in Salesforce CRM content, and files added to Chatter for a record, such as a related list on a detail page. To determine if an object supports the CombinedAttachment object, call describeSObject() on the object. For example, describeSObject('Account') returns all the child relationships of the Account object, including CombinedAttachment. You can then query the CombinedAttachment child relationship. You can’t directly query CombinedAttachment.\n\nUse this object to list all notes, attachments, documents uploaded to libraries in Salesforce CRM content, and files added to Chatter for a record, such as a related list on a detail page.\n\nTo determine if an object supports the CombinedAttachment object, call describeSObject() on the object. For example, describeSObject('Account') returns all the child relationships of the Account object, including CombinedAttachment. You can then query the CombinedAttachment child relationship.\n\nYou can’t directly query CombinedAttachment.",
+  "wsdl_segment": "```xml\n<complexType name=\"CombinedAttachment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentSize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ContentSizeLong\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"ContentUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalDataSourceName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalDataSourceType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FileExtension\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FileType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contract\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RecordType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SharingOption\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ContentSize": {
+      "field_label": "Content Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "ContentSizeLong": {
+      "field_label": "Content Size",
+      "type": "long",
+      "digits": "18"
+    },
+    "ContentUrl": {
+      "field_label": "Content URL",
+      "type": "url",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created",
+      "type": "datetime"
+    },
+    "ExternalDataSourceName": {
+      "field_label": "External Data Source",
+      "type": "string",
+      "length": "80"
+    },
+    "ExternalDataSourceType": {
+      "field_label": "Class ID",
+      "type": "picklist",
+      "length": "80"
+    },
+    "FileExtension": {
+      "field_label": "File Extension",
+      "type": "string",
+      "length": "40"
+    },
+    "FileType": {
+      "field_label": "File Type",
+      "type": "string",
+      "length": "30"
+    },
+    "Id": {
+      "field_label": "Combined Attachment Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Content Modified Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecordType": {
+      "field_label": "Type",
+      "type": "string",
+      "length": "30"
+    },
+    "SharingOption": {
+      "field_label": "Prevent others from sharing and unsharing",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

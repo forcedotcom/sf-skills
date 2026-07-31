@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PersonAccountOwnerPowerUser - Data API",
+  "description": "Represents a user who can own more than 50,000 customer or partner portal accounts. Person account owner power users can own a large number of either customer or partner users. Their role can’t be changed and they must be at the root of the role hierarchy. Person account owner power user objects can't be created if deferred sharing is turned on for your org. Person account owner power user objects can be created while deferred sharing is turned off for an org. Deferred sharing can be turned back on after person account owner power user objects have been created. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language that the user’s account is set to. The user is specified using the UserId field. See Salesforce Help for a full list of languages."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label entered when the person account owner power user is created."
+    },
+    "PortalType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of portal user account that the person account owner power user can own. A possible value is: CustomerPortal—Customer Portal"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique ID associated with the person account owner power user. This field is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "Create a PersonAccountOwnerPowerUser object. Enter the user ID of the power user and the type of users that they can own, Customer Portal or Partner.\n\nOnly users at the highest level of a hierarchy can be added to the\n            PersonAccountOwnerPowerUser object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Person Account Owner Power User ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "PortalType": {
+      "field_label": "Portal Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

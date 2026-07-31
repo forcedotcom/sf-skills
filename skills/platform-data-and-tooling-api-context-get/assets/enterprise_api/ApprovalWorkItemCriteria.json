@@ -1,0 +1,118 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ApprovalWorkItemCriteria - Data API",
+  "description": "Represents the logic by which a smart approval request is evaluated. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApprovalStepApiName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The unique API name of the approval step that uses the logic in the approval work item criteria."
+    },
+    "ApprovalWorkItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The parent approval work item associated with the approval work item criteria. This field is a relationship field.",
+      "relationship_name": "ApprovalWorkItem",
+      "relationship_type": "Master-detail",
+      "refers_to": "ApprovalWorkItem (the master object)"
+    },
+    "CriteriaType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether the requirement logic is for an entry or exit condition. Possible values are: Entry Exit"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The sequentially-generated name of the approval work item criteria record, for example AWCR-000000071."
+    },
+    "RequirementLogic": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The requirement logic of all entry or exit conditions."
+    }
+  },
+  "special_access_rules": "This object is available in Enterprise, Professional, Unlimited, and Developer Editions where Advanced Approvals is enabled with the Modify All Data or the Approval Admin user permission.\n\nThis object is available in Enterprise,\n         Professional, Unlimited, and Developer Editions where Advanced Approvals is enabled with\n         the Modify All Data or the Approval Admin user permission.",
+  "field_reference": {
+    "ApprovalStepApiName": {
+      "field_label": "Approval Step Api Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ApprovalWorkItemId": {
+      "field_label": "Approval Work Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CriteriaType": {
+      "field_label": "Criteria Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Approval Work Item Criteria ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Approval Work Item Criteria Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RequirementLogic": {
+      "field_label": "Requirement Logic",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

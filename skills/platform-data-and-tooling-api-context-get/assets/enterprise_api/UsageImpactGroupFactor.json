@@ -1,0 +1,141 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "UsageImpactGroupFactor - Data API",
+  "description": "Represents a junction between an Usage Impact Group version and Usage Impact Factor. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "FactorValue": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Defines the value of the Usage Impact Group Factor."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the Usage Impact Group Factor is active. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the Usage Impact Group Factor."
+    },
+    "UnitOfMeasureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The UnitOfMeasure object associated with the Usage Impact Group Factor. This field is a relationship field.",
+      "relationship_name": "UnitOfMeasure",
+      "relationship_type": "Lookup",
+      "refers_to": "UnitOfMeasure"
+    },
+    "UsageImpactFactorId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Usage Impact Factor object associated with the Usage Impact Group Factor. This field is a relationship field.",
+      "relationship_name": "UsageImpactFactor",
+      "relationship_type": "Lookup",
+      "refers_to": "UsageImpactFactor"
+    },
+    "UsageImpactGroupVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Usage Impact Group Version object associated with the Usage Impact Group Factor. This field is a relationship field.",
+      "relationship_name": "UsageImpactGroupVersion",
+      "relationship_type": "Lookup",
+      "refers_to": "UsageImpactGroupVersion"
+    }
+  },
+  "special_access_rules": "This object is available only with EAndU Cloud Usage Impact Access permission set.\n\nThis object is available only with EAndU Cloud Usage\n         Impact Access permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **UsageImpactGroupFactorChangeEvent**: Change events are available for the object.\n- **UsageImpactGroupFactorFeed**: Feed tracking is available for the object.\n- **UsageImpactGroupFactorHistory**: History is available for tracked fields of the object.\n- **UsageImpactGroupFactorOwnerSharingRule**: Sharing rules are available for the object.\n- **UsageImpactGroupFactorShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FactorValue": {
+      "field_label": "Factor Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Id": {
+      "field_label": "Usage Impact Group Factor ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UsageImpactFactorId": {
+      "field_label": "Usage Impact Factor ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UsageImpactGroupVersionId": {
+      "field_label": "Usage Impact Group Version ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

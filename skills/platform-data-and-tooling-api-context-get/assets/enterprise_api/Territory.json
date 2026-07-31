@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "Territory - Data API",
+  "description": "Represents a flexible collection of accounts and users where the users have at least read access to the accounts, regardless of who owns the accounts. Available if Sales Territories has been enabled. This object is available in API versions 7.0 to 52.0. Use Territory2 instead of Territory in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Account access level granted to users assigned to this territory."
+    },
+    "CaseAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Group, Sort, Update",
+      "description": "Case access level granted to users assigned to this territory."
+    },
+    "ContactAccessLevel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A value that represents the type of access granted to the target Group, UserRole, or User for any associated contacts. The possible values are: None Read Edit Note: When DefaultContactAccess is set to “Controlled by Parent,” you can’t create or update this field."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A description of the territory that is 1,000 characters or less."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object's name in a managed package and the changes are reflected in a subscriber's organization. Corresponds to Territory Name in the user interface. This field is available in API version 24.0 and later. When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record."
+    },
+    "ForecastUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Forecast Manager, who is the user to whom forecasts from this territory’s child territories roll up."
+    },
+    "MayForecastManagerShare": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the forecast manager can manually share their own forecast."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A name for the territory. Limit is 80 characters. Corresponds to Label on the user interface."
+    },
+    "OpportunityAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Opportunity access level granted to users assigned to this territory."
+    },
+    "ParentTerritoryID": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Territory immediately above this territory in the territory hierarchy. Label is Parent Territory ID."
+    },
+    "RestrictOppTransfer": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Update",
+      "description": "Indicates whether the opportunities associated with this territory are kept within the bounds of this territory and this territory’s children when account assignment rules are run (true), or if opportunities associated with this territory can be assigned to other nodes of the territory hierarchy when account assignment rules are run (false). Label is Confine Opportunity Assignment."
+    }
+  },
+  "special_access_rules": "Standard and partner users can access this object. Users assigned to the Manage Territories permission set can edit this object.",
+  "usage": "Use the Territory object to query your organization’s territory hierarchy. Use it to obtain valid territory IDs when querying or modifying records associated with territories."
+}

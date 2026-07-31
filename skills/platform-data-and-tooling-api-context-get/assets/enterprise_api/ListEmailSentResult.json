@@ -1,0 +1,265 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ListEmailSentResult - Data API",
+  "description": "Represents the results of a list email sent from Salesforce, or sent from Account Engagement and synced to Salesforce. It contains transport headers and information specific to the associated send action. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ActionCadenceStepTrackerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the action cadence step tracker related to the individual recipient of the list email. Used for automated emails in Sales Engagement. Users must have the Sales Engagement Cadence Creator or Sales Engagement User permission enabled.",
+      "relationship_name": "ActionCadenceStepTracker",
+      "refers_to": "ActionCadenceStepTracker"
+    },
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The task representation of the sent email.",
+      "relationship_name": "Activity",
+      "refers_to": "Task"
+    },
+    "EmailAdress": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The email address of the recipient."
+    },
+    "FirstClickedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the email link was first clicked."
+    },
+    "FirstOpenedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the email was first opened."
+    },
+    "HasReply": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email has a reply (true) or not (false) The default value is false."
+    },
+    "Headers": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The internet message headers of the email used for debugging and email threading purposes."
+    },
+    "isClicked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the individual copy of the list email is clicked true or false. The default value is false."
+    },
+    "IsLinkTracked": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on Create, Filter, Group, Sort, Update",
+      "description": "Indicates whether there are any URLs in the email that can be tracked (true) or not (false). The default value is false."
+    },
+    "IsOpenTracked": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on Create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the email is trackable (true) or not (false). The default value is false."
+    },
+    "IsOpened": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email has been opened (true) or not (false). The default value is false."
+    },
+    "LastClickedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the email was last clicked."
+    },
+    "LastOpenedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the email was last opened."
+    },
+    "ListEmailId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the list email that's associated with the email.",
+      "relationship_name": "ListEmail",
+      "relationship_type": "Master-detail",
+      "refers_to": "ListEmail (the master object)"
+    },
+    "MessageIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, idLookup, Nillable, Sort, Update",
+      "description": "The internet ID of an email."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the list email sent result."
+    },
+    "Reason": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the reason why a list email failed to send. Possible values are: Bounced DomainUnauthorized- Unauthorized Domain NoEmail - No Email Address OptedOut - Opted Out OutOfOffice - Out of Office Restricted - Restricted Address SoftBounced - Soft Bounced"
+    },
+    "RecipientId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the individual list email recipient. This field is a polymorphic relationship field.",
+      "relationship_name": "Recipient",
+      "refers_to": "Contact, Lead"
+    },
+    "Result": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted Picklist, Sort, Update",
+      "description": "Indicates the result of the sent list email. Possible values are: Failed NotSent Sent"
+    },
+    "ThreadIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, idLookup, Nillable, Sort, Update",
+      "description": "The thread ID of the email."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ListEmailSentResult\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Activity\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Task\"/>\n        <element name=\"ActivityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EmailAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Headers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ListEmail\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ListEmail\"/>\n        <element name=\"ListEmailId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MessageIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Reason\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Recipient\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RecipientId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Result\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ThreadIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActionCadenceStepTrackerId": {
+      "field_label": "Cadence Step Tracker ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivityId": {
+      "field_label": "Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EmailAddress": {
+      "field_label": "Email",
+      "type": "textarea",
+      "length": "320"
+    },
+    "FirstClickedDate": {
+      "field_label": "First Link Clicked Date",
+      "type": "datetime"
+    },
+    "FirstOpenedDate": {
+      "field_label": "First Opened Date",
+      "type": "datetime"
+    },
+    "HasReply": {
+      "field_label": "Has Reply",
+      "type": "boolean"
+    },
+    "Headers": {
+      "field_label": "Headers",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Id": {
+      "field_label": "List Email Sent Result ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsClicked": {
+      "field_label": "Is Clicked",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsLinkTracked": {
+      "field_label": "Is Link Tracked",
+      "type": "boolean"
+    },
+    "IsOpenTracked": {
+      "field_label": "Is Open Tracked",
+      "type": "boolean"
+    },
+    "IsOpened": {
+      "field_label": "Is Opened",
+      "type": "boolean"
+    },
+    "LastClickedDate": {
+      "field_label": "Last Link Clicked Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastOpenedDate": {
+      "field_label": "Last Opened Date",
+      "type": "datetime"
+    },
+    "ListEmailId": {
+      "field_label": "List Email ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MessageIdentifier": {
+      "field_label": "Message Identifier",
+      "type": "string",
+      "length": "765"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Reason": {
+      "field_label": "Reason",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecipientId": {
+      "field_label": "Recipient ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Result": {
+      "field_label": "Result",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ThreadIdentifier": {
+      "field_label": "Thread Identifier",
+      "type": "string",
+      "length": "765"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

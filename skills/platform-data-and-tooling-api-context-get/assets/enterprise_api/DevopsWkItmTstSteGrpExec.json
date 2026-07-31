@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsWkItmTstSteGrpExec - Data API",
+  "description": "Represents the association between a DevOpsWork Item and a DevOpsTestSuiteGroupExecution. This object is used to track which work items are linked to specific test suite group execution records, enabling traceability between development work and test execution activities within the DevOps lifecycle. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DevopsTestSuiteGroupExecId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the DevOps Test Suite Group Execution associated with this record. This field is a relationship field.",
+      "relationship_name": "DevopsTestSuiteGroupExec",
+      "refers_to": "DevopsTestSuiteGroupExec"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The system-generated unique identifier for the record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "References the user or queue that owns this record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "WorkItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the work item linked to this test suite group execution record.",
+      "relationship_name": "WorkItem",
+      "refers_to": "WorkItem"
+    }
+  }
+}

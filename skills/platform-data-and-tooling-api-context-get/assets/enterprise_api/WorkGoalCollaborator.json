@@ -1,0 +1,38 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "WorkGoalCollaborator - Data API",
+  "description": "Represents collaborators on a WorkGoal object. This doesn’t include WorkGoal followers, which is handled by Chatter Feed Follow functionality. This object has been deprecated as of API version 35.0. Use the Goal object to query information about WDC goals.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "InvitationDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date that a user was invited to become a collaborator (nill if the user was not invited)."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates the state of the collaborating user. Whether the user has not responded, joined, or declined collaboration. The possible values are: PendingResponse: a user who was invited to collaborate but hasn’t joined or declined Joined: a user who is collaborating on a goal (joined/commit) Declined: a user who declined to collaborate on a goal"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The collaborating user."
+    },
+    "WorkGoalId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The WorkGoal object that this collaborator is a part of."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **WorkGoalCollaboratorHistory**: History is available for tracked fields of the object."
+}

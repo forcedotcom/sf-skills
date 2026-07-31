@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "EnblProgramTaskMeasure - Data API",
+  "description": "Represents the connection between an Enablement measure and a specific milestone or outcome in an Enablement program. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EnablementMeasureDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Enablement measure to use with a milestone or outcome. This field is a relationship field.",
+      "relationship_name": "EnablementMeasureDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "EnablementMeasureDefinition"
+    },
+    "EnblProgramTaskDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the outcome or milestone that uses the Enablement measure. This field is a relationship field.",
+      "relationship_name": "EnblProgramTaskDefinition",
+      "relationship_type": "Master-detail",
+      "refers_to": "EnblProgramTaskDefinition (the master object)"
+    },
+    "SequenceNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A number that specifies the order of the Enablement measure when multiple measures are used with one outcome or milestone, starting at 0. For example, in a composite milestone that uses the Percentage function, the measure that provides the numerator value is sequence 0 and the measure that provides the denominator value is sequence 1."
+    }
+  },
+  "special_access_rules": "To access this object, the Design and Deliver Enablement Programs permission is required. This permission is enabled by default as part of the Manage Enablement Essentials permission set, which comes with the Enablement add-on license."
+}

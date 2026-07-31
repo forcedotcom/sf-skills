@@ -1,0 +1,180 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "BriefcaseRule - Data API",
+  "description": "Represents a rule that specifies records for a briefcase definition. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BriefcaseId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the briefcase definition. Label is Briefcase Definition ID. This field is a relationship field.",
+      "relationship_name": "Briefcase",
+      "relationship_type": "Lookup",
+      "refers_to": "BriefcaseDefinition",
+      "required": true
+    },
+    "FilterLogic": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The filter logic for record selection, for example, 1 AND 2 where 1 and 2 correspond to filter 1 and filter 2. Filter logic operators include AND and OR. Limited to 255 characters. Label is Filter Logic."
+    },
+    "IsAscendingOrder": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the records should be sorted in ascending order. Label is Ascending.",
+      "required": true
+    },
+    "OptionsIsRelatedFilesRule": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the briefcase rule is part of a hierarchical set of rules that configure the offline priming of file attachments. Available only for the Offline App (Salesforce Mobile App Plus)."
+    },
+    "OrderBy": {
+      "type": "picklist",
+      "properties": "Nillable, Restricted picklist",
+      "description": "The field to order the records by, which determines how the records can be sorted. For example, AccountName or CreatedBy. Label is Order By."
+    },
+    "ParentRuleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the parent rule of this briefcase rule. This field is a relationship field.",
+      "relationship_name": "ParentRule",
+      "relationship_type": "Lookup",
+      "refers_to": "BriefcaseRule"
+    },
+    "QueryScope": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "A group of records to restrict the scope of this rule. Possible values are: assignedToMe everything mine The default value is everything (All Records). The value assignedToMe is available only for the ServiceAppointment object.",
+      "required": true
+    },
+    "RecordLimit": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The record limit for the object. The recommended number for record limit is up to 500 records per object for optimal performance. The maximum number is 2000. Label is Limit."
+    },
+    "RelationshipField": {
+      "type": "picklist",
+      "properties": "Nillable, Restricted picklist",
+      "description": "The Salesforce object field that relates the briefcase rule to another briefcase rule. For example, an Account rule can be related to a Contact rule using the Account ID object field. In this example, the value for the briefcase rule's RelationshipField is AccountID."
+    },
+    "RelationshipType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The relationship of the briefcase rule to another briefcase rule. Possible values are: ParentToChild ChildToParent"
+    },
+    "TargetEntity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The standard object, custom object, or custom metadata type that the briefcase rule selects records from. The UI label is Target Object."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "wsdl_segment": "```xml\n<complexType name=\"BriefcaseRule\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Briefcase\" nillable=\"true\" minOccurs=\"0\" type=\"ens:BriefcaseDefinition\"/>\n        <element name=\"BriefcaseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"BriefcaseRuleFilters\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FilterLogic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsAscendingOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OptionsIsRelatedFilesRule\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OrderBy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ParentRule\" nillable=\"true\" minOccurs=\"0\" type=\"ens:BriefcaseRule\"/>\n        <element name=\"ParentRuleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"QueryScope\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordLimit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RelatedBriefcaseRules\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelationshipField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RelationshipType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TargetEntity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "BriefcaseId": {
+      "field_label": "Briefcase Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FilterLogic": {
+      "field_label": "Filter Logic",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Briefcase Rule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAscendingOrder": {
+      "field_label": "Ascending",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OptionsIsRelatedFilesRule": {
+      "field_label": "IsRelatedFilesRule",
+      "type": "boolean"
+    },
+    "OrderBy": {
+      "field_label": "Order By",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ParentRuleId": {
+      "field_label": "Briefcase Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QueryScope": {
+      "field_label": "Scope",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecordLimit": {
+      "field_label": "Limit",
+      "type": "int",
+      "digits": "9"
+    },
+    "RelationshipField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelationshipType": {
+      "field_label": "Relationship Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetEntity": {
+      "field_label": "Target Object",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "GenAiPlannerDefinition - Data API",
+  "description": "Represents an agent planner service that uses a large language model (LLM) and a reasoning strategy to decompose a given task into smaller subtasks, identify the most suitable actions for each subtask, and invoke them. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Capabilities": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A set of tags associated with the agent planner service definition."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A description explaining the general purpose and domain of the agent planner service definition."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name for this object."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the GenAiPlannerDefinition. The value for this field is the language value of the org."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The master label of the agent planner service definition."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the GenAiPlannerDefinition."
+    },
+    "PlannerType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A particular approach to problem solving that is given as prompt instructions to a large language model (LLM). Possible values are: AiCopilot__ReAct—Uses a reactive planning strategy to solve problems with the LLM. This strategy consists of prompting the LLM to generate the next step in response to an event and the current context. It differs from a sequential planner in that it doesn’t plan more than one step ahead of time. AiCopilot__SequentialPlannerIntentClassifier—Uses an intent classifier prompt and a sequential planner prompt. With each text input, the planner asks the LLM to generate a step-by-step plan to finish the goal. It plans first, then executes."
+    }
+  },
+  "special_access_rules": "To access this object, Agents must be enabled in your org.\n\nTo access this object, Agents must be enabled in\n         your org."
+}

@@ -12,7 +12,7 @@ Verify the target org is not a production org:
 sf data query --json -q "SELECT IsSandbox FROM Organization" -o <org-alias>
 ```
 If `IsSandbox` is `false`, display a prominent warning:
-```
+```text
 WARNING: Target org is a PRODUCTION org. Running actions against production
 can modify real data. Proceed with extreme caution.
 ```
@@ -27,7 +27,7 @@ warn the user and recommend using a sandbox or scratch org first.
 - Use synthetic test data: `test@example.com`, `000-00-0000`, `4111111111111111`
 - If the user provides what appears to be real PII, warn them and suggest synthetic alternatives
 
-## Setup: Get Org Credentials
+## Setup: Authenticate the Org
 
 ```bash
 # Ensure org is authenticated
@@ -35,33 +35,33 @@ sf org display --json -o <org-alias>
 
 # If not authenticated, login first
 sf org login web --json --alias <org-alias>
-
-# Extract credentials for API calls
-TOKEN=$(sf org display --json -o <org-alias> | jq -r '.result.accessToken')
-INSTANCE_URL=$(sf org display --json -o <org-alias> | jq -r '.result.instanceUrl')
 ```
+
+All REST calls below use `sf api request rest`, which authenticates at the
+transport layer using the CLI's stored credentials. No access token is ever
+extracted or exposed.
 
 ## Execute a Flow Action
 
 ```bash
-curl -s "$INSTANCE_URL/services/data/v63.0/actions/custom/flow/Get_Order_Status" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"inputs": [{"orderId": "00190000023XXXX"}]}'
+sf api request rest "/services/data/v63.0/actions/custom/flow/Get_Order_Status" \
+  --method POST \
+  --body '{"inputs": [{"orderId": "00190000023XXXX"}]}' \
+  -o <org-alias>
 ```
 
 ## Execute an Apex Action
 
 ```bash
-curl -s "$INSTANCE_URL/services/data/v63.0/actions/custom/apex/OrderProcessor" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"inputs": [{"orderId": "00190000023XXXX", "actionType": "cancel", "reason": "Customer request"}]}'
+sf api request rest "/services/data/v63.0/actions/custom/apex/OrderProcessor" \
+  --method POST \
+  --body '{"inputs": [{"orderId": "00190000023XXXX", "actionType": "cancel", "reason": "Customer request"}]}' \
+  -o <org-alias>
 ```
 
 ## Execute with JSON Input File
 
-For complex inputs, write a JSON file and pass it to curl:
+For complex inputs, write a JSON file and pass it to `sf api request rest` with `--file`:
 
 ```bash
 cat > /tmp/action-inputs.json << 'EOF'
@@ -77,19 +77,21 @@ cat > /tmp/action-inputs.json << 'EOF'
 }
 EOF
 
-curl -s "$INSTANCE_URL/services/data/v63.0/actions/custom/flow/Process_Return" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d @/tmp/action-inputs.json
+sf api request rest "/services/data/v63.0/actions/custom/flow/Process_Return" \
+  --method POST \
+  --file /tmp/action-inputs.json \
+  -o <org-alias>
 ```
 
 ## Pretty-Print Response
 
+Pipe the JSON response through `jq`:
+
 ```bash
-curl -s "$INSTANCE_URL/services/data/v63.0/actions/custom/flow/Get_Order_Status" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"inputs": [{"orderId": "00190000023XXXX"}]}' | jq .
+sf api request rest "/services/data/v63.0/actions/custom/flow/Get_Order_Status" \
+  --method POST \
+  --body '{"inputs": [{"orderId": "00190000023XXXX"}]}' \
+  -o <org-alias> | jq .
 ```
 
 ## Target Protocols
@@ -98,7 +100,7 @@ curl -s "$INSTANCE_URL/services/data/v63.0/actions/custom/flow/Get_Order_Status"
 
 Executes an Autolaunched Flow via REST API:
 
-```
+```text
 POST /services/data/v63.0/actions/custom/flow/{flowApiName}
 ```
 
@@ -132,7 +134,7 @@ Example response:
 
 Executes an @InvocableMethod via REST API:
 
-```
+```text
 POST /services/data/v63.0/actions/custom/apex/{className}
 ```
 
@@ -179,10 +181,10 @@ RECORD_ID=$(sf data create record --json -s Account \
 
 2. **Execute action**:
 ```bash
-curl -s "$INSTANCE_URL/services/data/v63.0/actions/custom/flow/Update_Account" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d "{\"inputs\": [{\"accountId\": \"$RECORD_ID\", \"status\": \"Active\"}]}" | jq .
+sf api request rest "/services/data/v63.0/actions/custom/flow/Update_Account" \
+  --method POST \
+  --body "{\"inputs\": [{\"accountId\": \"$RECORD_ID\", \"status\": \"Active\"}]}" \
+  -o myorg | jq .
 ```
 
 3. **Verify results**:
@@ -213,12 +215,12 @@ List all available custom actions to verify deployment:
 
 ```bash
 # List all Flow actions
-curl -s "$INSTANCE_URL/services/data/v63.0/actions/custom/flow" \
-  -H "Authorization: Bearer $TOKEN" | jq '.actions[].name'
+sf api request rest "/services/data/v63.0/actions/custom/flow" \
+  -o <org-alias> | jq '.actions[].name'
 
 # List all Apex actions
-curl -s "$INSTANCE_URL/services/data/v63.0/actions/custom/apex" \
-  -H "Authorization: Bearer $TOKEN" | jq '.actions[].name'
+sf api request rest "/services/data/v63.0/actions/custom/apex" \
+  -o <org-alias> | jq '.actions[].name'
 ```
 
 ## Error Handling

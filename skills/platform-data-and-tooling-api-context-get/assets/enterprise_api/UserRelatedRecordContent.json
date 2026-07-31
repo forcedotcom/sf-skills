@@ -1,0 +1,39 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "UserRelatedRecordContent - Data API",
+  "description": "Represents the link between a managed content record, an account, event, or opportunity record, and a user record. This object is reserved for future use.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentOwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The user who owns the managed content record associated with the given account, event, or opportunity record. This field is a relationship field.",
+      "relationship_name": "ContentOwner",
+      "refers_to": "User"
+    },
+    "ManagedContentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the managed content record created for the associated Salesforce record. One unique managed content record is created per account, event, or opportunity record per user. This field is a relationship field.",
+      "relationship_name": "ManagedContent",
+      "refers_to": "ManagedContent"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Salesforce record (e.g., account, opportunity, or event) associated with the managed content record. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "refers_to": "Account, Event, Opportunity"
+    }
+  }
+}

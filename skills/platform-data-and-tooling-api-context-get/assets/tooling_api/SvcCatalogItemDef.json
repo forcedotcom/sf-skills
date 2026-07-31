@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "SvcCatalogItemDef - Tooling API",
+  "description": "Represents the grouping of individual catalog items in Service Catalog. This object is available in API version 53.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Free-text description of the catalog item."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Developer name for this catalog item."
+    },
+    "FlowId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The screen flow associated with the catalog item. This is a relationship field.",
+      "relationship_name": "Flow",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowDefinition"
+    },
+    "FulfillmentFlowId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is a relationship field.",
+      "relationship_name": "FulfillmentFlow",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogFulfillmentFlow"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the catalog item. This name has the following requirements: It must be unique across the org. It must contain only alphanumeric characters and underscores. It must begin with a letter. It must not include spaces. It must not end with an underscore. It must not contain two consecutive underscores. Query this field only if the query result contains up to one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "InternalNotes": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Describes what the catalog item does and its implementation. This value is meant for other catalog builders."
+    },
+    "IsFeatured": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Determines if the catalog item is part of the featured catalog items. The default value is 'false'."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted Picklist, Sort",
+      "description": "Possible values are: da - Danish de - German en_US - English es - Spanish es_MX - Spanish (Mexico) fi - Finnish fr - French it - Italian ja - Japanese ko - Korean nl_NL - Dutch no - Norwegian pt_BR - Portuguese (Brazil) ru - Russian sv - Swedish th - Thai zh_CN - Chinese (Simplified) zh_TW - Chinese (Traditional)"
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes the manageable state of a catalog item that is contained in a package. Possible values are: beta—Managed-Beta deleted—Managed-Proposed-Deleted deprecated—Managed-Proposed-Deprecated deprecatedEditable—SecondGen-Installed-Deprecated installed—Managed-Installed installedEditable—SecondGen-Installed-Editable released—Managed-Released unmanaged—Unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The primary label for the catalog item record."
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "The catalog item’s metadata. Query this field only if the query result contains up to one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace associated with this catalog item."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Displays the publishing status of a catalog item. Possible values are: Deprecated Draft PendingChanges Published The default value is 'Draft'."
+    }
+  }
+}

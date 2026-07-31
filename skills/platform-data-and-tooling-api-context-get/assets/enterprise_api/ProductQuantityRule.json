@@ -1,0 +1,106 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ProductQuantityRule - Data API",
+  "description": "Represents the relationship between a quantity rule and a product. This object assigns quantity rules to a product. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO code for the currency that’s specified on the buyer’s account. This field is exposed in orgs that have multicurrency enabled. Default value is USD. Possible values are: EUR—Euro USD—U.S. Dollar"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the product quantity rule."
+    },
+    "ProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the product. This field is a relationship field.",
+      "relationship_name": "Product",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "PurchaseQuantityRuleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the related purchase quantity rule. This field is a relationship field.",
+      "relationship_name": "PurchaseQuantityRule",
+      "relationship_type": "Lookup",
+      "refers_to": "PurchaseQuantityRule"
+    }
+  },
+  "special_access_rules": "The ProductQuantityRule object is available only if the B2B Commerce license or Automotive Cloud license is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Product Quantity Rule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Product Quantity Rule Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PurchaseQuantityRuleId": {
+      "field_label": "Quantity Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "QueueSobject - Data API",
+  "description": "Represents the mapping between a queue Group and the types associated with the queue, including custom objects.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "QueueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of a queue. This field is a relationship field.",
+      "relationship_name": "Queue",
+      "relationship_type": "Lookup",
+      "refers_to": "Group"
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "A list of object types that can be associated with the queue specified by the QueueId."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only authenticated internal and external users can access this object. A queue is a Group whose Type is Queue. To create a Group, you must have the Manage Users permission.\n\nAs of Summer ’20 and later, only authenticated internal and external users can access this object.\n\nA queue is a Group whose Type is Queue. To create a Group, you must have the Manage Users permission.",
+  "usage": "Use this object to associate a queue with the sObject that can be associated with the queue, including custom objects.\n\nYou can't update or insert more than 18 queues at once when using the\n          Bulk API.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"QueueSobject\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Queue\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Group\"/>\n        <element name=\"QueueId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SobjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Queue sObject ID",
+      "type": "id",
+      "length": "18"
+    },
+    "QueueId": {
+      "field_label": "Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SobjectType": {
+      "field_label": "sObject Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

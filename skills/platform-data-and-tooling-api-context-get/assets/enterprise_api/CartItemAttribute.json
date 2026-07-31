@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "CartItemAttribute - Data API",
+  "description": "Represents the attributes associated with a cart item, stored as key-value pairs. These attributes are derived from the product and carried forward to the order during checkout. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AttributeDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the attribute definition associated with the cart item attribute. This field is a relationship field.",
+      "relationship_name": "AttributeDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "AttributeDefinition"
+    },
+    "AttributeName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the cart item attribute."
+    },
+    "AttributePicklistValueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the picklist value associated with the cart item attribute. This field is a relationship field.",
+      "relationship_name": "AttributePicklistValue",
+      "relationship_type": "Lookup",
+      "refers_to": "AttributePicklistValue"
+    },
+    "AttributeValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the cart item attribute, such as Blue or Large."
+    },
+    "CartItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the cart item to which this attribute is assigned. This field is a relationship field.",
+      "relationship_name": "CartItem",
+      "relationship_type": "Master-detail",
+      "refers_to": "CartItem (the master object)"
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An auto-generated ID for the attribute record that's stored in an external system, such as the HBase database."
+    },
+    "IsPriceImpacting": {
+      "type": "boolean",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates whether the attribute affects cart pricing (true) or not (false). This field determines whether the Commerce Pricing API calls must be triggered to update the price."
+    },
+    "UnitOfMeasure": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the unit of measure associated with the cart item attribute. This field is available only if the AttributeUomPilot Org perm is enabled. Contact Salesforce support for assistance. This field is a relationship field.",
+      "relationship_name": "UnitOfMeasure",
+      "relationship_type": "Lookup",
+      "refers_to": "UnitOfMeasure"
+    }
+  },
+  "special_access_rules": "The CartItemAttribute object is available:only if the B2B Commerce license, the Salesforce CPQ feature, and Commerce Dynamic Bundles are enabled in your Salesforce org.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CartItemAttributeChangeEvent**: Change events are available for the object.\n- **CartItemAttributeFeed**: Feed tracking is available for the object.\n- **CartItemAttributeHistory**: History is available for tracked fields of the object.\n- **CartItemAttributeOwnerSharingRule**: Sharing rules are available for the object.\n- **CartItemAttributeShare**: Sharing is available for the object."
+}

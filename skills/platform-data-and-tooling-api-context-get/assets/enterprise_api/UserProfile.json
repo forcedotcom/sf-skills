@@ -1,0 +1,367 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "UserProfile - Data API",
+  "description": "Represents a Chatter user profile.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AboutMe": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Information about the user, such as areas of interest or skills."
+    },
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The city associated with the user profile."
+    },
+    "CompanyName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The company associated with the user profile."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The country associated with the user profile."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The email address associated with the user profile."
+    },
+    "Fax": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The fax number associated with the user profile."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s first name."
+    },
+    "FullPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the user's profile photo if Chatter is enabled. The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo is uploaded, the URL returned for an older photo isn’t guaranteed to return a photo. Query this field for the URL of the most recent photo."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the user has access to log in (true) or not (false). You can modify a User's active status from the user interface or via the API."
+    },
+    "IsBadged": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the user is visually badged (true) or not (false). Users of the same Chatter user type (internal, external) are badged. Different user types are not badged."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The user’s last name."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used with Longitude to specify the precise geolocation of an address. Acceptable values are numbers between –90 and 90 up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations"
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used with Longitude to specify the precise geolocation of an address. Acceptable values are numbers between –90 and 90 up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations"
+    },
+    "ManagerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who manages this user."
+    },
+    "MobilePhone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s mobile or cellular phone number."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Concatenation of FirstName and LastName."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s phone number."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s postal or ZIP code. Label is Zip/Postal Code."
+    },
+    "SmallPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for a thumbnail of the user's profile photo if Chatter is enabled. The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo is uploaded, the URL returned for an older photo isn’t guaranteed to return a photo. Query this field for the URL of the most recent photo."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The state associated with the user profile."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The street address associated with the user profile."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s business title, such as “Vice President.”"
+    },
+    "UserPreferencesActivityRemindersPopup": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, a reminder window automatically opens when an activity reminder is due. Corresponds to the Trigger alert when reminder comes due checkbox at the Reminders page in the personal settings in the user interface."
+    },
+    "UserPreferencesApexPagesDeveloperMode": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, indicates that the user has enabled developer mode for editing Visualforce pages and controllers."
+    },
+    "UserPreferencesDisableAllFeedsEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email for all updates to Chatter feeds, based on the types of feed emails and digests the user has enabled."
+    },
+    "UserPreferencesDisableBookmarkEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time someone comments on a Chatter feed item after the user has bookmarked it."
+    },
+    "UserPreferencesDisableChangeCommentEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time someone comments on a change the user has made, such as an update to their profile."
+    },
+    "UserPreferencesDisableEndorsementEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the member automatically receives email every time someone endorses them for a topic."
+    },
+    "UserPreferencesDisableFeedbackEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives emails related to WDC feedback. This includes when someone requests or offers feedback, shares feedback with the user, or reminds the user to answer a feedback request."
+    },
+    "UserPreferencesDisableFileShareNotificationsForApi": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, email notifications are sent from the person who shared the file to the users that the file is shared with."
+    },
+    "UserPreferencesDisableFollowersEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time someone starts following the user in Chatter."
+    },
+    "UserPreferencesDisableLaterCommentEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time someone comments on a feed item after the user has commented on the feed item."
+    },
+    "UserPreferencesDisableLikeEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time someone likes their post or comment."
+    },
+    "UserPreferencesDisableMentionsPostEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time they’re mentioned in posts."
+    },
+    "UserPreferencesDisableMessageEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email for Chatter messages sent to the user."
+    },
+    "UserPreferencesDisableProfilePostEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time someone posts to the user’s profile."
+    },
+    "UserPreferencesDisableRewardEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives emails related to WDC rewards. This includes when someone someone gives a reward to the user."
+    },
+    "UserPreferencesDisableSharePostEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time their post is shared."
+    },
+    "UserPreferencesDisableWorkEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user receives emails related to WDC feedback, goals, and coaching. The user must also sign up for individual emails listed on the WDC email settings page. When true, the user will not receive any emails related to WDC feedback, goals, or coaching even if they are signed up for individual emails."
+    },
+    "UserPreferencesDisCommentAfterLikeEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time someone comments on a post that the user liked."
+    },
+    "UserPreferencesDisMentionsCommentEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time the user is mentioned in comments."
+    },
+    "UserPreferencesDisProfPostCommentEmail": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When false, the user automatically receives email every time someone comments on posts on the user’s profile."
+    },
+    "UserPreferencesEnableAutoSubForFeeds": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, the user automatically subscribes to feeds for any objects that the user creates."
+    },
+    "UserPreferencesEventRemindersCheckboxDefault": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, a reminder popup is automatically set on the user's events. Corresponds to the By default, set reminder on Events to... checkbox on the Reminders page in the user interface. This field is related to UserPreference and customizing activity reminders."
+    },
+    "UserPreferencesHideChatterOnboardingSplash": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, the initial Chatter onboarding prompts do not appear."
+    },
+    "UserPreferencesHideCSNDesktopTask": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, the Chatter recommendations panel never displays the recommendation to install Chatter Desktop."
+    },
+    "UserPreferencesHideCSNGetChatterMobileTask": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, the Chatter recommendations panel never displays the recommendation to install Chatter Mobile."
+    },
+    "UserPreferencesHideS1BrowserUI": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Controls the interface that the user sees when logging in to Salesforce from a supported mobile browser. If false, the user is automatically redirected to the Salesforce mobile web. If true, the user sees the full Salesforce site. The default value is false. Label is Salesforce User.This field is available in API version 29.0 or later."
+    },
+    "UserPreferencesHideSecondChatterOnboardingSplash": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, the secondary Chatter onboarding prompts do not appear."
+    },
+    "UserPreferencesReminderSoundOff": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, a sound automatically plays when an activity reminder is due. Corresponds to the Play a reminder sound checkbox on the Reminders page in the user interface."
+    },
+    "UserPreferencesShowCityToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the city field in the user’s contact information. City is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. City is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowCityToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses.The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowCityToGuestUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the city field in the user’s contact information. When true, city is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowCityToExternalUsers, making the user’s city visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowCountryToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the country field in the user’s contact information. Country is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. Country is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowCountryToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowCountryToGuestUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the country field in the user’s contact information. When true, country is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowCountryToExternalUsers, making the user’s country visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowEmailToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the email address field in the user’s contact information. Email address is visible only to internal members of the user’s organization when this field is false. Email address is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowFaxToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the fax number field in the user’s contact information. Fax number is visible only to internal members of the user’s organization when this field is false. Fax number is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowManagerToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the manager field in the user’s contact information. Manager is visible only to internal members of the user’s organization when this field is false. Manager is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowMobilePhoneToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the mobile device number field in the user’s contact information. The number is visible only to internal members of the user’s organization when this field is false. The number is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowPostalCodeToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the postal or ZIP code field in the user’s contact information. Postal code is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. Postal code is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowPostalCodeToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses.The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowPostalCodeToGuestUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the postal or ZIP code field in the user’s contact information. When true, postal code is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowPostalCodeToExternalUsers, making the user’s postal code visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowProfilePicToGuestUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the user’s profile photo. When true, the photo is visible to guest users in an Experience Cloud site. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site.When false, this field returns the stock photo. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowStateToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the state field in the user’s contact information. State is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. State is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowStateToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowStateToGuestUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the state field in the user’s contact information. When true, state is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowStateToExternalUsers, making the user’s state visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowStreetAddressToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the street address field in the user’s contact information. The address is visible only to internal members of the user’s organization when this field is false. The address is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowTitleToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the business title field in the user’s contact information. Title is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. Title is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowTitleToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses.The default value is true. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowTitleToGuestUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the business title field in the user’s contact information. When true, title is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowTitleToExternalUsers, making the user’s title visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowWorkPhoneToExternalUsers": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates the visibility of the work phone number field in the user’s contact information. The number is visible only to internal members of the user’s organization when this field is false. The number is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesTaskRemindersCheckboxDefault": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, a reminder popup is automatically set on the user's tasks. Corresponds to the By default, set reminder on Tasks to... checkbox on the Reminders page in the user interface. This field is related to UserPreference and customizing activity reminders."
+    }
+  },
+  "special_access_rules": "internal users belonging to the same Experience Cloud site can search for and view hidden field values in search results.\n\nInformation in hidden fields in a user's profile isn’t searchable by external users\n            (with a portal profile) in an Experience Cloud site. For example, if a user in a site\n            has a hidden email address and an external user searches for it, the user record isn’t\n            returned in the search results. Hidden field values also aren’t returned when external\n            users perform searches on nonhidden fields. So if an external user searches for a user's\n            name (can’t be hidden), any hidden field values associated with the user record such as\n            a hidden email address aren’t returned in the search results.\n\ninternal users\n              belonging to the same Experience Cloud site can search for and view hidden field\n              values in search results.\n\nAny fields that have been restricted in visibility will be returned empty, whether or\n            not they are, and will not be removed from the field listing.",
+  "usage": "Use this object to query Chatter—related information about the user. While the User object contains all the information about a user and is historically tied to user management, UserProfile is a read-only entity that contains the information that is relevant in a Chatter context.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **UserProfileFeed (API version 18.0–26.0)**: Feed tracking is available for the object."
+}

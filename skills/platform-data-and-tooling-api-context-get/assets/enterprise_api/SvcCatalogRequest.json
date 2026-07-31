@@ -1,0 +1,238 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "SvcCatalogRequest - Data API",
+  "description": "Represents a request made by a user using the Service Catalog. Catalog builders use this object to report on Service Catalog activity. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CatalogItemDescription": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description for the catalog item."
+    },
+    "CatalogItemName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the catalog item."
+    },
+    "CatalogItemVersion": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Version for the catalog item. This is a calculated field. Available in API version 58.0 and later."
+    },
+    "ClosedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the request was closed. This field is automatically populated when IsClosed is 'true'."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "ISO code of the currency. Must be one of the valid alphabetic, three-letter currency ISO codes defined by the ISO 4217 standard, such as USD, GBP, or JPY. Must be unique within your organization. Default value is USD-U.S. Dollar."
+    },
+    "FlowInterviewGuid": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Unique GUID associated with the automation that was executed as part of the catalog item. Available in API version 60.0 and later."
+    },
+    "IsClosed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the request has been resolved. This field is automatically checked when ClosedDate is populated. The default value is false."
+    },
+    "ItemFlowVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Version for the item flow. This is a calculated field."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The Service Catalog request number."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID for the owner record. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the service catalog request. Available in API version 60.0 and later. Possible values are: CompletedExecution—Default CreatedRequest StartedExecution"
+    },
+    "SubmitterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID for the submitter record. This is a relationship field.",
+      "relationship_name": "Submitter",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "SvcCatalogItemDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The catalog item that was used to create this request. This is a relationship field.",
+      "relationship_name": "SvcCatalogItemDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogItemDef"
+    },
+    "TargetCustomerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The customer ID that the request was submitted for. For example, when an agent runs a catalog item for a given contact, the contact is represented by the TargetCustomerId. Available in API version 61.0 and later. This is a polymorphic relationship field.",
+      "relationship_name": "TargetCustomer",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, User"
+    }
+  },
+  "special_access_rules": "To access this object, get the Service Catalog Access permission set license, Employee Productivity Starter license, or Employee Productivity Plus add-on license.",
+  "field_reference": {
+    "CaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CatalogItemDescription": {
+      "field_label": "Catalog Item Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "CatalogItemName": {
+      "field_label": "Catalog Item Name",
+      "type": "string",
+      "length": "80"
+    },
+    "CatalogItemVersion": {
+      "field_label": "Catalog Item Version",
+      "type": "string",
+      "length": "128"
+    },
+    "ClosedDate": {
+      "field_label": "Closed Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FlowInterviewGuid": {
+      "field_label": "Flow GUID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Service Catalog Request ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsClosed": {
+      "field_label": "Closed",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "ItemFlowVersion": {
+      "field_label": "Item Flow Version ID",
+      "type": "string",
+      "length": "128"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Service Catalog Request Number",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReferenceObjectId": {
+      "field_label": "Reference Object ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubmitterId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SvcCatalogItemDefinitionId": {
+      "field_label": "Service Catalog Item Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetCustomerId": {
+      "field_label": "Target Customer ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "LiveAgentSessionHistory - Data API",
+  "description": "This object is automatically created for each Chat session and stores information about changes made to the session. This object is available in API versions 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Data type of the field that was changed."
+    },
+    "Field": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The name of the field that was changed in a session record."
+    },
+    "LiveAgentSessionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the session record that was changed."
+    },
+    "NewValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The new value of the field that was changed."
+    },
+    "OldValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The original value of the field that was changed."
+    }
+  },
+  "usage": "Use this object to identify changes to chat session records.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataType": {
+      "field_label": "Datatype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Field": {
+      "field_label": "Changed Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Chat Session History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LiveAgentSessionId": {
+      "field_label": "Chat Session ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NewValue": {
+      "field_label": "New Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "OldValue": {
+      "field_label": "Old Value",
+      "type": "anyType",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

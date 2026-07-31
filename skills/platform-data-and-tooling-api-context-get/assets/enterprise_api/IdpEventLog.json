@@ -1,0 +1,129 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "IdpEventLog - Data API",
+  "description": "Represents the Identity Provider Event Log. This log records both problems and successes with inbound SAML or OpenID Connect authentication requests from another app provider. It also records outbound SAML responses when Salesforce is acting as an identity provider. This object is available in API version 39.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AppId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the app provider seeking authentication."
+    },
+    "AuthSessionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the authentication session."
+    },
+    "ErrorCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The error code for the authentication issue. Possible values are: AppAccessDenied—Error: App access denied AppBlocked—Error: App blocked ClientUnapproved—Error: Invalid grant CodeExpired—Error: Expired authorization code ForceAuthNLogout—User logged out due to forced authentication request InternalError—Error: Internal Error InvalidAuthnRequest—Error: Unable to parse AuthnRequest from service provider InvalidClientCredentials—Error: Invalid client credentials InvalidCode—Error: Invalid authorization code InvalidDeviceId—Error: Invalid device ID InvalidIdpEndpoint—Error: Invalid Identity Provider Endpoint URL InvalidIssuer—Error: Invalid Issuer InvalidScope—Error: Invalid scope(s) InvalidSessionLevel—Error: Invalid session level InvalidSettings—Error: IdP certificate is invalid or does not exist InvalidSignature—Error: Invalid Signature InvalidSp—Error: Misconfigured or invalid service provider InvalidSpokeSp—Error: Invalid spoke SP settings InvalidUserCredentials—Error: Invalid user credentials NoAccess—Error: User does not have access to this service provider NoCustomAttrValue—Error: User does not have a value for the subject custom attribute NoCustomField—Error: Custom field not found NoSpokeId—Error: No Spoke ID found NoSubdomain—Error: No My Domain deployed in the org NoUserFedId—Error: User does not have a Federation Identifier selected OauthError—OAuth Error Success UnableToResolve—Error: Unable to resolve request into a Service Provider UnknownError—Unknown Error"
+    },
+    "IdentityUsed": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The identity (username) of the user being authenticated."
+    },
+    "InitiatedBy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The code describing how the authentication request was initiated. Possible values are: IdP—IdP-Initiated SAML OauthAuthorize—OAuth Authorization OauthTokenExchange—OAuth Token Exchange SP—SP-Initiated SAML"
+    },
+    "OptionsHasLogoutUrl": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Whether a logout URL has been assigned to the app. This URL is where users are redirected when they log out."
+    },
+    "SamlEntityUrl": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "The authentication URL of the SAML provider."
+    },
+    "SsoType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of SSO. Options are: 0–SAML 1–OpenID Connect"
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time on which the event occurred."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user seeking authentication."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"IdpEventLog\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AuthSessionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ErrorCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IdentityUsed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InitiatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptionsHasLogoutUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SamlEntityUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SsoType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Timestamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AppId": {
+      "field_label": "Connected App ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AuthSessionId": {
+      "field_label": "Auth Session ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ErrorCode": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Event Log Entry ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IdentityUsed": {
+      "field_label": "Identity Used",
+      "type": "string",
+      "length": "765"
+    },
+    "InitiatedBy": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "OptionsHasLogoutUrl": {
+      "field_label": "Has Logout URL",
+      "type": "boolean"
+    },
+    "SamlEntityUrl": {
+      "field_label": "Entity ID",
+      "type": "string",
+      "length": "1500"
+    },
+    "SsoType": {
+      "field_label": "SSO Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Timestamp": {
+      "field_label": "Timestamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserRecordAccess - Data API",
+  "description": "Represents a user’s access to a set of records. This object is read only and is available in API version 24.0 and later. This object doesn’t consider whether a user’s access is blocked by a restriction rule.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "HasAllAccess": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a user can share the record."
+    },
+    "HasDeleteAccess": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a user has delete access to the record (true) or not (false)."
+    },
+    "HasEditAccess": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a user has edit access to the record (true) or not (false)."
+    },
+    "HasTransferAccess": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a user has transfer access to the record (true) or not (false)."
+    },
+    "HasReadAccess": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a user has read access to the record (true) or not (false)."
+    },
+    "MaxAccessLevel": {
+      "type": "picklist",
+      "properties": "Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates a user’s maximum level of access to a record. Valid values are: None Read Edit Delete Transfer All"
+    },
+    "RecordId": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "ID of the record."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group",
+      "description": "ID of the user."
+    }
+  },
+  "usage": "Use this object to query a user’s access to records. You can only query records of objects listed on the Sharing Settings Setup page. You can’t create, delete, or update any records using this object. Up to 200 record IDs can be queried. You can include an ORDER BY clause for any field that is being selected in the query. The following sample query returns the records, whether the queried user has read and transfer access to each record, and the user’s maximum access level to each record. The following query returns the records to which a queried user has read access. Using API version 30.0 and later, UserRecordAccess is a foreign key on the records. You can’t filter by or provide the UserId or RecordId fields when using this object as a lookup or foreign key. The previous sample queries can be run as: SOQL restrictions:\n\nUse this object to query a user’s access to records. You can only query records of objects listed on the Sharing Settings Setup page. You can’t create, delete, or update any records using this object.\n\nUp to 200 record IDs can be queried. You can include an ORDER BY clause for any field that is being selected in the query.\n\nThe following sample query returns the records, whether the queried user has read and transfer access to each record, and the user’s maximum access level to each record.\n\nThe following query returns the records to which a queried user has read access.\n\nUsing API version 30.0 and later, UserRecordAccess is a foreign key on the records. You can’t filter by or provide the UserId or RecordId fields when using this object as a lookup or foreign key. The previous sample queries can be run as:\n\nSOQL restrictions:",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserRecordAccess\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"HasAllAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasDeleteAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasEditAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasReadAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasTransferAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"MaxAccessLevel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "HasAllAccess": {
+      "field_label": "Has All Access",
+      "type": "boolean"
+    },
+    "HasDeleteAccess": {
+      "field_label": "Has Delete Access",
+      "type": "boolean"
+    },
+    "HasEditAccess": {
+      "field_label": "Has Edit Access",
+      "type": "boolean"
+    },
+    "HasReadAccess": {
+      "field_label": "Has Read Access",
+      "type": "boolean"
+    },
+    "HasTransferAccess": {
+      "field_label": "Has Transfer Access",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "User Record Access ID",
+      "type": "id",
+      "length": "18"
+    },
+    "MaxAccessLevel": {
+      "field_label": "Maximum Access Level",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RecordId": {
+      "field_label": "Record ID",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

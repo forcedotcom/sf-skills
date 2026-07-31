@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PicklistValueInfo - Data API",
+  "description": "Represents the active picklist values for a given picklist field. This object is available in API version 40.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field."
+    },
+    "EntityParticleId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the picklist field to which this value is related.",
+      "relationship_name": "EntityParticle",
+      "relationship_type": "Lookup",
+      "refers_to": "EntityParticle"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the picklist value is active or not."
+    },
+    "IsDefaultValue": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this value is the default for the picklist field. Only one value can be the default value."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the picklist value."
+    },
+    "ValidFor": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A set of bits where each bit indicates a controlling value for which this picklist value is valid."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name of the picklist value."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"PicklistValueInfo\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EntityParticle\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EntityParticle\"/>\n        <element name=\"EntityParticleId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDefaultValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ValidFor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Value\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "DurableId": {
+      "field_label": "Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "EntityParticleId": {
+      "field_label": "Entity Particle ID",
+      "type": "string",
+      "length": "150"
+    },
+    "Id": {
+      "field_label": "Picklist Value Info ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "IsDefaultValue": {
+      "field_label": "Is Default Value",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "70"
+    },
+    "ValidFor": {
+      "field_label": "Valid For",
+      "type": "string",
+      "length": "200"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "70"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

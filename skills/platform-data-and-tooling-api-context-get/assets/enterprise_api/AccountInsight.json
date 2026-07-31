@@ -1,0 +1,100 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "AccountInsight - Data API",
+  "description": "Represents an individual insight (a key business development) related to an account record.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the related account record."
+    },
+    "ActualHeardWithinDays": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "CompetitorName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field has been deprecated as of API version 45.0."
+    },
+    "ContactName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is not in use as of API version 46.0."
+    },
+    "ContactTitle": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is not in use as of API version 46.0."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The division of the related record."
+    },
+    "ExpectedHeardWithinDays": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "LastHeard": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "NumberOfNewsArticles": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of news articles related to insights of type M&A activity detected, Company is expanding, and Leadership changes."
+    },
+    "Rationale": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "The explanation for an insight, providing more background information and details that are specific to the org."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "The title of the insight."
+    },
+    "TrendType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The trend type of the insight. Possible values include: Negative Positive Informational"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of insight. Possible values include: M&A activity detected Company is expanding Leadership changes"
+    }
+  },
+  "special_access_rules": "To see an insight related to a specific account, users need a Sales Cloud Einstein license and access to the account record. As of the Spring ’20 release, Pardot and Sales Engagement users no longer have access to this object.",
+  "usage": "This object is read-only and isn’t supported with workflows, triggers, or process builder."
+}

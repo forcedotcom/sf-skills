@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "PackageInstallRequest - Tooling API",
+  "description": "Represents a request to install a package (first- or second-generation) in a target subscriber org. Available in API version 41.0 and later.",
+  "supported_soap_calls": "`create()`, `describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApexCompileType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For unlocked package installs and upgrades, specifies whether to require successful compilation of all Apex in the org, or only Apex within the package.Valid values are: all package For package installs into production orgs, or any org that has Apex Compile on Deploy enabled, the platform compiles all Apex in the org after the package install or upgrade operation completes. This approach assures that package installs and upgrades don’t impact the performance of an org, and is done even if --apexcompile package is specified. Available in API version 46.0 and later."
+    },
+    "EnableRss": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the package can send and receive Remote Site Settings (RSS) and Content Security Policy (CSP) data from third-party websites (true) or not (false).The default value is false. Available in API version 43.0 and later."
+    },
+    "Errors": {
+      "type": "SubscriberPackageInstallErrors",
+      "properties": "Nillable",
+      "description": "Errors that occurred during installation, if any."
+    },
+    "NameConflictResolution": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Controls name conflicts between package members in an unmanaged package. Valid values are: Block: Throw an exception on name conflicts. RenameMetadata: Rename only those components that can be renamed, otherwise throw an exception."
+    },
+    "PackageInstallSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "For internal use only."
+    },
+    "Password": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The installation key for the package. Required for packages that are protected by an installation key."
+    },
+    "ProfileMappings": {
+      "type": "SubscriberPackageProfileMappings",
+      "properties": "Create, Nillable",
+      "description": "Mappings between profile settings in the package and profiles in the subscriber org.When installing a package, the admin for the subscriber org chooses which profiles in the org to map the profile settings in the package to."
+    },
+    "SecurityType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Users for which this package is installed. Valid values are: Custom: Installed for specified custom profiles. Full: Installed for all users. None: Installed for administrators only."
+    },
+    "SkipHandlers": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Specifies the handlers that are skipped when the package is installed. There’s only one valid value: FeatureEnforcement: For package installs in scratch orgs only. Specifying FeatureEnforcement in this field decreases the length of time a package installation takes to complete.The feature enforcement handler adds object and feature validations in the subscriber org that prevent an admin from turning off a feature that can cause your app to malfunction. This enforcement isn’t critical in scratch orgs. Available in API version 61.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the install request. Valid values are: Error InProgress Success Unknown"
+    },
+    "SubscriberPackageVersionKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Foreign key to the subscriber package version."
+    },
+    "UpgradeType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For unlocked package upgrades, specifies whether to mark all removed components as deprecated (deprecate-only, delete removed components that can be safely deleted and deprecate the others (mixed-mode), or delete all removed components (delete-only). The default is mixed-mode. Valid values are: delete-only deprecate-only mixed-mode"
+    }
+  },
+  "sub_types": {
+    "SubscriberPackageInstallErrors": {
+      "errors": {
+        "type": "SubscriberPackageInstallError",
+        "description": "The errors that occurred during package install."
+      }
+    },
+    "SubscriberPackageInstallError": {
+      "message": {
+        "type": "string",
+        "description": "Describes the error that occurred.",
+        "required": true
+      }
+    },
+    "SubscriberPackageProfileMappings": {
+      "profileMappings": {
+        "type": "SubscriberPackageProfileMapping",
+        "description": "Name of the profile mapping."
+      }
+    },
+    "SubscriberPackageProfileMapping": {
+      "source": {
+        "type": "string",
+        "description": "The name of the profile setting in the package that’s being installed.",
+        "required": true
+      },
+      "target": {
+        "type": "string",
+        "description": "The name of the profile in the target subscriber org.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"PackageInstallRequest\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ApexCompileType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"EnableRss\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Errors\" minOccurs=\"0\" type=\"ens:SubscriberPackageInstallErrors\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"NameConflictResolution\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"PackageInstallRequestErrors\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"PackageInstallSource\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Password\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ProfileMappings\" minOccurs=\"0\" type=\"ens:SubscriberPackageProfileMappings\" nillable=\"true\"/>\n        <xsd:element name=\"SecurityType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SkipHandlers\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Status\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SubscriberPackageVersionKey\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"UpgradeType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"QueryLocator\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"QueryResult\">\n  <xsd:sequence>\n    <xsd:element name=\"done\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"entityTypeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"nextRecordsUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryLocator\" type=\"tns:QueryLocator\"/>\n    <xsd:element name=\"records\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"ens:sObject\"/>\n    <xsd:element name=\"size\" type=\"xsd:int\"/>\n    <xsd:element name=\"totalSize\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

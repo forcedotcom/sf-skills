@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "VoiceCallQualityFeedback - Data API",
+  "description": "Represents feedback given by a Sales Dialer user about the quality of a VoiceCall .",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "FeedbackText": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The detailed feedback about a call left by a user."
+    },
+    "FeedbackType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The feedback category (Call could not connect, Audio lagged, etc.) selected by a user."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user leaving the feedback."
+    },
+    "VoiceCallId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related VoiceCall."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **VoiceCallQualityFeedbackOwnerSharingRule**: Sharing rules are available for the object.\n- **VoiceCallQualityFeedbackShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FeedbackText": {
+      "field_label": "Feedback Text",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "FeedbackType": {
+      "field_label": "Feedback Type",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "VoiceCallQualityFeedback ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "VoiceCallId": {
+      "field_label": "Voice Call ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

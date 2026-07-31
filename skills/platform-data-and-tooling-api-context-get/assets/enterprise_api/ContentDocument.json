@@ -1,0 +1,292 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentDocument - Data API",
+  "description": "Represents a document that was uploaded to a library in Salesforce Files or Salesforce CRM content. This object is available in versions 17.0 and later for Salesforce CRM.This object is available in API version 21.0 and later for Salesforce Files.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ArchivedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who archived the document.This field is available in API version 24.0 and later."
+    },
+    "ArchivedDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date when the document was archived.This field is available in API version 24.0 and later."
+    },
+    "ContentAssetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "If the ContentDocument is an asset file, this field points to the asset. For most entities, the value of this field is null.This field is available in API version 38.0 and later. This is a relationship field.",
+      "relationship_name": "ContentAsset",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentAsset"
+    },
+    "ContentModifiedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the document was modified.ContentModifiedDate updates when, for example, the document is renamed or a new document version is uploaded. When you’re uploading the first version of a document, ContentModifiedDate can be set to the current time or anytime in the past. This field is available in API version 32.0 and later."
+    },
+    "ContentSize": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the document in bytes for documents smaller than 2 GB. This field is available in API version 31.0 and later. In API version 65.0 and later, we recommend that you use the ContentSizeLong field even for files smaller than 2 GB."
+    },
+    "ContentSizeLong": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the document in bytes up to 10 GB. This field is available in API version 65.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "A description of the document. This field is available in API version 31.0 and later."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Defaulted on Create, Filter, Group, Restricted picklist, Sort",
+      "description": "A logical segment of your organization's data. For example, if your company is organized into different business units, you could create a division for each business unit, such as “North America,” “Healthcare,” or “Consulting.” Available only if the organization has the Division permission enabled."
+    },
+    "FileExtension": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "File extension of the document. This field is available in API version 31.0 and later."
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Type of document, determined by the file extension. This field is available in API version 31.0 and later."
+    },
+    "IsArchived": {
+      "type": "boolean",
+      "properties": "Defaulted on Create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the document was archived (true) or not (false)."
+    },
+    "IsInternalOnly": {
+      "type": "boolean",
+      "properties": "Defaulted on Create, Filter, Group, Sort, Update",
+      "description": "Indicates that a file is for internal use only. When true, prevents users with the Query Non Vetoed Files permission from viewing and performing SOQL query on public and non vetoed files in a Data Cloud org. Default value is false. This field is available in API version 62.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "LatestPublishedVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the latest document version (ContentVersion). This is a relationship field.",
+      "relationship_name": "LatestPublishedVersion",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentVersion"
+    },
+    "MalwareScanDate": {
+      "type": "dateTime",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date the document was scanned for malware. This field is available as a beta feature in API version 66.0 and later. Note: The MalwareScanDate field is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "MalwareScanStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates whether the document was scanned for malware and whether it’s safe or malicious. This field is available in API version 66.0 and later. NotScanned—The file hasn’t yet been scanned for malware. This is the default value. Scheduled—The file scan is in progress. Clean—The file was scanned and doesn’t contain malware. Malicious—The file was scanned and contains malware. Skipped—The file can’t be scanned because it’s either larger than 100 MB or it’s a Salesforce-generated file, such as a Content Note. Failed—The file wasn’t scanned because of an error. Note: The MalwareScanStatus field is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "ID of the owner of this document. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the library that owns the document. Created automatically when inserting a ContentVersion via the API for the first time.This field is available in API version 24.0 and later when Salesforce CRM content is enabled."
+    },
+    "PublishStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates if and how the document is published. Valid values are: P—The document is published to a public library and is visible to other users. Label is Public. R—The document is published to a personal library and is not visible to other users. Label is Personal Library. U—The document is not published because publishing was interrupted. Label is Upload Interrupted."
+    },
+    "SharingOption": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Controls whether sharing is frozen for a file. Only administrators and file owners with Collaborator access to the file can modify this field. Default is Allowed, which means that new shares are allowed. When set to Restricted, new shares are prevented without affecting existing shares.This field is available in API versions 35.0 and later."
+    },
+    "SharingPrivacy": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Controls sharing privacy for a file. Only administrators and file owners with Collaborator access to the file can modify this field. Valid values are: N—Default. Label is Visible to Anyone With Record Access P—The file is private on records but can be shared selectively with others. Label is Private on Records. This field is available in API versions 41.0 and later."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort, Update",
+      "description": "The title of a document."
+    }
+  },
+  "special_access_rules": "Turn on the Query All Files permission to let your View All Data users bypass the restrictions on querying files. For API version 25.0 and later, you can change ownership of Salesforce Files and Salesforce CRM content documents.\n\nTurn on the Query All Files permission to let your View All Data users bypass the restrictions on querying files.\n\nFor API version 25.0 and later, you can change ownership of Salesforce Files and Salesforce CRM content documents.",
+  "associated_objects": "This object has the following associated objects. Unless noted, associated objects are available in the same API version as this object.\n\n- **ContentDocumentChangeEvent (API version 55.0)**: Change events are available for the object.\n- **ContentDocumentFeed (API version 20.0)**: Feed tracking is available for the object.\n- **ContentDocumentHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentDocument\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ArchivedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ArchivedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"AuthorizationFormTexts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentAsset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentAsset\"/>\n        <element name=\"ContentAssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentDistributions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ContentSize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ContentSizeLong\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"ContentVersions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FileExtension\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FileType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsArchived\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsInternalOnly\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LatestPublishedVersion\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentVersion\"/>\n        <element name=\"LatestPublishedVersionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MalwareScanDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MalwareScanStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PublishStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SharingOption\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SharingPrivacy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ArchivedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ArchivedDate": {
+      "field_label": "Archived Date",
+      "type": "date"
+    },
+    "ContentAssetId": {
+      "field_label": "Asset File ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentModifiedDate": {
+      "field_label": "Content Modified Date",
+      "type": "datetime"
+    },
+    "ContentSize": {
+      "field_label": "Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "ContentSizeLong": {
+      "field_label": "Size",
+      "type": "long",
+      "digits": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "FileExtension": {
+      "field_label": "File Extension",
+      "type": "string",
+      "length": "40"
+    },
+    "FileType": {
+      "field_label": "File Type",
+      "type": "string",
+      "length": "20"
+    },
+    "Id": {
+      "field_label": "Content Document ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsArchived": {
+      "field_label": "Is Archived",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Is Deleted",
+      "type": "boolean"
+    },
+    "IsInternalOnly": {
+      "field_label": "Is Internal Only",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LatestPublishedVersionId": {
+      "field_label": "Latest Published Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MalwareScanDate": {
+      "field_label": "Malware Scan Date",
+      "type": "datetime"
+    },
+    "MalwareScanStatus": {
+      "field_label": "Malware Scan Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PublishStatus": {
+      "field_label": "Publish Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SharingOption": {
+      "field_label": "Prevent others from sharing and unsharing",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SharingPrivacy": {
+      "field_label": "File Privacy on Records",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

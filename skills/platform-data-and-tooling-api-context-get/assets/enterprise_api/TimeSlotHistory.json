@@ -1,0 +1,91 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "TimeSlotHistory - Data API",
+  "description": "Represents the history of changes made to tracked fields on a time slot. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Field": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The name of the field that was changed."
+    },
+    "NewValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The new value of the field that was changed."
+    },
+    "OldValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The value of the field before it was changed."
+    },
+    "TimeSlotId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the time slot being tracked. The history is displayed on the detail page for this record."
+    }
+  },
+  "special_access_rules": "Field Service must be enabled in your organization, and field tracking for time slot fields must be configured.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"TimeSlotHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DataType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Field\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"NewValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:anyType\"/>\n        <element name=\"OldValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:anyType\"/>\n        <element name=\"TimeSlot\" nillable=\"true\" minOccurs=\"0\" type=\"ens:TimeSlot\"/>\n        <element name=\"TimeSlotId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataType": {
+      "field_label": "Datatype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Field": {
+      "field_label": "Changed Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Time Slot History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "NewValue": {
+      "field_label": "New Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "OldValue": {
+      "field_label": "Old Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "TimeSlotId": {
+      "field_label": "Time Slot ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AnalyticsDashboardWidget - Data API",
+  "description": "Represents a Tableau Next dashboard widget. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AnalyticsDashboardId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Tableau Next dashboard the widget is associated with. This field is a relationship field.",
+      "relationship_name": "AnalyticsDashboard",
+      "relationship_type": "Master-detail",
+      "refers_to": "AnalyticsDashboard (the master object)"
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the widget."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of widget. Possible values are: button container extension filter image metric parameter summary text visualization"
+    },
+    "WidgetName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name of the widget."
+    }
+  },
+  "special_access_rules": "To access this object, you must have Tableau Next enabled in your org and a Tableau Next permission set.",
+  "field_reference": {
+    "AnalyticsDashboardId": {
+      "field_label": "Analytics Dashboard ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "AnalyticsDashboardWidget ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Widget Label ID",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Widget Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "WidgetName": {
+      "field_label": "Widget Name",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

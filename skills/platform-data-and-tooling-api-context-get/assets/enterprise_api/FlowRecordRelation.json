@@ -1,0 +1,101 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowRecordRelation - Data API",
+  "description": "Represents a relationship between a record and a flow interview. When a flow interview is paused, Salesforce uses the $Flow.CurrentRecord global variable in the flow to associate the interview with a record. Available in API version 42.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated ID of this relation."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The flow interview that the record is related to. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowInterview"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The record that the flow interview is related to. Make sure that this field contains only one ID, and that the ID is for a valid object. Custom objects and most standard objects are supported. This is a relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, AccountContactRole, AccountPartner, Accreditation, ActivationTarget, ActivationTrgtIntOrgAccess, Address, AlternativePaymentMethod, Announcement, ApexTestQueueItem, AppAnalyticsQueryRequest, AppUsageAssignment, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskIndDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, AssociatedLocation, AsyncApexJob, Attachment, AuthorizationForm, AuthorizationFormConsent, AuthorizationFormDataUse, AuthorizationFormText, Award, BackgroundOperation, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, CalendarView, Campaign, CampaignMember, CardPaymentMethod, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CaseContactRole, CaseSolution, CodeSet, CodeSetBundle, CollaborationGroup, CollaborationGroupMember, CollaborationGroupMemberRequest, CollaborationGroupRecord, CollaborationInvitation, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, ConferenceNumber, ConsumptionRate, ConsumptionSchedule, Contact, ContactEncounter, ContactEncounterParticipant, ContactPointAddress, ContactPointConsent, ContactPointEmail, ContactPointPhone, ContactPointTypeConsent, ContactRequest, ContentDistribution, ContentDocument, ContentDocumentLink, ContentDocumentSubscription, ContentFolder, ContentFolderLink, ContentFolderMember, ContentNotification, ContentVersion, ContentVersionComment, ContentVersionRating, ContentWorkspaceDoc, Contract, ContractContactRole, ConversationEntry, CoverageBenefit, CoverageBenefitItem, CreditMemo, CreditMemoLine, Dashboard, DashboardComponent, DataAssessmentFieldMetric, DataAssessmentMetric, DataAssessmentValueMetric, DataStream, DataUseLegalBasis, DataUsePurpose, DelegatedAccount, DeleteEvent, DialerCallUsage, DigitalSignature, DigitalWallet, Document, DocumentChecklistItem, DuplicateRecordItem, DuplicateRecordSet, EmailMessage, EmailMessageRelation, EngagementChannelType, EnhancedLetterhead, EnrollmentEligibilityCriteria, EntitySubscription, Event, EventRelation, ExternalEvent, ExternalEventMapping, FeedAttachment, FeedComment, FeedItem, FeedPollChoice, FeedPollVote, FeedRevision, FileSearchActivity, FlowInterviewLog, FlowInterviewLogEntry, FlowStageRelation, HealthCareDiagnosis, HealthCareProcedure, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, Idea, Identifier, IdentityDocument, Image, Individual, IndividualApplication, InstalledMobileApp, Invoice, InvoiceLine, Lead, ListEmail, ListEmailIndividualRecipient, ListEmailRecipientSource, Location, LocationTrustMeasure, MarketSegment, MarketSegmentActivation, MatchingInformation, MemberPlan, MessagingDeliveryError, MessagingEndUser, MktCalculatedInsight, MktSgmntActvtnAudAttribute, MktSgmntActvtnContactPoint, Note, OperatingHours, Opportunity, OpportunityContactRole, OpportunityLineItem, OpportunityPartner, Order, OrderItem, OrgMetric, OrgMetricScanResult, OrgMetricScanSummary, OtherComponentTask, Partner, PartyConsent, Payment, PaymentAuthAdjustment, PaymentAuthorization, PaymentGateway, PaymentGatewayLog, PaymentGroup, PaymentLineInvoice, PersonEducation, PersonLanguage, PersonLifeEvent, PersonName, PlanBenefit, PlanBenefitItem, Pricebook2, PricebookEntry, ProcessException, ProcessInstance, ProcessInstanceNode, Product2, ProductConsumptionSchedule, ProductFulfillmentLocation, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, PromptAction, ProviderSearchSyncLog, PurchaserPlan, PurchaserPlanAssn, PushTopic, QuickText, QuickTextUsage, ReceivedDocument, Recommendation, RecordAction, Refund, RefundLinePayment, ReplyText, Report, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderItemAdjustment, ReturnOrderItemTax, ReturnOrderLineItem, SearchPromotionRule, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, ServiceTerritoryWorkType, SetupAssistantStep, SharingRecordCollection, SharingRecordCollectionItem, SharingRecordCollectionMember, Shift, Shipment, ShipmentItem, SkillRequirement, SocialPersona, SocialPost, Solution, StreamingChannel, Task, ThreatDetectionFeedback, TimeSlot, TodayGoal, Topic, TopicAssignment, UnitOfMeasure, UserAppInfo, UserAppMenuCustomization, UserEmailPreferredPerson, UserProvAccount, UserProvAccountStaging, UserProvMockTarget, UserProvisioningLog, UserProvisioningRequest, VideoCall, VideoCallParticipant, VideoCallRecording, Visit, VisitedParty, Visitor, VoiceCall, VoiceCallRecording, VoiceVendorLine, VolunteerProject, WaveAutoInstallRequest, WaveCompatibilityCheckItem, WorkAccess, WorkBadge, WorkBadgeDefinition, WorkOrder, WorkOrderLineItem, WorkThanks, WorkType, WorkTypeGroup, WorkTypeGroupMember"
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"FlowRecordRelation\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowInterview\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RelatedRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contract\"/>\n        <element name=\"RelatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Flow Record Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentId": {
+      "field_label": "Flow Interview ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

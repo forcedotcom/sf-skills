@@ -1,0 +1,111 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Apex Execution Event Type - Data API",
+  "description": "Apex Execution events contain details about Apex classes that are used.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "BOT_IDENTIFIER": {
+      "type": "string",
+      "description": "The ID of the bot."
+    },
+    "BOT_SESSION_IDENTIFIER": {
+      "type": "string",
+      "description": "The bot session ID."
+    },
+    "CALLOUT_TIME": {
+      "type": "Number",
+      "description": "Time spent waiting on webservice callouts, in milliseconds."
+    },
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. If the user’s session context isn't available, this field returns a blank value."
+    },
+    "CPU_TIME": {
+      "type": "Number",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "DB_TOTAL_TIME": {
+      "type": "Number",
+      "description": "Time (in milliseconds) spent waiting for database processing in aggregate for all operations in the request. Compare this field to CPU_TIME to determine whether performance issues are occurring in the database layer or in your own code."
+    },
+    "ENTRY_POINT": {
+      "type": "String",
+      "description": "The entry point for this Apex execution. Example GeneralCloner.cloneAndInsertRecords VF- /apex/CloneUser"
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always ApexExecution."
+    },
+    "EXEC_TIME": {
+      "type": "Number",
+      "description": "The end-to-end Apex execution time (in milliseconds)."
+    },
+    "IS_LONG_RUNNING_REQUEST": {
+      "type": "Boolean",
+      "description": "Indicates whether the request is counted against your org’s concurrent long-running Apex request limit (true) or not (false). Note: Asynchronous Apex jobs (batch, queueable, scheduled, and future), background processes, and bulk API requests aren’t counted against the concurrent long-running limit."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "NUMBER_SOQL_QUERIES": {
+      "type": "Number",
+      "description": "The number of SOQL queries that were executed during the event.This value is the aggregate across all namespaces, and can exceed the per-namespace limits. For test executions, the aggregate total value across all test methods executed in the request is used. If you’re using this value to track limit consumption, consider filtering out test execution quiddities (indicated by the QUIDDITY field)."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000123."
+    },
+    "PLANNER_IDENTIFIER": {
+      "type": "string",
+      "description": "The ID of the agent planner."
+    },
+    "QUIDDITY": {
+      "type": "String",
+      "description": "The type of outer execution associated with this event. Example A–ACS Batch Apex B–Bulk API and Bulk API 2.0 BA–Start method of a Batch Apex job C–Scheduled Apex CI–Commerce Integration DL– Discoverable Login page E–Inbound Email Service F–Future FC–Function Callback H–Apex REST I–Invocable Action K–Quick Action L–Lightning M–Remote Action P–Not used in API version 63.0 and later. PEPC–Platform Event Publish Callback PI–Post install script for a managed package Q–Queueable QTXF–Transaction Finalizer for Queueable R–Synchronous uncategorized (which is where all transactions not specified elsewhere end up) S–QueryLocator Batch Apex (Batch Apex jobs run faster when the start method returns a QueryLocator object that doesn't include related records via a subquery. See Batch Apex Best Practices in Using Batch Apex.) TA–Tests Async TD–Tests Deployment TS–Tests Synchronous UD–Undefined is the default when an event hasn’t been assigned a more descriptive quiddity. V–Visualforce W–SOAP Webservices X–Execute Anonymous Note: Implementations of the Process.Plugin interface use the quiddity value R."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RUN_TIME": {
+      "type": "Number",
+      "description": "The amount of time that the request took in milliseconds. Requests with a value over five seconds are considered long-running requests for the purposes of the Concurrent Long-Running Apex Limit. Note: HTTP callout processing time isn't included when calculating the 5-second limit. We pause the timer for the callout and resume it when the callout completes."
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "URI": {
+      "type": "String",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "URI_ID_DERIVED": {
+      "type": "ID",
+      "description": "The 18-character case insensitive ID of the URI of the page that’s receiving the request."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case insensitive ID of the user who’s using Salesforce services through the UI or the API. For example: 00590000000I1SNIA0."
+    }
+  }
+}

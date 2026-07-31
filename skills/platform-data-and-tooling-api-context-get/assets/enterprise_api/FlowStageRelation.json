@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowStageRelation - Data API",
+  "description": "Represents a relationship between a paused flow interview and its stages. When a flow interview is paused, Salesforce creates a FlowStageRelation record for each stage that’s set to the $Flow.CurrentStage or $Flow.ActiveStages global variable. Available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated ID of this relation."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The flow interview that the record is related to. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowInterview"
+    },
+    "StageLabel": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Label for the stage. If the stage is translated, the label respects the language of the user who is querying the label."
+    },
+    "StageOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The order of this stage when the flow interview was paused. This order may differ from the order in the stage definition. If the type is Active, the order corresponds to the order of the stage in $Flow.ActiveStages. If the type is Current and corresponds to an active stage, the order matches the order of the active stage. If the type is Current and doesn't correspond to an active stage, the order is 0."
+    },
+    "StageType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of stage. The valid values are: Current: Identifies that the stage is set to $Flow.CurrentStage. Active: Identifies that the stage is set to $Flow.ActiveStages."
+    }
+  },
+  "usage": "You can use the FlowStageRelation records to represent the paused interview and its active and current stages visually.\n\nFor example, an Online Purchasing flow interview starts with several stages in\n        $Flow.ActiveStages. If the interview is paused, Salesforce creates a FlowStageRelation\n        record for each stage in\n\n$Flow.ActiveStages\n\n$Flow.CurrentStage\n\nReview Cart\n\nShipping Details\n\nBilling Details\n\nPayment Details\n\nOrder Confirmation\n\nShipping Details",
+  "wsdl_segment": "```xml\n<complexType name=\"FlowStageRelation\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FlexIndex\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowInterview\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"StageLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StageOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StageType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FlexIndex": {
+      "field_label": "Flex Index",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Flow Interview Stage Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentId": {
+      "field_label": "Flow Interview ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StageLabel": {
+      "field_label": "Stage Label",
+      "type": "string",
+      "length": "1000"
+    },
+    "StageOrder": {
+      "field_label": "Stage Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "StageType": {
+      "field_label": "Stage Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "AppointmentScheduleAggr - Data API",
+  "description": "Records the utilization of a service resource, by date, for the Load Balancing appointment assignment policy. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AppointmentDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date of the appointment."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name or ID of the AppointmentScheduleAggr object."
+    },
+    "ResourceUtilizationCount": {
+      "type": "integer",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of appointments scheduled for a service resource. Available in API version 53.0 and later. This is a calculated field."
+    },
+    "ServiceResourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service resource associated with the appointment scheduling aggregate. This is a relationship field.",
+      "relationship_name": "ServiceResource",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceResource"
+    },
+    "TotalResourceUtilization": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The number of minutes for which the service resource has scheduled appointments. This is a calculated field."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specify the usage type of the AppointmentScheduleAggr object. Possible values are: FSL_Daily FSL_Monthly FSL_Weekly LightningScheduler The default value is 'LightningScheduler'."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AppointmentScheduleAggrOwnerSharingRule**: Sharing rules are available for the object.\n- **AppointmentScheduleAggrShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AppointmentDate": {
+      "field_label": "Appointment Date",
+      "type": "date"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Appointment Schedule Aggregate ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ResourceUtilizationCount": {
+      "field_label": "Resource Utilization Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ServiceResourceId": {
+      "field_label": "Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalResourceUtilization": {
+      "field_label": "Total Resource Utilization",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

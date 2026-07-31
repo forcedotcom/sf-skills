@@ -1,0 +1,250 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActiveScratchOrg - Data API",
+  "description": "Represents an active scratch org. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of this scratch org."
+    },
+    "Edition": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The org edition of this scratch org. Possible values are Group, Developer, Enterprise, and Professional. This field is read only."
+    },
+    "ExpirationDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Date when the scratch org expires. This field is read only."
+    },
+    "Features": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The features enabled in this scratch org, such as MultiCurrency. See the Salesforce DX Developer Guide for the full list of valid features. This field is read only."
+    },
+    "HasSampleData": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the scratch org contains sample data. If set to true, the sample data is similar to the data in a Salesforce free trial org."
+    },
+    "LastLoginDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date of the last user login to the scratch org. This field is read only."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record. This field is read only."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate isn’t null, the user accessed this record or list view indirectly. This field is read only."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, Sort",
+      "description": "The auto-generated ID of this scratch org. This field is read only."
+    },
+    "Namespace": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace associated with this scratch org. This field is read only."
+    },
+    "OrgName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the scratch org. This field is read only."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who owns this scratch org. This field is read only."
+    },
+    "ScratchOrg": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The org ID of the scratch org. This field is read only."
+    },
+    "ScratchOrgInfoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The id of the associated ScratchOrgInfo object. This field is read only."
+    },
+    "SignupEmail": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The email address of the Administration user. This field is read only."
+    },
+    "SignupInstance": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Salesforce instance on which this scratch org resides. This field is read only."
+    },
+    "SignupTrialDays": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of days between the scratch org's creation and expiration. This field is read only."
+    },
+    "SignupUsername": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The username of the Administration user of the scratch org. This field is read only."
+    },
+    "Snapshot": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If this scratch org was created from a scratch org snapshot, then this field contains either the name or ID of the snapshot. Specifically, the name corresponds to the Name field of the snapshot’s record in the OrgSnapshot standard object; the ID corresponds to the record ID. If this scratch org wasn’t created from a snapshot, this field is empty. This field is read only. This field is available in API version 61.0 and later."
+    }
+  },
+  "usage": "Salesforce automatically creates an instance of this object after a ScratchOrgInfo record moves to the Active state. The new ActiveScratchOrg gets many of its field values from the ScratchOrgInfo object with which it’s associated. When you delete an ActiveScratchOrg record, its associated scratch org is deleted and its associated ScratchOrgInfo record is moved to the Deleted state.\n\nSalesforce automatically creates an instance of this object after a ScratchOrgInfo record moves to the Active state. The new ActiveScratchOrg gets many of its field values from the ScratchOrgInfo object with which it’s associated.\n\nWhen you delete an ActiveScratchOrg record, its associated scratch org is deleted and its associated ScratchOrgInfo record is moved to the Deleted state.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **ActiveScratchOrgFeed**: Feed tracking is available for the object.\n- **ActiveScratchOrgHistory**: History is available for tracked fields of the object.\n- **ActiveScratchOrgShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Edition": {
+      "field_label": "Edition",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ExpirationDate": {
+      "field_label": "Expiration Date",
+      "type": "date"
+    },
+    "Features": {
+      "field_label": "Features",
+      "type": "textarea",
+      "length": "10000"
+    },
+    "HasSampleData": {
+      "field_label": "Has Sample Data",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Active Scratch Org ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastLoginDate": {
+      "field_label": "Last Login Date",
+      "type": "date"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Number",
+      "type": "string",
+      "length": "255"
+    },
+    "Namespace": {
+      "field_label": "Namespace",
+      "type": "string",
+      "length": "9"
+    },
+    "OrgName": {
+      "field_label": "Org Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScratchOrg": {
+      "field_label": "Scratch Org ID",
+      "type": "string",
+      "length": "15"
+    },
+    "ScratchOrgInfoId": {
+      "field_label": "Scratch Org Info ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SignupEmail": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "SignupInstance": {
+      "field_label": "Instance",
+      "type": "string",
+      "length": "8"
+    },
+    "SignupTrialDays": {
+      "field_label": "Active Days",
+      "type": "int",
+      "digits": "9"
+    },
+    "SignupUsername": {
+      "field_label": "Username",
+      "type": "string",
+      "length": "80"
+    },
+    "Snapshot": {
+      "field_label": "Snapshot",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

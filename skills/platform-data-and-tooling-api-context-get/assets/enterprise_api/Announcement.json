@@ -1,0 +1,112 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Announcement - Data API",
+  "description": "Represents a Chatter group announcement. This object is available in API version 30.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date on which the announcement expires. Announcements display on the group UI until 11:59 p.m. local time on the selected date.",
+      "required": true
+    },
+    "FeedItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the FeedItem that contains the content of the announcement. Announcements are stored as text posts. This is a relationship field.",
+      "relationship_name": "FeedItem",
+      "relationship_type": "Lookup",
+      "refers_to": "FeedItem",
+      "required": true
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the parent CollaborationGroup that the announcement belongs to. An announcement can belong only to a single Chatter group. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "CollaborationGroup"
+    },
+    "SendEmails": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Set to true to email all group members when an announcement is posted to the group. The default is false. This requires the user to have the “Send announcement on email” permission. This field is available in API version 36.0 and later. Note: This field is currently available to select customers through a pilot program. To be nominated to join this pilot program, contact Salesforce. Additional terms and conditions may apply to participate in the pilot program. Please note that pilot programs are subject to change, and as such, we cannot guarantee acceptance into this pilot program or a particular time frame in which this feature can be enabled. Any unreleased services or features referenced in this document, press releases, or public statements are not currently available and may not be delivered on time or at all. Customers who purchase our services should make their purchase decisions based upon features that are currently available."
+    }
+  },
+  "usage": "Group owners, managers, and users with the “Modify All Data” permission can use the Announcement object to create, edit, and delete group announcements. Creating a group announcement is a three-step process. To delete the group announcement, simply delete the value in the CollaborationGroup record. To restore a group announcement, update the field for a group with the announcement’s ID. The expiration date for the announcement should be in the future and the feed item used to create the announcement should be parented by the same group.\n\nGroup owners, managers, and users with the “Modify All Data” permission can use\n    the Announcement object to create, edit, and delete group announcements. Creating a group\n    announcement is a three-step process.\n\nUse the FeedItem object to create a text post with the announcement’s content. Use\n      the CollaborationGroup record you want to post the announcement to as the parent of this feed\n      item.\n\nNext, use the feed item ID and an expiration date to create the announcement record.\n\nFinally, update the\n\nAnnouncementId\n\nfield in the CollaborationGroup\n      record with the ID of the announcement you created.\n\nTo delete the group announcement, simply delete the\n\nAnnouncementId\n\nvalue in the CollaborationGroup record. To restore a group announcement, update the\n\nAnnouncementId\n\nfield for a group with the announcement’s ID. The\n    expiration date for the announcement should be in the future and the feed item used to create\n    the announcement should be parented by the same group.",
+  "wsdl_segment": "```xml\n<complexType name=\"Announcement\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeedItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FeedItem\"/>\n        <element name=\"FeedItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsArchived\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CollaborationGroup\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SendEmails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExpirationDate": {
+      "field_label": "Expiration Date",
+      "type": "datetime"
+    },
+    "FeedItemId": {
+      "field_label": "Feed Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Announcement ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsArchived": {
+      "field_label": "Is Announcement Archived",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SendEmails": {
+      "field_label": "Send Emails on Announcement",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

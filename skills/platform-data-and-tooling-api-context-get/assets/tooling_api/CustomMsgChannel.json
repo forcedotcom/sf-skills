@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "CustomMsgChannel - Tooling API",
+  "description": "Represents a custom conversation channel and stores event-driven Messaging settings. Custom conversation channels are implemented for Bring Your Own Channel for Messaging and Bring Your Own Channel for CCaaS Messaging channels. This object is available in API version 63.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ChannelDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Specifies the ConversationChannelDefinition for the custom channel. This field is a relationship field.",
+      "relationship_name": "ChannelDefinition",
+      "refers_to": "ConversationChannelDefinition"
+    },
+    "EventCapabilitiesIsInboundAcknowledgementEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the Salesforce admin has enabled read receipts and delivery receipts for inbound messages in the Messaging settings (true) or whether the admin hasn’t enabled these inbound acknowledgments (false). The default value is false, meaning inbound acknowledgments are disabled by default even if supported by the partner. This field is available in API version 65.0 and later. Use this field instead of HasInboundReceipts."
+    },
+    "EventCapabilitiesIsProgressIndicatorEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the Salesforce admin has enabled AI agent progress indicators in the Messaging settings (true) or whether the admin hasn’t enabled progress indicators (false). The default value is false, meaning progress indicators for AI agents are disabled by default even if supported by the partner. This field is available in API version 65.0 and later."
+    },
+    "EventCapabilitiesIsTypingIndicatorDisabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the Salesforce admin has enabled typing indicators for outbound messages in the Messaging settings (false) or whether the admin hasn’t enabled outbound typing indicators (true). The default value is false, meaning the outbound typing indicators are enabled by default. This field is available in API version 65.0 and later. Use this field instead of HasTypingIndicator."
+    },
+    "HasInboundReceipts": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Available in API versions 63.0 to 65.0. In API version 66.0 and later, this field is removed. Use EventCapabilitiesIsInboundAcknowledgementEnabled instead. The default value is false."
+    },
+    "HasTypingIndicator": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Available in API versions 63.0 to 65.0. In API version 66.0 and later, this field is removed. Use EventCapabilitiesIsTypingIndicatorDisabled instead."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomMsgChannel\">\n  <xsd:sequence>\n    <xsd:element name=\"channelDefinition\" type=\"xsd:string\"/>\n    <xsd:element name=\"isInboundAcknowledgementEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isProgressIndicatorEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isTypingIndicatorDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"messagingChannel\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

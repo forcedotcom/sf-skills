@@ -1,0 +1,209 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AuthSession - Data API",
+  "description": "The AuthSession object represents an individual user session in your organization. This object is available in versions 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CreatedDate": {
+      "type": "dateTime",
+      "properties": "Defaulted on create, Filter, Sort",
+      "description": "The date and time this session was created. This field is a standard system field."
+    },
+    "Id": {
+      "type": "id",
+      "properties": "Defaulted on create, Filter, Group, ID Lookup, Sort",
+      "description": "The current session’s ID."
+    },
+    "IsAssociatedWithJwtAccessToken": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the session is associated with a JSON Web Token (JWT)-based access token. This field is available in API version 64.0 and later."
+    },
+    "IsCurrent": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the session is a member of the user’s current session family. This field is available in API version 37.0 and later."
+    },
+    "LastModifiedDate": {
+      "type": "dateTime",
+      "properties": "Defaulted on create, Filter, Sort",
+      "description": "The date and time this session was last updated. A session expires when the current date and time equals LastModifiedDate + NumSecondsValid. This field is a standard system field."
+    },
+    "LoginGeoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character ID for the record of the geographic location of the user for a login event. Due to the nature of geolocation technology, the accuracy of geolocation fields (for example, country, city, postal code) can vary. This field is available in API version 34.0 and later. This is a relationship field.",
+      "relationship_name": "LoginGeo",
+      "relationship_type": "Lookup",
+      "refers_to": "LoginGeo"
+    },
+    "LoginHistoryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character ID for a successful login event. When a session is reused, Salesforce updates the LoginHistoryId with the value from the most recent login. This field is available in API version 33.0 and later. This is a relationship field.",
+      "relationship_name": "LoginHistory",
+      "relationship_type": "Lookup",
+      "refers_to": "LoginHistory"
+    },
+    "LoginSubType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of login flow used. For a list of values, see the LoginSubType field on the LoginHistory object. This field is available in API version 67.0 and later."
+    },
+    "LoginType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of login used to access the session. For a list of values, see the LoginType field on the LoginHistory object."
+    },
+    "LogoutUrl": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The page or view to display after users log out of an Experience Cloud site, or an org if they authenticated using SAML. This field is available in API version 32.0 and later."
+    },
+    "NumSecondsValid": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of seconds before the session expires, starting from the last update time."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character ID for the parent session, if one exists (for example, if the current session is for a canvas app). If the current session doesn’t have a parent, this value is the current session’s own ID."
+    },
+    "SessionSecurityLevel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Standard or High, depending upon the authentication method used."
+    },
+    "SessionType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of session. Common ones are UI, Content, API, and Visualforce. For more information, see User Session Types in the Object Reference Guide."
+    },
+    "SourceIp": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "IP address of the end user’s device from which the session started. This address can be an IPv4 or IPv6 address. The SourceIp field doesn't support the LIKE comparison operator."
+    },
+    "UserType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The kind of user for this session. Types include Standard, Partner, Customer Portal Manager, High Volume Portal, and CSN Only."
+    },
+    "UsersId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s Salesforce user ID. This is a relationship field.",
+      "relationship_name": "Users",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "To access the AuthSession object, users must have the Manage Users permission.",
+  "usage": "The AuthSession object exposes session data and enables read and delete operations on that data. For example, use this object to see who is signed in to your org. Or you can use this object to create a tool to delete a session, ending that user’s session. For a user, only their own sessions are available, while administrators can see all sessions. You can’t change user sessions with this object. You can only read and delete them.\n\nThe AuthSession object exposes session data and enables read and delete operations on that data. For example, use this object to see who is signed in to your org. Or you can use this object to create a tool to delete a session, ending that user’s session. For a user, only their own sessions are available, while administrators can see all sessions.\n\nYou can’t change user sessions with this object. You can only read and delete them.",
+  "wsdl_segment": "```xml\n<complexType name=\"AuthSession\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsAssociatedWithJwtAccessToken\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsCurrent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LoginGeo\" nillable=\"true\" minOccurs=\"0\" type=\"ens:LoginGeo\"/>\n        <element name=\"LoginGeoId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LoginHistory\" nillable=\"true\" minOccurs=\"0\" type=\"ens:LoginHistory\"/>\n        <element name=\"LoginHistoryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LoginSubType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LoginType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LogoutUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NumSecondsValid\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SessionPermSetActivations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SessionSecurityLevel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SessionType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SourceIp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Users\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UsersId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedDate": {
+      "field_label": "Created",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Auth Session ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAssociatedWithJwtAccessToken": {
+      "field_label": "Associated With Jwt",
+      "type": "boolean"
+    },
+    "IsCurrent": {
+      "field_label": "Current Session",
+      "type": "boolean"
+    },
+    "LastModifiedDate": {
+      "field_label": "Updated",
+      "type": "datetime"
+    },
+    "LoginGeoId": {
+      "field_label": "Login Geo Data ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LoginHistoryId": {
+      "field_label": "Login History ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LoginSubType": {
+      "field_label": "Login Subtype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LoginType": {
+      "field_label": "Login",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LogoutUrl": {
+      "field_label": "Logout URL",
+      "type": "string",
+      "length": "1500"
+    },
+    "NumSecondsValid": {
+      "field_label": "Valid For",
+      "type": "int",
+      "digits": "9"
+    },
+    "ParentId": {
+      "field_label": "Auth Session ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SessionSecurityLevel": {
+      "field_label": "Session Security Level",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SessionType": {
+      "field_label": "Session Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SourceIp": {
+      "field_label": "Source IP",
+      "type": "string",
+      "length": "39"
+    },
+    "UserType": {
+      "field_label": "User Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UsersId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

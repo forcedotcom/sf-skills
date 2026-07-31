@@ -1,0 +1,178 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "TenantConsumptionAlert - Data API",
+  "description": "Stores a record each time a utilization signal is reached for your org's consumption-based products. Each record captures the signal type, the resource that triggered it, and the condition that was met. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AlertScope": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Identifies the top-level resource or component that the alert applies to. AlertScope, AlertSubScope1, and AlertSubScope2 together identify the exact target of the alert, from broadest to most specific.",
+      "required": true
+    },
+    "AlertStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates whether the alert condition is still active or has resolved (Active or Cleared). Active suppresses duplicate alerts while the condition persists. Cleared resets the alert so it can fire again.",
+      "required": true
+    },
+    "AlertSubScope1": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "Identifies a sub-resource or sub-component beneath the alert scope. Can be empty if no further refinement is required."
+    },
+    "AlertSubScope2": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "Identifies a sub-resource or sub-component that further refines AlertSubScope1. Can be empty if no further refinement is required. However, if you set AlertSubScope2, we recommend that you also set AlertSubScope1."
+    },
+    "AlertTimestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Group, Sort",
+      "description": "The date and time the alert was triggered.",
+      "required": true
+    },
+    "AlertType": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Identifies the type of signal that triggered the alert. Salesforce-managed alert types are prefixed with sf__.",
+      "required": true
+    },
+    "IsNotificationSent": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates whether a platform notification has been sent for this alert record (true) or not (false).",
+      "required": true
+    },
+    "TriggerType": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unit or measurement type of the value that triggered the alert, such as a percentage or unit count. Use this field to interpret the numeric value in TriggerValue. Values are: ThresholdPercent or ThresholdUnits.",
+      "required": true
+    },
+    "TriggerValue": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The numeric value that triggered the alert, which is interpreted in the context of TriggerType.",
+      "required": true
+    }
+  },
+  "usage": "TenantConsumptionAlert stores a record each time a utilization signal is reached for your org's consumption-based products or license utilization. Each record represents a single triggered signal and is structured hierarchically: AlertType identifies the high-level signal category. There are two types of alerts: Salesforce-managed and user-defined.\n\nTenantConsumptionAlert stores a record each time a utilization signal is reached for your org's consumption-based products or license utilization. Each record represents a single triggered signal and is structured hierarchically:\n\nAlertType identifies the high-level signal category.\n\nThere are two types of alerts: Salesforce-managed and user-defined.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object.\n\n- **TenantConsumptionAlertOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantConsumptionAlertShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AlertScope": {
+      "field_label": "Alert Scope",
+      "type": "string",
+      "length": "100"
+    },
+    "AlertStatus": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AlertSubScope1": {
+      "field_label": "Alert Sub Scope 1",
+      "type": "string",
+      "length": "100"
+    },
+    "AlertSubScope2": {
+      "field_label": "Alert Sub Scope 2",
+      "type": "string",
+      "length": "100"
+    },
+    "AlertTimestamp": {
+      "field_label": "Alert Timestamp",
+      "type": "datetime"
+    },
+    "AlertType": {
+      "field_label": "Alert Type",
+      "type": "string",
+      "length": "100"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Utilization Alert ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsNotificationSent": {
+      "field_label": "Notification Sent",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TriggerType": {
+      "field_label": "Trigger Type",
+      "type": "string",
+      "length": "100"
+    },
+    "TriggerValue": {
+      "field_label": "Trigger Value",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

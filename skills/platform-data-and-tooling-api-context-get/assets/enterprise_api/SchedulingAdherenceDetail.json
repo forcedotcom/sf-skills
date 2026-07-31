@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "SchedulingAdherenceDetail - Data API",
+  "description": "Represents the breakdown of daily shift adherence data by agent status. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsShrinkage": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the linked status is considered as shrinkage time (true) or not (false). Shrinkage time is time, such as breaks, when an agent doesn’t receive work. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A number that identifies this detail record."
+    },
+    "SchedulingAdherenceSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Scheduling Adherence Summary. This is a relationship field.",
+      "relationship_name": "SchedulingAdherenceSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "SchedulingAdherenceSummary"
+    },
+    "StatusId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the agent status represented by this detail record. This is a relationship field.",
+      "relationship_name": "Status",
+      "relationship_type": "Lookup",
+      "refers_to": "ServicePresenceStatus"
+    },
+    "StatusName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the agent status represented by this detail record."
+    },
+    "TotalStatusMinutes": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Total minutes that the agent was present with this status."
+    }
+  },
+  "special_access_rules": "The org requires a Workforce Engagement license, and both Workforce Engagement and Omni-Channel must be enabled. The user requires the Workforce Engagement Planner or Workforce Engagement Admin permission set."
+}

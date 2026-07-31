@@ -1,0 +1,123 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CaseTeamMember - Data API",
+  "description": "Represents a case team member, who works with a team of other users to help resolve a case.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "MemberId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the user or contact who is a member on a case team. This is a polymorphic relationship field.",
+      "relationship_name": "Member",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, User"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the case with which the case team member is associated. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "TeamRoleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the case team role with which the case team member is associated. This is a relationship field.",
+      "relationship_name": "TeamRole",
+      "relationship_type": "Lookup",
+      "refers_to": "CaseTeamRole"
+    },
+    "TeamTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the predefined team with which the case team member is associated. This is a relationship field.",
+      "relationship_name": "TeamTemplate",
+      "relationship_type": "Lookup",
+      "refers_to": "CaseTeamTemplate"
+    },
+    "TeamTemplateMemberId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the team member included in a predefined case team. This is a relationship field.",
+      "relationship_name": "TeamTemplateMember",
+      "relationship_type": "Lookup",
+      "refers_to": "CaseTeamTemplateMember"
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only users with read access to the Case object can access this object. When accessing from Apex code, use the WITH USER_MODE clause to enable field-level and object-level security permissions checking for SOQL SELECT queries, including subqueries and cross-object relationships. See Enforce User Mode for Database Operations.\n\nAs of Spring ’20 and later, only users with read access to the Case object can access this object.\n\nWhen accessing from Apex code, use the WITH USER_MODE clause to enable field-level and object-level security permissions checking for SOQL SELECT queries, including subqueries and cross-object relationships. See Enforce User Mode for Database Operations.",
+  "wsdl_segment": "```xml\n<complexType name=\"CaseTeamMember\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Member\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"MemberId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Case\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TeamRole\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CaseTeamRole\"/>\n        <element name=\"TeamRoleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"TeamTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CaseTeamTemplate\"/>\n        <element name=\"TeamTemplateId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"TeamTemplateMember\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CaseTeamTemplateMember\"/>\n        <element name=\"TeamTemplateMemberId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Team Member Id",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MemberId": {
+      "field_label": "Member ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TeamRoleId": {
+      "field_label": "Team Role ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TeamTemplateId": {
+      "field_label": "Team Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TeamTemplateMemberId": {
+      "field_label": "Team Template Member ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "AttribModelStageMetric - Data API",
+  "description": "Represents the engagement signal metrics that you select when you configure a funnel stage for an attribution configuration. Available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Alias": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates the name of the output data metric. This name appears as the column name for the metric on the attribution output table."
+    },
+    "AttribModelStageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the attribution configuration stage that uses this metric.",
+      "relationship_name": "AttribModelStage",
+      "relationship_type": "Primary-detail",
+      "refers_to": "AttribModelStage (the primary object)"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Three letter ISO currency codes for supported currencies. The default value is USD. This is an optional field."
+    },
+    "EngagementSignalMetricId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the engagement signal that defines this stage.",
+      "relationship_name": "EngagementSignalMetric",
+      "refers_to": "EngagementSignalMetric"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The text label that identifies the attribution model stage metric."
+    }
+  },
+  "usage": "An engagement signal metric is an aggregation of an engagement signal data field. These metrics are reported in the attribution model dashboard. For example, sum of clicks on a link, number of products added to a cart, email sends, or distinct article downloads.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AttribModelStageMetricChangeEvent**: Change events are available for the object.\n- **AttribModelStageMetricFeed**: Feed tracking is available for the object.\n- **AttribModelStageMetricHistory**: History is available for tracked fields of the object.\n- **AttribModelStageMetricOwnerSharingRule**: Sharing rules are available for the object.\n- **AttribModelStageMetricShare**: Sharing is available for the object."
+}

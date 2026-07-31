@@ -1,0 +1,135 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "ContactSuggestionInsight - Data API",
+  "description": "Represents a suggestion for a new contact record. Available in API versions 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related account."
+    },
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The address of the suggested contact."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The city of the suggested contact."
+    },
+    "ContactTitle": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The title of the suggested contact."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The country of the suggested contact."
+    },
+    "CreatedRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the created contact record."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The division of the suggested contact."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The email address of the suggested contact."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The first name of the suggested contact."
+    },
+    "GeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Accuracy level of the geocode for the address. See Compound Field Considerations and Limitations for details on geolocation compound fields. Note: This field is available in the API only."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The last name of the suggested contact."
+    },
+    "LastOperationUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who last performed a related operation."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used in conjunction with Longitude to specify the precise geolocation of an address."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used in conjunction with Latitude to specify the precise geolocation of an address."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The phone number of the suggested contact."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The postal code of the suggested contact."
+    },
+    "RationaleLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The reason why this entry is a suggested contact."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The state of the suggested contact."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the suggested contact. Possible values include: New Pending Added Declined"
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The street of the suggested contact."
+    }
+  },
+  "special_access_rules": "To add or decline contact suggestions, users need a Sales Cloud Einstein license and edit access on accounts. As of the Spring ’20 release, Pardot and Sales Engagement users no longer have access to this object.",
+  "usage": "This object is read-only and isn’t supported in workflows, triggers, process builder, or Visualforce pages."
+}

@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ProcessNode - Data API",
+  "description": "Describes a step in a process definition. Compare to ProcessInstanceNode, which describes a step in a running process. This object is available in API version 31.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A description of this node, no longer than 3,000 bytes."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The external name of the node that’s seen by users."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The unique node name."
+    },
+    "ProcessDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the object affected by this approval instance. A relationship field.",
+      "relationship_name": "ProcessDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "ProcessDefinition"
+    }
+  },
+  "usage": "Use this object to get details about the process node or the process definition that it's associated with.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ProcessNode\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProcessDefinition\"/>\n        <element name=\"ProcessDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "DeveloperName": {
+      "field_label": "Unique Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Process Node ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProcessDefinitionId": {
+      "field_label": "Approval Process ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

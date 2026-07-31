@@ -1,0 +1,192 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "StandardShippingRate - Data API",
+  "description": "Standard shipping rate for a store. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ConditionFactor": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Conditions that affect the shipping rate. Possible values are: OrderPriceFactor—Condition based on the order price value. OrderWeightFactor—Condition based on delivery weight. This value is available in API version 62.0 and later."
+    },
+    "ConditionRangeMax": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Maximum value of the shipping rate condition."
+    },
+    "ConditionRangeMin": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Minimum value of the shipping rate condition. This value can't be negative."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Currency ISO code of the cart. Possible values are: EUR—Euro USD—U.S. Dollar The default value is USD."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the standard shipping rate."
+    },
+    "Price": {
+      "type": "currency",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "Price of standard shipping."
+    },
+    "ShippingCarrierMethodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the shipping service carrier method. This field is available in API version 61.0 and later. This field is a relationship field.",
+      "relationship_name": "ShippingCarrierMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "ShippingCarrierMethod"
+    },
+    "ShippingZoneId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the shipping zone. This field is a relationship field.",
+      "relationship_name": "ShippingZone",
+      "relationship_type": "Parent-detail",
+      "refers_to": "ShippingRateArea (the master object)"
+    },
+    "TransitTimeMax": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Maximum value of the shipping transit time. This field is available in API version 61.0 and later."
+    },
+    "TransitTimeMin": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Minimum value of the shipping transit time. This value can't be negative. This field is available in API version 61.0 and later."
+    },
+    "TransitTimeUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Unit of value for shipping transit time. This field is available in API version 61.0 and later. Possible values are: Days Hours Weeks"
+    },
+    "WeightUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Unit of measurement for the weight of the cart items. This field is available in API version 62.0 and later. Possible values are: Grams Kilograms Ounces Pounds"
+    }
+  },
+  "special_access_rules": "The StandardShippingRate object is available only if the B2B Commerce or D2C Commerce license is enabled.\n\nThe StandardShippingRate object is available only\n         if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "ConditionFactor": {
+      "field_label": "Condition Factor",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ConditionRangeMax": {
+      "field_label": "Condition Range Max",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ConditionRangeMin": {
+      "field_label": "Condition Range Min",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Standard Shipping Rate ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Standard Shipping Rate Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Price": {
+      "field_label": "Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ShippingCarrierMethodId": {
+      "field_label": "Shipping Carrier Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShippingZoneId": {
+      "field_label": "Shipping Rate Area ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TransitTimeMax": {
+      "field_label": "Maximum Transit Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "TransitTimeMin": {
+      "field_label": "Minimum Transit Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "TransitTimeUnit": {
+      "field_label": "Unit of Transit Time",
+      "type": "picklist",
+      "length": "255"
+    },
+    "WeightUnit": {
+      "field_label": "Unit of Weight",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

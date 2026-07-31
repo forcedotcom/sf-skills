@@ -1,0 +1,90 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CustomPermissionDependency - Data API",
+  "description": "Represents the dependency between two custom permissions when one custom permission requires that you enable another custom permission. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CustomPermissionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the custom permission that requires the permission that’s specified in RequiredCustomPermissionId. This is a relationship field.",
+      "relationship_name": "CustomPermission",
+      "relationship_type": "Lookup",
+      "refers_to": "CustomPermission"
+    },
+    "RequiredCustomPermissionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the custom permission that must be enabled when CustomPermissionId is enabled. This is a relationship field.",
+      "relationship_name": "RequiredCustomPermission",
+      "relationship_type": "Lookup",
+      "refers_to": "CustomPermission"
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only users with View Setup and Configuration permission can access this object.",
+  "usage": "The following Apex class contains a method that returns the IDs of all custom permissions that are required for the given custom permission ID. To use this class, save it in your organization. For more information about using Apex classes, see the .\n\nThe following Apex class contains a method that returns the IDs of all custom permissions that are required for the given custom permission ID. To use this class, save it in your\n\t\t\t\torganization.\n\nCustomPermissionUtil\n\ngetAllRequiredCustomPermissions\n\ncustomPermId\n\ngetAllRequiredHelper\n\ncustomPermId\n\ngetAllRequiredHelper\n\ncustomPermIds\n\nCustomPermissionDependency\n\nrequiredPerms\n\nRequiredCustomPermissionId\n\nCustomPermissionDependency\n\nCustomPermissionId\n\ncustomPermIds\n\nrequiredPermIds\n\nCustomPermissionDependency\n\nrequiredPerms\n\nrequiredPermIds\n\nRequiredCustomPermissionId\n\nrequiredPermIds\n\ncustomPermIds\n\ngetAllRequiredHelper\n\nrequiredPermIds\n\ncustomPermIds\n\ncustomPermIds\n\nFor\n\t\t\t\tmore information about using Apex classes, see the\n\nApex Developer Guide",
+  "wsdl_segment": "```xml\n<complexType name=\"CustomPermissionDependency\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomPermission\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CustomPermission\"/>\n        <element name=\"CustomPermissionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"RequiredCustomPermission\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CustomPermission\"/>\n        <element name=\"RequiredCustomPermissionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomPermissionId": {
+      "field_label": "Custom Permission ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Custom Permission Dependency ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RequiredCustomPermissionId": {
+      "field_label": "Custom Permission ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

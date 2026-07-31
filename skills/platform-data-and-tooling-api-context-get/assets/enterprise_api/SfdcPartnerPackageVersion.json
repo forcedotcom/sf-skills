@@ -1,0 +1,50 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerPackageVersion - Data API",
+  "description": "Represents a released version of a first generation (1GP) or second generation (2GP) package in a Partner Business Org (PBO) with the Go-To-Market app enabled. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Id": {
+      "type": "string",
+      "properties": "Defaulted on create, Filter, Group, idLookup, Sort",
+      "description": "System field. The unique identifier for the record."
+    },
+    "IsSecondGeneration": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the package is 2GP. The default value is false."
+    },
+    "PackageVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character external ID of the package version."
+    },
+    "PartnerPackageId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The partner package from which this package version was created. This field is a relationship field.",
+      "relationship_name": "PartnerPackage",
+      "refers_to": "SfdcPartnerPackage"
+    },
+    "VersionName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version name of the package."
+    },
+    "VersionNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version number of the package."
+    }
+  }
+}

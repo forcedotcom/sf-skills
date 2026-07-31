@@ -1,0 +1,91 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "API Total Usage - Data API",
+  "description": "API Total usage events contain details about Platform SOAP API, Platform REST API, and Bulk API requests.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "API_CLIENT_CATEGORY": {
+      "type": "String",
+      "description": "The category of the client making the API request. Possible values are: AGENTFORCE_AGENT—API request is from an Agentforce agent. EXTERNAL_APPLICATION—API request is from an external app defined in the org. LIGHTNING_UI—API request is from the Lightning UI. SALESFORCE—API request is from an internal Salesforce app or service. UNKNOWN—API request is from an unrecognized category. SALESFORCE_HOSTED_MCP—API request is from a Salesforce Hosted MCP Server."
+    },
+    "API_FAMILY": {
+      "type": "String",
+      "description": "The API family. Possible values are REST, SOAP, Bulk, ApexREST, DirectApexREST or DirectAura. ApexREST indicates an Apex REST call. DirectApexREST indicates an Apex REST Agent Action call. DirectAura indicates an AuraEnabled Apex Agent Action call."
+    },
+    "API_RESOURCE": {
+      "type": "String",
+      "description": "The API method or resource. For example, describeSObjects for SOAP, or /v21.0/sobjects/Account/001xx000003DGQW for REST."
+    },
+    "API_VERSION": {
+      "type": "Number",
+      "description": "The API version. For example, 21.0."
+    },
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CLIENT_NAME": {
+      "type": "String",
+      "description": "The name of the client making the API request. Includes values passed via the Sforce-Call-Options header."
+    },
+    "CONNECTED_APP_ID": {
+      "type": "String",
+      "description": "The ID of the connected app making the API request. If the connected app ID includes the prefix 0H4, append it to the connected app ID in the My Domain URL to access app details (https://MyDomainName.my.salesforce.com/0H4xxxxxxxxxxxx). If, however, the connected app ID uses the prefix 888, contact Salesforce Customer Support for app details."
+    },
+    "CONNECTED_APP_NAME": {
+      "type": "String",
+      "description": "The name of the connected app making the API request."
+    },
+    "COUNTS_AGAINST_API_LIMIT": {
+      "type": "Boolean",
+      "description": "Whether the request counted against the API limit (true) or not (false)."
+    },
+    "ENTITY_NAME": {
+      "type": "Set",
+      "description": "The name of the object accessed by the API request. For example: Account, Opportunity, Contact, and so on."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always ApiTotalUsage."
+    },
+    "HTTP_METHOD": {
+      "type": "String",
+      "description": "The HTTP method. For example, GET."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000123."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "STATUS_CODE": {
+      "type": "Number",
+      "description": "The HTTP response status code for the request."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the API. For example: 00530000009M943"
+    },
+    "USER_NAME": {
+      "type": "String",
+      "description": "The username of the user who's using Salesforce services through the API."
+    }
+  }
+}

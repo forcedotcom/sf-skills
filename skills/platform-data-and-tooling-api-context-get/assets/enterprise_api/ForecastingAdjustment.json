@@ -1,0 +1,222 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingAdjustment - Data API",
+  "description": "This object represents an individual forecast manager’s adjustment for a subordinate’s or child territory’s forecast via a ForecastingItem. Available in API versions 26.0 and later. This object is different from the ForecastingOwnerAdjustment object, which represents forecast users’ adjustments of their own forecasts, including territory forecasts they own.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustedAmount": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The revenue amount of an individual forecast item, after an adjustment."
+    },
+    "AdjustedQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The quantity amount of an individual forecast item, after an adjustment. This field is available in API version 28.0 and later."
+    },
+    "AdjustmentNote": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A text note providing information about the adjustment. The maximum length is 255 characters. This field doesn’t appear in reports."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The currency code of the adjustment. If omitted, the default is the user’s personal currency."
+    },
+    "ForecastCategoryName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The category within the sales cycle that an opportunity is assigned to based on its opportunity stage. The standard forecast categories are Pipeline, Best Case, Commit, Omitted, and Closed. You can add a Most Likely category and can customize forecast category names in single category rollups. The forecast categories display information for that specific category; for example, Best Case only reflects amounts in the Best Case category."
+    },
+    "ForecastingGroupItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If a forecast group is assigned to the forecast type, the ID of the group value that the manager adjustment belongs to. This field is a relationship field. Available in API version 60.0 and later.",
+      "relationship_name": "ForecastingGroupItem",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingGroupItem"
+    },
+    "ForecastingItemCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The category the forecast belongs to. For individual forecast category rollups, the possible values are: PipelineOnly—Rollup from Pipeline opportunities only. BestCaseOnly—Rollup from Best Case opportunities only. The value in this category is adjustable. MostLikelyOnly—Rollup from Most Likely opportunities only. The value in this category is adjustable. CommitOnly—Rollup from Commit opportunities only. The value in this category is adjustable. For cumulative forecast rollups, the possible values are: OpenPipeline—Rollup from Pipeline, Best Case, Most Likely, and Commit opportunities. BestCaseForecast—Rollup from Best Case, Most Likely, Commit, and Closed opportunities. The value in this category is adjustable. MostLikelyForecast—Rollup from Most Likely, Commit, and Closed opportunities. The value in this category is adjustable. CommitForecast—Rollup from Commit and Closed opportunities. The value in this category is adjustable. For either cumulative or individual forecast category rollups, the possible values are: ClosedOnly —Rollup from Closed opportunities only."
+    },
+    "ForecastingItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related ForecastingItem."
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the related ForecastingType."
+    },
+    "IsAmount": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, then the adjustment is made in a revenue amount. If false, then IsQuantity must be true. This field is available in API version 28.0 and later."
+    },
+    "IsQuantity": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, then the adjustment is made in a quantity amount. If false, then IsAmount must be true. This field is available in API version 28.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create,Defaulted on create, Filter, Group, Sort",
+      "description": "The ID of the forecast owner."
+    },
+    "PeriodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Period ID for the adjustment. Read only."
+    },
+    "ProductFamily": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The Product Family for the adjustment. Read only. This field is available in API version 29.0 and later."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The start of the adjustment, expressed as month and year. The date can include any day in a given month. Stored using the first date of the month."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the territory to forecast on. Available in API version 43.0 and later."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only standard users with the View All Forecasts or Allow Forecasting permission or delegated forecast manager status can access this object.",
+  "usage": "Use this object to obtain a manager’s adjustment detail for a specified ForecastingItem. The ForecastingAdjustment object is visible to all users, but only forecast managers and users above them in the forecast hierarchy can read or write ForecastingAdjustment records. The ForecastingItemCategory field differs from the ForecastCategoryName field. When inserting manager adjustments, the values you insert for ForecastCategoryName and ForecastingItemCategory must be compatible with each other. In organizations using cumulative forecast rollups, the ForecastCategoryName is nillable. The following pairs are valid.\n\nUse this object to obtain a manager’s adjustment detail for a specified ForecastingItem. The ForecastingAdjustment object is visible to all users, but only forecast managers and users above them in the forecast hierarchy can read or write ForecastingAdjustment records.\n\nThe ForecastingItemCategory field differs from the ForecastCategoryName field.\n\nWhen inserting manager adjustments, the values you insert for ForecastCategoryName and ForecastingItemCategory must be compatible with each other. In organizations using cumulative forecast rollups, the ForecastCategoryName is nillable. The following pairs are valid.\n\n- **For individual forecast category rollups:**: For individual forecast category rollups: ForecastCategoryName: BestCase, ForecastingItemCategory: BestCaseOnly ForecastCategoryName: MostLikely, ForecastingItemCategory: MostLikelyOnly ForecastCategoryName: Commit, ForecastingItemCategory: CommitOnly For cumulative forecast category rollups: ForecastCategoryName: null, ForecastingItemCategory: BestCaseForecast ForecastCategoryName: null, ForecastingItemCategory: MostLikelyForecast ForecastCategoryName: null, ForecastingItemCategory: CommitForecast\n- **For cumulative forecast category rollups:**: ForecastCategoryName: BestCase, ForecastingItemCategory: BestCaseOnly ForecastCategoryName: MostLikely, ForecastingItemCategory: MostLikelyOnly ForecastCategoryName: Commit, ForecastingItemCategory: CommitOnly\n\n- **For individual forecast category rollups:**: ForecastCategoryName: BestCase, ForecastingItemCategory: BestCaseOnly ForecastCategoryName: MostLikely, ForecastingItemCategory: MostLikelyOnly ForecastCategoryName: Commit, ForecastingItemCategory: CommitOnly\n- **For cumulative forecast category rollups:**: ForecastCategoryName: null, ForecastingItemCategory: BestCaseForecast ForecastCategoryName: null, ForecastingItemCategory: MostLikelyForecast ForecastCategoryName: null, ForecastingItemCategory: CommitForecast",
+  "field_reference": {
+    "AdjustedAmount": {
+      "field_label": "Adjusted Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "AdjustedQuantity": {
+      "field_label": "Adjusted Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "AdjustmentNote": {
+      "field_label": "Adjustment Note",
+      "type": "textarea",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ForecastCategoryName": {
+      "field_label": "Forecast Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ForecastingGroupItemId": {
+      "field_label": "Forecasting Group Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingItemCategory": {
+      "field_label": "Forecasting Item Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ForecastingItemId": {
+      "field_label": "Forecasting Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "ForecastingAdjustment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAmount": {
+      "field_label": "Is Amount",
+      "type": "boolean"
+    },
+    "IsQuantity": {
+      "field_label": "Is Quantity",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PeriodId": {
+      "field_label": "Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductFamily": {
+      "field_label": "Product Family",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StartDate": {
+      "field_label": "Period Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

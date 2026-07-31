@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "PrivacyHold - Data API",
+  "description": "Represents a Privacy Hold that indicates that a record should be preserved from masking or deletion by Data Management policies in Privacy Center. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date the Privacy Hold ends."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if Privacy Hold is active on the record. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the Privacy Hold."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of the account associated with this customer. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PrivacyHoldReasonId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the associated Privacy Hold Reason. This field is a relationship field.",
+      "relationship_name": "PrivacyHoldReason",
+      "relationship_type": "Lookup",
+      "refers_to": "PrivacyHoldReason"
+    },
+    "ReferenceRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the record marked for the Privacy Hold. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Contact, Individual, Lead, User"
+    },
+    "ReferenceRecordType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of object the record with the Privacy Hold is associated with. Possible values are: Account Contact Individual Lead User"
+    },
+    "RegisteredDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date the Privacy Hold was added to the record."
+    }
+  },
+  "special_access_rules": "This object is available for users with the Privacy Center license and the Manage Privacy Hold user permission.\n\nThis object is available for users with the\n         Privacy Center license and the Manage Privacy Hold user permission."
+}

@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "DomainSite - Data API",
+  "description": "Read-only junction object that joins the Site and Domain objects. This object is available in API version 26.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DomainId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the associated Domain. This is a relationship field. Relationship Name Domain Relationship Type Lookup Refers To Domain"
+    },
+    "PathPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Shows where a site’s root exists on a domain. Can only be set for custom Web addresses. Always begins with a /."
+    },
+    "SiteId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the associated Site. This is a relationship field. Relationship Name Site Relationship Type Lookup Refers To Site"
+    }
+  },
+  "usage": "Use this read-only object to query or retrieve information about your sites.",
+  "wsdl_segment": "```xml\n<complexType name=\"DomainSite\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Domain\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Domain\"/>\n        <element name=\"DomainId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PathPrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Site\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Site\"/>\n        <element name=\"SiteId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DomainId": {
+      "field_label": "Domain ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Custom URL ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PathPrefix": {
+      "field_label": "Path",
+      "type": "string",
+      "length": "255"
+    },
+    "SiteId": {
+      "field_label": "Site ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

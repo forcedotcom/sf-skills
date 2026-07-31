@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "PersonTraining - Data API",
+  "description": "Represents an assignment of a learning module in Workforce Engagement. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssigneeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A valid user ID for the user who’s assigned the training. AssigneeId can’t be empty if the Status field is Assigned. We recommend that you set AssigneeId to the value in OwnerId. This is a relationship field.",
+      "relationship_name": "Assignee",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the learning module."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The user who owns the person training. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the training. Possible values are: A—Assigned; when the Status is assigned, the AssigneeId field can’t be empty. C—Completed I—In Progress N—New P—Paused The default value is 'N'."
+    },
+    "TrainingId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the learning module. This is a relationship field.",
+      "relationship_name": "Training",
+      "relationship_type": "Lookup",
+      "refers_to": "LearningContent"
+    },
+    "TrainingType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of training. Possible values are: T—Trailhead"
+    }
+  },
+  "special_access_rules": "The org requires a Workforce Engagement license and an Enablement Sites (myTrailhead) license. The user requires at least one Workforce Engagement permission set assigned to them: Workforce Engagement Admin, Workforce Engagement Analyst, Workforce Engagement Planner, or Workforce Engagement Agent. Workforce Engagement Management uses this object to route training to agents. To assign modules to agents, users with the Learning Manager profile require Read, Create, and View All Records access to this object. To receive routed modules, users with the Learner profile require Read access to this object.\n\nThe org requires a Workforce Engagement license and an Enablement Sites (myTrailhead) license. The user requires at least one Workforce Engagement permission set assigned to them: Workforce Engagement Admin, Workforce Engagement Analyst, Workforce Engagement Planner, or Workforce Engagement Agent.\n\nWorkforce Engagement Management uses this object to route training to agents. To assign modules to agents, users with the Learning Manager profile require Read, Create, and View All Records access to this object. To receive routed modules, users with the Learner profile require Read access to this object.",
+  "usage": "In version 54.0 and later releases, Workforce Engagement uses this object instead of the AgentTraining object to route learning modules to agents. If you set up agent engagement in your org in an earlier release, we rename AgentTraining records as PersonTraining records."
+}

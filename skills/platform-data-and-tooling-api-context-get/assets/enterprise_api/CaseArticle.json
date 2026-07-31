@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "CaseArticle - Data API",
+  "description": "Represents the association between a Case and a KnowledgeArticle. This object is available in API version 20.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ArticleLanguage": {
+      "type": "picklist",
+      "properties": "Filter, Restricted picklist",
+      "description": "The language of the article associated with the case."
+    },
+    "ArticleVersionNumber": {
+      "type": "int",
+      "properties": "Create, Group, Nillable",
+      "description": "The number assigned to a version of an article. This field is available in API version 24.0 and later."
+    },
+    "CaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Case associated with the KnowledgeArticle."
+    },
+    "IsSharedByEmail": {
+      "type": "int",
+      "properties": "Create, Group, Nillable",
+      "description": "Indicates that the article has been shared with the customer through an email."
+    },
+    "KnowledgeArticleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the KnowledgeArticle associated with the Case."
+    }
+  },
+  "special_access_rules": "Access to this object is controlled by the parent Case and KnowledgeArticle. However, when querying, access is only controlled by the parent Case. Customer Portal users can't access this object.\n\nAccess to this object is controlled by the parent Case and KnowledgeArticle. However, when querying, access is only controlled by the parent Case.\n\nCustomer Portal users can't access this object.",
+  "usage": "This object represents the association of a knowledge article with a Case. An article is associated with a case when it’s relevant to a specific issue, when it helps an agent solve the case, or when the agent sends the article to a customer. You can use this object to include case-article associations in Apex and Visualforce. You can't update this object via the API. If you attempt to create a record that matches an existing record, the create request simply returns the existing record.\n\nThis object represents the association of a knowledge article with a Case. An article is associated with a case when it’s relevant to a specific issue, when it helps an agent solve the case, or when the agent sends the article to a customer.\n\nYou can use this object to include case-article associations in Apex and Visualforce.\n\nYou can't update this object via the API. If you attempt to create a record that matches an existing record, the create request simply returns the existing record.",
+  "field_reference": {
+    "ArticleLanguage": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ArticleVersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "6"
+    },
+    "CaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Case Article ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsSharedByEmail": {
+      "field_label": "Is Shared by Email",
+      "type": "boolean"
+    },
+    "KnowledgeArticleId": {
+      "field_label": "Article ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "KnowledgeArticleVersionId": {
+      "field_label": "Knowledge Article Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

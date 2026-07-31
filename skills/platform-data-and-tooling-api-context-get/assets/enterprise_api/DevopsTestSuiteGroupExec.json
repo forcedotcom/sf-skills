@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsTestSuiteGroupExec - Data API",
+  "description": "Records the execution lifecycle of a test suite group within a DevOps pipeline stage, including execution status, quality gate outcomes, timing information, and deployment request details. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DevopsPipelineStageTriggerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the pipeline stage trigger with which this test suite stage is associated.",
+      "relationship_name": "DevopsPipelineStageTrigger",
+      "refers_to": "DevopsPipelineStageTrigger"
+    },
+    "ExecutionEndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the test suite group finished executing. This field remains null (nillable) while the execution is actively In Progress or Pending and is populated immediately upon the completion, failure, or error termination of the run."
+    },
+    "ExecutionStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The precise date and time when the execution of the test suite group officially commenced within the DevOps pipeline stage. It is used alongside the end time to calculate the total duration of the test execution lifecycle."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique identifier (auto-number) for the DevOps Test Suite Stage record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or queue that owns the test suite group execution record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "PendingExecutionCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the number of test executions that are still pending within the execution group."
+    },
+    "QualityGateStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Represents the outcome of quality gate validation for the execution group. Possible values are: Error Failed InProgress Passed"
+    },
+    "RequestInfoId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the DevOps request or deployment request associated with this execution.",
+      "relationship_name": "RequestInfo",
+      "refers_to": "DevopsRequestInfo"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Represents the overall execution status of the test suite group. Possible values are: Error Failed InProgress Passed"
+    }
+  }
+}

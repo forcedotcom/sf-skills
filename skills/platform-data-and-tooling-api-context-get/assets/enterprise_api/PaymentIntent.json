@@ -1,0 +1,632 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentIntent - Data API",
+  "description": "Represents data temporarily stored during a transaction’s lifecycle that can identify the buyer, the merchant, and the amount the buyer is sending to the merchant. Data such as timestamp and amount returned can also be stored in PaymentIntent. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The account record of the buyer. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "AmountCapturable": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Payment amount that a merchant can collect after the fulfillment of an order."
+    },
+    "AmountRefundable": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of the payment that the merchant can refund."
+    },
+    "AuthorizationReversalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount canceled before completing the transfer of funds from buyer to merchant."
+    },
+    "AuthorizedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount authorized by the payer’s bank."
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The billing address of the account holder. This field is the compound form of the billing address. Read-only. For details on compound address fields, see Address Compound Fields."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address. The maximum size is 40 characters."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address. The maximum size is 80 characters."
+    },
+    "BillingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country code for the billing address."
+    },
+    "BillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the billing address. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLongitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLatitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address. Maximum size is 20 characters."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address. Maximum size is 80 characters."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address."
+    },
+    "CapturedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount that a merchant secured from a buyer."
+    },
+    "ContextData": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "Additional metadata or information about a payment, such as the source of the payment, user data, or any other relevant information that can help in processing or tracking the payment."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "ISO code for any currency allowed by the organization. Available only for orgs with the multicurrency feature enabled. Possible values are: Euro USD The default is USD."
+    },
+    "DisputeEvidenceDueDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date by which the merchant must submit information related to the dispute."
+    },
+    "DisputeFee": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount that the credit card company charges the merchant for each disputed payment. The fee is also known as a chargeback fee."
+    },
+    "DisputeStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The state of the disputed transaction. Possible values are: Closed—The dispute inquiry is closed. Created—The payment gateway opens a payment dispute. Lost—The bank ruled in the account owner’s favor and refunded the charge. The refund is permanent and the dispute fee isn’t returned. Won—The bank ruled in the merchant's favor. The issuing bank returns the debited chargeback amount to the payment gateway, who passes this amount back to the merchant."
+    },
+    "DisputedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount the customer is challenging."
+    },
+    "EntryMode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates how the payment information was provided. Possible values are: Flow—Salesforce flow that initiated the payment. Merchant—The credit card isn’t available so the merchant entered the payment information via the phone or an email. Payer_Online—The payer entered their payment information online. Place_Order_V2—The payment was initiated from the Place Order V2 Orchestration. TapToPay—The card was available and the payer tapped that card or device on the payment terminal."
+    },
+    "Guid": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "Unique ID of the payment sent to Stripe or PayPal. This ID links the Payments Merchant Account record with the payment at the payment provider."
+    },
+    "IncurrenceStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of an orphaned payment. An orphaned payment occurs when a payment transaction is complete, but the workflow is disrupted, and the payment isn't recorded in the consuming flow. An unexpected error can cause an orphaned payment. For example, a payment is accepted at checkout, but the order doesn't get placed because of a network issue. Possible values are: Canceled—The workflow was disrupted and the payment was canceled or refunded. Claimed—The payment was recorded and the workflow was completed. Pending—The consuming workflow hasn't recorded the payment yet. If there isn't a value for this field, it means that the consumer doesn't rely on it to track orphaned payments."
+    },
+    "IntentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount that a merchant expects to receive from a buyer."
+    },
+    "IsCaptureComplete": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Verification whether the funds for a given payment are paid. The default value is false."
+    },
+    "IsEvidenceSubmitted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Status of the requested information that the merchant provides to the bank about the dispute. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced but not viewed."
+    },
+    "MerchantAccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Required field. The merchant account record associated with a payment intent record. This field is a relationship field.",
+      "relationship_name": "MerchantAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "MerchantAccount",
+      "required": true
+    },
+    "PaymentGatewayId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The payment gateway record that processed the payment.",
+      "relationship_name": "PaymentGateway",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGateway"
+    },
+    "PaymentGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Payment groups organize all the payment transactions that have been made against a record such as an account or contract. This is a relationship field. This field is available in API version 65.0 and later.",
+      "relationship_name": "PaymentGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGroup"
+    },
+    "PaymentInitiationSourceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The payment initiation source record associated with the payment. The record identifies the originating application and object of the payment..lo",
+      "relationship_name": "PaymentInitiationSource",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentInitiaionSource"
+    },
+    "PaymentIntentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Autogenerated number assigned to the payment record, for example PI-000000001."
+    },
+    "PaymentLinkGmvDate": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Date the payment is captured from a payment link transaction. The total amount paid is expressed as the Gross Merchandise Value (GMV)."
+    },
+    "PaymentLinkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The payment link record. This field is a relationship field.",
+      "relationship_name": "PaymentLink",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentLink"
+    },
+    "PaymentMethodDetails": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Additional information about the payment method type such as the four last digits of a card number."
+    },
+    "PaymentMethodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The payment method record, indicating a card payment method, digital wallet, or alternative payment method. This field is a polymorphic relationship field.",
+      "relationship_name": "PaymentMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentMethod"
+    },
+    "PaymentMethodSubType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A payment method that exists as a subtype of a payment method type. For example, Visa, Mastercard, and American Express exist as subtypes of payment method types such as Apple Pay and Google Pay."
+    },
+    "PaymentMethodType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Payment method used for the transaction."
+    },
+    "ProviderReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A payment record at the payment gateway that identifies the payment provider."
+    },
+    "RefundedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total or partial amount refunded to the buyer due to product return, merchant’s lack of inventory, or shipping and delivering problems."
+    },
+    "ShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Delivery address for the purchase. The compound form of the shipping address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "ShippingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address. City maximum size is 40 characters."
+    },
+    "ShippingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address. Country maximum size is 80 characters."
+    },
+    "ShippingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country code for the shipping address."
+    },
+    "ShippingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the shipping address. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "ShippingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLongitude to specify the precise geolocation of a shipping address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "ShippingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLatitude to specify the precise geolocation of an address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "ShippingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address. The maximum size of the postal code is 20 characters."
+    },
+    "ShippingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address. State maximum size is 80 characters."
+    },
+    "ShippingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details of the shipping address. Maximum of 255 characters."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the payment record. Possible values are: Authorized Canceled Created Expired Failed PartiallyCaptured PartiallyRefunded Pending Refunded Succeeded"
+    },
+    "SubmittedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The submitted by record, which identifies who processes the payment on the customer's behalf. The customer provides the authorization to submit the payment over the phone or through the mail. This field is a relationship field.",
+      "relationship_name": "SubmittedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license with the Payments permission enabled for your org. Salesforce Payments entities are available only in Lightning Experience.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AmountCapturable": {
+      "field_label": "Amount Capturable",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AmountRefundable": {
+      "field_label": "Amount Refundable",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AuthorizationReversalAmount": {
+      "field_label": "Authorization Reversal Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AuthorizedAmount": {
+      "field_label": "Authorized Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BillingAddress": {
+      "field_label": "Billing Address",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "Bill To City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Bill To Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Bill To Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Bill To Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Bill To Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingPostalCode": {
+      "field_label": "Bill To Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingState": {
+      "field_label": "Bill To State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Bill To Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "CapturedAmount": {
+      "field_label": "Captured Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ContextData": {
+      "field_label": "Context Data",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DisputeEvidenceDueDate": {
+      "field_label": "Dispute Evidence Due",
+      "type": "datetime"
+    },
+    "DisputeFee": {
+      "field_label": "Dispute Fee",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DisputeStatus": {
+      "field_label": "Dispute Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DisputedAmount": {
+      "field_label": "Disputed Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "EntryMode": {
+      "field_label": "Payment Entry Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Guid": {
+      "field_label": "Unique Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Payment Intent ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IncurrenceStatus": {
+      "field_label": "Incurrence Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IntentAmount": {
+      "field_label": "Intent Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "IsCaptureComplete": {
+      "field_label": "Capture Complete",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEvidenceSubmitted": {
+      "field_label": "Evidence Submitted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MerchantAccountId": {
+      "field_label": "Merchant Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGatewayId": {
+      "field_label": "Payment Gateway ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGroupId": {
+      "field_label": "Payment Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentInitiationSourceId": {
+      "field_label": "Payment Initiation Source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentIntentNumber": {
+      "field_label": "Payment Intent Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentLinkGmvDate": {
+      "field_label": "Payment Link GMV Date",
+      "type": "datetime"
+    },
+    "PaymentLinkId": {
+      "field_label": "Payment Link ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodDetails": {
+      "field_label": "Payment Method Details",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentMethodId": {
+      "field_label": "Payment Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodSubType": {
+      "field_label": "Payment Method Subtype",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentMethodType": {
+      "field_label": "Payment Method Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProviderReference": {
+      "field_label": "Provider Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "RefundedAmount": {
+      "field_label": "Refunded Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ShippingAddress": {
+      "field_label": "Shipping Address",
+      "type": "address"
+    },
+    "ShippingCity": {
+      "field_label": "Ship To City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShippingCountry": {
+      "field_label": "Ship To Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingGeocodeAccuracy": {
+      "field_label": "Ship To Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShippingLatitude": {
+      "field_label": "Ship To Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingLongitude": {
+      "field_label": "Ship To Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingPostalCode": {
+      "field_label": "Ship To Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShippingState": {
+      "field_label": "Ship To State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingStreet": {
+      "field_label": "Ship To Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubmittedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

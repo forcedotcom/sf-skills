@@ -1,0 +1,92 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "EventWhoRelation - Data API",
+  "description": "Represents the relationship between an event and a lead or contacts. This derived object is a filtered version of the EventRelation object; that is, IsParent is true and IsWhat is false. It doesn’t represent relationships to invitees or to accounts, opportunities, or other objects. This object is available in API versions 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "EventId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the ID of the event."
+    },
+    "RelationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the ID of the contacts or lead related to the event."
+    },
+    "Type": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the person related to the event is a contact or lead."
+    }
+  },
+  "usage": "- **Apex example that queries relations to a contact or lead**: List<EventWhoRelation> whoRelations = [SELECT Id, Relation.Name FROM EventWhoRelation WHERE EventId = '00UD0000005zijD'];`",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventId": {
+      "field_label": "Event ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Event Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RelationId": {
+      "field_label": "Relation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "string",
+      "length": "50"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

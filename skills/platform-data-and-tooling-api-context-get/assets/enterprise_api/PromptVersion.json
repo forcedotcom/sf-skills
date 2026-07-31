@@ -1,0 +1,533 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PromptVersion - Data API",
+  "description": "Represents an in-app guidance prompt or walkthrough. Available in API version 46.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionButtonLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Label for the action button or link. Maximum of 25 characters. For a walkthrough, specify this value on the last step."
+    },
+    "ActionButtonLink": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "URL for the action button or link. Maximum of 1,000 characters. You can’t use the GROUP BY option in a SOQL query for this field. For a walkthrough, specify this value on the last step."
+    },
+    "Body": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "Body content. In API version 60.0 and later, enter up to 4,000 characters for all prompt types. In earlier API versions, enter up to 240 characters for floating prompts and targeted prompts. Enter up to 4,000 characters for docked prompts. For docked prompts, the maximum characters include HTML markup, not just readable text."
+    },
+    "DelayDays": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of days between occurrences. For a walkthrough, specify this value on the first step."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description. Maximum of 255 characters."
+    },
+    "DismissButtonLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Label for the dismiss button of a floating or targeted prompt. Maximum of 15 characters."
+    },
+    "DisplayPosition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The position of a floating prompt on the page. Valid values are: TopLeft TopCenter TopRight MiddleLeft MiddleCenter MiddleRight BottomLeft BottomCenter BottomRight"
+    },
+    "DisplayType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of prompt. Valid values are: DockedComposer—A docked prompt FloatingPanel—A floating prompt Targeted—A targeted prompt. Available in API version 52.0 and later."
+    },
+    "ElementRelativePosition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The location of a targeted prompt relative to the element. This field is available in API version 52.0 and later. Valid values are: BottomCenter BottomLeft BottomRight LeftBottom LeftCenter LeftTop RightBottom RightCenter RightTop TopCenter TopLeft TopRight"
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date to stop showing the in-app guidance. For a walkthrough, specify this value on the first step."
+    },
+    "Experience": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "This field corresponds to the Environment picklist in In-App Guidance Builder. Available in version 60.0 and later. Possible values are: Lightning—Default. The in-app guidance is used in a Lightning Experience app or page. Site—The in-app guidance is used in a supported Experience Cloud site page."
+    },
+    "ExperienceContextId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required if the value of Experience is Site. The ID of the Experience Cloud site context associated with the in-app guidance prompt. Available in version 60.0 and later. This field is a polymorphic relationship field.",
+      "relationship_name": "ExperienceContext",
+      "relationship_type": "Lookup",
+      "refers_to": "Site",
+      "required": true
+    },
+    "Header": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Label for the header of a docked prompt. This value is the label contained in the window’s browser bar. Maximum of 36 characters."
+    },
+    "ImageAltText": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the alt text of an image. Required if ImageLocation or ImageID is specified."
+    },
+    "ImageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the ContentAsset that holds the image. Required if ImageLocation or ImageAltText is specified. This is a relationship field.",
+      "relationship_name": "Image",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentAsset"
+    },
+    "ImageLocation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the location of the image in relation to the body text. Required if ImageID or ImageAltText is specified. Valid values are: Top Bottom Right, which is for floating or targeted prompts only Left, which is for floating or targeted prompts only"
+    },
+    "IndexWithIsPublished": {
+      "type": "string",
+      "properties": "Filter, idLookup, Nillable, Sort",
+      "description": "Used by Salesforce for efficient querying."
+    },
+    "IndexWithoutIsPublished": {
+      "type": "string",
+      "properties": "Filter, idLookup, Nillable, Sort",
+      "description": "Used by Salesforce for efficient querying."
+    },
+    "IsPublished": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the in-app guidance is active (true) or not (false)."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label. Maximum of 80 characters."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the in-app guidance. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Prompt"
+    },
+    "PublishedByUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user who activated the in-app guidance. If the in-app guidance is part of a package, this value is the user who installed the package. This is a relationship field.",
+      "relationship_name": "PublishedByUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "PublishedDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the date the in-app guidance was activated. If installed from a package, this value is the date when the package was installed. For walkthroughs, this field can only be specified on the first step."
+    },
+    "ReferenceElementContext": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Used by Salesforce to identify the element that the targeted prompt is associated with. Available in API version 52.0 and later."
+    },
+    "ShouldDisplayActionButton": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether an action button or link is included (true) or not (false)."
+    },
+    "ShouldIgnoreGlobalDelay": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the in-app guidance ignores the global time delay and instead shows on page load (true) or not (false). This field is available in API version 48.0 and later."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the date to start showing the in-app guidance. For a walkthrough, specify this value on the first step.In API version 48.0 and earlier, this field is required."
+    },
+    "StepNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required for walkthroughs only. Indicates the number of the last step the user viewed or interacted with in a walkthrough. Include up to 10 steps. Numbers must be consecutive without repeated or skipped numbers. Available in API version 49.0 and later.",
+      "required": true
+    },
+    "TargetAppDeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The app’s developer name where the in-app guidance appears. Deprecated in API version 51.0 and later."
+    },
+    "TargetAppNamespacePrefix": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The app’s namespace prefix where the in-app guidance appears. This value must match the target app’s NamespacePrefix in the org that the package is being installed into. Maximum of 15 characters. Deprecated in API version 51.0 and later."
+    },
+    "TargetPageKey1": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used by Salesforce to identity the prompt’s page location along with targetPageKey2, targetPageKey3, targetPageKey4, and targetPageType.",
+      "required": true
+    },
+    "TargetPageKey1Ref": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Used by Salesforce to identify the prompt’s page location along with TargetPageKey2, TargetPageKey3, TargetPageKey4, and TargetPageType."
+    },
+    "TargetPageKey2": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used by Salesforce to identify the prompt’s page location along with TargetPageKey1, TargetPageKey3, TargetPageKey4, and TargetPageType."
+    },
+    "TargetPageKey3": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used by Salesforce to identify the prompt’s page location along with TargetPageKey1, TargetPageKey2, TargetPageKey4, and TargetPageType."
+    },
+    "TargetPageKey4": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used by Salesforce to identify the page location along with TargetPageKey1, TargetPageKey2, TargetPageKey3, and TargetPageType. This field is available in API version 53.0 and later."
+    },
+    "TargetPageType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of page where the in-app guidance appears."
+    },
+    "TargetRecordType": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used by Salesforce to determine if in-app guidance is specific to a record type. This field is available in API version 53.0 and later.",
+      "relationship_name": "TargetRecordType",
+      "relationship_type": "Lookup",
+      "refers_to": "RecordType"
+    },
+    "ThemeColor": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates which custom theme color is applied to the in-app guidance. Required if ThemeSaturation is specified. For a walkthrough, specify this value on the first step. Valid values are: Theme1—derived from the current brand color Theme2—derived from the current page background color Theme3—derived from the current global header color Theme4—derived from the current app theme color"
+    },
+    "ThemeSaturation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates which color value, or saturation, is applied to the in-app guidance that has a custom theme color. Required if ThemeColor is specified. For a walkthrough, specify this value on the first step. Valid values are: Dark Light"
+    },
+    "TimesToDisplay": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required if recurrences are scheduled. The maximum number of times to show the in-app guidance. Salesforce detects whether the user interacts with the in-app guidance, then determines whether to show the in-app guidance again or cancel scheduled recurrences. Maximum value of 30. For a walkthrough, specify this value on the first step.",
+      "required": true
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for the title. Maximum of 36 characters.",
+      "required": true
+    },
+    "UserAccess": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates which permissions can see the in-app guidance. Valid values are: Everyone, which indicates that there’s no permission restrictions SpecificPermissions, which indicates that only users with all the specific user permissions specified can see the in-app guidance In API version 48.0 and earlier, this field is required."
+    },
+    "UserProfileAccess": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates which profiles can see the in-app guidance. This field is available in API version 48.0 and later. Valid values are: Everyone, which indicates that there are no profile restrictions SpecificProfiles, which indicates that users with any of the specified user profiles can see the in-app guidance"
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number remains 1 since multiple versions aren’t saved in the org.",
+      "required": true
+    },
+    "VideoLink": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The embed URL for a video in a docked prompt. Maximum of 1,000 characters. You can specify this field or the image field, but not both. This field is available in API version 48.0 and later. See Considerations for Creating In-App Guidance."
+    }
+  },
+  "special_access_rules": "To add, edit, manage, and view prompts and walkthroughs in Lightning Experience or in Experience Cloud sites, see Considerations for Creating In-App Guidance and Permissions for Creating and Accessing In-App Guidance in Salesforce Help for permissions.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PromptVersion\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActionButtonLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActionButtonLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Body\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DelayDays\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DismissButtonLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DisplayPosition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DisplayType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ElementRelativePosition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Experience\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExperienceContext\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ExperienceContextId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Header\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Image\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentAsset\"/>\n        <element name=\"ImageAltText\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ImageId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ImageLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ImageLocation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IndexWithIsPublished\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IndexWithoutIsPublished\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPublished\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Prompt\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PublishedByUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"PublishedByUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PublishedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"ReferenceElementContext\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShouldDisplayActionButton\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ShouldIgnoreGlobalDelay\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"StepNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TargetAppDeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetAppNamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetPageKey1\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetPageKey1Ref\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetPageKey2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetPageKey3\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetPageKey4\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetPageType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetRecordType\" nillable=\"true\" minOccurs=\"0\" type=\"ens:RecordType\"/>\n        <element name=\"TargetRecordTypeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ThemeColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThemeSaturation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TimesToDisplay\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserProfileAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"VersionNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"VideoLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActionButtonLabel": {
+      "field_label": "Action Button Label",
+      "type": "string",
+      "length": "25"
+    },
+    "ActionButtonLink": {
+      "field_label": "Action Button URL",
+      "type": "url",
+      "length": "1000"
+    },
+    "Body": {
+      "field_label": "Body",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DelayDays": {
+      "field_label": "Days In Between Displays",
+      "type": "int",
+      "digits": "9"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DismissButtonLabel": {
+      "field_label": "Dismiss Button Label",
+      "type": "string",
+      "length": "15"
+    },
+    "DisplayPosition": {
+      "field_label": "Position",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DisplayType": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ElementRelativePosition": {
+      "field_label": "Element Relative Position",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Experience": {
+      "field_label": "Experience",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ExperienceContextId": {
+      "field_label": "ExperienceContext ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Header": {
+      "field_label": "Header",
+      "type": "string",
+      "length": "36"
+    },
+    "Id": {
+      "field_label": "Prompt Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImageAltText": {
+      "field_label": "Image Alt Text",
+      "type": "string",
+      "length": "255"
+    },
+    "ImageId": {
+      "field_label": "Asset File ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ImageLink": {
+      "field_label": "Image URL",
+      "type": "url",
+      "length": "1000"
+    },
+    "ImageLocation": {
+      "field_label": "Image Location",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IndexWithIsPublished": {
+      "field_label": "Index Formula Field With Is Published Data",
+      "type": "string",
+      "length": "400"
+    },
+    "IndexWithoutIsPublished": {
+      "field_label": "Index Formula Field Without Is Published Data",
+      "type": "string",
+      "length": "400"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPublished": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Master Label",
+      "type": "string",
+      "length": "80"
+    },
+    "ParentId": {
+      "field_label": "Prompt ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PublishedByUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PublishedDate": {
+      "field_label": "Active Date",
+      "type": "date"
+    },
+    "ReferenceElementContext": {
+      "field_label": "Reference Element Context",
+      "type": "textarea",
+      "length": "50000"
+    },
+    "ShouldDisplayActionButton": {
+      "field_label": "Display Action Button",
+      "type": "boolean"
+    },
+    "ShouldIgnoreGlobalDelay": {
+      "field_label": "Ignore Global Delay",
+      "type": "boolean"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "StepNumber": {
+      "field_label": "Step Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetAppDeveloperName": {
+      "field_label": "Target Application Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "TargetAppNamespacePrefix": {
+      "field_label": "Target Application Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "TargetPageKey1": {
+      "field_label": "Target Page Key 1",
+      "type": "string",
+      "length": "80"
+    },
+    "TargetPageKey1Ref": {
+      "field_label": "Target Page Key 1 Reference",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TargetPageKey2": {
+      "field_label": "Target Page Key 2",
+      "type": "string",
+      "length": "80"
+    },
+    "TargetPageKey3": {
+      "field_label": "Target Page Key 3",
+      "type": "string",
+      "length": "255"
+    },
+    "TargetPageKey4": {
+      "field_label": "Target Page Key 4",
+      "type": "string",
+      "length": "255"
+    },
+    "TargetPageType": {
+      "field_label": "Target Page Type",
+      "type": "string",
+      "length": "80"
+    },
+    "TargetRecordTypeId": {
+      "field_label": "Record Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ThemeColor": {
+      "field_label": "Theme Color",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ThemeSaturation": {
+      "field_label": "Theme Saturation",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TimesToDisplay": {
+      "field_label": "Number Of Times To Repeat",
+      "type": "int",
+      "digits": "9"
+    },
+    "Title": {
+      "field_label": "Title Label",
+      "type": "string",
+      "length": "36"
+    },
+    "UserAccess": {
+      "field_label": "Access Permissions",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UserProfileAccess": {
+      "field_label": "Access Profiles",
+      "type": "picklist",
+      "length": "255"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "VideoLink": {
+      "field_label": "Video URL",
+      "type": "url",
+      "length": "1000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

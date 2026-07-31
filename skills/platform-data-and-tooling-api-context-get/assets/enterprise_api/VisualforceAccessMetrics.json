@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "VisualforceAccessMetrics - Data API",
+  "description": "Represents summary statistics for Visualforce pages.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApexPageId": {
+      "type": "reference",
+      "properties": "Aggregate, Filter, Group, Sort",
+      "description": "The ID of the Visualforce page. This is a relationship field.",
+      "relationship_name": "ApexPage",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexPage"
+    },
+    "ProfileId": {
+      "type": "reference",
+      "properties": "Aggregate, Filter, Group, Nillable, Sort",
+      "description": "The ID of the use who viewed the Visualforce page. This is a relationship field.",
+      "relationship_name": "Profile",
+      "relationship_type": "Lookup",
+      "refers_to": "Profile"
+    },
+    "DailyPageViewCount": {
+      "type": "int",
+      "properties": "Aggregate, Filter, Group, Nillable, Sort",
+      "description": "The number of views received by the specified Visualforce page."
+    },
+    "MetricsDate": {
+      "type": "date",
+      "properties": "Aggregate, Filter, Group, Sort",
+      "description": "The date the metrics are queried."
+    },
+    "LogDate": {
+      "type": "date",
+      "properties": "Aggregate, Filter, Group, Nillable, Sort",
+      "description": "The most recent page access date."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, to access VisualforceAccessMetrics, users must have the Customize Application permission.",
+  "usage": "Use this object to query information on the Visualforce pages in your org.\n\nSELECT ApexPageId, DailyPageViewCount, Id, ProfileId, MetricsDate, LogDate FROM VisualforceAccessMetrics",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"VisualforceAccessMetrics\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApexPage\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexPage\"/>\n        <element name=\"ApexPageId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"DailyPageViewCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LogDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"MetricsDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Profile\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Profile\"/>\n        <element name=\"ProfileId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApexPageId": {
+      "field_label": "Visualforce Page ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DailyPageViewCount": {
+      "field_label": "Daily Page View Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Visualforce Access Metric Id",
+      "type": "id",
+      "length": "18"
+    },
+    "LogDate": {
+      "field_label": "Log Date",
+      "type": "date"
+    },
+    "MetricsDate": {
+      "field_label": "Metrics Date",
+      "type": "date"
+    },
+    "ProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

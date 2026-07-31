@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OwnerChangeOptionInfo - Data API",
+  "description": "Represents default and optional actions that can be performed when a record’s owner is changed. Available in API version 35.0 and later, but to query for change owner metadata, use the OwnerChangeOptionInfo object in Tooling API instead. For more information, see OwnerChangeOptionInfo in the Tooling API.",
+  "wsdl_segment": "```xml\n<complexType name=\"OwnerChangeOptionInfo\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ChildOwnerChangeOptionInfo\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"DefaultValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EntityDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EntityDefinition\"/>\n        <element name=\"EntityDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsEditable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OwnerChangeOptionInfo\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "DefaultValue": {
+      "field_label": "Default Value",
+      "type": "boolean"
+    },
+    "DurableId": {
+      "field_label": "Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "EntityDefinitionId": {
+      "field_label": "Entity Definition ID",
+      "type": "string",
+      "length": "70"
+    },
+    "Id": {
+      "field_label": "Change Owner Option ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsEditable": {
+      "field_label": "Is Editable",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "150"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "150"
+    },
+    "ParentId": {
+      "field_label": "Change Owner Option ID",
+      "type": "string",
+      "length": "70"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

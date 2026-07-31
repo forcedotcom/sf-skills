@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "WorkflowOutboundMessage - Tooling API",
+  "description": "Represents an outbound message. An outbound message sends information to a designated endpoint, like an external service. Outbound messages are configured from Setup. You must configure the external endpoint and create a listener for the messages using the SOAP API.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `search()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The API version is automatically generated and set to the current API version when the outbound message was created."
+    },
+    "EntityDefinition": {
+      "type": "EntityDefinition",
+      "properties": "Filter, Group, Sort.",
+      "description": "Available in version 34.0. The entity definition for the object associated with this WebLink.",
+      "required": true
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the entity containing the outbound message."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IntegrationUserId": {
+      "type": "ID",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user under which this message is sent."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "mns:WorkflowOutboundMessage",
+      "properties": "Create, Nillable, Update",
+      "description": "Outbound message definition metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the outbound message."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the package containing the outbound message."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"WorkflowOutboundMessage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:WorkflowOutboundMessage\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"WorkflowOutboundMessage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"endpointUrl\" type=\"xsd:string\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"includeSessionId\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"integrationUser\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useDeadLetterQueue\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

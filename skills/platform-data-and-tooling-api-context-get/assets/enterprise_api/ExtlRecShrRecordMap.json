@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExtlRecShrRecordMap - Data API",
+  "description": "Represents the lead or opportunity being mapped between a partner and vendor for Partner Connect. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ExtlRecShrCnctId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the external record share connection. This field is a relationship field.",
+      "relationship_name": "ExtlRecShrCnct",
+      "refers_to": "ExtlRecShrCnct"
+    },
+    "ExtlRecord": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the lead or opportunity record on the external system."
+    },
+    "InboundStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of imports and updates received. Possible values are: ImportSuccess ImportConctExtlRecError UpdateSuccess UpdateFieldMapError UpdateConctExtlRecError UpdateUnknownError"
+    },
+    "InternalRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the lead or opportunity record on the internal system. This field is a polymorphic relationship field.",
+      "relationship_name": "InternalRecord",
+      "relationship_type": "Master-detail",
+      "refers_to": "Lead, Opportunity (the master object)"
+    },
+    "IsImported": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the record originated on the internal system (true) or external system (false). The default value is false."
+    },
+    "LastModifiedSent": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp of the last record update between the vendor and partner. This field doesn’t capture when the result is received."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only."
+    },
+    "OutboundStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of exports, updates, and results received. Possible values are: ExportSuccess ExportInProgress ExportSuccessSkipped ExportSuccessPartial ExportPublishFieldMapError ExportSubscribeFieldMapError ExportPublishEventError ExportPublishUnknownError ExportSubscribeUnknownError ExportPublishConnectionError UpdateInProgress UpdateInProgressUpdateSuccess UpdatePublishFieldMapErrorUpdateSubscribeRecordNotFound UpdatePublishFieldMapError UpdateSubscribeFieldMapError UpdatePublishConnectionError UpdatePublishEventError UpdatePublishUnknownError UpdateSubscribeUnknownError"
+    },
+    "UniqueRecordKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Record key used internally for indexing. If IsImported is false, then this field contains the InternalRecordId value. If IsImported is true, this field contains the ExtlRecord value. This field is a calculated field."
+    }
+  },
+  "special_access_rules": "To see this object, enable Partner Connect or Partner Connect for Vendors. See Set Up Partner Connect as a Partner and Set Up Partner Connect as a Vendor in Salesforce Help."
+}

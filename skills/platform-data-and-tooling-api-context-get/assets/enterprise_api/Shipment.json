@@ -1,0 +1,462 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Shipment - Data API",
+  "description": "Represents the transport of inventory in field service or a shipment of order items in Order Management.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActualDeliveryDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Date the product was delivered."
+    },
+    "DeliveredToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The person or entity the product was delivered to. This is a polymorphic relationship field.",
+      "relationship_name": "DeliveredTo",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "DeliveryMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The delivery method used for the shipment. This field is available in API version 51.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Details not recorded in the provided fields"
+    },
+    "DestinationLocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The place the product is to be delivered. This is a relationship field.",
+      "relationship_name": "DestinationLocation",
+      "relationship_type": "Lookup",
+      "refers_to": "Location"
+    },
+    "ExpectedDeliveryDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Date the product is expected to be delivered."
+    },
+    "FulfillmentOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The fulfillment order that the shipment belongs to. This field is available in API version 51.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it’s possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The order summary associated with the shipment. This field is available in API version 51.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of the shipment. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Provider": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The company or person making the transfer."
+    },
+    "ReturnOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "For a return Shipment, the associated ReturnOrder. This field is available in API version 53.0 and later."
+    },
+    "ShipFromAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The place the product is coming from. The compound form of the ship to address. Read-only. For details on compound address fields, see Address Compound Fields."
+    },
+    "ShipFromCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city of the address where the shipment originates."
+    },
+    "ShipFromCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country of the address where the shipment originates."
+    },
+    "ShipFromGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the address where the shipment originates. See Compound Field Considerations and Limitations for details on geolocation compound fields. Note: This field is available in the API only."
+    },
+    "ShipFromLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the precise geolocation of the address where the shipment originates. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields. Note: This field is available in the API only."
+    },
+    "ShipFromLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the precise geolocation of the address where the shipment originates. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields. Note: This field is available in the API only."
+    },
+    "ShipFromPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code of the address where the shipment originates."
+    },
+    "ShipFromState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state of the address where the shipment originates."
+    },
+    "ShipFromStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street of the address where the shipment originates."
+    },
+    "ShipToAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The physical address where the shipment is delivered. The compound form of the ship to address. Read-only. For details on compound address fields, see Address Compound Fields."
+    },
+    "ShipToCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city of the address where the shipment is delivered."
+    },
+    "ShipToCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country of the address where the shipment is delivered."
+    },
+    "ShipToGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the address where the shipment is delivered. See Compound Field Considerations and Limitations for details on geolocation compound fields. Note: This field is available in the API only."
+    },
+    "ShipToLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the precise geolocation of the address where the shipment is delivered. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields. Note: This field is available in the API only."
+    },
+    "ShipToLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the precise geolocation of the address where the shipment is delivered. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields. Note: This field is available in the API only."
+    },
+    "ShipToName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The shipment recipient."
+    },
+    "ShipToPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code of the address where the shipment is delivered."
+    },
+    "ShipToState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state of the address where the shipment is delivered."
+    },
+    "ShipToStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street of the address where the shipment is delivered."
+    },
+    "ShipmentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number identifying the shipment."
+    },
+    "SourceLocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The field service location where the shipment originates. This is a relationship field.",
+      "relationship_name": "SourceLocation",
+      "relationship_type": "Lookup",
+      "refers_to": "Location"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The status of the shipment. The picklist includes the following values, which can be customized: Created—Shipment has been created. Delivered—Shipment has been delivered. In Transit—Shipment is in transit. Shipped—Order has been shipped. Voided—Shipment has been cancelled."
+    },
+    "TotalItemsQuantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total quantity of items included in the shipment. This value is calculated as the sum of the quantities of the shipment items in the shipment. This field is available in API version 51.0 and later."
+    },
+    "TrackingNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Tracking number for the shipment."
+    },
+    "TrackingUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "URL of website used for tracking the shipment."
+    }
+  },
+  "special_access_rules": "At least one of these features must be enabled:",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ShipmentChangeEvent (API version 48.0)**: Change events are available for the object.\n- **ShipmentFeed**: Feed tracking is available for the object.\n- **ShipmentHistory**: History is available for tracked fields of the object.\n- **ShipmentOwnerSharingRule**: Sharing rules are available for the object.\n- **ShipmentShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"Shipment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ActualDeliveryDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeliveredTo\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"DeliveredToId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DestinationLocation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"DestinationLocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ExpectedDeliveryDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductTransfers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Provider\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnOrder\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ReturnOrder\"/>\n        <element name=\"ReturnOrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShipFromAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ShipFromCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShipFromLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShipFromPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipToAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ShipToCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipToCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipToGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipToLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShipToLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShipToName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipToPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipToState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipToStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipmentItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShipmentNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SourceLocation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"SourceLocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TotalItemsQuantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TrackingNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TrackingUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ActualDeliveryDate": {
+      "field_label": "Actual Delivery Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeliveredToId": {
+      "field_label": "Delivered To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DeliveryMethodId": {
+      "field_label": "Order Delivery Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DestinationLocationId": {
+      "field_label": "Destination Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExpectedDeliveryDate": {
+      "field_label": "Expected Delivery Date",
+      "type": "datetime"
+    },
+    "FulfillmentOrderId": {
+      "field_label": "Fulfillment Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Shipment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Provider": {
+      "field_label": "Shipping Provider",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReturnOrderId": {
+      "field_label": "Return Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShipFromAddress": {
+      "field_label": "Ship From Address",
+      "type": "address"
+    },
+    "ShipFromCity": {
+      "field_label": "Ship From City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShipFromCountry": {
+      "field_label": "Ship From Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShipFromGeocodeAccuracy": {
+      "field_label": "Ship From Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShipFromLatitude": {
+      "field_label": "Ship From Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShipFromLongitude": {
+      "field_label": "Ship From Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShipFromPostalCode": {
+      "field_label": "Ship From Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShipFromState": {
+      "field_label": "Ship From State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "ShipFromStreet": {
+      "field_label": "Ship From Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "ShipToAddress": {
+      "field_label": "Ship To Address",
+      "type": "address"
+    },
+    "ShipToCity": {
+      "field_label": "Ship To City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShipToCountry": {
+      "field_label": "Ship To Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShipToGeocodeAccuracy": {
+      "field_label": "Ship To  Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShipToLatitude": {
+      "field_label": "Ship To Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShipToLongitude": {
+      "field_label": "Ship To Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShipToName": {
+      "field_label": "Ship To Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ShipToPostalCode": {
+      "field_label": "Ship To Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShipToState": {
+      "field_label": "Ship To State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "ShipToStreet": {
+      "field_label": "Ship To Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "ShipmentNumber": {
+      "field_label": "Shipment Number",
+      "type": "string",
+      "length": "255"
+    },
+    "SourceLocationId": {
+      "field_label": "Source Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalItemsQuantity": {
+      "field_label": "Total Items Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TrackingNumber": {
+      "field_label": "Tracking Number",
+      "type": "string",
+      "length": "255"
+    },
+    "TrackingUrl": {
+      "field_label": "Tracking URL",
+      "type": "url",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

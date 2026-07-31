@@ -1,0 +1,91 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Composite API Event Type - Data API",
+  "description": "Composite API events contain details about composite API requests. One composite API event is generated for each composite API and composite graph API call. This event type is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "ALL_OR_NONE": {
+      "type": "boolean",
+      "description": "Indicates whether the entire request is rolled back when the update of any object fails (true), or if the call should continue with the independent update of other objects in the request (false). The default is false. If true, it overrides the ALL_OR_NONE setting in subrequests."
+    },
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using the API."
+    },
+    "CPU_TIME": {
+      "type": "Number",
+      "description": "The CPU time in milliseconds to complete the request."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of the event. The value is always CompositeApi."
+    },
+    "FAILURE_REASON": {
+      "type": "String",
+      "description": "An error code giving the reason for a failed request."
+    },
+    "IS_REQUEST_COLLATION_ON": {
+      "type": "boolean",
+      "description": "The setting for subrequest collation."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "Identifies all related events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I"
+    },
+    "NUM_GRAPH_DEPTH": {
+      "type": "Number",
+      "description": "The depth of the graph. When multiple graphs are present, this number is the depth of the deepest graph."
+    },
+    "NUM_RETRIES": {
+      "type": "Number",
+      "description": "Number of attempted retries while processing the graph."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization that made the request. For example: 00D000000000123"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "A unique ID identifying the composite API request."
+    },
+    "RUN_TIME": {
+      "type": "Number",
+      "description": "The amount of time in milliseconds to complete the request."
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. For example: 20130715233322.670"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The date and time that the event was generated."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The date and time, in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ), that the event was generated. The timezone is GMT. For example: 2015-07-27T11:32:59.555Z"
+    },
+    "URI": {
+      "type": "String",
+      "description": "The resource URI."
+    },
+    "URI_ID_DERIVED": {
+      "type": "ID",
+      "description": "The 18-character case insensitive ID of the URI of the page that’s receiving the request."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user that’s using the API. For example: 00530000009M943"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case insensitive ID of the user that’s using the API. For example: 00590000000I1SNIA0"
+    }
+  }
+}

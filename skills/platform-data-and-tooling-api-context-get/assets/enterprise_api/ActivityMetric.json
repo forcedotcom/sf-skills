@@ -1,0 +1,218 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ActivityMetric - Data API",
+  "description": "Represents activities that were added to Salesforce automatically by Einstein Activity Capture and manually by users.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BaseId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, idLookup, Sort",
+      "description": "The ID of the record that the activities apply to."
+    },
+    "BaseType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The entity that corresponds to the BaseId"
+    },
+    "FirstCallDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the first call was made. This field is available only to Sales Engagement users. Einstein Activity Capture and Activity Metrics aren’t required."
+    },
+    "FirstEmailDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the first email was sent. This field is available only to Sales Engagement users. Einstein Activity Capture and Activity Metrics aren’t required."
+    },
+    "InactiveDays": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the number of days since the most recent activity was completed. This field is derived from the Last Activity Date field."
+    },
+    "LastActivityDateLastModDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the LastActivityDateTime field was last modified."
+    },
+    "LastActivityDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the most recent activity was completed."
+    },
+    "LastCallDateLastModDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the LastCallDateTime field was last modified."
+    },
+    "LastCallDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the most recent call was made through Sales Dialer or Inbox."
+    },
+    "LastEmailDateLastModDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the LastEmailDateTime field was last modified."
+    },
+    "LastEmailDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the most recent email was sent or received."
+    },
+    "LastEmailReceivedDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the most recent email was received.Available in API version 54.0 and later."
+    },
+    "LastEmailSentDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the most recent email was sent.Available in API version 54.0 and later."
+    },
+    "LastEventDateLastModDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the LastEventDateTime field was last modified."
+    },
+    "LastEventDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the most recent event was completed."
+    },
+    "LastTaskDateLastModDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the LastTaskDateTime field was last modified."
+    },
+    "LastTaskDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date when the last task was completed."
+    },
+    "NextActivityDateLastModDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the NextActivityDateTime field was last modified."
+    },
+    "NextActivityDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date of the next scheduled task or event. Only open tasks in the future are included."
+    }
+  },
+  "special_access_rules": "Unless otherwise noted, Einstein Activity Capture and Activity Metrics must be enabled.",
+  "field_reference": {
+    "BaseId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BaseType": {
+      "field_label": "Parent Type",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Activity Metric ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InactiveDays": {
+      "field_label": "Inactive Days",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastActivityDateLastModDate": {
+      "field_label": "Update Date for Last Activity Date",
+      "type": "datetime"
+    },
+    "LastActivityDateTime": {
+      "field_label": "Last Activity Date",
+      "type": "datetime"
+    },
+    "LastCallDateLastModDate": {
+      "field_label": "Update Date for Last Call Date",
+      "type": "datetime"
+    },
+    "LastCallDateTime": {
+      "field_label": "Last Call Date",
+      "type": "datetime"
+    },
+    "LastEmailDateLastModDate": {
+      "field_label": "Update Date for Last Email Date",
+      "type": "datetime"
+    },
+    "LastEmailDateTime": {
+      "field_label": "Last Email Date",
+      "type": "datetime"
+    },
+    "LastEmailReceivedDateLastModDate": {
+      "field_label": "Update Date for Last Email Received Date",
+      "type": "datetime"
+    },
+    "LastEmailReceivedDateTime": {
+      "field_label": "Last Email Received Date",
+      "type": "datetime"
+    },
+    "LastEmailSentDateLastModDate": {
+      "field_label": "Update Date for Last Email Sent Date",
+      "type": "datetime"
+    },
+    "LastEmailSentDateTime": {
+      "field_label": "Last Email Sent Date",
+      "type": "datetime"
+    },
+    "LastEventDateLastModDate": {
+      "field_label": "Update Date for Last Event Date",
+      "type": "datetime"
+    },
+    "LastEventDateTime": {
+      "field_label": "Last Event Date",
+      "type": "datetime"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastTaskDateLastModDate": {
+      "field_label": "Update Date for Last Task Date",
+      "type": "datetime"
+    },
+    "LastTaskDateTime": {
+      "field_label": "Last Task Date",
+      "type": "datetime"
+    },
+    "NextActivityDateLastModDate": {
+      "field_label": "Update Date for Next Activity Date",
+      "type": "datetime"
+    },
+    "NextActivityDateTime": {
+      "field_label": "Next Activity Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

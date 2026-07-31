@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VoiceCallInsightAction - Data API",
+  "description": "Represents a suggested follow-up action derived from a voice call insight. VoiceCallInsightAction manages recommended steps—such as sending an email, creating a task, or scheduling a meeting—that address specific moments, including competitor mentions, pricing discussions, or objections. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ActionCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The category that classifies the purpose of the action. Possible values are: FollowUp NeedsAttention"
+    },
+    "ActionReferenceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the record associated with the generated action. This field is a relationship field.",
+      "relationship_name": "ActionReference",
+      "refers_to": "VoiceCallInsightReason"
+    },
+    "ActionType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The specific type of action to be performed for the insight. Possible values are: CreateCalendarEvent CreateTaskWithDate EciCreateCallback EciScheduleMeetings EciSendCallResponse ViewContactProfile The default value is CreateTaskWithDate."
+    },
+    "CompletionDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the action was completed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the insight action.",
+      "required": true
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the insight action. Possible values are: Active Completed The default value is Active."
+    },
+    "VoiceCallInsightId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the VoiceCallInsight record associated with a voice call. Each record represents the call insight of a specific recording or transcript within a call. This field is a relationship field.",
+      "relationship_name": "VoiceCallInsight",
+      "relationship_type": "Master-detail",
+      "refers_to": "VoiceCallInsight (the master object)",
+      "required": true
+    }
+  },
+  "special_access_rules": "Einstein Conversation Insight must be enabled and the user requires the Conversation Insights for Sales permission set."
+}

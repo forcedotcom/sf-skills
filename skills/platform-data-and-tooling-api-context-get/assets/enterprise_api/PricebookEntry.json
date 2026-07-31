@@ -1,0 +1,191 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PricebookEntry - Data API",
+  "description": "Represents a product entry (an association between a Pricebook2 and Product2) in a price book.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivePriceAdjustmentQuantity": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The count of active price adjustment schedules associated with the price book entry. This field is available in API version 49.0 and later. This field is available with a B2B or D2C Commerce license."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for organizations with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this price book entry is active (true) or not (false). Although you can never delete PricebookEntry records, your client application can set this flag to false. Inactive PricebookEntry records are hidden in many areas in the user interface. You can change this flag on a PricebookEntry record as often as necessary."
+    },
+    "IsArchived": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the PricebookEntry has been archived (true) or not (false). This field is set to true when the Product2 record it’s associated with is archived, or when the Pricebook2 record is archived. This field is read only. Available in API version 45.0 and later. Label is Archived."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of this PricebookEntry record. This read-only field references the value in the Name field of the Product2 record. Label is Product Name."
+    },
+    "Pricebook2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Pricebook2 record with which this record is associated. This field must be specified when creating Pricebook2 records. It can’t be changed in an update. This field is a relationship field.",
+      "relationship_name": "Pricebook2",
+      "relationship_type": "Lookup",
+      "refers_to": "Pricebook2",
+      "required": true
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Product2 record with which this record is associated. This field must be specified when creating Product2 records. It can’t be changed in an update. This is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2",
+      "required": true
+    },
+    "ProductCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Product code for this record. This read-only field references the value in the ProductCode field of the associated Product2 record."
+    },
+    "ProductSellingModelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the related product selling model. This field is available in API version 55.0 and later. This field is available when Subscription Management is enabled.",
+      "relationship_name": "ProductSellingModel",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductSellingModel"
+    },
+    "UnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Unit price for this price book entry. You can specify a value only if UseStandardPrice is set to false. Label is List Price.",
+      "required": true
+    },
+    "UseStandardPrice": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this price book entry uses the standard price defined in the standard Pricebook2 record (true) or not (false). If set to true, then the UnitPrice field is read-only, and the value is the same as the UnitPrice value in the corresponding PricebookEntry in the standard price book (that is, the PricebookEntry record whose Pricebook2Id refers to the standard price book and whose Product2Id and CurrencyIsoCode are the same as this record). For PricebookEntry records associated with the standard Pricebook2 record, this field must be set to true."
+    }
+  },
+  "usage": "Use this object to define the association between your organization’s products (Product2) and your organization’s standard price book or to custom price books ( Pricebook2). Create one PricebookEntry record for each standard or custom price and currency combination for a product in a Pricebook2. When creating these records, you must specify the IDs of the associated Pricebook2 record and Product2 record. Once these records are created, your client application can’t update these IDs. This object is defined only for those organizations that have products enabled as a feature. If the organization doesn’t have the products feature enabled, then the PricebookEntry object doesn’t appear in the describeGlobal call, and you can’t access it. If you delete a PriceBookEntry that is referenced by a line item, the line item is unaffected, but the PriceBookEntry is archived and unavailable from the API. Deleted PriceBookEntry records can’t be recovered. You must load the standard price for a product before you’re permitted to load its custom prices.\n\nUse this object to define the association between your organization’s products (Product2) and your organization’s standard price book or to custom price books ( Pricebook2). Create one PricebookEntry record for each standard or custom price and currency combination for a product in a Pricebook2.\n\nWhen creating these records, you must specify the IDs of the associated Pricebook2 record and Product2 record. Once these records are created, your client application can’t update these IDs.\n\nThis object is defined only for those organizations that have products enabled as a feature. If the organization doesn’t have the products feature enabled, then the PricebookEntry object doesn’t appear in the describeGlobal call, and you can’t access it.\n\nIf you delete a PriceBookEntry that is referenced by a line item, the line item is unaffected, but the PriceBookEntry is archived and unavailable from the API. Deleted PriceBookEntry records can’t be recovered.\n\nYou must load the standard price for a product before you’re permitted to load its custom prices.",
+  "associated_objects": "This object has the following associated objects. Unless otherwise noted, they’re available in the same API version as this object.\n\n- **PricebookEntryChangeEvent(API version 57.0)**: Change events are available for the object.\n\n- **PricebookEntryHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PricebookEntry\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContractLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsArchived\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OpportunityLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OrderItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Pricebook2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Pricebook2\"/>\n        <element name=\"Pricebook2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Product2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Product2\"/>\n        <element name=\"Product2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProductCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProductsConsumed\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UnitPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UseStandardPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"WorkOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ActivePriceAdjustmentQuantity": {
+      "field_label": "Active Price Adjustments",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Price Book Entry ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsArchived": {
+      "field_label": "Archived",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDerived": {
+      "field_label": "Is Derived",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Product Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Pricebook2Id": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductCode": {
+      "field_label": "Product Code",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductSellingModelId": {
+      "field_label": "Product Selling Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UnitPrice": {
+      "field_label": "List Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UseStandardPrice": {
+      "field_label": "Use Standard Price",
+      "type": "boolean"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

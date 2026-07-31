@@ -1,0 +1,238 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ForecastingType - Data API",
+  "description": "Used to identify the forecast type associated with ForecastingAdjustment, ForecastingOwnerAdjustment, ForecastingQuota, ForecastingFact, and ForecastingItem objects. Available in API version 30.0 and greater.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CanDisplayQuotas": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a forecast type can show quota information. The default value is false. Available in API version 38.0 and later."
+    },
+    "DateType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The date type that forecast amounts are based on. These values are available for forecast types that were available before Summer ’21. OpportunityCloseDate: Base forecasts on opportunity close dates. ProductDate: Base forecasts on opportunity product line item dates, if available. ScheduleDate: Base forecasts on opportunity product schedule dates, if available. These values are available in API version 52.0 and later in Performance Edition and in Unlimited Edition with the Sales Cloud. OLIMeasureCloseDateOnly: Base forecasts on opportunity close dates. ProductDateOnly: Base forecasts on opportunity product line item dates, if available. ScheduleDateOnly: Base forecasts on opportunity product schedule dates, if available. These values to create forecasts on custom date fields are available in API version 57.0 and later in Performance, Professional, Enterprise, and Unlimited Edition with the Sales Cloud. OLIMeasureOppCustomDateOnly: Base forecasts on custom opportunity dates, if available. OpportunityCustomDate: Base forecasts on custom opportunity dates. The custom date field used must be on the opportunity object and based on the date type."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the forecasting type. The DeveloperName is called name in the Metadata API and Forecasting Type in custom reports."
+    },
+    "ForecastingGroupID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the forecasting type has a group assignment, and if so, the name of the group. This field is a relationship field. Available in API version 60.0 and later.",
+      "relationship_name": "ForecastingGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingGroup"
+    },
+    "HasAdjustments": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether forecast managers can adjust forecasts of their immediate subordinates and child territories. The default value is false. Available in API version 60.0 and later."
+    },
+    "HasOwnerAdjustments": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether all forecast users can adjust their own forecasts, including the territory forecasts that they own. The default value is false. Available in API version 60.0 and later."
+    },
+    "HasProductFamily": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group",
+      "description": "Indicates whether a forecasts view includes product families. The default value is false. Available in API version 40.0 and later."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the forecasting type is enabled. The default value is false."
+    },
+    "IsAmount": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the forecasting type is based on the revenue measure. The default value is false."
+    },
+    "IsPlatformType": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates a legacy forecast type that wasn’t available before Summer ’21. The default value is false. Available in API version 52.0 and later."
+    },
+    "IsQuantity": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the forecasting type is based on the quantity measure. The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the forecasting type."
+    },
+    "LastActivatedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date when a forecast type was activated. Read only. Available in API version 53.0 and later."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Controlling label for this forecasting type value. This display value is the internal label that doesn’t get translated."
+    },
+    "OpportunitySplitTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the forecasting type has a split type, and if so, the name of the split type. This field is a relationship field. Available in API version 41.0 and later.",
+      "relationship_name": "OpportunitySplitType",
+      "relationship_type": "Lookup",
+      "refers_to": "OpportunitySplitType"
+    },
+    "OpptyLineItemSplitTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the forecasting type has a product split type, and if so, the name of the product split type. This field is a relationship field. Available in API version 58.0 and later.",
+      "relationship_name": "OpptyLineItemSplitType",
+      "relationship_type": "Lookup",
+      "refers_to": "OpptyLineItemSplitType"
+    },
+    "RoleType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the role type has a forecasting type, and if so, which forecasting type. Available in API version 41.0 and later. Possible values are: R—User role-based forecasting type T—Territory1-based forecasting type; not used Y—Territory2-based forecasting type"
+    },
+    "Territory2ModelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the forecasting type has a Territory2 model, and if so, the name of the Territory2 model. Available in API version 41.0 and later."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only standard users with the View All Forecasts or Allow Forecasting permission or delegated forecast manager status can access this object.",
+  "field_reference": {
+    "CanDisplayQuotas": {
+      "field_label": "Can Display Quotas",
+      "type": "boolean"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DateType": {
+      "field_label": "Date Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ForecastingGroupId": {
+      "field_label": "Forecasting Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "HasAdjustments": {
+      "field_label": "Has Adjustments",
+      "type": "boolean"
+    },
+    "HasOwnerAdjustments": {
+      "field_label": "Has Owner Adjustments",
+      "type": "boolean"
+    },
+    "HasProductFamily": {
+      "field_label": "Has Product Family",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Forecasting Type ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "IsAdvCurrencyMgmt": {
+      "field_label": "Is Advanced Currency Management",
+      "type": "boolean"
+    },
+    "IsAmount": {
+      "field_label": "Is Amount",
+      "type": "boolean"
+    },
+    "IsCdp": {
+      "field_label": "Is Cdp",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPlatformType": {
+      "field_label": "Is Platform Type",
+      "type": "boolean"
+    },
+    "IsQuantity": {
+      "field_label": "Is Quantity",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastActivatedDate": {
+      "field_label": "Last Activated Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "RoleType": {
+      "field_label": "Role Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2ModelId": {
+      "field_label": "Territory Model ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "DevopsPipelineEnvironment - Data API",
+  "description": "Represents the association between a DevopsPipeline and DevopsEnvironment objects. This object defines which orgs are part of the release pipeline. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "DevopsEnvironmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the DevopsEnvironment record associated with the pipeline. This field is a relationship field.",
+      "relationship_name": "DevopsEnvironment",
+      "refers_to": "DevopsEnvironment"
+    },
+    "DevopsPipelineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent DevopsPipeline record that this environment belongs to. This field is a relationship field.",
+      "relationship_name": "DevopsPipeline",
+      "relationship_type": "Master-detail",
+      "refers_to": "DevopsPipeline (the parent object)"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the environment is active for the specified pipeline. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique, auto-generated name for the pipeline environment association record."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **DevopsPipelineEnvironmentFeed**: Feed tracking is available for the object.\n- **DevopsPipelineEnvironmentHistory**: History is available for tracked fields of the object."
+}

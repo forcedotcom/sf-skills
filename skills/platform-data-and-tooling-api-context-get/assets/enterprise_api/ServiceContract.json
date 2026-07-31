@@ -1,0 +1,522 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ServiceContract - Data API",
+  "description": "Represents a customer support contract (business agreement). This object is available in API version 18.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the account associated with the service contract."
+    },
+    "ActivationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The initial day the service contract went into effect (whereas StartDate may include a renewal date)."
+    },
+    "AdditionalDiscount": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Extra discount percentage for the service contract. Available in API version 55.0 and later."
+    },
+    "ApprovalStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Approval status of the service contract."
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the billing address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address. Maximum size is 40 characters."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address. Maximum size is 40 characters."
+    },
+    "BillingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country code for the service contract’s billing address."
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLongitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLatitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address. Maximum size is 20 characters."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Group, Sort, Filter, Nillable",
+      "description": "Details for the billing address. Maximum size is 20 characters."
+    },
+    "BillingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO state code for the service contract’s billing address."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Street address for the billing address."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Contact associated with the service contract. Must be a valid ID.",
+      "required": true
+    },
+    "ContractNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, Sort",
+      "description": "Unique number automatically assigned to the service contract."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Description of the service contract."
+    },
+    "Discount": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Discount percentage for the service contract."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The last day the service contract is in effect."
+    },
+    "GrandTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total price of the service contract plus shipping and taxes."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "LastReferencedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly. Some sample scenarios are:"
+    },
+    "LastViewedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it’s possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "LineItemCount": {
+      "type": "int",
+      "properties": "Filter, Nillable, Group, Sort",
+      "description": "Number of ContractLineItem records associated with the service contract."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Name of the service contract."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who currently owns the service contract."
+    },
+    "ParentServiceContractId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service contract’s parent service contract, if it has one."
+    },
+    "Pricebook2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Pricebook2 associated with the service contract. Must be a valid ID."
+    },
+    "RootServiceContractId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "(Read only) The top-level service contract in a service contract hierarchy. Depending on where a service contract lies in the hierarchy, its root could be the same as its parent."
+    },
+    "ShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the shipping address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "ShippingCity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details of the shipping address. Maximum size is 40 characters."
+    },
+    "ShippingCountry": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details of the shipping address. Country maximum size is 40 characters."
+    },
+    "ShippingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country code for the service contract’s shipping address."
+    },
+    "ShippingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLongitude to specify the precise geolocation of a shipping address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "ShippingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLatitude to specify the precise geolocation of an address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "ShippingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Details of the shipping address. Postal code maximum size is 20 characters."
+    },
+    "ShippingState": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Details of the shipping address. State maximum size is 20 characters."
+    },
+    "ShippingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO state code for the service contract’s shipping address."
+    },
+    "ShippingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The street address of the shipping address. Maximum of 255 characters."
+    },
+    "SpecialTerms": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Any terms specifically agreed to and tracked in the service contract."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The first day the service contract is in effect."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Nillable",
+      "description": "The status of the service contract, such as Inactive."
+    },
+    "Subtotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable",
+      "description": "Total of the service contract line items (products) before discounts, taxes, and shipping are applied."
+    },
+    "Tax": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Total taxes for the service contract."
+    },
+    "Term": {
+      "type": "int",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Number of months that the service contract is valid."
+    },
+    "TotalPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable",
+      "description": "Total of the contract line items (products) after discounts and before taxes and shipping."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ServiceContractChangeEvent (API version 44.0)**: Change events are available for the object.\n- **ServiceContractFeed (API version 23.0)**: Feed tracking is available for the object.\n- **ServiceContractHistory**: History is available for tracked fields of the object.\n- **ServiceContractOwnerSharingRule**: Sharing rules are available for the object.\n- **ServiceContractShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"ServiceContract\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AdditionalDiscount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ApprovalStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BillingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"BillingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"BillingLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"BillingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Cases\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ChildServiceContracts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Contact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContractLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContractLineOutcomes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContractNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DescendantServiceContracts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Discount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Entitlements\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GrandTotal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LineItemCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MaintenancePlans\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ParentServiceContract\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceContract\"/>\n        <element name=\"ParentServiceContractId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Pricebook2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Pricebook2\"/>\n        <element name=\"Pricebook2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RootServiceContract\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceContract\"/>\n        <element name=\"RootServiceContractId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShippingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ShippingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingHandling\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShippingLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShippingLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShippingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SpecialTerms\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subtotal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Tax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Term\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"TotalPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkPlanSelectionRules\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivationDate": {
+      "field_label": "Activation Date",
+      "type": "datetime"
+    },
+    "AdditionalDiscount": {
+      "field_label": "Additional Discount",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "ApprovalStatus": {
+      "field_label": "Approval Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingAddress": {
+      "field_label": "Billing Address",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "Billing City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Billing Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Billing Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Billing Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Billing Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingPostalCode": {
+      "field_label": "Billing Zip",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingState": {
+      "field_label": "Billing State",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Billing Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContractNumber": {
+      "field_label": "Contract Number",
+      "type": "string",
+      "length": "30"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Discount": {
+      "field_label": "Discount",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "GrandTotal": {
+      "field_label": "Grand Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Service Contract ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LineItemCount": {
+      "field_label": "Line Items",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Contract Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentServiceContractId": {
+      "field_label": "Parent Service Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Pricebook2Id": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RootServiceContractId": {
+      "field_label": "Root Service Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShippingAddress": {
+      "field_label": "Shipping Address",
+      "type": "address"
+    },
+    "ShippingCity": {
+      "field_label": "Shipping City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShippingCountry": {
+      "field_label": "Shipping Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingGeocodeAccuracy": {
+      "field_label": "Shipping Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShippingHandling": {
+      "field_label": "Shipping and Handling",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ShippingLatitude": {
+      "field_label": "Shipping Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingLongitude": {
+      "field_label": "Shipping Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingPostalCode": {
+      "field_label": "Shipping Zip",
+      "type": "string",
+      "length": "20"
+    },
+    "ShippingState": {
+      "field_label": "Shipping State",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingStreet": {
+      "field_label": "Shipping Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SpecialTerms": {
+      "field_label": "Special Terms",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Subtotal": {
+      "field_label": "Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Tax": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Term": {
+      "field_label": "Term (months)",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalPrice": {
+      "field_label": "Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

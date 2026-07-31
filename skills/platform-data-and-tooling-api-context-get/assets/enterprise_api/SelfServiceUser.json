@@ -1,0 +1,92 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "SelfServiceUser - Data API",
+  "description": "Represents a Contact who has been enabled to use your organization’s Self-Service portal, where he or she can obtain online support.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "All Self-Service users must be associated with a Contact. The contact’s email should match the Self-Service user email. The contact must have a value in the AccountId field or an error occurs.",
+      "required": true
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Make this the same as the email address for the Contact associated with this SelfServiceUser. Password resets and other system communication will be sent to this email address.",
+      "required": true
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "First name of the Self-Service user."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the Self-Service user is allowed to log in to the Self-Service portal (true) or not (false). Note that there is no way to delete a Self-Service user. They can only be marked as inactive."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "LanguageLocaleKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "This is a restricted picklist field. It is the primary language for the user. All on-screen text in the Self-Service portal is displayed in this language.",
+      "required": true
+    },
+    "LastLoginDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the Self-Service user last logged in."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Last name of the Self-Service user.",
+      "required": true
+    },
+    "LocaleSidKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "This is a restricted picklist field. The value of this field affects the formatting and parsing of values, especially numeric values, in the Self-Service portal. Values are two-letter codes that indicate language and sometimes language and country. The codes are based on ISO standards.",
+      "required": true
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Concatenation of FirstName and LastName. Limited to 203 characters, including whitespaces."
+    },
+    "SuperUser": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this Self-Service user is a super user with additional access on his or her company's Self-Service portal (true) or not (false)."
+    },
+    "TimeZoneSidKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "This is a restricted picklist field. The time zone of a affects the offset used when displaying or entering times in the Self-Service portal.",
+      "required": true
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "This contains the name that a Self-Service user enters to log into the Self-Service portal. Value must be unique in your organization. If you try to create or update a user with a duplicate value, the operation is rejected and an error is returned.",
+      "required": true
+    }
+  },
+  "special_access_rules": "Customer Portal users can't access this object.",
+  "usage": "For security reasons, you can’t query Self-Service user passwords via the API or the user interface. However, the API allows you to set and reset Self-Service user passwords using the setPassword() and resetPassword() calls. SelfServiceUser records created from the API don’t cause a notification email to be sent. If you want to notify the user, you must send them an email after creating the user.\n\nFor security reasons, you can’t query Self-Service user passwords via the API or the user interface. However, the API allows you to set and reset Self-Service user passwords using the setPassword() and resetPassword() calls.\n\nSelfServiceUser records created from the API don’t cause a notification email to be sent. If you want to notify the user, you must send them an email after creating the user."
+}

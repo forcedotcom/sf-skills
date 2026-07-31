@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ApexLog - Tooling API",
+  "description": "Represents a debug log.",
+  "supported_soap_calls": "`delete()`, `describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `DELETE`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Application": {
+      "type": "textarea",
+      "properties": "Filter, Group, Sort",
+      "description": "This value depends on the client type that triggered the log or heap dump. For API clients, this value is the client ID. For browser clients, this value is Browser. This field is required."
+    },
+    "DurationMilliseconds": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The duration of the transaction in milliseconds. This field is required."
+    },
+    "Location": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort, Nillable, Restricted picklist",
+      "description": "Specifies the location of the origin of the log or heap dump. Values are: Monitoring—Generated as part of debug log monitoring, and visible to all administrators. These types of logs are maintained for seven days or until a user deletes them. SystemLog—Generated as part of system log monitoring, and visible only to you. These types of logs are maintained for 24 hours or until the user clears them."
+    },
+    "LogLength": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Length of the log or heap dump in bytes. This field is required."
+    },
+    "LogUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "ID of the user whose actions triggered the debug log or heap dump."
+    },
+    "Operation": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Name of the operation that triggered the debug log or heap dump, such as APEXSOAP, Apex Sharing Recalculation, and so on. This field is required."
+    },
+    "Request": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Request type. Values are: API—Request came from an API. Application—Request came from the Salesforce user interface. This field is required."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique identifier of the request that triggered the debug log. Use this request identifier to correlate multiple debug logs triggered by the same request."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "Start time of the transaction. This field is required."
+    },
+    "Status": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Status of the transaction. This value is either Success, or the text of an unhandled Apex exception. This field is required."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexLog\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Application\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DurationMilliseconds\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Location\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LogLength\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"LogUser\" minOccurs=\"0\" type=\"ens:sObject\" nillable=\"true\"/>\n        <xsd:element name=\"LogUserId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"Operation\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Request\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RequestIdentifier\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"StartTime\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Status\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

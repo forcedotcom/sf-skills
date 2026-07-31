@@ -1,0 +1,260 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "AsyncOperationTracker - Data API",
+  "description": "Represents the status of an asynchronous request initiated from the Quote, Order, and CreditMemo objects. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AsyncOperationNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A string that identifies the operation tracked in AsyncOperationTracker."
+    },
+    "CorrelationIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A string that identifies an operation across services."
+    },
+    "ExpiresAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp indicating when this record will be deleted."
+    },
+    "FailedJobItems": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of items within the job that have failed."
+    },
+    "FinishedAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp indicating when the asynchronous process completed."
+    },
+    "JobType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of job. Possible values are: ASMAdServerCheckAvailability. This field is available in API version 66.0 and later. ASMAdServerIntegration. This field is available in API version 66.0 and later. ASMAddRelatedEntityToAQL. This field is available in API version 66.0 and later. ASMApplyMediaPlanTemplateJob. This field is available in API version 66.0 and later. ASMApplyTargetingTemplateJob. This field is available in API version 66.0 and later. ASMBulkEditLineItemDetail. This field is available in API version 67.0 and later. ASMCalcLinearMediaSpotPrc. This field is available in API version 66.0 and later. ASMCreateAmendQuoteJob. This field is available in API version 66.0 and later. ASMFileProcessorJob. This field is available in API version 66.0 and later. ASMLinearSpotGenerationJob. This field is available in API version 67.0 and later. ASMMediaPlanAsTemplate. This field is available in API version 66.0 and later. ASMMediaPlanClone. This field is available in API version 66.0 and later. ASMMediaPlanCopyJob. This field is available in API version 66.0 and later. AbandonedCart. This field is available in API version 67.0 and later. AssetizationAsyncJob AutomatedNegativeInvoiceLineConversion AutomaticRefunds CommerceVariationsUpsert ContextPersistence CreateCPQContractsJob CreditMemoDraftToPosted. This field is available in API version 66.0 and later. CreditMemoRecovery. This field is available in API version 66.0 and later. DeltaCatalogSyndicationAsyncJob energyAgreementSetup. This field is available in API version 66.0 and later. FullCatalogSyndicationAsyncJob InvoiceBatchRunEmailJob. This field is available in API version 66.0 and later. InvoiceDocgenJob InvoiceDocgenPostProcessJob InvoiceDocgenRetryJob InvoiceDraftToPosted InvoiceEstimatedTaxCallout. This field is available in API version 66.0 and later. LoadSalesRecipientData. This field is available in API version 66.0 and later. MultisiteAutoQuote. This field is available in API version 66.0 and later. PearAmendQtyAssets—Initiate Amend Quantity PearCancelAssets—Initiate Cancellation PearRenewAssets—Initiate Renewal PersonalizationRecommender. This field is available in API version 67.0 and later. PlaceOrder PlaceOrderPersistSync PlaceOrderPriceAsync PlaceOrderTaxAsync PlaceQuote PlaceQuotePersistAndPriceSync PlaceQuotePersistSync PlaceQuotePriceAsync PlaceQuoteTaxAsync PostOrderCampaign. This field is available in API version 67.0 and later. PreprocessOrder. This field is available in API version 66.0 and later. PriceRuleDeployment PriceSheetDeployJob PSTBaseJob—Top-Level. This field is available in API version 66.0 and later. PSTConfig—Configuration. This field is available in API version 66.0 and later. PSTPersist—Save. This field is available in API version 66.0 and later. PSTPrice. This field is available in API version 66.0 and later. QuoteToOrderJob RuleLibraryDeployment SmsDltTemplateIngestion. This field is available in API version 66.0 and later. StandaloneBillingSchedulesCreation. This field is available in API version 66.0 and later. StatementOfAccountGeneration. This field is available in API version 66.0 and later. StoreRetrieveSyncJob. This field is available in API version 66.0 and later. TestSerialMessageStepJob. This field is available in API version 66.0 and later. TransactionLineBom—Create Material Lines VoidCreditMemo. This field is available in API version 66.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user or group that owns the job. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ParentOperationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is a relationship field.",
+      "relationship_name": "ParentOperation",
+      "refers_to": "AsyncOperationTracker"
+    },
+    "ReferenceEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Contains the ID of a record associated with the asynchronous request. For example, if the asynchronous request is associated with a credit memo, this field contains the ID of the credit memo. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceEntity",
+      "refers_to": "CreditMemo, InvoiceBatchRun, Order, Product2, Quote"
+    },
+    "Request": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The payload required to process the async request that’s populated by internal Salesforce services that use the async framework. This field is available in API version 66.0 and later."
+    },
+    "Response": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Stores the response for each step in the async flow, used in the next steps of the flow until its completion. This field is available in API version 66.0 and later."
+    },
+    "SequenceNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The sequence number associated with each step of a multiple step job, to define the execution order for the async job flow. This field is available in API version 66.0 and later."
+    },
+    "StartedAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp indicating when Salesforce started the asynchronous process."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the asynchronous request. Possible values are: Completed CompletedWithFailures Failure InProgress Submitted"
+    },
+    "StepName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Possible values are: ASMAdServerCheckAvailability. This field is available in API version 66.0 and later. ASMAdServerIntegration. This field is available in API version 66.0 and later. ASMAddRelatedEntityToAQL. This field is available in API version 66.0 and later. ASMApplyMediaPlanTemplateJob. This field is available in API version 66.0 and later. ASMApplyTargetingTemplateJob. This field is available in API version 66.0 and later. ASMBulkEditLineItemDetail. This field is available in API version 67.0 and later. ASMCalcLinearMediaSpotPrc. This field is available in API version 66.0 and later. ASMCreateAmendQuoteJob. This field is available in API version 66.0 and later. ASMFileProcessorJob ASMLinearSpotGenerationJob. This field is available in API version 67.0 and later. ASMMediaPlanAsTemplate. This field is available in API version 66.0 and later. ASMMediaPlanClone. This field is available in API version 66.0 and later. ASMMediaPlanCopyJob. This field is available in API version 66.0 and later. AbandonedCart. This field is available in API version 67.0 and later. AssetizationAsyncJob AutomatedNegativeInvoiceLineConversion AutomaticRefunds CommerceVariationsUpsert ContextPersistence CreateCPQContractsJob CreditMemoDraftToPosted. This field is available in API version 66.0 and later. CreditMemoRecovery. This field is available in API version 66.0 and later. DeltaCatalogSyndicationAsyncJob energyAgreementSetup. This field is available in API version 66.0 and later. FullCatalogSyndicationAsyncJob InvoiceBatchRunEmailJob. This field is available in API version 66.0 and later. InvoiceDocgenJob InvoiceDocgenPostProcessJob InvoiceDocgenRetryJob InvoiceDraftToPosted InvoiceEstimatedTaxCallout. This field is available in API version 66.0 and later. LoadSalesRecipientData. This field is available in API version 66.0 and later. MultisiteAutoQuote. This field is available in API version 66.0 and later. PearAmendQtyAssets—Initiate Amend Quantity PearCancelAssets—Initiate Cancellation PearRenewAssets—Initiate Renewal PersonalizationRecommender. This field is available in API version 67.0 and later. PlaceOrder PlaceOrderPersistSync PlaceOrderPriceAsync PlaceOrderTaxAsync PlaceQuote PlaceQuotePersistAndPriceSync PlaceQuotePersistSync PlaceQuotePriceAsync PlaceQuoteTaxAsync PostOrderCampaign. This field is available in API version 67.0 and later. PreprocessOrder. This field is available in API version 66.0 and later. PriceRuleDeployment PriceSheetDeployJob PSTBaseJob—Top-Level. This field is available in API version 66.0 and later. PSTCommonSyncStep PSTConfig. This field is available in API version 66.0 and later. PSTConfigAndPersist. This field is available in API version 66.0 and later. PSTOrderTaxAsync. This field is available in API version 66.0 and later. PSTPersist—Save. This field is available in API version 66.0 and later. PSTPrice. This field is available in API version 66.0 and later. PSTPriceAndPersist. This field is available in API version 66.0 and later. PSTQuoteTaxAsync. This field is available in API version 66.0 and later. QuoteToOrderJob RuleLibraryDeployment SmsDltTemplateIngestion. This field is available in API version 66.0 and later. StandaloneBillingSchedulesCreation. This field is available in API version 66.0 and later. StatementOfAccountGeneration. This field is available in API version 66.0 and later. StoreRetrieveSyncJob. This field is available in API version 66.0 and later. TestSerialMessageStepJob. This field is available in API version 66.0 and later. TransactionLineBom—Create Material Lines VoidCreditMemo"
+    },
+    "SubmittedAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp indicating when the asynchronous process was submitted by the REST request."
+    },
+    "SuccessfulJobItems": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of successful items in this job."
+    },
+    "TotalJobItems": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of items in this job."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AsyncOperationTrackerOwnerSharingRule**: Sharing rules are available for the object.\n- **AsyncOperationTrackerShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AsyncOperationNumber": {
+      "field_label": "Async Operation Number",
+      "type": "string",
+      "length": "255"
+    },
+    "CorrelationIdentifier": {
+      "field_label": "Correlation Identifier",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExpiresAt": {
+      "field_label": "Expires At",
+      "type": "datetime"
+    },
+    "FailedJobItems": {
+      "field_label": "Failed Job Items",
+      "type": "int",
+      "digits": "9"
+    },
+    "FinishedAt": {
+      "field_label": "Finished At",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Revenue Async Operation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JobType": {
+      "field_label": "Job Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentOperationId": {
+      "field_label": "Revenue Async Operation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReferenceEntityId": {
+      "field_label": "Reference Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Request": {
+      "field_label": "Request",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Response": {
+      "field_label": "Response",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "SequenceNumber": {
+      "field_label": "Sequence Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "StartedAt": {
+      "field_label": "Started At",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StepName": {
+      "field_label": "Step Name",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubmittedAt": {
+      "field_label": "Submitted At",
+      "type": "datetime"
+    },
+    "SuccessfulJobItems": {
+      "field_label": "Successful Job Items",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalJobItems": {
+      "field_label": "Total Job Items",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

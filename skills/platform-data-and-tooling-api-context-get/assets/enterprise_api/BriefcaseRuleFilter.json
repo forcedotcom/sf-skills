@@ -1,0 +1,114 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "BriefcaseRuleFilter - Data API",
+  "description": "Represents a filter criteria for a briefcase rule. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BriefcaseRuleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the briefcase rule.",
+      "required": true
+    },
+    "FilterOperator": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The comparison operator for this rule filter. Possible values are: d—Ends with e— Equals g—Greater than h—Greater than or equal i—Like l—Less than m—Less than or equal s—Starts with",
+      "required": true
+    },
+    "FilterSeqNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The filter number. When you apply multiple filters, the filters are numbered sequentially, 1, 2, 3, and so on.",
+      "required": true
+    },
+    "FilterValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value for the field and criteria. For example, true or false for a boolean field whose criteria or filter operator is Equals. Capitalization matters with date filter operators. Be sure to specify date literals in uppercase. Some valid date literals include TODAY, YESTERDAY and TOMORROW."
+    },
+    "TargetEntityField": {
+      "type": "picklist",
+      "properties": "Restricted picklist",
+      "description": "The field to filter by. Compound fields and encrypted fields aren’t supported. Label is Field.",
+      "required": true
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "wsdl_segment": "```xml\n<complexType name=\"BriefcaseRuleFilter\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"BriefcaseRule\" nillable=\"true\" minOccurs=\"0\" type=\"ens:BriefcaseRule\"/>\n        <element name=\"BriefcaseRuleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FilterOperator\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FilterSeqNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FilterValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TargetEntityField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "BriefcaseRuleId": {
+      "field_label": "Briefcase Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FilterOperator": {
+      "field_label": "Operator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FilterSeqNumber": {
+      "field_label": "Filter Sequence Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "FilterValue": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Briefcase Rule Filter ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetEntityField": {
+      "field_label": "Field",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

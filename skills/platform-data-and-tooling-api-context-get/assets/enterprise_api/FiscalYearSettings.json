@@ -1,0 +1,165 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FiscalYearSettings - Data API",
+  "description": "Settings to define a custom or standard fiscal year for your organization. This object has a parent-child relationship with the Period object.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Description of the setting."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "End date of the fiscal year."
+    },
+    "IsStandardYear": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the fiscal year is a standard calendar year (true) or a custom fiscal year (false)."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "A name for the fiscal year. Limit: 80 characters."
+    },
+    "PeriodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the associated fiscal period."
+    },
+    "PeriodLabelScheme": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The numbering scheme used for fiscal periods."
+    },
+    "PeriodPrefix": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The prefix of fiscal periods. For example, if p is the prefix, then the first period is “P1.”"
+    },
+    "QuarterLabelScheme": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The numbering scheme used for fiscal quarters."
+    },
+    "QuarterPrefix": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The prefix of fiscal quarters. For example, if “Q” is the prefix, then the fourth quarter would be “Q4.”"
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Start date of the fiscal year."
+    },
+    "WeekLabelScheme": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The numbering scheme used for weeks."
+    },
+    "WeekStartDay": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the day that starts the week, for example Monday or Sunday"
+    },
+    "YearType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates one of two types of fiscal years, Standard or Custom. Standard denotes the standard Gregorian calendar, while Custom means a fiscal year with a custom structure."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only partner users and standard users can access this object.",
+  "wsdl_segment": "```xml\n<complexType name=\"FiscalYearSettings\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"IsStandardYear\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PeriodId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PeriodLabelScheme\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PeriodPrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Periods\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"QuarterLabelScheme\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"QuarterPrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"WeekLabelScheme\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"WeekStartDay\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"YearType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Fiscal Year Settings ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsStandardYear": {
+      "field_label": "Is Standard Year",
+      "type": "boolean"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "PeriodId": {
+      "field_label": "Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PeriodLabelScheme": {
+      "field_label": "Period Name Scheme",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PeriodPrefix": {
+      "field_label": "Period Prefix",
+      "type": "picklist",
+      "length": "255"
+    },
+    "QuarterLabelScheme": {
+      "field_label": "Quarter Name Scheme",
+      "type": "picklist",
+      "length": "40"
+    },
+    "QuarterPrefix": {
+      "field_label": "Quarter Prefix",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WeekLabelScheme": {
+      "field_label": "Week Name Scheme",
+      "type": "picklist",
+      "length": "40"
+    },
+    "WeekStartDay": {
+      "field_label": "Week Start Day",
+      "type": "int",
+      "digits": "9"
+    },
+    "YearType": {
+      "field_label": "Year Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

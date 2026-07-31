@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ApiTotalUsageEventLog - Data API",
+  "description": "API Total Usage Event Log contains details about Platform SOAP API, Platform REST API, and Bulk API requests. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiFamily": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API family. For example, REST, SOAP, or Bulk."
+    },
+    "ApiResource": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API method or resource. For example, describeSObjects for SOAP."
+    },
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP, such as a login from AppExchange, is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "ClientName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the client making the API request."
+    },
+    "ConnectedAppIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the connected app making the API request."
+    },
+    "HttpMethod": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The HTTP method. For example, GET."
+    },
+    "IsApiLimitCounted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Whether the request counted against the API limit (true) or not (false). The default value is false."
+    },
+    "ObjectName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the object accessed by the API request."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestIdentifier. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "StatusCode": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The HTTP response status code for the request."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

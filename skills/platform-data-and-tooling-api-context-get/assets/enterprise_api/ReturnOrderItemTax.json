@@ -1,0 +1,179 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ReturnOrderItemTax - Data API",
+  "description": "Represents the tax on a return order line item or return order item adjustment. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort",
+      "description": "Amount of tax represented by the return order item tax."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the return order item tax."
+    },
+    "OrderItemTaxLineItemSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the order item tax line item summary associated with the order item summary that corresponds to the return order line item to which the tax applies."
+    },
+    "Rate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax rate used to calculate the Amount."
+    },
+    "ReturnOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated return order. This is a relationship field.",
+      "relationship_name": "ReturnOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "ReturnOrder"
+    },
+    "ReturnOrderItemAdjustmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If this object represents a tax on an adjustment, this value is the ID of the return order item adjustment to which the tax applies. If this value is null, the adjustment applies to a return order line item. This is a relationship field.",
+      "relationship_name": "ReturnOrderItemAdjustment",
+      "relationship_type": "Lookup",
+      "refers_to": "ReturnOrderItemAdjustment"
+    },
+    "ReturnOrderItemTaxNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID of the return order item tax."
+    },
+    "ReturnOrderLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "If this object represents a tax on a return order line item, this value is the ID of that return order line item. If this object represents a tax on an adjustment, this value is the ID of the return order line item to which the adjustment applies. This is a relationship field.",
+      "relationship_name": "ReturnOrderLineItem",
+      "relationship_type": "Lookup",
+      "refers_to": "ReturnOrderLineItem"
+    },
+    "TaxEffectiveDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Date on which the Amount was calculated. Important due to tax rate changes over time."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Shows whether the amount on the tax line is an estimate or the final calculated amount. Doesn’t set a value by default. Users can define automation to set and change the value as needed. Possible values are: Actual Estimated"
+    }
+  },
+  "special_access_rules": "Order Management must be enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ReturnOrderItemTaxChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Id": {
+      "field_label": "Return Order Item Tax ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OrderItemTaxLineItemSummaryId": {
+      "field_label": "Order Product Tax Line Item Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Rate": {
+      "field_label": "Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "ReturnOrderId": {
+      "field_label": "Return Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReturnOrderItemAdjustmentId": {
+      "field_label": "Return Order Item Adjustment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReturnOrderItemTaxNumber": {
+      "field_label": "Return Order Item Tax Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ReturnOrderLineItemId": {
+      "field_label": "Return Order Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxEffectiveDate": {
+      "field_label": "Tax Effective Date",
+      "type": "date"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

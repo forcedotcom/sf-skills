@@ -1,0 +1,67 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExtlRecShrField - Data API",
+  "description": "Represents an imported, exported, or updated external record share field for Partner Connect. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ExtlRecShrObjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the ExtlRecShrObject record. This field is a relationship field.",
+      "relationship_name": "ExtlRecShrObject",
+      "refers_to": "ExtlRecShrObject"
+    },
+    "FieldDefaultValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Default value of the field."
+    },
+    "FieldSetType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Set of fields associated with this record. Possible values are: ExportedFields ImportedFields InternalFields"
+    },
+    "IsFieldNillable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this field can be set to null (true) or not (false). The default value is false."
+    },
+    "SendFieldUpdates": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether updates are tracked for this field, sent to the connected org, and stored in the ExtlRecShrLead or ExlRecShrOpportunity objects (true) or not (false). The default value is false."
+    },
+    "SharedFieldDevName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Developer name of the field."
+    },
+    "SharedFieldLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Label of the field."
+    },
+    "SharedFieldLength": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Maximum length of the field."
+    },
+    "SharedFieldType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Field type of the imported, exported, or updated field. Possible values are: Address Boolean Currency DateOnly DateTime Double DynamicEnum Email EntityId EnumOrId Fax Integer MultiLineText Percent Phone StaticEnum Text Url"
+    }
+  },
+  "special_access_rules": "To see this object, enable Partner Connect or Partner Connect for Vendors. See Set Up Partner Connect as a Partner and Set Up Partner Connect as a Vendor in Salesforce Help."
+}

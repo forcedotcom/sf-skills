@@ -1,0 +1,33 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "SiteDomain - Data API",
+  "description": "SiteDomain is a read-only object, and a one-to-many replacement for the Site.TopLevelDomain field. This object is available in API version 21.0, and has been deprecated as of API version 26.0. In API version 26.0 and later, use the Domain and DomainSite objects instead.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Domain": {
+      "type": "url",
+      "properties": "Filter, Sort",
+      "description": "The branded custom Web address within the global namespace identified by this domain's type. In the Domain Name System (DNS) global namespace, this field is the custom Web address that you registered with a third-party domain name registrar. The custom Web address can be used to access the site of this domain."
+    },
+    "SiteId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the associated Site."
+    },
+    "DomainType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "The global namespace that this custom Web address belongs to. This value is set to DNS for custom Web addresses in the global DNS. This field is available in version 24.0 of the API."
+    }
+  },
+  "usage": "Use this read-only object to query the domains that are associated with each site in your organization."
+}

@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "QuoteLineRelationship - Data API",
+  "description": "Describes the relationship between quote line items, such as items in a bundle. When you create a QuoteLineRelationship object, it’s immutable: it can’t be edited or removed. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssociatedQuantScaleMethod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "How to scale the quantity of the associated quote line, relative to the main quote line. If this field has a non-null value, you can't edit the associated quote line's quantity. Possible values are: Constant— The associated quote’s line quantity remains the same in relation to the main quote line’s quantity. For example, the main quote line has a quantity of one and the associated quote line has a quantity of one. If you increase the quantity of the main quote line to two, the associated quote line’s quantity remains at one. Proportional— The associated order’s item quantity increases or decreases based on the main quote line’s quantity. For example, the main quote line has a quantity of one and the associated quote line has a quantity of two. If you increase the quantity of the main quote line to two, the associated quote line’s quantity increases to four. The default value is Proportional."
+    },
+    "AssociatedQuoteLineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique identifier of the associated quote line item. This field is a relationship field. In a bundle relationship, this quote line is the bundle component.",
+      "relationship_name": "AssociatedQuoteLine",
+      "relationship_type": "Lookup",
+      "refers_to": "QuoteLineItem"
+    },
+    "AssociatedQuoteLinePricing": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates how the associated quote line item is priced relative to the main quote line item. Possible values are: IncludedInBundlePrice— The associated quote line’s cost is $0 because it’s included in the bundle’s price. NotIncludedInBundlePrice— The associated quote line has a cost because it’s not included in the bundle’s price."
+    },
+    "AssociatedQuoteLineRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Describes the position of the associated quote line item in the relationship. Possible values are: BundleComponent— The associated quote line item is part of a bundle. SetComponent— The associated quote line item is part of a set. ClassificationComponent— The associated quote line item is a product classification component."
+    },
+    "IsPriceInclusive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether child products are included in the root bundle price. If set to true, the price of each child product is zero. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "MainQuoteLineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique identifier of the main quote line item. This field is a relationship field. In a bundle relationship, this quote line is the bundle parent.",
+      "relationship_name": "MainQuoteLine",
+      "relationship_type": "Lookup",
+      "refers_to": "QuoteLineItem"
+    },
+    "MainQuoteLineRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the position of the main quote line item in the relationship. Possible values are: Bundle—The main quote line item is the bundle parent. Set—The main quote line item is the set parent."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the quote line relationship."
+    },
+    "ProductRelatedComponentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the product related component. This field is a relationship field.",
+      "relationship_name": "ProductRelatedComponent",
+      "refers_to": "ProductRelatedComponent"
+    },
+    "ProductRelationshipTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique identifier of record that describes the relationship between the main and associated quote lines. This field is a relationship field.",
+      "relationship_name": "ProductRelationshipType",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductRelationshipType"
+    },
+    "QuoteId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier of the quote to which the main and associated quote lines belong. This field is a relationship field.",
+      "relationship_name": "Quote",
+      "relationship_type": "Lookup",
+      "refers_to": "Quote"
+    },
+    "RootQuoteLineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The root quote line for the quote line relationship. In a bundle relationship, the root quote line is the root bundle. This field is a relationship field.",
+      "relationship_name": "RootQuoteLine",
+      "refers_to": "QuoteLineItem"
+    }
+  },
+  "special_access_rules": "This object is available if Subscription Management or Revenue Cloud is enabled.",
+  "associated_objects": "This object has the following associated objects.\n\n- **QuoteLineRelationshipFeed**: Feed tracking is available for the object.\n- **QuoteLineRelationshipHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "AssociatedQuantScaleMethod": {
+      "field_label": "Associated Quantity Scale Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssociatedQuoteLineId": {
+      "field_label": "Quote Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssociatedQuoteLinePricing": {
+      "field_label": "Associated Quote Line Item Pricing",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssociatedQuoteLineRole": {
+      "field_label": "Associated Quote Line Item Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Quote Line Relationship ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MainQuoteLineId": {
+      "field_label": "Quote Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MainQuoteLineRole": {
+      "field_label": "Main Quote Line Item Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Quote Line Relationship Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductRelatedComponentId": {
+      "field_label": "Product Related Component ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductRelationshipTypeId": {
+      "field_label": "Product Relationship Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteId": {
+      "field_label": "Quote ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "PackagePushJob - Data API",
+  "description": "Represents an individual push job for upgrading a package in an org from one version to another version. There can be multiple push jobs created for one push request. For example, if you want to upgrade five orgs as part of one push, you have one PackagePushRequest record and five PackagePushJob records.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurationSeconds": {
+      "type": "int",
+      "properties": "Group, Nillable",
+      "description": "The length of time in seconds, that the push upgrade took to complete. This field is new in API version 51.0."
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Nillable, Update",
+      "description": "The date and time (UTC) at which the push upgrade ended, in ISO 8601 format. This field is new in API version 51.0."
+    },
+    "PackagePushRequestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the parent push request record that must have been created.",
+      "required": true
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Nillable, Update",
+      "description": "The date and time (UTC) at which the push upgrade started, in ISO 8601 format. This field is new in API version 51.0."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the job. Valid values are: Canceled Created (default) Failed In Progress Pending Succeeded Don’t specify this value when you create the push job. The default value of Created is used."
+    },
+    "SubscriberOrganizationKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The organization key of the org where the package is upgraded. This references orgKey in PackageSubscriber.",
+      "required": true
+    }
+  },
+  "special_access_rules": "To initiate a push upgrade for a first-generation managed package, the Upload AppExchange Packages user permission is required. To initiate a push upgrade for an unlocked or second-generation managed package, the Create and Update Second-Generation Packages user permission is required. The push upgrade feature is only available to first- and second-generation managed packages that have passed AppExchange security review. To enable push upgrades for your managed package, log a support case in the Salesforce Partner Community. For unlocked packages, push upgrades are enabled by default.\n\nTo initiate a push upgrade for a first-generation managed package, the Upload AppExchange Packages user permission is required.\n\nTo initiate a push upgrade for an unlocked or second-generation managed package, the Create and Update Second-Generation Packages user permission is required.\n\nThe push upgrade feature is only available to first- and second-generation managed packages that have passed AppExchange security review. To enable push upgrades for your managed package, log a support case in the Salesforce Partner Community.\n\nFor unlocked packages, push upgrades are enabled by default.",
+  "usage": "Suppose that you want to push version 3.4.6 of your package to all orgs. You’ve already identified the orgs eligible for the upgrade by using MetadataPackageVersion and created the push request using PackagePushRequest. Now let’s write some code to create a push job for each eligible org. This code sample uses the Web Services Connector (WSC). Checking the Status of a Push Job\n\nSuppose that you want to push version 3.4.6 of your package to all orgs. You’ve already identified the orgs eligible for the upgrade by using MetadataPackageVersion and created the push request using PackagePushRequest. Now let’s write some code to create a push job for each eligible org.\n\nThis code sample uses the Web Services Connector (WSC).\n\nChecking the Status of a Push Job**"
+}

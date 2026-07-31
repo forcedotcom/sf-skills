@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "LiveChatTranscriptEvent - Data API",
+  "description": "Captures specific events that occur over the lifetime of a chat. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AgentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the agent associated with the event."
+    },
+    "Detail": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Details associated with the event."
+    },
+    "LastReferencedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "LiveChatTranscriptId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the live chat transcript associated with the event."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the event."
+    },
+    "Time": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort",
+      "description": "The time at which the event happened."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The kind of event that occurred. Accept—Accepted AgentBlocked—Blocked by Agent AlertCriticalWaitChat—Critical Wait Alert Time Reached CancelBlocked—Cancel (Blocked) CancelNoAgent—Cancel (No Agent) CancelNoQueue—Cancel (No Queue) CancelVisitor—Canceled by Visitor ChasitorIdleTimeout—Visitor Idle Time-Out ChasitorIdleTimeoutWarningCleared—Visitor Idle Time-Out Warning: Cleared ChasitorIdleTimeoutWarningTriggered—Visitor Idle Time-Out Warning: Appeared ChatRequest—Chat Requested ChatResumedAfterTransfer—Chat resumed ChatbotEndChat—Chatbot end chat ChatbotEndedChatByAction—Conversation ended by automated action ChatbotEstablished—Accepted by Chatbot ChatbotNotEstablished—Chatbot Request Failed ChoiceRoute—Routed (Choice) ClearCriticalWaitChat—Critical Wait Alert Cleared ConferenceRequest—Chat Conference Requested ConferenceRequestCanceled—Chat Conference Canceled ConferenceRequestDeclined—Chat Conference Declined ConnectionTimeout—Visitor connection timed out. Available in API version 38.0 and later. ConnectionWarning—Warning that visitor hasn't been connected for some time and that the connection times out soon. Available in API version 38.0 and later. DeclineManual—Decline (Manual) DeclineTimeout—Decline (Timeout) EndAgent—Ended by Agent EndVisitor—Ended by Visitor Enqueue—Queued FileCanceledAgent—File Transfer Canceled by Agent FileCanceledChasitor—File Transfer Canceled by Visitor FileTransferFailure—File Transfer Failure FileTransferRequested—File Transfer Requested by Agent FileTransferSuccess—File Transfer Success FileTransferToChasitor—File Transfer Initiated by Agent FlagLoweredAgent—Flag Lowered by Agent FlagLoweredSupervisor—Flag Lowered by Supervisor FlagRaised—Flag Raised LeaveAgent—Agent Left LeaveVisitor—Visitor Left OperatorJoinedConference—Agent Joined Conference OperatorLeftConference—Agent Left Conference Other PushAssignment—Routed (Push) SensitiveDataAgent—Sensitive data blocked (Agent) SensitiveDataSupervisor—Sensitive data blocked (Supervisor) SensitiveDataVisitor—Sensitive data blocked (Visitor) Transfer—Transfer Accepted TransferCancelled—Transfer Request Canceled TransferDeclined—Transfer Request Declined TransferRequest—Transfer Requested TransferToBotFailed—Transfer to bot failed TransferToButtonFailed—Transfer to button failed TransferToQueueFailed—Transfer to queue failed TransferredToBot—Transferred to bot TransferredToButton—Transferred to button TransferredToQueue—Transferred to queue TransferredToSbrSkill—Transferred to skill TransferredToSbrSkillFailed—Transfer to skill failed Unassigned"
+    }
+  },
+  "usage": "Use this object to query and manage live chat transcript events. LiveChatTranscriptEvent records are inserted after the chat is closed and the LiveTranscript record updated). However, the trigger on the LiveChatTranscriptEvent sObject fires separately on each LiveChatTranscriptEvent record within the same transaction. All the LiveChatTranscriptEvent records are inserted in a single transaction but one by one. For example, the trigger is executed for each individual record. To avoid hitting any governors and limits, design your functionality considering this behavior. You can execute the logic by filtering the records based on the Type field of LiveChatTranscriptEvent.\n\nUse this object to query and manage live chat transcript events.\n\nLiveChatTranscriptEvent records are inserted after the chat is closed and the LiveTranscript record updated). However, the trigger on the LiveChatTranscriptEvent sObject fires separately on each LiveChatTranscriptEvent record within the same transaction.\n\nAll the LiveChatTranscriptEvent records are inserted in a single transaction but one by one. For example, the trigger is executed for each individual record.\n\nTo avoid hitting any governors and limits, design your functionality considering this behavior. You can execute the logic by filtering the records based on the Type field of LiveChatTranscriptEvent.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **LiveChatTranscriptChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "AgentId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Detail": {
+      "field_label": "Detail",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Chat Transcript Event ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LiveChatTranscriptId": {
+      "field_label": "Chat Transcript ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Chat Transcript Event Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Time": {
+      "field_label": "Time",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

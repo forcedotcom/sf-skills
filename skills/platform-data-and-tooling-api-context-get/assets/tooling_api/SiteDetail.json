@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SiteDetail - Tooling API",
+  "description": "Represents the details of a Salesforce site or Experience Cloud site. Available in API version 38.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Site object."
+    },
+    "IsRegistrationEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the site allows users to sign up."
+    },
+    "SecureUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL of the website."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SiteDetail\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsRegistrationEnabled\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"SecureUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "EngagementSignal - Data API",
+  "description": "Represents data about an individual’s engagement action, such as a web click, an email response, or a PDF download. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the data space where the engagement signal originates. This field is a relationship field.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace",
+      "required": true
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "An optional text description of the engagement signal."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "API name for the engagement signal that's system-or user-generated.",
+      "required": true
+    },
+    "IsRemote": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the engagement signal object is owned by a different org in Data 360. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time the engagement signal was referenced by the current user."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time the current user viewed the engagement signal record."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Text label that identifies the engagement signal.",
+      "required": true
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Picklist value that indicates the current status of the engagement signal. Possible values are: Active CreateError—Error DeleteError—Error Deleting EditError—Error Preparing Processing The default value is Processing."
+    }
+  },
+  "usage": "Use this object to define foundational data for your business objectives and recommendations in Salesforce Personalization. Use mapped data model object (DMO) fields to identify and track an individual’s engagement actions. For example, use data about a web click, an email response, or a PDF download to help achieve your personalization goals."
+}

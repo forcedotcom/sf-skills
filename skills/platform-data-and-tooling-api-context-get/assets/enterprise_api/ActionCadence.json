@@ -1,0 +1,234 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionCadence - Data API",
+  "description": "Represents the definition of a cadence. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivatedDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date that the user activated the action cadence. ActionCadence objects are created in a draft state and must be manually activated before they’re used."
+    },
+    "ActiveTargets": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of active targets that are currently assigned with this cadence. Available in API version 58.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of this action cadence."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If there was an error when activating the action cadence, this field contains the error message."
+    },
+    "FolderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the folder that contains the action cadence. Available in API version 49.0 and later. This is a polymorphic relationship field.",
+      "relationship_name": "Folder",
+      "relationship_type": "Lookup",
+      "refers_to": "Folder, Organization, User"
+    },
+    "FolderName": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The name of the folder that contains the action cadence. Available in API version 49.0 and later."
+    },
+    "IsWaitAllowedBeforeDaisyChain": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Whether the cadence is allowed to have a wait step before a daisy chain step (true) or not (false). The default value is false."
+    },
+    "LastEditedDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time this object was last edited."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date this object was last referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date this action cadence was last viewed in the Sales Engagement app."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of this action cadence. Every action cadence in an org must have a unique name."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of the action cadence (typically the user who created it). Note: To change the owner of an action cadence, the new owner must have read access to action cadences enabled in their user profile. This field is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "This entity's state. Possible values are: ActiveThe user finished modifying the action cadence and has activated it. At this point, you can't make any more changes to the steps in the action cadence. DeletingAll records associated with this action cadence, including the ActionCadence record and all its related records, are being deleted. While in this state, the ActionCadence can’t be attached to a prospect. DraftActionCadence objects are in the draft state when they’re created. In this state, the ActionCadence can’t be assigned to any prospect. ErrorAn error occurred while trying to activate the action cadence. InactiveThe user deactivated the action cadence. New targets can’t be added to the action cadence. Existing targets continue in the action cadence until completion."
+    },
+    "SuccessfulCompletions": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of successful dispositions this cadence has upon completion. For example, customer engaged or customer connected. Available in API version 58.0 and later."
+    },
+    "TotalSteps": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of total steps associated with this cadence. This value doesn’t include special step types such as root, branch, and daisy chain. Available in API version 58.0 and later."
+    },
+    "TotalTargets": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of targets that have been assigned with this cadence. Available in API version 58.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the type of ActionCadence. Available in API version 56.0 and later. Possible values are: StandardStandard cadences can contain multiple steps and are usually built by sales managers in the Cadence Builder. QuickQuick cadences can contain only one step, are built by reps for their personal use, and don't require the Cadence Builder. SDRSDR cadences are built for Sales Development Representative workflows."
+    }
+  },
+  "usage": "Use ActionCadence to learn how many action cadences are currently active: Retrieve all ActionCadence records that have \"West Coast\" in their name: Retrieve all ActionCadence records owned by a specific user:\n\nUse ActionCadence to learn how many action cadences are currently\n        active:\n\nselect COUNT() from ActionCadence where State=\"Active\"\n\nRetrieve all ActionCadence records that have \"West Coast\" in their\n        name:\n\nSELECT ActionCadenceId FROM ActionCadence WHERE NAME LIKE '[West Coast Cadence]%'\n\nRetrieve all ActionCadence records owned by a specific\n        user:\n\nSELECT ActionCadenceId  FROM ActionCadence WHERE OwnerId = '<owner id>'",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ActionCadenceChangeEvent (API version 48.0)**: Change events are available for the object.\n- **ActionCadenceOwnerSharingRule**: Sharing rules are available for the object.\n- **ActionCadenceShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ActivatedDate": {
+      "field_label": "Activated Date",
+      "type": "date"
+    },
+    "ActiveTargets": {
+      "field_label": "Active Targets",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "ErrorMessage": {
+      "field_label": "Error Message",
+      "type": "string",
+      "length": "255"
+    },
+    "FolderId": {
+      "field_label": "Folder ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FolderName": {
+      "field_label": "Folder Name",
+      "type": "string",
+      "length": "256"
+    },
+    "Id": {
+      "field_label": "Cadence ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsWaitAllowedBeforeDaisyChain": {
+      "field_label": "Is Wait Allowed Before Daisy Chain",
+      "type": "boolean"
+    },
+    "LastEditedDateTime": {
+      "field_label": "Last Edited Date Time",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SuccessfulCompletions": {
+      "field_label": "Successful Completions",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalSteps": {
+      "field_label": "Total Steps",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalTargets": {
+      "field_label": "Total Targets",
+      "type": "int",
+      "digits": "9"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

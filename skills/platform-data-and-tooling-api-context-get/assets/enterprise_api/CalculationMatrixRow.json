@@ -1,0 +1,140 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CalculationMatrixRow - Data API",
+  "description": "Defines a row in a Decision Matrix. The label for this object is Decision Matrix Row. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CalculationMatrixVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the Decision Matrix Version to which this row belongs. This is a relationship field.",
+      "relationship_name": "CalculationMatrixVersion",
+      "relationship_type": "Lookup",
+      "refers_to": "CalculationMatrixVersion"
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last date on which this row version is active. Applicable if IsVersionEnabled is true."
+    },
+    "InputData": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The input columns and associated values for this row of the matrix."
+    },
+    "IsVersionEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the associated matrix version is active. Derived from the associated Decision Matrix Version (CalculationMatrixVersion object). The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The row name."
+    },
+    "OutputData": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The output columns and associated values for this row of the matrix."
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The first date on which this row version is active. Applicable if IsVersionEnabled is true."
+    }
+  },
+  "special_access_rules": "Access to Decision Matrices requires Omnistudio licenses.",
+  "field_reference": {
+    "CalculationMatrixVersionId": {
+      "field_label": "Decision Matrix Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EndDateTime": {
+      "field_label": "End Date Time",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Decision Matrix Row ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InputData": {
+      "field_label": "Input Data",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsVersionEnabled": {
+      "field_label": "Version Enabled",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Hash Key",
+      "type": "string",
+      "length": "255"
+    },
+    "Namespace": {
+      "field_label": "Namespace",
+      "type": "string",
+      "length": "255"
+    },
+    "OutputData": {
+      "field_label": "Output Data",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "StartDateTime": {
+      "field_label": "Start Date Time",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

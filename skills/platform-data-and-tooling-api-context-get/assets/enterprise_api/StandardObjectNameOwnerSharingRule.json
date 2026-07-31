@@ -1,0 +1,34 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "StandardObjectNameOwnerSharingRule - Data API",
+  "description": "StandardObjectNameOwnerSharingRule is the model for all owner sharing rule objects associated with standard objects. These objects represent a rule for sharing a standard object with users other than the owner.",
+  "fields_columns": [
+    "description"
+  ],
+  "fields": {
+    "AccessLevel": {
+      "description": "Type: picklist Properties: Create, Filter, Group, Restricted picklist, Sort, Update Description: Determines the level of access users have to records. Values are: Read (read only) Edit (read/write)"
+    },
+    "Description": {
+      "description": "Type: textarea Properties: Create, Filter, Nillable, Sort, Update Description: Description of the sharing rule. Maximum length is 1,000 characters."
+    },
+    "DeveloperName": {
+      "description": "Type: string Properties: Create, Filter, Group, Nillable, Sort, Update Description: The unique name of the object in the API. This name can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package, and the changes are reflected in a subscriber’s organization.When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance can slow while Salesforce generates one for each record."
+    },
+    "GroupId": {
+      "description": "Type: reference Properties: Create, Filter, Group, Sort Description: ID of the source group. Records that are owned by users in the source group trigger the rule to give access."
+    },
+    "Name": {
+      "description": "Type: string Properties: Create, Filter, Group, idLookup, Sort, Update Description: Label of the sharing rule as it appears in the UI. Maximum length is 80 characters."
+    },
+    "UserOrGroupId": {
+      "description": "Type: reference Properties: Create, Filter, Group, Sort Description: ID of the user or group that you're granting access to."
+    }
+  },
+  "special_access_rules": "For specific special access rules, if any, see the documentation for the standard object. For example, for ChannelProgramOwnerSharingRule, see the special access rules for ChannelProgram.\n\nFor specific special access rules, if any, see the documentation for the standard object. For example, for ChannelProgramOwnerSharingRule, see the\n\t\t\tspecial access rules for ChannelProgram."
+}

@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ActiveProfileMetric - Data API",
+  "description": "Represents the profile associated with the active, assigned, and purchased user licenses. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActiveUserCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number of users assigned this profile who have logged in within the last 30 days."
+    },
+    "AssignedUserCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number of users assigned this profile."
+    },
+    "MetricsDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "Date that profile metrics were collected."
+    },
+    "ProfileId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the profile. This is a relationship field.",
+      "relationship_name": "Profile",
+      "relationship_type": "Lookup",
+      "refers_to": "Profile"
+    },
+    "UserLicenseId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user license. This is a relationship field.",
+      "relationship_name": "UserLicense",
+      "relationship_type": "Lookup",
+      "refers_to": "UserLicense"
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"ActiveProfileMetric\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActiveUserCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"AssignedUserCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MetricsDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Profile\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Profile\"/>\n        <element name=\"ProfileId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserLicense\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserLicense\"/>\n        <element name=\"UserLicenseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ActiveUserCount": {
+      "field_label": "Active User Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AssignedUserCount": {
+      "field_label": "Assigned User Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Active Profile Metric ID",
+      "type": "id",
+      "length": "18"
+    },
+    "MetricsDate": {
+      "field_label": "Metrics Date",
+      "type": "date"
+    },
+    "ProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserLicenseId": {
+      "field_label": "User License ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

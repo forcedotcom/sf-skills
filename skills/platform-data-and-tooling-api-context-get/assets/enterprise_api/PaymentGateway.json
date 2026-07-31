@@ -1,0 +1,219 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PaymentGateway - Data API",
+  "description": "Platform object that represents the connection to an external payment gateway. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Admin-provided details about a record. Maximum of 1000 characters."
+    },
+    "DefaultTapToPayLocation": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Stores the locationId of the location record created at Stripe. The Field Service app uses the location to process where tap-to-pay transactions are made."
+    },
+    "ExternalReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Identifier of an external payment gateway. This field is unique within your organization."
+    },
+    "GatewayMode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The operational mode of the payment gateway. This field determines the payment gateway’s ability to accept payments. For production orgs, the gateway must be in Live mode. Possible values are: Connected– Payment gateway is active but it can’t accept payments. This option is only valid in production orgs. Live– Payment gateway is active and can accept payments. This option is only valid in production orgs. Test –Payment gateway is active but not able to accept payments. This option is only valid in sandbox orgs, and the account can accept only test transactions."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it's possible this record is only referenced (LastReferencedDate) but not viewed."
+    },
+    "MerchantAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the merchant account used by the payment gateway. This merchant account links to a merchant account at a payment processor. This field is a relationship field.",
+      "relationship_name": "MerchantAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "MerchantAccount"
+    },
+    "MerchantCredentialId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the merchant credential setup entity to reference merchant information. This field is a relationship field.",
+      "relationship_name": "MerchantCredential",
+      "relationship_type": "Lookup",
+      "refers_to": "NamedCredential"
+    },
+    "PaymentGatewayName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Admin-defined name for the payment gateway."
+    },
+    "PaymentProcessor": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Name of payment gateway provider. Possible values are: Paypal Stripe"
+    },
+    "PaymentStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The payment gateway is active and can accept payments. Possible values are: Enabled Disabled The default value is Disabled."
+    },
+    "PayoutStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Money can be moved from the payment provider account to the merchant bank account linked to it. Possible values are: Enabled Disabled The default value is Disabled."
+    },
+    "PaymentGatewayProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the payment gateway that handles transactions between the merchant account and the payment processor. This field is a relationship field.",
+      "relationship_name": "PaymentGatewayProvider",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGatewayProvider"
+    },
+    "ProviderAccount": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Account ID assigned by the payment provider that identifies the linked Salesforce Payments account."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines whether Salesforce Payments can use this payment gateway for calls to the external payment gateway. Inactive payment gateways can’t be used. Possible values are: Active - the merchant account can accept payments. Complete – PaymentStatus and DepositStatus are enabled and the account provided all the required information. Enabled – PaymentStatus and PayoutStatus are enabled, but the payment provider can require more information later. If the merchant doesn't provide the information then the account can become restricted. The time limit that the merchant has to provide the information is longer than the RestrictedSoon state. Pending–The merchant account exists but it can’t accept payments. This option maintains backward compatibility for accounts that were created with API version 55.0 and earlier. Pending is no longer in use for API version 57.0 and higher. Rejected – The payment provider has rejected the merchant account with an explanation. Restricted – merchant account functionality is limited. This state is only applicable if PaymentStatus, PayoutStatus, or both are disabled. RestrictedSoon – PaymentStatus and PayoutStatus are enabled, but the payment provider requires more information. If the merchant doesn't provide the information in a specific time period, then the merchant account becomes restricted."
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects with the API, your org must have one or more of these licenses: Salesforce Payments, Salesforce Order Management, B2B Commerce, or D2C Commerce. Salesforce Payments objects are available only in Lightning Experience.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PaymentGateway\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AlternativePaymentMethods\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CardPaymentMethods\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DefaultTapToPayLocation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DigitalWallets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ExternalReference\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MerchantCredential\" nillable=\"true\" minOccurs=\"0\" type=\"ens:NamedCredential\"/>\n        <element name=\"MerchantCredentialId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentAuthorizations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PaymentGatewayLogs\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PaymentGatewayName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentGatewayProvider\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PaymentGatewayProvider\"/>\n        <element name=\"PaymentGatewayProviderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Payments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Refunds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DefaultTapToPayLocation": {
+      "field_label": "Tap To Pay Location",
+      "type": "string",
+      "length": "40"
+    },
+    "ExternalReference": {
+      "field_label": "External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "GatewayMode": {
+      "field_label": "Gateway Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Payment Gateway ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MerchantAccountId": {
+      "field_label": "Merchant Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MerchantCredentialId": {
+      "field_label": "Named Credential ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGatewayName": {
+      "field_label": "Payment Gateway Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentGatewayProviderId": {
+      "field_label": "Payment Gateway Provider ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentProcessor": {
+      "field_label": "Payment Processor",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PaymentStatus": {
+      "field_label": "Payment Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PayoutStatus": {
+      "field_label": "Payout Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProviderAccount": {
+      "field_label": "Provider Account ID",
+      "type": "string",
+      "length": "50"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

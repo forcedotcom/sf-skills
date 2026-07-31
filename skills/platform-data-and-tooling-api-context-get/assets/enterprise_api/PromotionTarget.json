@@ -1,0 +1,257 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PromotionTarget - Data API",
+  "description": "Represents the product, product category, or order that you want to target with your promotion in a B2B Store or D2C store. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The promotion discount is expressed as an amount, not as a percentage."
+    },
+    "AdjustmentPercent": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage discount of the promotion. Valid values include numbers from 1 through 100."
+    },
+    "AdjustmentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of adjustment discount applied to the product or group of products. Possible values are: FixedAmountOffLineItemTotal—Fixed amount off the total of all line items. FixedAmountOffTransaction—Fixed amount off the entire transaction. This value is available in API version 56.0 and later. FixedAmountOffUnitPrice—Fixed amount off the unit price. FixedPrice—Fixed price for a product. This value is available in API version 56.0 and later. TotalFixedPrice—Fixed price for a set number of products. Requires a quantity limit. This value is available in API version 56.0 and later. FixedAmountOffUnitPrice—Fixed amount off the unit price. PercentageDiscount—Percentage discount. BonusProduct—Gift product at no additional cost after qualifying purchases. This value is available in API version 64.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "ExternalTarget": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A target product or product category stored outside of Salesforce. This field is available in API version 56.0 and later."
+    },
+    "IsMinItemCountRequired": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the max value in the RestrictionQuantity field must be met before the promotion is applied. The default value is false. This field is available in API version 56.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the promotion target."
+    },
+    "PromotionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the promotion that you want to reference. This is a relationship field.",
+      "relationship_name": "Promotion",
+      "relationship_type": "Lookup",
+      "refers_to": "Promotion"
+    },
+    "PromotionTierId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the promotion tier associated with the target. Only used with tiered promotions. This is a relationship field. This field is available in API version 57.0 and later.",
+      "relationship_name": "PromotionTier",
+      "relationship_type": "Lookup",
+      "refers_to": "PromotionTier"
+    },
+    "RestrictionQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Maximum number of times the discount can be applied to the target. This field is available in API version 56.0 and later."
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the product or product category that you want to target. This is a polymorphic relationship field.",
+      "relationship_name": "Target",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2, ProductCategory"
+    },
+    "TargetOperator": {
+      "type": "enum",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "For product and category targets, specify if the qualifying product or item in the qualifying category must be in the cart to determine if the cart satisfies the promotions criteria. For example, a quantity or amount across one or more items. This field is available in API version 59.0 and later. Possible values are: EQUAL_TO—Specifies that the qualifying product or item in the qualifying category must be in the cart. NOT_EQUAL_TO—Specifies that the qualifying product or item in the qualifying category isn’t required to be in the cart. NONE—Specifies that none of the other possible values apply. If the target type is for an order, you must use none."
+    },
+    "TargetProductCategoryName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the product category referenced in the target. This field is available in API version 55.0 and later."
+    },
+    "TargetProductName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the product referenced in the target. This field is available in API version 55.0 and later."
+    },
+    "TargetProductSku": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The stock keeping unit of the product referenced in the target. This field is available in API version 55.0 and later."
+    },
+    "TargetRuleCriteriaType": {
+      "type": "enum",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Controls what promotion rules must be met for the promotion to be valid. This field is available in API version 59.0 and later. Possible values are: ALL—Specifies that all of the promotion rules must be met. ANY—Specifies that any of the promotion rules can be met."
+    },
+    "TargetType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The target of the promotion. Possible values are: Product—Applies the promotion to a single product. ProductCategory—Applies the promotion to a group of products. Shipping—Applies the promotion to all shipping methods on the order. StandardShippingRate—Applies the promotion to a single shipping method on the order. Transaction—Applies the promotion to the entire order."
+    }
+  },
+  "special_access_rules": "The PromotionTarget object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "AdjustmentAmount": {
+      "field_label": "Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AdjustmentPercent": {
+      "field_label": "Adjustment Percent",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "AdjustmentType": {
+      "field_label": "Adjustment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Promotion Target ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Promotion Target Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PromotionId": {
+      "field_label": "Promotion ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PromotionTierId": {
+      "field_label": "Promotion Tier ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RestrictionQuantity": {
+      "field_label": "Quantity Limit",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetId": {
+      "field_label": "Target ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TargetOperator": {
+      "field_label": "Target Operator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TargetProductCategoryName": {
+      "field_label": "Target Category Name",
+      "type": "string",
+      "length": "200"
+    },
+    "TargetProductName": {
+      "field_label": "Target Product Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TargetProductSku": {
+      "field_label": "Target Product SKU",
+      "type": "string",
+      "length": "180"
+    },
+    "TargetRuleCriteriaType": {
+      "field_label": "Target Rule Criteria Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TargetStandardShippingRateName": {
+      "field_label": "Target Standard Shipping Rate Name",
+      "type": "string",
+      "length": "180"
+    },
+    "TargetType": {
+      "field_label": "Target Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

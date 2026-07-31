@@ -1,0 +1,122 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "TerritoryAdminAssignment - Data API",
+  "description": "Represents designated team members who can administer specific territories and their descendants. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CanManageHierarchy": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Lets the user update and delete the territory and its descendants, and create descendants. The default value is false."
+    },
+    "CanManageMembers": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Lets the user assign other team members to the territory and its descendants. Also lets the user update the user territory association log. The default value is false."
+    },
+    "CanManageRecordAssociations": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Lets the user add and remove assignments for records, author rules, and assign and run rules for the territory and its descendants. The default value is false."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID for the territory you’re letting the user administer. The user can also administer this territory’s descendants. This field is a relationship field.",
+      "relationship_name": "Territory2",
+      "refers_to": "Territory2"
+    },
+    "Territory2ModelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID for the territory model that includes the territory you’re letting the user administer. This field is a relationship field.",
+      "relationship_name": "Territory2Model",
+      "refers_to": "Territory2Model"
+    },
+    "UserOrGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID for the user you’re letting administer the territory and its descendants. Requires that the user is assigned the Administer Territory Operations permission set. This field is a polymorphic relationship field.",
+      "relationship_name": "UserOrGroup",
+      "refers_to": "Group, User"
+    }
+  },
+  "special_access_rules": "To designate team members, assign them the Administer Territory Operations permission.\n\nTo designate team members, assign them the\n         Administer Territory Operations permission.",
+  "field_reference": {
+    "CanManageHierarchy": {
+      "field_label": "Can Manage Hierarchy",
+      "type": "boolean"
+    },
+    "CanManageMembers": {
+      "field_label": "Can Manage Members",
+      "type": "boolean"
+    },
+    "CanManageRecordAssociations": {
+      "field_label": "Can Manage Record Associations",
+      "type": "boolean"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Territory Admin Assignment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Territory2ModelId": {
+      "field_label": "Territory Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UserOrGroupId": {
+      "field_label": "User Or Group ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

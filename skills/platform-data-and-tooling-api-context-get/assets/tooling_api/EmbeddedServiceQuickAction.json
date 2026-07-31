@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "EmbeddedServiceQuickAction - Tooling API",
+  "description": "Returns a quick action that is associated with an EmbeddedServiceLiveAgent setup. The quick action includes the pre-chat form fields that the embedded chat window displays and shows the order in which the fields are displayed. Available in Tooling API version 39.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `POST`, `PUT`, `PATCH`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "EmbeddedServiceLiveAgentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Reference to the embedded chat deployment."
+    },
+    "Order": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Order in which this quick action appears in the embedded chat pre-chat form."
+    },
+    "QuickActionDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Reference to a quick action."
+    },
+    "QuickActionType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Quick action type. One of the following values: Prechat–Pre-chat OfflineCase–Offline support (Cases) Available in API version 43.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmbeddedServiceQuickAction\">\n  <xsd:sequence>\n    <xsd:element name=\"embeddedServiceLiveAgent\" type=\"xsd:string\"/>\n    <xsd:element name=\"order\" type=\"xsd:int\"/>\n    <xsd:element name=\"quickActionDefinition\" type=\"xsd:string\"/>\n    <xsd:element name=\"quickActionType\" minOccurs=\"0\" type=\"tns:EmbeddedServiceQuickActionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceQuickActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Prechat\"/>\n    <xsd:enumeration value=\"OfflineCase\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

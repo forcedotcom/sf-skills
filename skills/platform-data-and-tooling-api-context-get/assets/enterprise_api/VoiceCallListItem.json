@@ -1,0 +1,38 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VoiceCallListItem - Data API",
+  "description": "Represents a single phone number in a prioritized call list.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CallListId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the related call list."
+    },
+    "Ordinal": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The order of the item in the overall call list."
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the related record."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Whether the call list item is not called, called, or skipped."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only your Salesforce org's internal users can access this object."
+}

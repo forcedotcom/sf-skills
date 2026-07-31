@@ -1,0 +1,76 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "BatchApexErrorEvent - Data API",
+  "description": "The documentation has moved to BatchApexErrorEvent in the Platform Events Developer Guide.",
+  "wsdl_segment": "```xml\n<complexType name=\"BatchApexErrorEvent\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AsyncApexJobId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DoesExceedJobScopeMaxLength\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"EventUuid\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExceptionType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"JobScope\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Message\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Phase\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReplayId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RequestId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StackTrace\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AsyncApexJobId": {
+      "field_label": "Async Apex Job ID",
+      "type": "string",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DoesExceedJobScopeMaxLength": {
+      "field_label": "Item Values Max Length Exceeded",
+      "type": "boolean"
+    },
+    "EventUuid": {
+      "field_label": "Event UUID For Platform Event",
+      "type": "string",
+      "length": "36"
+    },
+    "ExceptionType": {
+      "field_label": "Exception Type Thrown",
+      "type": "string",
+      "length": "200"
+    },
+    "JobScope": {
+      "field_label": "Items In Failed Batch",
+      "type": "textarea",
+      "length": "40000"
+    },
+    "Message": {
+      "field_label": "Exception Message",
+      "type": "string",
+      "length": "5000"
+    },
+    "Phase": {
+      "field_label": "Phase",
+      "type": "string",
+      "length": "8"
+    },
+    "ReplayId": {
+      "field_label": "Replay ID For Platform Event",
+      "type": "string",
+      "length": "1000"
+    },
+    "RequestId": {
+      "field_label": "Jetty Request ID",
+      "type": "string",
+      "length": "18"
+    },
+    "StackTrace": {
+      "field_label": "Error Stack Trace",
+      "type": "string",
+      "length": "5000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

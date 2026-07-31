@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ArchiveActivity - Data API",
+  "description": "Represents metadata retrieved for a single archive process initiated by an action. Retrieved metadata can include status tracking, start and end times, record counts, and monitoring and auditing outcomes. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ArchivePolicyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated policy that triggered the process. Links each execution back to its configuration."
+    },
+    "AttemptedRootRecordsCount": {
+      "type": "long",
+      "properties": "Filter, Sort",
+      "description": "The number of root records that the action tried to process. Excludes records that were filtered out before processing. The field type changed from int to long in API version 67.0."
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time that the process completed successfully or was terminated."
+    },
+    "FailedCount": {
+      "type": "long",
+      "properties": "Filter, Sort",
+      "description": "The number of records that failed to process due to errors, such as validation failures, missing references, or system exceptions. The field type changed from int to long in API version 67.0."
+    },
+    "FailureReason": {
+      "type": "textarea",
+      "properties": "Filter, Group, Sort",
+      "description": "The reason that the process failed or didn't complete successfully. Can contain system error messages, stack traces, or policy enforcement details. The field type changed from string to textarea in API version 67.0."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the action instance."
+    },
+    "ProgressIcon": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "Progress indicator with color coding. This field is a calculated field. Available in API version 67.0 and later."
+    },
+    "ProgressPercentage": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The percentage of records processed successfully."
+    },
+    "RecordsSizeInMb": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "Estimated total size, in megabytes (MB), of the records processed during an action, including metadata and payload. The field type changed from double to string in API version 67.0."
+    },
+    "RootEntityName": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "The API name of the Salesforce object that was archived, purged, or processed. Available in API version 67.0 and later."
+    },
+    "SkippedRootRecordsCount": {
+      "type": "long",
+      "properties": "Filter, Sort",
+      "description": "The number of root records skipped due to validation errors, exclusion filters, or data protection thresholds. The field type changed from int to long in API version 67.0."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time that the action started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort",
+      "description": "Status of the current activity.Valid values are: Aborted—Process manually aborted during policy run. Aborting—The Aborted process started. API limit reached—Process stopped because it exceeded API rate limits or usage thresholds. Available in API version 67.0 and later. Archive Timeout—Process automatically stopped because it took too long to execute a specific task, or the entire run. Completed—Process completed successfully, and all records were processed. Ended—Process finished execution. Available in API version 67.0 and later. Ended with Delete Failures—Process completed, but failed to delete one or more items. Ended with Errors—Process finished, but some records weren't processed. A CSV of the failed records can be downloaded from the Execution Details page. Failed—Process failed, and no records were archived. A CSV of the failed records is available on the Activities tab. No Records—Process found no records matching the policy criteria. Pending—Process is queued and waiting for execution. Process Exceeds 23h—Activity started and ran successfully until it reached a time limit. When a policy is set to run daily, this status indicates partial success before exceeding the time limit. Process Exceeds 120h—Activity started and ran successfully until it reached a time limit. When a policy is set to run one time in a five-day period, this status indicates partial success before exceeding the time limit. Process Exceeds 168h—Activity started and ran successfully until it reached a time limit. When a policy is set to run weekly, this status indicates partial success before exceeding the time limit. Query Timeout—Process stopped because the database query took too long. Running—Process is actively executing its tasks. Skipped—Process was bypassed and did not execute. Available in API version 67.0 and later. Started—Process is running. Too Many Failures—Process was abandoned after too many records failed to read or delete."
+    },
+    "SucceededCount": {
+      "type": "long",
+      "properties": "Filter, Sort",
+      "description": "The number of records processed successfully. The field type changed from int to long in API version 67.0."
+    },
+    "TotalRecordCount": {
+      "type": "long",
+      "properties": "Filter, Sort",
+      "description": "The total number of records initially selected for processing, including successful, failed, and skipped records. The field type changed from int to long in API version 67.0."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort",
+      "description": "Specifies the type of archive process to be executed. This static enum categorizes the purpose or mode of the run.Valid values are: Analyzer Archive Archive-fail-to-delete Estimate Export Export-and-download Export-to-external-bucket Import-data-archive Import-data-load Index-request None Purge Purge-by-retention Purge-estimation RTBF-SDK Unarchive Unarchive-retry Unarchive-sdk Mask-sdk—Available in API version 67.0 and later."
+    }
+  },
+  "special_access_rules": "This object is Read-Only and can't be deleted. Storage consumed by this object doesn't count toward your org's data storage limits."
+}

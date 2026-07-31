@@ -1,0 +1,118 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "MatchingRuleItem - Data API",
+  "description": "Represents criteria used by a matching rule to identify duplicate records. This object is available in API version 33.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BlankValueBehavior": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies how blank fields affect whether the fields being compared are considered matches. Valid values are: MatchBlanks NullNotAllowed (default)"
+    },
+    "Field": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates which field to compare when determining if a record is similar enough to an existing record to be considered a match."
+    },
+    "MatchingMethod": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Defines how the fields are compared. Choose between the exact matching method and various fuzzy matching methods. Valid values are: Exact FirstName LastName CompanyName Phone City Street Zip Title For details on each matching method, see “Matching Methods Used with Matching Rules” in the Salesforce Help."
+    },
+    "MatchingRuleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID for the matching rule. This is a relationship field.",
+      "relationship_name": "MatchingRule",
+      "relationship_type": "Lookup",
+      "refers_to": "MatchingRule"
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The order of the matching rule items for a matching rule."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users with the View Setup and Configuration permission can access this object.",
+  "usage": "Use the Salesforce SOAP API to retrieve and view details about MatchingRule and MatchingRuleItem. Use the Salesforce Metadata API to create, update, or delete these objects.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"MatchingRuleItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"BlankValueBehavior\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Field\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MatchingMethod\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MatchingRule\" nillable=\"true\" minOccurs=\"0\" type=\"ens:MatchingRule\"/>\n        <element name=\"MatchingRuleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "BlankValueBehavior": {
+      "field_label": "Blank Value Behavior",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Field": {
+      "field_label": "Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Matching Rule Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MatchingMethod": {
+      "field_label": "Custom Object Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MatchingRuleId": {
+      "field_label": "Matching Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

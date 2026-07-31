@@ -1,0 +1,95 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Pricing Event Type - Data API",
+  "description": "Pricing events contain information about pricing procedures that were executed, including details such as pricing procedures used, the pricing APIs, and pricing details and status.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. If the user’s session context isn't available, this field returns a blank value."
+    },
+    "CPU_TIME": {
+      "type": "Number",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always Pricing."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000062."
+    },
+    "PRICING_API_ENDPOINT": {
+      "type": "String",
+      "description": "The starting point of the Pricing API or Headless Pricing API. For example: Pricing API."
+    },
+    "PRICING_DETAILS": {
+      "type": "String",
+      "description": "The details of the pricing event that describes if the pricing API was executed or failed. For example: Pricing element was processed.."
+    },
+    "PRICING_ERROR_CODE": {
+      "type": "String",
+      "description": "The API error code that appears when pricing execution fails. If there is no error, the value is null. For example: INTERNAL_ERROR."
+    },
+    "PRICING_LOG_NAME": {
+      "type": "String",
+      "description": "The detailed pricing log message generated. For example: The Headless Pricing API was run in:{0}."
+    },
+    "PRICING_PROCEDURE": {
+      "type": "String",
+      "description": "The name of the pricing procedure used to perform pricing calculations. For example: Default Pricing Procedure."
+    },
+    "PRICING_STATUS": {
+      "type": "String",
+      "description": "The status of the request for pricing execution. For example: Completed or Failed."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID."
+    },
+    "RUN_TIME": {
+      "type": "Number",
+      "description": "The amount of time that the request took in milliseconds. For example: 1851629863."
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The time that the pricing was executed in GMT. For example: 20170606170000.000."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The time that the pricing was executed in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2017-06-06T1700.000Z. Timezone is GMT."
+    },
+    "URI": {
+      "type": "String",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "URI_ID_DERIVED": {
+      "type": "ID",
+      "description": "The 18-character case insensitive ID of the URI of the page that’s receiving the request."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who executed pricing through the UI or the API. For example: 005SG000000eu6j"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case insensitive ID of the user who’s using Salesforce services through the UI or the API. For example: 001xx0000000useAAA."
+    }
+  }
+}

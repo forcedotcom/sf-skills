@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OutgoingEmailRelation - Data API",
+  "description": "For internal use only.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OutgoingEmailRelation\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OutgoingEmail\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OutgoingEmail\"/>\n        <element name=\"OutgoingEmailId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Relation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelationAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RelationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ExternalId": {
+      "field_label": "External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Outgoing Email Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "OutgoingEmailId": {
+      "field_label": "Outgoing Email ID",
+      "type": "string",
+      "length": "255"
+    },
+    "RelationAddress": {
+      "field_label": "Relation Address",
+      "type": "string",
+      "length": "255"
+    },
+    "RelationId": {
+      "field_label": "Relation ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

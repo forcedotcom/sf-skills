@@ -1,0 +1,114 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FormulaFunction - Data API",
+  "description": "Represents a function used when building a formula, including examples and uses. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CategoryId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the FormulaFunctionCategory. This is a relationship field.",
+      "relationship_name": "Category",
+      "relationship_type": "Lookup",
+      "refers_to": "FormulaFunctionCategory"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Description of the formula function."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "ExampleString": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Describes the function and what arguments you can use with it."
+    },
+    "IsAllowedInEntityContext": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether you can use the formula function on an Entity (true) or not (false). For example, you cannot use the PRIORVALUE function in a custom Account formula field. The default value is false. This field is removed in API version 48.0 and later. Use the FormulaFunctionAllowedType object instead."
+    },
+    "IsAllowedInFlowContext": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the formula function is allowed in a Flow (true) or not (false). The default value is false. This field is removed in API version 48.0 and later. Use the FormulaFunctionAllowedType object instead."
+    },
+    "IsAllowedInVisualforceContext": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the formula function is allowed in Visualforce (true) or not (false). The default value is false. This field is removed in API version 48.0 and later. Use the FormulaFunctionAllowedType object instead."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The formula function label that appears in the user interface."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the formula function."
+    }
+  },
+  "usage": "Query FormulaFunction to search for available formula functions, such as AND(), ISBLANK(), MAX(), MIN(), and others.",
+  "wsdl_segment": "```xml\n<complexType name=\"FormulaFunction\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Category\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FormulaFunctionCategory\"/>\n        <element name=\"CategoryId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExampleString\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Types\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CategoryId": {
+      "field_label": "Formula Function Category ID",
+      "type": "string",
+      "length": "80"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DurableId": {
+      "field_label": "Formula Function Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "ExampleString": {
+      "field_label": "Example String",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Formula Function ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

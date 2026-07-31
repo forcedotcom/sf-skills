@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "OpportunitySplit - Data API",
+  "description": "OpportunitySplit credits one or more opportunity team members with a portion of the opportunity amount. This object is available in API version 16.0 and later for pilot customers, and version 28.0 and later for others.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ArchivedTerritoryName": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the associated territory that’s on an archived territory model. If the OpportunityLineItemSplit isn’t associated with a territory on an archived territory model, the field value is null. This field is available in API version 62.0 and later."
+    },
+    "HasOpportunityLineItemSplit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only. Indicates whether the opportunity split has a split on the opportunity line item level (true) or not (false). The default value is false. This field is available in API version 58.0 and later."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the opportunity for which the split is being created. This field is a relationship field.",
+      "relationship_name": "Opportunity",
+      "relationship_type": "Lookup",
+      "refers_to": "Opportunity"
+    },
+    "Split": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Read-only. Automatically generated number identifying the split within the opportunity."
+    },
+    "SplitAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Monetary amount of the split. Label is Split Amount."
+    },
+    "SplitNote": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Enter any notes or comments about the split. The character limit is 255. Label is Split Note."
+    },
+    "SplitOwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The opportunity owner. This field is a relationship field.",
+      "relationship_name": "SplitOwner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "SplitPercentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Split percentage that this team member receives. If the split type is validated to a 100% total, this number can range from 0 to 100. If the total isn’t validated, this number can range from 0 to 1,000. Label is Split (%)."
+    },
+    "SplitTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Auto-generated, numeric ID for the split type defined by the OpportunitySplitType object. This field is available in API version 28 and later. If this field is blank, the system automatically specifies the default split type for the opportunity amount, which is validated to 100%. This field is a relationship field.",
+      "relationship_name": "SplitType",
+      "relationship_type": "Lookup",
+      "refers_to": "OpportunitySplitType"
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the associated territory. This field is a relationship field, and is available in API version 62.0 and later.",
+      "relationship_name": "Territory2",
+      "relationship_type": "Lookup",
+      "refers_to": "Territory2"
+    }
+  },
+  "usage": "Use the OpportunitySplit object to manage splits for an opportunity. If you change the opportunity owner using the API, the old owner remains on the opportunity team with either Read-only access, or the level of access specified in your organization-wide defaults.\n\nUse the OpportunitySplit object to manage splits for an opportunity.\n\nIf you change the opportunity owner using the API, the old owner remains on the opportunity team with either Read-only access, or the level of access specified in your organization-wide defaults.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OpportunitySplitChangeEvent (API version 48.0)**: Change events are available for the object.\n- **OpportunitySplitHistory (API version 59.0)**: History is available for tracked fields of the object."
+}

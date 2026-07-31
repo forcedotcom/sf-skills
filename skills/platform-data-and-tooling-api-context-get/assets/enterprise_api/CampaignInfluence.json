@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "CampaignInfluence - Data API",
+  "description": "Represents the association between a campaign and an opportunity in Customizable Campaign Influence. This object is available in API version 37.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CampaignId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the campaign that’s related to the opportunity."
+    },
+    "CampaignMemberId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the campaign member related to the opportunity. Not available in the UI."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the contact on the associated opportunity."
+    },
+    "Influence": {
+      "type": "percent",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "The percentage of the Amount field for the related opportunity that’s attributed to the campaign."
+    },
+    "ModelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the campaign influence model that’s related to the record."
+    },
+    "OpportunityContactRoleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The opportunity contact role ID of the related opportunity. Not available in the UI."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the related opportunity."
+    },
+    "RevenueShare": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of revenue from the related opportunity attributed to the campaign."
+    }
+  },
+  "special_access_rules": "To access this object, Customizable Campaign Influence must be enabled. Customer Portal users can’t access this object.",
+  "usage": "Use this object to create campaign influence records for your custom campaign influence models. Don’t create campaign influence records for the Primary Campaign Source model. Records added to the Primary Campaign Source model via the API are deleted when the model is recalculated."
+}

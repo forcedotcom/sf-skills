@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ProspectingAgentRcmdTarget - Data API",
+  "description": "Represents prospecting information suggested by generative AI. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date the recommendation expires, after which the recommendation is automatically deleted."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID associated with the owner of the AI-generated recommendation. The owner can be an individual user or a list. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User",
+      "required": true
+    },
+    "Rationale": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "The explanation of why the agent recommended the target contact or lead. The rationale provides context to guide users in their decision making."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the AI-generated recommendation. Possible values are: Accepted New – Default Rejected"
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID associated with the contact or lead recommended by the AI agent. This field is a polymorphic relationship field.",
+      "relationship_name": "Target",
+      "refers_to": "Contact, Lead",
+      "required": true
+    }
+  },
+  "special_access_rules": "This object is available if Agentforce Prospecting is enabled in your org and your org has an Agentforce for Sales or an Agentforce for an Industry add-on license. To access this object, you need the Sales Agentic Prospecting Manager user permission.\n\nThis object is available if Agentforce Prospecting\n         is enabled in your org and your org has an Agentforce for Sales or an Agentforce for an\n         Industry add-on license. To access this object, you need the Sales Agentic Prospecting\n         Manager user permission."
+}

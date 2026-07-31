@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "Concurrent Long-Running Apex Limit Event Type - Data API",
+  "description": "Concurrent Long-Running Apex Limit events contain information about long-running concurrent Apex requests in your org that Salesforce terminated after reaching your org’s concurrency limit. Requests with an established Apex context that execute for 5 seconds are counted towards your org’s limit of concurrent long-running requests. (Asynchronous requests don’t count towards the limit.) When the long-running requests exceed the org default limit, all new Apex invocation requests are denied. This event type is available in the EventLogFile object in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "example"
+  ],
+  "fields": {
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always ConcurrentLongRunningApexLimit."
+    },
+    "NUMBER_REQUESTS": {
+      "type": "Number",
+      "description": "Count of requests with an established Apex context executing for longer than 5 seconds in your org."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000123."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "REQUEST_URI": {
+      "type": "String",
+      "description": "URI of the long-running Apex request that Salesforce terminated.",
+      "example": "/apex/ApexClassName"
+    },
+    "REQUESTS_LIMIT": {
+      "type": "Number",
+      "description": "Maximum count of requests with an established Apex context that can execute for longer than 5 seconds. When NUMBER_REQUESTS reaches this limit, then additional long-running Apex requests are terminated. (Asynchronous requests don’t count towards the limit.) See Apex Developer Guide: Lightning Platform Apex Limits.",
+      "example": "10"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943"
+    }
+  },
+  "usage": "For example, you can monitor Concurrent Long-Running Apex Limit log counts to get a benchmark or plot a count by hour. To identify where the limit was exceeded, see the REQUEST_URI field. Then, cross-reference this data with Apex Execution event data where the average RUN_TIME exceeds 5 seconds. To identify synchronous requests only, cross-reference event data with the QUIDDITY field in Apex Execution event data. For example, QUIDDITY NOT IN (A,BA,F,Q,S) and CALLOUT_TIME (>5000)."
+}

@@ -1,0 +1,164 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ExtDataShare - Data API",
+  "description": "Represents a data share, which is a collection of Data Cloud objects that can be shared with other Data Cloud orgs or third-party partners. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DataShareType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of data share, indicating the direction of data flow. If Outbound, the data share was created on this Data Cloud org and is shared to third-party partners or with another Data Cloud org. If Inbound, the data share comes from another Data Cloud org and is shared to this Data Cloud org. Possible values are: Inbound Outbound The default value is Outbound."
+    },
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the data space under which the data share was created. This field is a relationship field.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace"
+    },
+    "InboundDataShareName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The name of the data share in the source Data Cloud org."
+    },
+    "InboundDataShareOrgIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the source Data Cloud org that shared a data share with the target org."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the data share."
+    },
+    "ObjectCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of Data Cloud objects added to this data share."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ExtDataShareChangeEvent**: Change events are available for the object.\n- **ExtDataShareFeed**: Feed tracking is available for the object.\n- **ExtDataShareHistory**: History is available for tracked fields of the object.\n- **ExtDataShareOwnerSharingRule**: Sharing rules are available for the object.\n- **ExtDataShareShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataShareConsentFormStatus": {
+      "field_label": "Consent",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DataShareStatus": {
+      "field_label": "Data Share Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DataShareType": {
+      "field_label": "Data Share Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DataSpaceId": {
+      "field_label": "Data Space ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Data Share ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InboundDataShareName": {
+      "field_label": "Inbound Data Share Name",
+      "type": "string",
+      "length": "255"
+    },
+    "InboundDataShareOrgIdentifier": {
+      "field_label": "Inbound Data Share Organization Id",
+      "type": "string",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastDataChangeStatusDateTime": {
+      "field_label": "Last Data Change Status At",
+      "type": "datetime"
+    },
+    "LastDataChangeStatusErrorCode": {
+      "field_label": "Last Data Change Status Error Code",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Data Share Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ObjectCount": {
+      "field_label": "Number Of Objects",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

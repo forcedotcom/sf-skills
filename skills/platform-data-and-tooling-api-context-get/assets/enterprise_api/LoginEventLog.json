@@ -1,0 +1,143 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "LoginEventLog - Data API",
+  "description": "Login event logs contain details about your Salesforce org's user login history. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of API request. Possible values are: D—Apex Class E—SOAP Enterprise I—SOAP Cross Instance M—SOAP Metadata O—Old SOAP P—SOAP Partner S—SOAP Apex T—SOAP Tooling X—XmlRPC f—Feed l—Live Agent p—SOAP ClientSync"
+    },
+    "ApiVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version of the API that’s being used. For example: 36.0."
+    },
+    "AuthenticatedMethodReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The authentication method used by a third-party identification provider for an OpenID Connect single sign-on protocol."
+    },
+    "BrowserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The identifier string returned by the browser used at login. Example values are: Go-http-client/1.1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv%3A50.0) Gecko/20100101 Firefox/50.0 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36"
+    },
+    "CipherSuite": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The TLS cipher suite used for the login. Values are OpenSSL-style cipher suite names, with hyphen delimiters. For more information, see OpenSSL Cryptography and SSL/TLS Toolkit."
+    },
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CpuTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "DatabaseTotalTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time in nanoseconds for a database round trip. Includes time spent in the JDBC driver, network to the database, and DatabaseTotalTime. Compare this field to CpuTime to determine whether performance issues are occurring in the database layer or in your own code."
+    },
+    "ForwardedForIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "LoginStatus": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The status of the login attempt. For successful logins, the value is LOGIN_NO_ERROR. All other values indicate errors or authentication issues. For details, see Login Event Type — LOGIN_STATUS Values."
+    },
+    "LoginSubType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of login flow used. Possible values are: uiup—UI Username-Password oauthpassword—OAuth Username-Password oauthtoken—OAuth User-Agent oauthhybridtoken—OAuth User-Agent for Hybrid Apps oauthtokenidtoken—OAuth User-Agent with ID Token oauthclientcredential—OAuth Client Credential oauthcode—OAuth Web Server oauthhybridauthcode—OAuth Web Server for Hybrid Apps"
+    },
+    "LoginType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of login used to access the session. Possible values are: 7—AppExchange A—Application s—Certificate-based login k—Chatter Communities External User n—Chatter Communities External User Third Party SSO r—Employee Login to Community z—Lightning Login l—Networks Portal API Only 6—Remote Access Client i—Remote Access 2.0 I—Other Apex API R—Partner Product w—Passwordless Login 3—Customer Service Portal q—Partner Portal Third-Party SSO 9—Partner Portal 5—SAML Idp Initiated SSO m—SAML Chatter Communities External User SSO b—SAML Customer Service Portal SSO c—SAML Partner Portal SSO h—SAML Site SSO 8—SAML Sfdc Initiated SSO E—SelfService j—Third Party SSO"
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestIdentifier. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RequestStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The status of the request for a page view or user interface action. Possible values are: S—Success. Salesforce handled the request successfully. If an Apex controller throws an exception, this status is also returned. F—Failure. Typically 4xx or 5xx HTTP codes, such as no permission to view page, page took too long to render, page is read-only. U—Undefined A—Authorization Error R—Redirect. Typically a 3xx HTTP code, possibly initiated by an Apex controller in a Visualforce page. N—Not Found. 404 error."
+    },
+    "RunTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of time that the request took in milliseconds."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For Login Event Type, this field is usually null because the event is captured before a session is created. For example: d7DEq/ANa7nNZZVD."
+    },
+    "SourceIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The source IP of the login request."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "TransportLayerSecurityProtocol": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The TLS protocol used for the login. Possible values are: 1.0 1.1 1.2"
+    },
+    "Uri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    },
+    "UserName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The username that’s used for login."
+    },
+    "UserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The category of user license. Possible values are: CsnOnly—Users whose access to the application is limited to Chatter. This user type includes Chatter Free and Chatter moderator users. CspLitePortal—CSP Lite Portal license. Users whose access is limited because they’re organization customers and access the application through a customer portal or an Experience Cloud site. CustomerSuccess—Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Guest—Users whose access is limited so that your customers can view and interact with your site without logging in. PowerCustomerSuccess—Power Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Users with this license type can view and edit data they directly own or data owned by or shared with users below them in the customer portal role hierarchy. PowerPartner—Power Partner license. Users whose access is limited because they’re partners and typically access the application through a partner portal or site. SelfService—Users whose access is limited because they’re organization customers and access the application through a self-service portal. Standard—Standard user license. This user type also includes Salesforce Platform and Salesforce Platform One user licenses, and admins for this org."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The username that’s used for login."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

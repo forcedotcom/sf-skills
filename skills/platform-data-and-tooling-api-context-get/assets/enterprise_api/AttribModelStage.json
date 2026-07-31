@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "AttribModelStage - Data API",
+  "description": "Represents a funnel stage that’s used in a predefined or custom attribution configuration. Available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AttribModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the attribution configuration that uses this stage. This is a required field.",
+      "relationship_name": "AttribModel",
+      "relationship_type": "Master-detail",
+      "refers_to": "AttribModel (the master object)"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Three letter ISO currency codes for supported currencies. The default value is USD. This is an optional field."
+    },
+    "EngagementSignalEnum": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Picklist value that indicates the engagement signal that’s selected for an attribution stage. This value represents a step in a customer journey. The accepted values are the engagement signals that are configured in the selected data space."
+    },
+    "IsContentMatchRequired": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether to link item attribution from one funnel stage to the next. The default value is false, meaning not required. If you set this value to true, only engagement with the same item from the previous stage is linkable."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Text label that identifies the attribution model stage. This is a required field."
+    },
+    "Sequence": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates the position of a stage in its journey sequence, reflecting funnel engagement from start to finish. The funnel requires a minimum of two stages, with a maximum of four stages. Accepted values are 1, 2, 3, or 4."
+    },
+    "StageUnionGroupName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of a certain group of stages. It can be used to reference individual, consecutive stages as a combined group with a common name."
+    }
+  },
+  "usage": "Use this object to create attribution funnel stages. The funnel mirrors key touchpoints of an individual’s personalization journey, which you define by selecting an engagement signal and any relevant metrics. The order that you create stages in describes funnel engagement from start to finish. For example, view a product, click the product, add it to cart, and submit the order. The funnel requires a minimum of two stages, with a maximum of four stages in a journey.\n\nUse this object to create attribution funnel stages. The funnel mirrors key touchpoints of an individual’s personalization journey, which you define by selecting an engagement signal and any relevant metrics. The order that you create stages in describes funnel engagement from start to finish.\n\nFor example, view a product, click the product, add it to cart, and submit the order. The funnel requires a minimum of two stages, with a maximum of four stages in a journey.",
+  "associated_objects": "This object has the these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AttribModelStageChangeEvent**: Change events are available for the object.\n- **AttribModelStageFeed**: Feed tracking is available for the object.\n- **AttribModelStageHistory**: History is available for tracked fields of the object.\n- **AttribModelStageOwnerSharingRule**: Sharing rules are available for the object.\n- **AttribModelStageShare**: Sharing is available for the object."
+}

@@ -1,0 +1,99 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Bulk API 2.0 Event Type - Data API",
+  "description": "BulkApi2 events contain details about Bulk API 2.0 requests.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CPU_TIME": {
+      "type": "Number",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "ENTITY_TYPE": {
+      "type": "String",
+      "description": "The type of entity that Bulk API 2.0 used. For example, Account or Contact."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always BulkApi2."
+    },
+    "JOB_ID": {
+      "type": "String",
+      "description": "The 15-character ID of the Bulk API 2.0 job."
+    },
+    "JOB_STATUS": {
+      "type": "String",
+      "description": "The job’s current status."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "OPERATION_TYPE": {
+      "type": "String",
+      "description": "The type of Bulk API 2.0 operation that was performed."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000123."
+    },
+    "RECORDS_FAILED": {
+      "type": "Number",
+      "description": "The total number of records that failed. For example: 150."
+    },
+    "RECORDS_PROCESSED": {
+      "type": "Number",
+      "description": "Number of records processed for this event. For example: 980. Note: The number of records processed is reported differently for ingest and query jobs."
+    },
+    "RESULT_SIZE_MB": {
+      "type": "Number",
+      "description": "Number of megabytes returned in query. Empty for ingest jobs. For example: 670. Note: RESULT_SIZE_MB currently does not emit events, but is shown here as a placeholder for future enhancement."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RUN_TIME": {
+      "type": "Number",
+      "description": "The amount of time that the request took in milliseconds."
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "URI": {
+      "type": "String",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "URI_ID_DERIVED": {
+      "type": "ID",
+      "description": "The 18-character case-safe ID of the URI of the page that’s receiving the request."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case-safe ID of the user who’s using Salesforce services through the UI or the API. For example: 00590000000I1SNIA0."
+    }
+  }
+}

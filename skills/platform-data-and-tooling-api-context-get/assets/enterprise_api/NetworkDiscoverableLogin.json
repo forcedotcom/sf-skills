@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "NetworkDiscoverableLogin - Data API",
+  "description": "Represents the Login Discoverable page from where customers and partners log in to an Experience Cloud site. Customers and partners are users with an External Identity license or any communities license for Experience Cloud. This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApexHandlerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the Apex handler created by the Login Discovery page type."
+    },
+    "ExecuteApexHandlerAsId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who is executing the handler."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of NetworkId is unique within your org."
+    },
+    "UsernameLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Log in prompt on login page when the login page type is Login Discovery."
+    }
+  },
+  "usage": "Use this object to access the Login Discovery Page, which is a login page type that prompts users to identify themselves with an email address, phone number, or custom identifier. DiscoverableLogin performs an interview-based login process, where users are first prompted to provide identity and then authenticated. For example, users receive a verification code that they enter to complete the login process.\n\nThe NetworkDiscoverableLogin object is created when\n\nLogin Discovery\n\t\t\t\t\tPage\n\nis selected as the login page type on the Login &\n\t\t\t\tRegistration (L&R) page. If you later switch to another login page type, such as\n\t\t\t\ta Visualforce Page or Experience Builder Page, the object isn’t deleted. The object\n\t\t\t\tpersistence means you can’t delete the Apex class associated with the\n\t\t\t\tNetworkDiscoverableLogin object. To delete the Apex class, return to the L&R\n\t\t\t\tpage and change the login page type back to\n\nLogin Discovery\n\t\t\t\t\tpage\n\n. Select another Apex class, and then you can delete the first\n\t\t\t\tone.",
+  "field_reference": {
+    "ApexHandlerId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ExecuteApexHandlerAsId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Experience Discoverable Login Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UsernameLabel": {
+      "field_label": "Username Label",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

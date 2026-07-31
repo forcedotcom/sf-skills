@@ -1,0 +1,35 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "Article Type__DataCategorySelection - Data API",
+  "description": "A data category selection represents a data category that classifies an article. This object is available in API version 19.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataCategoryGroupName": {
+      "type": "DataCategoryGroupReference",
+      "properties": "Create",
+      "description": "Unique name of the data category group which has categories associated with the article."
+    },
+    "DataCategoryName": {
+      "type": "DataCategoryGroupReference",
+      "properties": "Create",
+      "description": "Unique name of the data category associated with the article."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the article associated with the data category selection."
+    }
+  },
+  "special_access_rules": "Knowledge must be enabled in your org. Not available in Lightning Knowledge. Users can only access, create or delete data category selection visible to their role, permission set, or profile. If a user has partial visibility on an article's categorization, only the visible categories are returned.",
+  "usage": "Every article in Salesforce Knowledge can be categorized. A data category selection represents a category that has been selected to classify an article. You can use the Article Type__DataCategorySelection object to query and manage article categorization in your org. Client applications can create a categorization for an article with a Draft status. They can also delete and query article categorizations. Answers zones use QuestionDataCategorySelection to classify questions.\n\nEvery article in Salesforce Knowledge can be categorized. A data category selection represents a category that has been selected to classify an article. You can use the Article Type__DataCategorySelection object to query and manage article categorization in your org. Client applications can create a categorization for an article with a Draft status. They can also delete and query article categorizations.\n\nAnswers zones use QuestionDataCategorySelection to classify questions."
+}

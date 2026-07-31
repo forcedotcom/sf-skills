@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityLogin - Data API",
+  "description": "Stores the login details of a single user to a tenant, grouped by date and type. You can query this object to find out how many times the user logged in to a specific tenant using a specific login type (for example, username/password or SSO). This object is available to Security Center subscribers in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the individual detail record. This field is unique within your org."
+    },
+    "LastLoginDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The last time the user logged in."
+    },
+    "LoginCount": {
+      "type": "int",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The number of times the user has logged in to the tenant."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the type of metric that was counted."
+    },
+    "MetricsType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of data collected. The supported metric types are: LOGIN_PWLESS LOGIN_PWLESS2FA LOGIN_UNPW LOGIN_UNPW2FA LOGIN_SSO LOGIN_SSO2FA LOGIN_OAUTH LOGIN_OAUTH2FA"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the metric for which data is being collected."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant that was scored."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the tenant that was scored."
+    },
+    "UserEmail": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The email address of the user."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The user’s org username."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityLoginChangeEvent**: Change events are available for the object.\n- **TenantSecurityLoginFeed**: Feed tracking is available for the object.\n- **TenantSecurityLoginHistory**: History is available for tracked fields of the object.\n- **TenantSecurityLoginOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityLoginShare**: Sharing is available for the object."
+}

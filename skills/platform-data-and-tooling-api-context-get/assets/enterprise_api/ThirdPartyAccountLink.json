@@ -1,0 +1,128 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ThirdPartyAccountLink - Data API",
+  "description": "Represents the list of external users who authenticated using an authentication provider. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Handle": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The username in the third-party system."
+    },
+    "IsNotSsoUsable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Sort",
+      "description": "Support for single sign-on.If true, the link can't be used for a single sign-on flow. It's only available OAuth access and refresh tokens."
+    },
+    "Provider": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The third-party account provider name."
+    },
+    "RemoteIdentifier": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The unique ID for the user in the third-party system."
+    },
+    "SsoProvider": {
+      "type": "AuthProvider",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The foreign key to the AuthProvider of the third-party system."
+    },
+    "SsoProviderId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The ID associated with the SsoProvider value. This is a relationship field.",
+      "relationship_name": "SsoProvider",
+      "relationship_type": "Lookup",
+      "refers_to": "AuthProvider"
+    },
+    "SsoProviderName": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The name associated with the AuthProvider of the third-party system, in case the user has no access to the provider foreign key (the SsoProvider value)."
+    },
+    "ThirdPartyAccountLinkKey": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A concatenated string including the organization ID, the SsoProviderId value, the SsoProvider value, and the RemoteIdentifier value."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The Salesforce user associated with this third-party account link. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "If you try to use Apex DML operations and then query this object in the same call, you get an UncommittedWork error with this description. To avoid this error, execute DML operations and queries in separate, asynchronous calls.\n\nIf you try to use Apex DML operations and then query this object in the same call, you get an UncommittedWork error with this description.\n\nTo avoid this error, execute DML operations and queries in separate, asynchronous calls.",
+  "usage": "Admins (with the Manage Users permission) querying this object can see all the links for all users in the organization. Without the Manage Users permission, users can only retrieve their own links. Users sometimes don't have access to the SsoProvider value (the foreign key). In this case, use the SsoProviderName to render the name of the provider for the associated link. Use the Apex method Auth.AuthToken.revokeAccess() to revoke a link. To use this method, the IsNotSsoUsable field must be false. To make the ThirdPartyAccountLink standard object writable for Salesforce admins, contact Salesforce Customer Support. With this feature, you can easily add or delete third-party account links using the API, but you can’t update existing account links. In API version 34.0 and later, this object was enhanced to help manage high instance counts. A query() call returns up to 500 rows. A queryMore() call returns 500 more, up to 2,500 total. No more records are returned after 2,500. To make sure that you don’t miss any records, issue a COUNT() query in a SELECT clause for ThirdPartyAccountLink. This query gives you the total number of records. If there are more than 2,500 records, use these options to manage your results. For example, use an initial query with this structure. Then, run another query with an offset of 2,000.\n\nAdmins (with the Manage Users permission) querying this object can see all the links for all users in the organization. Without the Manage Users permission, users can only retrieve their own links. Users sometimes don't have access to the SsoProvider value (the foreign key). In this case, use the SsoProviderName to render the name of the provider for the associated link.\n\nUse the Apex method Auth.AuthToken.revokeAccess() to revoke a link. To use this method, the IsNotSsoUsable field must be false.\n\nTo make the ThirdPartyAccountLink standard object writable for Salesforce admins, contact Salesforce Customer Support. With this feature, you can easily add or delete third-party account links using the API, but you can’t update existing account links.\n\nIn API version 34.0 and later, this object was enhanced to help manage high instance counts. A query() call returns up to 500 rows. A queryMore() call returns 500 more, up to 2,500 total. No more records are returned after 2,500. To make sure that you don’t miss any records, issue a COUNT() query in a SELECT clause for ThirdPartyAccountLink. This query gives you the total number of records. If there are more than 2,500 records, use these options to manage your results.\n\nFor example, use an initial query with this structure.\n\nThen, run another query with an offset of 2,000.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ThirdPartyAccountLink\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Handle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsNotSsoUsable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Provider\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RemoteIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SsoProvider\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AuthProvider\"/>\n        <element name=\"SsoProviderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SsoProviderName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThirdPartyAccountLinkKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Handle": {
+      "field_label": "External User Handle",
+      "type": "string",
+      "length": "375"
+    },
+    "Id": {
+      "field_label": "Third Party Account Link ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsNotSsoUsable": {
+      "field_label": "Is Not SSO Usable",
+      "type": "boolean"
+    },
+    "Provider": {
+      "field_label": "Provider",
+      "type": "string",
+      "length": "128"
+    },
+    "RemoteIdentifier": {
+      "field_label": "External User Id",
+      "type": "string",
+      "length": "128"
+    },
+    "SsoProviderId": {
+      "field_label": "Authentication Provider ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SsoProviderName": {
+      "field_label": "Single Sign-On Provider Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ThirdPartyAccountLinkKey": {
+      "field_label": "Third Party Account Link Unique Key",
+      "type": "string",
+      "length": "255"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ServiceResourceSkill - Data API",
+  "description": "Represents a skill that a service resource possesses in Field Service and Lightning Scheduler. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EffectiveEndDate": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the skill expires. For example, if a service resource needs to be re-certified after six months, the end date would be the date their certification expires."
+    },
+    "EffectiveStartDate": {
+      "type": "datetime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date when the service resource gains the skill. For example, if the skill represents a certification, the start date would be the date of certification."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the resource skill was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the resource skill was last viewed."
+    },
+    "ServiceResourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The service resource who possesses the skill. This is a relationship field.",
+      "relationship_name": "ServiceResource",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceResource"
+    },
+    "SkillId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The skill the service resource possesses. This is a relationship field.",
+      "relationship_name": "Skill",
+      "relationship_type": "Lookup",
+      "refers_to": "Skill"
+    },
+    "SkillLevel": {
+      "type": "double",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "The service resource’s skill level. Skill level can range from zero to 99.99."
+    },
+    "SkillNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number identifying the resource skill assignment."
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "usage": "If you intend to use the skills feature, determine which skills you want to track and how skill level should be determined. For example, you may want the skill level to reflect years of experience, certification levels, or license classes.\n\nYou can assign skills to all service resources in your org to\n\t\t\tindicate their certifications and areas of expertise, and specify each resource’s skill\n\t\t\tlevel from 0 to 99.99. For example, you can assign\n\t\t\tMaria the “Welding” skill, level\n\t\t\t\t50.\n\nIf you intend to use the skills feature, determine which skills you want to\n\t\t\t\ttrack and how skill level should be determined. For example, you may want the skill\n\t\t\t\tlevel to reflect years of experience, certification levels, or license\n\t\t\tclasses.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **ServiceResourceSkillChangeEvent (API version 54.0)**: Change events are available for the object.\n\n- **ServiceResourceSkillFeed**: Feed tracking is available for the object.\n- **ServiceResourceSkillHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"ServiceResourceSkill\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EffectiveEndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EffectiveStartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceResource\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceResource\"/>\n        <element name=\"ServiceResourceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Skill\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Skill\"/>\n        <element name=\"SkillId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SkillLevel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SkillNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EffectiveEndDate": {
+      "field_label": "End Date",
+      "type": "datetime"
+    },
+    "EffectiveStartDate": {
+      "field_label": "Start Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Resource Skill ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ServiceResourceId": {
+      "field_label": "Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SkillId": {
+      "field_label": "Skill ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SkillLevel": {
+      "field_label": "Skill Level",
+      "type": "double",
+      "precision": "4",
+      "scale": "2"
+    },
+    "SkillNumber": {
+      "field_label": "Resource Skill Number",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "VoiceVendorLine - Data API",
+  "description": "Represents a user’s phone number reserved with the vendor.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CallUsageInSecondsLastMonth": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "An org’s total call usage last month in seconds."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user who owns the phone number. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PhoneNumber": {
+      "type": "phone",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The unique vendor phone number."
+    },
+    "ShouldRecord": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Reserved for future use."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies whether the number is currently active or released."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user using the phone number. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "VoiceVendorInfoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Dialer vendor. This is a relationship field.",
+      "relationship_name": "VoiceVendorInfo",
+      "relationship_type": "Lookup",
+      "refers_to": "VoiceVendorInfo"
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only your Salesforce org's internal users can access this object.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **VoiceVendorLineOwnerSharingRule**: Sharing rules are available for the object.\n- **VoiceVendorLineShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CallUsageInSecondsLastMonth": {
+      "field_label": "Call Usage in Seconds Last Month",
+      "type": "int",
+      "digits": "8"
+    },
+    "ConversationChannelId": {
+      "field_label": "Messaging Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Voice Vendor Line ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPhoneTwilioVerified": {
+      "field_label": "Is the phone number verified with Twilio and using STIR/SHAKEN",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PhoneNumber": {
+      "field_label": "PhoneNumber",
+      "type": "phone",
+      "length": "40"
+    },
+    "ShouldRecord": {
+      "field_label": "ShouldRecord",
+      "type": "boolean"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "VoiceVendorInfoId": {
+      "field_label": "Voice Vendor Info ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

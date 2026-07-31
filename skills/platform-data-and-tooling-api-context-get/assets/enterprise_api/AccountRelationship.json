@@ -1,0 +1,127 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "AccountRelationship - Data API",
+  "description": "Represents a relationship of a given type between two accounts. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountFromID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort,",
+      "description": "ID of the account that gains access to data from AccountTo."
+    },
+    "AccountToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the account sharing data with AccountFrom."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user accessed this record or list view (LastReferencedDate) but didn’t viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the account relationship."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who created the account relationship."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The relationship type. All account relationship sharing rules of that type are to this account relationship. Standard values are: System Integrator Agency Advertiser Reseller Distributor Developer Broker Lender Institution Contractor Dealer Consultant Client Vendor Agent Retailer SubContractor Supplier Picklist items can be updated with your own values."
+    }
+  },
+  "special_access_rules": "In Digital Experience Settings, turn on the Enable Account Relationships org preference, which is off by default.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **AccountRelationshipFeed**: Feed tracking is available for the object.\n- **AccountRelationshipHistory**: History is available for tracked fields of the object.\n- **AccountRelationshipOwnerSharingRule**: Sharing rules are available for the object.\n- **AccountRelationshipShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountFromId": {
+      "field_label": "Account From ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AccountToId": {
+      "field_label": "Account To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Account Relationship ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Account Relationship Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

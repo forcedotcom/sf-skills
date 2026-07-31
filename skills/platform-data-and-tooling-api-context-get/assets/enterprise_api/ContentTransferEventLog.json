@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ContentTransferEventLog - Data API",
+  "description": "ContentTransferEventLog stores information about content transfer events, such as downloads, uploads, and previews. This information includes events performed on files and attachments to records. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "possible_values"
+  ],
+  "fields": {
+    "DocumentIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the document that’s being shared."
+    },
+    "FilePreviewType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The content type of the file preview."
+    },
+    "FileSize": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The size of rendition being added (bytes)."
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The content type of the file version."
+    },
+    "OperationType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The operation that’s being performed.",
+      "possible_values": "meta_deploy meta_list meta_retrieve meta_synchronous_create meta_synchronous_read meta_synchronous_upsert"
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943YAS"
+    },
+    "VersionIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the content version."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

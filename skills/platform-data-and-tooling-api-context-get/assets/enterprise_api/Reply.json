@@ -1,0 +1,171 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "Reply - Data API",
+  "description": "Represents a reply that a user has submitted to a question in an answers zone.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Body": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "Body of this reply."
+    },
+    "CommunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The zone ID associated with the question and its reply. This field is available in API version 27.0 and later."
+    },
+    "CreatorFullPhotoUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the user’s profile photo from the feed. Chatter Answers must be enabled to view this field. This field is available in API version 26.0 and later."
+    },
+    "CreatorName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the user who posted the question or reply. Only the first name of internal users (agents) appears to portal users in the feed. Chatter Answers must be enabled to view this field. This field is available in API version 26.0 and later"
+    },
+    "CreatorSmallPhotoUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the user’s thumbnail photo from the feed. Chatter Answers must be enabled to view this field. This field is available in API version 26.0 and later."
+    },
+    "DownVotes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of down votes for a reply."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "When creating a Reply, the Name field is automatically populated with a truncated, plain text version of the Reply Body field."
+    },
+    "NumReportAbuses": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the number of reported abuses on the reply by users.This field is available in API version 24.0 and later."
+    },
+    "QuestionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Question to which this reply was made."
+    },
+    "UpVotes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of up votes for a reply."
+    },
+    "VoteTotal": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total number of all votes for a reply, including up and down votes."
+    }
+  },
+  "usage": "Use this object to track replies to a Question.",
+  "field_reference": {
+    "Body": {
+      "field_label": "Reply Body",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "CommunityId": {
+      "field_label": "Zone ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreatorFullPhotoUrl": {
+      "field_label": "Url of Creator's Profile Photo",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatorName": {
+      "field_label": "Name of Creator",
+      "type": "string",
+      "length": "121"
+    },
+    "CreatorSmallPhotoUrl": {
+      "field_label": "Url of Creator's Thumbnail Photo",
+      "type": "string",
+      "length": "255"
+    },
+    "DownVotes": {
+      "field_label": "Down Votes",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Reply ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NumReportAbuses": {
+      "field_label": "Number of Report Abuses",
+      "type": "int",
+      "digits": "9"
+    },
+    "QuestionId": {
+      "field_label": "Question ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UpVotes": {
+      "field_label": "Up Votes",
+      "type": "int",
+      "digits": "9"
+    },
+    "VoteTotal": {
+      "field_label": "Vote Total",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

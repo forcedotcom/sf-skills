@@ -6,7 +6,7 @@ How to find the right SLDS artifact for a UI pattern.
 
 ## Decision Flow
 
-```
+```text
 What framework?
 ├─ LWC → Check Lightning Base Component (LBC) first
 │   ├─ LBC exists → Use it. Done.

@@ -1,0 +1,623 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "VoiceCall - Data API",
+  "description": "Represents a call in Salesforce Voice, Sales Dialer, or other supported voice connectors. For Salesforce Voice, this can be a phone or Voice over Internet Protocol (VoIP) call. This object is available in API version 40.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID of the activity record. Available in API version 48.0 and later. This is a relationship field.",
+      "relationship_name": "Activity",
+      "refers_to": "Task"
+    },
+    "AgentSentimentScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "If Sentiment Journey in Salesforce Voice is set up, this field represents the rep’s overall sentiment score post-call in a conversation event. The value must be between -5 (lowest negative sentiment score) and 5 (highest positive sentiment score), with 0 being a neutral sentiment score. Available in API version 59.0 and later.This field isn't available in Salesforce Voice (Native Telephony)."
+    },
+    "CallAcceptDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the date and time (in UTC) when an agent accepts the call. Available in API version 48.0 and later."
+    },
+    "CallCenterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the unique ID of the call center (CallCenter Id) where the activity took place. Available in API version 48.0 and later. This is a relationship field.This field isn't available in Salesforce Voice (Native Telephony)."
+    },
+    "CallConnectDateTime": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "For Sales Dialer, this field represents the date and time (in UTC) when the call was connected."
+    },
+    "CallDisposition": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The status of the phone call. For Sales Dialer, possible values are: in progress busy failed For Salesforce Voice, possible values are: new—The voice call record has been created. in-progress—The call has been accepted (or, for outbound messages, initiated) by an agent. completed—The call has ended. This includes calls that are transferred. (If a call is transferred, another voice call record is created to track the state of the transferred call.) If After Conversation Work (ACW) is enabled, that work begins after the call completes."
+    },
+    "CallDurationInSeconds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The total duration (in seconds) of the call."
+    },
+    "CallEndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort",
+      "description": "The date and time (in UTC) when the call ended."
+    },
+    "CallerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For Salesforce Voice, this field represents the unique ID of the participant who initiated the call. If “Match Callers to End User Records” is enabled in Lightning Experience, the value is null and the EndUserId field is used instead to determine the end user associated with this voice call. Available in API version 48.0 and later. This is a relationship field."
+    },
+    "CallerIdType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "For Sales Dialer, this field represents the number displayed for outbound calls. Possible values are: VendorLine—User. CompanyNumber—Company. LocalPresence—Local Presence. CustomCallerId—Custom Caller ID. Available in API version 41.0 and later."
+    },
+    "CallOrigin": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Information about how this call originated. For Salesforce Voice, possible values are: Preview—Preview dialer. Progressive—Progressive dialer. Voicemail—Voicemail call. Available in API version 56.0 and later."
+    },
+    "CallQueuedDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the date and time (in UTC) when the call was added to a queue to be routed to an agent. Available in API version 48.0 and later."
+    },
+    "CallRecordingId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For Salesforce Voice, this field represents the unique ID of the call recording for the voice call. An update to the CallRecordingId value is an internal process and doesn't trigger automation such as flows. Available in API version 41.0 and later. This is a relationship field.",
+      "relationship_name": "CallRecording",
+      "relationship_type": "Lookup",
+      "refers_to": "VoiceCallRecording"
+    },
+    "CallResolution": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The resolution outcome of the call. The default value is Resolved, meaning the call has been resolved. Available in API version 48.0 and later."
+    },
+    "CallStartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort",
+      "description": "The date and time (UTC) when the call started."
+    },
+    "CallStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "For internal use only. Available in API version 63.0 and later."
+    },
+    "CallSubtype": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "For Salesforce Voice, this field represents the network or protocol over which the phone or Voice over Internet Protocol (VoIP) call is made. Possible values are: PSTN WebRTC Available in API version 62.0 and later."
+    },
+    "CallType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The types of call.For Sales Dialer, possible values are: Bridge Coach Inbound Internal Outbound For Salesforce Voice, possible values are: Callback Consult Inbound InternalCall Outbound Transfer"
+    },
+    "CoachingDurationInSeconds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For Sales Dialer, this field represents the total duration (in seconds) of the coaching session. This field only appears if call coaching is enabled. Available in API version 41.0 and later."
+    },
+    "ConferenceKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For Sales Dialer, this field represents the related conference key. This field is only available if call monitoring is enabled. Available in API version 41.0 and later."
+    },
+    "ConversationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the unique ID of the conversation. This field is only available if call monitoring is enabled. Available in API version 48.0 and later. This is a relationship field.",
+      "relationship_name": "Conversation",
+      "relationship_type": "Lookup",
+      "refers_to": "Conversation"
+    },
+    "CurrencyCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "For Sales Dialer, this field represents the ISO currency code used to bill the call."
+    },
+    "CustomerHoldDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the total duration (in seconds) of all the holds that occurred during the voice call. Available in API version 49.0 and later."
+    },
+    "CustomerSentimentScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "If Sentiment Journey in Salesforce Voice is set up, this field represents the customer’s overall sentiment score post-call in a conversation event. The value must be between -5 (lowest negative sentiment score) and 5 (highest positive sentiment score), with 0 being a neutral sentiment score. Available in API version 59.0 and later.This field isn't available in Salesforce Voice (Native Telephony)."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "If Salesforce Voice is enabled, this field represents a text field where the agent can enter a summary of the call. Available in API version 48.0 and later."
+    },
+    "DisconnectReason": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable",
+      "description": "If Salesforce Voice is enabled, this field represents the reason why the voice call was disconnected. For Salesforce Voice with Telephony Providers, the partner telephony provides the reason. For Amazon Connect instances, this value is automatically populated through the contact record if you have Contact Center version 13.0 or later. See DisconnectReason in the Amazon Connect contact records data model page for a list of possible reasons why a voice call may be disconnected. For all other partner telephony models, configure this feature through the disconnectReason parameter in the Update a Voice Call Record Telephony Integration API. Available in API version 59.0 and later.For Salesforce Voice (Native Telephony), possible values for inbound calls are: CUSTOMER_DISCONNECT FLOW_DISCONNECT REP_DISCONNECT AGENT_DISCONNECT CUSTOMER_QUEUE_DISCONNECT For Salesforce Voice (Native Telephony), possible values for outbound calls are: CUSTOMER_DISCONNECT FLOW_DISCONNECT REP_DISCONNECT AGENT_DISCONNECT RING_NO_ANSWER CALL_REJECTED For Agentforce Voice, possible values are: DISCONNECTED_BY_CUSTOMER TRANSFERRED OTHER"
+    },
+    "EndUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For Salesforce Voice, if “Match Callers to End User Records” is enabled in Lightning Experience, this field represents the unique ID of the messaging end user (MessagingEndUser ID) associated with this voice call. Available in API version 53.0 and later. This is a relationship field.",
+      "relationship_name": "EndUser",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingEndUser"
+    },
+    "FromPhoneNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The number of the user who initiated the call."
+    },
+    "IsDiarizationOptIn": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether optimal speaker separation (diarization) is opted in (true) or not (false) for the call."
+    },
+    "IsRecorded": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a Voice Call Recording record was created (true) or not (false) for this voice call. The default value is false. Available in API version 44.0 and later."
+    },
+    "IvrDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Total duration, in seconds, that a caller spends in the Interactive Voice Response (IVR) system. The duration includes time spent on automated prompts and responses before being placed in a queue or connected to a service rep. This field is available in API version 66.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time (in UTC) when the current user last viewed a record related to this voice call."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time (in UTC) when the current user last viewed this voice call. If the record has not been viewed before, this value is null. Referencing a record (LastReferencedDate) doesn’t count as viewing it."
+    },
+    "LongestHoldDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the longest hold duration (in seconds) that occurred during the call. Available in API version 49.0 and later."
+    },
+    "MediaProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The unique ID of the related media provider. Available in API version 49.0 and later. This is a relationship field.",
+      "relationship_name": "MediaProvider",
+      "relationship_type": "Lookup",
+      "refers_to": "CallCoachingMediaProvider"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the voice call record. For example, VC-00000001. Available in API version 60.0 and later."
+    },
+    "NextCallId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the unique ID of the next call if the call was transferred to another agent. If there is no other agent, this value is null. Available in API version 48.0 and later.This field isn't available in Salesforce Voice (Native Telephony). This is a relationship field.",
+      "relationship_name": "NextCall",
+      "relationship_type": "Lookup",
+      "refers_to": "VoiceCall"
+    },
+    "NumberOfHolds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the number of times the customer was put on hold. Available in API version 49.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The unique ID of the user who owns the voice call record. Don’t modify this field during active call routing through automation, such as record-triggered flows or Apex triggers. Modifying this field during active call routing by customer automation creates conflicts with the Salesforce Voice with Telephony Providers internal platform logic. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PreviousCallId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the unique ID of the previous call if the call was transferred from another agent. When there is no previous call, this value is null. Available in API version 48.0 and later.This field isn't available inr Salesforce Voice (Native Telephony). This is a relationship field.",
+      "relationship_name": "PreviousCall",
+      "relationship_type": "Lookup",
+      "refers_to": "VoiceCall"
+    },
+    "Price": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "For Sales Dialer, this field represents the cost of the phone call."
+    },
+    "QualityScore": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "If Salesforce Voice is enabled, this field represents the value of the Mean Opinion Score (MOS) that measures voice call quality. This algorithm is based on packet loss percentage, average latency, and average jitter. Available in API version 53.0 and later."
+    },
+    "QueueName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "If Salesforce Voice is enabled, this field represents the name of the agent queue. Available in API version 49.0 and later."
+    },
+    "RecipientId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For Salesforce Voice, this field represents the unique ID of the participant who received the call. If “Match Callers to End User Records” is enabled in Lightning Experience, this value is null and the EndUserId field is used instead to determine the end user associated with this voice call. This is a relationship field.",
+      "relationship_name": "Recipient",
+      "relationship_type": "Lookup",
+      "refers_to": "ConversationParticipant"
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Updates",
+      "description": "The ID of the voice call record type assigned to this voice call. If a record type isn't assigned to this voice call, the value is null. Available in API version 59.0 and later. This is a relationship field.",
+      "relationship_name": "RecordType",
+      "relationship_type": "Lookup",
+      "refers_to": "RecordType"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID of the related record. Associates the VoiceCall record to a standard or custom object record. For Salesforce Voice, supported related records include the standard objects Account, Case, Collection Plan, Contact, Contact Request, Lead, Opportunity, and WorkOrder. For Sales Dialer, supported related records include custom objects. This is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Case, CollectionPlan, Contact, ContactRequest, Lead, Opportunity, Workorder"
+    },
+    "SourceType": {
+      "type": "picklist",
+      "properties": "Create, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The general purpose of the call. The permission sets assigned to the voice call owner determine the value. A call’s source type controls which insights Einstein Conversation Insights applies during analysis.Possible values are: Sales Service Available in API version 52.0 and later."
+    },
+    "ToPhoneNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The recipient of the call. For inbound, transfer, and callback calls, this value is the agent's number. For outbound calls, this value is the customer's number."
+    },
+    "TranscribedLanguage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The language that is transcribed for this voice call."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The unique ID of the Salesforce user who initiates an outbound call or accepts an inbound call. If no one takes the call, this value defaults to null. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "VendorCallKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, idLookup, Sort",
+      "description": "The unique ID of the child leg of the call that’s provided by the Sales Dialer vendor or Salesforce Voice."
+    },
+    "VendorParentCallKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For Sales Dialer, this field represents the unique ID of the parent leg of the call that’s provided by the Dialer vendor."
+    },
+    "VendorType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "For Sales Dialer, this field represents the type of Dialer vendor. For Salesforce Voice, this field is always set to ContactCenter. Available in API version 41.0 and later."
+    },
+    "VoiceVendorLineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For Sales Dialer, this field represents the unique ID of the associated Dialer vendor line. This is a relationship field.",
+      "relationship_name": "VoiceVendorLine",
+      "relationship_type": "Lookup",
+      "refers_to": "VoiceVendorLine"
+    }
+  },
+  "special_access_rules": "Only users with the Modify All Data permission can delete call records. To edit voice call records, Sales Dialer or Salesforce Voice permissions are required. This includes the Dialer Outbound permission set for Sales Dialer, or the Salesforce Voice Contact Center Rep or Salesforce Voice Contact Center Admin permission sets for Salesforce Voice, or Agentforce Contact Center Admin (Salesforce Voice) permission set.\n\nOnly users with the Modify All Data permission can delete call records.\n\nTo edit voice call records, Sales Dialer or Salesforce Voice permissions are required. This includes the Dialer Outbound permission set for Sales Dialer, or the Salesforce Voice Contact Center Rep or Salesforce Voice Contact Center Admin permission sets for Salesforce Voice, or Agentforce Contact Center Admin (Salesforce Voice) permission set.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **VoiceCallChangeEvent (Available in API version 48.0 and later)**: Change events are available for the object.\n- **VoiceCallFeed (Available in API version 50.0 and later.)**: Feed tracking is available for the object.\n- **VoiceCallOwnerSharingRule**: Sharing rules are available for the object.\n- **VoiceCallShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ActivityId": {
+      "field_label": "Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AgentSentimentScore": {
+      "field_label": "Agent Sentiment Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CallAcceptDateTime": {
+      "field_label": "Call Accepted",
+      "type": "datetime"
+    },
+    "CallCenterId": {
+      "field_label": "Call Center ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CallConnectDateTime": {
+      "field_label": "Call Connected",
+      "type": "datetime"
+    },
+    "CallDisposition": {
+      "field_label": "Call Status",
+      "type": "string",
+      "length": "255"
+    },
+    "CallDurationInSeconds": {
+      "field_label": "Call Duration",
+      "type": "int",
+      "digits": "8"
+    },
+    "CallEndDateTime": {
+      "field_label": "Call Ended",
+      "type": "datetime"
+    },
+    "CallOrigin": {
+      "field_label": "Call Origin",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CallQueuedDateTime": {
+      "field_label": "Call Entered Queue",
+      "type": "datetime"
+    },
+    "CallRecordingId": {
+      "field_label": "Voice Call Recording ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CallResolution": {
+      "field_label": "Call Resolution",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CallStartDateTime": {
+      "field_label": "Call Started",
+      "type": "datetime"
+    },
+    "CallStatus": {
+      "field_label": "Call Status Internal",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CallSubtype": {
+      "field_label": "Call Subtype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CallType": {
+      "field_label": "Call Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CallerId": {
+      "field_label": "Caller ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CallerIdType": {
+      "field_label": "Caller Id",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ConferenceKey": {
+      "field_label": "Conference Key",
+      "type": "string",
+      "length": "255"
+    },
+    "ConversationId": {
+      "field_label": "Conversation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyCode": {
+      "field_label": "Currency Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CustomerHoldDuration": {
+      "field_label": "Customer Hold Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "CustomerSentimentScore": {
+      "field_label": "Customer Sentiment Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DisconnectReason": {
+      "field_label": "Disconnect Reason",
+      "type": "string",
+      "length": "255"
+    },
+    "EndUserId": {
+      "field_label": "Messaging User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FromPhoneNumber": {
+      "field_label": "Caller Contact Info",
+      "type": "phone",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Voice Call ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDiarizationOptIn": {
+      "field_label": "Is Diarization Opted In",
+      "type": "boolean"
+    },
+    "IsRecorded": {
+      "field_label": "Is Call Recorded",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LongestHoldDuration": {
+      "field_label": "Longest Hold Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "MediaProviderId": {
+      "field_label": "CallCoachingMediaProvider ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "30"
+    },
+    "NextCallId": {
+      "field_label": "Next Call ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NumberOfHolds": {
+      "field_label": "Number Of Holds",
+      "type": "int",
+      "digits": "9"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreviousCallId": {
+      "field_label": "Previous Call ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Price": {
+      "field_label": "Price",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "QualityScore": {
+      "field_label": "Mean Opinion Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "QueueName": {
+      "field_label": "Queue Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RecipientId": {
+      "field_label": "Recipient ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "RelatedRecord ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceType": {
+      "field_label": "Source Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ToPhoneNumber": {
+      "field_label": "Recipient Contact Info",
+      "type": "phone",
+      "length": "40"
+    },
+    "TranscribedLanguage": {
+      "field_label": "Language",
+      "type": "string",
+      "length": "10"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "VendorCallKey": {
+      "field_label": "Vendor Call Key",
+      "type": "string",
+      "length": "255"
+    },
+    "VendorParentCallKey": {
+      "field_label": "Vendor Parent Call Key",
+      "type": "string",
+      "length": "255"
+    },
+    "VendorType": {
+      "field_label": "Vendor Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "VoiceVendorLineId": {
+      "field_label": "Voice Vendor Line ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

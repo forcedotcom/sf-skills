@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PermissionSetTabSetting - Data API",
+  "description": "Represents a permission set tab setting. Requires the View Setup permission. Use this object to query all tab settings of the permission set. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The tab name."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The permission set Id. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSet"
+    },
+    "Visibility": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the tab is visible by default. Possible values are: DefaultOff DefaultOn"
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only users with \"View Setup and Configuration\" permission can access this object.",
+  "usage": "Use the PermissionSetTabSetting object to find tab setting visibility settings, parent permission sets, and so forth. For example, to find the visibility setting of a tab named “standard-Lead,” do something like the following.\n\nUse the PermissionSetTabSetting object to find tab setting visibility settings, parent permission sets, and so forth.\n\nFor example, to find the visibility setting of a tab named “standard-Lead,” do something like the following.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PermissionSetTabSetting\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSet\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Visibility\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Id": {
+      "field_label": "Permission Set Tab Setting ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Tab Name",
+      "type": "string",
+      "length": "60"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Visibility": {
+      "field_label": "Visibility",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

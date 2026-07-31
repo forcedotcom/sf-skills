@@ -1,0 +1,106 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "SvcCatalogCategoryItem - Data API",
+  "description": "Represents an association between a Service Catalog item and category. Service catalog items can be grouped into categories. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsPrimaryCategory": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether the category is the primary category for a catalog item. The default value is false."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Controls the order in which catalog items appear by default when you're viewing all items in a single category."
+    },
+    "SvcCatalogCategoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the category for which the service category item belongs. This field is a relationship field.",
+      "relationship_name": "SvcCatalogCategory",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogCategory"
+    },
+    "SvcCatalogItemDefId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the service category item definition. This field is a relationship field.",
+      "relationship_name": "SvcCatalogItemDef",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogItemDef"
+    }
+  },
+  "special_access_rules": "To access this object, get the Service Catalog Access permission set license, Employee Productivity Starter license, or Employee Productivity Plus add-on license.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Service Catalog Category Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPrimaryCategory": {
+      "field_label": "Primary Category",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SvcCatalogCategoryId": {
+      "field_label": "Service Catalog Category ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SvcCatalogItemDefId": {
+      "field_label": "Service Catalog Item Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

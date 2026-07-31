@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment"
+  ],
+  "title": "PermissionSetGroupComponent - Data API",
+  "description": "A junction object that relates the PermissionSetGroup and PermissionSet objects via their respective IDs; enables permission set group recalculation to determine the aggregated permissions for the group. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "PermissionSetGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique permission set group ID. This is a relationship field.",
+      "relationship_name": "PermissionSetGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSetGroup"
+    },
+    "PermissionSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique permission set ID of a permission set in a permission set group. This is a relationship field.",
+      "relationship_name": "PermissionSet",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSet"
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only users with the \"View Setup and Configuration\" permission can access this object.",
+  "usage": "Use the PermissionSetGroupComponent object to add members to or delete members from a permission set group, or to query for group members.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PermissionSetGroupComponent\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PermissionSet\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSet\"/>\n        <element name=\"PermissionSetGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSetGroup\"/>\n        <element name=\"PermissionSetGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PermissionSetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```"
+}

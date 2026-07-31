@@ -1,0 +1,199 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "RecentlyViewed - Data API",
+  "description": "Represents records or list views that the current user has recently viewed or referenced (by viewing a related record). List views are available in API version 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Alias": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The alias on the record."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The email address on the record."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The first name on the record. If the recently viewed record is a user, the value is the user’s first name."
+    },
+    "Id": {
+      "type": "ID",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The ID of the recently viewed record or list view."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the recently viewed record is an active user (true) or not (false). This field contains a value only if the recently viewed record is a user."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The last name on the record."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly. Viewing or opening a record. Selecting a record in a lookup search or related list search."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it’s possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name on the recently viewed record or list view. If the recently viewed record is a user, contact, or lead, the value is a concatenation of the firstname and lastname field values."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter,Group, Nillable, Sort",
+      "description": "ID of the Experience Cloud site that this group is part of. This field is available only if digital experiences is enabled in your org.You can add a NetworkId only when creating a group. You can’t change or add a NetworkId for an existing group. This field is available in API version 27.0 and later."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The phone number on the record."
+    },
+    "ProfileId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the recently viewed record is a user, this value is the user’s profile ID. This field is a relationship field.",
+      "relationship_name": "Profile",
+      "relationship_type": "Lookup",
+      "refers_to": "Profile"
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the recently viewed record is a user, this value is the title of the user; for example CFO or CEO."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The object type for this recently viewed record or list view. Valid values include any standard or custom objects that RecentlyViewed supports."
+    },
+    "UserRoleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user role associated with this object. This field is a relationship field.",
+      "relationship_name": "UserRole",
+      "relationship_type": "Lookup",
+      "refers_to": "UserRole"
+    }
+  },
+  "usage": "This object provides a heterogeneous list of different object types. The list consists of recently viewed records, records that were recently referenced (a related record was viewed), or recently viewed list views. A record is considered viewed when the user sees the record details, but not when the user sees the record in a list with other records. Use this object to programmatically construct a list of recently viewed items specific to the current user. For example, use this object on a custom user interface or for search auto-complete options. You can also retrieve a filtered list of records by object type (Type). The RecentlyViewed data is periodically truncated down to 200 records and 200 list views. RecentlyViewed data is retained for 90 days, after which it’s removed on a periodic basis. Use this query in your code to retrieve a list of all the records and list views that were recently viewed. The results are ordered from most to least recent. Use this query to retrieve data that was either viewed or referenced, but only for a limited set of objects. This query retrieves a list of all recently viewed contacts with contact-specific fields, such as the contact’s account name, and the custom website field. Records are ordered from most to least recent.\n\nThis object provides a heterogeneous list of different object types. The list consists of recently viewed records, records that were recently referenced (a related record was viewed), or recently viewed list views. A record is considered viewed when the user sees the record details, but not when the user sees the record in a list with other records. Use this object to programmatically construct a list of recently viewed items specific to the current user. For example, use this object on a custom user interface or for search auto-complete options. You can also retrieve a filtered list of records by object type (Type). The RecentlyViewed data is periodically truncated down to 200 records and 200 list views. RecentlyViewed data is retained for 90 days, after which it’s removed on a periodic basis.\n\nUse this query in your code to retrieve a list of all the records and list views that were recently viewed. The results are ordered from most to least recent.\n\nUse this query to retrieve data that was either viewed or referenced, but only for a limited set of objects.\n\nThis query retrieves a list of all recently viewed contacts with contact-specific fields, such as the contact’s account name, and the custom website field. Records are ordered from most to least recent.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"RecentlyViewed\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Alias\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Email\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FirstName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NameOrAlias\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Profile\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Profile\"/>\n        <element name=\"ProfileId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RecordType\" nillable=\"true\" minOccurs=\"0\" type=\"ens:RecordType\"/>\n        <element name=\"RecordTypeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRole\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRole\"/>\n        <element name=\"UserRoleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Alias": {
+      "field_label": "Alias",
+      "type": "string",
+      "length": "8"
+    },
+    "Email": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "FirstName": {
+      "field_label": "First Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Recently Viewed ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastName": {
+      "field_label": "Last Name",
+      "type": "string",
+      "length": "80"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NameOrAlias": {
+      "field_label": "Name or Alias",
+      "type": "string",
+      "length": "80"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "ProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecordTypeId": {
+      "field_label": "Record Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "80"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UserRoleId": {
+      "field_label": "Role ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

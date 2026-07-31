@@ -1,0 +1,445 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "FulfillmentOrderLineItem - Data API",
+  "description": "Represents a product or delivery charge belonging to a FulfillmentOrder. Corresponds to an OrderItemSummary. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. ISO code for the currency of the FulfillmentOrder associated with the FulfillmentOrderLineItem. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD. This field is available in API version 49.0 and later."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the FulfillmentOrderLineItem."
+    },
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "End date of the FulfillmentOrderLineItem."
+    },
+    "FulfillmentOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the FulfillmentOrder associated with the FulfillmentOrderLineItem. This field is a relationship field.",
+      "relationship_name": "FulfillmentOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "FulfillmentOrder"
+    },
+    "FulfillmentOrderLineItemNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID of the FulfillmentOrderLineItem."
+    },
+    "FulfillmentAssetReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Reference identifier of the fulfillment asset."
+    },
+    "FulfillmentAssetStartQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The number of fulfillment assets before assetization."
+    },
+    "FulfillmentAssetEndQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The number of fulfillment assets after assetization."
+    },
+    "GrossUnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Unit price, including tax, of the FulfillmentOrderLineItem. This value is equal to TotalPrice + TotalTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "IsReship": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the FulfillmentOrderLineItem belongs to a reshipment. The default value is false. This field is available in API version 53.0 and later."
+    },
+    "MainFulfillmentOrderLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the original FulfillmentOrderLineItem. This field is a relationship field. This field is available in API version 63.0 and later.",
+      "relationship_name": "FulfillmentOrderLineItem",
+      "relationship_type": "Lookup",
+      "refers_to": "FulfillmentOrderLineItem"
+    },
+    "OrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the original OrderItem for the OrderItemSummary associated with the FulfillmentOrderLineItem. This field is a relationship field.",
+      "relationship_name": "OrderItem",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderItem"
+    },
+    "OrderItemSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the OrderItemSummary associated with the FulfillmentOrderLineItem. This field is a relationship field.",
+      "relationship_name": "OrderItemSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderItemSummary"
+    },
+    "OriginalQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort",
+      "description": "Original quantity of the FulfillmentOrderLineItem."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the product represented by the FulfillmentOrderLineItem. This field is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Current quantity of the FulfillmentOrderLineItem. Equal to the original quantity minus any canceled quantity."
+    },
+    "QuantityUnitOfMeasure": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Unit of measure of the quantity, for example: unit, gallon, ton, or case."
+    },
+    "RejectedQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used by the Distributed Order Management package and Store Fulfillment app to store the quantity that has been rejected by a fulfillment location. This field is available in API version 57.0 and later."
+    },
+    "RejectReason": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the FulfillmentOrderLineItem was rejected by a fulfillment location, the reason for the rejection. Default values are: Damaged Just Sold Other Out of Packing Supplies Out of Stock This field is available in API version 56.0 and later."
+    },
+    "ReshipReason": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the FulfillmentOrderLineItem belongs to a reshipment, the reason for the reshipment. Default values are: Damaged Lost Unknown Wrong Item This field is available in API version 53.0 and later."
+    },
+    "ServiceDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Service or start date of the FulfillmentOrderLineItem."
+    },
+    "ScopeIdentifierText": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Unique identifier used to identify the scope in which this fulfillment order line item record is created."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of any price adjustments applied to the FulfillmentOrderLineItem."
+    },
+    "TotalAdjustmentAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the FulfillmentOrderLineItem, inclusive of tax. This amount is equal to TotalAdjustmentAmount + TotalAdjustmentTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAdjustmentAmount."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including adjustments and tax, of the FulfillmentOrderLineItem."
+    },
+    "TotalLineAmount": {
+      "type": "currency",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort",
+      "description": "Total, not including adjustments or tax, of the FulfillmentOrderLineItem."
+    },
+    "TotalLineAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total price of the FulfillmentOrderLineItem, inclusive of tax. This amount is equal to TotalLineAmount + TotalLineTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalLineTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalLineAmount."
+    },
+    "TotalPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including adjustments but not tax, of the FulfillmentOrderLineItem. Equal to UnitPrice times Quantity."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalPrice."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Type of the FulfillmentOrderLineItem. Matches the type of the associated OrderItemSummary. Delivery Charge indicates that the FulfillmentOrderLineItem represents a delivery charge. Fee indicates that it represents another type of fee, such as a return fee. Order Product indicates that it represents any other type of product, service, or charge. Each type corresponds to one type code, shown here in parentheses. Possible values are: Delivery Charge (Charge) Fee (Charge) This value is available in API v56.0 and later. Order Product (Product)"
+    },
+    "TypeCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Type code of the FulfillmentOrderLineItem. Matches the type code of the associated OrderItemSummary. Processing depends on this value. Charge indicates that the FulfillmentOrderLineItem represents a charge or fee. Product indicates that it represents any other type of product, service, or charge. A type code can be associated with one or more types. Possible values are: Charge Product"
+    },
+    "UnitPrice": {
+      "type": "currency",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort",
+      "description": "Unit price of the FulfillmentOrderLineItem."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs.",
+  "field_reference": {
+    "Action": {
+      "field_label": "Action",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "datetime"
+    },
+    "FulfillmentAssetEndQuantity": {
+      "field_label": "Fulfillment Asset End Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "FulfillmentAssetId": {
+      "field_label": "Fulfillment Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FulfillmentAssetReference": {
+      "field_label": "Fulfillment Asset Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "FulfillmentAssetStartQuantity": {
+      "field_label": "Fulfillment Asset Start Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "FulfillmentOrderId": {
+      "field_label": "Fulfillment Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FulfillmentOrderLineItemNumber": {
+      "field_label": "Fulfillment Order Product Number",
+      "type": "string",
+      "length": "255"
+    },
+    "GrossUnitPrice": {
+      "field_label": "Gross Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Fulfillment Order Product ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsReship": {
+      "field_label": "Reship",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MainFulfillmentOrderLineItemId": {
+      "field_label": "Fulfillment Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemId": {
+      "field_label": "Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemSummaryId": {
+      "field_label": "Order Product Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OriginalQuantity": {
+      "field_label": "Quantity on the Original Order",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "QuantityUnitOfMeasure": {
+      "field_label": "Quantity Unit Of Measure",
+      "type": "string",
+      "length": "100"
+    },
+    "RejectReason": {
+      "field_label": "Reject Reason",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RejectedQuantity": {
+      "field_label": "Rejected Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ReshipReason": {
+      "field_label": "Reship Reason",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ScopeIdentifierText": {
+      "field_label": "Scope Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "ServiceDate": {
+      "field_label": "Start Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentAmountWithTax": {
+      "field_label": "Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentTaxAmount": {
+      "field_label": "Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Total with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmount": {
+      "field_label": "Line Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmountWithTax": {
+      "field_label": "Line Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineTaxAmount": {
+      "field_label": "Line Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPrice": {
+      "field_label": "Pretax Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TypeCode": {
+      "field_label": "Type Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UnitPrice": {
+      "field_label": "Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

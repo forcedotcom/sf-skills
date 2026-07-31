@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "PrivacyRtntStoreDelStatus - Data API",
+  "description": "Represents the status of retention store deletion operations in Privacy Center. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Assigned automatically when each retention store deletion status record is inserted. It can't be set directly, and it can't be modified after the record is created."
+    },
+    "ObjectState": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Stores state information for the deletion operation."
+    },
+    "PrivacyRetentionStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The current status of the retention store deletion operation. Possible values are: del_req_invalid — Delete Request Is Invalid obj_del_cancelled — Object Delete Request Is Canceled obj_del_complete — Object Deletion Complete obj_del_failures — Object Deletes Completed with failures obj_del_in_progress — Object Deletion In Progress store_del_cancelled — Store Delete Request Is Canceled store_del_complete — Store Deletion Complete store_del_enqueued — Store Deletion Enqueued store_del_failures — Store Delete Completed with failures store_del_in_progress — Store Deletion In Progress"
+    },
+    "PrivacyRetentionStoreType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of retention store being tracked for deletion. Possible values are: Object Organization"
+    },
+    "RetentionStoreOrganizationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Organization associated with this retention store deletion operation. This is a relationship field.",
+      "relationship_name": "RetentionStoreOrganization",
+      "refers_to": "Organization"
+    }
+  }
+}

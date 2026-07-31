@@ -1,0 +1,125 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FeedRevision - Data API",
+  "description": "Holds the revision history of a specific feed item or comment, including a list of attributes that changed for each revision. This object is available in API version 34.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Action": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Holds the type of modification to the underlying feed item or comment attribute. Action can have the value Changed."
+    },
+    "EditedAttribute": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Identifies the part of the feed item or comment which was modified. A single revision can have many edited attributes."
+    },
+    "FeedEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Identifies the modified feed item or comment."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the record has been moved to the Recycle Bin (true) or not (false). This field is a standard system field."
+    },
+    "IsValueRichText": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the feed item Body contains rich text. If you post a rich text feed comment using SOAP API, set IsRichText to true and escape HTML entities from the body. Otherwise, the post is rendered as plain text.Rich text supports the following HTML tags: <p>Though the <br> tag isn’t supported, you can use <p>&nbsp;</p> to create lines. <a> <b> <code> <i> <u> <s> <ul> <ol> <li> <img>The <img> tag is accessible only through the API and must reference files in Salesforce similar to this example: <img src=\"sfdc://069B0000000omjh\"></img> In API version 35.0 and later, the system replaces special characters in rich text with escaped HTML. In API version 34.0 and prior, all rich text appears as a plain-text representation."
+    },
+    "OriginNetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Experience Cloud site in which a user modified the feed item or comment. This field is only available, if digital experiences is enabled for your org."
+    },
+    "Revision": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The revision number of the feed item or comment."
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Identifies the value of the EditedAttribute field before the update."
+    }
+  },
+  "usage": "This object tracks the changes made to a feed item or feed comment and stores a list of attributes that changed for each revision.\n\nThis object tracks the changes made to a feed item or feed comment\n      and stores a list of attributes that changed for each revision.\n\nTo query the FeedRevision object, users need the View All Data permission or supply a\n          WHERE clause on the\n\nFeedEntityId",
+  "wsdl_segment": "```xml\n<complexType name=\"FeedRevision\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Action\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EditedAttribute\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsValueRichText\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Revision\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Value\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "Action": {
+      "field_label": "Action",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EditedAttribute": {
+      "field_label": "Edited Attribute",
+      "type": "picklist",
+      "length": "40"
+    },
+    "FeedEntityId": {
+      "field_label": "Feed Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Feed Revision ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsValueRichText": {
+      "field_label": "Is Value RichText",
+      "type": "boolean"
+    },
+    "OriginNetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Revision": {
+      "field_label": "Revision",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "textarea",
+      "length": "10000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

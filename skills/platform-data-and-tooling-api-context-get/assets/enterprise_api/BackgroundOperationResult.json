@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "BackgroundOperationResult - Data API",
+  "description": "Stores error messages generated when or importing data into big objects using Bulk API. This is a big object, available in API version 37.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CreatedById": {
+      "type": "ID",
+      "properties": "Nillable",
+      "description": "The user ID of the user initiating the Bulk API request."
+    },
+    "CreatedDate": {
+      "type": "dateTime",
+      "properties": "Defaulted on create",
+      "description": "The date and time at which the Bulk API request was made."
+    },
+    "Data": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The data that generated the error message. The total length is limited to 2,000 characters, and each column can occupy a maximum of 50 characters. Any data exceeding those limits is truncated."
+    },
+    "Id": {
+      "type": "ID",
+      "properties": "Defaulted on create, idLookup",
+      "description": "The ID of the error message."
+    },
+    "Message": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The text of the error message."
+    },
+    "MessageType": {
+      "type": "picklist",
+      "properties": "Nillable, Restricted picklist",
+      "description": "The type of error message. The possible values are: ERROR, WARNING, or INFO."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Sort",
+      "description": "The batch ID in Bulk API."
+    }
+  },
+  "usage": "You can check for errors by querying the object. For example, this query returns details of all errors in a data file imported using Bulk API, whose batch ID is .\n\nYou can check for errors by querying the\n\nBackgroundOperationResult\n\nobject. For example, this query returns details of all\n    errors in a data file imported using Bulk API, whose batch ID is\n\n751xx000000006OAAQ\n\nSELECT CreatedbyId, CreatedDate, Id, Message, MessageType, ParentId FROM BackgroundOperationResult WHERE ParentId = “751xx000000006OAAQ”"
+}

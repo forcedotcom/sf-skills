@@ -1,0 +1,160 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SlaProcess - Data API",
+  "description": "Represents an entitlement process associated with an Entitlement. This object is available in API version 19.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BusinessHoursId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the BusinessHours associated with the entitlement. Must be a valid business hours ID.",
+      "required": true
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Nillable",
+      "description": "A description of the entitlement process."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the entitlement process is active (true) or not (false)."
+    },
+    "IsVersionDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the entitlement process is the default version (true) or not (false). This field is available in API version 28.0 and later in organizations that have entitlement versioning enabled."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the SlaProcess was last viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, idLookup",
+      "description": "The name of the entitlement process."
+    },
+    "NameNorm": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The read-only value for the unique name of the entitlement process or the entitlement process version. If entitlement versioning is enabled, this value is automatically generated for each version of an entitlement process in this form: process name+_v + x, where x is the version number (for example, “gold_support_v2”). If entitlement versioning isn’t enabled, this value is the same as Name. This field is available in API version 28.0 and later."
+    },
+    "SObjectType": {
+      "type": "picklist",
+      "properties": "Restricted picklist, Filter, Group, Sort",
+      "description": "The type of records that the entitlement process can run on. Its values are: Case Work Order An entitlement process runs only on records that match its type. For example, a Case entitlement process that’s applied to an entitlement runs only on cases associated with the entitlement, not on work orders. As a best practice, therefore, manage customers’ work orders and cases on separate entitlements.The field label in the user interface is Entitlement Process Type."
+    },
+    "StartDateField": {
+      "type": "picklist",
+      "properties": "Filter, Restricted picklist",
+      "description": "The criteria for cases to enter the entitlement process. Cases can enter the process based on: The creation date on a case A custom date/time field on a case"
+    },
+    "VersionMaster": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Identifies the sequence of versions to which this entitlement process belongs. This field’s contents can be any value as long as it is identical among all versions of the entitlement process. This field is available in API version 28.0 and later in organizations that have entitlement versioning enabled."
+    },
+    "VersionNotes": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The description of the entitlement process version. This field is available in API version 28.0 and later in organizations that have entitlement versioning enabled."
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version number of the entitlement process. Must be 1 or greater. This field is available in API version 28.0 and later in organizations that have entitlement versioning enabled."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only Salesforce admin users, users with access to the Case, Entitlement, or Work Order objects, and users with the View Setup and Configuration permission can access this object.",
+  "usage": "Use this object to query entitlement processes on entitlements.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"SlaProcess\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"BusinessHours\" nillable=\"true\" minOccurs=\"0\" type=\"ens:BusinessHours\"/>\n        <element name=\"BusinessHoursId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EntityMilestones\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NameNorm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SobjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartDateField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "BusinessHoursId": {
+      "field_label": "Business Hours ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Entitlement Process ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Entitlement Process Name",
+      "type": "string",
+      "length": "120"
+    },
+    "NameNorm": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "240"
+    },
+    "SobjectType": {
+      "field_label": "Entitlement Process Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StartDateField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

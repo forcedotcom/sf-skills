@@ -1,0 +1,160 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "External OData Callout Event Type - Data API",
+  "description": "External OData Callout events represent external data callouts via the OData 2.0 and OData 4.0 adapters for Salesforce Connect. This event type is available in the EventLogFile object in API version 40.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "possible_values",
+    "example",
+    "examples"
+  ],
+  "fields": {
+    "ACTION": {
+      "type": "String",
+      "description": "Action performed by the callout.",
+      "possible_values": "query upsert delete"
+    },
+    "BYTES": {
+      "type": "Number",
+      "description": "Size of the result set in bytes."
+    },
+    "ENTITY": {
+      "type": "String",
+      "description": "Name of the external object being accessed.",
+      "example": "Order"
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "Type of event. Value is always ExternalODataCallout."
+    },
+    "EXECUTE_MS": {
+      "type": "Number",
+      "description": "How long it took (in milliseconds) for Salesforce to prepare and execute the query. Available in API version 42.0 and later.",
+      "example": "21"
+    },
+    "EXPAND": {
+      "type": "String",
+      "description": "Reserved for future use."
+    },
+    "FETCH_MS": {
+      "type": "Number",
+      "description": "How long it took (in milliseconds) to retrieve the query results from the external system. Available in API version 42.0 and later.",
+      "example": "127"
+    },
+    "FILTER": {
+      "type": "Text",
+      "description": "Field expressions to filter which rows to return. Corresponds to WHERE in SOQL queries and $filter in OData queries.",
+      "example": "CustomerID eq 12345"
+    },
+    "LIBRARY": {
+      "type": "String",
+      "description": "Reserved for future use."
+    },
+    "LIMIT": {
+      "type": "Number",
+      "description": "Maximum number of rows to return for a query. Corresponds to LIMIT in SOQL queries and $top in OData queries.",
+      "example": "200"
+    },
+    "MESSAGE": {
+      "type": "String",
+      "description": "Error or warning message associated with the failed call.",
+      "example": "The OData query result was too large, so the external data didn’t load."
+    },
+    "NEXT_LINK": {
+      "type": "String",
+      "description": "OData next link that the callout used to request a subsequent page of rows. A next link is provided in a previous response from the OData producer when the response includes only part of the result set.Available in API version 42.0 and later. However, this field isn’t supported for the OData 2.0 adapter on orgs created before Spring ’18.",
+      "example": "http://services.example.org/Warehouse.svc/Orders?$count=true&$select=CustomerID,OrderID,RequiredDate,ShippedDate&$top=301&$skiptoken=10447"
+    },
+    "OFFSET": {
+      "type": "Number",
+      "description": "Number of rows to skip when paging through a result set.Corresponds to OFFSET in SOQL queries and $skip in OData queries.",
+      "example": "10"
+    },
+    "ORDERBY": {
+      "type": "String",
+      "description": "Field or column to use for sorting query results, and whether to sort the results in ascending (default) or descending order. Corresponds to ORDER BY in SOQL queries and $orderby in OData queries.",
+      "examples": "ShipName ShipName desc"
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "15-character ID of the organization.",
+      "example": "00D000000000123"
+    },
+    "PARENT_CALLOUT": {
+      "type": "String",
+      "description": "If the callout requested a subsequent page of rows, this field identifies the initial callout whose request resulted in the multi-page result set.Available in API version 42.0 and later. However, this field isn’t supported for the OData 2.0 adapter on orgs created before Spring ’18.",
+      "example": "4EoZtuBzzRIXSk-ysRdf1F-1"
+    },
+    "PROVIDER_TYPE": {
+      "type": "String",
+      "description": "Whether the OData 2.0 or OData 4.0 adapter made the callout.",
+      "possible_values": "OData—OData 2.0 adapter OData4—OData 4.0 adapter"
+    },
+    "RATE_LIMIT_USAGE_PERCENT": {
+      "type": "Number",
+      "description": "Consumed percentage of the org’s limit of OData callouts per hour.",
+      "example": "2.5—2.5% of the hourly callout limit has been consumed"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "Unique ID of a transaction. A transaction can contain one or more events. All events in a transaction have the same REQUEST_ID.",
+      "example": "4A13-HSKv3CKs-0FKfceaV"
+    },
+    "REQUESTS": {
+      "type": "Number",
+      "description": "Reserved for future use."
+    },
+    "ROWS": {
+      "type": "Number",
+      "description": "Total number of records in the result set. Available in API version 42.0 and later.",
+      "example": "830"
+    },
+    "ROWS_FETCHED": {
+      "type": "Number",
+      "description": "Number of records fetched by the callout. The records fetched by a callout can be a subset of a large result set.Available in API version 42.0 and later. However, this field isn’t supported for the OData 2.0 adapter on orgs created before Spring ’18.",
+      "example": "200"
+    },
+    "SEARCH": {
+      "type": "String",
+      "description": "Search query string. Corresponds to condition expressions in SOSL.",
+      "example": "contains(CustomerID,'10248') eq true or contains(ShipName,'10248') eq true"
+    },
+    "SELECT": {
+      "type": "String",
+      "description": "Comma-separated list of fields being queried. Corresponds to SELECT in SOQL queries and $select in OData queries.",
+      "example": "CustomerID,OrderDate,OrderID,ShipCity,ShipCountry"
+    },
+    "STATUS": {
+      "type": "Boolean",
+      "description": "Whether the query was successful.",
+      "possible_values": "1—Success 0—Failed"
+    },
+    "THROUGHPUT": {
+      "type": "Number",
+      "description": "Number of records retrieved in one second.Available in API version 42.0 and later. However, this field isn’t supported for the OData 2.0 adapter on orgs created before Spring ’18.",
+      "example": "3025.67"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "TOTAL_MS": {
+      "type": "Number",
+      "description": "How long it took (in milliseconds) to prepare and execute the query and to retrieve the query results."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "15-character ID of the user accessing the external system.",
+      "example": "00530000009M943"
+    }
+  }
+}

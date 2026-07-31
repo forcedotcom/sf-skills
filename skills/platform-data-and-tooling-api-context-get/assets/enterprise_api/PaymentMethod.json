@@ -1,0 +1,280 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PaymentMethod - Data API",
+  "description": "Represents the method that a buyer uses to compensate the seller of a good or service. Common payment methods include cash, checks, credit or debit cards, money orders, bank transfers, and online payment services. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The account entity linked to this payment method. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Users can add comments to provide additional details about a record. Maximum of 1000 characters."
+    },
+    "CompanyName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Company name for this payment method. Part of the payment method’s address."
+    },
+    "ImplementorType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Shows the type of payment method."
+    },
+    "IsAutoPayEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the payment method can be used for recurring payments (True) or not (False). The default value is False. This field is available in API v55.0 and later. For orgs that upgraded from v54.0, you must add this field to the Payment Method page layout in the UI. It isn't automatically added."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "A unique number assigned to the payment method. Numbers start at 1000 and are read only, but administrators can change the format."
+    },
+    "NickName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "User-defined nickname for this payment method."
+    },
+    "PaymentMethodAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Full address related to the alternative payment method. For more information about address fields, see Address Compound Fields."
+    },
+    "PaymentMethodCity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Payment method address details."
+    },
+    "PaymentMethodCountry": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Payment method address details."
+    },
+    "PaymentMethodDetails": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Optional information about the payment method type. This field is available in API version 57.0 and later."
+    },
+    "PaymentMethodGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Accuracy level of the geocode for the payment method address. An accuracy level contains information about the location of a latitude and longitude. For more information about geolocation fields, see Geolocation Compound Field. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "PaymentMethodLatitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Latitude of the payment method address. Used with the PaymentMethodLongitude to specify the precise geolocation of the address. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "PaymentMethodLongitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Longitude of the payment method address. Used with the PaymentMethodLatitude to specify the precise geolocation of the address. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "PaymentMethodPostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Part of the address for this payment method."
+    },
+    "PaymentMethodState": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Payment method address details."
+    },
+    "PaymentMethodStreet": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Payment method address details."
+    },
+    "PaymentMethodSubType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "More information about the payment method. For example, if the PaymentMethodType is Visa, this field can be a digital wallet. This field is available in API version 57.0 and later."
+    },
+    "PaymentMethodType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The payment method used for the transaction, such as Visa, Mastercard, EPS, SepaDebit, UnionPay, and Klarna. Method types can also be direct debit payments like ACH, Becs, and BACS. This field is available in API version 57.0 and later."
+    },
+    "SavedPaymentMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the saved payment method record.",
+      "relationship_name": "SavedPaymentMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "SavedPaymentMethod"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The state of the payment method. Possible values are: Active—The Payments platform can use the payment method to make payments. Canceled—The Payments platform can no longer use the payment method to make payments. InActive—The Payments platform currently can’t use the payment method to make payments. Admins can change this value to Active when needed."
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects with the API, your org must have one or more of these licenses: Salesforce Payments, Salesforce Order Management, B2B Commerce, or D2C Commerce. Salesforce Payments objects are available only in Lightning Experience.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PaymentMethod\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CompanyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ImplementorType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsAutoPayEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NickName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentAuthorizations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PaymentMethodAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"PaymentMethodCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethodCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethodDetails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethodGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethodLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"PaymentMethodLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"PaymentMethodPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethodState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethodStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethodSubType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentMethodType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Payments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Refunds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "CompanyName": {
+      "field_label": "Company Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "__MISSING LABEL__ PropertyFile - val CreatedDate not found in section udd_PaymentMethod",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Payment Method ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImplementorType": {
+      "field_label": "Implementor Type",
+      "type": "string",
+      "length": "255"
+    },
+    "IsAutoPayEnabled": {
+      "field_label": "Auto Pay",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "__MISSING LABEL__ PropertyFile - val IsDeleted not found in section udd_PaymentMethod",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Payment Method Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NickName": {
+      "field_label": "Nickname",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentMethodAddress": {
+      "field_label": "Payment Method Address",
+      "type": "address"
+    },
+    "PaymentMethodCity": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "PaymentMethodCountry": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "PaymentMethodDetails": {
+      "field_label": "Payment Method Details",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentMethodGeocodeAccuracy": {
+      "field_label": "Geo Code Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PaymentMethodLatitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "PaymentMethodLongitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "PaymentMethodPostalCode": {
+      "field_label": "Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "PaymentMethodState": {
+      "field_label": "State",
+      "type": "string",
+      "length": "80"
+    },
+    "PaymentMethodStreet": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "PaymentMethodSubType": {
+      "field_label": "Payment Method Sub Type",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentMethodType": {
+      "field_label": "Payment Method Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SavedPaymentMethodId": {
+      "field_label": "Saved Payment Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "__MISSING LABEL__ PropertyFile - val SystemModstamp not found in section udd_PaymentMethod",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

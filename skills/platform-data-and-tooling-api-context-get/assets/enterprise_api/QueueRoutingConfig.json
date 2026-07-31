@@ -1,0 +1,186 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "QueueRoutingConfig - Data API",
+  "description": "Represents the settings that determine how work items are routed to agents. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CapacityPercentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage of an agent’s capacity for work items that’s consumed by a specific type of work item from this service channel.Voice calls must have a capacity percentage of 100. If an agent receives a voice call, the agent won’t receive new work items until the call ends, because at that point the agent’s capacity will have reached 100%. This field is available in API version 33.0 and later."
+    },
+    "CapacityWeight": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The amount of an agent’s capacity for work items that’s consumed by a work item from this service channel.For example, if an agent has a capacity of 6, and cases are assigned a capacity weight of 2, an agent can be assigned up to 3 cases before the agent is at capacity and can’t receive new work items. Voice calls must use the entire capacity weight. This field is available in API version 33.0 and later."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object's name in a managed package and the changes are reflected in a subscriber's organization. When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "DropAdditionalSkillsTimeout": {
+      "type": "int",
+      "properties": "Create, Filter, Group Nillable, Sort, Update",
+      "description": "The number of seconds to wait before a skill marked as Additional Skill is dropped from Omni-Channel routing. The case is then routed to the best-matched agent even if they don’t have all the skills."
+    },
+    "IsAttributeBased": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this routing is attribute-based. Available in API version 45.0 and later."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the presence status."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label of the presence status."
+    },
+    "OverflowAssigneeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user or queue that’s set as the Overflow Assignee."
+    },
+    "PausedCapacityPercentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage of an agent’s capacity for work items that’s consumed by a paused work item from this service channel. The paused capacity feature is available with status-based capacity and Enhanced Omni-Channel only."
+    },
+    "PausedCapacityWeight": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The amount of an agent’s capacity for work items that’s consumed by a paused work item from this service channel. The paused capacity feature is available with status-based capacity and Enhanced Omni-Channel only."
+    },
+    "PushTimeout": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of seconds set for push timeout. 0 is returned when push timeout isn’t enabled. Available in API version 36.0 and later."
+    },
+    "RoutingModel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The routing type that determines how work items are routed (pushed) to agents. Possible values are Least Active and Most Available."
+    },
+    "RoutingPriority": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The priority in which work items from the service channels that are related to this routing configuration are routed to agents. Work items from routing configurations that have lower priority values (for example, 0) are routed to agents first."
+    },
+    "ServiceChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the service channel that’s associated with this configuration. This field is available in API version 32.0 and earlier."
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled. As of Spring ’20 and later, only authenticated internal and external users can access this object.\n\nTo access this object, Omni-Channel must be enabled.\n\nAs of Spring ’20 and later, only authenticated internal and external users can access this object.",
+  "field_reference": {
+    "CapacityPercentage": {
+      "field_label": "Percentage of Capacity",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "CapacityWeight": {
+      "field_label": "Units of Capacity",
+      "type": "double",
+      "precision": "10",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DropAdditionalSkillsTimeout": {
+      "field_label": "Drop Additional Skills Time-Out (seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Routing Configuration ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAttributeBased": {
+      "field_label": "Use with Skills-Based Routing Rules",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Routing Configuration Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OverflowAssigneeId": {
+      "field_label": "OverflowAssignee ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PushTimeout": {
+      "field_label": "Push Time-Out (seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "RoutingModel": {
+      "field_label": "Routing Model",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RoutingPriority": {
+      "field_label": "Routing Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PermissionSetLicenseAssign - Data API",
+  "description": "Represents the association between a User and a PermissionSetLicense. This object is available in API version 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssigneeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the User to assign the permission set license specified in PermissionSetLicenseId. This is a relationship field.",
+      "relationship_name": "Assignee",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "IsRevoked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Reserved for internal use. This field is available in API version 58.0 and later."
+    },
+    "LastCreatedByChangeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the user access change record related to this permission set license assignment. This field is available only if user access policies are enabled. This field is available in API version 58.0 and later. This field is a relationship field.",
+      "relationship_name": "LastCreatedByChange",
+      "relationship_type": "Lookup",
+      "refers_to": "UserAccessChange"
+    },
+    "LastDeletedByChangeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the user access change record related to this permission set license assignment being revoked. This field is available only if user access policies are enabled. This field is available in API version 58.0 and later. This field is a relationship field.",
+      "relationship_name": "LastCreatedByChange",
+      "relationship_type": "Lookup",
+      "refers_to": "UserAccessChange"
+    },
+    "PermissionSetLicenseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the permission set license the user is assigned to. This is a relationship field.",
+      "relationship_name": "PermissionSetLicense",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSetLicense"
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users who have one of these permissions can access this object:",
+  "usage": "Use the PermissionSetLicenseAssign object for querying permission set license assignments to find out which permission set licenses are assigned to which users. Because each user can be assigned to many permission set licenses, each PermissionSetLicenseAssign ID represents the association of a single user and single permission set license. You can also create a new permission set license assignment, or use delete to remove a permission set license that’s been assigned to a user. To update an assignment, delete an existing assignment and insert a new one.\n\nUse the PermissionSetLicenseAssign object for querying permission set license assignments to find out which permission set licenses are assigned to which users. Because each user can be assigned to many permission set licenses, each PermissionSetLicenseAssign ID represents the association of a single user and single permission set license.\n\nYou can also create a new permission set license assignment, or use delete to remove a permission set license that’s been assigned to a user. To update an assignment, delete an existing assignment and insert a new one.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PermissionSetLicenseAssign\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Assignee\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"AssigneeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PermissionSetLicense\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSetLicense\"/>\n        <element name=\"PermissionSetLicenseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AssigneeId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Permission Set License Assignment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PermissionSetLicenseId": {
+      "field_label": "Permission Set License ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "Date Assigned",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

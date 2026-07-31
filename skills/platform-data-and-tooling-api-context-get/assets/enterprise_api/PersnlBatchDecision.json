@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "PersnlBatchDecision - Data API",
+  "description": "Represents a batch personalization that delivers personalization decisions (content or recommendations) to a customer segment. Available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivationTriggerType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of trigger that activates the batch personalization decision. The default value is None and possible values are: Automatic—Automatically On Job Completion None"
+    },
+    "BatchStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the batch personalization decision. The default value is Active and possible values are: Active Error Paused"
+    },
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the data space from where batch personalization decision resources originate.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Text description of the batch personalization decision."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique name of the batch personalization decision in the API."
+    },
+    "ErrorCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The issue that’s causing an error. The default value is None and possible values are: ConfigurationMissingError—A required configuration setting is missing. DpcJobError—A problem occurred during processing. Internal Error—An internal error occurred during processing. ModelValidationError—The model is invalid. None"
+    },
+    "RefreshMode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "How the batch personalization data is refreshed. The default value is FULL_REFRESH and possible values are: FULL_REFRESH—Generates new decisions for all members in a segment. INCREMENTAL—Generates decisions only for the new members added to the segment after the last run."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the batch personalization decision.",
+      "required": true
+    }
+  },
+  "usage": "PersnlBatchDecision provides details about refresh modes, model versions, and refresh states for specific market segments."
+}

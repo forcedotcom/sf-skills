@@ -82,7 +82,7 @@ Use `ROUTES.*` constants from `@/utils/authenticationConfig` for auth-related pa
 
 - **Local state:** `useState`, `useReducer`, `useRef` inside the page component
 - **Shared or complex state:** extract to `src/hooks/` with a `use` prefix (e.g., `useContacts`)
-- **Data fetching:** any Salesforce record access — GraphQL or REST — goes through the `@salesforce/platform-sdk` Data SDK (`createDataSDK()`, then `sdk.graphql`/`sdk.fetch`); consult the `experience-ui-bundle-salesforce-data-access` skill before writing this code, do not call `fetch`/`axios` directly or invent a different data API. Place client/query modules in `src/api/`; place shared data logic (loading, error, caching state) in `src/hooks/`
+- **Data fetching:** any Salesforce record access — GraphQL or REST — goes through the `@salesforce/platform-sdk` Data SDK (`createDataSDK()`, then `sdk.graphql`/`sdk.fetch`). **You MUST invoke the `experience-ui-bundle-salesforce-data-access` skill before writing this code** — do not call `fetch`/`axios` directly or invent a different data API, even if the data need is small or implied only by a clarifying-question answer. Place client/query modules in `src/api/`; place shared data logic (loading, error, caching state) in `src/hooks/`
 - **Auth context:** `useAuth()` from `@/context/AuthContext` when current user is needed — only valid under `AuthProvider`
 
 ### Confirm — Page

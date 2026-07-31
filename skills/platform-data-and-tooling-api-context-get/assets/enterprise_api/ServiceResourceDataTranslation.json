@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "ServiceResourceDataTranslation - Data API",
+  "description": "Represents the translated values of the data stored within a ServiceResource record’s fields. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The translated value for the ServiceResource description."
+    },
+    "IsOutOfDate": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the translation is out-of-date (true) or current (false). A translation is out-of-date if the parent ServiceResource record is updated after the last translation was filed."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The language for these translated values."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The translated value for the ServiceResource record name. This field is required to translate the text in other fields."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The record ID of the ServiceResource associated with the data that is being translated."
+    }
+  },
+  "usage": "Use this object to translate the data stored in a ServiceResource record into the different languages supported by Salesforce. If data translation is enabled for custom fields on the ServiceResource object, additional ServiceResourceDataTranslation fields exist for translating the data contained within those fields. You can’t use a custom external id field in an upsert call for a ServiceResourceDataTranslation object.\n\nUse this object to translate the data stored in a ServiceResource record into the different languages supported by Salesforce. If data translation is enabled for custom fields on the ServiceResource object, additional ServiceResourceDataTranslation fields exist for translating the data contained within those fields.\n\nYou can’t use a custom external id field in an upsert call for a ServiceResourceDataTranslation object."
+}

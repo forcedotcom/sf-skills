@@ -1,0 +1,117 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "PersonalizationPoint - Data API",
+  "description": "Represents a specific touch point in an experience where a personalization decision can be made. It connects a data space, profile data graph, personalization type, and response template to deliver personalized content at that time in a customer journey. Available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AbnExperimentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to a related experiment.",
+      "relationship_name": "AbnExperiment",
+      "refers_to": "AbnExperiment"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Three letter ISO currency codes for supported currencies. The default value is USD. This is an optional field."
+    },
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the data space where a personalization point's resources originate. This is a required field.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace"
+    },
+    "Description": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Text description of the personalization point. This is an optional field."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "System or user-generated API name for the personalization point. This is a required field."
+    },
+    "IsAuthenticationRequired": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the personalization point must use authenticated endpoints for real-time data capture and recommendation requests. When set to true, all interactions with Data Cloud are secured and verified.The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time the personalized point was referenced by another resource."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time a user viewed the personalization point."
+    },
+    "MaxItemsCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the maximum number of recommendations to return."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The text label that identifies the personalization point."
+    },
+    "PersonalizationSchemaEnum": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Picklist value that indicates the type of personalization schema, which is related to where a personalization decision is created. The accepted values are DecisionDefined ExperienceVariation FlowPath"
+    },
+    "PersonalizationSchemaId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to the schema that’s related to the personalization point.",
+      "relationship_name": "PersonalizationSchema",
+      "refers_to": "PersonalizationSchema"
+    },
+    "ProfileDataGraphId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the profile data graph that’s used with the personalization point.",
+      "relationship_name": "ProfileDataGraph",
+      "refers_to": "DataGraph"
+    },
+    "RootPersonalizationPoint": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the personalization point from where data is gathered."
+    },
+    "Source": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the personalization point from where data is gathered."
+    },
+    "SourceRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to the specific record that contains the personalization point.",
+      "relationship_name": "SourceRecord",
+      "refers_to": "FlowRecordElement, ManagedContent"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the state of the personalization point. The default value is Processing, and the accepted values are: Active CreateError—Error DeleteError—Error Deleting EditError—Error Processing"
+    }
+  },
+  "usage": "Use this object to define a specific touch point in an experience where personalization decisions can be made. For example, a personalization point can be an banner on a webpage. After setting up data space, profile data graph, personalization type, and schema, you can add decisions and targeting rules to the personalization point to tailor the user experience.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PersonalizationPointChangeEvent**: Change events are available for the object.\n- **PersonalizationPointFeed**: Feed tracking is available for the object.\n- **PersonalizationPointHistory**: History is available for tracked fields of the object.\n- **PersonalizationPointOwnerSharingRule**: Sharing rules are available for the object.\n- **PersonalizationPointShare**: Sharing is available for the object."
+}

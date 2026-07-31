@@ -1,0 +1,188 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "DigitalSignature - Data API",
+  "description": "Represents a signature captured on a service report in field service.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DigitalSignatureNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number identifying the signature."
+    },
+    "DocumentBody": {
+      "type": "base64",
+      "properties": "Create",
+      "description": "The captured signature image."
+    },
+    "DocumentContentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The data type of the captured signature. Possible values are: audio/acc audio/amr audio/ogg video/3gpp2 video/3gpp image/avif text/calendar audio/x-caf image/webp"
+    },
+    "DocumentLength": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The length of the captured signature."
+    },
+    "DocumentName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The name of the captured signature image."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the service appointment, work order, or work order line item that the service report is generated for. This is a polymorphic relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "AuthorizationFormConsent, Order, ServiceAppointment, WorkOrder, WorkOrderLineItem"
+    },
+    "Place": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The place where the report was signed."
+    },
+    "SignatureType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The role of the person signing the service report. Your org comes with one signature type, Default. A service report template can only contain one signature per type. If you plan to collect multiple signatures on service reports, create additional values for the Signature Type field. Create at least one value for every role that might need to sign a service report. For example, Technician, Customer, Supervisor, or Supplier. If some service reports will be signed by multiple people in one role—for example, all technicians present at an appointment—create numbered types: Technician 1, Technician 2, and so forth. Note: You can create up to 1,000 signature types. You can’t delete signature types, but you can deactivate them so they can’t be used in service report templates. When you deactivate a type, it still appears on service report templates that used it, but you can’t use it on new service report templates."
+    },
+    "SignedBy": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The name of the person signing."
+    },
+    "SignedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date and time of the signing."
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "usage": "Add signature blocks to service report templates to determine which signatures need to be gathered on reports that use the template. Service report templates can contain up to 20 signatures, and each signature must use a different Signature Type. For example, create a standard service report template that contains a customer signature and a technician signature. To learn more about digital signatures, see Guidelines for Using Signatures on Service Reports.\n\nAdd signature blocks to service report templates to determine which signatures need to be gathered on reports that use the template. Service report templates can contain up to 20 signatures, and each signature must use a different Signature Type. For example, create a standard service report template that contains a customer signature and a technician signature.\n\nTo learn more about digital signatures, see Guidelines for Using Signatures on Service Reports.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **DigitalSignatureChangeEvent (Available in API version 57.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"DigitalSignature\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeviceOs\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeviceType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DigitalSignatureNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DocumentBody\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <element name=\"DocumentContentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DocumentLength\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DocumentName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Place\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SignatureType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SignedBy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SignedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WebBrowser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeviceOs": {
+      "field_label": "Device OS",
+      "type": "string",
+      "length": "255"
+    },
+    "DeviceType": {
+      "field_label": "Device Type",
+      "type": "string",
+      "length": "255"
+    },
+    "DigitalSignatureNumber": {
+      "field_label": "Signature Number",
+      "type": "string",
+      "length": "255"
+    },
+    "DocumentBody": {
+      "field_label": "Digital Signature Body",
+      "type": "base64"
+    },
+    "DocumentContentType": {
+      "field_label": "Digital Signature Content Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DocumentLength": {
+      "field_label": "Digital Signature Length",
+      "type": "int",
+      "digits": "9"
+    },
+    "DocumentName": {
+      "field_label": "Signature Document Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Digital Signature ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Place": {
+      "field_label": "Place",
+      "type": "string",
+      "length": "255"
+    },
+    "SignatureType": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SignedBy": {
+      "field_label": "Signed By",
+      "type": "string",
+      "length": "255"
+    },
+    "SignedDate": {
+      "field_label": "Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WebBrowser": {
+      "field_label": "Web Browser",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

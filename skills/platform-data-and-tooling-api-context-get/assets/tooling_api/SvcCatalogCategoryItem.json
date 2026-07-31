@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SvcCatalogCategoryItem - Tooling API",
+  "description": "Represents the assignment of this service to a category within the Service Catalog. This object is available in API version 53.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsPrimaryCategory": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines if the catalog category (SvcCatalogCategory) is the primary category for this catalog item. EachSvcCatalogItemDef component can only have one category with this attribute set to true. The default value is 'false'."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The position of the catalog item relative to other catalog items in the catalog category."
+    },
+    "SvcCatalogCategoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The catalog category that the catalog item is assigned to. This is a relationship field.",
+      "relationship_name": "SvcCatalogCategory",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogCategory"
+    },
+    "SvcCatalogItemDefId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Reference to the SvcCatalogItemDef. This is a relationship field.",
+      "relationship_name": "SvcCatalogItemDef",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogItemDef"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SvcCatalogCategoryItem\">\n  <xsd:sequence>\n    <xsd:element name=\"isPrimaryCategory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"sortOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"svcCatalogCategory\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

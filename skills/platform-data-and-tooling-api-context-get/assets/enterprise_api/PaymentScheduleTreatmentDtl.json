@@ -1,0 +1,193 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentScheduleTreatmentDtl - Data API",
+  "description": "Contains configuration information for the payment schedule treatment detail. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DateOffset": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A number equal to or less than 0. The date offset is subtracted from the processing date reference to determine the processing date. For example, suppose that the invoice due date is 01/17/2022 and offset is -7. In this case, the payment schedule item is processed by the jobs that run on or before 01/10/2022."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The user-entered description of the payment schedule treatment detail."
+    },
+    "InstallmentPaymentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates how the payment amount is divided into multiple payments. Possible values are: Percentage"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "PaymentMethodSelectionType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates how the payment method is specified. Possible values are: Manual—the payment method is entered by a user MostRecentAutopay—the payment method is the most recent automatic payment method used"
+    },
+    "PaymentRunMatchingValue": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Possible values are: AMER APAC EMEA"
+    },
+    "PaymentScheduleTreatmentDetailNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique identifier for this payment schedule treatment detail."
+    },
+    "PaymentScheduleTreatmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the related payment schedule treatment. This field is a relationship field.",
+      "relationship_name": "PaymentScheduleTreatment",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentScheduleTreatment"
+    },
+    "Percentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the percentage of the source amount that is used to create the payment schedule."
+    },
+    "ProcessingDateReference": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates the source of the reference date. Possible values are: InvoiceDueDate—use the invoice’s due date as the date reference UserInputDate—User Input DateAvailable in API version 65.0 and later with Financial Services and Automotive Cloud."
+    },
+    "PymtSchdDistributionMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The distribution method that contains the information on how to create the payment schedule items. This field is a relationship field.",
+      "relationship_name": "PymtSchdDistributionMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "PymtSchdDistributionMethod"
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DateOffset": {
+      "field_label": "Date Offset",
+      "type": "int",
+      "digits": "9"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "Id": {
+      "field_label": "Payment Schedule Treatment Detail ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InstallmentPaymentType": {
+      "field_label": "Installment Payment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "PaymentMethodSelectionType": {
+      "field_label": "Payment Method Selection Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PaymentRunMatchingValue": {
+      "field_label": "Payment Run Matching Value",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PaymentScheduleTreatmentDetailNumber": {
+      "field_label": "Payment Schedule Treatment Detail Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentScheduleTreatmentId": {
+      "field_label": "Payment Schedule Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Percentage": {
+      "field_label": "Percentage",
+      "type": "percent",
+      "precision": "3",
+      "scale": "0"
+    },
+    "ProcessingDateReference": {
+      "field_label": "Processing Date Reference",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PymtSchdDistributionMethodId": {
+      "field_label": "Payment Schedule Distribution Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

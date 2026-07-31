@@ -1,0 +1,280 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Entitlement - Data API",
+  "description": "Represents the customer support an account or contact is eligible to receive. This object is available in API version 18.0 and later. Entitlements may be based on an asset, product, or service contract.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Account associated with the entitlement."
+    },
+    "AssetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Asset associated with the entitlement. Must be a valid asset ID.",
+      "required": true
+    },
+    "AssetWarrantyID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The identifier of the asset warranty record. Must be a valid asset warranty ID. AssetWarranty is available only with Field Service."
+    },
+    "BusinessHoursId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the BusinessHours associated with the entitlement. Must be a valid business hours ID.",
+      "required": true
+    },
+    "CasesPerEntitlement": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of cases the entitlement supports. This field is only available if IsPerIncident is true."
+    },
+    "ContractLineItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the ContractLineItem associated with the entitlement. Must be a valid ID.",
+      "required": true
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The last day the entitlement is in effect."
+    },
+    "IsPerIncident": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Update",
+      "description": "Indicates whether the entitlement is limited to supporting a specific number of cases (true) or not (false)."
+    },
+    "LastReferencedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "LocationID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Location associated with the entitlement. Must be a valid location ID."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Update",
+      "description": "Name of the entitlement.",
+      "required": true
+    },
+    "SvcApptBookingWindowsId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Nillable, Update",
+      "description": "The operating hours that the entitlement’s work orders should respect. The label in the user interface is Operating Hours. Available only if Field Service is enabled."
+    },
+    "RemainingCases": {
+      "type": "int",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The number of cases the entitlement can support. This field decreases in value by one each time a case is created with the entitlement. This field is only available if IsPerIncident is selected."
+    },
+    "RemainingWorkOrders": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of agreed work orders remaining to be created."
+    },
+    "ServiceContractId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "ID of the ServiceContract associated with the entitlement. Must be a valid ID.",
+      "required": true
+    },
+    "SlaProcessId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "ID of the SlaProcess associated with the entitlement. This field is available in version 19.0 and later."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The first date the entitlement is in effect."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Nillable",
+      "description": "Status of the entitlement, such as Expired."
+    },
+    "SvcApptBookingWindows": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Nillable, Update",
+      "description": "The operating hours of the entitlement. This field is visible only if Field Service is enabled."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Update",
+      "description": "The type of entitlement, such as Web or phone support."
+    },
+    "WorkOrdersPerEntitlement": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Total number of work orders available for this entitlement."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **EntitlementChangeEvent (API version 44.0)**: Change events are available for the object.\n- **EntitlementFeed (API version 23.0)**: Feed tracking is available for the object.\n- **EntitlementHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"Entitlement\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Asset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"AssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AssetWarranty\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AssetWarranty\"/>\n        <element name=\"AssetWarrantyId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BusinessHours\" nillable=\"true\" minOccurs=\"0\" type=\"ens:BusinessHours\"/>\n        <element name=\"BusinessHoursId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Cases\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CasesPerEntitlement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContractLineItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContractLineItem\"/>\n        <element name=\"ContractLineItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"EntitlementContacts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPerIncident\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Location\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"LocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RemainingCases\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RemainingWorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ServiceContract\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceContract\"/>\n        <element name=\"ServiceContractId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SlaProcess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:SlaProcess\"/>\n        <element name=\"SlaProcessId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SvcApptBookingWindows\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OperatingHours\"/>\n        <element name=\"SvcApptBookingWindowsId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkOrdersPerEntitlement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssetWarrantyId": {
+      "field_label": "Asset Warranty ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BusinessHoursId": {
+      "field_label": "Business Hours ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CasesPerEntitlement": {
+      "field_label": "Cases Per Entitlement",
+      "type": "int",
+      "digits": "9"
+    },
+    "ContractLineItemId": {
+      "field_label": "Contract Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Entitlement ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPerIncident": {
+      "field_label": "Per Incident",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LocationId": {
+      "field_label": "Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Entitlement Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RemainingCases": {
+      "field_label": "Remaining Cases",
+      "type": "int",
+      "digits": "9"
+    },
+    "RemainingWorkOrders": {
+      "field_label": "Remaining Work Orders",
+      "type": "int",
+      "digits": "9"
+    },
+    "ServiceContractId": {
+      "field_label": "Service Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SlaProcessId": {
+      "field_label": "Entitlement Process ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SvcApptBookingWindowsId": {
+      "field_label": "Operating Hour ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "WorkOrdersPerEntitlement": {
+      "field_label": "Work Orders Per Entitlement",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

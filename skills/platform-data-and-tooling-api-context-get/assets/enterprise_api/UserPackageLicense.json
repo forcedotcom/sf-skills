@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserPackageLicense - Data API",
+  "description": "Represents a license for an installed managed package, assigned to a specific user. This object is available in API version 31.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsRevoked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Reserved for internal use. This field is available in API version 58.0 and later."
+    },
+    "LastCreatedByChangeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the user access change record related to this managed package license assignment. This field is available only if user access policies are enabled. This field is available in API version 58.0 and later. This field is a relationship field.",
+      "relationship_name": "LastCreatedByChange",
+      "relationship_type": "Lookup",
+      "refers_to": "UserAccessChange"
+    },
+    "LastDeletedByChangeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the user access change record related to this managed package license assignment being revoked. This field is available only if user access policies are enabled. This field is available in API version 58.0 and later. This field is a relationship field.",
+      "relationship_name": "LastCreatedByChange",
+      "relationship_type": "Lookup",
+      "refers_to": "UserAccessChange"
+    },
+    "PackageLicenseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The 18-character Globally Unique ID (GUID) that identifies the package license This is a relationship field.",
+      "relationship_name": "PackageLicense",
+      "relationship_type": "Lookup",
+      "refers_to": "PackageLicense"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The User ID of the user licensed to use this package"
+    }
+  },
+  "usage": "Use this object, in conjunction with PackageLicense, to provide users access to a managed package installed in your organization.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserPackageLicense\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PackageLicense\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PackageLicense\"/>\n        <element name=\"PackageLicenseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "User Package License ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PackageLicenseId": {
+      "field_label": "Package License ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "Assigned User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

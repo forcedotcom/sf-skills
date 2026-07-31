@@ -1,0 +1,33 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "HeapDump - Tooling API",
+  "description": "A complex type that represents a heap dump in an ApexExecutionOverlayResult object. Available from API version 28.0 or later.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "className": {
+      "type": "string",
+      "description": "The name of the Apex class or trigger."
+    },
+    "extents": {
+      "type": "array of TypeExtent",
+      "description": "TypeExtent includes the following fields: collectionType count definition (array of AttributeDefinition) extent (array of HeapAddress) totalSize typeName"
+    },
+    "heapDumpDate": {
+      "type": "dateTime",
+      "description": "The date and time that the heap dump was captured."
+    },
+    "namespace": {
+      "type": "string",
+      "description": "The namespace of the Apex class or trigger. Null if there is no namespace."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexExecutionOverlayResult\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ActionScript\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ActionScriptType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ApexResult\" minOccurs=\"0\" type=\"tns:ApexResult\" nillable=\"true\"/>\n        <xsd:element name=\"ClassName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"ExpirationDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"HeapDump\" minOccurs=\"0\" type=\"tns:HeapDump\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDumpingHeap\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Iteration\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Line\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Namespace\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"OverlayResultLength\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"RequestedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"RequestedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"SOQLResult\" minOccurs=\"0\" type=\"tns:SOQLResult\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"User\" minOccurs=\"0\" type=\"ens:sObject\" nillable=\"true\"/>\n        <xsd:element name=\"UserId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AttributeDefinition\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"HeapAddress\">\n  <xsd:sequence>\n    <xsd:element name=\"address\" type=\"xsd:string\"/>\n    <xsd:element name=\"isStatic\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"size\" type=\"xsd:int\"/>\n    <xsd:element name=\"symbols\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"tns:StateValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"HeapDump\">\n  <xsd:sequence>\n    <xsd:element name=\"className\" type=\"xsd:string\"/>\n    <xsd:element name=\"extents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:TypeExtent\"/>\n    <xsd:element name=\"heapDumpDate\" type=\"xsd:dateTime\"/>\n    <xsd:element name=\"namespace\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"StateValue\">\n  <xsd:sequence/>\n</xsd:complexType>\n<xsd:complexType name=\"TypeExtent\">\n  <xsd:sequence>\n    <xsd:element name=\"collectionType\" type=\"xsd:string\"/>\n    <xsd:element name=\"count\" type=\"xsd:int\"/>\n    <xsd:element name=\"definition\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AttributeDefinition\"/>\n    <xsd:element name=\"extent\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:HeapAddress\"/>\n    <xsd:element name=\"totalSize\" type=\"xsd:int\"/>\n    <xsd:element name=\"typeName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

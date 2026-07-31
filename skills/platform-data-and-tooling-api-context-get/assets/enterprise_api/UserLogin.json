@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserLogin - Data API",
+  "description": "Represents the settings that affect a user’s ability to log into an organization. To access this object, you need the UserPermissions.ManageUsers permission. This object is available in API version 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "IsFrozen": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the user account associated with this object is frozen. If a user's account is frozen, they can't log in, but their account isn't deactivated."
+    },
+    "IsPasswordLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the user account associated with this object is locked because of too many login failures. From the API, you can set this field to false, but not true. Note: If the Lockout effective period is set to Forever (must be reset by admin) in your org’s Password Policies Setup page, this field isn’t set to false."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the associated user account. This field can’t be updated."
+    }
+  },
+  "usage": "To freeze or unfreeze multiple users, use Data Loader.\n\nTo query for all frozen users in your\n        organization:\n\nSELECT Id, UserId\n\nFROM UserLogin\n\nWHERE IsFrozen = true",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserLogin\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"IsFrozen\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPasswordLocked\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Id": {
+      "field_label": "User Login ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsFrozen": {
+      "field_label": "Is Frozen",
+      "type": "boolean"
+    },
+    "IsPasswordLocked": {
+      "field_label": "Is Password Locked",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

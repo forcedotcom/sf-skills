@@ -1,0 +1,84 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "Package2 - Tooling API",
+  "description": "Represents a second-generation managed package or an unlocked package in a Dev Hub org. Values for all fields are visible to the subscriber. Available in API version 41.0 and later.",
+  "supported_soap_calls": "`create()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AppAnalyticsEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true AppExchange App Analytics can access package usage logs and subscriber snapshots. The default value is false."
+    },
+    "ContainerOptions": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Container options for the second-generation package. These options determine the upgrade and editability rules. The default value is Managed.Valid values include: Managed (developer-managed, subscriber-managed) Unlocked (developer-controlled, subscriber-editable)"
+    },
+    "ConvertedFromPackageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The package ID (starts with 033) for the first-generation managed package that was converted. This field is available in API version 64.0 and later. This field is a relationship field.",
+      "relationship_name": "ConvertedFromPackage",
+      "refers_to": "SubscriberPackage"
+    },
+    "DataCloudPackage": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "If true, this package contains Data 360 metadata. When creating a managed package with Data 360 metadata, you must isolate the Data 360 metadata from the other Salesforce metadata by creating a separate package that contains only Data 360 metadata. Then create a package dependency between your dedicated Data 360 package and any related packages. The default value is false."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Description of the package."
+    },
+    "IsDeprecated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether this package has been marked as deprecated (true) or not (false). The default value is false. If you set IsDeprecated to true for a package, the package and all of its child package versions are deprecated.If you set IsDeprecated to false for a package, the package and all of its child package versions are undeprecated. However, if IsDeprecated is explicitly set to true for a package version after its parent package is deprecated, the child remains deprecated even if you undeprecate its parent. If you set IsDeprecated to false for a package version whose parent package is deprecated, the package version’s IsDeprecated value remains true until its parent is undeprecated. Deprecated package versions that have been installed in subscriber orgs continue to function, but new installations of deprecated package versions are blocked."
+    },
+    "IsOrgDependent": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates whether the package depends on unpackaged metadata in the installation org (true) or not (false). This field only applies to unlocked packages. The default value is false. Available in API version 49.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the package. Unlike a typical developer name, this value is mutable and can contain special characters."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Namespace prefix that identifies the components of your package in the subscriber’s org."
+    },
+    "PackageErrorUsername": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email address for an active user in the Dev Hub org you want to receive email notification regarding package-related errors. You can set the field when creating a package and update it later."
+    },
+    "SubscriberPackageID": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Unique",
+      "description": "ID that identifies this package across all Salesforce instances (starts with 033).This value is case-sensitive and must be unique."
+    },
+    "WasTransferred": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the package was previously associated with a different Dev Hub org. For details, see: Transfer a Second-Generation Managed Package to a Different Dev Hub. This field is available in API version 57.0 and later. The default value is false."
+    }
+  }
+}

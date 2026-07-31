@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "WebstoreBuyerGroup - Data API",
+  "description": "Associates a webstore with a buyer group. Supports dynamically changing locales when buyers shop in orgs that are enabled for multiple languages and currencies. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BuyerGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the buyer group this record references. This field is a relationship field.",
+      "relationship_name": "BuyerGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "BuyerGroup",
+      "required": true
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate isn’t null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of this record."
+    },
+    "WebStoreId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the webstore. This field is a relationship field.",
+      "relationship_name": "WebStore",
+      "relationship_type": "Lookup",
+      "refers_to": "WebStore",
+      "required": true
+    }
+  },
+  "usage": "This object can support a localized buyer experience by associating a Market-enabled webstore with a buyer group, allowing shoppers to view their group entitlements, price books, and promotions in localized languages and currencies.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WebstoreBuyerGroupChangeEvent**: Change events are available for the object.\n- **WebstoreBuyerGroupFeed**: Feed tracking is available for the object.\n- **WebstoreBuyerGroupHistory**: History is available for tracked fields of the object.\n- **WebstoreBuyerGroupOwnerSharingRule**: Sharing rules are available for the object.\n- **WebstoreBuyerGroupShare**: Sharing is available for the object."
+}

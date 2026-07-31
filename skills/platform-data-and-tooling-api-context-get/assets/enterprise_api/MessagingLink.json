@@ -1,0 +1,112 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "MessagingLink - Data API",
+  "description": "Represents the link between a Messaging Channel and where it's shared. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EntityType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Possible values are: Account Case Contact CustomEntityDefinition—Custom Object Definition Lead Opportunity"
+    },
+    "MessagingChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The channel being shared. This is a relationship field.",
+      "relationship_name": "MessagingChannel",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingChannel"
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "This is a relationship field.",
+      "relationship_name": "RecordType",
+      "relationship_type": "Lookup",
+      "refers_to": "RecordType"
+    },
+    "ShouldAttemptAutoLink": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "No longer in use. Indicated that an incoming messaging session was auto-linked to a Salesforce contact or account based on information such as a phone number."
+    },
+    "ShouldPromptCreate": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "No longer in use. Indicated that a contact or account was created for the messaging user if none existed."
+    }
+  },
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EntityType": {
+      "field_label": "Custom Object Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Messaging Link ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MessagingChannelId": {
+      "field_label": "Messaging Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecordTypeId": {
+      "field_label": "Record Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShouldAttemptAutoLink": {
+      "field_label": "Attempt to auto-link record",
+      "type": "boolean"
+    },
+    "ShouldPromptCreate": {
+      "field_label": "Prompt to manually create link",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "PendingOrderSummary - Data API",
+  "description": "Object representing a B2C Commerce order ingested via High Scale Orders before an OrderSummary is created for it. Optimized for online transaction processing (OLTP). This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the account or person account associated with the PendingOrderSummary. It represents the shopper in the storefront. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "BillToContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Contact associated with the PendingOrderSummary. It represents the shopper in the storefront when not using person accounts. This field is a relationship field.",
+      "relationship_name": "BillToContact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "BillingEmailAddress": {
+      "type": "email",
+      "properties": "Filter, Group, Sort",
+      "description": "Email address on the billing address."
+    },
+    "BillingPhoneNumber": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Phone number of the billing address."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for the currency of the original Order associated with the PendingOrderSummary. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Description of the PendingOrderSummary."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is used internally. This field isn’t synced with ZOS, so you can’t use it in a query or insert operation."
+    },
+    "ExternalReferenceIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Used internally to prevent duplicate records. This value is case-sensitive. On creation, this value is set to B2C realm ID + \"_\" + B2C instance ID + \"@\" + B2C Commerce catalog/domain ID + \"@\" + B2C Commerce order number. When the OrderSummary is created, this value is copied to its ExternalReferenceIdentifier field. If you ingest orders from multiple sources, you can maintain uniqueness by including a prefix based on the source."
+    },
+    "GrandTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Total amount, including adjustments and tax, of the PendingOrderSummary."
+    },
+    "OrderNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Name of the PendingOrderSummary."
+    },
+    "OrderedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "Date of the original order associated with this PendingOrderSummary."
+    },
+    "Payload": {
+      "type": "textarea",
+      "description": "The order data payload."
+    },
+    "PayloadType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The datatype of the Payload. Possible values are: JSON_GZIP JSON_RAW"
+    },
+    "ProcessingInstructions": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Instructions about how the HSOI service should create the order summary. Options include using the default without customizations or using a custom flow. Also includes instructions about how the HSOI service should dedupe account and contact information using platform duplication and matching rules or by using simple email methods."
+    },
+    "SalesChannelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the SalesChannel associated with this PendingOrderSummary. The SalesChannel Name matches the B2C Commerce catalog/domain ID. This field is a relationship field.",
+      "relationship_name": "SalesChannel",
+      "relationship_type": "Lookup",
+      "refers_to": "SalesChannel"
+    },
+    "SalesStoreId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the RetailStore or WebStore associated with this PendingOrderSummary. This field is a relationship field.",
+      "relationship_name": "SalesStore",
+      "relationship_type": "Lookup",
+      "refers_to": "WebStore"
+    },
+    "ShopperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The first name and last name of the shopper that placed the original order."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs where the High Scale Orders feature is enabled.",
+  "usage": "If you need to view or service an ingested B2C Commerce order before the automated High Scale Orders process has created an OrderSummary for it, you can manually trigger creation of the OrderSummary. In Salesforce, open the PendingOrderSummaries list, find the record, and click Import. PendingOrderSummary only supports certain methods and queries. It doesn’t support Apex triggers.\n\nIf you need to view or service an ingested B2C Commerce order before the automated High Scale Orders process has created an OrderSummary for it, you can manually trigger creation of the OrderSummary. In Salesforce, open the PendingOrderSummaries list, find the record, and click Import**.\n\nPendingOrderSummary only supports certain methods and queries. It doesn’t support Apex triggers.\n\n- **convertCurrency() function**: Example: SELECT Id, convertCurrency(AnnualRevenue) FROM Account\n- **Child-to-Parent subquery**: Example: SELECT ExternalReferenceIdentifier, Account.Name FROM PendingOrderSummary WHERE ExternalReferenceIdentifier = 'a'\n- **Limit clause**: Example: SELECT ExternalReferenceIdentifier FROM PendingOrderSummary WHERE ExternalReferenceIdentifier = 'a' LIMIT 1\n- **Filter by index**: Example: SELECT ExternalReferenceIdentifier FROM PendingOrderSummary WHERE ExternalReferenceIdentifier = 'a'\n- **Filter by secondary index**: Example: SELECT ExternalReferenceIdentifier FROM PendingOrderSummary WHERE AccountId = 'xxx'\n- **ORDER BY clause**: When using ORDER BY, you don’t need to specify a direction. However, if you sort ASC, you can’t use NULLS LAST. If you sort DESC, you can only use NULLS LAST.\n- **Equality filter**: Example: SELECT ExternalReferenceIdentifier FROM PendingOrderSummary ORDER BY ExternalReferenceIdentifier",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillToContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingEmailAddress": {
+      "field_label": "Billing Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "BillingPhoneNumber": {
+      "field_label": "Billing Phone Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalId": {
+      "field_label": "External Id",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalReferenceIdentifier": {
+      "field_label": "External Reference Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Grand Total Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Pending Order Summary ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OrderNumber": {
+      "field_label": "Order Number",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderedDate": {
+      "field_label": "Ordered Date",
+      "type": "datetime"
+    },
+    "Payload": {
+      "field_label": "Payload",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "PayloadType": {
+      "field_label": "Payload Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProcessingInstructions": {
+      "field_label": "Processing Instructions",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SalesChannelId": {
+      "field_label": "Sales Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SalesStoreId": {
+      "field_label": "Store ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShopperName": {
+      "field_label": "Shopper Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

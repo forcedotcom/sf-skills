@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "CleanRule - Tooling API",
+  "description": "Represents a data integration rule that controls how a data service adds and updates data for existing records in an org.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CleanDataServiceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A foreign key reference to the CleanDataService that processes this CleanRule."
+    },
+    "DataAssessmentStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable",
+      "description": "The status of the data assessment. The following are valid values: Hidden (default) Not Started In Progress Pending Aggregation Aggregation Complete Failed Aggregation Aborted This field is read only."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "User-friendly text that describes the data integration rule."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, , Sort, Update",
+      "description": "This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This unique name prevents conflicts with rules from other packages that have the same MasterLabel. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "IsBulkEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If this flag is set to true, the system automatically applies the rule to existing records whenever the rule is updated or saved. If the flag is set to false, the system doesn’t automatically apply the rule to existing records. You can always apply the rule manually."
+    },
+    "IsSilentSaveEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If false, updates don’t modify LastModifiedDate and LastModifiedById when it applies this rule; otherwise, updates insert the current date and the current user."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the data integration rule. The following values are permitted: Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "MatchConfidence": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates how closely a Lightning Data record matches a Salesforce record. The higher the minimum value is set, the more precise the matches. This field is used in packages that support match scores for third-party data. Valid values include an integer determined by the data service provider. If the value is null, the default value from the data service provider is used. Available in API version 45.0 and later."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Master label for this object. This display value is the internal label that is not translated."
+    },
+    "MatchRule": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "An internal label for the matching rule in the data service that’s associated with this CleanRule."
+    },
+    "ShouldBypassTriggers": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, indicates that the system does not apply triggers when it applies this rule; otherwise, the system applies the triggers."
+    },
+    "ShouldBypassWorkflow": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the system bypasses workflow rules when it applies the data integration rule; otherwise, the system applies workflow rules."
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The standard or custom object in your org that’s acted on by this CleanRule. The possible values are: Account Address Contact CustomEntityDefinition Lead ResourceAbsence ServiceAppointment ServiceTerritory ServiceTerritoryMember WorkOrder WorkOrderLineItem In addition, custom objects with data integration rules are possible. Note: The standard objects are installed with default data integration rules, but only the default rules for account, contact, and lead can be modified."
+    },
+    "SourceSobjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "A data service object associated with this CleanRule. The set of picklist values includes all the object types defined in the data service. However, if you specify a non-existent object, the API call returns an error. If you enable the Salesforce data services, the following values appear. CustomEntityDefinition Information retrieved from an external source in the form of an external object to enrich an account, contact, or lead. We map the external object fields to the account, contact, and lead lookup and details. DataCloudAddress Geolocation data service. DatacloudDandBCompany Data.com data service. This service is only available in the Professional, Enterprise, Unlimited, and Performance Editions, and only with a Premium Clean license. Your administrator must enable this data service by enabling the data integration rules for account and lead. If you install Marketplace packages that contain data services, their object names also appear in the set of picklist values."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Status of the data integration rule. Valid values are Active and Inactive."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CleanRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CleanDataService\" minOccurs=\"0\" type=\"ens:CleanDataService\" nillable=\"true\"/>\n        <xsd:element name=\"CleanDataServiceId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"DataAssessmentStatus\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Description\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DeveloperName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMappingClients\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"IsBulkEnabled\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsSilentSaveEnabled\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Language\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"MasterLabel\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"MatchConfidence\" minOccurs=\"0\" type=\"xsd:double\" nillable=\"true\"/>\n        <xsd:element name=\"MatchRule\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ShouldBypassTriggers\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"ShouldBypassWorkflow\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"SobjectType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SourceSobjectType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Status\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CleanRuleStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Inactive\"/>\n    <xsd:enumeration value=\"Active\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

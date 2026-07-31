@@ -1,0 +1,132 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "BotVersion - Data API",
+  "description": "Represents a version of a bot or agent defined by a BotDefinition record. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "BotDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "This field relates a bot version to its parent BotDefinition record. This field is a relationship field.",
+      "relationship_name": "BotDefinition",
+      "refers_to": "BotDefinition",
+      "required": true
+    },
+    "CopilotPrimaryLanguage": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The primary language that the bot or agent communicates in."
+    },
+    "CopilotSecondaryLanguages": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A comma-separated list of additional languages that the bot or agent supports."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for this object."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the bot version is active or inactive. Only one version for a related BotDefinition can be active at once. Possible values are: Active Inactive The default value is Inactive.",
+      "required": true
+    },
+    "ToneType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Defines the tone of the bot. Possible values are: Casual— Formal— Neutral— The default value is Casual."
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number for this version of the bot or agent."
+    }
+  },
+  "field_reference": {
+    "BotDefinitionId": {
+      "field_label": "Bot ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CopilotPrimaryLanguage": {
+      "field_label": "Agent Primary Language",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CopilotSecondaryLanguages": {
+      "field_label": "Agent Secondary Languages",
+      "type": "string",
+      "length": "1333"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Object Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Bot Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ToneType": {
+      "field_label": "Tone Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

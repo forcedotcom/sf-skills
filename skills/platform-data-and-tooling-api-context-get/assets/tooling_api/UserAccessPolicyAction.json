@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "UserAccessPolicyAction - Tooling API",
+  "description": "Represents an action applied by the user access policy. This object is available in API version 57.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`GET`, `POST`, `PATCH`, `DELETE`, `HEAD`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Action": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the user access policy grants access to or removes access from the target access mechanism. Possible values are: Grant Revoke"
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the access mechanism that the user access policy applies. This field is a polymorphic relationship field.",
+      "relationship_name": "Target",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, Queue, PermissionSet, PermissionSetGroup"
+    }
+  },
+  "special_access_rules": "To create or modify user access policies, users must have the Manage User Access Policies permission.",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"UserAccessPolicyAction\">\n  <xsd:sequence>\n    <xsd:element name=\"action\" type=\"tns:UserAccessPolicyActionType\"/>\n    <xsd:element name=\"target\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:UserAccessPolicyActionTargetType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"UserAccessPolicyActionTargetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PermissionSet\"/>\n    <xsd:enumeration value=\"PermissionSetGroup\"/>\n    <xsd:enumeration value=\"PermissionSetLicense\"/>\n    <xsd:enumeration value=\"PackageLicense\"/>\n    <xsd:enumeration value=\"Group\"/>\n    <xsd:enumeration value=\"Queue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UserAccessPolicyActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Grant\"/>\n    <xsd:enumeration value=\"Revoke\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

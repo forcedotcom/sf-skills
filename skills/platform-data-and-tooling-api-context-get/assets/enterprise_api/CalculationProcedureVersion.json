@@ -1,0 +1,210 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CalculationProcedureVersion - Data API",
+  "description": "Defines a version of an Expression Set. The label for this object is Expression Set Version. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CalculationProcedureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Expression Set to which this version belongs. This is a relationship field.",
+      "relationship_name": "CalculationProcedure",
+      "relationship_type": "Lookup",
+      "refers_to": "CalculationProcedure"
+    },
+    "Constants": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A serialized JSON object containing information about each constant. This information includes the name, data type, alias, and precision."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A text description of the Expression Set Version."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last date on which this Expression Set Version is active."
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether this Expression Set Version is active. The default value is false."
+    },
+    "IsLoopingEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether looping is enabled in this Expression Set Version. The default value is false."
+    },
+    "LastSimulatedVariablesInput": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The input variables and results of the most recent simulation."
+    },
+    "LoopEnd": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the end variable for looping."
+    },
+    "LoopIncrement": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the interval variable for looping."
+    },
+    "LoopStart": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the start variable for looping."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The version name."
+    },
+    "Rank": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "When more than one enabled version matches an Expression Set call, and the StartDateTime to EndDateTime spans overlap, the version with the highest Rank is chosen."
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "The first date on which this Expression Set Version is active."
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The version number."
+    }
+  },
+  "special_access_rules": "Access to Expression Sets requires OmniStudio licenses.",
+  "field_reference": {
+    "CalculationProcedureId": {
+      "field_label": "Calculation Procedure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Constants": {
+      "field_label": "Constants",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "EndDateTime": {
+      "field_label": "End Date Time",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Calculation Procedure Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEnabled": {
+      "field_label": "Enabled",
+      "type": "boolean"
+    },
+    "IsLoopingEnabled": {
+      "field_label": "Looping Enabled",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastSimulatedVariablesInput": {
+      "field_label": "Last Simulated Variables Input",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "LoopEnd": {
+      "field_label": "Loop End",
+      "type": "textarea",
+      "length": "255"
+    },
+    "LoopIncrement": {
+      "field_label": "Loop Increment",
+      "type": "textarea",
+      "length": "255"
+    },
+    "LoopStart": {
+      "field_label": "Loop Start",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Version Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Namespace": {
+      "field_label": "Namespace",
+      "type": "string",
+      "length": "255"
+    },
+    "Rank": {
+      "field_label": "Rank",
+      "type": "int",
+      "digits": "9"
+    },
+    "StartDateTime": {
+      "field_label": "Start Date Time",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

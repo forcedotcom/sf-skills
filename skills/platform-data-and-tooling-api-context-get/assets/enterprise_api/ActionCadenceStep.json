@@ -1,0 +1,625 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionCadenceStep - Data API",
+  "description": "Represents a step in a cadence. Use ActionCadenceStep to learn which steps belong to a cadence, and how the steps are connected to each other. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionCadenceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the ActionCadence that this step belongs to. This field is a relationship field.",
+      "relationship_name": "ActionCadence",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadence"
+    },
+    "AllCallsCallBackLater": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of calls having the call outcome Call Back Later."
+    },
+    "AllCallsLeftVoicemail": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of calls having the call outcome Left Voicemail."
+    },
+    "AllCallsMeaningfulConnect": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of calls having the call outcome Meaningful Connect."
+    },
+    "AllCallsNotInterested": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of calls having the call outcome Not Interested."
+    },
+    "AllCallsUncategorized": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of calls where the call outcome isn’t categorized."
+    },
+    "AllCallsUnqualified": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of calls having the call outcome Unqualified."
+    },
+    "AllEmailsBouncedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails that weren’t delivered successfully. This field is a calculated field."
+    },
+    "AllEmailsDeliveredCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails delivered. This field is a calculated field."
+    },
+    "AllEmailsHardBouncedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails returned for a permanent reason — for example, the email address doesn’t exist. This field is available in API version 50.0 and later."
+    },
+    "AllEmailsLinkClickedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of links inside an email that the target clicked during this step. Multiple clicks on the same link count towards this total. This field is available in API version 50.0 and later."
+    },
+    "AllEmailsOpenedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails that the target opened while working on this step. Multiple opens of the same email count towards this total."
+    },
+    "AllEmailsOutOfOfficeCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails that were returned because the recipient set an out-of-office responder. Multiple replies count towards this total. This field is available in API version 50.0 and later."
+    },
+    "AllEmailsRepliedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails that targets replied to as part of this step. Multiple replies to the same email count towards this total, This field is available in API version 50.0 and later."
+    },
+    "AllEmailsSentCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of sent emails."
+    },
+    "AllEmailsSoftBouncedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails that were returned for temporary reasons — for example, the email is too large. This field is available in API version 50.0 and later."
+    },
+    "AllEmailsTrackedSentCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails sent by this user with engagement tracking enabled."
+    },
+    "AllEmailsUntrackedSentCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails sent by this user without engagement tracking."
+    },
+    "AllManuallyCompletedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of steps manually completed."
+    },
+    "AllOnTimeCompletedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of steps completed on time."
+    },
+    "AllOverdueCompletedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of overdue steps that were completed."
+    },
+    "AllSkippedCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of steps skipped."
+    },
+    "AllTotalCallsCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of calls that the sales rep made during this step. This field is a calculated field."
+    },
+    "BranchDefaultStepName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the default step."
+    },
+    "ChainedCadenceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the ActionCadence for the linked action cadence. Available only if the step type is DaisyChain (meaning that another action cadence is connected to this action cadence). This field is a relationship field.",
+      "relationship_name": "ChainedCadence",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadence"
+    },
+    "GoToStepIntervalInMinutes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Contains information about when the step should be repeated next, in minutes. Available in API version 58.0 and later."
+    },
+    "GoToStepIterationLimit": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Contains the maximum number of repeat (goto) step iterations allowed. Available in API version 58.0 and later."
+    },
+    "GoToStepName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If this step’s original next step was removed during an edit after activation, this field specifies the updated next step."
+    },
+    "GraphState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Represents the state of the ActionCadenceStep within the step graph, or sequence, of the action cadence. Possible values are: Included—This step is part of the step graph. Orphaned—This step was removed from the step graph before the action cadence was activated. Orphaned steps are deleted upon activation. Pending—This step has been created but hasn’t been added to the step graph. Pending steps can be added to the step graph in the future. Retired—This step was previously part of an active action cadence step graph and was removed during an edit after activation. Retired steps can have associated step trackers."
+    },
+    "HasVariant": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "This field is valid for email and call step types. If true, the step has email or call template variants. The template variants are defined in ActionCadenceStepVariant records. Available in API version 53.0 and later. The default value is false."
+    },
+    "IsImmediateWakeUp": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a listener branch is immediate wake up (true) or not (false). The default value is false."
+    },
+    "IsOrphan": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, this step isn’t executed by the action cadence and will be deleted. Steps with IsOrphan equal to true have ParentStepName equal to null. Note: To retrieve the active steps in an action cadence, include IsOrphan=false in your query. The default value is false. This field is available in API version 49.0 and later. This field is a calculated field."
+    },
+    "IsScheduledDueDateLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether assignees can change the due date (true) or not (false). Available in API version 58.0 and later. The default value is false."
+    },
+    "IsScreenFlowActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the flow is active and can be executed (true) or not (false). The default value is false."
+    },
+    "IsStepAutomationActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the flow referenced in the StepAutmationReference field is active. If false, the flow isn’t active. Only active flows can be executed. The default value isfalse. This field is available in API version 56.0 and later."
+    },
+    "IsThreaded": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "This field is valid for email steps. Email steps have ActionCadence.StepType equal to SendAnEmail. If true, the email for this email step is sent as a reply to the email conversation from the previous email step. By sending the email as a reply to a previous email, customers see a \"conversation\" view of the emails. Only emails from the same action cadence are grouped as conversations. This field can’t be true for the first email step in an action cadence, because the first email from an action cadence must start a new conversation with the prospect. The default value is false. This field is available in API version 49.0 and later."
+    },
+    "MessageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of message for this step. Possible values are: Text"
+    },
+    "ParentStepName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The step name (ActionCadenceStep.StepName) of the previous step in the action cadence. Must contain a valid step name value unless this step is the root step. null if this step is a parent step."
+    },
+    "RootStepId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the root step for this action cadence. Every action cadence has exactly one root step (so that the Salesforce API can find all the steps for this cadence). This field is a relationship field.",
+      "relationship_name": "RootStep",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadenceStep"
+    },
+    "ScheduledDaysUntilDue": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of days after which this current step is due. Available in API version 58.0 and later."
+    },
+    "ScheduledDaysUntilStart": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of days when this step starts after the previous step completes. For delays of greater than one day from ScheduledStartTimeInMinutes. Available in API version 58.0 and later."
+    },
+    "ScheduledStartDelayInMinutes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Any hard waits in minutes is captured in this field. Waits greater than 1 day need to set ScheduledDaysUntilStart. Available in API version 58.0 and later."
+    },
+    "ScheduledStartTimeInMinutes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The specific time of day when the step starts. The time represents minutes after 00:00. Available in API version 58.0 and later."
+    },
+    "ScreenFlowReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace__fullname of the screen flow. Used to describe flow objects and launch flows client side."
+    },
+    "StepAutomationReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the flow that the step uses. Cadence steps can launch a cadence step flow as the step or as a cadence autolaunched flow when a rep completes the step. The format is namespace__fullName. This field is available in API version 56.0 and later."
+    },
+    "StepComments": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A comment that provides additional information about this step."
+    },
+    "StepName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for this step. Generated by Salesforce."
+    },
+    "StepTitle": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The title given to the step when it was created."
+    },
+    "TemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If a template was added to this step, this field contains the template's ID. For example, if this step is a call step it can contain a template for a call script. Or, if this step is an email step, it can contain a template for an email. This field is a polymorphic relationship field.",
+      "relationship_name": "Template",
+      "relationship_type": "Lookup",
+      "refers_to": "CallTemplate, EmailTemplate"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of step. Possible values are: AutoSendAnEmail — Salesforce automatically sends the specified email. Branch — A branch step in the action cadence. Copilot — The SDR agent action. CreateTask — Used for custom steps. DaisyChain — A daisy chain step. A daisy chain step connects this action cadence to another action cadence. It must be the last step in the path. LinkedInConnection LinkedInMail ListenerBranch — A branch step for emails. MakeACall — The sales rep must call the prospect at this step. PlatformScreenFlow Root — This step is the root step for the action cadence. SendAMessage — The sales rep must send the prospect a message at this step. SendAnEmail — The sales rep must send the prospect an email at this step. Terminal — The engagement monitor. Wait — A wait step tells the sales rep not to do anything at this point in the action cadence."
+    },
+    "TypeDetail": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "More detail about the step type. If the step is a cadence step flow, this field contains the flow name. Otherwise, this field contains the same value as the Type field. This field is available in API version 56.0 and later."
+    },
+    "UniqueEmailsLinkClickedCount": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of links inside an email that the target clicked during this step. Multiple clicks on the same link aren’t counted. This field is available in API version 50.0 and later."
+    },
+    "UniqueEmailsOpenedCount": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails that the target opened as part of this step. Multiple openings of the same email aren’t counted. This field is available in API version 50.0 and later."
+    },
+    "UniqueEmailsRepliedCount": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of emails that targets replied to as part of this step. Multiple replies to the same email aren’t counted. This field is available in API version 50.0 and later."
+    },
+    "WaitTimeInSeconds": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Required if the step type is Wait. The time in seconds for this step to wait.",
+      "required": true
+    }
+  },
+  "usage": "Use ActionCadenceStep to see what steps your action cadence has:\n\nUse ActionCadenceStep to see what steps your action cadence\n\t\t\t\thas:\n\nselect StepTitle from ActionCadenceStep where ActionCadence.ID= <the id of an action cadence> and IsOrphan=false",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ActionCadenceStepChangeEvent (API version 48.0)**: Change events are available for the object.",
+  "field_reference": {
+    "ActionCadenceId": {
+      "field_label": "Cadence ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AllCallsCallBackLater": {
+      "field_label": "All Calls Call Back Later Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllCallsLeftVoicemail": {
+      "field_label": "All Calls Left Voicemail Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllCallsMeaningfulConnect": {
+      "field_label": "All Calls Meaningful Connect Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllCallsNotInterested": {
+      "field_label": "All Calls Not Interested Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllCallsUncategorized": {
+      "field_label": "All Calls Uncategorized Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllCallsUnqualified": {
+      "field_label": "All Calls Unqualified Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsBouncedCount": {
+      "field_label": "All Emails Bounced Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsDeliveredCount": {
+      "field_label": "All Emails Delivered Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsHardBouncedCount": {
+      "field_label": "All Emails Hard Bounced Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsLinkClickedCount": {
+      "field_label": "All Emails Link Clicked Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsOpenedCount": {
+      "field_label": "All Emails Opened Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsOutOfOfficeCount": {
+      "field_label": "All Emails Out Of Office Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsRepliedCount": {
+      "field_label": "All Emails Replied Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsSentCount": {
+      "field_label": "All Emails Sent Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsSoftBouncedCount": {
+      "field_label": "All Emails Soft Bounced Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsTrackedSentCount": {
+      "field_label": "All Emails Tracked Sent Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllEmailsUntrackedSentCount": {
+      "field_label": "All Emails Untracked Sent Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllManuallyCompletedCount": {
+      "field_label": "All Manually Completed",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllOnTimeCompletedCount": {
+      "field_label": "All On Time Completed",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllOverdueCompletedCount": {
+      "field_label": "All Overdue Completed",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllSkippedCount": {
+      "field_label": "All Skipped",
+      "type": "int",
+      "digits": "9"
+    },
+    "AllTotalCallsCount": {
+      "field_label": "Total Calls",
+      "type": "int",
+      "digits": "9"
+    },
+    "BranchDefaultStepName": {
+      "field_label": "Branch Default Step Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ChainedCadenceId": {
+      "field_label": "Cadence ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DayGroup": {
+      "field_label": "Day Group",
+      "type": "int",
+      "digits": "9"
+    },
+    "GoToStepIntervalInMinutes": {
+      "field_label": "Go To Step Interval In Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "GoToStepIterationLimit": {
+      "field_label": "Go To Step Iteration Limit",
+      "type": "int",
+      "digits": "9"
+    },
+    "GoToStepName": {
+      "field_label": "Go To StepName",
+      "type": "string",
+      "length": "255"
+    },
+    "GraphState": {
+      "field_label": "State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Cadence Step ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsImmediateWakeUp": {
+      "field_label": "Immediate Wake Up",
+      "type": "boolean"
+    },
+    "IsOrphan": {
+      "field_label": "Orphan",
+      "type": "boolean"
+    },
+    "IsScheduledDueDateLocked": {
+      "field_label": "Is Scheduled Due Date Locked",
+      "type": "boolean"
+    },
+    "IsScreenFlowActive": {
+      "field_label": "Is Screen Flow Active",
+      "type": "boolean"
+    },
+    "IsStepAutomationActive": {
+      "field_label": "Is Step Automation Active",
+      "type": "boolean"
+    },
+    "IsThreaded": {
+      "field_label": "Send Email as Reply All",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MinuteGroup": {
+      "field_label": "Minute Group",
+      "type": "int",
+      "digits": "9"
+    },
+    "ParentStepName": {
+      "field_label": "Parent Step Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RootStepId": {
+      "field_label": "Cadence Step ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScheduledDaysUntilDue": {
+      "field_label": "Scheduled Days Until Due",
+      "type": "int",
+      "digits": "9"
+    },
+    "ScheduledDaysUntilStart": {
+      "field_label": "Scheduled Days Until Start",
+      "type": "int",
+      "digits": "9"
+    },
+    "ScheduledStartDelayInMinutes": {
+      "field_label": "Scheduled Start Delay In Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "ScheduledStartTimeInMinutes": {
+      "field_label": "Scheduled Start Time In Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "ScreenFlowReference": {
+      "field_label": "Screen Flow Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "StepAutomationReference": {
+      "field_label": "Step Automation Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "StepComments": {
+      "field_label": "Step Comments",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "StepName": {
+      "field_label": "Step Name",
+      "type": "string",
+      "length": "255"
+    },
+    "StepTitle": {
+      "field_label": "Step Title",
+      "type": "string",
+      "length": "255"
+    },
+    "SubCadenceName": {
+      "field_label": "SubCadence Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TemplateId": {
+      "field_label": "Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TypeDetail": {
+      "field_label": "Type Detail",
+      "type": "string",
+      "length": "255"
+    },
+    "UniqueEmailsLinkClickedCount": {
+      "field_label": "Unique Emails Link Clicked Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "UniqueEmailsOpenedCount": {
+      "field_label": "Unique Emails Opened Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "UniqueEmailsRepliedCount": {
+      "field_label": "Unique Emails Replied Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "WaitTimeInSeconds": {
+      "field_label": "Wait Time In Seconds",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

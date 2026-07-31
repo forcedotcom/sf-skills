@@ -1,0 +1,74 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "SourceCodeRepository - Data API",
+  "description": "Represents a specific version control repository hosted by a provider, such as GitHub, that stores the metadata and configuration data for a DevOps Center project. Multiple projects can reference the same repository. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DefaultBranch": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the primary branch in the repository that contains all the changes you plan to release. In GitHub, this branch is typically called main."
+    },
+    "ExternalRepositoryName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the repository as it appears on the provider. For example, my-dx-project."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the repository record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user or group that owns this record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "Provider": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The provider of this repository. Possible values are: BITBUCKET GITHUB The default value is GITHUB."
+    },
+    "ProviderInfo": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Additional provider-specific configuration or metadata in a JSON or text format."
+    },
+    "RepositoryOwner": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The username or organization name that owns the repository."
+    },
+    "SourceCodeRepoProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the associated SourceCodeRepoProvider that handles the connection to this repository. This field is a relationship field.",
+      "relationship_name": "SourceCodeRepoProvider",
+      "refers_to": "SourceCodeRepoProvider"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SourceCodeRepositoryChangeEvent**: Change events are available for the object.\n- **SourceCodeRepositoryFeed**: Feed tracking is available for the object.\n- **SourceCodeRepositoryHistory**: History is available for tracked fields of the object.\n- **SourceCodeRepositoryOwnerSharingRule**: Sharing rules are available for the object.\n- **SourceCodeRepositoryShare**: Sharing is available for the object."
+}

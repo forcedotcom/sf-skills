@@ -1,0 +1,473 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "CreditMemo - Data API",
+  "description": "Represents a document that is used to reduce the amount that a buyer owes a seller under the terms of an earlier invoice. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AppType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Read-only field that indicates which Salesforce application generated the credit memo. Possible values are: Commerce Cloud Revenue Cloud This field is available in API versions 54.0 to 55.0"
+    },
+    "Balance": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the credit memo that's available for allocation."
+    },
+    "BillToContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Inherited from the account’s Bill to Account field. This field is a relationship field.",
+      "relationship_name": "BillToContact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "BillingAccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The customer account associated with this credit memo. This field is a relationship field.",
+      "relationship_name": "BillingAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "CreationMode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether the credit memo originated in Salesforce or an external system. Possible values are: External Salesforce This field is available in API version 55.0 and later."
+    },
+    "CreditDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date when the credit memo was posted."
+    },
+    "CreditMemoNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "A credit memo numbering alternative to DocumentNumber, containing a number in a format of your choice. Credit memo numbering is optional."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code associated with the credit memo. The default value is USD. This field is available in API version 55.0 and later."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the credit memo."
+    },
+    "DocumentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated number for organizing financial documents, for example DOC-0000123."
+    },
+    "EffectiveDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the effective date of the credit memo. If this field is empty, the credit date is used. For reporting purposes only; this field drives no other logic. This field is available in API version 55.0 and later."
+    },
+    "ExternalReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Contains an external system’s ID for the credit memo. This field is available in API version 55.0 and later."
+    },
+    "ExternalReferenceDataSource": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Contains the name of the external system that also contains the credit memo. This field is available in API version 55.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it's possible that this record was only referenced (LastReferencedDate) and not viewed."
+    },
+    "NetCreditsApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents the total difference between the credit applied to and credit unapplied from the invoice. This field is a calculated field. This field is available in API version 55.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The user who owns a credit memo record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ReferenceEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the record that this credit memo was generated from. For example, the order, order summary, or invoice. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceEntity",
+      "relationship_type": "Lookup",
+      "refers_to": "Invoice, Order"
+    },
+    "SourceAction": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates which Salesforce API created the credit memo. Possible values are: Invoice—Indicates that Credit Invoice API created the credit memo and applied it to the invoice. NegativeInvoiceLineConversion—Indicates that Subscription Management created the credit memo when a negative invoice line was converted. Standalone—Indicates that the Credit Memo API created the credit memo. VoidPostedInvoice—Indicates that the Void a Posted Invoice API created the credit memo to offset the amount that was voided on the invoice. This field is available in API version 55.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Status of the credit memo. Possible values are: Canceled—Indicates that the credit memo isn't being used and doesn't have a financial impact. Error—Indicates that the credit memo has an error and doesn’t have a financial impact. Pending—Indicates that the credit memo is being processed but hasn't yet been posted as a financial transaction. Posted—The credit memo has been recorded as a financial transaction. Most fields can’t be edited."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of TotalAmount values for the credit memo’s adjustment lines. This field is a calculated field."
+    },
+    "TotalAdjustmentAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the credit memo’s adjustment line amounts, including tax. This field is available in API version 49.0 and later."
+    },
+    "TotalAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the credit memo’s adjustment line tax. Adjustment line balances are excluded. This field is available in API version 49.0 and later."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of the credit memo’s TotalLineAmount and TotalAdjustmentAmount. This field is a calculated field."
+    },
+    "TotalAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total credit memo amount, with tax included. This field is a calculated field."
+    },
+    "TotalChargeAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of TotalAmount values for the credit memo’s charge lines. This field is a calculated field."
+    },
+    "TotalChargeAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of the credit memo’s charge line amounts, including tax. This field is available in API version 49.0 and later."
+    },
+    "TotalChargeTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "This field is available in API version 49.0 and later."
+    },
+    "TotalCreditAmountApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Credit memo amount that's been applied to invoices. This field is available in API version 53.0 and later."
+    },
+    "TotalCreditAmountUnapplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Credit memo amount that's been unapplied from invoices. This field is available in API version 55.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of TotalAmount values for the credit memo’s tax lines. This field is a calculated field."
+    }
+  },
+  "special_access_rules": "This object is available with Order Management, Subscription Management, and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Order Management, Subscription Management, and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, the associated objects are available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CreditMemoFeed**: Feed tracking is available for the object.\n- **CreditMemoHistory**: History is available for tracked fields of the object.\n- **CreditMemoOwnerSharingRule**: Sharing rules are available for the object.\n- **CreditMemoShare**: Sharing is available for the object.",
+  "field_reference": {
+    "Balance": {
+      "field_label": "Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BillToContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingProfileId": {
+      "field_label": "Billing Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CorpCrcyCnvTotAmtWithTax": {
+      "field_label": "Corporate Currency Converted Total Amount With Tax",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "CorporateCurrencyCvsnDate": {
+      "field_label": "Corporate Currency Conversion Date",
+      "type": "date"
+    },
+    "CorporateCurrencyCvsnRate": {
+      "field_label": "Corporate Currency Conversion Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "10"
+    },
+    "CorporateCurrencyIsoCode": {
+      "field_label": "Corporate Currency ISO Code",
+      "type": "string",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreationMode": {
+      "field_label": "Creation Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreditDate": {
+      "field_label": "Credit Date",
+      "type": "date"
+    },
+    "CreditMemoNumber": {
+      "field_label": "Credit Memo Number",
+      "type": "string",
+      "length": "255"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DocumentNumber": {
+      "field_label": "Document Number",
+      "type": "string",
+      "length": "255"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "date"
+    },
+    "ExternalReference": {
+      "field_label": "External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalReferenceDataSource": {
+      "field_label": "External Reference Data Source",
+      "type": "string",
+      "length": "255"
+    },
+    "FuncCrcyCnvTotAmtWithTax": {
+      "field_label": "Functional Currency Converted Total Amount With Tax",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "FunctionalCurrencyCvsnDate": {
+      "field_label": "Functional Currency Conversion Date",
+      "type": "date"
+    },
+    "FunctionalCurrencyCvsnRate": {
+      "field_label": "Functional Currency Conversion Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "10"
+    },
+    "FunctionalCurrencyIsoCode": {
+      "field_label": "Functional Currency ISO Code",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Credit Memo ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityAccountingPeriodId": {
+      "field_label": "Legal Entity Accounting Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NetCreditsApplied": {
+      "field_label": "Net Credits Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReasonCode": {
+      "field_label": "Reason Code",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReferenceEntityId": {
+      "field_label": "ReferenceEntity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SettlementLevel": {
+      "field_label": "Settlement Level",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SourceAction": {
+      "field_label": "Source Action",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxLocaleType": {
+      "field_label": "Tax Locale Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Total Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentAmountWithTax": {
+      "field_label": "Total Adjustment Amount with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentTaxAmount": {
+      "field_label": "Total Adjustment Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Total Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmountWithTax": {
+      "field_label": "Total with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalChargeAmount": {
+      "field_label": "Total Charges",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalChargeAmountWithTax": {
+      "field_label": "Total Charge Amount with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalChargeTaxAmount": {
+      "field_label": "Total Charge Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCreditAmountApplied": {
+      "field_label": "Total Credit Amount Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCreditAmountUnapplied": {
+      "field_label": "Total Credit Amount Unapplied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxesCapturedAtHeader": {
+      "field_label": "Total Taxes Captured at Header",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

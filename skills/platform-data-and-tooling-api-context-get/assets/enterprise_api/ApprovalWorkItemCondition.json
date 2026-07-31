@@ -1,0 +1,163 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ApprovalWorkItemCondition - Data API",
+  "description": "Represents a condition for starting and concluding an approval step that's evaluated as part of the smart approval process. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApprovalWorkItemCriteriaId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The approval work item criteria associated with the approval work item condition. The approval work item criteria defines the logic by which the approval conditions are evaluated. This field is a relationship field.",
+      "relationship_name": "ApprovalWorkItemCriteria",
+      "relationship_type": "Master-detail",
+      "refers_to": "ApprovalWorkItemCriteria (the master object)"
+    },
+    "ConditionSequencePosition": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The order in which the condition is evaluated relative to other conditions that are part of the requirement logic."
+    },
+    "HasEvaluationSucceeded": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the first value (left side) evaluates against the second value (right side) successfully (true) or not (false). The default value is false."
+    },
+    "IsConditionExcluded": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the condition must be excluded from evaluation (true) or not (false) in an auto-approval process. The default value is false."
+    },
+    "LeftValue": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "The first value of the condition that's evaluated against the second value."
+    },
+    "LeftValueDataType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The data type of the first operand (left side) in this condition. Possible values are: Apex Boolean Currency Date DateTime—Date/Time MultiSelectPicklist—Multi-Select Picklist Number Other Picklist Text Time"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The sequentially-generated name of the approval work item condition record, for example AWCO-000000071."
+    },
+    "OperatorType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The operator for the condition. Possible values are: Contains EndsWith Equal GreaterThan GreaterThanOrEqualTo HasError In IsBlank IsChanged IsEmpty IsNull LessThan LessThanOrEqualTo None NotEqualTo NotIn StartsWith WasSelected WasSet WasVisited"
+    },
+    "RightValue": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "The second value (right side) of the condition that's evaluated against the first value."
+    },
+    "RightValueDataType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The data type of the second operand for the condition. Possible values are: Apex Boolean Currency Date DateTime—Date/Time MultiSelectPicklist—Multi-Select Picklist Number Other Picklist Text Time"
+    }
+  },
+  "special_access_rules": "This object is available in Enterprise, Professional, Unlimited, and Developer Editions where Advanced Approvals is enabled with the Modify All Data or the Approval Admin user permission.\n\nThis object is available in Enterprise,\n         Professional, Unlimited, and Developer Editions where Advanced Approvals is enabled with\n         the Modify All Data or the Approval Admin user permission.",
+  "field_reference": {
+    "ApprovalWorkItemCriteriaId": {
+      "field_label": "Approval Work Item Criteria ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConditionSequencePosition": {
+      "field_label": "Condition Sequence Position",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "HasEvaluationSucceeded": {
+      "field_label": "Evaluation Succeeded",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Approval Work Item Condition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LeftValue": {
+      "field_label": "Left Value",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "LeftValueDataType": {
+      "field_label": "Left Value Data Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Approval Work Item Condition Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OperatorType": {
+      "field_label": "Operator Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RightValue": {
+      "field_label": "Right Value",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "RightValueDataType": {
+      "field_label": "Right Value Data Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

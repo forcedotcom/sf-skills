@@ -66,7 +66,7 @@ Classify these as `Safety & Responsible AI` root cause category with priority P1
 
 **Issues grouped by root cause category:**
 
-```
+```text
 ## Agent Configuration Gap
 - [P1] <description> -- turn <N>, subagent: <subagent>, evidence: `<field>: "<value>"`
 
@@ -195,7 +195,7 @@ grep -c "^    instructions:" "$AGENT_FILE" | head -1
 
 Compare the `reasoning: instructions:` content across all subagents. If 2+ subagents share the same instructions word-for-word, flag this as a critical issue:
 
-```
+```text
 CRITICAL: N subagents share identical reasoning instructions.
     Each subagent needs distinct, actionable instructions that tell the LLM
     what to do specifically for that subagent's responsibility.
@@ -211,7 +211,7 @@ Compare what the `.agent` file contains against what the agent actually does (fr
 
 If publish drift is detected:
 
-```
+```text
 PUBLISH DRIFT DETECTED: .agent file has subagent-specific instructions and actions,
     but the agent behaves as if using generic/default configuration.
     Root cause: Platform / Runtime Issue -- bundle was never properly published,

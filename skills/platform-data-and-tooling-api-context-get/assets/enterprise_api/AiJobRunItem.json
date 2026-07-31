@@ -1,0 +1,156 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "AiJobRunItem - Data API",
+  "description": "Stores an individual item associated with a parent AiJobRun, including the inputs and resulting response. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AiJobRunId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A required reference to the parent AiJobRun record that this item belongs to. This field is a relationship field.",
+      "relationship_name": "AiJobRun",
+      "refers_to": "AiJobRun"
+    },
+    "ErrorCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If processing for this item fails, this field contains a numeric code indicating the error."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Contains a detailed, human-readable message that explains the reason for the job run item failure."
+    },
+    "Input": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "Contains the input data for a single item within the job run. For example, in a PromptTemplate job, this is the JSON input for the prompt template."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique, system-generated identifier for the AiJobRunItem record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The user or group that owns the AiJobRunItem record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "PreprocessedInput": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Stores an intermediate version of the input data after the preprocessing step. For example, this field could be a hydrated JSON prompt."
+    },
+    "Response": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Contains the generated response for the job item after processing is complete."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Tracks the status of the individual job item. Valid values are: Ready: The default value. The job run item is ready to start processing. Completed: Processing for the job run item is complete. Failed: Processing for the job run item failed."
+    }
+  },
+  "field_reference": {
+    "AiJobRunId": {
+      "field_label": "AI Job Run ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ErrorCode": {
+      "field_label": "Error Code",
+      "type": "string",
+      "length": "40"
+    },
+    "ErrorMessage": {
+      "field_label": "Error Message",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "AI Job Run Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Input": {
+      "field_label": "Input",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "InputEncoding": {
+      "field_label": "Input Encoding",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreprocessedInput": {
+      "field_label": "Preprocessed Input",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Response": {
+      "field_label": "Response",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

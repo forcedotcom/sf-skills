@@ -1,0 +1,131 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ServiceTerritoryWorkType - Data API",
+  "description": "Represents the relationship between a ServiceTerritory object and a WorkType object for Salesforce Scheduler appointments. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsSlotPublished": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicate whether records in the Shift object are created for the selected Service Territory and Work Type. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the current user last viewed a record related to this object."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this object."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of this service territory-work type relationship."
+    },
+    "ServiceTerritoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the service territory that’s related to the work type indicated in the WorkTypeId field. This is a relationship field.",
+      "relationship_name": "ServiceTerritory",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceTerritory"
+    },
+    "TeamId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Represents the team associated with the service territory for a specific work type. This field is a relationship field and is available in API version 58.0 and later.",
+      "relationship_name": "Team",
+      "relationship_type": "Lookup",
+      "refers_to": "Team"
+    },
+    "WorkTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the work type that’s related to the service territory indicated in the ServiceTerritoryId field. This is a relationship field.",
+      "relationship_name": "WorkType",
+      "relationship_type": "Lookup",
+      "refers_to": "WorkType"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **ServiceTerritoryWorkTypeFeed**: Feed tracking is available for the object.\n- **ServiceTerritoryWorkTypeHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Service Territory Work Type ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsSlotPublished": {
+      "field_label": "Slot Published",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Service Territory Work Type Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ServiceTerritoryId": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WorkTypeId": {
+      "field_label": "Work Type ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

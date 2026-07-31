@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "UserDeviceApplication - Data API",
+  "description": "Represents information on applications installed on a device that is accessing Salesforce. Available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApplicationType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of application used to log in to Salesforce."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "This field is system-generated and cannot be changed."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The activity status of the device application. The picklist options are: Approved Pending Approval Revoked"
+    },
+    "UserDeviceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier used to identify a device when tracking events. UserDeviceId is a generated value that’s created when the mobile app is initially run after installation."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user."
+    }
+  },
+  "special_access_rules": "You must have View Devices enabled to see devices."
+}

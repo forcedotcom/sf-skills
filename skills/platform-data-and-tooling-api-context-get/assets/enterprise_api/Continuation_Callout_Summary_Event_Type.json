@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Continuation Callout Summary Event Type - Data API",
+  "description": "Continuation Callout Summary events contain information about all of the asynchronous callouts performed during a transaction, their response status codes, execution times, and URL endpoint destinations. This event type is available in the EventLogFile object in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "example",
+    "examples"
+  ],
+  "fields": {
+    "CONTINUATION_ID": {
+      "type": "String",
+      "description": "A unique ID identifying a sequence of events within a request.",
+      "example": "SFDC-Continuation-14e3cg85-961d-389e-7bz1-3d171543162a"
+    },
+    "DURATION": {
+      "type": "Number",
+      "description": "Total duration of continuation, in milliseconds."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always ContinuationCalloutSummary."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000123."
+    },
+    "ORIGIN_REQUEST_ID": {
+      "type": "Id",
+      "description": "The ID of the request that initiated a callout.",
+      "example": "TID:5ILoVKlztX_rDDJcp7"
+    },
+    "REQUEST_FORM_SIZE": {
+      "type": "String",
+      "description": "Continuation request form size, in bytes. Depending on how many HTTP requests were used in a continuation, this field can contain up to three space-separated values."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RESPONSE_SIZE": {
+      "type": "String",
+      "description": "The size of the callout response, in bytes. Depending on how many HTTP requests were used in a continuation, this field can contain up to three space-separated values."
+    },
+    "STATUS_CODE": {
+      "type": "String",
+      "description": "The HTTP status or internal code returned by the remote endpoint. A status code of 200 indicates that the request was successful. Other status code values indicate the type of problem that was encountered. Depending on how many HTTP requests were used in a continuation, this field can contain up to three space-separated values.",
+      "examples": "2000—The timeout was reached, and the server didn’t get a chance to respond. 2001—There was a connection failure. 2002—Exceptions occurred. 2003—The response hasn’t arrived (which also means that the Apex asynchronous callout framework hasn’t resumed). 2004—The response size is too large (greater than 1 MB)."
+    },
+    "SUCCESS": {
+      "type": "Boolean",
+      "description": "Indicates whether the continuation was successful (1) or not (0)."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "URL": {
+      "type": "String",
+      "description": "The callout endpoint URL. Depending on how many HTTP requests were used in a continuation, this field can contain up to three space-separated values.",
+      "example": "http://prod.location.amazonaws.com:1000/orders/order/_search"
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case insensitive ID of the user who’s using Salesforce services through the UI or the API. For example: 00590000000I1SNIA0."
+    },
+    "VF_CONTROLLER_SIZE": {
+      "type": "String",
+      "description": "Continuation Visualforce controller size, in bytes. Depending on how many HTTP requests were used in a continuation, this field can contain up to three space-separated values."
+    }
+  }
+}

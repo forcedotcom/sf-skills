@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionPlan - Data API",
+  "description": "Represents the instance of an action plan, a set of tasks created from an action plan template. This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActionPlanState": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The status of work being done for the action plan. Possible values are: Canceled Complete In Progress Not Started The default value is Not Started."
+    },
+    "ActionPlanTemplateVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the version of the action plan template used to create this action plan. At creation, the referenced action plan template must be in the published state."
+    },
+    "ActionPlanType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The action plan’s type. Possible values are: Industries Sales—This value is available in API version 63.0 and later with the Sales Action Plans add-on license and the Sales Action Plans default permission set. Service"
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the action plan is locked or not."
+    },
+    "IsUsingHolidayHours": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether task completion dates have been calculated by incrementing the task offset for each non-work day, excluding recurring holidays."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nllable, Sort",
+      "description": "The most recent date on which a user referenced this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent date on which a user viewed this record."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the action plan can be edited or not."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the action plan."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who owns this record."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Default on create, Filter, Group, Sort",
+      "description": "The start date of the action plan."
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the parent object record that relates to this action plan. For API version 63.0 and later, supported parent objects are Account, AccountPlanObjective, Applicant, ApplicationForm, ApplicationFormProduct, Asset, BusinessLicense, BusinessMilestone, Campaign, Case, ChangeRequest, Claim, Contact, Contract, FinancialGoal, Incident, InsurancePolicy, InsurancePolicyCoverage, Lead, Opportunity, PersonLifeEvent, Problem, ResidentialLoanApplication, WorkOrder, and WorkOrderLineItem. For API version 62.0 and later, supported parent objects are ApplicationFormEvaluation and VettingEvaluation. For API version 48.0 and later, supported parent objects are Account, AssetsAndLiabilities, BusinessMilestone, Campaign, Card, Case, Claim, Contact, Contract, Financial Account, Financial Goal, Financial Holding, InsurancePolicy, InsurancePolicyCoverage, Lead, Opportunity, PersonLifeEvent, ResidentialLoanApplication, and Visit as well as custom objects with activities enabled. For API version 47.0 and later, supported parent objects are Account, BusinessMilestone, Campaign, Case, Claim, Contact, Contract, InsurancePolicy, InsurancePolicyCoverage, Lead, Opportunity, PersonLifeEvent, and Visit as well as custom objects with activities enabled. For API version 46.0 and later, supported parent objects are Account, Campaign, Case, Contact, Contract, Lead, and Opportunity as well as custom objects with activities enabled. For API version 45.0 and earlier, the only supported parent object is Account."
+    }
+  },
+  "special_access_rules": "The user must have “Edit” permissions on ActionPlan records in order to create or update action plans line. The user must have “Edit” permissions on ActionPlan records to delete an action plan. Some of the fields are available when Subscription Management is enabled.\n\nThe user must have “Edit” permissions on ActionPlan records in order to create or update action plans line. The user must have “Edit” permissions on ActionPlan records to delete an action plan.\n\nSome of the fields are available when Subscription Management is enabled.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **ActionPlanChangeEvent**: Change events are available for the object.\n- **ActionPlanFeed**: Feed tracking is available for the object.\n- **ActionPlanHistory**: History is available for tracked fields of the object.\n- **ActionPlanOwnerSharingRule**: Sharing rules are available for the object.\n- **ActionPlanShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ActionPlanState": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ActionPlanTemplateVersionId": {
+      "field_label": "Action Plan Template Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActionPlanType": {
+      "field_label": "Action Plan Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ActualEndDate": {
+      "field_label": "Actual End Date",
+      "type": "date"
+    },
+    "ActualStartDate": {
+      "field_label": "Actual Start Date",
+      "type": "date"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Action Plan ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsUsingHolidayHours": {
+      "field_label": "Skip Nonwork Days",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecordCreationType": {
+      "field_label": "Record Creation Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecurringScheduleId": {
+      "field_label": "Recurrence Schedule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScheduleFrequency": {
+      "field_label": "Schedule Frequency",
+      "type": "string",
+      "length": "50"
+    },
+    "ShouldAllowOverride": {
+      "field_label": "Should Allow Override",
+      "type": "boolean"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "StatusCode": {
+      "field_label": "Status Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetId": {
+      "field_label": "Target Record ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

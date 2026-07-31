@@ -1,0 +1,714 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "Network - Data API",
+  "description": "Represents an Experience Cloud site. Salesforce Experience Cloud lets you create branded spaces for your employees, customers, and partners. You can customize and create experiences, whether they’re communities, sites, or portals, to meet your business needs, then transition seamlessly between them. Experience Cloud sites let you share information, records, and files with coworkers and stakeholders all in one place. This object is available in API version 26.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AllowedExtensions": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Specifies the types of files allowed in your site. This list of file types lets you control what members upload and also prevents spammers from polluting your site with inappropriate files. Available in API version 36.0 and later.Separate file types with a comma (for example: jpg,docx,txt). You can enter lowercase and uppercase letters. You can enter up to 1,000 characters. To allow all file types, leave this field empty."
+    },
+    "CaseCommentEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template used when submitting a comment on a case. This field is available in API version 28.0 and later."
+    },
+    "ChangePasswordEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "ID of the email template used when notifying users that their password has been reset."
+    },
+    "ChgEmailVerNewEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template used when notifying users that their email address has been changed. This email is sent to the user’s new email address."
+    },
+    "ChgEmailVerOldEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template used when notifying users that their email address has been changed. This email is sent to the user’s old email address."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the site."
+    },
+    "DeviceActEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template used when users log in from an unrecognized browser, app, or IP address. The email contains a one-time password that users enter to verify their identity.This field is available in API version 53.0 and later."
+    },
+    "EmailFooterLogoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Document object that displays as an image in the footer of Chatter emails."
+    },
+    "EmailFooterText": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Text that displays in the footer of Chatter emails."
+    },
+    "EmailSenderAddress": {
+      "type": "email",
+      "properties": "Filter, Group, Sort",
+      "description": "Read only. Email address from which emails are sent. Note: To change the EmailSenderAddress value, you must first specify NewSenderAddress, which triggers the sending of an address change verification email. After you complete the address verification process, EmailSenderAddress changes to the specified NewSenderAddress."
+    },
+    "EmailSenderName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "Name from which emails are sent."
+    },
+    "enableImageOptimizationCDN": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "The setting that optimizes cached images for guest users on all devices when a site uses Salesforce’s CDN for Digital Experiences.This field is available in API version 56.0 and later."
+    },
+    "FirstActivationDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date the site was first activated.This field is available in API version 34.0 and later. If the site was activated or inactive before the release of API version 34.0, this field returns the date that the site was first created."
+    },
+    "ForgotPasswordEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "ID of the email template used when users forget their password."
+    },
+    "HeadlessForgotPasswordTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template to use with the Headless Forgot Password Flow.This field is available in API version 57.0 and later."
+    },
+    "HeadlessRegistrationTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template to use for identity verification during the Headless Registration Flow.This field is available in API version 59.0 and later."
+    },
+    "LockoutEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template used when users try to reset their password after locking themselves out because of too many login attempts. This field is available in API version 43.0 and later."
+    },
+    "MaxFileSizeKb": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the maximum file size (in KBs) that members can upload in your site. Available in API version 36.0 and later.Enter a number between 3072 KB and your org’s maximum file size. To use the default limit of 2 GB, leave this field empty."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the site."
+    },
+    "NewSenderAddress": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Email address that has been entered as the new value for EmailSenderAddress but hasn’t been verified yet. After a user has requested to change the sender email address and has successfully responded to the verification email, the NewSenderAddress value overwrites the value in EmailSenderAddress. This value becomes the email address from which emails are sent. If verification is pending for a new email address and you set NewSenderAddress to null, the verification request is canceled. NewSenderAddress is automatically set to null after EmailSenderAddress has been set to the new verified address. If verification is pending for a new email address, and you specify a different new address for this field, only the latest value is retained and used for verification. Note"
+    },
+    "OptionsActionOverrideEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Override the action that occurs when users click a default button, like New or Edit, with a Lightning component. For example, show a custom window instead of the one that Salesforce provides. Assign action overrides in the Object Manager. In the UI, this setting is available in the Administration Workspace, under Administration | Preferences under Experience Management This field is available in API version 49.0 and later."
+    },
+    "OptionsAllowInternalUserLogin": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Specifies whether internal users can log in with their internal credentials on the site login page. This field is available in API version 37.0 and later."
+    },
+    "OptionsAllowMembersToFlag": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether users can flag posts, comments, or files as inappropriate.This field is available in API version 29.0 and later. The ability to flag files is available in version 30.0 and later."
+    },
+    "OptionsApexCDNCachingEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether public data from @wire calls to Apex methods is cached only for guest users. This setting applies only to sites using Salesforce's CDN for Digital Experiences.This field is available in API version 55.0 and later."
+    },
+    "OptionsDirectMessagesEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Controls the availability of direct messages in an Experience Builder site.This field is available in API version 39.0 and later."
+    },
+    "OptionsEmbeddedLoginEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether the Embedded Login feature is enabled in a site. When true, Embedded Login is turned on.This field is available in API version 61.0 and later."
+    },
+    "OptionsEnableTalkingAboutStats": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether site users see how many people are discussing a topic. The number of people discussing the topic appears as the user types the topic and the system gives topic suggestions.This field is available in API version 41.0 and later."
+    },
+    "OptionsEnableTopicAssignmentRules": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, displays knowledgeable people in key areas, for example, on Topic Detail pages."
+    },
+    "OptionsExpFriendlyUrlsAsDefault": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, URL slugs are on by default for Product and Category pages of LWR Commerce stores (available in API version 58.0 and later) Custom object pages on enhanced LWR sites (available in API version 60.0 and later) Account and contact pages on enhanced LWR sites (available in API version 61.0 and later)"
+    },
+    "OptionsExperienceBundleBasedSnaOverrideEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, the Service Not Available Page is an auto-generated Experience Builder-based page. When false, the Service Not Available page uses a static resource page that is set in Workspaces | Administration | Pages. The default value is true. Available in API version 52.0 and later."
+    },
+    "OptionsGatherCustomerSentimentData": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, collects data about user likes, upvotes, and downvotes."
+    },
+    "OptionsGuestChatterEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Specifies whether guest users can access public Chatter groups in the site without logging in."
+    },
+    "OptionsGuestFileAccessEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, lets guest users view asset files and CMS content that’s available to the site. Guest users can access shared asset files and published CMS content that’s made for external use, even if it isn’t used. Shared asset files include images that are associated with topics, recognition badges, branding, and account branding. This preference is automatically enabled if public access is enabled at the page or site level in Experience Builder."
+    },
+    "OptionsGuestMemberVisibility": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, lets guest users see who else is part of the site, including non-guest users. In the UI, this setting appears in the Administration Workspace under Administration | Preferences .Available in API version 47.0 and later."
+    },
+    "OptionsHeadlessFrgtPswEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, Headless Forgot Password Flow is enabled.This field is available in API version 57.0 and later."
+    },
+    "OptionsImageOptimizationCDNEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, cached images are optimized to suit any device that guest users use to access your site. This feature is available only for sites that use Salesforce’s CDN for Digital Experiences. In the UI, this setting appears in the Administration Workspace under Administration | Preferences.Available in API version 56.0 and later."
+    },
+    "OptionsInvitationsEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether users can invite others to the site."
+    },
+    "OptionsKnowledgeableEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether users can see knowledgeable people for topics and endorse people for topics."
+    },
+    "OptionsLWRExperienceConnectedAppEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, enhances the performance and scalability of Connect API calls made from Lightning web components in an enhanced LWR site. This field is available in API version 58.0 and later. Note: This feature is a Beta Service. Customer may opt to try such Beta Service in its sole discretion. Any use of the Beta Service is subject to the applicable Beta Services Terms provided at Agreements and Terms."
+    },
+    "OptionsMemberVisibility": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Controls user visibility on a per-site basis. If true, the See other members of this site preference is enabled for the selected site. This field is available in API version 45.0 and later."
+    },
+    "OptionsMobileImageOptimizationEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "If true, file asset images are optimized for mobile display. This field is available in API version 45.0 and later."
+    },
+    "OptionsNetworkSentimentAnalysis": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "If true, enables sentiment analysis in a site. In the UI, this setting is available in the Administration Workspace, under Administration | Preferences. This field is available in API version 40.0 and later."
+    },
+    "OptionsNicknameDisplayEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether user nicknames display instead of their first and last names in most places in the site.A few restrictions to keep in mind about nickname display: Records and user lookups on records show full names. Keep in mind, though, that you can control record and user visibility with sharing rules. Mobile notifications in the Salesforce mobile app show full names. You can turn off mobile notifications in the app to avoid this display. Searches by first, last, and full names aren’t restricted and return matches, but the search results display only nicknames. Global search auto-complete recommendations show any first, last, and full names that the user has searched by or accessed via a record or another location. The recent items list also shows first, last, and full under the same conditions."
+    },
+    "OptionsPrivateMessagesEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether users can send and receive Chatter messages in the site."
+    },
+    "OptionsProfileBasedLayoutsForKnowledgeSearchEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "When true, provides a grid layout for Knowledge search results. With grid layout in place, you can edit search profile layouts on the Knowledge object to show and hide different search result fields for different profiles. When you enable the standard grid layout, search-term highlighting isn’t available. This field is available in API version 51.0 and later."
+    },
+    "OptionsRecognitionBadgingEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether Recognition Badges is enabled for the site."
+    },
+    "OptionsReputationEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines if reputation is calculated and displayed for members. This field is available in API version 31.0 and later."
+    },
+    "OptionsReputationRecordConversationsDisabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Disables the feed on reputation records."
+    },
+    "OptionsSelfRegistrationEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether customers and partners can self-register to join the site. Customers and partners are users with External Identity, Community, Customer Portal, or partner portal licenses. If true, displays a Not a member? link on the login page that points to the default self-registration page. This field is available in API version 28.0 and later."
+    },
+    "OptionsSendWelcomeEmail": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether a welcome email is sent when a new user is added to the site."
+    },
+    "OptionsShowAllNetworkSettings": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether settings in Experience Management that were hidden based on how you set up your site are visible or remain hidden.This field is available in API version 33.0 and later."
+    },
+    "OptionsSiteAsContainerEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether the site is an Experience Builder site (true) or a Salesforce Tabs + Visualforce site (false).This field is available in API version 29.0 and later."
+    },
+    "OptionsThreadedDiscussionsEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether threaded discussions are enabled for the site. Available in API version 44.0 and later."
+    },
+    "OptionsTopicFilteringForKnowledgeSearchEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether topic filtering is enabled for Knowledge search.This field is available in API version 55.0 and later."
+    },
+    "OptionsTopicSuggestionsEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Enables topic suggestions when users write posts.This field is available in API version 41.0 and later."
+    },
+    "OptionsUpDownVoteEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether up and down voting is enabled for the site.This field is available in API version 41.0 and later."
+    },
+    "PwdlessRegEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template for the welcome email that users receive when they sign up with passwordless registration. This field is available in API version 61.0 and later."
+    },
+    "SelfRegMicroBatchSubErrorEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the profile assigned to users who self-register using micro-batchng. Only applies if self-registration using micro-batching is enabled for the site. This field is available in API version 54.0 and later."
+    },
+    "SelfRegProfileId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the profile assigned to users who self-register. Only applies if self-registration is enabled for the site.This field is available in API version 29.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Status of the site. Available values are: Live—The site is online and members can access it. Label is Published. DownForMaintenance—The site was previously published, but was taken offline. Members with the Create and Set Up Experiences permission can still access the setup for offline sites regardless of profile or membership. Members aren’t able to access offline sites, but they still appear in the user interface dropdown menu as SiteName (Offline). Label is Offline. UnderConstruction—The site hasn’t yet been published. When a user’s profile is associated with the site, and they’ve Create and Set Up Experiences permission, they can access sites in this status.After a site is published, it can never be in this status again. Label is Preview."
+    },
+    "UrlPathPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The UrlPathPrefix is a unique string at the end of the URL for the site. For example, in the site URL MyDomainName.my.site.com/customers, customers is the UrlPathPrefix."
+    },
+    "VerificationEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the email template used when users must verify their identity, for example, when they log in without a password. This field is available in API version 44.0 and later."
+    },
+    "WelcomeEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "ID of the email template used when sending welcome emails to new members."
+    }
+  },
+  "special_access_rules": "This object is available only when your org has digital experiences enabled.",
+  "usage": "Use this object to find, view, and update sites in your org. If you’re assigned the Modify All Data, View All Data, or Create and Set Up Experiences permission, you can view all sites in the org. Users without these permissions see only the Preview or Published sites that they’re members of. If you’re assigned the Create and Set Up Experiences permission, you can customize site settings.",
+  "field_reference": {
+    "AllowedExtensions": {
+      "field_label": "Allowed Extensions",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CaseCommentEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChangePasswordEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChgEmailVerNewEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChgEmailVerOldEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DeviceActEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EmailFooterLogoId": {
+      "field_label": "Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EmailFooterText": {
+      "field_label": "Email Footer Text",
+      "type": "string",
+      "length": "1000"
+    },
+    "EmailSenderAddress": {
+      "field_label": "From Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "EmailSenderName": {
+      "field_label": "From Email Name",
+      "type": "string",
+      "length": "80"
+    },
+    "FirstActivationDate": {
+      "field_label": "First Date Active",
+      "type": "date"
+    },
+    "ForgotPasswordEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "HeadlessForgotPasswordTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "HeadlessRegistrationTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Network ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LockoutEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MaxFileSizeKb": {
+      "field_label": "Max File Size KB",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "40"
+    },
+    "NewSenderAddress": {
+      "field_label": "Unverified Sender Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "OptionsActionOverrideEnabled": {
+      "field_label": "ActionOverrideEnabled",
+      "type": "boolean"
+    },
+    "OptionsAdvancedAuthForSiteEnabled": {
+      "field_label": "AdvancedAuthForSiteEnabled",
+      "type": "boolean"
+    },
+    "OptionsAllowInternalUserLogin": {
+      "field_label": "Allow Employee Login",
+      "type": "boolean"
+    },
+    "OptionsAllowMembersToFlag": {
+      "field_label": "Allow Members To Flag",
+      "type": "boolean"
+    },
+    "OptionsApexCDNCachingEnabled": {
+      "field_label": "ApexCDNCachingEnabled",
+      "type": "boolean"
+    },
+    "OptionsCWBannerState": {
+      "field_label": "CWBannerState",
+      "type": "boolean"
+    },
+    "OptionsDataCategoryContextPassingEnabled": {
+      "field_label": "DataCategoryContextPassingEnabled",
+      "type": "boolean"
+    },
+    "OptionsDirectMessagesEnabled": {
+      "field_label": "Direct Messages Enabled",
+      "type": "boolean"
+    },
+    "OptionsDisableWorkspaceInfo": {
+      "field_label": "DisableWorkspaceInfo",
+      "type": "boolean"
+    },
+    "OptionsEinsteinAnswersEnabled": {
+      "field_label": "EinsteinAnswersEnabled",
+      "type": "boolean"
+    },
+    "OptionsEinsteinAnswersKAEnabled": {
+      "field_label": "EinsteinAnswersKAEnabled",
+      "type": "boolean"
+    },
+    "OptionsEinsteinAnswersQAEnabled": {
+      "field_label": "EinsteinAnswersQAEnabled",
+      "type": "boolean"
+    },
+    "OptionsEinsteinAnswersSnippetEnabled": {
+      "field_label": "EinsteinAnswersSnippetEnabled",
+      "type": "boolean"
+    },
+    "OptionsEmbeddedLoginEnabled": {
+      "field_label": "EmbeddedLoginEnabled",
+      "type": "boolean"
+    },
+    "OptionsEnableTalkingAboutStats": {
+      "field_label": "EnableTalkingAboutStats",
+      "type": "boolean"
+    },
+    "OptionsEnableTopicAssignmentRules": {
+      "field_label": "EnableTopicAssignmentRules",
+      "type": "boolean"
+    },
+    "OptionsExpFriendlyUrlsAsDefault": {
+      "field_label": "ExpFriendlyUrlsAsDefault",
+      "type": "boolean"
+    },
+    "OptionsExperienceBundleBasedSnaOverrideEnabled": {
+      "field_label": "ExperienceBundleBasedSnaOverrideEnabled",
+      "type": "boolean"
+    },
+    "OptionsGatherCustomerSentimentData": {
+      "field_label": "Gather Customer Insights Data",
+      "type": "boolean"
+    },
+    "OptionsGuestChatterEnabled": {
+      "field_label": "Guest Chatter Enabled",
+      "type": "boolean"
+    },
+    "OptionsGuestFileAccessEnabled": {
+      "field_label": "Guest File Access Enabled",
+      "type": "boolean"
+    },
+    "OptionsGuestMemberVisibility": {
+      "field_label": "GuestMemberVisibility",
+      "type": "boolean"
+    },
+    "OptionsHeadlessFrgtPswEnabled": {
+      "field_label": "HeadlessFrgtPswEnabled",
+      "type": "boolean"
+    },
+    "OptionsImageOptimizationCDNEnabled": {
+      "field_label": "ImageOptimizationCDNEnabled",
+      "type": "boolean"
+    },
+    "OptionsInvitationsEnabled": {
+      "field_label": "Invitations Enabled",
+      "type": "boolean"
+    },
+    "OptionsKnowledgeableEnabled": {
+      "field_label": "Knowledgeable Enabled",
+      "type": "boolean"
+    },
+    "OptionsLWRExperienceConnectedAppEnabled": {
+      "field_label": "LWRExperienceConnectedAppEnabled",
+      "type": "boolean"
+    },
+    "OptionsLWRExperienceOnManagedRuntime": {
+      "field_label": "LWRExperienceOnManagedRuntime",
+      "type": "boolean"
+    },
+    "OptionsLWRSearchGenerativeAnswersEnabled": {
+      "field_label": "Allow Einstein Search Answers for Knowledge",
+      "type": "boolean"
+    },
+    "OptionsMemberVisibility": {
+      "field_label": "MemberVisibility",
+      "type": "boolean"
+    },
+    "OptionsMobileImageOptimizationEnabled": {
+      "field_label": "MobileImageOptimizationEnabled",
+      "type": "boolean"
+    },
+    "OptionsNetworkSentimentAnalysis": {
+      "field_label": "Sentiment Analysis on Feed Posts and Comments",
+      "type": "boolean"
+    },
+    "OptionsNicknameDisplayEnabled": {
+      "field_label": "NicknameDisplayEnabled",
+      "type": "boolean"
+    },
+    "OptionsPrivateMessagesEnabled": {
+      "field_label": "Private Messages Enabled",
+      "type": "boolean"
+    },
+    "OptionsProfileBasedLayoutsForKnowledgeSearchEnabled": {
+      "field_label": "ProfileBasedLayoutsForKnowledgeSearchEnabled",
+      "type": "boolean"
+    },
+    "OptionsPvtPagesPwdResetAccessDisabled": {
+      "field_label": "PvtPagesPwdResetAccessDisabled",
+      "type": "boolean"
+    },
+    "OptionsRecognitionBadgingEnabled": {
+      "field_label": "Recognition badging for Lightning Experiences",
+      "type": "boolean"
+    },
+    "OptionsReputationEnabled": {
+      "field_label": "Reputation Enabled",
+      "type": "boolean"
+    },
+    "OptionsReputationRecordConversationsDisabled": {
+      "field_label": "ReputationRecordConversationsDisabled",
+      "type": "boolean"
+    },
+    "OptionsSecondaryEmailSenderEnabled": {
+      "field_label": "SecondaryEmailSenderEnabled",
+      "type": "boolean"
+    },
+    "OptionsSelfRegistrationEnabled": {
+      "field_label": "Self Registration Enabled",
+      "type": "boolean"
+    },
+    "OptionsSendWelcomeEmail": {
+      "field_label": "Send Welcome Email",
+      "type": "boolean"
+    },
+    "OptionsShowAllNetworkSettings": {
+      "field_label": "ShowAllNetworkSettings",
+      "type": "boolean"
+    },
+    "OptionsSiteAsContainerEnabled": {
+      "field_label": "Site.com as Experience Container Enabled",
+      "type": "boolean"
+    },
+    "OptionsSlfSrvcPersonalizationEnabled": {
+      "field_label": "Self Service Personalization Enabled Experiences",
+      "type": "boolean"
+    },
+    "OptionsThreadedDiscussionsEnabled": {
+      "field_label": "ThreadedDiscussionsEnabled",
+      "type": "boolean"
+    },
+    "OptionsTopicFilteringForKnowledgeSearchEnabled": {
+      "field_label": "TopicFilteringForKnowledgeSearchEnabled",
+      "type": "boolean"
+    },
+    "OptionsTopicSuggestionsEnabled": {
+      "field_label": "TopicSuggestionsEnabled",
+      "type": "boolean"
+    },
+    "OptionsTwilioCallbackApiEnabled": {
+      "field_label": "Allow Twilio Callback API",
+      "type": "boolean"
+    },
+    "OptionsUnifiedSearchEnabled": {
+      "field_label": "UnifiedSearchEnabled",
+      "type": "boolean"
+    },
+    "OptionsUpDownVoteEnabled": {
+      "field_label": "UpDownVoteEnabled",
+      "type": "boolean"
+    },
+    "PendingSecondaryEmailAddress": {
+      "field_label": "Pending Secondary Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "PwdlessRegEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SelfRegMicroBatchSubErrorEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SelfRegProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UrlPathPrefix": {
+      "field_label": "Experience URL Prefix",
+      "type": "string",
+      "length": "40"
+    },
+    "VerificationEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "VerifiedSecondaryEmailAddress": {
+      "field_label": "Verified Secondary Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "WelcomeEmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

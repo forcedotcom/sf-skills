@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ExtConvParticipantIntegDef - Tooling API",
+  "description": "Represents the integration configuration for external conversation participants, used for communication between Salesforce and external messaging platforms. This object is available in API version 66.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountKey": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The encrypted JSON format key for secure storage of authentication credentials for external bot API calls."
+    },
+    "BotProvider": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The provider of bot integration that handles authentication and request and response logic. Possible value: Custom"
+    },
+    "ChannelMode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Possible values for channel type are: Messaging Voice The default value is Messaging."
+    },
+    "ClientIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API client ID of the bot provider."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the MasterLabel."
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The manageable state of the specified component that’s contained in a package. Possible values are: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for this object."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If it's part of a managed package, the namespace of the package that contains integration definition for the external conversation participant."
+    },
+    "ProjectIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the project in the provider framework to scope API calls and resource access."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the integration. Possible values are: Active Deleted Inactive The default value is Active."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"BotProvider\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"GoogleCCAI\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChannelMode\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Messaging\"/>\n    <xsd:enumeration value=\"Voice\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ExtConvParticipantIntegDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accountKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"botProvider\" minOccurs=\"0\" type=\"tns:BotProvider\"/>\n        <xsd:element name=\"channelMode\" minOccurs=\"0\" type=\"tns:ChannelMode\"/>\n        <xsd:element name=\"clientIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"connectedAppOauthLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"conversationVendorInfo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customEventPayloadField\" type=\"xsd:string\"/>\n        <xsd:element name=\"customEventTypeField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customPlatformEvent\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalConversationBotDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ExternalConversationBotDef\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"projectIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"status\" minOccurs=\"0\" type=\"tns:ExtConvParticipantIntegDefStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ExtConvParticipantIntegDefStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Active\"/>\n    <xsd:enumeration value=\"Inactive\"/>\n    <xsd:enumeration value=\"Deleted\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

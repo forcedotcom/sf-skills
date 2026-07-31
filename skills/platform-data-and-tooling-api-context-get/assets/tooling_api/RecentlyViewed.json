@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "RecentlyViewed - Tooling API",
+  "description": "Represents metadata entities typically found in Setup such as page layout definitions, workflow rule definitions, and email templates that the current user has recently viewed.",
+  "supported_soap_calls": "`query()`, `update()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Alias": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The alias on the item."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The email address on the item."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The first name on the item."
+    },
+    "Id": {
+      "type": "ID",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The ID of the recently viewed item."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the recently viewed item is an active user (true) or not (false). This field contains a value only if the recently viewed item is a user."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The last name on the item."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the current user last viewed an item related to this item."
+    },
+    "LastViewedDate": {
+      "type": "dateTimedateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the current user last viewed this item. If this value is null, this item might only have been referenced (see LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the recently viewed item is a user, this is the user’s name. Specifically, it’s the concatenation of the FirstName and LastName field values."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Experience Cloud site that this recently viewed item is part of. This field is available only if digital experiences is enabled in your org."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The phone number on the item."
+    },
+    "ProfileId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the recently viewed item is a user, this is the user’s profile ID."
+    },
+    "RelatedObject": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The object that the recently viewed item is related to. For example, if the recently viewed item is an Account Custom Field, then the related object will be Account. Not all recently viewed items will have a related object."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "FilterGrouplable, Sort",
+      "description": "If the recently viewed item is a user, this is the user’s title. For example, CFO or CEO."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter Group NillableRestricted picklist Sort",
+      "description": "The sObject type for this recently viewed item."
+    },
+    "UserRoleId": {
+      "type": "reference",
+      "properties": "FilterGroupNillableSort",
+      "description": "The ID of the user role associated with this object."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"RecentlyViewed\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Alias\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Email\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"FirstName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsActive\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Language\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LastReferencedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"LastViewedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"NameOrAlias\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Phone\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Profile\" minOccurs=\"0\" type=\"ens:Profile\" nillable=\"true\"/>\n        <xsd:element name=\"ProfileId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"RecordType\" minOccurs=\"0\" type=\"ens:RecordType\" nillable=\"true\"/>\n        <xsd:element name=\"RecordTypeId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"RelatedObject\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Title\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Type\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"UserRole\" minOccurs=\"0\" type=\"ens:UserRole\" nillable=\"true\"/>\n        <xsd:element name=\"UserRoleId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

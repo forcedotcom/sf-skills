@@ -1,0 +1,148 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "EmpUserProvisionProcessErr - Data API",
+  "description": "Represents an employee-user provisioning process error. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the Person Account linked to the employee record associated with the error. This is a relationship field.",
+      "relationship_name": "Account",
+      "refers_to": "Account"
+    },
+    "EmployeeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the employee record associated with the error. This is a relationship field.",
+      "relationship_name": "Employee",
+      "relationship_type": "Lookup",
+      "refers_to": "Employee"
+    },
+    "ErrorCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The error code if the provisioning isn’t successful."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If an error occurred, this field contains the error message."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the error was last referenced, with a precision of one second."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the error was last viewed, with a precision of one second."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the error."
+    },
+    "ProvisioningProcessId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the associated user provisioning process. This is a relationship field.",
+      "relationship_name": "ProvisioningProcess",
+      "relationship_type": "Lookup",
+      "refers_to": "EmpUserProvisioningProcess"
+    }
+  },
+  "special_access_rules": "This object requires a Workplace Command Center add-on license, or an Employee Experience add-on license.",
+  "usage": "Use the EmpUserProvisionProcessErr to view the errors for an employee-user provisioning process.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ErrorCode": {
+      "field_label": "Error Code",
+      "type": "string",
+      "length": "32"
+    },
+    "ErrorMessage": {
+      "field_label": "Error Message",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Employee User Provisioning Process Error ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Process Item Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ProvisioningProcessId": {
+      "field_label": "Employee User Provisioning Process ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

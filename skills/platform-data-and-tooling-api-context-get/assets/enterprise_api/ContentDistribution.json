@@ -1,0 +1,271 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentDistribution - Data API",
+  "description": "Represents information about sharing a document externally. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentDocumentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the shared document."
+    },
+    "ContentDownloadUrl": {
+      "type": "string",
+      "properties": "Sort, Nillable",
+      "description": "The link for downloading the file. This field is available in API version 40.0 and later."
+    },
+    "ContentVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the shared document version. This is a relationship field.",
+      "relationship_name": "ContentVersion",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentVersion"
+    },
+    "DistributionPublicUrl": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "URL of the link to the shared document."
+    },
+    "ExpiryDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Date when the shared document becomes inaccessible."
+    },
+    "FirstViewDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date when the shared document is first viewed."
+    },
+    "LastViewDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date when the shared document was last viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the content delivery."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the user who owns the shared document. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "PdfDownloadUrl": {
+      "type": "string",
+      "properties": "Sort, Nillable",
+      "description": "The link for downloading the file as a PDF. This field is available in API version 40.0 and later."
+    },
+    "Password": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "A password that allows access to a shared document."
+    },
+    "PreferencesAllowOriginalDownload": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the shared document can be downloaded as the file type that it was uploaded as.When false, download availability depends on whether a preview of the file exists. If a preview exists, the file can’t be downloaded. If a preview doesn’t exist, the file can still be downloaded. If the shared document is a link, it can’t be downloaded."
+    },
+    "PreferencesAllowPDFDownload": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the shared document can be downloaded as a PDF if the original file type is PDF or if a PDF preview has been generated."
+    },
+    "PreferencesAllowViewInBrowser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, a preview of the shared document can be viewed in a Web browser."
+    },
+    "PreferencesExpires": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, access to the shared document expires on the date that’s specified by ExpiryDate."
+    },
+    "PreferencesLinkLatestVersion": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, users see the most recent version of a shared document. When false, users see the version of the document that’s shared, even if it isn’t the most recent version."
+    },
+    "PreferencesNotifyOnVisit": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the owner of the shared document is emailed the first time that someone views or downloads the shared document."
+    },
+    "PreferencesNotifyRndtnComplete": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the owner of the shared document is emailed when renditions of the shared document that can be previewed in a Web browser are generated."
+    },
+    "PreferencesPasswordRequired": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, a password, specified by Password, is required to access the shared document."
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the record, such as an Account, Campaign, or Case, that the shared document is related to. This is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Campaign, Case, Contact, EmailMessage, Lead, ListEmail, Opportunity"
+    },
+    "ViewCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times that the shared document has been viewed."
+    }
+  },
+  "usage": "Use this object to create, update, delete, or query information about a document shared externally via a link or via Salesforce CRM Content delivery. The ContentDistribution object supports triggers before and after these operations: insert, update, delete. It supports triggers after undelete.\n\nUse this object to create, update, delete, or query information about a document shared externally via a link or via Salesforce CRM Content delivery.\n\nThe ContentDistribution object supports triggers before and after these operations: insert, update, delete. It supports triggers after undelete.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentDistribution\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentDistributionViews\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentDownloadUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContentVersion\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentVersion\"/>\n        <element name=\"ContentVersionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DistributionPublicUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExpiryDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FirstViewDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Password\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PdfDownloadUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PreferencesAllowOriginalDownload\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesAllowPDFDownload\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesAllowViewInBrowser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesExpires\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesLinkLatestVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesNotifyOnVisit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesNotifyRndtnComplete\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesPasswordRequired\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"RelatedRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ViewCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ContentDocumentId": {
+      "field_label": "Content Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentDownloadUrl": {
+      "field_label": "File Download Link",
+      "type": "string",
+      "length": "256"
+    },
+    "ContentVersionId": {
+      "field_label": "Content Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DistributionPublicUrl": {
+      "field_label": "External Link",
+      "type": "string",
+      "length": "256"
+    },
+    "ExpiryDate": {
+      "field_label": "Expiration Date",
+      "type": "datetime"
+    },
+    "FirstViewDate": {
+      "field_label": "First Viewed",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Content Delivery ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastViewDate": {
+      "field_label": "Last Viewed",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Content Delivery Name",
+      "type": "string",
+      "length": "100"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Password": {
+      "field_label": "Password",
+      "type": "string",
+      "length": "36"
+    },
+    "PdfDownloadUrl": {
+      "field_label": "PDF Download Link",
+      "type": "string",
+      "length": "256"
+    },
+    "PreferencesAllowOriginalDownload": {
+      "field_label": "Allow Download in Original Format",
+      "type": "boolean"
+    },
+    "PreferencesAllowPDFDownload": {
+      "field_label": "Allow Download as PDF",
+      "type": "boolean"
+    },
+    "PreferencesAllowViewInBrowser": {
+      "field_label": "Allow View in the Browser",
+      "type": "boolean"
+    },
+    "PreferencesExpires": {
+      "field_label": "Content Delivery Expires",
+      "type": "boolean"
+    },
+    "PreferencesLinkLatestVersion": {
+      "field_label": "Content Delivery Opens Latest Version",
+      "type": "boolean"
+    },
+    "PreferencesNotifyOnVisit": {
+      "field_label": "Notify Me of First View or Download",
+      "type": "boolean"
+    },
+    "PreferencesNotifyRndtnComplete": {
+      "field_label": "Email when Preview Images are Ready",
+      "type": "boolean"
+    },
+    "PreferencesPasswordRequired": {
+      "field_label": "Require Password to Access Content",
+      "type": "boolean"
+    },
+    "RelatedRecordId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ViewCount": {
+      "field_label": "View Count",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

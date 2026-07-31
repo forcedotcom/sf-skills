@@ -1,0 +1,138 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "WorkGoal - Data API",
+  "description": "Represents the components of a goal, such as its description and associated metrics. This object has been deprecated as of API version 35.0. Use the Goal object to query information about WDC goals.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActualValue": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The actual value of the WorkGoal metric. Applicable only to WorkGoal objects of Type: Metric."
+    },
+    "ActualValueExternalUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Contains a URL that references WDC data synchronization for the actual value of a metric. Applicable only to WorkGoal objects of Type: Metric."
+    },
+    "CompletionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The completion date of the goal. Note: Field-level security limits access to only administrators and owners by default, and only they can complete a goal."
+    },
+    "Description": {
+      "type": "textarea (max length 4000)",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the goal."
+    },
+    "DueDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date the WorkGoal object is due (optional). Applicable only to WorkGoal objects of Type: Metric."
+    },
+    "FlaggedAs": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The progress of the WorkGoal object. Applicable only to WorkGoal objects of Type: Metric. Possible values: On Track: Progress on the metric is on track. Behind: Progress on the metric is behind schedule. Postponed: The metric is postponed. Critical: Progress on the metric is critical."
+    },
+    "ImageUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The URL for the goal image. The image must be stored in Documents and set as externally available. Applicable only to WorkGoal objects of Type: Goal."
+    },
+    "InitialValue": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The initial value of the WorkGoal metric. Applicable only to WorkGoal objects of Type: Metric and MetricType: Progress or Percent."
+    },
+    "IsKeyCompanyGoal": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Used to indicate if the goal is a key company goal. Used for the Company Goal Showcase. Applicable only to WorkGoal objects of Type: Goal."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time stamp that indicates when the current user last viewed a record that is related to this goal."
+    },
+    "LastSyncDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time stamp that indicates when the actual value was last synced with the associated metrics report."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time stamp that indicates when the current user last viewed this goal."
+    },
+    "MetricType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of metric that is represented. (See values in the following list). Applies only to WorkGoal objects of Type: Metric. Possible values: Progress: ActualValue / TargetValue as a percentage Percent: the metric as a percentage only YesNo: the completed / not completed metric as a milestone Absolute: Deprecated"
+    },
+    "MetricTypeDataSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies how the metric (ActualValue and CurrentValue) is updated. Applies only to WorkGoal objects of Type: Goal and Metric. Possible values: Manual: indicates that the actual and target value of the metric is updated manually by the user Rollup: indicates that the actual and target value of a goal is rolled up automatically by WDC Goals DataSyncActualOnly: indicates that the actual value of the metric is linked to a Salesforce report"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the WorkGoal object. (Maximum length is 255.)"
+    },
+    "OverallStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The overall calculated status of the WorkGoal based on FlaggedAs and CompletionDate."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who owns the WorkGoal."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the structural parent of the WorkGoal. For example, a goal that has a metric is represented by a WorkGoal of Type Metric, which has a parent of WorkGoal of Type Goal. Note: The root and the parent must be set to the parent goal for any child metrics."
+    },
+    "Progress": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read Only. The overall progress of the WorkGoal."
+    },
+    "RootId": {
+      "type": "reference to a WorkGoal object",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the structural root of the WorkGoal. For example, a goal that has a metric is represented by a WorkGoal of Type Metric, which has a root of WorkGoal of Type Goal."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The state of the WorkGoal object. Applies only to WorkGoal objects of Type: Metric. Possible values: Draft: the draft state for the WorkGoal Published: published state for the WorkGoal Archived: archived state for the WorkGoal (for example, goals that no longer apply)"
+    },
+    "TargetValue": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The target value of the WorkGoal. Applies only to WorkGoal objects of Type: Metric."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of the WorkGoal object, used to differentiate between the components of a goal. (This field is used to represent components of a goal such as its description and associated metrics.) Possible values: Goal: a goal Metric: a metric (typically associated with goals) Objective: an objective KeyResult: a key result (typically associated with objectives V2Mom: a V2MOM (pilot feature) Vision: a vision (pilot feature — typically associated with V2MOM) Value: a value (pilot feature - typically associated with V2MOM) Method: a method (pilot feature - typically associated with V2MOM) Obstacle: an obstacle (pilot feature - typically associated with V2MOM) Measure: a measure (pilot feature - typically associated with a method) Note: Administrators can rename goals and metrics to objectives and key results, respectively. If this preference is enabled, use the Type Objective or KeyResult. Otherwise, use the default Type Goal or KeyResult."
+    },
+    "Weight": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The weight of the goal or metric. The sum of the weights should equal 100%."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **WorkGoalFeed (API verison 35.0)**: Feed tracking is available for the object.\n- **WorkGoalHistory**: History is available for tracked fields of the object.\n- **WorkGoalOwnerSharingRule**: The original WDC feature is unavailable as of Spring '22. This object isn't available as of API version 54.0. For more information, see Phased WDC (legacy Work.com) Feature Retirement.\n- **WorkGoalShare**: Sharing rules are available for the object."
+}

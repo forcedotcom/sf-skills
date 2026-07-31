@@ -1,0 +1,214 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmailDomainKey - Data API",
+  "description": "Represents a domain key for an organization’s domain, used to authenticate outbound email that Salesforce sends on the organization’s behalf. This object is available in API version 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AlternatePublicKey": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Read-only. Alternate public keys are used by Salesforce to auto-rotate domain keys. This field is available in API version 44.0 and later after activating the Critical Update."
+    },
+    "AlternateSelector": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The text used to distinguish the DKIM key from any other DKIM keys your organization uses for the specified domain. This field is available in API version 44.0 and later after activating the Critical Update."
+    },
+    "AlternateTxtRecordName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The alternate TXT record name is used to create the CNAME record. Refer to the Usage section for more information. This field is available in API version 44.0 and later after activating the Critical Update."
+    },
+    "Domain": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The organization’s domain name that the DKIM key is generated for."
+    },
+    "DomainMatch": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The specificity of match required on the sending domain name before signing with this DKIM key. Valid values are: DomainOnly—Sign if sending domain matches at the domain level only (example.com but not mail.example.com) SubdomainsOnly—Sign if sending domain matches at the subdomain level only (mail.example.com but not example.com) DomainAndSubdomains—Sign if sending domain matches at the domain and subdomain levels (example.com and mail.example.com)"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this DKIM key is active (true) or not (false)."
+    },
+    "KeySize": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Indicates the RSA key size, in bits. The possible values are: 1024 2048 This field is available in API version 45.0 and later."
+    },
+    "PrivateKey": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Once you activate the Critical Update, this field is no longer visible. The private portion of the DKIM key pair used to encrypt mail headers from your domain. Salesforce generates an encrypted PrivateKey if you don’t specify a value when creating the DKIM key. If you do specify a value, it must be an existing valid PrivateKey from another EmailDomainKey object. This field doesn’t contain the actual private key, but a value that represents the key in our system. Therefore: The actual private key can’t be leaked. You can’t use the value to do your own email signing."
+    },
+    "PublicKey": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Part of the domain key pair that mail recipients retrieve to decrypt the DKIM header and verify your domain. Add the PublicKey value to your domain’s DNS records before you start signing with this domain key."
+    },
+    "Selector": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Text used to distinguish the DKIM key from any other DKIM keys your organization uses for the specified domain."
+    },
+    "TxtRecordName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read-only. The TXT record name is used to create the CNAME record. Refer to the Usage section for more information. This field is available in API version 44.0 and later after activating the Critical Update."
+    },
+    "TxtRecordsPublishState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The possible values are: Published Publishing in progress Publishing failed This field is available in API version 44.0 and later after activating the Critical Update."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only authenticated internal and external users can access this object. We’ve upgraded and replaced the original DKIM (DomainKeys Identified Mail) key feature, so that you can create a DKIM key with increased email security. For more information, see Setting Up More Secure DKIM Keys.\n\nAs of Summer ’20 and later, only authenticated internal and external users can access this object.\n\nWe’ve upgraded and replaced the original DKIM (DomainKeys Identified Mail) key feature, so that you can create a DKIM key with increased email security. For more information, see Setting Up More Secure DKIM Keys.",
+  "usage": "Create DKIM Keys with Increased Security Create DKIM Keys (pre-Winter ‘19 Version) When you create a DKIM key, Salesforce generates a public and private key pair. Publish the public key in the DNS.\n\nCreate DKIM Keys with Increased Security**\n\nCreate DKIM Keys (pre-Winter ‘19 Version)**\n\nWhen you create a DKIM key, Salesforce generates a public and private key pair. Publish the public key in the DNS.",
+  "wsdl_segment": "```xml\n<complexType name=\"EmailDomainKey\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AlternatePublicKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AlternateSelector\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AlternateTxtRecordName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Domain\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DomainMatch\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DomainMatchPattern\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDnsDelegated\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsMceShared\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"KeySize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PlatformType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PublicKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Selector\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StatusMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ThirdSelector\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ThirdTxtRecordName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TxtRecordName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TxtRecordsPublishState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AlternatePublicKey": {
+      "field_label": "Alternate Public Key",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "AlternateSelector": {
+      "field_label": "Alternate Selector",
+      "type": "string",
+      "length": "63"
+    },
+    "AlternateTxtRecordName": {
+      "field_label": "Alternate TXT Record Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Domain": {
+      "field_label": "Domain",
+      "type": "string",
+      "length": "255"
+    },
+    "DomainMatch": {
+      "field_label": "Domain Match",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DomainMatchPattern": {
+      "field_label": "Domain Match Pattern",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Email Domain Key ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDnsDelegated": {
+      "field_label": "Is DNS Delegated",
+      "type": "boolean"
+    },
+    "IsMceShared": {
+      "field_label": "Is MCE Shared",
+      "type": "boolean"
+    },
+    "KeySize": {
+      "field_label": "Key Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PlatformType": {
+      "field_label": "Platform Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PublicKey": {
+      "field_label": "Public Key",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Selector": {
+      "field_label": "Selector",
+      "type": "string",
+      "length": "63"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StatusMessage": {
+      "field_label": "Status Message",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ThirdSelector": {
+      "field_label": "Third Selector",
+      "type": "string",
+      "length": "63"
+    },
+    "ThirdTxtRecordName": {
+      "field_label": "Third TXT Record Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TxtRecordName": {
+      "field_label": "TXT Record Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TxtRecordsPublishState": {
+      "field_label": "TXT Record Status",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

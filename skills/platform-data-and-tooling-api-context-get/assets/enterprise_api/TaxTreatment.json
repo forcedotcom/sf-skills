@@ -1,0 +1,177 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "TaxTreatment - Data API",
+  "description": "A tax treatment contains details about how Salesforce and external engines calculate taxes, and the tax engine to use for tax calculation. The IsTaxable field determines whether tax is calculated for the product in the transaction. The tax code, tax engine, and product code are sent via API to the external tax calculation service. When you invoice an order item that has a tax treatment, the invoice line inherits the tax treatment from the order item’s related billing schedule. The invoice line’s TaxCode field is populated based on the code that the tax engine used for calculation. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Optional user-defined description for providing more information about the tax treatment."
+    },
+    "IsTaxable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether Subscription Management calculates tax for order items covered by the tax treatment. When this value is True, Subscription Management calls the CalculateTax API for the order item during order item creation. The default value is 'False'. This field is available when Subscription Management is enabled."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Optional user-defined name for the tax treatment."
+    },
+    "ProductCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Code of the product that the tax treatment applies to."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Status of the tax treatment. Possible values are: Active Draft Inactive"
+    },
+    "TaxCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reference code used when tax is calculated in an external tax engine."
+    },
+    "TaxEngineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The tax engine for the tax treatment. A tax engine represents both an instance of a tax engine provider as well as the merchant credentials for that specific instance. When Subscription Management begins the tax calculation process for an order item, it uses the tax engine from the order item’s tax treatment. If the tax treatment’s IsTaxable value is True, the treatment requires a tax engine. This field is a relationship field. This field is available when Subscription Management is enabled.",
+      "relationship_name": "TaxEngine",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxEngine"
+    },
+    "TaxPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The tax treatment’s parent tax policy. A tax policy is a group of tax treatments, where each treatment represents a rule for how to invoice a customer for an order item. Tax policies are related to products, which pass the policy on to the resulting order items. When you activate an order, Subscription Management assigns a tax treatment to each order item based on the tax policy's DefaultTaxTreatmentId, then uses the tax treatment to calculate tax. This field is a relationship field.",
+      "relationship_name": "TaxPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxPolicy"
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "Id": {
+      "field_label": "Tax Treatment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsTaxable": {
+      "field_label": "Is Taxable",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Tax Treatment Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductCode": {
+      "field_label": "Product Code",
+      "type": "string",
+      "length": "80"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShouldUseTaxTreatmentItems": {
+      "field_label": "Use Tax Treatment Items",
+      "type": "boolean"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxCode": {
+      "field_label": "Tax Code",
+      "type": "string",
+      "length": "80"
+    },
+    "TaxEngineId": {
+      "field_label": "Tax Engine ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TaxPolicyId": {
+      "field_label": "Tax Policy ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "PriceAdjustmentTier - Data API",
+  "description": "Represents a discount tier in a price adjustment schedule. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "LowerBound": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The minimum quantity the discount can be applied to. It must be a positive integer and less than or equal to the upper bound of the tier."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only."
+    },
+    "PriceAdjustmentScheduleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the price adjustment schedule that the discount is applied to."
+    },
+    "TierType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The unit of the discount. Possible values are: AdjustmentAmount—An amount discounted from an item’s list price. Label is Amount. AdjustmentPercentage—A percentage discounted from an item’s list price. Label is Percentage. AdjustmentOverride—An override of an item’s list price. Label is Override."
+    },
+    "TierValue": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The value of the discount."
+    },
+    "UpperBound": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The maximum quantity the discount can be applied to. The quantity must be a positive integer. Not inclusive. Set this value one digit higher than the quantity you want the tier to include. For example, if a tier’s upper bound is 99, set the value of UpperBound to 100. For the last tier, the value is optional."
+    }
+  },
+  "special_access_rules": "This object is available only if the B2B Commerce license is enabled.",
+  "usage": "To use PriceAdjustmentTiers, associate them with a PriceAdjustmentSchedule. Tiers can’t overlap, and no gaps are allowed between tiers.\n\nTo use PriceAdjustmentTiers, associate them with a PriceAdjustmentSchedule.\n\nTiers can’t overlap, and no gaps are allowed between tiers.",
+  "field_reference": {
+    "AdjustmentType": {
+      "field_label": "Adjustment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EffectiveFrom": {
+      "field_label": "Effective From",
+      "type": "datetime"
+    },
+    "EffectiveTo": {
+      "field_label": "Effective To",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Price Adjustment Tier ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LowerBound": {
+      "field_label": "Lower Bound",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Name": {
+      "field_label": "Price Adjustment Tier Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PriceAdjustmentScheduleId": {
+      "field_label": "Price Adjustment Schedule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PricingTerm": {
+      "field_label": "Pricing Term",
+      "type": "int",
+      "digits": "9"
+    },
+    "PricingTermUnit": {
+      "field_label": "Pricing Term Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductSellingModelId": {
+      "field_label": "Product Selling Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScheduleType": {
+      "field_label": "Schedule Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SellingModelType": {
+      "field_label": "Selling Model Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TierType": {
+      "field_label": "Tier Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TierValue": {
+      "field_label": "Tier Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "UpperBound": {
+      "field_label": "Upper Bound",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

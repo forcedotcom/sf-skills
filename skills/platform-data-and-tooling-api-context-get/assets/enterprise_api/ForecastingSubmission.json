@@ -1,0 +1,183 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingSubmission - Data API",
+  "description": "Represents a submitted forecast. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The currency code of the forecast submission. If omitted, the default is USD."
+    },
+    "ForecastOwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecast owner. This field is a relationship field.",
+      "relationship_name": "ForecastOwner",
+      "refers_to": "User"
+    },
+    "ForecastingGroupItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use. Forecast submissions aren't supported in forecast types with groups.",
+      "relationship_name": "ForecastingGroupItem",
+      "refers_to": "ForecastingGroupItem"
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecast type. This field is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "refers_to": "ForecastingType"
+    },
+    "IsLatest": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the forecast submission is the most recent submission. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only. ID of this record."
+    },
+    "Note": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The note attached to the submitted forecast."
+    },
+    "PeriodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the period to which the submission applies. This field is a relationship field.",
+      "relationship_name": "Period",
+      "refers_to": "Period"
+    },
+    "PeriodStartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates the start date of the forecast period."
+    },
+    "ProductFamily": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Must be set to none. Forecast submissions aren't supported in forecast types grouped by product families."
+    },
+    "SubmissionDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time that the forecast submission was made. Calculated internally."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the territory to forecast on. This field is a relationship field.",
+      "relationship_name": "Territory2",
+      "refers_to": "Territory2"
+    }
+  },
+  "special_access_rules": "Available for forecast types that aren’t grouped by product family forecast.",
+  "usage": "ForecastingSubmission is a detail object that contains the submitted item category values. Each record represents the values for a single item category. ForecastingSubmission is always used as a detail object for the submission, and inserted only as part of a transaction that includes all detail objects.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ForecastOwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingGroupItemId": {
+      "field_label": "Forecasting Group Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Submission ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsLatest": {
+      "field_label": "Is Latest",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Forecasting Submission",
+      "type": "string",
+      "length": "255"
+    },
+    "Note": {
+      "field_label": "Note",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "PeriodId": {
+      "field_label": "Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PeriodStartDate": {
+      "field_label": "Period Start Date",
+      "type": "date"
+    },
+    "ProductFamily": {
+      "field_label": "Product Family",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubmissionDateTime": {
+      "field_label": "Submission Date Time",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

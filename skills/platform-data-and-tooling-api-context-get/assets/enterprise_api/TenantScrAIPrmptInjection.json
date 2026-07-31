@@ -1,0 +1,93 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "TenantScrAIPrmptInjection - Data API",
+  "description": "Stores generative AI prompt injection data. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the individual detail record. This field is unique across all tenants."
+    },
+    "InputSource": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The origin of this prompt."
+    },
+    "Language": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Language of the prompt."
+    },
+    "MaskedPrompt": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Masked prompt or input text."
+    },
+    "MaskedResponse": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The generated response from the LLM. If masking is enabled, this may contain placeholder text."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the type of metric that was counted. This field is unique within your organization."
+    },
+    "MetricsType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of data collected."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the metric for which data is being collected."
+    },
+    "PlannerLlm": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The LLM being used by the Planner."
+    },
+    "Prompt": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The hydrated version of prompt text before data masking is applied. The actual prompt sent to the LLM will mask sensitive data if data masking is enabled."
+    },
+    "PromptTimestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when this prompt injection happened."
+    },
+    "PromptTokens": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of tokens used in the prompt."
+    },
+    "Response": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The generated response after unmasking."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant with this triggered Transaction Security Policy event."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the tenant where this triggered Transaction Security Policy happened."
+    }
+  },
+  "special_access_rules": "This object is available for Security Center subscribers. This object is read-only."
+}

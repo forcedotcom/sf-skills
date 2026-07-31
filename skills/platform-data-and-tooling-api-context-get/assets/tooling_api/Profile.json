@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "Profile - Tooling API",
+  "description": "Represents a user profile. A profile defines a user’s permission to perform different functions within Salesforce. This type extends the Metadata metadata type and inherits its fullName field.",
+  "supported_soap_calls": "`getDeleted()`, `getUpdated()`, `query()`, `retrieve()`, `search()`",
+  "supported_rest_api_http_methods": "`GET`, `HEAD`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The profile description, limited to 255 characters."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The unique profile name. Use this name when creating the profile, before you have an ID. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Metadata": {
+      "type": "ProfileMetadata",
+      "properties": "Create, Nillable, Update",
+      "description": "The profile metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The profile name."
+    },
+    "TimeSheetTemplateAssignments": {
+      "type": "tns:QueryResult",
+      "properties": "Nillable",
+      "description": "The time sheet template that you assign to a particular profile. Because this field represents a relationship, use it only in subqueries. This field is available in Tooling API version 46.0 and later."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, Customer Portal and Partner Portal users cannot access this object.\n- Client settings\n- Field permissions\n- Layout assignments\n- Object permissions\n- Permission dependencies\n- Permission set tab settings\n- Permission set group components\n- Record types\nAs of API version 50.0 and later, only users with correct permissions can view profile names other than their own if the Profile Filtering setting is enabled.\n- Create a tab or record type with a wizard step that includes the assignment of tabs and record types to profiles.\n- Configure a login flow where viewing profile lists is required to make flow associations.\n- Set up delegated admins where looking up profiles is needed to identify assignable profiles.\n- Administer an org as a delegated customer admin.\n- Administer an org as a delegated admin to view and assign profiles of the delegated group.",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Profile\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:Profile\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"Profile\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"applicationVisibilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileApplicationVisibility\"/>\n        <xsd:element name=\"classAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileApexClassAccess\"/>\n        <xsd:element name=\"custom\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"customPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileCustomPermissions\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalDataSourceAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileExternalDataSourceAccess\"/>\n        <xsd:element name=\"fieldPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileFieldLevelSecurity\"/>\n        <xsd:element name=\"loginHours\" minOccurs=\"0\" type=\"mns:ProfileLoginHours\"/>\n        <xsd:element name=\"loginIpRanges\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileLoginIpRange\"/>\n        <xsd:element name=\"objectPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileObjectPermissions\"/>\n        <xsd:element name=\"pageAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileApexPageAccess\"/>\n        <xsd:element name=\"profileActionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileActionOverride\"/>\n        <xsd:element name=\"recordTypeVisibilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileRecordTypeVisibility\"/>\n        <xsd:element name=\"servicePresenceStatusAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileServicePresenceStatusAccess\"/>\n        <xsd:element name=\"tabVisibilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileTabVisibility\"/>\n        <xsd:element name=\"userLicense\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"userPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileUserPermission\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

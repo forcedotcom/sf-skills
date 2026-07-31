@@ -1,0 +1,112 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ReleaseUpdate - Tooling API",
+  "description": "Represents an individual release update. Available in API version 50.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`",
+  "supported_rest_api_http_methods": "`Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The API version to which the update is applied."
+    },
+    "Category": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the type of the release update. For example, “Security” or “Usability.”"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The description of the update that appears on the front of the card."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique name of the release update."
+    },
+    "DueDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date by which test runs must be completed."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique name of the release update."
+    },
+    "HasNewSteps": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if steps have been added to the release update since its original release (true) or not (false)."
+    },
+    "IsReleased": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the update is released (true) or not (false)."
+    },
+    "NumCompSteps": {
+      "type": "integer",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates how many steps have been completed in the update."
+    },
+    "NumReqSteps": {
+      "type": "integer",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the total number of required steps before proceeding with test run."
+    },
+    "NumSteps": {
+      "type": "integer",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the total number of all steps in the update."
+    },
+    "Release": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The release, including patch number, in which the update is available. For example, 50.00.00. Note: Also see ReleaseDate and ReleaseLabel."
+    },
+    "ReleaseDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date in which the update is enforced. Note: Only specified if the update is part of a scheduled release, so either Release or ReleaseDate will be non-null. Also see Release and ReleaseLabel."
+    },
+    "ReleaseLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The release label in which the update is enforced. For example, “Winter ‘21.” The label could also be a formatted date if Release is null and ReleaseDate is non-null."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Values include: Complete: The update has been applied. Info: An information-only update; no actions to take. Invocable: The update is not yet applied; ready for invocation. Invoked: The update has been invoked but can’t be revoked yet. Nascent: The update has incomplete steps so test run can’t be run yet. Pending: The Complete Steps By date is in the past and update is awaiting enforcement. Revocable: The update is in test run mode."
+    },
+    "StepStage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the stage in which the update is at. Options include Needs Action, Due Soon, Overdue, and Archived."
+    },
+    "SupportsRevoke": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the update has a test run(true) or not (false). Default is false."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The release update title that appears at the top of the release update in the UI."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"QueryLocator\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"QueryResult\">\n  <xsd:sequence>\n    <xsd:element name=\"done\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"entityTypeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"nextRecordsUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryLocator\" type=\"tns:QueryLocator\"/>\n    <xsd:element name=\"records\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"ens:sObject\"/>\n    <xsd:element name=\"size\" type=\"xsd:int\"/>\n    <xsd:element name=\"totalSize\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReleaseUpdate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ApiVersion\" minOccurs=\"0\" type=\"xsd:double\" nillable=\"true\"/>\n        <xsd:element name=\"AutoEnforceOnSandboxOnly\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Category\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Description\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DeveloperName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DueDate\" minOccurs=\"0\" type=\"xsd:date\" nillable=\"true\"/>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"HasNewSteps\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsReleased\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"NumCompSteps\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumReqSteps\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumSteps\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"RecompileApexClasses\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Release\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ReleaseDate\" minOccurs=\"0\" type=\"xsd:date\" nillable=\"true\"/>\n        <xsd:element name=\"ReleaseLabel\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Status\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"StepLog\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"StepStage\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Steps\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"SupportsRevoke\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Title\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

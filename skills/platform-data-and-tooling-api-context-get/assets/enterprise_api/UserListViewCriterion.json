@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserListViewCriterion - Data API",
+  "description": "Represents the criterion for a user’s customized list view. The criterion consists of the filters or sort order a user added to a list view for the Salesforce Mobile app. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "description"
+  ],
+  "fields": {
+    "ColumnName": {
+      "description": "Properties: Create, Filter, Group, Sort, Update; The name of the column in the user list view."
+    },
+    "Operation": {
+      "description": "Properties: Create, Filter, Group, Restricted picklist, Sort, Update; The criteria to apply, such as “equals” or “starts with.”"
+    },
+    "SortOrder": {
+      "description": "Properties: Create, Filter, Group, Sort, Update; The order in which the list view is evaluated compared to other UserListViewCriterion objects for the given UserListView."
+    },
+    "UserListViewId": {
+      "description": "Properties: Create, Filter, Group, Sort; The ID of the user list view. This is a relationship field.; Relationship Name: UserListView; Relationship Type: Lookup; Refers To: UserListView"
+    },
+    "Value": {
+      "description": "Properties: Create, Filter, Group, Nillable, Sort, Update; The field values used to filter the list view. For example, a value of 94105 if the Field is Billing Zip/Postal Code shows only rows that have a billing ZIP code of 94105."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserListViewCriterion\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ColumnName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Operation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserListView\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserListView\"/>\n        <element name=\"UserListViewId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Value\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ColumnName": {
+      "field_label": "Column Name",
+      "type": "string",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "User List View Criteria Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Operation": {
+      "field_label": "Operation",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserListViewId": {
+      "field_label": "User List View ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "85"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

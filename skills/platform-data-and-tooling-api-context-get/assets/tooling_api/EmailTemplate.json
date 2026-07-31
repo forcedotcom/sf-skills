@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "EmailTemplate - Tooling API",
+  "description": "Represents a template for an email, mass email, list email, or Sales Engagement email. Supported in first-generation managed packages only.",
+  "supported_soap_calls": "`create()`, `getDeleted()`, `getUpdated()`, `query()`, `retrieve()`, `search()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The API version if this is a Visualforce email template. Every Visualforce email template has an API version specified at creation."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The email template description. This can be useful to describe the reason for creating the template or its intended use."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The unique name used as the template identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "EmailTemplateMetadata",
+      "properties": "Create, Nillable, Update",
+      "description": "Email template metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The email template name."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique string to distinguish this template from any others. For example, if this template is being using by a flow, use the NamespacePrefix to uniquely identify the templates in multiple flow instances."
+    },
+    "RelatedEntityType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "When UIType is 2 (Lightning Experience) or 3 (Lightning ExperienceSample), RelatedEntityType indicates which entities this template can be used with. Valid values are the entity API name: \"Account\" for account, \"Contact\" for contact, \"Opportunity\" for opportunity, \"Lead\" for lead, and so on. The value can be any entity the user has read access to (including custom entities) but not virtual entities, setup entities, or platform entities. No restrictions exist at the schema level."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "The email subject. The limit is 1,000 characters for Lightning email templates and 230 characters for Classic email templates."
+    },
+    "UIType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the user interface where this template is usable. Valid values are: 1 (Salesforce Classic), 2 (Lightning Experience), and 3 (Lightning Experience Sample)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmailTemplate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:EmailTemplate\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"EmailTemplate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"attachedDocuments\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"attachments\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:Attachment\"/>\n        <xsd:element name=\"available\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"encodingKey\" type=\"tns:Encoding\"/>\n        <xsd:element name=\"letterhead\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:PackageVersion\"/>\n        <xsd:element name=\"pageDevName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relatedEntityType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"style\" type=\"tns:EmailTemplateStyle\"/>\n        <xsd:element name=\"subject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"textOnly\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:EmailTemplateType\"/>\n        <xsd:element name=\"uiType\" minOccurs=\"0\" type=\"tns:EmailTemplateUiType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EmailTemplateStyle\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"none\"/>\n    <xsd:enumeration value=\"freeForm\"/>\n    <xsd:enumeration value=\"formalLetter\"/>\n    <xsd:enumeration value=\"promotionRight\"/>\n    <xsd:enumeration value=\"promotionLeft\"/>\n    <xsd:enumeration value=\"newsletter\"/>\n    <xsd:enumeration value=\"products\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmailTemplateType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"text\"/>\n    <xsd:enumeration value=\"html\"/>\n    <xsd:enumeration value=\"custom\"/>\n    <xsd:enumeration value=\"visualforce\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmailTemplateUiType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Aloha\"/>\n    <xsd:enumeration value=\"SFX\"/>\n    <xsd:enumeration value=\"SFX_Sample\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"Encoding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UTF-8\"/>\n    <xsd:enumeration value=\"ISO-8859-1\"/>\n    <xsd:enumeration value=\"Shift_JIS\"/>\n    <xsd:enumeration value=\"ISO-2022-JP\"/>\n    <xsd:enumeration value=\"EUC-JP\"/>\n    <xsd:enumeration value=\"ks_c_5601-1987\"/>\n    <xsd:enumeration value=\"Big5\"/>\n    <xsd:enumeration value=\"GB2312\"/>\n    <xsd:enumeration value=\"Big5-HKSCS\"/>\n    <xsd:enumeration value=\"x-SJIS_0213\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

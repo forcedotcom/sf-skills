@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentWorkspaceMember - Data API",
+  "description": "Represents a member of a content library. This object is available in API version 40.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentWorkspaceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the library. This is a relationship field.",
+      "relationship_name": "ContentWorkspace",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentWorkspace"
+    },
+    "ContentWorkspacePermissionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The id of the library permission or role. This is a relationship field.",
+      "relationship_name": "ContentWorkspacePermission",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentWorkspacePermission"
+    },
+    "MemberId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group,Namepointing, Sort",
+      "description": "ID of the library member (the member is either a user or a group). This is a polymorphic relationship field.",
+      "relationship_name": "Member",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "MemberType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable,Restricted picklist, Sort",
+      "description": "The type of library member. Valid values are: G - Group U - User"
+    }
+  },
+  "special_access_rules": "A user can create/update/delete memberships if they have the Manage Salesforce CRM Content admin perm or the Manage Library permission for the library concerned.",
+  "usage": "Use this object to create, update, or delete members from a library.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentWorkspaceMember\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentWorkspace\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentWorkspace\"/>\n        <element name=\"ContentWorkspaceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentWorkspacePermission\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentWorkspacePermission\"/>\n        <element name=\"ContentWorkspacePermissionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Member\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"MemberId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MemberType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ContentWorkspaceId": {
+      "field_label": "Library ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentWorkspacePermissionId": {
+      "field_label": "Library Permission ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Library Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "MemberId": {
+      "field_label": "Member ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MemberType": {
+      "field_label": "Member Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

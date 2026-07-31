@@ -1,0 +1,132 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "SiteEventLog - Data API",
+  "description": "SiteEventLog stores details of Site.com requests. Requests can originate from the browser (UI). This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CpuTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "DatabaseTotalTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time in nanoseconds for a database round trip. Includes time spent in the JDBC driver, network to the database, and DB_CPU_TIME. Compare this field to CPU_TIME to determine whether performance issues are occurring in the database layer or in your own code."
+    },
+    "HttpHeaders": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The HTTP headers that were sent in the request."
+    },
+    "HttpMethod": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The HTTP method of the request. For example: GET, POST, PUT, and so on."
+    },
+    "IsApi": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The default value is false."
+    },
+    "IsError": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "True if this page was an error page. The default value is false."
+    },
+    "IsFirstRequest": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "True if this page is the first Visualforce transaction in the request. The default value is false."
+    },
+    "IsGuest": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "True if this page was a guest (unauthenticated) request. The default value is false."
+    },
+    "IsSecure": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "True if this request is secure. The default value is false."
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "PageName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the Visualforce page that was requested."
+    },
+    "QueryString": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The SOQL query, if one was performed."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RequestStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The status of the request for a page view or user interface action. This field can have a blank value. For example: S— Success. Salesforce handled the request successfully. If an Apex controller throws an exception, this status is also returned. F— Failure. Typically 4xx or 5xx HTTP codes, such as no permission to view page, page took too long to render, page is read-only. U— Undefined. A—Authorization error. R— Redirect. Typically a 3xx HTTP code, possibly initiated by an Apex controller in a Visualforce page. N—Not Found. 404 error."
+    },
+    "RequestType": {
+      "type": "String",
+      "description": "The request type. Possible values are: page—a normal request for a page content_UI—a content request for a page that originated in the user interface content_apex—a content request initiated by an Apex call PDF_UI—a request for a page in PDF format through the user interface PDF_apex—a request for PDF format by an Apex call (usually a Web Service call)"
+    },
+    "RunTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of time that the request took in milliseconds."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "SiteIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the Site.com site."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "Uri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the page that’s receiving the request. For example: home/home.jsp."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943YAS."
+    },
+    "UserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The category of user license. Possible values are: CsnOnly—Users whose access to the application is limited to Chatter. This user type includes Chatter Free and Chatter moderator users. CspLitePortal—CSP Lite Portal license. Users whose access is limited because they’re organization customers and access the application through a customer portal or an Experience Cloud site. CustomerSuccess—Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Guest—Users whose access is limited so that your customers can view and interact with your site without logging in. PowerCustomerSuccess—Power Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Users with this license type can view and edit data they directly own or data owned by or shared with users below them in the customer portal role hierarchy. PowerPartner—Power Partner license. Users whose access is limited because they’re partners and typically access the application through a partner portal or site. SelfService—Users whose access is limited because they’re organization customers and access the application through a self-service portal. Standard—Standard user license. This user type also includes Salesforce Platform and Salesforce Platform One user licenses, and admins for this org."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

@@ -1,0 +1,276 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "LoginHistory - Data API",
+  "description": "Represents the login history for all successful and failed login attempts for organizations and enabled portals. This object is available in API version 21.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApiType": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "Indicates the API type, for example Soap Enterprise. Label is API Type."
+    },
+    "ApiVersion": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "Displays the API version used by the client. Label is API Version."
+    },
+    "Application": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "The application used to access the organization. Label is Application."
+    },
+    "AuthContextClassRef": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If provided by a third-party identity provider, the authentication method indicated in the Authentication Context Class Reference (ACR) claim. SAML providers—stores the value of the AuthnContextClassRef statement in the SAML response. OpenID Connect providers—stores the value of the ACR claim in the ID token This field is available in API version 67.0 and later."
+    },
+    "AuthMethodReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The authentication method used by a third-party identification provider for an OpenID Connect single sign-on protocol. This field is available in API version 51.0 and later. Label is Authentication Method Reference."
+    },
+    "AuthenticationServiceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character ID for an authentication service for a login event. For example, you can use this field to identify the SAML or authentication provider configuration with which the user logged in. This field is available in API version 34.0 and later. Label is Authentication Service Id. This field is a polymorphic relationship field.",
+      "relationship_name": "AuthenticationService",
+      "relationship_type": "Lookup",
+      "refers_to": "AuthProvider, SamlSsoConfig"
+    },
+    "Browser": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "The current browser version. Label is Browser."
+    },
+    "CipherSuite": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The TLS cipher suite used for the login. Values are OpenSSL-style cipher suite names, with hyphen delimiters. For more information, see OpenSSL Cryptography and SSL/TLS Toolkit. This field is available in API version 37.0 and later."
+    },
+    "ClientVersion": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "Version of the API client. Label is Client Version."
+    },
+    "CountryIso": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ISO 3166 code for the country where the user’s IP address is physically located. For more information, see Country Codes - ISO 3166. This field is available in API version 37.0 and later."
+    },
+    "ForwardedForIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value in the X-Forwarded-For header of HTTP requests sent by the client. For logins that use one or more HTTP proxies, the X-Forwarded-For header is sometimes used to store the origin IP and all proxy IPs. The ForwardedForIp field stores whatever value the client sends, which might not be an IP address. The maximum length is 256 characters. Longer values are truncated. The ForwardedForIp field isn’t populated for logins completed via OAuth flows or single sign-on (SSO). Available in API version 61.0 and later."
+    },
+    "LoginGeoId": {
+      "type": "reference"
+    },
+    "LoginSubType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of login flow used. InternalSalesforceAuthentication–Internal Salesforce AuthenticationThis subtype is for internal use only. OauthClientCredentials–OAuth Client Credentials OauthHybridRefreshToken—OAuth Refresh Token for Hybrid Apps OauthHybridTokenExchange—OAuth Token Exchange for Hybrid Apps OauthHybridUserAgent–OAuth User-Agent for Hybrid Apps OauthHybridWebServer–OAuth Web Server for Hybrid Apps OauthOtpLogin—OAuth OTP Login OauthRefreshToken—OAuth Refresh Token OauthTokenExchange—OAuth Token Exchange OauthUserAgent–OAuth User-Agent OauthUserAgentIdToken–OAuth User-Agent with ID Token OauthUsernamePassword–OAuth Username-Password OauthWebServer–OAuth Web Server SoapApiLogin–SOAP APIThis subtype is for internal use only. SoapApiLoginMobile–SOAP API (Mobile)This subtype is for internal use only. SoapApiLoginNetworksPortal–SOAP API (Networks Portal)This subtype is for internal use only. SoapApiLoginPortal–SOAP API (Portal)This subtype is for internal use only. SoapApiLoginSelfService–SOAP API (Self-Service)This subtype is for internal use only. UiPasswordReset–UI Password Reset UsernamePasswordUiLogin–UI Username-Password Label is Login Subtype."
+    },
+    "LoginTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "Time zone is based on GMT. Label is Login Time."
+    },
+    "LoginType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of login used to access the session. AppExchange–AppExchange Application–Application Certificate–Certificate-based login ChatterCommunityPortalUnPwd–Chatter Communities External User ChatterCommunityThirdPartySso–Chatter Communities External User Third Party SSO CrossTenantLogin–Cross Tenant Login—For internal use only. EmployeeLoginToCommunity–Employee Login to Community HelpAndTraining–Help And Training IeOfflineClient–Offline Client LightningLogin–Lightning Login NetworksPortalApiOnly–Networks Portal API Only Oauth, Remote Access Client–Remote Access Client Oauth2, Remote Access 2.0–Remote Access 2.0 OtherApi–Other Apex API Partner–Partner Product PasswordlessLogin–Passwordless Login PasswordlessPasskeyLogin–Passwordless Login via Passkeys (beta)Passwordless login with passkeys is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion. Portal–Customer Service Portal PortalThirdPartySso–Customer Service Portal Third-Party SSO PrmPortalThirdPartySso–Partner Portal Third-Party SSO PrmPortal–Partner Portal Saml–SAML Idp Initiated SSO SamlChatterNetworks–SAML Chatter Communities External User SSO SamlCspPortal–SAML Customer Service Portal SSO SamlPrmPortal–SAML Partner Portal SSO SamlSite–SAML Site SSO Saml2–SAML Sfdc Initiated SSO SelfService–SelfService ThirdPartySso–Third Party SSO Label is Login Type."
+    },
+    "LoginUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL from which the login request is coming. Label is Login URL."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Experience Cloud site that the user is logging in to. This field is available in API version 31.0 and later, if Salesforce Experience Cloud sites are enabled for your org."
+    },
+    "OptionsIsGet": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The HTTP method used for the session login is a GET request."
+    },
+    "OptionsIsPost": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The HTTP method used for the session login is a POST request."
+    },
+    "Platform": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "Operating system on the login machine. Label is Platform."
+    },
+    "SourceIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the incoming client request that first reaches Salesforce during a login. For example, 126.7.4.2. For clients that redirect through one or more HTTP proxies, this field stores the IP address of the first proxy to reach Salesforce. To better identify the origin IP for these cases, check the ForwardedForIp field instead. The SourceIp field doesn't support the LIKE comparison operator."
+    },
+    "Status": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "Displays the status of the attempted login. Status is either success or a reason for failure. Label is Status."
+    },
+    "TlsProtocol": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The TLS protocol used for the login. Possible values are: TLS 1.0 TLS 1.1 TLS 1.2 TLS 1.3 Unknown This field is available in API version 37.0 and later."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the user logging in. Label is User ID."
+    }
+  },
+  "special_access_rules": "With one exception, only users with Manage Users or Monitor Login History permissions can access this object. The exception is that, in API version 37.0 and later, all users can retrieve their own login history records.",
+  "usage": "Not all fields are filterable. You can only filter on the following fields: The API allows you to do many powerful queries. A few examples are:\n\nNot all fields are filterable. You can only filter on the following fields:\n\nThe API allows you to do many powerful queries. A few examples are:",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"LoginHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApiVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Application\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AuthContextClassRef\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AuthMethodReference\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AuthenticationServiceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Browser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CipherSuite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ClientVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CountryIso\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ForwardedForIp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LoginGeo\" nillable=\"true\" minOccurs=\"0\" type=\"ens:LoginGeo\"/>\n        <element name=\"LoginGeoId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LoginSubType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LoginTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LoginType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LoginUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptionsIsGet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsPost\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Platform\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SourceIp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TlsProtocol\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApiType": {
+      "field_label": "API Type",
+      "type": "string",
+      "length": "64"
+    },
+    "ApiVersion": {
+      "field_label": "API Version",
+      "type": "string",
+      "length": "32"
+    },
+    "Application": {
+      "field_label": "Application",
+      "type": "string",
+      "length": "64"
+    },
+    "AuthContextClassRef": {
+      "field_label": "Authentication Context Class Reference",
+      "type": "string",
+      "length": "500"
+    },
+    "AuthMethodReference": {
+      "field_label": "Authentication Method Reference",
+      "type": "string",
+      "length": "128"
+    },
+    "AuthenticationServiceId": {
+      "field_label": "Authentication Service ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Browser": {
+      "field_label": "Browser",
+      "type": "string",
+      "length": "64"
+    },
+    "CipherSuite": {
+      "field_label": "TLS Cipher Suite",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ClientVersion": {
+      "field_label": "Client Version",
+      "type": "string",
+      "length": "64"
+    },
+    "CountryIso": {
+      "field_label": "Country Code",
+      "type": "string",
+      "length": "3"
+    },
+    "ForwardedForIp": {
+      "field_label": "Forwarded For IP",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Login History Id",
+      "type": "id",
+      "length": "18"
+    },
+    "LoginGeoId": {
+      "field_label": "Login Geo Data ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LoginSubType": {
+      "field_label": "Login Subtype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LoginTime": {
+      "field_label": "Login Time",
+      "type": "datetime"
+    },
+    "LoginType": {
+      "field_label": "Login Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LoginUrl": {
+      "field_label": "Login URL",
+      "type": "string",
+      "length": "255"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OptionsIsGet": {
+      "field_label": "Login via GET",
+      "type": "boolean"
+    },
+    "OptionsIsPost": {
+      "field_label": "Login via POST",
+      "type": "boolean"
+    },
+    "Platform": {
+      "field_label": "Platform",
+      "type": "string",
+      "length": "64"
+    },
+    "SourceIp": {
+      "field_label": "Source IP",
+      "type": "string",
+      "length": "39"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "string",
+      "length": "128"
+    },
+    "TlsProtocol": {
+      "field_label": "TLS Protocol",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

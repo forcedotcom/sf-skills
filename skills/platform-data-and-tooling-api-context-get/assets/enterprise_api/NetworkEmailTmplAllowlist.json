@@ -1,0 +1,84 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "NetworkEmailTmplAllowlist - Data API",
+  "description": "Represents an allowlist for the one-time password (OTP) email templates that are sent to end users during the Headless Registration Flow, the Headless Passwordless Login Flow, and the Headless Forgot Password Flow. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EmailTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The IDs of the allowlisted email templates that can be sent to users during the headless authorization flows for registration, passwordless login, and forgot password. You can list multiple template IDs. When your app sends its initial request to Headless Registration API or Headless Passwordless Login API, the emailtemplate parameter can include only an email template ID from the allowlist. For Headless Forgot Password API, it works the same way, but only if email template allowlisting is enabled. This field is a relationship field.",
+      "relationship_name": "EmailTemplate",
+      "relationship_type": "Lookup",
+      "refers_to": "EmailTemplate"
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the Experience Cloud site for which the allowlist is being configured. This field is a relationship field.",
+      "relationship_name": "Network",
+      "relationship_type": "Lookup",
+      "refers_to": "Network"
+    }
+  },
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Oauth EmailTemplate AllowList for Headless Flows ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,610 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "WebCart - Data API",
+  "description": "Represents an online shopping cart for a store built with B2B Commerce or D2C Commerce, with total amounts for products, shipping and handling, and taxes. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the account that owns this WebCart. In API version 51.0 and later, if the WebCart was created through Guest Browsing, this ID is the ID of the GuestBuyerProfile. This field is a polymorphic relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The mailing address to which this WebCart is billed."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city of the billing address."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country of the billing address."
+    },
+    "BillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The accuracy rating of the geocode for the billing address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The latitude of the geocode for the billing address."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The longitude of the geocode for the billing address."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code for the billing address."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state of the billing address."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street of the billing address. Enter up to 255 characters."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO code for the currency that’s specified on the buyer’s account. Default value is USD. Possible values are: EUR—Euro USD—U.S. Dollar Note: Although this field is Nillable, if you want to use Commerce Webstore Cart Promotions with multi-currency enabled, this field is required."
+    },
+    "GrandTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of all cart items’ TotalAmount, or WebCart TotalAmount plus WebCart TotalTaxAmount. This value includes all taxes and adjustments."
+    },
+    "GuestCompanyName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Company name associated with a delivery for a guest customer. This field is available in API version 59.0 and later."
+    },
+    "GuestEmailAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email address of a guest buyer. This field is available in API version 52.0 and later."
+    },
+    "GuestFirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The first name of a guest buyer. This field is available in API version 52.0 and later."
+    },
+    "GuestLastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The last name (or surname) of a guest buyer. This field is available in API version 52.0 and later."
+    },
+    "GuestPhoneNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The phone number of a guest buyer. This field is available in API version 52.0 and later."
+    },
+    "GuestSecondName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The second name of a guest buyer. This field is available in API version 52.0 and later."
+    },
+    "InitialOrderReferenceNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A unique identifier assigned to the WebCart at the beginning of the checkout process. Initially populated when the checkout process is initiated, the InitialOrderReferenceNumber is then associated with the order created when the checkout is complete. This field is available in API version 61.0 and later."
+    },
+    "InventoryReservationIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use. This field is available in API version 57.0 and later."
+    },
+    "IsRepricingNeeded": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether the cart has changed since the last repricing. The default value is false."
+    },
+    "IsSecondary": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether the cart is a secondary cart or a primary cart. This field is available in API version 52.0 and later."
+    },
+    "LastRepricingDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Date when the last repricing was done."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of this WebCart record. Name can be up to 255 characters."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of this WebCart. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PaymentGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the WebCart payment group. This field is a relationship field.",
+      "relationship_name": "PaymentGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGroup"
+    },
+    "PaymentMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The method of payment for this WebCart. This field is a polymorphic relationship field.",
+      "relationship_name": "PaymentMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "AlternativePaymentMethod, CardPaymentMethod, DigitalWallet"
+    },
+    "PoNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The purchase order number. Enter up to 80 characters."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of this WebCart. Possible values are: Active—Cart is created and available for modifications, like adding or removing products or promotions. Checkout—Cart is in checkout. If the customer modifies the cart, the current checkout session is canceled. Closed—Checkout is complete and an order was created. The cart cannot be modified. PendingClosed—Cart is marked to be closed, but the request isn't completed yet. The cart can’t be modified. This value is available in API version 57.0 and later. PendingDelete—Cart is marked for delete, but the request isn't completed yet. The cart can’t be modified. Processing—Cart is processing. For example, taxes are being calculated. The cart can’t be modified."
+    },
+    "TaxLocaleType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of tax locale. Possible values are: Net Gross This field is available in API versions 52.0 to 54.0."
+    },
+    "TaxType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of tax policy. Possible values are: Automatic Net Gross This field is available in API version 55.0 and later."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "A calculated field that reflects the total of all adjustments to the cart subtotal. Adjustments include item, tier, and cart level discounts."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all cart items’ TotalPrice, or TotalProductAmount plus TotalChargeAmount. If the store tax type is Gross, the sum includes taxes. Note: Although this field is Nillable, if you want to use Commerce Webstore Cart Promotions, this field is required and must have a value greater than or equal to zero (0)."
+    },
+    "TotalAmountAfterAllAdjustments": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all cart items after all price adjustments are applied. Adjustments include various types of discounts. This field is available in API version 52.0 and later."
+    },
+    "TotalCartLevelAdjAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "Total cart level discount amount for the cart. This field is available in API version 61.0 and later."
+    },
+    "TotalChargeAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The sum of all cart items’ TotalPrice for cart items of the type Charge."
+    },
+    "TotalChargeTaxAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The sum of all the cart items’ TotalTaxAmount for cart items of the type Charge."
+    },
+    "TotalLineItemsWithErrors": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "A calculated field that shows the total number of cart line items of type Product with errors. This field is available in API version 50.0 and later."
+    },
+    "TotalListAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "Sum of all the cart items’ TotalListPrice."
+    },
+    "TotalProductAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The sum of all the cart items’ TotalPrice for cart items of the type Product."
+    },
+    "TotalProductCount": {
+      "type": "double",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "A count of all the products in the WebCart."
+    },
+    "TotalProductItemAdjAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "Total item level discount amount for the cart. This field is available in API version 61.0 and later."
+    },
+    "TotalProductLineItemCount": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "A calculated field that shows the total number of cart line items of type Product. This field is available in API version 60.0 and later."
+    },
+    "TotalProductListAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The sum of all the cart items’ TotalListAmount for the CartItem type Product. This field is available in API version 59.0 and later."
+    },
+    "TotalProductTaxAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The sum of all the cart items’ TotalTaxAmount for the CartItem type Product."
+    },
+    "TotalPromoAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The total of all item discounts related to product promotions. This field is available in API version 52.0 and later."
+    },
+    "TotalPromoAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The total tax adjustment for all item discounts related to product promotions. This field is available in API version 52.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum of all cart items’ TotalTaxAmount, or TotalProductTaxAmount plus TotalDeliveryTaxAmount."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The WebCart type. Default value is Cart. Possible values are: Cart PayNowReadOnly ReadOnly Template"
+    },
+    "UniqueProductCount": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The count of unique product SKUs in the WebCart."
+    },
+    "WebStoreId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The store ID related to this WebCart. This field is a relationship field.",
+      "relationship_name": "WebStore",
+      "relationship_type": "Lookup",
+      "refers_to": "WebStore"
+    }
+  },
+  "special_access_rules": "The WebCart object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. Unless it’s noted, associated objects are available in the same API version as this object.\n\n- **WebCartChangeEvent (API version 58.0)**: Change events are available for the object.\n- **WebCartHistory**: History is available for tracked fields of the object.\n- **WebCartOwnerSharingRule**: Sharing rules are available for the object.\n- **WebCartShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingAddress": {
+      "field_label": "Billing Address",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "Billing City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Billing Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Billing Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Billing Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Billing Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingPostalCode": {
+      "field_label": "Billing Zip",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingState": {
+      "field_label": "Billing State",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Billing Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Grand Total Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "GuestCompanyName": {
+      "field_label": "Name of the company",
+      "type": "string",
+      "length": "255"
+    },
+    "GuestEmailAddress": {
+      "field_label": "Email address for Guest User",
+      "type": "email",
+      "length": "80"
+    },
+    "GuestFirstName": {
+      "field_label": "First Name for Guest User",
+      "type": "string",
+      "length": "255"
+    },
+    "GuestLastName": {
+      "field_label": "Last Name for Guest User",
+      "type": "string",
+      "length": "255"
+    },
+    "GuestPhoneNumber": {
+      "field_label": "Phone Number for Guest User",
+      "type": "phone",
+      "length": "40"
+    },
+    "GuestSecondName": {
+      "field_label": "Second Name for Guest User",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Cart ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InitialOrderReferenceNumber": {
+      "field_label": "Initial Order Reference Number",
+      "type": "string",
+      "length": "36"
+    },
+    "InventoryReservationIdentifier": {
+      "field_label": "The inventory reservation identifier.",
+      "type": "string",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRepricingNeeded": {
+      "field_label": "Is Repricing Needed",
+      "type": "boolean"
+    },
+    "IsSecondary": {
+      "field_label": "Is Cart Secondary",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastRepricingDate": {
+      "field_label": "Last Repricing Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Cart Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderOwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGroupId": {
+      "field_label": "Payment Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodId": {
+      "field_label": "Payment Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PoNumber": {
+      "field_label": "Purchase Order Number",
+      "type": "string",
+      "length": "80"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxType": {
+      "field_label": "Tax Policy for Cart",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Total Quantity Based and Promotional Adjustment Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Total Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmountAfterAllAdjustments": {
+      "field_label": "Cart Total Adjusted Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCartLevelAdjAmount": {
+      "field_label": "Total cart level adjustment amount for all the items in the cart. Includes discount and surcharge.",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalChargeAmount": {
+      "field_label": "Total Charge Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalChargeItemAdjAmount": {
+      "field_label": "Total adjustment amount on a cart item of type charge. Includes discount and surcharge.",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalChargeTaxAmount": {
+      "field_label": "Total Charge Tax Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineItemsWithErrors": {
+      "field_label": "Total Line Items with Errors",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalListAmount": {
+      "field_label": "Total List Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAmount": {
+      "field_label": "Total Product Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductCount": {
+      "field_label": "Total Quantity in the Cart",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "TotalProductItemAdjAmount": {
+      "field_label": "Total adjustment amount on a cart item. Includes discount and surcharge.",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductLineItemCount": {
+      "field_label": "Total Product Line Item Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalProductListAmount": {
+      "field_label": "Total Product List Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductTaxAmount": {
+      "field_label": "Total Product Tax Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPromoAdjustmentAmount": {
+      "field_label": "Cart Promotions Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPromoAdjustmentTaxAmount": {
+      "field_label": "Cart Promotions Tax Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax Amount in Cart",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UniqueProductCount": {
+      "field_label": "Unique Products (SKUs) in the Cart",
+      "type": "int",
+      "digits": "9"
+    },
+    "WebStoreId": {
+      "field_label": "Store ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

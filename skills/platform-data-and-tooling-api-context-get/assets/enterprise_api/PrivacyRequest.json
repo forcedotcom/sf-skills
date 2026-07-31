@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "usage"
+  ],
+  "title": "PrivacyRequest - Data API",
+  "description": "See details and monitor the status of Data Subject Access Requests made in Privacy Center. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CompletedDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the request was completed."
+    },
+    "DataSubjectEmail": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email address of the data subject."
+    },
+    "DueDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the request is due."
+    },
+    "ExecutionStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The execution status of the request. completed — Completed in_progress — In Progress new — New"
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "First name of the data subject."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Last name of the data subject."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the Privacy Request."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of the account associated with this customer. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RelatedRecord": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Data Subject Access Request (DSAR) or Right to Be Forgotten request (RTBF) record related to the request."
+    },
+    "StartedDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the request was started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Represents the status of the request. Possible values are: Approved Cancelled Completed Created In Progress Rejected"
+    },
+    "TargetRecord": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record that is listed in the request."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Represents the type of request that was made. Possible values are: DSAR GlobalOptOut RTBF"
+    }
+  },
+  "special_access_rules": "This object is for Privacy Center customers with the ReadAllData or PrivacyDataAccess permissions.\n\nThis object is for Privacy Center customers with\n         the ReadAllData or PrivacyDataAccess permissions.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PrivacyRequestFeed**: Feed tracking is available for the object.\n- **PrivacyRequestHistory**: History is available for tracked fields of the object.\n- **PrivacyRequestOwnerSharingRule**: Sharing rules are available for the object.\n- **PrivacyRequestShare**: Sharing is available for the object.",
+  "usage": "In API version 66.0 and later, users can click New Privacy Request to create privacy requests directly from the Privacy Requests page. This action supports Right to Be Forgotten (RTBF) request types. The New Privacy Request button uses a custom dialog based on search criteria defined in Setup. The standard New button uses the default record creation dialog. To streamline the user interface and avoid redundancy, hide the standard New button.\n\nIn API version 66.0 and later, users can click New Privacy Request** to create privacy requests directly from the Privacy Requests page. This action supports Right to Be Forgotten (RTBF) request types. The New Privacy Request button uses a custom dialog based on search criteria defined in Setup. The standard New button uses the default record creation dialog. To streamline the user interface and avoid redundancy, hide the standard New button."
+}

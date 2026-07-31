@@ -1,0 +1,230 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "BuyerAccount - Data API",
+  "description": "Represents an account that is enabled as a buyer for Lightning B2B Commerce. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AvailableCredit": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of credit available to a buyer account. This is a calculated field."
+    },
+    "BuyerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the buyer account. This is a relationship field.",
+      "relationship_name": "Buyer",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "BuyerStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Status of the buyer account. Possible values are: Active Inactive On Hold Pending The default value is 'Pending'."
+    },
+    "CommerceType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of commerce that the buyer account is conducting, using the Commerce app. Possible values are: Buyer Reseller Seller The default value is 'Buyer'."
+    },
+    "CreditLimit": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The limit of credit available to the buyer account."
+    },
+    "CreditStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type or status of the buyer account's credit ranking. Possible values are: Bad Credit Delinquent Good Credit On Hold The default value is 'Good Credit'."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO currency code associated with the buyer account record. Possible values are: USD—U.S. Dollar The default value is 'USD'."
+    },
+    "CurrentBalance": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The balance carried by the buyer account."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the buyer account is active (true) or not (false). The default value is 'false'."
+    },
+    "MaximumOrderLimit": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The maximum number of orders that can be placed by the buyer account."
+    },
+    "MinimumOrderLimit": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The minimum number of orders that can be placed by the buyer account."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the buyer account."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the buyer account owner. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "PayerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the buyer account payer. This is a relationship field.",
+      "relationship_name": "Payer",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "SendToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of account that an order is sent to. This is a relationship field.",
+      "relationship_name": "SendTo",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    }
+  },
+  "special_access_rules": "The BuyerAccount object is available only if the B2B Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **BuyerAccountFeed**: Feed tracking is available for the object.\n- **BuyerAccountHistory**: History is available for tracked fields of the object.\n- **BuyerAccountShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AvailableCredit": {
+      "field_label": "Available Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BuyerId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BuyerStatus": {
+      "field_label": "Buyer Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CommerceType": {
+      "field_label": "Commerce Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreditLimit": {
+      "field_label": "Credit Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreditStatus": {
+      "field_label": "Credit Rating/Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CurrentBalance": {
+      "field_label": "Current Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Buyer Account ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MaximumOrderLimit": {
+      "field_label": "Maximum Order Limit",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "MinimumOrderLimit": {
+      "field_label": "Minimum Order Limit",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Name": {
+      "field_label": "Buyer Account Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PayerId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SendToId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

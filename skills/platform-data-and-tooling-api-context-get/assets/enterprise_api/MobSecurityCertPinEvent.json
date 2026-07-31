@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "MobSecurityCertPinEvent - Data API",
+  "description": "The event of mobile security certificate pinning on the Salesforce mobile app with Enhanced Mobile Security. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AppPackageIdentifier": {
+      "type": "string",
+      "properties": "Create",
+      "description": "The unique identifier for the certificate."
+    },
+    "AppVersion": {
+      "type": "string",
+      "properties": "Create",
+      "description": "The version of the app."
+    },
+    "CertPinResults": {
+      "type": "json",
+      "properties": "Create",
+      "description": "The results of certificate pinning."
+    },
+    "DeviceIdentifier": {
+      "type": "string",
+      "properties": "Create",
+      "description": "The hardware IDs or IDs to uniquely identify a mobile device."
+    },
+    "DeviceModel": {
+      "type": "string",
+      "properties": "Create",
+      "description": "The model of the mobile device."
+    },
+    "EventDate": {
+      "type": "dateTime",
+      "properties": "Create, Nillable",
+      "description": "The date of the certificate pinning event."
+    },
+    "EventDescription": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The description of the certificate pinning event."
+    },
+    "EventIdentifier": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The ID of the certificate pinning event."
+    },
+    "EventUuid": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The universally unique identifier of the event."
+    },
+    "OsName": {
+      "type": "string",
+      "properties": "Create",
+      "description": "The name of the operating system."
+    },
+    "OsVersion": {
+      "type": "string",
+      "properties": "Create",
+      "description": "The version of the operating system."
+    },
+    "ReplayId": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The position of the event in the event stream."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create",
+      "description": "This is polymorphic relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "WebkitVersion": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The version of the web browser engine developed by Apple."
+    }
+  },
+  "special_access_rules": "Accessing this object requires the Enhanced Mobile App Security add-on subscriptions and the Enforce Enhanced Mobile App Security user permission."
+}

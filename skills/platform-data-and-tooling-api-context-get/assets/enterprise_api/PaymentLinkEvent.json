@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentLinkEvent - Data API",
+  "description": "Represents a payment link platform event. Subscribe to these events so you can listen and respond to them when they’re published. For example, create a Salesforce Flow that is triggered when one of these events is published. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ChangeType": {
+      "type": "picklist",
+      "properties": "Restricted picklist",
+      "description": "Type of payment link event, which triggers and event notification. Possible values are: Create–Payment link created. Delete–Payment link deleted. Update–Payment link property changed."
+    },
+    "PaymentLinkId": {
+      "type": "reference",
+      "properties": "Nillable",
+      "description": "Type of payment link event. You can write code to operate conditionally on the value of this field. For example, you can ignore a create change but get notified of updates. This field is a relationship field.",
+      "relationship_name": "PaymentLink",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentLink"
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license and Payments must be enabled for your org. Salesforce Payments objects are available only in Lightning Experience.",
+  "field_reference": {
+    "ChangeType": {
+      "field_label": "Payment Link Event Change Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventUuid": {
+      "field_label": "Event UUID",
+      "type": "string",
+      "length": "36"
+    },
+    "PaymentLinkId": {
+      "field_label": "Payment Link ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReplayId": {
+      "field_label": "Replay Id",
+      "type": "string",
+      "length": "1000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

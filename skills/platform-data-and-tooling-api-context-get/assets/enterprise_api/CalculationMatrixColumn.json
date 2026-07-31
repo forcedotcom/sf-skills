@@ -1,0 +1,163 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CalculationMatrixColumn - Data API",
+  "description": "Defines a column in a Decision Matrix. The label for this object is Decision Matrix Column. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of the column."
+    },
+    "CalculationMatrixId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Decision Matrix to which this column belongs. This is a relationship field.",
+      "relationship_name": "CalculationMatrix",
+      "relationship_type": "Lookup",
+      "refers_to": "CalculationMatrix"
+    },
+    "ColumnType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies whether the column matches matrix input or is returned as output. Possible values are: Input Output"
+    },
+    "DataType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of data in the column. Possible values are: Boolean Currency Number NumberRange Percent Text TextRange"
+    },
+    "DisplaySequence": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The position of this column in the column order."
+    },
+    "IsWildcardColumn": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies that this column can contain a wildcard value such as ALL. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The column name."
+    },
+    "RangeValues": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A list of values that define range boundaries."
+    },
+    "WildcardColumnValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value that indicates a wildcard, for example ALL. Applicable if IsWildcardColumn is true."
+    }
+  },
+  "special_access_rules": "Access to Decision Matrices requires Omnistudio licenses.",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "80"
+    },
+    "CalculationMatrixId": {
+      "field_label": "Decision Matrix ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ColumnType": {
+      "field_label": "Column Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataType": {
+      "field_label": "Data Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DisplaySequence": {
+      "field_label": "Display Sequence",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Decision Matrix Column ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsWildcardColumn": {
+      "field_label": "Wildcard Column",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Namespace": {
+      "field_label": "Namespace",
+      "type": "string",
+      "length": "255"
+    },
+    "RangeValues": {
+      "field_label": "Range Values",
+      "type": "textarea",
+      "length": "32768"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WildcardColumnValue": {
+      "field_label": "Wildcard Column Value",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

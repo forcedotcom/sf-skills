@@ -1,0 +1,210 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "WebCartAdjustmentGroup - Data API",
+  "description": "Group of price adjustments for a cart. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Price adjustment type. Possible values are: Discretionary Promotion System"
+    },
+    "AdjustmentTargetType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Target for the price adjustment (the cart itself or individual items). Possible values are: Cart Item"
+    },
+    "AdjustmentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates if the price adjustment is applied as percentage or an absolute amount. Possible values are: AdjustmentAmount AdjustmentPercentage"
+    },
+    "AdjustmentValue": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Numeric value of the adjustment (for example, 10 if the price adjustment is either 10% off or $10 off)."
+    },
+    "CartId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the cart to which the price adjustment belongs. This is a relationship field.",
+      "relationship_name": "Cart",
+      "relationship_type": "Lookup",
+      "refers_to": "WebCart"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO code for the currency that’s specified on the buyer’s account. Default value is USD. Possible values are: EUR—Euro USD—U.S. Dollar"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the adjustment group."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the adjustment group."
+    },
+    "PriceAdjustmentCauseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of entity that caused this adjustment (for example, a promotion ID). If unspecified, then Description populates the display name. This is a relationship field.",
+      "relationship_name": "PriceAdjustmentCause",
+      "relationship_type": "Lookup",
+      "refers_to": "Promotion"
+    },
+    "Priority": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If there are multiple price adjustments, sequence in which the price adjustments are applied."
+    },
+    "TaxAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Tax on the total adjusted price."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Total price after adjustments."
+    },
+    "TotalAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total adjusted price plus tax."
+    }
+  },
+  "special_access_rules": "The WebCartAdjustmentGroup object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. Unless it’s noted, associated objects are available in the same API version as this object.\n\n- **WebCartAdjustmentGroupChangeEvent (API version 58.0)**: Change events are available for the object.",
+  "field_reference": {
+    "AdjustmentBasisReferenceId": {
+      "field_label": "Coupon ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AdjustmentSource": {
+      "field_label": "Adjustment Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentTargetType": {
+      "field_label": "Target Type for the Adjustment",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentType": {
+      "field_label": "Adjustment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentValue": {
+      "field_label": "Adjustment Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CartId": {
+      "field_label": "Cart ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Id": {
+      "field_label": "Cart Adjustment Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Cart Adjustment Group Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PriceAdjustmentCauseId": {
+      "field_label": "Promotion ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority Order for Adjustments",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxAmount": {
+      "field_label": "Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Total Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmountWithTax": {
+      "field_label": "Total Adjustment Amount With Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

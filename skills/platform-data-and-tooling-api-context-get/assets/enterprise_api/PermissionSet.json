@@ -1,0 +1,4304 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PermissionSet - Data API",
+  "description": "Represents a set of permissions that’s used to grant more access to one or more users without changing their profile or reassigning profiles. This object is available in API version 22.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Group, Sort, Update",
+      "description": "A description of the permission set. Limit: 255 characters."
+    },
+    "HasActivationRequired": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the permission set requires an associated active session (true) or not (false)."
+    },
+    "IsCustom": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the permission set is custom (created by an admin); if false, the permission set is standard and related to a specific permission set license."
+    },
+    "IsOwnedByProfile": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the permission set is owned by a profile. Available in API version 25.0 and later."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The permission set label, which corresponds to Label in the user interface. Limit: 80 characters."
+    },
+    "LicenseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of either the related PermissionSetLicense or UserLicense associated with this permission set. Available in API version 38.0 and later. Use this field instead of UserLicenseId, which is deprecated and only available up to API Version 37.0. This is a polymorphic relationship field.",
+      "relationship_name": "License",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSetLicense, UserLicense"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your organization. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Corresponds to API Name in the user interface. Limit: 80 characters."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix for a permission set that's been installed as part of a managed package. If the permission set isn't packaged or is part of an unmanaged package, this value is empty. Available in API version 23.0 and later."
+    },
+    "Permissions": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "One field for each permission. If true, users assigned to this permission set have the named permission. The number of fields varies depending on the permissions for the organization and license type. To get a list of available permissions in the SOAP API, use describeSObjects()."
+    },
+    "PermissionSetGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the permission set is owned by a permission set group, this field returns the ID of the permission set group. If the permission set isn’t owned by a permission set group, this field returns a null value. Available in API version 45.0 and later. This is a relationship field.",
+      "relationship_name": "PermissionSetGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSetGroup"
+    },
+    "ProfileId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the permission set is owned by a profile, this field returns the ID of the Profile. If the permission set isn’t owned by a profile, this field returns a null value. Available in API version 25.0 and later. This is a relationship field.",
+      "relationship_name": "Profile",
+      "relationship_type": "Lookup",
+      "refers_to": "Profile"
+    },
+    "Type": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Available in API version 46.0 and later."
+    },
+    "UserLicenseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the UserLicense associated with this permission set. This field is nillable in API version 26.0 and later and available up to API version 37.0 In API version 38.0 and later, use LicenseId."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users who have one of these permissions can access this object: To view the following settings, assignments, and permissions for standard and custom objects in a specified permission set, the View Setup and Configuration permission is required.\n\nAs of Summer ’20 and later, only users who have one of these permissions can access this object:\n\nTo view the following settings, assignments, and permissions for standard and custom objects in a specified permission set, the View Setup and Configuration permission is required.",
+  "usage": "Use the PermissionSet object to query existing permission sets. For example, to search for all permission sets that contain the “Modify All Data” permission: When combined with the PermissionSetAssignment object, you can create a nested query that returns all users assigned to a particular permission like “Modify All Data”: If the permission set isn’t assigned to a user, you can also create or delete a permission set.\n\nUse the PermissionSet object to query existing permission sets.\n\nFor example, to search for all permission sets that contain the “Modify All Data” permission:\n\nWhen combined with the PermissionSetAssignment object, you can create a nested query that returns all users assigned to a particular permission like “Modify All Data”:\n\nIf the permission set isn’t assigned to a user, you can also create or delete a permission set.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PermissionSet\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Assignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FieldPerms\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"HasActivationRequired\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsCustom\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOwnedByProfile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"License\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"LicenseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ObjectPerms\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PermissionSetGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSetGroup\"/>\n        <element name=\"PermissionSetGroupComponents\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PermissionSetGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PermissionsAcceptInboundBundling\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessBankingRelationshipAssistance\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessBankingServiceAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessCMC\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessContentBuilder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessDispatchConsoleMap\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessDisputePrompts\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessOrchestrationObjects\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessPolicyAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessServiceEinstein\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessSfDrive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessToComplaintAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessToComplaintMgmt\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessToDisputeManagement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessToServiceProcess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccessWealthAdvisorAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAccountSwitcherUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsActivateContract\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsActivateOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsActivateSystemModeFlows\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsActivitiesAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAddDirectMessageMembers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAdvancedCsvDataImportUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAgentforceSchedulingSupervisorView\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAgentforceServiceAgentUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAllowEmailIC\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAllowLightningLogin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAllowUniversalSearch\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAllowViewEditConvertedLeads\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAllowViewKnowledge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsApexRestServices\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsApiEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsApiUserOnly\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAppFrameworkManageApp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAppFrameworkManageTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAppFrameworkViewApp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsApprovalAdmin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsApprovalDesigner\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAssignPermissionSets\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAssignTopics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAttributionModelUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAuthorApex\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAuthorizePayments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsB2BMarketingAnalyticsUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsBotManageBots\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsBotManageBotsTrainingData\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsBulkApiHardDelete\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsBulkMacrosAllowed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCMSECEAuthoringAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCampaignInfluence2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanAccessCE\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanApproveFeedPost\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanApproveUninstalledApps\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanDoActAsUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanEditPrompts\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanInitiateMessagingSessions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanInsertFeedSystemFields\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanQueryForeignTables\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanSendInitialSMSToIndividual\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanTranslateScrt2Conversation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanUpdateEmailMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanUseNewDashboardBuilder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCanVerifyComment\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCaptureAndReversePayments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCdcReportingCreateReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCdcReportingManageFolders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCdcReportingViewReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChangeDashboardColors\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChatterComposeUiCodesnippet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChatterEditOwnPost\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChatterEditOwnRecordPost\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChatterFileLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChatterInternalUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChatterInviteExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChatterOwnGroups\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsClientSecretRotation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCloseConversations\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCombAuthAndCapPayments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsConfigCustomRecs\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsConfigureDataspaceScope\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsConnectOrgToEnvironmentHub\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsConsentApiUpdate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsContentAdministrator\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsContentHubUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsContentWorkspaces\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsConvertLeads\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateCustomizeDashboards\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateCustomizeFilters\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateCustomizeReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateDashboardFolders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateLtngTempFolder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateLtngTempInPub\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreatePackaging\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateReportFolders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateReportInLightning\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateTopics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateWorkBadgeDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCreateWorkspaces\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCustomAppsOnFSMobile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCustomMobileAppsAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCustomSidebarOnAllPages\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsCustomizeApplication\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDataExport\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDelegatedTwoFactor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDeleteActivatedContract\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDeleteCrMemoAndInvoice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDeleteSalesforceFiles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDeleteTopics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDigitalLendingAdminUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDigitalLendingEditReadOnly\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDigitalLendingUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDigitalLendingWorkbench\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDistributeFromPersWksp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDownloadMaliciousFiles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDownloadPackageVersionZips\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditActivatedOrders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditBillingInfo\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditBrandTemplates\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditCaseComments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditEvent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditHtmlTemplates\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditKnowledge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditMyDashboards\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditMyReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditOppLineItemUnitPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditPublicDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditPublicFilters\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditPublicTemplates\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditReadonlyFields\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditTask\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEditTopics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEmailAdministration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEmailMass\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEmailSingle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEmailTemplateManagement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEmbeddedMessagingAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEnableBCTransactionPolling\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEnableCommunityAppLauncher\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEnableIPFSUpload\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEnableNotifications\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEngagementConfigUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsEnhancedSalesMobileExp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsExportReport\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsExternalClientAppAdmin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsExternalClientAppDeveloper\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsExternalClientAppViewer\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFSCArcGraphCommunityUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFeedPinning\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFieldServiceAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFieldServiceCopilotActions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFieldServiceDispatcher\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFieldServiceLastMile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFieldServiceMobileApp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFieldServiceScheduling\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFieldServiceVoiceToForm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFieldServiceVoiceToRecordEdit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFlowUFLRequired\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsForceTwoFactor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFreezeUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsGiveRecognitionBadge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsGovernNetworks\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsGrantOutboundBundling\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsHasUnlimitedNBAExecutions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsHeadlessCMSAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsHeadlessPublishNudges\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsHideReadByList\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsIdentityConnect\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsIdentityEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsImportCustomObjects\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsImportLeads\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsImportPersonal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsInstallPackaging\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsIntelligentDocumentProcessing\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsIsSsoEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsIsotopeAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsIsotopeCToCUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsIsotopeLEX\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsLMEndMessagingSessionUserPerm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsLMOutboundMessagingUserPerm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsLifecycleManagementAPIUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsLightningConsoleAllowedForUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsLightningExperienceUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsLightningOnFSMobile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsListEmailSend\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsLobbyManagementUserAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsLtngPromoReserved01UserPerm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMCPMetadataApi\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMakePayments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageAccessPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageAgentforceServiceAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageAnalyticSnapshots\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageApiNamedQueries\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageAuthProviders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageBusinessHourHolidays\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageC2CHighVolumePriming\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageC360AConnections\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCMS\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCallCenters\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCases\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCategories\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCdpMlModels\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCertificates\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCertificatesExpiration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageChatterMessages\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageContentPermissions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageContentProperties\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageContentTaxonomy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageContentTypes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCustomDomains\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCustomPermissions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCustomReportTypes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageCustomerDataOptOut\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageDashbdsInPubFolders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageDataCategories\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageDataIntegrations\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageDataMaskPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageDataspaceScope\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageDynamicDashboards\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageEmailClientConfig\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageEncryptionKeys\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageEntitlements\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageExchangeConfig\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageExternalConnections\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageFilesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageHealthCheck\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageHerokuAppLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageHubConnections\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageIntegrationConnections\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageIntegrationPortals\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageInteraction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageInternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageIpAddresses\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageKnowledge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageKnowledgeImportExport\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageLeads\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageLoginAccessPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageMaliciousFiles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageMobile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageNamedCredentials\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageNetworks\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageOrchInstsAndWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageOrchestrationRuns\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManagePasswordPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageProfilesPermissionsets\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManagePropositions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManagePvtRptsAndDashbds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageRecommendationStrategies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageReleaseUpdates\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageRemoteAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageReportsInPubFolders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageRoles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSALifecycle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSearchPromotionRules\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSecurityCommandCenter\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSessionPermissionSets\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSharedListViews\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSharing\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSolutions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSubscriptions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSurveys\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageSynonyms\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageTwoFactor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageUnlistedGroups\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMassInlineEdit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMeetingEngagementUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMergeTopics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMetadataStudioUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMngBenVerfForAssistiveAgnt\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMobileMessagingAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModerateChatter\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModerateNetworkUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyAccessAllowPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyAccessDenyPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyAllData\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyAllPolicyCenterPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyDataClassification\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyMetadata\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyTransactionSecurityPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsMonitorLoginHistory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsNativeWebviewScrolling\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsNewReportBuilder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsOnbrdDataGrpMDDsgnr\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsOnbrdDataGrpMDReader\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsOptOutGeoLocationTracking\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPackaging2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPackaging2Delete\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPasswordNeverExpires\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPaymentsAPIUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPersonalizationDecisioningUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPersonalizationIntelUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPersonalizationPlatform\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPersonalizedFinanceUserAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPreventClassicExperience\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPrismBackofficeUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPrismPlaygroundUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPrivacyDataAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPrmExtIntPrtnrAdminUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsProductAdmin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPtyProflDataVldMDDsgnr\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPtyProflDataVldMDReader\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPtyProflDataVldRTReader\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPtyProflDataVldRTWriter\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsPublishPackaging\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsQrCodeGeneratorMobilePublisherPlayground\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsQueryAllFiles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsQueryNonVetoedFiles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsQuipMetricsAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsQuipUserEngagementMetrics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsReassignOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRebookWithAgentforceFromDispatchConsole\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRefundPayments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRegrelloUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRemoveDirectMessageMembers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsResetPasswords\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRunFlow\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRunGlobalOptimization\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRunInDayOptimization\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRunMyDayUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRunReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsRunResourceScheduleOptimization\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSalesConsole\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSalesInsightsUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSandboxTestingInCommunityApp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsScheduleReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSegmentIntelligenceUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSelectFilesFromSalesforce\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSendAnnouncementEmails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSendCustomNotifications\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSendExternalEmailAvailable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSendSitRequests\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSetAdvancedOptimizationFilters\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsShareInternalArticles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsShowCompanyNameAsUserBadge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsShowExplanationsForCandidateResults\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsShowPlannedRoute\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsShowPreWorkBriefGA\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSimpleCsvDataImportUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSkipIdentityConfirmation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSolutionImport\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsStageManagementDesignUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSubmitMacrosAllowed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSubscribeDashboardRolesGrps\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSubscribeDashboardToOtherUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSubscribeReportRolesGrps\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSubscribeReportToOtherUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSubscribeReportsRunAsUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSubscribeToLightningDashboards\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSubscribeToLightningReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsSuitesAgentEscalationPerm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTerritoryOperations\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTraceXdsQueries\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTransactionSecurityExempt\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTransactionalEmailSend\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTransferAnyCase\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTransferAnyEntity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTransferAnyLead\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTwoFactorApi\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseAnyApiAuth\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseAssistantDialog\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseCanCancelInProgressChange\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseCreateOrderSummary\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseEnsureFunds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseMySearch\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseOrderItemSummaryCancel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseOrderItemSummaryReturn\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseQuerySuggestions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseRestrictedTheme\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseServicePartReturn\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseSetupWithAgentforce\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseTeamReassignWizards\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseTeamsForEmployee\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseTeamsForItSrvcs\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUseWebLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUserCanDeployStore\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUserHasALMSimpleDeployAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsUserInteractionInsights\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAccessPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllActivities\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllCustomSettings\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllData\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllFieldsGlobal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllForeignKeyNames\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllPolicyCenterPolicies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllProfiles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAllUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewAnomalyEvents\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewApiNamedQueries\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewClientSecret\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewContent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewContentTaxonomy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewDataAssessment\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewDataCategories\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewDataLeakageEvents\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewDeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewEncryptedData\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewEventLogFiles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewHealthCheck\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewHelpLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewMyTeamsDashboards\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewOrchestrationsInAutomApp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewPayments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewPlatformEvents\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewPrivateStaticResources\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewPublicDashboards\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewPublicReports\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewRecommendations\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewRestrictionAndScopingRules\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewRoles\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewSALifecycle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewSecurityCommandCenter\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewSetup\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewShieldApp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewUserPII\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsWorkCalibrationUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsWorkDotComUserPerm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Profile\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Profile\"/>\n        <element name=\"ProfileId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PsgCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SessionActivations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SetupEntityAccessItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "HasActivationRequired": {
+      "field_label": "Session Activation Required",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Permission Set ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsCustom": {
+      "field_label": "Custom",
+      "type": "boolean"
+    },
+    "IsOwnedByProfile": {
+      "field_label": "Is Owned By Profile",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Permission Set Name",
+      "type": "string",
+      "length": "80"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LicenseId": {
+      "field_label": "License ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "80"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "PermissionSetGroupId": {
+      "field_label": "Permission Set Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PermissionsAECommunityAccess": {
+      "field_label": "Use Assessment Envelope objects via Experience Cloud sites",
+      "type": "boolean"
+    },
+    "PermissionsAICreateInsightObjects": {
+      "field_label": "Create AI Insight Objects",
+      "type": "boolean"
+    },
+    "PermissionsAITestingUser": {
+      "field_label": "Manage Agentforce Testing",
+      "type": "boolean"
+    },
+    "PermissionsAIViewInsightObjects": {
+      "field_label": "View AI Insight Objects",
+      "type": "boolean"
+    },
+    "PermissionsAIWorkbenchUser": {
+      "field_label": "Manage Agentforce Grids",
+      "type": "boolean"
+    },
+    "PermissionsAcceptInboundBundling": {
+      "field_label": "Accept Inbound Bundling",
+      "type": "boolean"
+    },
+    "PermissionsAcceptRiskForProblems": {
+      "field_label": "Accept Risk For Problems",
+      "type": "boolean"
+    },
+    "PermissionsAccessActivation": {
+      "field_label": "Allows user access activations",
+      "type": "boolean"
+    },
+    "PermissionsAccessApplicationFormObjects": {
+      "field_label": "Access Application Form-Related Functionality",
+      "type": "boolean"
+    },
+    "PermissionsAccessBankingRelationshipAssistance": {
+      "field_label": "Access Banking Relationship Assistance",
+      "type": "boolean"
+    },
+    "PermissionsAccessBankingServiceAgent": {
+      "field_label": "Access Banking Service Agent",
+      "type": "boolean"
+    },
+    "PermissionsAccessBudgetManagement": {
+      "field_label": "Manage Budgets",
+      "type": "boolean"
+    },
+    "PermissionsAccessCMC": {
+      "field_label": "Access Experience Management",
+      "type": "boolean"
+    },
+    "PermissionsAccessCdpDataExplorer": {
+      "field_label": "Access Data Cloud Data Explorer",
+      "type": "boolean"
+    },
+    "PermissionsAccessCdpProfileExplorer": {
+      "field_label": "Access Data Cloud Profile Explorer",
+      "type": "boolean"
+    },
+    "PermissionsAccessContentBuilder": {
+      "field_label": "Access drag-and-drop content builder",
+      "type": "boolean"
+    },
+    "PermissionsAccessCustomerDataCloudSetup": {
+      "field_label": "Allows user access Data Cloud setup menu",
+      "type": "boolean"
+    },
+    "PermissionsAccessDispatchConsoleMap": {
+      "field_label": "Access Scheduling Console Map",
+      "type": "boolean"
+    },
+    "PermissionsAccessDisputePrompts": {
+      "field_label": "Provides access to Financial Services Email prompt templates",
+      "type": "boolean"
+    },
+    "PermissionsAccessEduCloudAdvncdAcadOperExprcCloud": {
+      "field_label": "Access Education Cloud Advanced Academic Operations for Experience Cloud users",
+      "type": "boolean"
+    },
+    "PermissionsAccessEducationCloudCmty": {
+      "field_label": "Education Cloud for Experience Cloud User",
+      "type": "boolean"
+    },
+    "PermissionsAccessEinsteinAutofill": {
+      "field_label": "Access Einstein Autofill",
+      "type": "boolean"
+    },
+    "PermissionsAccessFinancialAccounts": {
+      "field_label": "Financial Accounts User",
+      "type": "boolean"
+    },
+    "PermissionsAccessGeniePlatform": {
+      "field_label": "Allows user access Data Cloud",
+      "type": "boolean"
+    },
+    "PermissionsAccessKnowledgeSpace": {
+      "field_label": "Create, edit, and delete knowledge spaces",
+      "type": "boolean"
+    },
+    "PermissionsAccessOrchestrationObjects": {
+      "field_label": "Access Orchestration Objects",
+      "type": "boolean"
+    },
+    "PermissionsAccessPSPasCaseAgents": {
+      "field_label": "Access Patient Support Programs as a Case Agent",
+      "type": "boolean"
+    },
+    "PermissionsAccessPSPasProgramLead": {
+      "field_label": "Access Patient Support Programs as a Program Lead",
+      "type": "boolean"
+    },
+    "PermissionsAccessPolicyAgent": {
+      "field_label": "Access Policy Agent",
+      "type": "boolean"
+    },
+    "PermissionsAccessProgramManagementAsGuest": {
+      "field_label": "Access Program Management as Guest",
+      "type": "boolean"
+    },
+    "PermissionsAccessRecordEngagementActions": {
+      "field_label": "Access Record Engagement Actions",
+      "type": "boolean"
+    },
+    "PermissionsAccessRevCmnyUnmetered": {
+      "field_label": "Revenue Management: Community user access",
+      "type": "boolean"
+    },
+    "PermissionsAccessSegment": {
+      "field_label": "Allows user access segments",
+      "type": "boolean"
+    },
+    "PermissionsAccessServiceEinstein": {
+      "field_label": "Access Service Einstein",
+      "type": "boolean"
+    },
+    "PermissionsAccessSfDrive": {
+      "field_label": "Grant users permission to SfDrive",
+      "type": "boolean"
+    },
+    "PermissionsAccessStuFinancialsCmty": {
+      "field_label": "Access Education Cloud Student Financials for Experience Cloud users",
+      "type": "boolean"
+    },
+    "PermissionsAccessToComplaintAgent": {
+      "field_label": "Provides access to Complaint Fulfilment Agent",
+      "type": "boolean"
+    },
+    "PermissionsAccessToComplaintMgmt": {
+      "field_label": "Public Complaint Management User",
+      "type": "boolean"
+    },
+    "PermissionsAccessToDisputeManagement": {
+      "field_label": "Dispute Management User",
+      "type": "boolean"
+    },
+    "PermissionsAccessToServiceProcess": {
+      "field_label": "Service Process User",
+      "type": "boolean"
+    },
+    "PermissionsAccessTrialInfoGuestUser": {
+      "field_label": "Access Clinical Trial Information as Guest User",
+      "type": "boolean"
+    },
+    "PermissionsAccessWalkthroughs": {
+      "field_label": "Take Custom Walkthroughs",
+      "type": "boolean"
+    },
+    "PermissionsAccessWealthAdvisorAgent": {
+      "field_label": "Financial Advisor Assistance Agent",
+      "type": "boolean"
+    },
+    "PermissionsAccountAddressManager": {
+      "field_label": "Manage Account Addresses",
+      "type": "boolean"
+    },
+    "PermissionsAccountSwitcherUser": {
+      "field_label": "Account Switcher User",
+      "type": "boolean"
+    },
+    "PermissionsAccsPtntSuptPgmUseEinstein": {
+      "field_label": "Expose patient support programs powered by Einstein generative AI",
+      "type": "boolean"
+    },
+    "PermissionsActionPlansUserAccess": {
+      "field_label": "Permission to access the Action Plans feature",
+      "type": "boolean"
+    },
+    "PermissionsActionableListCompUser": {
+      "field_label": "Actionable Segmentation Outreach",
+      "type": "boolean"
+    },
+    "PermissionsActionableListConfigUser": {
+      "field_label": "Actionable Segmentation Admin",
+      "type": "boolean"
+    },
+    "PermissionsActionableListCreator": {
+      "field_label": "Actionable Segmentation List Manager",
+      "type": "boolean"
+    },
+    "PermissionsActionableListUser": {
+      "field_label": "Actionable Segmentation Objects",
+      "type": "boolean"
+    },
+    "PermissionsActivateContract": {
+      "field_label": "Activate Contracts",
+      "type": "boolean"
+    },
+    "PermissionsActivateDeactivateNonSetupFlow": {
+      "field_label": "Activate or Deactivate Flows",
+      "type": "boolean"
+    },
+    "PermissionsActivateOrder": {
+      "field_label": "Activate Orders",
+      "type": "boolean"
+    },
+    "PermissionsActivateSystemModeFlows": {
+      "field_label": "Enable System Mode Flow Activation",
+      "type": "boolean"
+    },
+    "PermissionsActivationWrite": {
+      "field_label": "Allows use to hit cleanroom API while creating activations.",
+      "type": "boolean"
+    },
+    "PermissionsActivitiesAccess": {
+      "field_label": "Access Activities",
+      "type": "boolean"
+    },
+    "PermissionsAddAnalyticsRemoteConnections": {
+      "field_label": "Add CRM Analytics Remote Connections",
+      "type": "boolean"
+    },
+    "PermissionsAddAsgntElmntToNonSetupFlow": {
+      "field_label": "Add Assignment Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddCollFltrElmntToNonSetupFlow": {
+      "field_label": "Add Collection Filter Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddCollSrtElmntToNonSetupFlow": {
+      "field_label": "Add Collection Sort Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddCreaRecElmntToNonSetupFlow": {
+      "field_label": "Add Create Records Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddDecisionElmntNonSetupFlow": {
+      "field_label": "Add Decision Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddDelRecElmntToNonSetupFlow": {
+      "field_label": "Add Delete Records Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddDirectMessageMembers": {
+      "field_label": "Add People to Direct Messages",
+      "type": "boolean"
+    },
+    "PermissionsAddGetRecElmntToNonSetupFlow": {
+      "field_label": "Add Get Records Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddLoopElmntToNonSetupFlow": {
+      "field_label": "Add Loop Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddSendToFlowElmntToNonSetupFlow": {
+      "field_label": "Add Send to a Flow Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddSubflowElmntToNonSetupFlow": {
+      "field_label": "Add Subflow Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddTrfmElmntToNonSetupFlow": {
+      "field_label": "Add Transform Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddUpdtRecElmntToNonSetupFlow": {
+      "field_label": "Add Update Records Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddWaitToNonSetupFlow": {
+      "field_label": "Add Wait Element to Flows",
+      "type": "boolean"
+    },
+    "PermissionsAddWaveNotificationRecipients": {
+      "field_label": "Add Recipients to CRM Analytics Notifications",
+      "type": "boolean"
+    },
+    "PermissionsAdoptionAnalyticsUser": {
+      "field_label": "Access Adoption Analytics Templates and Apps",
+      "type": "boolean"
+    },
+    "PermissionsAdvancedCsvDataImportUser": {
+      "field_label": "Advanced Csv Data Import User Permission",
+      "type": "boolean"
+    },
+    "PermissionsAgentforceSalesChatGPT": {
+      "field_label": "Use Agentforce Sales ChatGPT App",
+      "type": "boolean"
+    },
+    "PermissionsAgentforceSchedulingSupervisorView": {
+      "field_label": "Access Agentforce Scheduling Supervisor View",
+      "type": "boolean"
+    },
+    "PermissionsAgentforceServiceAgentUser": {
+      "field_label": "Agentforce Service Agent User",
+      "type": "boolean"
+    },
+    "PermissionsAllowAIAccelerator": {
+      "field_label": "View AI Accelerator Predictions.",
+      "type": "boolean"
+    },
+    "PermissionsAllowEmailIC": {
+      "field_label": "Email-Based Identity Verification Option",
+      "type": "boolean"
+    },
+    "PermissionsAllowLightningLogin": {
+      "field_label": "Lightning Login User",
+      "type": "boolean"
+    },
+    "PermissionsAllowOCIAvailabilityAPIs": {
+      "field_label": "Use Omnichannel Inventory Availability APIs",
+      "type": "boolean"
+    },
+    "PermissionsAllowSurveyAdvancedFeatures": {
+      "field_label": "Salesforce Surveys Advanced Features",
+      "type": "boolean"
+    },
+    "PermissionsAllowSurveyLimitedAdvFeatures": {
+      "field_label": "Surveys Advanced Features Starter",
+      "type": "boolean"
+    },
+    "PermissionsAllowUniversalSearch": {
+      "field_label": "Knowledge One",
+      "type": "boolean"
+    },
+    "PermissionsAllowViewEditConvertedLeads": {
+      "field_label": "View and Edit Converted Leads",
+      "type": "boolean"
+    },
+    "PermissionsAllowViewKnowledge": {
+      "field_label": "Allow View Knowledge",
+      "type": "boolean"
+    },
+    "PermissionsAlumniCommunityPages": {
+      "field_label": "Alumni Community Pages",
+      "type": "boolean"
+    },
+    "PermissionsAmendAssets": {
+      "field_label": "Amend Assets",
+      "type": "boolean"
+    },
+    "PermissionsAnalyticsQueryServiceConsumer": {
+      "field_label": "Allow the user to run queries with the Analytics Query Service",
+      "type": "boolean"
+    },
+    "PermissionsApexRestServices": {
+      "field_label": "Apex REST Services",
+      "type": "boolean"
+    },
+    "PermissionsApiEnabled": {
+      "field_label": "API Enabled",
+      "type": "boolean"
+    },
+    "PermissionsApiUserOnly": {
+      "field_label": "API Only User",
+      "type": "boolean"
+    },
+    "PermissionsAppFrameworkManageApp": {
+      "field_label": "Access to manage the template framework apps",
+      "type": "boolean"
+    },
+    "PermissionsAppFrameworkManageTemplate": {
+      "field_label": "Access to manage the template framework templates",
+      "type": "boolean"
+    },
+    "PermissionsAppFrameworkViewApp": {
+      "field_label": "Access to view templated apps and assets",
+      "type": "boolean"
+    },
+    "PermissionsApplicantCommunityPages": {
+      "field_label": "Applicant Community Pages",
+      "type": "boolean"
+    },
+    "PermissionsAppointmentBookingUserAccess": {
+      "field_label": "Enables the Appointment Booking feature",
+      "type": "boolean"
+    },
+    "PermissionsApprovalAdmin": {
+      "field_label": "Approval Admin",
+      "type": "boolean"
+    },
+    "PermissionsApprovalDesigner": {
+      "field_label": "Approval Designer",
+      "type": "boolean"
+    },
+    "PermissionsArchiveArticles": {
+      "field_label": "Archive Articles",
+      "type": "boolean"
+    },
+    "PermissionsAssessmentPlatformUser": {
+      "field_label": "Discovery Framework Platform User",
+      "type": "boolean"
+    },
+    "PermissionsAssignConsumptionTags": {
+      "field_label": "Assign Consumption Tags",
+      "type": "boolean"
+    },
+    "PermissionsAssignPermissionSets": {
+      "field_label": "Assign Permission Sets",
+      "type": "boolean"
+    },
+    "PermissionsAssignTopics": {
+      "field_label": "Assign Topics",
+      "type": "boolean"
+    },
+    "PermissionsAssignUserToSkill": {
+      "field_label": "Assign Chat Skills to Users",
+      "type": "boolean"
+    },
+    "PermissionsAssocChgRqstAndProb": {
+      "field_label": "Associate Change Requests and Problems",
+      "type": "boolean"
+    },
+    "PermissionsAssocIncAndChgRqst": {
+      "field_label": "Associate Incidents and Change Requests",
+      "type": "boolean"
+    },
+    "PermissionsAssocIncAndProb": {
+      "field_label": "Associate Incidents and Problems",
+      "type": "boolean"
+    },
+    "PermissionsAssocRelAndChgRqst": {
+      "field_label": "Associate Releases and Change Requests",
+      "type": "boolean"
+    },
+    "PermissionsAssocRelAndInc": {
+      "field_label": "Associate Releases and Incidents",
+      "type": "boolean"
+    },
+    "PermissionsAssocRelAndProb": {
+      "field_label": "Associate Releases and Problems",
+      "type": "boolean"
+    },
+    "PermissionsAssociationEngineUserAccess": {
+      "field_label": "User license to access Record Association Builder in Financial Services Cloud.",
+      "type": "boolean"
+    },
+    "PermissionsAttributionModelUser": {
+      "field_label": "Attribution Model User",
+      "type": "boolean"
+    },
+    "PermissionsAuthorApex": {
+      "field_label": "Author Apex",
+      "type": "boolean"
+    },
+    "PermissionsAuthorizePayments": {
+      "field_label": "Authorize Payments",
+      "type": "boolean"
+    },
+    "PermissionsAutomatedActionsUser": {
+      "field_label": "Automated Actions User",
+      "type": "boolean"
+    },
+    "PermissionsAutomaticActivityCapture": {
+      "field_label": "Use Einstein Activity Capture",
+      "type": "boolean"
+    },
+    "PermissionsAutonomousAnalyticsPrivacy": {
+      "field_label": "Manage Autonomous Insights Data Privacy",
+      "type": "boolean"
+    },
+    "PermissionsB2BCommerceIntegrator": {
+      "field_label": "Commerce Integrator User",
+      "type": "boolean"
+    },
+    "PermissionsB2BCommerceSuperUser": {
+      "field_label": "B2B Commerce Super User",
+      "type": "boolean"
+    },
+    "PermissionsB2BCommerceUser": {
+      "field_label": "Commerce User",
+      "type": "boolean"
+    },
+    "PermissionsB2BMarketingAnalyticsUser": {
+      "field_label": "Create B2B Marketing Analytics Apps",
+      "type": "boolean"
+    },
+    "PermissionsB2CCommerceUser": {
+      "field_label": "B2C Commerce User",
+      "type": "boolean"
+    },
+    "PermissionsBACommunityAccess": {
+      "field_label": "Enable community users to access Benefit Assistance objects and features.",
+      "type": "boolean"
+    },
+    "PermissionsBREAlertsUserAccess": {
+      "field_label": "Access Record Alerts for Business Rules Engine",
+      "type": "boolean"
+    },
+    "PermissionsBatchManagementUser": {
+      "field_label": "Batch Management User",
+      "type": "boolean"
+    },
+    "PermissionsBenefitManagementAccess": {
+      "field_label": "Allows internal org users to access Programs, Benefits, and Goal objects and features.",
+      "type": "boolean"
+    },
+    "PermissionsBillingInvoiceSuperUser": {
+      "field_label": "Delete Invoice and Invoice Lines",
+      "type": "boolean"
+    },
+    "PermissionsBillingParameterUpdateAccess": {
+      "field_label": "Edit Billing Fields",
+      "type": "boolean"
+    },
+    "PermissionsBillingPaymentApiUser": {
+      "field_label": "Apply and Unapply Payments Using APIs",
+      "type": "boolean"
+    },
+    "PermissionsBillingRefundApiUser": {
+      "field_label": "Apply and Unapply Refunds Using APIs",
+      "type": "boolean"
+    },
+    "PermissionsBillingSetupAccess": {
+      "field_label": "Configure Billing Settings",
+      "type": "boolean"
+    },
+    "PermissionsBillingTransactionToBSApiUser": {
+      "field_label": "Access Billing Transaction to Billing Schedule API",
+      "type": "boolean"
+    },
+    "PermissionsBotManageBots": {
+      "field_label": "Manage Bots",
+      "type": "boolean"
+    },
+    "PermissionsBotManageBotsTrainingData": {
+      "field_label": "Manage Bots Training Data",
+      "type": "boolean"
+    },
+    "PermissionsBranchManagementUserAccess": {
+      "field_label": "User license to access Branch Management in Financial Services Cloud.",
+      "type": "boolean"
+    },
+    "PermissionsBroadcaster": {
+      "field_label": "Send One-to-Many Messages",
+      "type": "boolean"
+    },
+    "PermissionsBulkApiHardDelete": {
+      "field_label": "Bulk API Hard Delete",
+      "type": "boolean"
+    },
+    "PermissionsBulkMacrosAllowed": {
+      "field_label": "Run Macros on Multiple Records",
+      "type": "boolean"
+    },
+    "PermissionsBypassMFAForUiLogins": {
+      "field_label": "Waive Multi-Factor Authentication for Exempt Users",
+      "type": "boolean"
+    },
+    "PermissionsCCMCommunityAccess": {
+      "field_label": "Allows community users to access Composable Case Management objects and features.",
+      "type": "boolean"
+    },
+    "PermissionsCCUserHasBillingAccount": {
+      "field_label": "Manage Energy & Utilities Billing Accounts for Experience Cloud",
+      "type": "boolean"
+    },
+    "PermissionsCCUserHasEAndUProgramAccess": {
+      "field_label": "EU Experience Cloud User Program Access",
+      "type": "boolean"
+    },
+    "PermissionsCCUserHasEUCore": {
+      "field_label": "Manage Energy & Utilities Objects for Experience Cloud",
+      "type": "boolean"
+    },
+    "PermissionsCIPartnerIntegrationUser": {
+      "field_label": "Conversation Insights Partner Integration User",
+      "type": "boolean"
+    },
+    "PermissionsCMSECEAuthoringAccess": {
+      "field_label": "Migrate Enablement Content",
+      "type": "boolean"
+    },
+    "PermissionsCallCoachingUser": {
+      "field_label": "Use Conversation Insights for Sales",
+      "type": "boolean"
+    },
+    "PermissionsCallExplorer": {
+      "field_label": "Einstein Question and Answer for ECI Calls",
+      "type": "boolean"
+    },
+    "PermissionsCalmSobjectAccessUser": {
+      "field_label": "Access Lifecycle-Managed Assets",
+      "type": "boolean"
+    },
+    "PermissionsCampaignInfluence2": {
+      "field_label": "Campaign Influence",
+      "type": "boolean"
+    },
+    "PermissionsCanAccessCE": {
+      "field_label": "Access Conversation Entries",
+      "type": "boolean"
+    },
+    "PermissionsCanApproveFeedPost": {
+      "field_label": "Can Approve Feed Post and Comment",
+      "type": "boolean"
+    },
+    "PermissionsCanApproveUninstalledApps": {
+      "field_label": "Approve Uninstalled Connected Apps",
+      "type": "boolean"
+    },
+    "PermissionsCanDoActAsUser": {
+      "field_label": "Act As User",
+      "type": "boolean"
+    },
+    "PermissionsCanEditDataPrepRecipe": {
+      "field_label": "Edit Dataset Recipes",
+      "type": "boolean"
+    },
+    "PermissionsCanEditPrompts": {
+      "field_label": "Design and Deliver In-App Guidance",
+      "type": "boolean"
+    },
+    "PermissionsCanExitFlowViaAPI": {
+      "field_label": "Exit Flow Via API",
+      "type": "boolean"
+    },
+    "PermissionsCanInitiateMessagingSessions": {
+      "field_label": "Initiate Messaging Sessions",
+      "type": "boolean"
+    },
+    "PermissionsCanInsertFeedSystemFields": {
+      "field_label": "Insert System Field Values for Chatter Feeds",
+      "type": "boolean"
+    },
+    "PermissionsCanManageMaps": {
+      "field_label": "Manage CRM Analytics Custom Maps",
+      "type": "boolean"
+    },
+    "PermissionsCanMarketingUserDebugFlow": {
+      "field_label": "Can Marketing User Debug Marketing Flows",
+      "type": "boolean"
+    },
+    "PermissionsCanRunAnalysis": {
+      "field_label": "Can Run Einstein Discovery for Reports",
+      "type": "boolean"
+    },
+    "PermissionsCanSendInitialSMSToIndividual": {
+      "field_label": "Send Initial SMS Message to Individual",
+      "type": "boolean"
+    },
+    "PermissionsCanToggleCallRecordings": {
+      "field_label": "Control Call Recording",
+      "type": "boolean"
+    },
+    "PermissionsCanTranslateScrt2Conversation": {
+      "field_label": "Translate Enhanced Conversations",
+      "type": "boolean"
+    },
+    "PermissionsCanUpdateEmailMessage": {
+      "field_label": "Update Email Messages",
+      "type": "boolean"
+    },
+    "PermissionsCanUseNewDashboardBuilder": {
+      "field_label": "Drag-and-Drop Dashboard Builder",
+      "type": "boolean"
+    },
+    "PermissionsCanVerifyComment": {
+      "field_label": "Verify Answers to Chatter Questions",
+      "type": "boolean"
+    },
+    "PermissionsCanViewDataPrepRecipe": {
+      "field_label": "Recipes View Only",
+      "type": "boolean"
+    },
+    "PermissionsCanWriteWithAiScrt2Conversation": {
+      "field_label": "Write with AI",
+      "type": "boolean"
+    },
+    "PermissionsCancelAssets": {
+      "field_label": "Cancel Assets",
+      "type": "boolean"
+    },
+    "PermissionsCaptureAndReversePayments": {
+      "field_label": "Capture and Reverse Payments",
+      "type": "boolean"
+    },
+    "PermissionsCareManagementUserAccess": {
+      "field_label": "Enable the Integrated Care Management User Access in a Salesforce org.",
+      "type": "boolean"
+    },
+    "PermissionsCarePlansAccess": {
+      "field_label": "Allows internal org users to access Care Plans objects and features.",
+      "type": "boolean"
+    },
+    "PermissionsCaseReferralAccess": {
+      "field_label": "Allows internal org users to access referral feature.",
+      "type": "boolean"
+    },
+    "PermissionsCdcReportingCreateReports": {
+      "field_label": "Allow access to creating and editing reports in Data Cloud Reporting",
+      "type": "boolean"
+    },
+    "PermissionsCdcReportingManageFolders": {
+      "field_label": "Allow access to managing folders in Data Cloud Reporting",
+      "type": "boolean"
+    },
+    "PermissionsCdcReportingViewReports": {
+      "field_label": "Allow access to viewing reports in Data Cloud Reporting",
+      "type": "boolean"
+    },
+    "PermissionsCdpConnectionManagementUser": {
+      "field_label": "Manage Data Cloud connections",
+      "type": "boolean"
+    },
+    "PermissionsChainOfCustodyUser": {
+      "field_label": "Manage Chain Of Custody Features",
+      "type": "boolean"
+    },
+    "PermissionsChangeDashboardColors": {
+      "field_label": "Change Dashboard Colors",
+      "type": "boolean"
+    },
+    "PermissionsChangeTargetAssignee": {
+      "field_label": "Change Cadence Target Assignees",
+      "type": "boolean"
+    },
+    "PermissionsChannelPartnerInventoryReadOnlyUser": {
+      "field_label": "View Channel Partner Inventory",
+      "type": "boolean"
+    },
+    "PermissionsChatterComposeUiCodesnippet": {
+      "field_label": "Allow Inclusion of Code Snippets from UI",
+      "type": "boolean"
+    },
+    "PermissionsChatterEditOwnPost": {
+      "field_label": "Edit My Own Posts",
+      "type": "boolean"
+    },
+    "PermissionsChatterEditOwnRecordPost": {
+      "field_label": "Edit Posts on Records I Own",
+      "type": "boolean"
+    },
+    "PermissionsChatterFileLink": {
+      "field_label": "Create Public Links",
+      "type": "boolean"
+    },
+    "PermissionsChatterInternalUser": {
+      "field_label": "Chatter Internal User",
+      "type": "boolean"
+    },
+    "PermissionsChatterInviteExternalUsers": {
+      "field_label": "Invite Customers To Chatter",
+      "type": "boolean"
+    },
+    "PermissionsChatterOwnGroups": {
+      "field_label": "Create and Own New Chatter Groups",
+      "type": "boolean"
+    },
+    "PermissionsCitrixVDIPlatform": {
+      "field_label": "Access Virtual Desktop Infrastructure for Voice Calls through Citrix",
+      "type": "boolean"
+    },
+    "PermissionsClaimUnclaimNumber": {
+      "field_label": "Manage Numbers",
+      "type": "boolean"
+    },
+    "PermissionsClauseDEUser": {
+      "field_label": "Allows users to use clauses in Digital Experience sites",
+      "type": "boolean"
+    },
+    "PermissionsClauseDesigner": {
+      "field_label": "Allows clause designers to create and manage clauses",
+      "type": "boolean"
+    },
+    "PermissionsClauseUser": {
+      "field_label": "Allows users to use clauses within documents",
+      "type": "boolean"
+    },
+    "PermissionsClientSecretRotation": {
+      "field_label": "Allow consumer key and secret rotation",
+      "type": "boolean"
+    },
+    "PermissionsCloseConversations": {
+      "field_label": "Close Conversation Threads",
+      "type": "boolean"
+    },
+    "PermissionsCodeBuilderUser": {
+      "field_label": "Code Builder User",
+      "type": "boolean"
+    },
+    "PermissionsCollectionsAndRecoveryAdmin": {
+      "field_label": "Create promise to pay records, view collection plan details, and update the status of collections.",
+      "type": "boolean"
+    },
+    "PermissionsCollectionsAndRecoverySpecialist": {
+      "field_label": "Set up and manage collections.",
+      "type": "boolean"
+    },
+    "PermissionsCombAuthAndCapPayments": {
+      "field_label": "Allow Sale Payments",
+      "type": "boolean"
+    },
+    "PermissionsCommerceEntitlementIntegrator": {
+      "field_label": "Commerce Buyer and Entitlements Integrator",
+      "type": "boolean"
+    },
+    "PermissionsCommerceShipmentIntegrator": {
+      "field_label": "Commerce Shipment User",
+      "type": "boolean"
+    },
+    "PermissionsCommerceTaxApiUser": {
+      "field_label": "Tax API User",
+      "type": "boolean"
+    },
+    "PermissionsComplaintsManagementAccess": {
+      "field_label": "Provides access to Complaints Management features and objects.",
+      "type": "boolean"
+    },
+    "PermissionsConfigCompliantDataSharing": {
+      "field_label": "Configure Compliant Data Sharing",
+      "type": "boolean"
+    },
+    "PermissionsConfigCustomRecs": {
+      "field_label": "Configure Custom Recommendations",
+      "type": "boolean"
+    },
+    "PermissionsConfigureCCTarget": {
+      "field_label": "Allow user to configure communication capping activation target.",
+      "type": "boolean"
+    },
+    "PermissionsConfigureCommunicationCapping": {
+      "field_label": "Allow user to configure communication capping.",
+      "type": "boolean"
+    },
+    "PermissionsConfigureDataspaceScope": {
+      "field_label": "Configure Dataspace Scope",
+      "type": "boolean"
+    },
+    "PermissionsConfigureLiveMessage": {
+      "field_label": "Configure Messaging",
+      "type": "boolean"
+    },
+    "PermissionsConfigureMerchantAccounts": {
+      "field_label": "Set up Payments Merchant Accounts",
+      "type": "boolean"
+    },
+    "PermissionsConfigurePayments": {
+      "field_label": "Configure Payments",
+      "type": "boolean"
+    },
+    "PermissionsConnectOrgToEnvironmentHub": {
+      "field_label": "Connect Organization to Environment Hub",
+      "type": "boolean"
+    },
+    "PermissionsConsentApiUpdate": {
+      "field_label": "Update Consent Preferences Using REST API",
+      "type": "boolean"
+    },
+    "PermissionsContactInspectorUser": {
+      "field_label": "Access Contact Intelligence View in Partner Sites",
+      "type": "boolean"
+    },
+    "PermissionsContentAdministrator": {
+      "field_label": "Manage Salesforce CRM Content",
+      "type": "boolean"
+    },
+    "PermissionsContentHubUser": {
+      "field_label": "Files Connect Cloud",
+      "type": "boolean"
+    },
+    "PermissionsContentWorkspaces": {
+      "field_label": "Access Libraries",
+      "type": "boolean"
+    },
+    "PermissionsContextServiceAdmin": {
+      "field_label": "Context Service Admin user.",
+      "type": "boolean"
+    },
+    "PermissionsContextServiceEmbedAdmin": {
+      "field_label": "Context Service Embed Admin user.",
+      "type": "boolean"
+    },
+    "PermissionsContextServiceRuntime": {
+      "field_label": "Context Service Run time user.",
+      "type": "boolean"
+    },
+    "PermissionsContractorHasEUProgramAccess": {
+      "field_label": "Contractor Program Access",
+      "type": "boolean"
+    },
+    "PermissionsContractorHasWorkReportAccess": {
+      "field_label": "Manage Contractor Work Report",
+      "type": "boolean"
+    },
+    "PermissionsConversationCatchupUser": {
+      "field_label": "View Conversation Catch-Up",
+      "type": "boolean"
+    },
+    "PermissionsConvertLeads": {
+      "field_label": "Convert Leads",
+      "type": "boolean"
+    },
+    "PermissionsCoordinateClinicalTrials": {
+      "field_label": "Coordinate clinical trial tasks like candidate outreach programs.",
+      "type": "boolean"
+    },
+    "PermissionsCoordinateClnclTrialExprcUsr": {
+      "field_label": "Coordinate clinical trial tasks like candidate outreach programs as an Experience Cloud user.",
+      "type": "boolean"
+    },
+    "PermissionsCoreCPQUser": {
+      "field_label": "Manage Revenue Cloud",
+      "type": "boolean"
+    },
+    "PermissionsCorePricingAdmin": {
+      "field_label": "Salesforce Pricing: Admin user",
+      "type": "boolean"
+    },
+    "PermissionsCorePricingDesignTimeUser": {
+      "field_label": "Salesforce Pricing: Design time user",
+      "type": "boolean"
+    },
+    "PermissionsCorePricingManager": {
+      "field_label": "Salesforce Pricing: Manager",
+      "type": "boolean"
+    },
+    "PermissionsCorePricingRunTimeUser": {
+      "field_label": "Salesforce Pricing: Run time user",
+      "type": "boolean"
+    },
+    "PermissionsCosellAuthSetupUser": {
+      "field_label": "Establish an Approved PRM External Integration",
+      "type": "boolean"
+    },
+    "PermissionsCosellExportUser": {
+      "field_label": "Export Vendor Records to an Authorized Partner Org",
+      "type": "boolean"
+    },
+    "PermissionsCreateClosePlan": {
+      "field_label": "Allow access to Einstein Close Plan in Einstein Copilot",
+      "type": "boolean"
+    },
+    "PermissionsCreateCustomizeDashboards": {
+      "field_label": "Create and Customize Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsCreateCustomizeFilters": {
+      "field_label": "Create and Customize List Views",
+      "type": "boolean"
+    },
+    "PermissionsCreateCustomizeReports": {
+      "field_label": "Create and Customize Reports",
+      "type": "boolean"
+    },
+    "PermissionsCreateDPEDefinitionWithDerivedFields": {
+      "field_label": "Create DPE Definition With Derived Fields",
+      "type": "boolean"
+    },
+    "PermissionsCreateDashboardFolders": {
+      "field_label": "Create Dashboard Folders",
+      "type": "boolean"
+    },
+    "PermissionsCreateEditNonSetupFlow": {
+      "field_label": "Create or Edit Flows",
+      "type": "boolean"
+    },
+    "PermissionsCreateLtngTempFolder": {
+      "field_label": "Create Folders for Lightning Email Templates",
+      "type": "boolean"
+    },
+    "PermissionsCreateLtngTempInPub": {
+      "field_label": "Manage Public Lightning Email Templates",
+      "type": "boolean"
+    },
+    "PermissionsCreateModActTrigNonSetupFlow": {
+      "field_label": "Create or Modify Activation-Triggered Flows",
+      "type": "boolean"
+    },
+    "PermissionsCreateModCampaignMemberTrigNonSetupFlow": {
+      "field_label": "Create or Modify Campaign Member-Triggered Flows",
+      "type": "boolean"
+    },
+    "PermissionsCreateModCrmRecordQueryFlow": {
+      "field_label": "Create or Modify CRM Record Query Flows",
+      "type": "boolean"
+    },
+    "PermissionsCreateModDGTrigNonSetupFlow": {
+      "field_label": "Create or Modify Flows with Data Graph Event Triggers",
+      "type": "boolean"
+    },
+    "PermissionsCreateModIndRecNonSetupFlow": {
+      "field_label": "Create or Modify Flows with Individual Related Record Event Triggers",
+      "type": "boolean"
+    },
+    "PermissionsCreateModListTrigNonSetupFlow": {
+      "field_label": "Create or Modify List Triggered Flows",
+      "type": "boolean"
+    },
+    "PermissionsCreatePackaging": {
+      "field_label": "Create AppExchange Packages",
+      "type": "boolean"
+    },
+    "PermissionsCreateQuickCadence": {
+      "field_label": "Create and Edit Quick Cadences",
+      "type": "boolean"
+    },
+    "PermissionsCreateReductionOrder": {
+      "field_label": "Create Reduction Orders",
+      "type": "boolean"
+    },
+    "PermissionsCreateReportFolders": {
+      "field_label": "Create Report Folders",
+      "type": "boolean"
+    },
+    "PermissionsCreateReportInLightning": {
+      "field_label": "Report Builder (Lightning Experience)",
+      "type": "boolean"
+    },
+    "PermissionsCreateStandardCadence": {
+      "field_label": "Create and Edit Standard Cadences",
+      "type": "boolean"
+    },
+    "PermissionsCreateTopics": {
+      "field_label": "Create Topics",
+      "type": "boolean"
+    },
+    "PermissionsCreateUpdateSDDDataset": {
+      "field_label": "Create and Update Einstein Discovery Datasets",
+      "type": "boolean"
+    },
+    "PermissionsCreateUpdateSDDStory": {
+      "field_label": "Create and Update Einstein Discovery Models",
+      "type": "boolean"
+    },
+    "PermissionsCreateWorkBadgeDefinition": {
+      "field_label": "Create custom Badge Definitions",
+      "type": "boolean"
+    },
+    "PermissionsCreateWorkspaces": {
+      "field_label": "Create Libraries",
+      "type": "boolean"
+    },
+    "PermissionsCreditMemoAPIUser": {
+      "field_label": "Credit Memo API User",
+      "type": "boolean"
+    },
+    "PermissionsCustomAppsOnFSMobile": {
+      "field_label": "Custom Applications for Field Service Mobile",
+      "type": "boolean"
+    },
+    "PermissionsCustomMobileAppsAccess": {
+      "field_label": "Access Custom Mobile Apps",
+      "type": "boolean"
+    },
+    "PermissionsCustomSidebarOnAllPages": {
+      "field_label": "Show Custom Sidebar On All Pages",
+      "type": "boolean"
+    },
+    "PermissionsCustomizeApplication": {
+      "field_label": "Customize Application",
+      "type": "boolean"
+    },
+    "PermissionsDFODesignerUser": {
+      "field_label": "Allows user to gain Fulfillment Designer level access to DRO",
+      "type": "boolean"
+    },
+    "PermissionsDFOManagerOperatorUser": {
+      "field_label": "Allows user to gain Fulfillment Manager or Fulfillment Operator level access to DRO",
+      "type": "boolean"
+    },
+    "PermissionsDPEOnDemandAccess": {
+      "field_label": "DPEOnDemandAccess",
+      "type": "boolean"
+    },
+    "PermissionsDROOrchestrateTransactionUser": {
+      "field_label": "Submit Transactions and Orchestrate User",
+      "type": "boolean"
+    },
+    "PermissionsDROOrderSubmitInitiateUser": {
+      "field_label": "Submit Transactions User",
+      "type": "boolean"
+    },
+    "PermissionsDataCleanRoomQueryAccess": {
+      "field_label": "DataCleanRoomQueryAccess",
+      "type": "boolean"
+    },
+    "PermissionsDataCleanRoomReadAccess": {
+      "field_label": "DataCleanRoomReadAccess",
+      "type": "boolean"
+    },
+    "PermissionsDataCleanRoomSetupAccess": {
+      "field_label": "DataCleanRoomSetupAccess",
+      "type": "boolean"
+    },
+    "PermissionsDataCleanRoomWriteAccess": {
+      "field_label": "DataCleanRoomWriteAccess",
+      "type": "boolean"
+    },
+    "PermissionsDataExport": {
+      "field_label": "Weekly Data Export",
+      "type": "boolean"
+    },
+    "PermissionsDataPipelinesAppConsumer": {
+      "field_label": "Permission to access Data Pipelines license",
+      "type": "boolean"
+    },
+    "PermissionsDebitMemoAPIUser": {
+      "field_label": "Manage Debit Memos",
+      "type": "boolean"
+    },
+    "PermissionsDecimalQuantityDesigntime": {
+      "field_label": "Decimal Quantity Design time Access",
+      "type": "boolean"
+    },
+    "PermissionsDecimalQuantityRuntime": {
+      "field_label": "Decimal Quantity Runtime Access",
+      "type": "boolean"
+    },
+    "PermissionsDecisionTableExecUserAccess": {
+      "field_label": "Run Decision Tables",
+      "type": "boolean"
+    },
+    "PermissionsDelegatedContactCenterAdmin": {
+      "field_label": "Salesforce Voice Delegated Contact Center Admin",
+      "type": "boolean"
+    },
+    "PermissionsDelegatedPortalUserAdmin": {
+      "field_label": "Delegated External User Administrator",
+      "type": "boolean"
+    },
+    "PermissionsDelegatedTwoFactor": {
+      "field_label": "Manage MFA in User Interface",
+      "type": "boolean"
+    },
+    "PermissionsDeleteActivatedContract": {
+      "field_label": "Delete Activated Contracts",
+      "type": "boolean"
+    },
+    "PermissionsDeleteChangeRequest": {
+      "field_label": "Delete Change Request",
+      "type": "boolean"
+    },
+    "PermissionsDeleteCrMemoAndInvoice": {
+      "field_label": "Delete Credit Memo and Invoice",
+      "type": "boolean"
+    },
+    "PermissionsDeleteIncident": {
+      "field_label": "Delete Incident",
+      "type": "boolean"
+    },
+    "PermissionsDeleteNonSetupFlow": {
+      "field_label": "Delete Flows",
+      "type": "boolean"
+    },
+    "PermissionsDeleteProblem": {
+      "field_label": "Delete Problem",
+      "type": "boolean"
+    },
+    "PermissionsDeleteRevenueRecords": {
+      "field_label": "Allow Revenue Records Deletion",
+      "type": "boolean"
+    },
+    "PermissionsDeleteSalesforceFiles": {
+      "field_label": "Delete Salesforce Files",
+      "type": "boolean"
+    },
+    "PermissionsDeleteTopics": {
+      "field_label": "Delete Topics",
+      "type": "boolean"
+    },
+    "PermissionsDerivedPricing": {
+      "field_label": "Provides create, read, and edit access to all derived pricing objects and features.",
+      "type": "boolean"
+    },
+    "PermissionsDesignContextRule": {
+      "field_label": "Manage Context Rules",
+      "type": "boolean"
+    },
+    "PermissionsDfoAdminUser": {
+      "field_label": "System Administrator access for DRO",
+      "type": "boolean"
+    },
+    "PermissionsDigitalAgentUser": {
+      "field_label": "Use Custom Agents",
+      "type": "boolean"
+    },
+    "PermissionsDigitalLendingAdminUser": {
+      "field_label": "Digital Lending Admin User",
+      "type": "boolean"
+    },
+    "PermissionsDigitalLendingEditReadOnly": {
+      "field_label": "Digital Lending Edit Read Only Party Related Records",
+      "type": "boolean"
+    },
+    "PermissionsDigitalLendingIndiaAdminUser": {
+      "field_label": "Digital Lending India Admin User",
+      "type": "boolean"
+    },
+    "PermissionsDigitalLendingUser": {
+      "field_label": "Digital Lending User",
+      "type": "boolean"
+    },
+    "PermissionsDigitalLendingWorkbench": {
+      "field_label": "Digital Lending Workbench",
+      "type": "boolean"
+    },
+    "PermissionsDisbursementUserAccess": {
+      "field_label": "Grant users access to Benefit Disbursement features.",
+      "type": "boolean"
+    },
+    "PermissionsDistributeFromPersWksp": {
+      "field_label": "Create Content Deliveries",
+      "type": "boolean"
+    },
+    "PermissionsDocGenDesigner": {
+      "field_label": "Enables Designers to create Document Templates.",
+      "type": "boolean"
+    },
+    "PermissionsDocGenRuntimeCCUser": {
+      "field_label": "Enables Customers and Partners to generate documents via communities.",
+      "type": "boolean"
+    },
+    "PermissionsDocGenRuntimeUser": {
+      "field_label": "Enables Business users to generate documents.",
+      "type": "boolean"
+    },
+    "PermissionsDocumentAutomationUserAccess": {
+      "field_label": "User license to access IntelligentDocumentAutomation in Financial Services Cloud.",
+      "type": "boolean"
+    },
+    "PermissionsDocumentBuilder": {
+      "field_label": "Document Builder",
+      "type": "boolean"
+    },
+    "PermissionsDocumentChecklistUserAccess": {
+      "field_label": "User license to access the Document Checklist features.",
+      "type": "boolean"
+    },
+    "PermissionsDocumentWorkspaceCmtyAccess": {
+      "field_label": "Permission to access Intelligent Document Workspace for community users",
+      "type": "boolean"
+    },
+    "PermissionsDocumentWorkspaceUserAccess": {
+      "field_label": "Permission to access Intelligent Document Workspace",
+      "type": "boolean"
+    },
+    "PermissionsDownloadMaliciousFiles": {
+      "field_label": "Download Malicious Files",
+      "type": "boolean"
+    },
+    "PermissionsDownloadPackageVersionZips": {
+      "field_label": "Download Package Version Zip Files",
+      "type": "boolean"
+    },
+    "PermissionsDynamicCommonOrchestratorUser": {
+      "field_label": "Dynamic Common Orchestrator User",
+      "type": "boolean"
+    },
+    "PermissionsEGPTSalesSummariesUser": {
+      "field_label": "Einstein Sales Summaries User",
+      "type": "boolean"
+    },
+    "PermissionsEGPTServiceEmailUser": {
+      "field_label": "Use Einstein Service Email Assistant",
+      "type": "boolean"
+    },
+    "PermissionsEditASEFields": {
+      "field_label": "Update One Sync Engine Data",
+      "type": "boolean"
+    },
+    "PermissionsEditAccountScoreFields": {
+      "field_label": "View Account Scores",
+      "type": "boolean"
+    },
+    "PermissionsEditActivatedOrders": {
+      "field_label": "Edit Activated Orders",
+      "type": "boolean"
+    },
+    "PermissionsEditBillingInfo": {
+      "field_label": "Manage Billing",
+      "type": "boolean"
+    },
+    "PermissionsEditBrandTemplates": {
+      "field_label": "Manage Letterheads",
+      "type": "boolean"
+    },
+    "PermissionsEditCalculationStatusOnQuoteOrder": {
+      "field_label": "Edit Calculation Status on Quote and Order",
+      "type": "boolean"
+    },
+    "PermissionsEditCaseComments": {
+      "field_label": "Edit Case Comments",
+      "type": "boolean"
+    },
+    "PermissionsEditDeliveryInformation": {
+      "field_label": "Edit Delivery Information",
+      "type": "boolean"
+    },
+    "PermissionsEditEvent": {
+      "field_label": "Edit Events",
+      "type": "boolean"
+    },
+    "PermissionsEditHtmlTemplates": {
+      "field_label": "Edit HTML Templates",
+      "type": "boolean"
+    },
+    "PermissionsEditIQFields": {
+      "field_label": "Update Activity Metrics Data",
+      "type": "boolean"
+    },
+    "PermissionsEditKnowledge": {
+      "field_label": "Manage Articles",
+      "type": "boolean"
+    },
+    "PermissionsEditManagedOrderSummaries": {
+      "field_label": "Edit Managed Order Summaries",
+      "type": "boolean"
+    },
+    "PermissionsEditMyDashboards": {
+      "field_label": "Edit My Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsEditMyReports": {
+      "field_label": "Edit My Reports",
+      "type": "boolean"
+    },
+    "PermissionsEditOppLineItemUnitPrice": {
+      "field_label": "Edit Opportunity Product Sales Price",
+      "type": "boolean"
+    },
+    "PermissionsEditOrderManagementBillingType": {
+      "field_label": "Edit the OrderManagementBillingType field in the SalesChannel object.",
+      "type": "boolean"
+    },
+    "PermissionsEditPublicDocuments": {
+      "field_label": "Manage Public Documents",
+      "type": "boolean"
+    },
+    "PermissionsEditPublicFilters": {
+      "field_label": "Manage Public List Views",
+      "type": "boolean"
+    },
+    "PermissionsEditPublicTemplates": {
+      "field_label": "Manage Public Classic Email Templates",
+      "type": "boolean"
+    },
+    "PermissionsEditReadonlyFields": {
+      "field_label": "Edit Read Only Fields",
+      "type": "boolean"
+    },
+    "PermissionsEditRepricing": {
+      "field_label": "Edit Repricing Information",
+      "type": "boolean"
+    },
+    "PermissionsEditTask": {
+      "field_label": "Edit Tasks",
+      "type": "boolean"
+    },
+    "PermissionsEditTopics": {
+      "field_label": "Edit Topics",
+      "type": "boolean"
+    },
+    "PermissionsEditTranslation": {
+      "field_label": "Article Translation - Edit",
+      "type": "boolean"
+    },
+    "PermissionsEditUnmanagedOrderSummaries": {
+      "field_label": "Edit Unmanaged Order Summaries",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinAgentPlatformBuilder": {
+      "field_label": "Manage AI Agents",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinCopilotBuilder": {
+      "field_label": "Manage Agentforce Default Agent",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinCopilotUser": {
+      "field_label": "Use Agentforce Default Agent",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinGPTSalesEmailsUser": {
+      "field_label": "Use Einstein Sales Emails",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinReplyManager": {
+      "field_label": "Manage Replies for Einstein Reply Recommendations",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinSalesCoachAgent": {
+      "field_label": "Agentforce Sales Coach",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinSalesRepFdbkUser": {
+      "field_label": "Use Einstein Coach",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinSdrAAPerm": {
+      "field_label": "Enables users to assign EinsteinSdr Automated Action rule.",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinSdrAccessPerm": {
+      "field_label": "Use Agentforce SDR Agent App",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinSdrConfigPerm": {
+      "field_label": "Configure Agentforce SDR Agent App",
+      "type": "boolean"
+    },
+    "PermissionsEinsteinSdrWorkerPerm": {
+      "field_label": "Engage Prospects as an Agentforce Sales Development Agent",
+      "type": "boolean"
+    },
+    "PermissionsEmailAdministration": {
+      "field_label": "Email Administration",
+      "type": "boolean"
+    },
+    "PermissionsEmailMass": {
+      "field_label": "Mass Email",
+      "type": "boolean"
+    },
+    "PermissionsEmailSingle": {
+      "field_label": "Send Email",
+      "type": "boolean"
+    },
+    "PermissionsEmailTemplateManagement": {
+      "field_label": "Manage Email Templates",
+      "type": "boolean"
+    },
+    "PermissionsEmbeddedMessagingAgent": {
+      "field_label": "Enhanced Chat Rep",
+      "type": "boolean"
+    },
+    "PermissionsEmployee2Access": {
+      "field_label": "Access Employee2",
+      "type": "boolean"
+    },
+    "PermissionsEmployeeAccess": {
+      "field_label": "Access Employee",
+      "type": "boolean"
+    },
+    "PermissionsEmployeeExperience": {
+      "field_label": "Access Employee Experience",
+      "type": "boolean"
+    },
+    "PermissionsEnableBCTransactionPolling": {
+      "field_label": "Enable blockchain transaction polling API",
+      "type": "boolean"
+    },
+    "PermissionsEnableCommunityAppLauncher": {
+      "field_label": "Show App Launcher in Experience Cloud Sites",
+      "type": "boolean"
+    },
+    "PermissionsEnableConfigurationLogAccess": {
+      "field_label": "Read and write configuration logs",
+      "type": "boolean"
+    },
+    "PermissionsEnableIPFSUpload": {
+      "field_label": "Allow blockchain data upload",
+      "type": "boolean"
+    },
+    "PermissionsEnableNotifications": {
+      "field_label": "Send Outbound Messages",
+      "type": "boolean"
+    },
+    "PermissionsEnablementAdmin": {
+      "field_label": "Design and Deliver Enablement Programs",
+      "type": "boolean"
+    },
+    "PermissionsEnablementUser": {
+      "field_label": "Take Enablement Programs",
+      "type": "boolean"
+    },
+    "PermissionsEngagementConfigUser": {
+      "field_label": "Engagement Config User",
+      "type": "boolean"
+    },
+    "PermissionsEnhancedSalesMobileExp": {
+      "field_label": "Salesforce Mobile App: Native Seller Experience",
+      "type": "boolean"
+    },
+    "PermissionsExecutePromptTemplates": {
+      "field_label": "Execute Prompt Templates",
+      "type": "boolean"
+    },
+    "PermissionsExplainabilityCmtyAccess": {
+      "field_label": "Provides site users with access to Decision Explainers features and APIs.",
+      "type": "boolean"
+    },
+    "PermissionsExplainabilityUserAccess": {
+      "field_label": "Provides internal Org users with access to Decision Explainer features and APIs.",
+      "type": "boolean"
+    },
+    "PermissionsExportReport": {
+      "field_label": "Export Reports",
+      "type": "boolean"
+    },
+    "PermissionsExternalClientAppAdmin": {
+      "field_label": "View all External Client Apps, view their settings, and edit their policies",
+      "type": "boolean"
+    },
+    "PermissionsExternalClientAppDeveloper": {
+      "field_label": "Create, edit, and delete External Client Apps",
+      "type": "boolean"
+    },
+    "PermissionsExternalClientAppViewer": {
+      "field_label": "View all External Client Apps",
+      "type": "boolean"
+    },
+    "PermissionsFSCAlertFrameworkUserAccess": {
+      "field_label": "Access Record Alerts",
+      "type": "boolean"
+    },
+    "PermissionsFSCArcGraphCommunityUser": {
+      "field_label": "Access Actionable Relationship Center for partner users",
+      "type": "boolean"
+    },
+    "PermissionsFSCB2BUserAccess": {
+      "field_label": "Grants access to B2B features",
+      "type": "boolean"
+    },
+    "PermissionsFSCInsClaimMgmtPlatformUser": {
+      "field_label": "Insurance Claim Management Platform User",
+      "type": "boolean"
+    },
+    "PermissionsFSCInsPolicyAdminPlatformUser": {
+      "field_label": "Insurance Policy Administration Platform User",
+      "type": "boolean"
+    },
+    "PermissionsFSCInsuranceCmpCmtyAccess": {
+      "field_label": "Access Insurance Lightning Components",
+      "type": "boolean"
+    },
+    "PermissionsFSCInsuranceCmpLexOnlyAccess": {
+      "field_label": "Access Insurance Lightning Components",
+      "type": "boolean"
+    },
+    "PermissionsFSCInsurancePlatformUser": {
+      "field_label": "Access Insurance Objects",
+      "type": "boolean"
+    },
+    "PermissionsFSCReferralUserPerm": {
+      "field_label": "Manage FSC Referral",
+      "type": "boolean"
+    },
+    "PermissionsFeedPinning": {
+      "field_label": "Pin Posts in Feeds",
+      "type": "boolean"
+    },
+    "PermissionsFieldServiceAccess": {
+      "field_label": "Field Service Standard",
+      "type": "boolean"
+    },
+    "PermissionsFieldServiceCopilotActions": {
+      "field_label": "Access Agent Topics and Actions for Field Service",
+      "type": "boolean"
+    },
+    "PermissionsFieldServiceDispatcher": {
+      "field_label": "Field Service Dispatcher",
+      "type": "boolean"
+    },
+    "PermissionsFieldServiceLastMile": {
+      "field_label": "Field Service Appointment Assistant",
+      "type": "boolean"
+    },
+    "PermissionsFieldServiceMobileApp": {
+      "field_label": "Field Service Mobile",
+      "type": "boolean"
+    },
+    "PermissionsFieldServiceScheduling": {
+      "field_label": "Field Service Scheduling",
+      "type": "boolean"
+    },
+    "PermissionsFieldServiceVoiceToForm": {
+      "field_label": "Access Field Service Data Capture Voice to Form",
+      "type": "boolean"
+    },
+    "PermissionsFieldServiceVoiceToRecordEdit": {
+      "field_label": "Access Field Service Voice to Record Edit",
+      "type": "boolean"
+    },
+    "PermissionsFinancialServices2UserAccess": {
+      "field_label": "Access Actionable Relationship Center",
+      "type": "boolean"
+    },
+    "PermissionsFindPastCollaborators": {
+      "field_label": "Allow access to Find Past Collaborators in Einstein Copilot.",
+      "type": "boolean"
+    },
+    "PermissionsFlowUFLRequired": {
+      "field_label": "Require Flow User Feature License",
+      "type": "boolean"
+    },
+    "PermissionsForceTwoFactor": {
+      "field_label": "Multi-Factor Authentication for User Interface Logins",
+      "type": "boolean"
+    },
+    "PermissionsFreezeUsers": {
+      "field_label": "Freeze Users",
+      "type": "boolean"
+    },
+    "PermissionsFscPlansAndGoalsUser": {
+      "field_label": "Plans and Goals User",
+      "type": "boolean"
+    },
+    "PermissionsGenEmailResponseUser": {
+      "field_label": "View, Edit, and Post Service Emails",
+      "type": "boolean"
+    },
+    "PermissionsGenReplyRecommendationUser": {
+      "field_label": "View, Edit, and Post Service Replies",
+      "type": "boolean"
+    },
+    "PermissionsGetConversationTranscripts": {
+      "field_label": "Get Conversation Transcripts",
+      "type": "boolean"
+    },
+    "PermissionsGetProductPricing": {
+      "field_label": "Allow access to Get Product Pricing in Einstein Copilot",
+      "type": "boolean"
+    },
+    "PermissionsGetRecordDetailsUserAccess": {
+      "field_label": "Get Record Details",
+      "type": "boolean"
+    },
+    "PermissionsGetSmartDataDiscovery": {
+      "field_label": "View Einstein Discovery Recommendations",
+      "type": "boolean"
+    },
+    "PermissionsGetSmartDataDiscoveryExternal": {
+      "field_label": "View Einstein Discovery Recommendations Via Connect API",
+      "type": "boolean"
+    },
+    "PermissionsGiveRecognitionBadge": {
+      "field_label": "Give Recognition Badges in Experience Builder Sites",
+      "type": "boolean"
+    },
+    "PermissionsGovernNetworks": {
+      "field_label": "Manage Experiences",
+      "type": "boolean"
+    },
+    "PermissionsGrantOutboundBundling": {
+      "field_label": "Grant Outbound Bundling",
+      "type": "boolean"
+    },
+    "PermissionsGroupMembershipCmtyUsr": {
+      "field_label": "Group Membership Experience Cloud User",
+      "type": "boolean"
+    },
+    "PermissionsGroupMembershipPsl": {
+      "field_label": "Group Membership",
+      "type": "boolean"
+    },
+    "PermissionsHasUnlimitedErbScoringRequests": {
+      "field_label": "User Has Unlimited Erb Model Scoring",
+      "type": "boolean"
+    },
+    "PermissionsHasUnlimitedNBAExecutions": {
+      "field_label": "User Has Unlimited Next Best Action Strategy Executions",
+      "type": "boolean"
+    },
+    "PermissionsHcAdvancedTherapyUser": {
+      "field_label": "Manage Advanced Therapy Orchestration features",
+      "type": "boolean"
+    },
+    "PermissionsHeadlessCMSAccess": {
+      "field_label": "Enable Salesforce CMS Integration",
+      "type": "boolean"
+    },
+    "PermissionsHeadlessConfiguratorUser": {
+      "field_label": "Product Configurator API User",
+      "type": "boolean"
+    },
+    "PermissionsHeadlessPublishNudges": {
+      "field_label": "Headless Publish Nudges User",
+      "type": "boolean"
+    },
+    "PermissionsHealthCloudStarter": {
+      "field_label": "Health Cloud Starter",
+      "type": "boolean"
+    },
+    "PermissionsHideReadByList": {
+      "field_label": "Hide the Seen By List",
+      "type": "boolean"
+    },
+    "PermissionsHighVelocitySalesUser": {
+      "field_label": "Sales Engagement User",
+      "type": "boolean"
+    },
+    "PermissionsHydratePromptTemplateIA": {
+      "field_label": "Hydrate Prompt Template IA",
+      "type": "boolean"
+    },
+    "PermissionsIdentityConnect": {
+      "field_label": "Use Identity Connect",
+      "type": "boolean"
+    },
+    "PermissionsIdentityEnabled": {
+      "field_label": "Use Identity Features",
+      "type": "boolean"
+    },
+    "PermissionsIdentityVerificationUserAccess": {
+      "field_label": "Permission to access Identity Verification",
+      "type": "boolean"
+    },
+    "PermissionsImportCustomObjects": {
+      "field_label": "Import Custom Objects",
+      "type": "boolean"
+    },
+    "PermissionsImportLeads": {
+      "field_label": "Import Leads",
+      "type": "boolean"
+    },
+    "PermissionsImportPersonal": {
+      "field_label": "Import Personal Contacts",
+      "type": "boolean"
+    },
+    "PermissionsInboundLeadGenAgentConfigurePerm": {
+      "field_label": "Set Up Inbound Lead Generation",
+      "type": "boolean"
+    },
+    "PermissionsInboundLeadGenAgentPerm": {
+      "field_label": "Inbound Lead Generation Autonomous User",
+      "type": "boolean"
+    },
+    "PermissionsInboundMigrationToolsUser": {
+      "field_label": "Deploy Change Sets",
+      "type": "boolean"
+    },
+    "PermissionsIndustriesEpcNextPilot": {
+      "field_label": "Industries Epc Next Pilot",
+      "type": "boolean"
+    },
+    "PermissionsIndustryMilestonePlatformUser": {
+      "field_label": "Access Life Events or Business Milestones Component",
+      "type": "boolean"
+    },
+    "PermissionsInsightsAppAdmin": {
+      "field_label": "Manage CRM Analytics",
+      "type": "boolean"
+    },
+    "PermissionsInsightsAppDashboardEditor": {
+      "field_label": "Create and Edit CRM Analytics Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsInsightsAppEltEditor": {
+      "field_label": "Edit CRM Analytics Dataflows",
+      "type": "boolean"
+    },
+    "PermissionsInsightsAppUploadUser": {
+      "field_label": "Upload External Data to CRM Analytics",
+      "type": "boolean"
+    },
+    "PermissionsInsightsAppUser": {
+      "field_label": "Use CRM Analytics",
+      "type": "boolean"
+    },
+    "PermissionsInsightsCreateApplication": {
+      "field_label": "Create CRM Analytics Apps",
+      "type": "boolean"
+    },
+    "PermissionsInsightsIntelAppUser": {
+      "field_label": "Use Intelligent Apps",
+      "type": "boolean"
+    },
+    "PermissionsInstallPackaging": {
+      "field_label": "Download AppExchange Packages",
+      "type": "boolean"
+    },
+    "PermissionsInsuranceGroupBenefitsUser": {
+      "field_label": "Insurance Group Benefits User",
+      "type": "boolean"
+    },
+    "PermissionsIntelligentDocumentProcessing": {
+      "field_label": "Use generic Intelligent Document Processing",
+      "type": "boolean"
+    },
+    "PermissionsInteractionCalcAdminPerm": {
+      "field_label": "Grant administrators access to Industries Interaction Calculation features.",
+      "type": "boolean"
+    },
+    "PermissionsInteractionCalcUserPerm": {
+      "field_label": "Grant users access to Industries Interaction Calculation features.",
+      "type": "boolean"
+    },
+    "PermissionsInteractionObjStateDefUserPerm": {
+      "field_label": "Grant users access to Industries Interaction Object State Definition features.",
+      "type": "boolean"
+    },
+    "PermissionsInterestTaggingUserAccess": {
+      "field_label": "Access Interest Tags for Financial Services Cloud.",
+      "type": "boolean"
+    },
+    "PermissionsInviteBuyerToReorderPortal": {
+      "field_label": "Invite Buyer to Reorder Portal",
+      "type": "boolean"
+    },
+    "PermissionsInvoiceOrErrorRecoveryAPI": {
+      "field_label": "Invoice or Recovery API",
+      "type": "boolean"
+    },
+    "PermissionsInvoicePreview": {
+      "field_label": "Preview Invoices",
+      "type": "boolean"
+    },
+    "PermissionsInvoiceSchedulerUser": {
+      "field_label": "Invoice Scheduler User",
+      "type": "boolean"
+    },
+    "PermissionsIsContactCenterAdmin": {
+      "field_label": "Salesforce Voice Contact Center Admin",
+      "type": "boolean"
+    },
+    "PermissionsIsContactCenterAdminBYOT": {
+      "field_label": "Salesforce Voice Contact Center Admin (Partner Telephony)",
+      "type": "boolean"
+    },
+    "PermissionsIsContactCenterAgent": {
+      "field_label": "Salesforce Voice Contact Center Rep",
+      "type": "boolean"
+    },
+    "PermissionsIsContactCenterAgentBYOT": {
+      "field_label": "Salesforce Voice Contact Center Rep (Partner Telephony)",
+      "type": "boolean"
+    },
+    "PermissionsIsContactCenterSupervisor": {
+      "field_label": "Salesforce Voice Contact Center Supervisor",
+      "type": "boolean"
+    },
+    "PermissionsIsSsoEnabled": {
+      "field_label": "Is Single Sign-On Enabled",
+      "type": "boolean"
+    },
+    "PermissionsIsotopeAccess": {
+      "field_label": "Salesforce Anywhere on Mobile",
+      "type": "boolean"
+    },
+    "PermissionsIsotopeCToCUser": {
+      "field_label": "Salesforce Anywhere Integration Access",
+      "type": "boolean"
+    },
+    "PermissionsIsotopeLEX": {
+      "field_label": "Salesforce Anywhere in Lightning Experience",
+      "type": "boolean"
+    },
+    "PermissionsKGERMultiArticlesUser": {
+      "field_label": "Access KGER with Multi-Articles",
+      "type": "boolean"
+    },
+    "PermissionsKycPlatformUser": {
+      "field_label": "Identity Verification and Screening User",
+      "type": "boolean"
+    },
+    "PermissionsLMEndMessagingSessionUserPerm": {
+      "field_label": "End Messaging Session",
+      "type": "boolean"
+    },
+    "PermissionsLMOutboundMessagingUserPerm": {
+      "field_label": "Agent Initiated Outbound Messaging",
+      "type": "boolean"
+    },
+    "PermissionsLPICommunityAccess": {
+      "field_label": "Grant community users access to LPI features.",
+      "type": "boolean"
+    },
+    "PermissionsLeadInspectorUser": {
+      "field_label": "Access Lead Intelligence View in Partner Sites",
+      "type": "boolean"
+    },
+    "PermissionsLeadScoreResultPublisher": {
+      "field_label": "Publish Einstein Lead Scoring results",
+      "type": "boolean"
+    },
+    "PermissionsLeadScoreUser": {
+      "field_label": "Use Einstein Lead Scoring",
+      "type": "boolean"
+    },
+    "PermissionsLearningManager": {
+      "field_label": "Manage Learning",
+      "type": "boolean"
+    },
+    "PermissionsLifecycleManagementAPIUser": {
+      "field_label": "Access Customer Asset Lifecycle Management APIs",
+      "type": "boolean"
+    },
+    "PermissionsLightningConsoleAllowedForUser": {
+      "field_label": "Lightning Console User",
+      "type": "boolean"
+    },
+    "PermissionsLightningExperienceUser": {
+      "field_label": "Lightning Experience User",
+      "type": "boolean"
+    },
+    "PermissionsLightningOnFSMobile": {
+      "field_label": "Lightning SDK for Field Service Mobile",
+      "type": "boolean"
+    },
+    "PermissionsLightningSchedulerUserAccess": {
+      "field_label": "Let a user be included in appointments in Salesforce Scheduler.",
+      "type": "boolean"
+    },
+    "PermissionsListEmailSend": {
+      "field_label": "Allow sending of List Emails",
+      "type": "boolean"
+    },
+    "PermissionsLiveMessageAgent": {
+      "field_label": "Messaging Agent",
+      "type": "boolean"
+    },
+    "PermissionsLobbyManagementUserAccess": {
+      "field_label": "Let greeters access the Lobby Management tab.",
+      "type": "boolean"
+    },
+    "PermissionsLtngPromoReserved01UserPerm": {
+      "field_label": "Remain in Salesforce Classic",
+      "type": "boolean"
+    },
+    "PermissionsMCPMetadataApi": {
+      "field_label": "MCPMetadataApi",
+      "type": "boolean"
+    },
+    "PermissionsMakePayments": {
+      "field_label": "Make Payments",
+      "type": "boolean"
+    },
+    "PermissionsManageAccessPolicies": {
+      "field_label": "Manage Access Policies",
+      "type": "boolean"
+    },
+    "PermissionsManageAdvancedConfigurator": {
+      "field_label": "Manage Configurator with Constraint Rules Engine",
+      "type": "boolean"
+    },
+    "PermissionsManageAgentforceServiceAgent": {
+      "field_label": "Manage Agentforce Service Agents",
+      "type": "boolean"
+    },
+    "PermissionsManageAnalyticSnapshots": {
+      "field_label": "Manage Reporting Snapshots",
+      "type": "boolean"
+    },
+    "PermissionsManageApiNamedQueries": {
+      "field_label": "Allows users to create, read, update and delete Named Query records",
+      "type": "boolean"
+    },
+    "PermissionsManageAssets": {
+      "field_label": "Manage Assets",
+      "type": "boolean"
+    },
+    "PermissionsManageAuthProviders": {
+      "field_label": "Manage Auth. Providers",
+      "type": "boolean"
+    },
+    "PermissionsManageB2bReferrals": {
+      "field_label": "B2B Referral Management App",
+      "type": "boolean"
+    },
+    "PermissionsManageBusinessHourHolidays": {
+      "field_label": "Manage Business Hours Holidays",
+      "type": "boolean"
+    },
+    "PermissionsManageC2CHighVolumePriming": {
+      "field_label": "Manage Cross-Cloud High-Volume Priming",
+      "type": "boolean"
+    },
+    "PermissionsManageC360AConnections": {
+      "field_label": "Connect Org to Data Cloud",
+      "type": "boolean"
+    },
+    "PermissionsManageCMS": {
+      "field_label": "Create CMS Workspaces and Channels",
+      "type": "boolean"
+    },
+    "PermissionsManageCallCenters": {
+      "field_label": "Manage Call Centers",
+      "type": "boolean"
+    },
+    "PermissionsManageCases": {
+      "field_label": "Manage Cases",
+      "type": "boolean"
+    },
+    "PermissionsManageCategories": {
+      "field_label": "Manage Categories",
+      "type": "boolean"
+    },
+    "PermissionsManageCdpMlModels": {
+      "field_label": "Allow users to manage models in Einstein Studio",
+      "type": "boolean"
+    },
+    "PermissionsManageCertificates": {
+      "field_label": "Manage Certificates",
+      "type": "boolean"
+    },
+    "PermissionsManageCertificatesExpiration": {
+      "field_label": "Receive Certificate Expiration Notifications",
+      "type": "boolean"
+    },
+    "PermissionsManageChatterMessages": {
+      "field_label": "Manage Chatter Messages and Direct Messages",
+      "type": "boolean"
+    },
+    "PermissionsManageClinicalDataModel": {
+      "field_label": "Provides access to Clinical Data Model entities for LifeSciences Users",
+      "type": "boolean"
+    },
+    "PermissionsManageClinicalTrials": {
+      "field_label": "Design and run clinical trials.",
+      "type": "boolean"
+    },
+    "PermissionsManageConsumptionTags": {
+      "field_label": "Manage Consumption Tags",
+      "type": "boolean"
+    },
+    "PermissionsManageContentLinks": {
+      "field_label": "Manage Content Links",
+      "type": "boolean"
+    },
+    "PermissionsManageContentPermissions": {
+      "field_label": "Manage Content Permissions",
+      "type": "boolean"
+    },
+    "PermissionsManageContentProperties": {
+      "field_label": "Manage Content Properties",
+      "type": "boolean"
+    },
+    "PermissionsManageContentTaxonomy": {
+      "field_label": "Manage Content Taxonomy",
+      "type": "boolean"
+    },
+    "PermissionsManageContentTypes": {
+      "field_label": "Manage record types and layouts for Files",
+      "type": "boolean"
+    },
+    "PermissionsManageConvMiningReports": {
+      "field_label": "View and generate Einstein Conversation Mining reports",
+      "type": "boolean"
+    },
+    "PermissionsManageCssUsers": {
+      "field_label": "Manage Customer Users",
+      "type": "boolean"
+    },
+    "PermissionsManageCustomDomains": {
+      "field_label": "Manage Custom Domains",
+      "type": "boolean"
+    },
+    "PermissionsManageCustomPermissions": {
+      "field_label": "Manage Custom Permissions",
+      "type": "boolean"
+    },
+    "PermissionsManageCustomReportTypes": {
+      "field_label": "Manage Custom Report Types",
+      "type": "boolean"
+    },
+    "PermissionsManageCustomerDataOptOut": {
+      "field_label": "Manage Opt Out for Customer Data Access",
+      "type": "boolean"
+    },
+    "PermissionsManageCustomerExperienceAnalytics": {
+      "field_label": "Manage Customer Experience Analytics",
+      "type": "boolean"
+    },
+    "PermissionsManageDashbdsInPubFolders": {
+      "field_label": "Manage Dashboards in Public Folders",
+      "type": "boolean"
+    },
+    "PermissionsManageDataAnalyticsGroups": {
+      "field_label": "Manage Data Analytics Groups",
+      "type": "boolean"
+    },
+    "PermissionsManageDataCategories": {
+      "field_label": "Manage Data Categories",
+      "type": "boolean"
+    },
+    "PermissionsManageDataCloudSegmentsGPM": {
+      "field_label": "Lets users select a Data Cloud segment as the target audience for promotions created using Global Promotions Management.",
+      "type": "boolean"
+    },
+    "PermissionsManageDataIntegrations": {
+      "field_label": "Manage Data Integrations",
+      "type": "boolean"
+    },
+    "PermissionsManageDataMaskPolicies": {
+      "field_label": "Manage Data Mask Policies",
+      "type": "boolean"
+    },
+    "PermissionsManageDataProcessingEngine": {
+      "field_label": "Allow users to access the features of Data Processing Engine to transform data that’s available in your Salesforce org.",
+      "type": "boolean"
+    },
+    "PermissionsManageDataspaceScope": {
+      "field_label": "Manage Dataspace Scope",
+      "type": "boolean"
+    },
+    "PermissionsManageDevSandboxes": {
+      "field_label": "Manage Dev Sandboxes",
+      "type": "boolean"
+    },
+    "PermissionsManageDynamicDashboards": {
+      "field_label": "Manage Dynamic Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsManageEinsteinSalesCoach": {
+      "field_label": "Configure Agentforce Sales Coach",
+      "type": "boolean"
+    },
+    "PermissionsManageEmailClientConfig": {
+      "field_label": "Manage Email Client Configurations",
+      "type": "boolean"
+    },
+    "PermissionsManageEmailMessagingSetup": {
+      "field_label": "Manage Email Messaging Setup",
+      "type": "boolean"
+    },
+    "PermissionsManageEncryptionKeys": {
+      "field_label": "Manage Encryption Keys",
+      "type": "boolean"
+    },
+    "PermissionsManageEntitlements": {
+      "field_label": "Manage Entitlements",
+      "type": "boolean"
+    },
+    "PermissionsManageExchangeConfig": {
+      "field_label": "Manage Lightning Sync",
+      "type": "boolean"
+    },
+    "PermissionsManageExternalConnections": {
+      "field_label": "Allow user to modify Private Connections",
+      "type": "boolean"
+    },
+    "PermissionsManageFilesAndAttachments": {
+      "field_label": "Manage Policies' Files And Attachments",
+      "type": "boolean"
+    },
+    "PermissionsManageForecastingCustomData": {
+      "field_label": "Manage Forecasts Custom Data",
+      "type": "boolean"
+    },
+    "PermissionsManageHcProviderRelMgmt": {
+      "field_label": "Manage Health Cloud Provider Relationship Management",
+      "type": "boolean"
+    },
+    "PermissionsManageHealthCheck": {
+      "field_label": "Manage Health Check",
+      "type": "boolean"
+    },
+    "PermissionsManageHealthCloudFinancialData": {
+      "field_label": "Manage Health Cloud Financial Data",
+      "type": "boolean"
+    },
+    "PermissionsManageHerokuAppLink": {
+      "field_label": "Manage Heroku AppLink",
+      "type": "boolean"
+    },
+    "PermissionsManageHubConnections": {
+      "field_label": "Connect Org to Customer 360 Data Manager",
+      "type": "boolean"
+    },
+    "PermissionsManageInAppGuidanceForSites": {
+      "field_label": "Design and Deliver In-App Guidance for Partners",
+      "type": "boolean"
+    },
+    "PermissionsManageIndustriesVisit": {
+      "field_label": "Manage Industries Visit",
+      "type": "boolean"
+    },
+    "PermissionsManageIntegrationConnections": {
+      "field_label": "Manage Integration Connections",
+      "type": "boolean"
+    },
+    "PermissionsManageIntegrationPortals": {
+      "field_label": "Manage Integration Portals",
+      "type": "boolean"
+    },
+    "PermissionsManageIntelligenceApp": {
+      "field_label": "Manage Commerce Intelligence App",
+      "type": "boolean"
+    },
+    "PermissionsManageInteraction": {
+      "field_label": "Manage Flow",
+      "type": "boolean"
+    },
+    "PermissionsManageInternalUsers": {
+      "field_label": "Manage Internal Users",
+      "type": "boolean"
+    },
+    "PermissionsManageIpAddresses": {
+      "field_label": "Manage IP Addresses",
+      "type": "boolean"
+    },
+    "PermissionsManageJourneys": {
+      "field_label": "Manage Journeys",
+      "type": "boolean"
+    },
+    "PermissionsManageKnowledge": {
+      "field_label": "Manage Salesforce Knowledge",
+      "type": "boolean"
+    },
+    "PermissionsManageKnowledgeImportExport": {
+      "field_label": "Manage Knowledge Article Import/Export",
+      "type": "boolean"
+    },
+    "PermissionsManageLeads": {
+      "field_label": "Manage Leads",
+      "type": "boolean"
+    },
+    "PermissionsManageLearningReporting": {
+      "field_label": "Manage Learning Reporting",
+      "type": "boolean"
+    },
+    "PermissionsManageLiteLoyaltyProgram": {
+      "field_label": "Create, manage, and run a lite loyalty program.",
+      "type": "boolean"
+    },
+    "PermissionsManageLoginAccessPolicies": {
+      "field_label": "Manage Login Access Policies",
+      "type": "boolean"
+    },
+    "PermissionsManageLoyalty": {
+      "field_label": "Allow users to access the features of Loyalty that’s available in your Salesforce org.",
+      "type": "boolean"
+    },
+    "PermissionsManageLoyaltyAnalytics": {
+      "field_label": "Manage Loyalty Analytics",
+      "type": "boolean"
+    },
+    "PermissionsManageLoyaltyPrograms": {
+      "field_label": "Lets users design loyalty programs.",
+      "type": "boolean"
+    },
+    "PermissionsManageLoyaltyPromotionsGPM": {
+      "field_label": "Lets users create and run promotions for a loyalty program using capabilities of Global Promotion Management.",
+      "type": "boolean"
+    },
+    "PermissionsManageMCEEmails": {
+      "field_label": "Manage Marketing Cloud Engagement Emails",
+      "type": "boolean"
+    },
+    "PermissionsManageMaliciousFiles": {
+      "field_label": "Manage Malicious Files",
+      "type": "boolean"
+    },
+    "PermissionsManageMobile": {
+      "field_label": "Manage Mobile Configurations",
+      "type": "boolean"
+    },
+    "PermissionsManageMobileAppSecurity": {
+      "field_label": "Manage Enhanced Mobile App Security",
+      "type": "boolean"
+    },
+    "PermissionsManageMyExternalUsers": {
+      "field_label": "Manage External Users (Limited)",
+      "type": "boolean"
+    },
+    "PermissionsManageMySavedPaymentMethods": {
+      "field_label": "Manage My Saved Payment Methods",
+      "type": "boolean"
+    },
+    "PermissionsManageNamedCredentials": {
+      "field_label": "Allows users to modify Named Credentials and External Credentials",
+      "type": "boolean"
+    },
+    "PermissionsManageNetworks": {
+      "field_label": "Create and Set Up Experiences",
+      "type": "boolean"
+    },
+    "PermissionsManageOCIRecords": {
+      "field_label": "Manage Omnichannel Inventory Records",
+      "type": "boolean"
+    },
+    "PermissionsManageOrchInstsAndWorkItems": {
+      "field_label": "Manage Orchestration Runs and Work Items",
+      "type": "boolean"
+    },
+    "PermissionsManageOrchestrationRuns": {
+      "field_label": "Manage Orchestration Runs",
+      "type": "boolean"
+    },
+    "PermissionsManageOutcomeManagement": {
+      "field_label": "Manage Outcomes",
+      "type": "boolean"
+    },
+    "PermissionsManagePartners": {
+      "field_label": "Manage External Users",
+      "type": "boolean"
+    },
+    "PermissionsManagePasswordPolicies": {
+      "field_label": "Manage Password Policies",
+      "type": "boolean"
+    },
+    "PermissionsManagePatientProgramOutcomes": {
+      "field_label": "Manage Patient Program Outcomes",
+      "type": "boolean"
+    },
+    "PermissionsManagePaymentLinks": {
+      "field_label": "Manage Payment Links",
+      "type": "boolean"
+    },
+    "PermissionsManagePharmacyBenefitsVerf": {
+      "field_label": "Gives users access to verify and reverify pharmacy benefits.",
+      "type": "boolean"
+    },
+    "PermissionsManageProductCatalog": {
+      "field_label": "Manage Product Catalog",
+      "type": "boolean"
+    },
+    "PermissionsManageProductDetailsApiCache": {
+      "field_label": "Product Catalog Management Cache Access",
+      "type": "boolean"
+    },
+    "PermissionsManageProductDiscovery": {
+      "field_label": "Manage Product Discovery",
+      "type": "boolean"
+    },
+    "PermissionsManageProductIndexAndSearch": {
+      "field_label": "Create and delete indexes for Product Catalog Management, and configure product browsing options.",
+      "type": "boolean"
+    },
+    "PermissionsManageProfilesPermissionsets": {
+      "field_label": "Manage Profiles and Permission Sets",
+      "type": "boolean"
+    },
+    "PermissionsManageProgramManagement": {
+      "field_label": "Advanced Program Management",
+      "type": "boolean"
+    },
+    "PermissionsManagePromotionDistributionGPM": {
+      "field_label": "Lets users design emails and select the Marketing Cloud business unit for promotions created using Global Promotions Management.",
+      "type": "boolean"
+    },
+    "PermissionsManagePromotionWithGPM": {
+      "field_label": "Lets users create and run promotions using the capabilities of Global Promotions Management.",
+      "type": "boolean"
+    },
+    "PermissionsManagePromptTemplates": {
+      "field_label": "Manage Prompt Templates",
+      "type": "boolean"
+    },
+    "PermissionsManagePropositions": {
+      "field_label": "Manage Next Best Action Recommendations",
+      "type": "boolean"
+    },
+    "PermissionsManageProviderSearch": {
+      "field_label": "Manage Provider Search",
+      "type": "boolean"
+    },
+    "PermissionsManagePvtRptsAndDashbds": {
+      "field_label": "Manage All Private Reports and Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsManageQuickAttributes": {
+      "field_label": "Manage Quick Attributes",
+      "type": "boolean"
+    },
+    "PermissionsManageQuotas": {
+      "field_label": "Manage Quotas",
+      "type": "boolean"
+    },
+    "PermissionsManageRecommendationStrategies": {
+      "field_label": "Manage Next Best Action Strategies",
+      "type": "boolean"
+    },
+    "PermissionsManageReferralRecords": {
+      "field_label": "Manage Referral Record",
+      "type": "boolean"
+    },
+    "PermissionsManageReleaseUpdates": {
+      "field_label": "Manage Release Updates",
+      "type": "boolean"
+    },
+    "PermissionsManageRemoteAccess": {
+      "field_label": "Manage Connected Apps",
+      "type": "boolean"
+    },
+    "PermissionsManageReportsInPubFolders": {
+      "field_label": "Manage Reports in Public Folders",
+      "type": "boolean"
+    },
+    "PermissionsManageRoles": {
+      "field_label": "Manage Roles",
+      "type": "boolean"
+    },
+    "PermissionsManageSALifecycle": {
+      "field_label": "Manage Service Appointment Lifecycle",
+      "type": "boolean"
+    },
+    "PermissionsManageSandboxes": {
+      "field_label": "Manage Sandboxes",
+      "type": "boolean"
+    },
+    "PermissionsManageSavedPaymentMethods": {
+      "field_label": "Manage Saved Payment Methods",
+      "type": "boolean"
+    },
+    "PermissionsManageSearchPromotionRules": {
+      "field_label": "Manage Promoted Search Terms",
+      "type": "boolean"
+    },
+    "PermissionsManageSecurityCommandCenter": {
+      "field_label": "Manage Security Center",
+      "type": "boolean"
+    },
+    "PermissionsManageServicePlanner": {
+      "field_label": "Service Planner Admin",
+      "type": "boolean"
+    },
+    "PermissionsManageSessionPermissionSets": {
+      "field_label": "Manage Session Permission Set Activations",
+      "type": "boolean"
+    },
+    "PermissionsManageSharedListViews": {
+      "field_label": "Manage Shared List Views",
+      "type": "boolean"
+    },
+    "PermissionsManageSharing": {
+      "field_label": "Manage Sharing",
+      "type": "boolean"
+    },
+    "PermissionsManageSiteManagement": {
+      "field_label": "Manage Site Management",
+      "type": "boolean"
+    },
+    "PermissionsManageSiteProfile": {
+      "field_label": "Manage Site and Investigator Profile",
+      "type": "boolean"
+    },
+    "PermissionsManageSmartDataDiscovery": {
+      "field_label": "Manage Einstein Discovery",
+      "type": "boolean"
+    },
+    "PermissionsManageSmartDataDiscoveryModel": {
+      "field_label": "Can Deploy and Manage Einstein Discovery predictions",
+      "type": "boolean"
+    },
+    "PermissionsManageSocialDeterminant": {
+      "field_label": "Enable access to the Manage Social Determinants Data Model for Life Sciences users in a Salesforce org.",
+      "type": "boolean"
+    },
+    "PermissionsManageSolutions": {
+      "field_label": "Manage Published Solutions",
+      "type": "boolean"
+    },
+    "PermissionsManageStores": {
+      "field_label": "Manage Stores",
+      "type": "boolean"
+    },
+    "PermissionsManageSubscriptions": {
+      "field_label": "Manage CRM Analytics Subscriptions",
+      "type": "boolean"
+    },
+    "PermissionsManageSurveys": {
+      "field_label": "Manage Surveys",
+      "type": "boolean"
+    },
+    "PermissionsManageSvcCatalog": {
+      "field_label": "Manage Service Catalog",
+      "type": "boolean"
+    },
+    "PermissionsManageSynonyms": {
+      "field_label": "Manage Synonyms",
+      "type": "boolean"
+    },
+    "PermissionsManageTemplatedApp": {
+      "field_label": "Manage CRM Analytics Templated Apps",
+      "type": "boolean"
+    },
+    "PermissionsManageTerritories": {
+      "field_label": "Manage Territories",
+      "type": "boolean"
+    },
+    "PermissionsManageTrialMgmtRandomization": {
+      "field_label": "Manage Trial Management Randomization",
+      "type": "boolean"
+    },
+    "PermissionsManageTrustMeasures": {
+      "field_label": "Manage Trust Measures",
+      "type": "boolean"
+    },
+    "PermissionsManageTwoFactor": {
+      "field_label": "Manage MFA in API",
+      "type": "boolean"
+    },
+    "PermissionsManageUnlistedGroups": {
+      "field_label": "Manage Unlisted Groups",
+      "type": "boolean"
+    },
+    "PermissionsManageUsers": {
+      "field_label": "Manage Users",
+      "type": "boolean"
+    },
+    "PermissionsMarketingExpertSystem": {
+      "field_label": "Marketing Expert System",
+      "type": "boolean"
+    },
+    "PermissionsMassInlineEdit": {
+      "field_label": "Mass Edits from Lists",
+      "type": "boolean"
+    },
+    "PermissionsMeetingEngagementUser": {
+      "field_label": "Agentforce Meeting Concierge User",
+      "type": "boolean"
+    },
+    "PermissionsMergeAndSplitGroups": {
+      "field_label": "Merge and Split Groups",
+      "type": "boolean"
+    },
+    "PermissionsMergeTopics": {
+      "field_label": "Merge Topics",
+      "type": "boolean"
+    },
+    "PermissionsMetadataStudioUser": {
+      "field_label": "Metadata studio User",
+      "type": "boolean"
+    },
+    "PermissionsMicrobatching": {
+      "field_label": "Use Micro-Batching to Create Records",
+      "type": "boolean"
+    },
+    "PermissionsMilestoneBillingAccess": {
+      "field_label": "Manage Milestone Billing Plans",
+      "type": "boolean"
+    },
+    "PermissionsMngBenVerfForAssistiveAgnt": {
+      "field_label": "Gives AI agents access to the objects and fields required to reverify benefits.",
+      "type": "boolean"
+    },
+    "PermissionsMngFinancialAssistanceProgram": {
+      "field_label": "Access PSP Financial Assistance",
+      "type": "boolean"
+    },
+    "PermissionsMobileAppSecurity": {
+      "field_label": "Enforce Enhanced Mobile App Security",
+      "type": "boolean"
+    },
+    "PermissionsMobileMessagingAgent": {
+      "field_label": "Message on Mobile",
+      "type": "boolean"
+    },
+    "PermissionsModerateChatter": {
+      "field_label": "Moderate Chatter",
+      "type": "boolean"
+    },
+    "PermissionsModerateNetworkFeeds": {
+      "field_label": "Moderate Experience Cloud Site Feeds",
+      "type": "boolean"
+    },
+    "PermissionsModerateNetworkFiles": {
+      "field_label": "Moderate Files in Experience Cloud Sites",
+      "type": "boolean"
+    },
+    "PermissionsModerateNetworkMessages": {
+      "field_label": "Moderate Chatter Messages in Experience Cloud Sites",
+      "type": "boolean"
+    },
+    "PermissionsModerateNetworkUsers": {
+      "field_label": "Moderate Experience Cloud Site Users",
+      "type": "boolean"
+    },
+    "PermissionsModifyAccessAllowPolicies": {
+      "field_label": "Modify Allow Data Governance Policies",
+      "type": "boolean"
+    },
+    "PermissionsModifyAccessDenyPolicies": {
+      "field_label": "Modify Deny Data Governance Policies",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllData": {
+      "field_label": "Modify All Data",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllDataGovClassif": {
+      "field_label": "Modify All Data Governance Classification Tags",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllDataGovClsfTax": {
+      "field_label": "Modify All Data Governance Classification Taxonomies",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllDataGovPolicies": {
+      "field_label": "Modify All Data Governance Policies",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllDataGovTagAssign": {
+      "field_label": "Modify All Data Governance Tag Assignments",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllDataGovTagPropagation": {
+      "field_label": "Enable editing the propagation of tags in the Data Governance tab.",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllDataGovTags": {
+      "field_label": "Modify All Data Governance Tags",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllDataGovTax": {
+      "field_label": "Modify All Data Governance Tag Taxonomies",
+      "type": "boolean"
+    },
+    "PermissionsModifyAllPolicyCenterPolicies": {
+      "field_label": "Modify All Policy Center Policies",
+      "type": "boolean"
+    },
+    "PermissionsModifyDataClassification": {
+      "field_label": "Modify Data Classification",
+      "type": "boolean"
+    },
+    "PermissionsModifyMetadata": {
+      "field_label": "Modify Metadata Through Metadata API Functions",
+      "type": "boolean"
+    },
+    "PermissionsModifyTransactionSecurityPolicies": {
+      "field_label": "Modify Transaction Security Policies",
+      "type": "boolean"
+    },
+    "PermissionsMonitorLoginHistory": {
+      "field_label": "Monitor Login History",
+      "type": "boolean"
+    },
+    "PermissionsMortgageUserAccess": {
+      "field_label": "User license to access Mortgage in Financial Services Cloud.",
+      "type": "boolean"
+    },
+    "PermissionsMultiStepSchedulingUser": {
+      "field_label": "Manage Multi-Step Scheduling features",
+      "type": "boolean"
+    },
+    "PermissionsMyTrailheadBranding": {
+      "field_label": "Manage Site Settings",
+      "type": "boolean"
+    },
+    "PermissionsMyTrailheadContentAccess": {
+      "field_label": "View All Content",
+      "type": "boolean"
+    },
+    "PermissionsMyTrailheadContentCreation": {
+      "field_label": "Create Content",
+      "type": "boolean"
+    },
+    "PermissionsMyTrailheadCustomSteps": {
+      "field_label": "Manage Trailmix Custom Steps",
+      "type": "boolean"
+    },
+    "PermissionsMyTrailheadManageCollections": {
+      "field_label": "Manage Content Collections",
+      "type": "boolean"
+    },
+    "PermissionsMyTrailheadPreviewMode": {
+      "field_label": "Preview Release",
+      "type": "boolean"
+    },
+    "PermissionsMyTrailheadReleaseMgmt": {
+      "field_label": "Manage Releases",
+      "type": "boolean"
+    },
+    "PermissionsNativeWebviewScrolling": {
+      "field_label": "Salesforce Mobile App: Native scrolling on webviews",
+      "type": "boolean"
+    },
+    "PermissionsNewReportBuilder": {
+      "field_label": "Report Builder",
+      "type": "boolean"
+    },
+    "PermissionsObligationAssignee": {
+      "field_label": "Allows the obligation assignees to manage obligations within a parent object. For example, in the Contract object, monitor tasks and compliance status.",
+      "type": "boolean"
+    },
+    "PermissionsObligationDEAssignee": {
+      "field_label": "Allows the obligation assignees to manage obligations in a parent object on Digital Experience sites. For example, in the Contract object, monitor tasks and compliance status.",
+      "type": "boolean"
+    },
+    "PermissionsObligationDEManager": {
+      "field_label": "Allows obligation managers to create and define obligations in a parent object on Digital Experience sites. For example, in the Contract object, extract and define obligations, and assign obligations to an assignee.",
+      "type": "boolean"
+    },
+    "PermissionsObligationDEUser": {
+      "field_label": "Allows users to only view obligations in a parent object on Digital Experience sites. For example, Contract.",
+      "type": "boolean"
+    },
+    "PermissionsObligationManager": {
+      "field_label": "Allows obligation managers to create and define obligations in a parent object. For example, in the Contract object, extract and define obligations, and assign obligations to an assignee.",
+      "type": "boolean"
+    },
+    "PermissionsObligationUser": {
+      "field_label": "Allows users to only view obligations.",
+      "type": "boolean"
+    },
+    "PermissionsOmniAssistiveActionUser": {
+      "field_label": "Use Service Assistive Actions",
+      "type": "boolean"
+    },
+    "PermissionsOmniStudioDesigner": {
+      "field_label": "Enables admin/developer to create new OS/DR/VIP instances.",
+      "type": "boolean"
+    },
+    "PermissionsOmniStudioRuntime": {
+      "field_label": "Enables business users to execute OmniScripts, DRs, Cards, etc, in employee facing apps.",
+      "type": "boolean"
+    },
+    "PermissionsOmniStudioRuntimeCC": {
+      "field_label": "Enables consumers and partners  to execute OmniScripts, DRs, Cards through a Community or off platform.",
+      "type": "boolean"
+    },
+    "PermissionsOmniSupervisorManageQueue": {
+      "field_label": "Manage Queue Memberships",
+      "type": "boolean"
+    },
+    "PermissionsOmnichannelInventoryBasic": {
+      "field_label": "Omnichannel Inventory Basic",
+      "type": "boolean"
+    },
+    "PermissionsOmnichannelInventorySync": {
+      "field_label": "Omnichannel Inventory Sync",
+      "type": "boolean"
+    },
+    "PermissionsOnbrdDataGrpMDDsgnr": {
+      "field_label": "Edit Onboarding Data Object Group Configuration",
+      "type": "boolean"
+    },
+    "PermissionsOnbrdDataGrpMDReader": {
+      "field_label": "View Onboarding Data Object Group Configuration",
+      "type": "boolean"
+    },
+    "PermissionsOpportunityScoreUser": {
+      "field_label": "Use Einstein Opportunity Scoring",
+      "type": "boolean"
+    },
+    "PermissionsOptOutGeoLocationTracking": {
+      "field_label": "Exclude Technician from Geolocation Tracking",
+      "type": "boolean"
+    },
+    "PermissionsOrderSubmitUser": {
+      "field_label": "Submit Transactions and Fulfillment User",
+      "type": "boolean"
+    },
+    "PermissionsOrderToBSAPIUser": {
+      "field_label": "Access Order to Billing Schedule API",
+      "type": "boolean"
+    },
+    "PermissionsOrgPerformanceAccess": {
+      "field_label": "Org Performance Access",
+      "type": "boolean"
+    },
+    "PermissionsOutboundMigrationToolsUser": {
+      "field_label": "Create and Upload Change Sets",
+      "type": "boolean"
+    },
+    "PermissionsOverrideForecasts": {
+      "field_label": "Override Forecasts",
+      "type": "boolean"
+    },
+    "PermissionsPRMChannelMgmtConsoleUser": {
+      "field_label": "View Channel Management Console",
+      "type": "boolean"
+    },
+    "PermissionsPackaging2": {
+      "field_label": "Create and Update Second-Generation Packages",
+      "type": "boolean"
+    },
+    "PermissionsPackaging2Delete": {
+      "field_label": "Delete Second-Generation Packages",
+      "type": "boolean"
+    },
+    "PermissionsPackaging2PromoteVersion": {
+      "field_label": "Promote a package version to released",
+      "type": "boolean"
+    },
+    "PermissionsParticipateClinicalTrials": {
+      "field_label": "Let external users view and enroll in research studies.",
+      "type": "boolean"
+    },
+    "PermissionsPasswordNeverExpires": {
+      "field_label": "Password Never Expires",
+      "type": "boolean"
+    },
+    "PermissionsPaymentSchedulerUser": {
+      "field_label": "Payments Scheduler User",
+      "type": "boolean"
+    },
+    "PermissionsPaymentsAPIUser": {
+      "field_label": "Payments API User",
+      "type": "boolean"
+    },
+    "PermissionsPerformanceAnalysisAccess": {
+      "field_label": "Performance Analysis Access",
+      "type": "boolean"
+    },
+    "PermissionsPersonalizationDecisioningUser": {
+      "field_label": "Provides users access to the Personalization Decisions invocable action.",
+      "type": "boolean"
+    },
+    "PermissionsPersonalizationIntelUser": {
+      "field_label": "Personalization Intelligence User",
+      "type": "boolean"
+    },
+    "PermissionsPersonalizationPlatform": {
+      "field_label": "Access Personalization Platform",
+      "type": "boolean"
+    },
+    "PermissionsPersonalizedFinanceUserAccess": {
+      "field_label": "Data Cloud FlexCards for Financial Services Cloud",
+      "type": "boolean"
+    },
+    "PermissionsPipelineInspectorUser": {
+      "field_label": "Pipeline Inspection User",
+      "type": "boolean"
+    },
+    "PermissionsPlaceSupplementalTransactions": {
+      "field_label": "Place Supplemental Transactions",
+      "type": "boolean"
+    },
+    "PermissionsPortalSuperUser": {
+      "field_label": "Portal Super User",
+      "type": "boolean"
+    },
+    "PermissionsPreventClassicExperience": {
+      "field_label": "Hide Option to Switch to Salesforce Classic",
+      "type": "boolean"
+    },
+    "PermissionsPreviewExperienceUser": {
+      "field_label": "Allow access to  Preview Experience",
+      "type": "boolean"
+    },
+    "PermissionsPreviewTestSendEmail": {
+      "field_label": "Send Test Email",
+      "type": "boolean"
+    },
+    "PermissionsPricingDiscovery": {
+      "field_label": "Provides create, read, and edit access to all pricing discovery objects and features.",
+      "type": "boolean"
+    },
+    "PermissionsPrismBackofficeUser": {
+      "field_label": "Prism Backoffice User",
+      "type": "boolean"
+    },
+    "PermissionsPrismPlaygroundUser": {
+      "field_label": "Prism Playground User",
+      "type": "boolean"
+    },
+    "PermissionsPrivacyDataAccess": {
+      "field_label": "Allow user to access privacy data",
+      "type": "boolean"
+    },
+    "PermissionsPrmEnhancedPortalUser": {
+      "field_label": "PRM Enhanced Portal User",
+      "type": "boolean"
+    },
+    "PermissionsPrmExtIntPrtnrAdminUser": {
+      "field_label": "Set Up Partner Connect for a Partner Org",
+      "type": "boolean"
+    },
+    "PermissionsProductAdmin": {
+      "field_label": "Product Admin",
+      "type": "boolean"
+    },
+    "PermissionsProductCatalogApiAccess": {
+      "field_label": "View Product Catalog via API",
+      "type": "boolean"
+    },
+    "PermissionsProductCatalogMgmtApiCCAccess": {
+      "field_label": "View Product Catalog via API for Customer Community User",
+      "type": "boolean"
+    },
+    "PermissionsProductCatalogMgmtApiPCAccess": {
+      "field_label": "View Product Catalog via API for Partner Community User",
+      "type": "boolean"
+    },
+    "PermissionsProductCatalogMgmtBaseCCUser": {
+      "field_label": "View Product Catalog for Customer Community User",
+      "type": "boolean"
+    },
+    "PermissionsProductCatalogMgmtBasePCUser": {
+      "field_label": "View Product Catalog for Partner Community User",
+      "type": "boolean"
+    },
+    "PermissionsProductConfigurationRuleAccess": {
+      "field_label": "Manage Configurator with Business Rules Engine",
+      "type": "boolean"
+    },
+    "PermissionsProductConfiguratorUser": {
+      "field_label": "Product Configurator",
+      "type": "boolean"
+    },
+    "PermissionsProductDiscoveryUser": {
+      "field_label": "Allow access to Product Discovery",
+      "type": "boolean"
+    },
+    "PermissionsProposeMajorIncidents": {
+      "field_label": "Propose Major Incidents",
+      "type": "boolean"
+    },
+    "PermissionsPublicSectorPlatformUserAccess": {
+      "field_label": "Grant users access to Public Sector features.",
+      "type": "boolean"
+    },
+    "PermissionsPublishArticles": {
+      "field_label": "Publish Articles",
+      "type": "boolean"
+    },
+    "PermissionsPublishPackaging": {
+      "field_label": "Upload AppExchange Packages",
+      "type": "boolean"
+    },
+    "PermissionsPublishTranslation": {
+      "field_label": "Article Translation - Publish",
+      "type": "boolean"
+    },
+    "PermissionsPulseRuntimeUser": {
+      "field_label": "Pulse Runtime user",
+      "type": "boolean"
+    },
+    "PermissionsQrCodeGeneratorMobilePublisherPlayground": {
+      "field_label": "Mobile Publisher QR Code Generator Playground User",
+      "type": "boolean"
+    },
+    "PermissionsQueryAllFiles": {
+      "field_label": "Query All Files",
+      "type": "boolean"
+    },
+    "PermissionsQueryNonVetoedFiles": {
+      "field_label": "Query Non Vetoed Files",
+      "type": "boolean"
+    },
+    "PermissionsQuipMetricsAccess": {
+      "field_label": "Quip Metrics",
+      "type": "boolean"
+    },
+    "PermissionsQuipUserEngagementMetrics": {
+      "field_label": "Quip User Engagement Metrics",
+      "type": "boolean"
+    },
+    "PermissionsQuoteToOrderUser": {
+      "field_label": "Create Orders from Quotes",
+      "type": "boolean"
+    },
+    "PermissionsRatingAdmin": {
+      "field_label": "Rate Management: Admin user",
+      "type": "boolean"
+    },
+    "PermissionsRatingDesignTimeUser": {
+      "field_label": "Rate Management: Design time user",
+      "type": "boolean"
+    },
+    "PermissionsRatingManager": {
+      "field_label": "Rate Management: Manager",
+      "type": "boolean"
+    },
+    "PermissionsRatingRunTimeUser": {
+      "field_label": "Rate Management: Run time user",
+      "type": "boolean"
+    },
+    "PermissionsReadConfigurationItemInformation": {
+      "field_label": "Allows user to read CMDB associations details.",
+      "type": "boolean"
+    },
+    "PermissionsReassignOrchestrationWorkItems": {
+      "field_label": "Reassign Orchestration Work Items",
+      "type": "boolean"
+    },
+    "PermissionsRebookWithAgentforceFromDispatchConsole": {
+      "field_label": "Rebook with Agentforce from Dispatch Console",
+      "type": "boolean"
+    },
+    "PermissionsRecommendedActions": {
+      "field_label": "Recommended Actions",
+      "type": "boolean"
+    },
+    "PermissionsRecordAggregationAccess": {
+      "field_label": "Record Aggregation Access",
+      "type": "boolean"
+    },
+    "PermissionsRecordVisibilityAPI": {
+      "field_label": "Enable RecordVisibility API",
+      "type": "boolean"
+    },
+    "PermissionsRecoveryAPIUser": {
+      "field_label": "Access Credit Memo Recovery API",
+      "type": "boolean"
+    },
+    "PermissionsRefundPayments": {
+      "field_label": "Refund Payments",
+      "type": "boolean"
+    },
+    "PermissionsRegrelloUser": {
+      "field_label": "Provides user permission to access the Regrello App",
+      "type": "boolean"
+    },
+    "PermissionsRemoteMediaVirtualDesktop": {
+      "field_label": "Remote Media for Virtual Desktop",
+      "type": "boolean"
+    },
+    "PermissionsRemoveDirectMessageMembers": {
+      "field_label": "Remove People from Direct Messages",
+      "type": "boolean"
+    },
+    "PermissionsRenewAssets": {
+      "field_label": "Renew Assets",
+      "type": "boolean"
+    },
+    "PermissionsReopenProblems": {
+      "field_label": "Reopen Problems",
+      "type": "boolean"
+    },
+    "PermissionsReplyRecommendationUser": {
+      "field_label": "View and Act on Einstein Reply Recommendations",
+      "type": "boolean"
+    },
+    "PermissionsResetPasswords": {
+      "field_label": "Reset User Passwords and Unlock Users",
+      "type": "boolean"
+    },
+    "PermissionsResolveBillingServiceRequestsAccess": {
+      "field_label": "Resolve Service Requests",
+      "type": "boolean"
+    },
+    "PermissionsResolveChgRqstAssoc": {
+      "field_label": "Resolve Change Request Associations",
+      "type": "boolean"
+    },
+    "PermissionsResolveIncAssoc": {
+      "field_label": "Resolve Incident Associations",
+      "type": "boolean"
+    },
+    "PermissionsResolveProbAssoc": {
+      "field_label": "Resolve Problem Associations",
+      "type": "boolean"
+    },
+    "PermissionsRespondToSocialInsuranceClaims": {
+      "field_label": "Respond to Social Insurance Claims",
+      "type": "boolean"
+    },
+    "PermissionsRevenueIntelligenceUser": {
+      "field_label": "Revenue Intelligence User",
+      "type": "boolean"
+    },
+    "PermissionsReviewBuyingCommittee": {
+      "field_label": "Allow access to Review Buying Committee in Einstein Copilot",
+      "type": "boolean"
+    },
+    "PermissionsReviewMyDay": {
+      "field_label": "Review My Day",
+      "type": "boolean"
+    },
+    "PermissionsRlmBillingAccess": {
+      "field_label": "Manage Billing Access",
+      "type": "boolean"
+    },
+    "PermissionsRunCatalogItemsOnBehalfOf": {
+      "field_label": "Run Catalog Items As User",
+      "type": "boolean"
+    },
+    "PermissionsRunContextRule": {
+      "field_label": "Run Context Rules",
+      "type": "boolean"
+    },
+    "PermissionsRunDPEDefForNextGenBilling": {
+      "field_label": "Run Data Processing Engine Definitions for Billing",
+      "type": "boolean"
+    },
+    "PermissionsRunDecisionMatrix": {
+      "field_label": "Run Decision Matrices",
+      "type": "boolean"
+    },
+    "PermissionsRunExpressionSet": {
+      "field_label": "Run Expression Sets",
+      "type": "boolean"
+    },
+    "PermissionsRunFlow": {
+      "field_label": "Run Flows",
+      "type": "boolean"
+    },
+    "PermissionsRunGlobalOptimization": {
+      "field_label": "Run Global Optimization",
+      "type": "boolean"
+    },
+    "PermissionsRunInDayOptimization": {
+      "field_label": "Run In-Day Optimization",
+      "type": "boolean"
+    },
+    "PermissionsRunReports": {
+      "field_label": "Run Reports",
+      "type": "boolean"
+    },
+    "PermissionsRunResourceScheduleOptimization": {
+      "field_label": "Run Resource Schedule Optimization",
+      "type": "boolean"
+    },
+    "PermissionsRunTrialMgmtRandomization": {
+      "field_label": "Run Trial Management Randomization",
+      "type": "boolean"
+    },
+    "PermissionsSCEViewAllData": {
+      "field_label": "View Opportunity Scoring Model Factors",
+      "type": "boolean"
+    },
+    "PermissionsSCVVoicemailDropUser": {
+      "field_label": "Use Voicemail Drops",
+      "type": "boolean"
+    },
+    "PermissionsSCVVoicemailGreetingUser": {
+      "field_label": "Manage Voicemail greetings",
+      "type": "boolean"
+    },
+    "PermissionsSalesAnalyticsUser": {
+      "field_label": "Access Sales Cloud Analytics Templates and Apps",
+      "type": "boolean"
+    },
+    "PermissionsSalesConsole": {
+      "field_label": "Sales Console",
+      "type": "boolean"
+    },
+    "PermissionsSalesInsightsUser": {
+      "field_label": "Sales Insights Admin",
+      "type": "boolean"
+    },
+    "PermissionsSalesManagementAutonomousUser": {
+      "field_label": "Sales Management Autonomous User",
+      "type": "boolean"
+    },
+    "PermissionsSalesMeetingFollowUpEmail": {
+      "field_label": "Sales Meeting Follow-Up Emails",
+      "type": "boolean"
+    },
+    "PermissionsSalesforceForecastingUser": {
+      "field_label": "Forecast on Any Business Model",
+      "type": "boolean"
+    },
+    "PermissionsSalesforceIQInbox": {
+      "field_label": "Use Inbox",
+      "type": "boolean"
+    },
+    "PermissionsSalesforceIQInternal": {
+      "field_label": "Allows the Cloud Integration User to perform SalesforceIQ internal operations",
+      "type": "boolean"
+    },
+    "PermissionsSandboxTestingInCommunityApp": {
+      "field_label": "Test Sandboxes in Mobile Publisher for Experience Cloud",
+      "type": "boolean"
+    },
+    "PermissionsScheduleJob": {
+      "field_label": "Schedule Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsScheduleReports": {
+      "field_label": "Schedule Reports",
+      "type": "boolean"
+    },
+    "PermissionsScoringFrameworkAdmin": {
+      "field_label": "Scoring Framework Admin",
+      "type": "boolean"
+    },
+    "PermissionsScoringFrameworkUser": {
+      "field_label": "Scoring Framework User",
+      "type": "boolean"
+    },
+    "PermissionsSegmentIntelligenceUser": {
+      "field_label": "Segment Intelligence User",
+      "type": "boolean"
+    },
+    "PermissionsSelectFilesFromSalesforce": {
+      "field_label": "Select Files from Salesforce",
+      "type": "boolean"
+    },
+    "PermissionsSendAnnouncementEmails": {
+      "field_label": "Send announcement emails",
+      "type": "boolean"
+    },
+    "PermissionsSendCustomNotifications": {
+      "field_label": "Send Custom Notifications",
+      "type": "boolean"
+    },
+    "PermissionsSendEmail": {
+      "field_label": "Send Unified Messaging Email",
+      "type": "boolean"
+    },
+    "PermissionsSendExternalEmailAvailable": {
+      "field_label": "Send Email through External Email Service",
+      "type": "boolean"
+    },
+    "PermissionsSendMeetingRequest": {
+      "field_label": "Permission for Send Meeting Request.",
+      "type": "boolean"
+    },
+    "PermissionsSendSitRequests": {
+      "field_label": "Send Stay-in-Touch Requests",
+      "type": "boolean"
+    },
+    "PermissionsSequenceNumberingSetUp": {
+      "field_label": "Turn on Sequential Numbering",
+      "type": "boolean"
+    },
+    "PermissionsServiceECIUser": {
+      "field_label": "Use Conversation Insights for Service",
+      "type": "boolean"
+    },
+    "PermissionsServiceExcellencePlatformUser": {
+      "field_label": "Service Excellence Platform User",
+      "type": "boolean"
+    },
+    "PermissionsServicePlanTranslation": {
+      "field_label": "View Translated Service Plans",
+      "type": "boolean"
+    },
+    "PermissionsServicePlannerUser": {
+      "field_label": "Draft Service Plans with Generative AI",
+      "type": "boolean"
+    },
+    "PermissionsSessionScopeContext": {
+      "field_label": "Provides access to create session scope context.",
+      "type": "boolean"
+    },
+    "PermissionsSetAdvancedOptimizationFilters": {
+      "field_label": "Set Advanced Optimization Filters",
+      "type": "boolean"
+    },
+    "PermissionsSetupAgentBuilder": {
+      "field_label": "Legacy placeholder for Setup Agent Builder, do NOT use it or add any dependencies to it.",
+      "type": "boolean"
+    },
+    "PermissionsSetupAgentUser": {
+      "field_label": "Legacy placeholder for Setup Agent User, do NOT use it or add any dependencies to it.",
+      "type": "boolean"
+    },
+    "PermissionsShareFilesWithNetworks": {
+      "field_label": "Share Files with People in Experience Cloud sites",
+      "type": "boolean"
+    },
+    "PermissionsShareInternalArticles": {
+      "field_label": "Share internal Knowledge articles externally",
+      "type": "boolean"
+    },
+    "PermissionsShareSmartDataDiscoveryStory": {
+      "field_label": "Share Einstein Discovery Models",
+      "type": "boolean"
+    },
+    "PermissionsShowCompanyNameAsUserBadge": {
+      "field_label": "Show Company Name as Site Role",
+      "type": "boolean"
+    },
+    "PermissionsShowExplanationsForCandidateResults": {
+      "field_label": "Show Explanations for Candidate Results",
+      "type": "boolean"
+    },
+    "PermissionsShowPlannedRoute": {
+      "field_label": "Show Planned Route",
+      "type": "boolean"
+    },
+    "PermissionsShowPreWorkBriefGA": {
+      "field_label": "Show Pre-Work Brief",
+      "type": "boolean"
+    },
+    "PermissionsSimpleCsvDataImportUser": {
+      "field_label": "Basic Csv Data Import User Permission",
+      "type": "boolean"
+    },
+    "PermissionsSkipIdentityConfirmation": {
+      "field_label": "Skip Device Activation at Login",
+      "type": "boolean"
+    },
+    "PermissionsSlackCibUser": {
+      "field_label": "Financial Services Cloud for Slack User",
+      "type": "boolean"
+    },
+    "PermissionsSlackFromTableau": {
+      "field_label": "Slack from Tableau Next",
+      "type": "boolean"
+    },
+    "PermissionsSlackRecordChannels": {
+      "field_label": "Access Slack Record Channels",
+      "type": "boolean"
+    },
+    "PermissionsSmartDataDiscoveryForCommunity": {
+      "field_label": "Smart Data Discovery for experience users",
+      "type": "boolean"
+    },
+    "PermissionsSolutionImport": {
+      "field_label": "Import Solutions",
+      "type": "boolean"
+    },
+    "PermissionsSonicConsumer": {
+      "field_label": "Use Data Pipeline Base",
+      "type": "boolean"
+    },
+    "PermissionsStageManagementDesignUser": {
+      "field_label": "Stage Management Designer User",
+      "type": "boolean"
+    },
+    "PermissionsStageManagementUser": {
+      "field_label": "Stage Management User",
+      "type": "boolean"
+    },
+    "PermissionsStandaloneTxToBSAPIApiUser": {
+      "field_label": "Create Billing Schedules for Standalone Transactions",
+      "type": "boolean"
+    },
+    "PermissionsStdAutomaticActivityCapture": {
+      "field_label": "Use Einstein Activity Capture Standard",
+      "type": "boolean"
+    },
+    "PermissionsStoryOnDSWithPredicate": {
+      "field_label": "Ignore predicate when creating model from dataset",
+      "type": "boolean"
+    },
+    "PermissionsStudentCommunityPages": {
+      "field_label": "Student Community Pages",
+      "type": "boolean"
+    },
+    "PermissionsSubmitForTranslation": {
+      "field_label": "Article Translation - Submit for Translation",
+      "type": "boolean"
+    },
+    "PermissionsSubmitMacrosAllowed": {
+      "field_label": "Manage Macros Users Can't Undo",
+      "type": "boolean"
+    },
+    "PermissionsSubscrMgmtPymtSchedAutomation": {
+      "field_label": "Automate Payment Scheduling",
+      "type": "boolean"
+    },
+    "PermissionsSubscrMgmtRefundAutomation": {
+      "field_label": "Automate Refunds",
+      "type": "boolean"
+    },
+    "PermissionsSubscribeDashboardRolesGrps": {
+      "field_label": "Subscribe to Dashboards: Send to Groups and Roles",
+      "type": "boolean"
+    },
+    "PermissionsSubscribeDashboardToOtherUsers": {
+      "field_label": "Subscribe to Dashboards: Add Recipients",
+      "type": "boolean"
+    },
+    "PermissionsSubscribeReportRolesGrps": {
+      "field_label": "Subscribe to Reports: Send to Groups and Roles",
+      "type": "boolean"
+    },
+    "PermissionsSubscribeReportToOtherUsers": {
+      "field_label": "Subscribe to Reports: Add Recipients",
+      "type": "boolean"
+    },
+    "PermissionsSubscribeReportsRunAsUser": {
+      "field_label": "Subscribe to Reports: Set Running User",
+      "type": "boolean"
+    },
+    "PermissionsSubscribeToLightningDashboards": {
+      "field_label": "Subscribe to Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsSubscribeToLightningReports": {
+      "field_label": "Subscribe to Reports",
+      "type": "boolean"
+    },
+    "PermissionsSummarizationUser": {
+      "field_label": "View, Edit, and Save Work Summaries",
+      "type": "boolean"
+    },
+    "PermissionsSuspendResumeBilling": {
+      "field_label": "Suspend and Resume Billing",
+      "type": "boolean"
+    },
+    "PermissionsSvcInnovationsEinsteinFeatr": {
+      "field_label": "Summarize record details using Einstein generative AI.",
+      "type": "boolean"
+    },
+    "PermissionsTableauCreateDashboard": {
+      "field_label": "Access to create Tableau Next dashboards",
+      "type": "boolean"
+    },
+    "PermissionsTableauCreateVisualization": {
+      "field_label": "Access to create Tableau Next visualizations",
+      "type": "boolean"
+    },
+    "PermissionsTableauCreateWorkspace": {
+      "field_label": "Access to create Tableau Next workspaces",
+      "type": "boolean"
+    },
+    "PermissionsTableauMetricCards": {
+      "field_label": "View Tableau Next Metrics",
+      "type": "boolean"
+    },
+    "PermissionsTableauShareSnapshot": {
+      "field_label": "Tableau Next Share Snapshot",
+      "type": "boolean"
+    },
+    "PermissionsTableauViewDashboard": {
+      "field_label": "Access to view Tableau Next dashboards",
+      "type": "boolean"
+    },
+    "PermissionsTableauViewVisualization": {
+      "field_label": "Access to view Tableau Next visualizations",
+      "type": "boolean"
+    },
+    "PermissionsTableauViewWorkspace": {
+      "field_label": "Access to view Tableau Next workspaces",
+      "type": "boolean"
+    },
+    "PermissionsTakePartnerProgram": {
+      "field_label": "Take Partner Enablement Programs",
+      "type": "boolean"
+    },
+    "PermissionsTerritoryOperations": {
+      "field_label": "Administer territory operations",
+      "type": "boolean"
+    },
+    "PermissionsTraceXdsQueries": {
+      "field_label": "Access Tracer for External Data Sources",
+      "type": "boolean"
+    },
+    "PermissionsTransactionSecurityExempt": {
+      "field_label": "Exempt from Transaction Security",
+      "type": "boolean"
+    },
+    "PermissionsTransactionalEmailSend": {
+      "field_label": "Send Non-Commercial Email",
+      "type": "boolean"
+    },
+    "PermissionsTransferAnyCase": {
+      "field_label": "Transfer Cases",
+      "type": "boolean"
+    },
+    "PermissionsTransferAnyEntity": {
+      "field_label": "Transfer Record",
+      "type": "boolean"
+    },
+    "PermissionsTransferAnyLead": {
+      "field_label": "Transfer Leads",
+      "type": "boolean"
+    },
+    "PermissionsTriggerDataGovAutoTagging": {
+      "field_label": "Enable Data Governance Suggest Tags",
+      "type": "boolean"
+    },
+    "PermissionsTwoFactorApi": {
+      "field_label": "Multi-Factor Authentication for API Logins",
+      "type": "boolean"
+    },
+    "PermissionsUnifiedCatalogAdminPerm": {
+      "field_label": "Unified Catalog Admin Perm",
+      "type": "boolean"
+    },
+    "PermissionsUnifiedCatalogAgentPerm": {
+      "field_label": "Unified Catalog Agent Perm",
+      "type": "boolean"
+    },
+    "PermissionsUnifiedCatalogDesignGAPerm": {
+      "field_label": "Unified Catalog Design Perm",
+      "type": "boolean"
+    },
+    "PermissionsUnifiedCatalogRuntimePerm": {
+      "field_label": "Unified Catalog Runtime Perm",
+      "type": "boolean"
+    },
+    "PermissionsUnifiedEHDViewer": {
+      "field_label": "Viewer access to Unified Engagement History Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsUnmeteredUserBasedAI": {
+      "field_label": "Unmetered User Based AI",
+      "type": "boolean"
+    },
+    "PermissionsUpdateReportTypeReferences": {
+      "field_label": "Update Report Type References in Semantic Search",
+      "type": "boolean"
+    },
+    "PermissionsUsageDesignUser": {
+      "field_label": "Usage: Design User",
+      "type": "boolean"
+    },
+    "PermissionsUsageManagementDesigner": {
+      "field_label": "Usage Management: Designer",
+      "type": "boolean"
+    },
+    "PermissionsUsageManagementRunTimeUser": {
+      "field_label": "Usage Management: Run Time User",
+      "type": "boolean"
+    },
+    "PermissionsUseAddOrderItemSummary": {
+      "field_label": "Add additional items to an order summary.",
+      "type": "boolean"
+    },
+    "PermissionsUseAddOrderItemSummaryAPIs": {
+      "field_label": "Use Order Management Add Order Item Summary APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseAdvancedDeliveryEstimationAPI": {
+      "field_label": "Use Advanced Delivery Estimation Service APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseAgentforceSalesManagement": {
+      "field_label": "Use Agentforce Sales Management",
+      "type": "boolean"
+    },
+    "PermissionsUseAnyApiAuth": {
+      "field_label": "Use Any API Auth",
+      "type": "boolean"
+    },
+    "PermissionsUseAssistantDialog": {
+      "field_label": "Instant Actionable Results",
+      "type": "boolean"
+    },
+    "PermissionsUseBulkUpdtSalesAgrExprcCloud": {
+      "field_label": "Use Bulk Update for Sales Agreements in Experience Cloud",
+      "type": "boolean"
+    },
+    "PermissionsUseCanCancelInProgressChange": {
+      "field_label": "Can cancel Order Management in-progress async calls.",
+      "type": "boolean"
+    },
+    "PermissionsUseChannelPartnerInvExprcCloud": {
+      "field_label": "Use Channel Partner Inventory in Experience Cloud",
+      "type": "boolean"
+    },
+    "PermissionsUseChannelPartnerInventory": {
+      "field_label": "Channel Partner Inventory User",
+      "type": "boolean"
+    },
+    "PermissionsUseCompliantDataSharing": {
+      "field_label": "Use Compliant Data Sharing",
+      "type": "boolean"
+    },
+    "PermissionsUseCreateCreditMemo": {
+      "field_label": "Create credit memos.",
+      "type": "boolean"
+    },
+    "PermissionsUseCreateOrderSummary": {
+      "field_label": "Create order summaries by using APIs.",
+      "type": "boolean"
+    },
+    "PermissionsUseCustomerExperienceAnalytics": {
+      "field_label": "Use Customer Experience Analytics",
+      "type": "boolean"
+    },
+    "PermissionsUseDeliveryEstimation": {
+      "field_label": "Use Delivery Estimation Service",
+      "type": "boolean"
+    },
+    "PermissionsUseDeliveryEstimationAPIs": {
+      "field_label": "Use Delivery Estimation Service APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseDesignRegChannelManagerUser": {
+      "field_label": "Approve Registered Designs",
+      "type": "boolean"
+    },
+    "PermissionsUseDesignRegExpCloudUser": {
+      "field_label": "Register Designs",
+      "type": "boolean"
+    },
+    "PermissionsUseDesignRegReadOnlyUser": {
+      "field_label": "View Registered Designs",
+      "type": "boolean"
+    },
+    "PermissionsUseDocumentBuilder": {
+      "field_label": "Generate documents using Document Builder templates.",
+      "type": "boolean"
+    },
+    "PermissionsUseEinsteinSalesCoach": {
+      "field_label": "Use Agentforce Sales Coach",
+      "type": "boolean"
+    },
+    "PermissionsUseEnsureFunds": {
+      "field_label": "Execute ensure funds.",
+      "type": "boolean"
+    },
+    "PermissionsUseFulfillmentAPIs": {
+      "field_label": "Use Order Management Fulfillment APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseInboxSchedulingOnBehalfOf": {
+      "field_label": "Inbox Scheduling Proxy User",
+      "type": "boolean"
+    },
+    "PermissionsUseLoyaltyAnalytics": {
+      "field_label": "Use Loyalty Analytics",
+      "type": "boolean"
+    },
+    "PermissionsUseMySearch": {
+      "field_label": "Einstein Search",
+      "type": "boolean"
+    },
+    "PermissionsUseOMAnalytics": {
+      "field_label": "Use Order Management Analytics",
+      "type": "boolean"
+    },
+    "PermissionsUseOmnichannelInventoryAPIs": {
+      "field_label": "Use Omnichannel Inventory APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseOrderEntry": {
+      "field_label": "Use Order Entry",
+      "type": "boolean"
+    },
+    "PermissionsUseOrderItemSummaryCancel": {
+      "field_label": "Cancel order item summaries.",
+      "type": "boolean"
+    },
+    "PermissionsUseOrderItemSummaryReturn": {
+      "field_label": "Execute blind returns.",
+      "type": "boolean"
+    },
+    "PermissionsUseOrderManagementAPIs": {
+      "field_label": "Use Order Management APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseOrderSummaryCreateAPI": {
+      "field_label": "Create Order Summaries via API",
+      "type": "boolean"
+    },
+    "PermissionsUsePartnerMessagingChannels": {
+      "field_label": "Message Customers with Bring Your Own Channel",
+      "type": "boolean"
+    },
+    "PermissionsUsePaymentCreditAPIs": {
+      "field_label": "Use Order Management Payment Credit APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseQuerySuggestions": {
+      "field_label": "Natural Language Search",
+      "type": "boolean"
+    },
+    "PermissionsUseRegisterGuestBuyerAPI": {
+      "field_label": "Use Register Guest Buyer API",
+      "type": "boolean"
+    },
+    "PermissionsUseRepricing": {
+      "field_label": "Use Repricing Objects and APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseRestrictedTheme": {
+      "field_label": "Use restricted theme",
+      "type": "boolean"
+    },
+    "PermissionsUseReturnOrder": {
+      "field_label": "Use Order Management Return Order",
+      "type": "boolean"
+    },
+    "PermissionsUseReturnOrderAPIs": {
+      "field_label": "Use Order Management Return APIs",
+      "type": "boolean"
+    },
+    "PermissionsUseRouting": {
+      "field_label": "Access the Fulfillment Order routing APIs.",
+      "type": "boolean"
+    },
+    "PermissionsUseServiceCatalogForGuest": {
+      "field_label": "Use Service Catalog As A Guest User",
+      "type": "boolean"
+    },
+    "PermissionsUseServicePartReturn": {
+      "field_label": "Manufacturing Cloud Service Part Return Management User",
+      "type": "boolean"
+    },
+    "PermissionsUseSetupWithAgentforce": {
+      "field_label": "Use Setup with Agentforce",
+      "type": "boolean"
+    },
+    "PermissionsUseShipment": {
+      "field_label": "Use Shipment Objects",
+      "type": "boolean"
+    },
+    "PermissionsUseSmartDataDiscovery": {
+      "field_label": "Use Einstein Discovery",
+      "type": "boolean"
+    },
+    "PermissionsUseSubscriptionEmails": {
+      "field_label": "Subscribe to CRM Analytics Assets",
+      "type": "boolean"
+    },
+    "PermissionsUseSvcCatalog": {
+      "field_label": "Use Service Catalog",
+      "type": "boolean"
+    },
+    "PermissionsUseTeamReassignWizards": {
+      "field_label": "Use Team Reassignment Wizards",
+      "type": "boolean"
+    },
+    "PermissionsUseTeamsForEmployee": {
+      "field_label": "Gives employee users the ability to use Microsoft Teams to manage and resolve IT issues and service requests",
+      "type": "boolean"
+    },
+    "PermissionsUseTeamsForItSrvcs": {
+      "field_label": "Manage ITSM Teams",
+      "type": "boolean"
+    },
+    "PermissionsUseTemplatedApp": {
+      "field_label": "Use CRM Analytics Templated Apps",
+      "type": "boolean"
+    },
+    "PermissionsUseWebLink": {
+      "field_label": "Allow Access to Customized Actions",
+      "type": "boolean"
+    },
+    "PermissionsUserCanAccessNLPResult": {
+      "field_label": "View Natural Language Process Results",
+      "type": "boolean"
+    },
+    "PermissionsUserCanDeployStore": {
+      "field_label": "Users can perform the deployment operation on a store.",
+      "type": "boolean"
+    },
+    "PermissionsUserCanPerformNLPOperation": {
+      "field_label": "Manage Natural Language Process Results",
+      "type": "boolean"
+    },
+    "PermissionsUserHasALMSimpleDeployAccess": {
+      "field_label": "Enable ALM Simple Deploy User Permission",
+      "type": "boolean"
+    },
+    "PermissionsUserHasBillingAccount": {
+      "field_label": "Access EU User Billing Account",
+      "type": "boolean"
+    },
+    "PermissionsUserHasEAndUProgramAccess": {
+      "field_label": "EU User Program Access",
+      "type": "boolean"
+    },
+    "PermissionsUserHasEUCore": {
+      "field_label": "Access EU Objects",
+      "type": "boolean"
+    },
+    "PermissionsUserHasMilestoneWorkAccess": {
+      "field_label": "Allows users to access the tasks tied to a milestone.",
+      "type": "boolean"
+    },
+    "PermissionsUserHasUsageImpactAccess": {
+      "field_label": "EU User Impact Access",
+      "type": "boolean"
+    },
+    "PermissionsUserHasWorkReportAccess": {
+      "field_label": "Manage User Work Report",
+      "type": "boolean"
+    },
+    "PermissionsUserInteractionInsights": {
+      "field_label": "Collect User Engagement Data for Insight Calculation",
+      "type": "boolean"
+    },
+    "PermissionsVideoConferenceMeetUser": {
+      "field_label": "Use Video Conferencing with Google Meet",
+      "type": "boolean"
+    },
+    "PermissionsVideoConferenceTeamsUser": {
+      "field_label": "Use Video Conferencing with Teams",
+      "type": "boolean"
+    },
+    "PermissionsVideoConferenceZoomUser": {
+      "field_label": "Use Video Conferencing with Zoom",
+      "type": "boolean"
+    },
+    "PermissionsViewAccessPolicies": {
+      "field_label": "View Access Policies",
+      "type": "boolean"
+    },
+    "PermissionsViewAgtfrceAnlytDshbrd": {
+      "field_label": "View Agentforce Analytics Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewAllActivities": {
+      "field_label": "View All Activities",
+      "type": "boolean"
+    },
+    "PermissionsViewAllCalls": {
+      "field_label": "View All Voice And Video Calls",
+      "type": "boolean"
+    },
+    "PermissionsViewAllCustomSettings": {
+      "field_label": "View All Custom Settings",
+      "type": "boolean"
+    },
+    "PermissionsViewAllData": {
+      "field_label": "View All Data",
+      "type": "boolean"
+    },
+    "PermissionsViewAllDataGovPolicies": {
+      "field_label": "View All Data Governance Policies",
+      "type": "boolean"
+    },
+    "PermissionsViewAllDataGovTags": {
+      "field_label": "View All Data Governance Tags, Classifications, and Taxonomies",
+      "type": "boolean"
+    },
+    "PermissionsViewAllFieldsGlobal": {
+      "field_label": "View All Fields (Global)",
+      "type": "boolean"
+    },
+    "PermissionsViewAllForecasts": {
+      "field_label": "View All Forecasts",
+      "type": "boolean"
+    },
+    "PermissionsViewAllForeignKeyNames": {
+      "field_label": "View All Lookup Record Names",
+      "type": "boolean"
+    },
+    "PermissionsViewAllNonSetupFlows": {
+      "field_label": "View All Non-Admin Flows",
+      "type": "boolean"
+    },
+    "PermissionsViewAllPolicyCenterPolicies": {
+      "field_label": "View All Policy Center Policies",
+      "type": "boolean"
+    },
+    "PermissionsViewAllProfiles": {
+      "field_label": "View All Profiles",
+      "type": "boolean"
+    },
+    "PermissionsViewAllUsers": {
+      "field_label": "View All Users",
+      "type": "boolean"
+    },
+    "PermissionsViewAnomalyEvents": {
+      "field_label": "View Threat Detection Events",
+      "type": "boolean"
+    },
+    "PermissionsViewApiNamedQueries": {
+      "field_label": "Allows users to view Named Query records",
+      "type": "boolean"
+    },
+    "PermissionsViewArchivedArticles": {
+      "field_label": "View Archived Articles",
+      "type": "boolean"
+    },
+    "PermissionsViewCaseAnlytDshbrd": {
+      "field_label": "View Case Analytics Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewChangeRequestAnlytDshbrd": {
+      "field_label": "View Change Request Analytics Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewChangeRequestDshbrd": {
+      "field_label": "View Change Request Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewClientSecret": {
+      "field_label": "View External Client App Consumer Secrets in Metadata",
+      "type": "boolean"
+    },
+    "PermissionsViewConsumption": {
+      "field_label": "View Consumption",
+      "type": "boolean"
+    },
+    "PermissionsViewConsumptionTags": {
+      "field_label": "View Consumption Tags",
+      "type": "boolean"
+    },
+    "PermissionsViewContent": {
+      "field_label": "View Content in Portals",
+      "type": "boolean"
+    },
+    "PermissionsViewContentTaxonomy": {
+      "field_label": "View Content Taxonomy",
+      "type": "boolean"
+    },
+    "PermissionsViewCustomerSentiment": {
+      "field_label": "View Customer Insights",
+      "type": "boolean"
+    },
+    "PermissionsViewDataAssessment": {
+      "field_label": "Access to view Data Assessment",
+      "type": "boolean"
+    },
+    "PermissionsViewDataCategories": {
+      "field_label": "View Data Categories in Setup",
+      "type": "boolean"
+    },
+    "PermissionsViewDataGovTab": {
+      "field_label": "View the Data Governance Tab",
+      "type": "boolean"
+    },
+    "PermissionsViewDataLeakageEvents": {
+      "field_label": "View Real-Time Event Monitoring Data",
+      "type": "boolean"
+    },
+    "PermissionsViewDeveloperName": {
+      "field_label": "View Developer Name",
+      "type": "boolean"
+    },
+    "PermissionsViewDraftArticles": {
+      "field_label": "View Draft Articles",
+      "type": "boolean"
+    },
+    "PermissionsViewEmailMessagingSetup": {
+      "field_label": "View Email Messaging Setup",
+      "type": "boolean"
+    },
+    "PermissionsViewEnablementAnalytics": {
+      "field_label": "View Enablement Analytics",
+      "type": "boolean"
+    },
+    "PermissionsViewEncryptedData": {
+      "field_label": "View Encrypted Data",
+      "type": "boolean"
+    },
+    "PermissionsViewEventLogFiles": {
+      "field_label": "View Event Log Files",
+      "type": "boolean"
+    },
+    "PermissionsViewForecastingPredictive": {
+      "field_label": "Use Einstein Forecasting",
+      "type": "boolean"
+    },
+    "PermissionsViewGlobalHeader": {
+      "field_label": "View Global Header",
+      "type": "boolean"
+    },
+    "PermissionsViewHealthCheck": {
+      "field_label": "View Health Check",
+      "type": "boolean"
+    },
+    "PermissionsViewHelpLink": {
+      "field_label": "View Help Link",
+      "type": "boolean"
+    },
+    "PermissionsViewInAppGuidanceForSites": {
+      "field_label": "Take In-App Guidance for Partners",
+      "type": "boolean"
+    },
+    "PermissionsViewIncidentAnlytDshbrd": {
+      "field_label": "View Incident Analytics Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewIncidentFulfrDshbrd": {
+      "field_label": "View Incident Fulfiller Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewIncidentMgrDshbrd": {
+      "field_label": "View Incident Manager Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewIntelligenceApp": {
+      "field_label": "View Commerce Intelligence App",
+      "type": "boolean"
+    },
+    "PermissionsViewItLeaderAnlytDshbrd": {
+      "field_label": "View IT Leader Analytics Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewItsmConsoleAsFulfr": {
+      "field_label": "View Agentic IT Service Desk App as Fulfillers",
+      "type": "boolean"
+    },
+    "PermissionsViewItsmConsoleHmpg": {
+      "field_label": "View Agentic IT Service Desk App Home Page",
+      "type": "boolean"
+    },
+    "PermissionsViewKnwlgAnlytDshbrd": {
+      "field_label": "View Knowledge Analytics Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewLicenseUtilization": {
+      "field_label": "View License Utilization",
+      "type": "boolean"
+    },
+    "PermissionsViewMLModels": {
+      "field_label": "Allow users to view MLModels and related Entities",
+      "type": "boolean"
+    },
+    "PermissionsViewMyTeamsDashboards": {
+      "field_label": "View My Team's Dashboards",
+      "type": "boolean"
+    },
+    "PermissionsViewNonSetupFlow": {
+      "field_label": "View Flows",
+      "type": "boolean"
+    },
+    "PermissionsViewOmnichnlAnlytDshbrd": {
+      "field_label": "View Omnichannel Analytics Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewOnlyEmbeddedAppUser": {
+      "field_label": "Access to View-Only Licensed Templates and Apps",
+      "type": "boolean"
+    },
+    "PermissionsViewOrchestrationsInAutomApp": {
+      "field_label": "View Orchestrations in Automation App",
+      "type": "boolean"
+    },
+    "PermissionsViewPayments": {
+      "field_label": "Use Payments or Access Payments",
+      "type": "boolean"
+    },
+    "PermissionsViewPlatformEvents": {
+      "field_label": "View Login Forensics Events",
+      "type": "boolean"
+    },
+    "PermissionsViewPrivateStaticResources": {
+      "field_label": "View Private Static Resources",
+      "type": "boolean"
+    },
+    "PermissionsViewProblemFulfrDshbrd": {
+      "field_label": "View Problem Fulfiller Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewProblemMgrDshbrd": {
+      "field_label": "View Problem Manager Dashboard",
+      "type": "boolean"
+    },
+    "PermissionsViewProductCatalogObjects": {
+      "field_label": "View Product Catalog",
+      "type": "boolean"
+    },
+    "PermissionsViewPromotions": {
+      "field_label": "Lets users view promotions and their configurations.",
+      "type": "boolean"
+    },
+    "PermissionsViewPublicCapstoneFolders": {
+      "field_label": "View Public Capstone Folder",
+      "type": "boolean"
+    },
+    "PermissionsViewPublicDashboards": {
+      "field_label": "View Dashboards in Public Folders",
+      "type": "boolean"
+    },
+    "PermissionsViewPublicReports": {
+      "field_label": "View Reports in Public Folders",
+      "type": "boolean"
+    },
+    "PermissionsViewRecommendations": {
+      "field_label": "View Recommendations",
+      "type": "boolean"
+    },
+    "PermissionsViewRestrictionAndScopingRules": {
+      "field_label": "View Restriction and Scoping Rules",
+      "type": "boolean"
+    },
+    "PermissionsViewRoles": {
+      "field_label": "View Roles and Role Hierarchy",
+      "type": "boolean"
+    },
+    "PermissionsViewSALifecycle": {
+      "field_label": "View Service Appointment Lifecycle",
+      "type": "boolean"
+    },
+    "PermissionsViewSecurityCommandCenter": {
+      "field_label": "View Security Center pages",
+      "type": "boolean"
+    },
+    "PermissionsViewSetup": {
+      "field_label": "View Setup and Configuration",
+      "type": "boolean"
+    },
+    "PermissionsViewShieldApp": {
+      "field_label": "View Shield App Pages",
+      "type": "boolean"
+    },
+    "PermissionsViewTrustMeasures": {
+      "field_label": "View Trust Measures",
+      "type": "boolean"
+    },
+    "PermissionsViewUserPII": {
+      "field_label": "View Concealed Field Data",
+      "type": "boolean"
+    },
+    "PermissionsVoiceCoach": {
+      "field_label": "Access Dialer Monitoring",
+      "type": "boolean"
+    },
+    "PermissionsVoiceInbound": {
+      "field_label": "Access Dialer Inbound Calls",
+      "type": "boolean"
+    },
+    "PermissionsVoiceMinutes": {
+      "field_label": "Access Dialer Minutes",
+      "type": "boolean"
+    },
+    "PermissionsVoiceOutbound": {
+      "field_label": "Access Dialer Outbound Calls",
+      "type": "boolean"
+    },
+    "PermissionsVoidInvoiceAPIUser": {
+      "field_label": "Void Invoice API",
+      "type": "boolean"
+    },
+    "PermissionsVoidPostedCreditMemoAPIUser": {
+      "field_label": "Void Posted Credit Memo API",
+      "type": "boolean"
+    },
+    "PermissionsWalletManagementUser": {
+      "field_label": "Usage Management: Wallet Management User",
+      "type": "boolean"
+    },
+    "PermissionsWaveCommunityUser": {
+      "field_label": "View CRM Analytics on Experience Cloud site pages.",
+      "type": "boolean"
+    },
+    "PermissionsWaveManagePrivateAssetsUser": {
+      "field_label": "Manage CRM Analytics Private Assets",
+      "type": "boolean"
+    },
+    "PermissionsWaveTabularDownload": {
+      "field_label": "Download CRM Analytics Data",
+      "type": "boolean"
+    },
+    "PermissionsWaveTrendReports": {
+      "field_label": "Trend Report Data in CRM Analytics",
+      "type": "boolean"
+    },
+    "PermissionsWorkCalibrationUser": {
+      "field_label": "Enable WDC Calibration",
+      "type": "boolean"
+    },
+    "PermissionsWorkDotComUserPerm": {
+      "field_label": "Enable WDC",
+      "type": "boolean"
+    },
+    "PermissionsYourAccountCDAPublishEvents": {
+      "field_label": "Your Account Cache Durable Architecture Publish Events",
+      "type": "boolean"
+    },
+    "ProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PsgCount": {
+      "field_label": "PSG Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Permission Set Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

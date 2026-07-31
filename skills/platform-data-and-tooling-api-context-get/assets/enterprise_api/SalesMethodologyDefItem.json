@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "SalesMethodologyDefItem - Data API",
+  "description": "Represents the individual criteria for each stage of a sales methodology. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Details about a specific stage or criteria of a sales methodology and its purpose."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for the sales methodology stage or criteria. The name: must be 40 characters or fewer must begin with a letter can contain only underscores and alphanumeric characters can't include spaces can't end with an underscore can't contain 2 consecutive underscores In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object's name in a managed package and the changes are reflected in a subscriber's organization."
+    },
+    "InputType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the input type of the sales methodology criteria. Possible values are: Boolean Number Picklist",
+      "required": true
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the sales methodology criteria is active (true) or not (false). The default value is false.",
+      "required": true
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The combined language and locale ISO code, which controls the language of the sales methodology item."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label for the sales methodology stage or criteria. This display value is the internal label that doesn't get translated.",
+      "required": true
+    },
+    "MaxValue": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Defines the upper bound for numeric input items. It applies when InputType is a numeric type (e.g., a slider or score field). When InputType is not numeric (e.g., picklist, boolean, text), MaxValue is not used. ."
+    },
+    "SalesMethodologyDefId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the parent sales methodology definition. This field is a relationship field.",
+      "relationship_name": "SalesMethodologyDef",
+      "refers_to": "SalesMethodologyDef",
+      "required": true
+    },
+    "ShortHand": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The initial that represents the methodology stage or criteria.",
+      "required": true
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The display order number of the sales methodology stage or criteria.",
+      "required": true
+    }
+  },
+  "special_access_rules": "To access this object turn on the userHasSalesMethodologyEnabled, OrgPreferences, SalesMethodologyPref, and PipelineInspectorUser permissions. To read records, users must have the userHasSalesMethodologyEnabled permission. To create, edit, or delete records, users must have the CustomizeApplication user permission."
+}

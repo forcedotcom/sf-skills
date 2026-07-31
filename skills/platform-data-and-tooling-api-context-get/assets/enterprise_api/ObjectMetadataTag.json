@@ -1,0 +1,123 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ObjectMetadataTag - Data API",
+  "description": "Represents a meta tag for a store page. Meta tags in HTML documents provide structured data used by search engines for ranking and to show content in search results. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Possible values are: USD—U.S. Dollar The default value is USD."
+    },
+    "Language": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The language of the page meta tag."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the page meta tag."
+    },
+    "RecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the product or product category with which this record is associated. This is a polymorphic relationship field.",
+      "relationship_name": "Record",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2, ProductCategory"
+    },
+    "TagType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of the page meta tag. Possible values are: Description—Meta Description Title—Title Tag"
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The value of the page meta tag. This value populates the HTML tag. For example, a meta tag with a Type of Title and a Value of GoBrew Espresso renders the HTML <title>GoBrew Espresso</title> for the page."
+    }
+  },
+  "special_access_rules": "This object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Object Metadata Tag ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Language",
+      "type": "string",
+      "length": "8"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RecordId": {
+      "field_label": "Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TagType": {
+      "field_label": "Tag Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Value": {
+      "field_label": "Text",
+      "type": "textarea",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

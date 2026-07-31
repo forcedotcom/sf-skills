@@ -1,0 +1,171 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OrderSummaryAdditionalInfo - Data API",
+  "description": "Stores information related to OrderSummary including context around the order, such as inventory reservation details, order origination, and other values that Einstein uses to perform order analysis. Only reservation details can be stored in this object. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentsVersion": {
+      "type": "text",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the adjustment algorithm that was used to create adjustments for this order"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "ISO code for the currency of the OrderSummary associated with the OrderSummaryAdditionalInfo. Possible values are: GBP—British Pound USD—U.S. Dollar The default value is USD."
+    },
+    "InventoryReservationExtRef": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Holds an external reference identifier for tracking the inventory reservation."
+    },
+    "InventoryReservationIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Inventory reservation identifier for the order, if available. Since this value can come from external systems, the value type has no lookup or enforcement."
+    },
+    "InventoryReservationMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Holds any details or other relevant information that can further explain the status of the reservation."
+    },
+    "InventoryReservationState": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the reservation, if available. Possible values are: DEFERRED NOT_APPLICABLE PERMANENT TEMPORARY"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the OrderSummaryAdditionalInfo record."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Unique ID of the order associated with this record. This field is a relationship field.",
+      "relationship_name": "Order",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique ID of the associated OrderSummary to which the specific OrderSummaryAdditionalInfo applies. This field is a relationship field.",
+      "relationship_name": "OrderSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderSummary"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who currently owns this record. Default value is the ID of the user who created the record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderSummaryAdditionalInfoFeed**: Feed tracking is available for the object.\n- **OrderSummaryAdditionalInfoOwnerSharingRule**: Sharing rules are available for the object.\n- **OrderSummaryAdditionalInfoShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AdjustmentsVersion": {
+      "field_label": "Adjustments Version",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Order Summary Additional Id",
+      "type": "id",
+      "length": "18"
+    },
+    "InventoryReservationExtRef": {
+      "field_label": "Inventory Reservation External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "InventoryReservationIdentifier": {
+      "field_label": "Inventory Reservation Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "InventoryReservationMessage": {
+      "field_label": "Inventory Reservation Message",
+      "type": "string",
+      "length": "255"
+    },
+    "InventoryReservationState": {
+      "field_label": "Inventory Reservation State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

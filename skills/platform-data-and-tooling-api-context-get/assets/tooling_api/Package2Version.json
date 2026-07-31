@@ -1,0 +1,157 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "Package2Version - Tooling API",
+  "description": "Represents a second-generation package version in a Dev Hub org. Values for all fields except for Tag and Branch are visible to the subscriber. Available in API version 41.0 and later.",
+  "supported_soap_calls": "`query()`, `retrieve()`, `update()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AncestorId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the immediate parent of the package version in the package ancestry tree."
+    },
+    "Branch": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The branch associated with this package version. Can be used to create a tree structure of inheritance. This value is auto-populated from Package2VersionCreateRequest, but you can update it."
+    },
+    "BuildDurationInSeconds": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort,",
+      "description": "Measured in seconds, this field indicates how long the build for this package version took. This field is new in API version 51.0."
+    },
+    "BuildNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Part of the version number of a package version. The complete version number format is major.minor.patch (Beta build)—for example, 1.2.0 (Beta 5). For released packages, version numbers contain only major.minor.patch, or, if patch is 0, major.minor—for example, 1.2."
+    },
+    "CodeCoverage": {
+      "type": "complexvalue",
+      "properties": "Nillable",
+      "description": "Percentage of lines of Apex code in the package version that are covered by tests. The value is null if code coverage wasn’t run when the package version was created. For second-generation managed packages, a minimum 75% code coverage is required for package version promotion."
+    },
+    "CodeCoveragePercentages": {
+      "type": "complexvalue",
+      "properties": "Nillable",
+      "description": "Provides code coverage details for each Apex class in the package version.The value is null if code coverage wasn’t run when the package version was created, or if there’s no Apex code in the package."
+    },
+    "ConvertedFromVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The subscriber package version ID (starts with 04t) of the first-generation managed package version that was converted. This field is available in API version 64.0 and later. This field is a relationship field.",
+      "relationship_name": "ConvertedFromVersion",
+      "refers_to": "SubscriberPackageVersion"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Description of the package."
+    },
+    "DeveloperUsePkgZip": {
+      "type": "base64",
+      "properties": "Nillable",
+      "description": "The zip file of package metadata for the package version. For converted second-generation managed packages only."
+    },
+    "HasMetadataRemoved": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "For managed packages only, this field returns true when one or more managed metadata components included in the package version’s ancestor aren’t included in this package version. This field doesn’t apply to unlocked packages. Available in API version 51.0."
+    },
+    "HasPassedCodeCoverageCheck": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Returns true if code coverage tests were run when the package version was created, and the resulting code coverage percentage is 75% or greater. Otherwise, returns false.For second-generation managed packages, a minimum 75% code coverage is required for package version promotion."
+    },
+    "InstallKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Installation key for creating the key-protected package. The default is null.If you query for this value, the returned value is always null (for security reasons). The value can be set and reset but not read."
+    },
+    "IsDeprecated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether this package version has been marked as deprecated (true) or not (false). The default value is false. If you set IsDeprecated to true for a package, the package and all of its child package versions are deprecated.If you set IsDeprecated to false for a package, the package and all of its child package versions are undeprecated. However, if IsDeprecated is explicitly set to true for a package version after its parent package is deprecated, the child remains deprecated even if you undeprecate its parent. If you set IsDeprecated to false for a package version whose parent package is deprecated, the package version’s IsDeprecated value remains true until its parent is undeprecated. Deprecated package versions that have been installed in subscriber orgs continue to function, but new installations of deprecated package versions are blocked."
+    },
+    "IsPasswordProtected": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether installation of this package version requires the user to provide an installation key (true) or not (false). The default value is false."
+    },
+    "IsReleased": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the package version is released (true) or in beta (false)."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language for the package. If a language wasn’t specified, the language defaults to the language of the Dev Hub user who created the package. This field is available in API version 57.0 and later."
+    },
+    "MajorVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Part of the version number of a package version. The complete version number format is major.minor.patch (Beta build)—for example, 1.2.0 (Beta 5). For released packages, version numbers contain only major.minor.patch, or, if patch is 0, major.minor—for example, 1.2."
+    },
+    "MinorVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Part of the version number of a package version. The complete version number format is major.minor.patch (Beta build)—for example, 1.2.0 (Beta 5). For released packages, version numbers contain only major.minor.patch, or, if patch is 0, major.minor—for example, 1.2."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "Name of the package."
+    },
+    "Package2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the parent package (starts with 0Ho)."
+    },
+    "PatchVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Part of the version number of a package version. The complete version number format is major.minor.patch (Beta build)—for example, 1.2.0 (Beta 5). For released packages, version numbers contain only major.minor.patch, or, if patch is 0, major.minor—for example, 1.2.Currently, the only valid value is 0."
+    },
+    "ReleaseVersion": {
+      "type": "double",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates the Salesforce release version used to create the package version. The value is in the format of a Salesforce API version number, for example, “51.0.” This field is new in API version 51.0."
+    },
+    "SnapshotName": {
+      "description": "The name of the scratch org snapshot used when creating this package version."
+    },
+    "SubscriberPackageVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Unique",
+      "description": "ID that subscribers use to install the package version (starts with 04t).This value is read-only."
+    },
+    "Tag": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The package version’s tag. This value is auto-populated from Package2VersionCreateRequest, but you can update it."
+    },
+    "ValidatedAsync": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, a new package version is created before package validations complete. The default value is false.For more information on async validation, see Create and Update Versions of a Second-Generation Managed Package"
+    },
+    "ValidationSkipped": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "If true, validation is skipped during package version creation. Skipping validation reduces the time it takes to create a new package version, but package versions created without validation can’t be promoted to the released state. This field is available in API version 48.0 and later.The default value is false. You can't specify both skip validation and code coverage, because code coverage is calculated during validation."
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "WorkloadUnit - Data API",
+  "description": "Represents the number of work items and average handle time in a specific time interval. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AverageHandleTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The average handle time at a specific period of time."
+    },
+    "Channel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The channel value."
+    },
+    "CustomWorkType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The derived field of WorkDemographic.CustomWorkType for the custom dimension value."
+    },
+    "DateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The timestamp of the single data point in the time series of the workload."
+    },
+    "IsOmni": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Derived from isOmni field in workload. Indicates that the workload is Omni-based The default value is 'false'."
+    },
+    "MeasureUnit": {
+      "type": "string",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The time interval (in minutes) used in the workload. Possible values are: 43200—Monthly. Reserved for future use. 10080—Weekly 1440—Daily 60—Hourly 30—30 minutes. Reserved for future use. 15—15 minutes. Reserved for future use. The default value is '1440'."
+    },
+    "Region": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The derived field from WorkDemographic.Region for the region value."
+    },
+    "SkillSet": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The derived field from WorkDemographic.SkillSet for the skill value."
+    },
+    "TotalCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The total number work items at a specific period of time."
+    },
+    "WorkDemographicId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The foreign key to the WorkDemographic object. This is a relationship field.",
+      "relationship_name": "WorkDemographic",
+      "relationship_type": "Lookup",
+      "refers_to": "WorkDemographic"
+    },
+    "WorkloadId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The foreign key to the Workload object. This is a relationship field.",
+      "relationship_name": "Workload",
+      "relationship_type": "Lookup",
+      "refers_to": "Workload"
+    },
+    "WorkloadType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The derived field from Workload.WorkloadType to indicate the type of workload, for example, a history or forecast workload. Possible values are: F—Forecasted H—Historical The default value is 'H'."
+    }
+  },
+  "special_access_rules": "The org must have a Workforce Engagement license. To view, create, edit, and delete records, the user must have the Workforce Engagement Analyst permission set.\n\nThe org must have a Workforce Engagement license.\n         To view, create, edit, and delete records, the user must have the Workforce Engagement\n         Analyst permission set."
+}

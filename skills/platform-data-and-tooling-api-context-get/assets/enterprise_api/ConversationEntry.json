@@ -1,0 +1,268 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ConversationEntry - Data API",
+  "description": "Represents a message or event in a voice call or messaging session. The schema on this page only applies to conversation entries for legacy chat. Refer to the ConversationEntry (Off-Core) schema in the Messaging Object Model guide to see the ConversationEntry schema for Enhanced Channels. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActorId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the author. The possible values can be null or any ID in the following domain set: BotDefinition LiveChatVisitor MessagingEndUser User This is a polymorphic relationship field.",
+      "relationship_name": "Actor",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingEndUser, User"
+    },
+    "ActorName": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The name of the author sending the message or event."
+    },
+    "ActorType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The author of this entry in the chat history. The valid values include: Agent Bot EndUser Supervisor System"
+    },
+    "ClientDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The length in milliseconds for the entry. This field is used with voice messages and other applicable use cases. This value may be 0 if not set by the client. This field is available in API version 51.0 and later."
+    },
+    "ClientTimestamp": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The timestamp sent by the client when it generated the entry. This field is available in API version 51.0 and later."
+    },
+    "ConversationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The MessagingSession ID this entry belongs to. This is a polymorphic relationship field.",
+      "relationship_name": "Conversation",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingSession, VoiceCall"
+    },
+    "EntryEndTime": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The timestamp that this entry ended in the chat history. This field is available in API version 48.0 and later."
+    },
+    "EntryTime": {
+      "type": "datetime",
+      "properties": "Create, Filter, Sort",
+      "description": "The timestamp of this entry in the chat history."
+    },
+    "EntryTimeMilliSecs": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The milliseconds value for the time when an entry was received by the server. Note that the related EntryTime field does not provide millisecond accuracy. This field is available in API version 51.0 and later."
+    },
+    "EntryType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of entry in the chat history. Can be a message (text) or an event. The possible values include: Text AdminOptedIn AdminOptedOut BotEscalated ChatbotClosedIdleSession ChatbotEndedChatByAction—Conversation ended by automated action ChatbotEndedTransferNotConfigured—Conversation ended because transfer fail is not configured ChatbotEstablished ChatbotNotEstablished EndUserOptedIn EndUserOptedOut"
+    },
+    "HasAttachments": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a message has attachments associated with it (true) or not (false)."
+    },
+    "Message": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "The message or event sent by the author. In ConversationEntry records for enhanced Messaging channels or Messaging for In-App and Web, the Message field is blank due to data storage differences from standard channels."
+    },
+    "MessageDeliverTime": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Unused field reserved for future use."
+    },
+    "MessageIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The unique ID for the message. Maximum size is 36 characters."
+    },
+    "MessageReadTime": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Unused field reserved for future use."
+    },
+    "MessageSendTime": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Unused field reserved for future use."
+    },
+    "MessageStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the message sent by the author. The valid values include: Delivered Error Pending Read Sent"
+    },
+    "MessageStatusCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The code associated with a message status. MessageStatusCode is only populated when a message is undeliverable"
+    },
+    "Seq": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The sequence position of this entry in the chat history."
+    },
+    "ServerReceivedTimestamp": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The timestamp recorded when the server received the entry. This is a unique value and is used for ordering. This value can also be referred to as the “transcripted timestamp.” This field is available in API version 51.0 and later."
+    }
+  },
+  "special_access_rules": "To use the ConversationEntry object, enable the Access Conversation Entries user permission, which is available in API version 50.0 and later. Earlier versions do not require permissions.",
+  "usage": "In standard SMS, WhatsApp, and Facebook Messenger channels, a ConversationEntry record is created for each message sent by a messaging end user or an agent, bot, or automation. Each ConversationEntry record is associated with a MessagingSession record, which represents the interaction between the messaging end user and the business. Access and work with ConversationEntry records like any standard object. You can report on messaging activity and track the conversation workflow end to end. You can also download or delete transcripts, redact sensitive text, and customize your workflows with solutions built on the ConversationEntry object. In enhanced Messaging channels, Messaging for In-App and Web, and Service Cloud Voice (\"enhanced channels\"), inbound and outbound messages are processed in one of two ways depending on your location. To get the fullest picture of conversations in enhanced channels, use Data Cloud, the Connect REST API, or the Conversation Transcript Export tool to access transcripts. See Accessing Messaging and Voice Conversation Data.\n\nIn standard SMS, WhatsApp, and Facebook Messenger channels, a ConversationEntry record is created for each message sent by a messaging end user or an agent, bot, or automation. Each ConversationEntry record is associated with a MessagingSession record, which represents the interaction between the messaging end user and the business. Access and work with ConversationEntry records like any standard object. You can report on messaging activity and track the conversation workflow end to end. You can also download or delete transcripts, redact sensitive text, and customize your workflows with solutions built on the ConversationEntry object.\n\nIn enhanced Messaging channels, Messaging for In-App and Web, and Service Cloud Voice (\"enhanced channels\"), inbound and outbound messages are processed in one of two ways depending on your location.\n\nTo get the fullest picture of conversations in enhanced channels, use Data Cloud, the Connect REST API, or the Conversation Transcript Export tool to access transcripts. See Accessing Messaging and Voice Conversation Data.",
+  "wsdl_segment": "```xml\n<complexType name=\"ConversationEntry\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Actor\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ActorId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActorName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActorType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ClientDuration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ClientTimestamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ConvEntryRelatedRecordCopies\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Conversation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ConversationEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ConversationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EntryEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EntryTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EntryTimeMilliSecs\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"EntryType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HasAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Message\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessageDeliverTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessageIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessageReadTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessageSendTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessageStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessageStatusCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Seq\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ServerReceivedTimestamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ActorId": {
+      "field_label": "Actor ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActorName": {
+      "field_label": "Actor Name",
+      "type": "string",
+      "length": "650"
+    },
+    "ActorType": {
+      "field_label": "Actor Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ClientDuration": {
+      "field_label": "ClientDuration",
+      "type": "int",
+      "digits": "9"
+    },
+    "ClientTimestamp": {
+      "field_label": "ClientTimestamp",
+      "type": "datetime"
+    },
+    "ConversationEntityId": {
+      "field_label": "Conversation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConversationId": {
+      "field_label": "Conversation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EntryEndTime": {
+      "field_label": "Entry End Time",
+      "type": "datetime"
+    },
+    "EntryTime": {
+      "field_label": "Entry Start Time",
+      "type": "datetime"
+    },
+    "EntryTimeMilliSecs": {
+      "field_label": "Entry Time Milli Seconds(last 3 digits)",
+      "type": "int",
+      "digits": "9"
+    },
+    "EntryType": {
+      "field_label": "Entry Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "HasAttachments": {
+      "field_label": "Has Attachments",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Conversation Entry ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Message": {
+      "field_label": "Message",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "MessageDeliverTime": {
+      "field_label": "Message Deliver Time",
+      "type": "datetime"
+    },
+    "MessageIdentifier": {
+      "field_label": "Message ID",
+      "type": "string",
+      "length": "36"
+    },
+    "MessageReadTime": {
+      "field_label": "Message Read Time",
+      "type": "datetime"
+    },
+    "MessageSendTime": {
+      "field_label": "Message Send Time",
+      "type": "datetime"
+    },
+    "MessageStatus": {
+      "field_label": "Message Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "MessageStatusCode": {
+      "field_label": "Message Status Code",
+      "type": "string",
+      "length": "25"
+    },
+    "Seq": {
+      "field_label": "Sequence",
+      "type": "int",
+      "digits": "9"
+    },
+    "ServerReceivedTimestamp": {
+      "field_label": "ServerReceivedTimestamp",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

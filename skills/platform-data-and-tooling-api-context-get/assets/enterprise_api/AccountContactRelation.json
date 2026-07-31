@@ -1,0 +1,132 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "AccountContactRelation - Data API",
+  "description": "Represents a relationship between a contact and one or more accounts.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountContactRelationshipCurrency": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for organizations with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the account that is related to the contact. Field can't be modified when updating existing account-contact relationship records."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the contact that is related to the account. Field can't be modified when updating existing account-contact relationship records."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date a relationship between a contact and account ended. Use with the Start Date to keep a history of the relationship."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether relationship is active (true) or not (false)."
+    },
+    "IsDirect": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the account associated with the contact is the contact's primary account (true) or not (false)."
+    },
+    "Roles": {
+      "type": "multipicklist",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The contact’s participating role in the account. Values are Business User, Decision Maker, Economic Buyer, Economic Decision Maker, Evaluator, Executive Sponsor, Influencer, Technical Buyer, and Other."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date a relationship between a contact and account began. Use with the End Date to keep a history of the relationship."
+    }
+  },
+  "usage": "Use this object to associate a single contact record to multiple account records so you can easily track the relationships between the people and businesses they work with. When you insert a non-private contact in your org that associates a contact to multiple accounts, an AccountContactRelation is created and its validation rules, database insertion, and triggers are executed immediately after the contact is saved to the database. When you change a contact's primary account, an AccountContactRelation may be created or edited, and the AccountContactRelation validation rules, database changes, and triggers are executed immediately after the contact is saved to the database. See Order of Execution.\n\nUse this object to associate a single contact record to multiple account records so you can easily track the relationships between the people and businesses they work with.\n\nWhen you insert a non-private contact in your org that associates a contact to multiple accounts, an AccountContactRelation is created and its validation rules, database insertion, and triggers are executed immediately after the contact is saved to the database. When you change a contact's primary account, an AccountContactRelation may be created or edited, and the AccountContactRelation validation rules, database changes, and triggers are executed immediately after the contact is saved to the database. See Order of Execution.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AccountContactRelationChangeEvent (API version 59.0)**: Change events are available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Account Contact Relationship ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDirect": {
+      "field_label": "Direct",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Roles": {
+      "field_label": "Roles",
+      "type": "multipicklist",
+      "length": "4099",
+      "precision": "0"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision"
+  ]
+}

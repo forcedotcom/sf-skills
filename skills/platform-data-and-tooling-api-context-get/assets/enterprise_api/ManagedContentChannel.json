@@ -1,0 +1,149 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ManagedContentChannel - Data API",
+  "description": "Represents the details of a CMS channel. CMS channels correspond to managed content publishing endpoints. They deliver published content from your Salesforce CMS workspaces to an audience. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CacheControlMaxAge": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The amount of time, in seconds, it takes for a requested CMS content resource in the CMS channel to expire before a new request for the resource must be made."
+    },
+    "Domain": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The domain for a public channel. Only public channels can have an assigned domain. Possible value is: mydomain.cdn.salesforce-experience.com Note: The mydomain value is specific to the domain of the channel."
+    },
+    "DomainHostName": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The hostname of the domain assigned to the CMS channel. Only public channels can have an assigned domain."
+    },
+    "MediaCacheControlMaxAge": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The amount of time, in seconds, it takes for a requested CMS image or document content resource in the CMS channel to expire before a new request for the resource must be made. This field is available in API version 57.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Name of the CMS channel."
+    },
+    "OptionsIsCacheControlPublic": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, the CMS channel connection type is public. When false, the cache control is private. The default value is false."
+    },
+    "OptionsIsDomainLocked": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, the domain set to the channel can’t be changed. Only public channels can have this field set to true. If the channel type is COMMUNITY, the default value is true. For all other channel types, the default value is false."
+    },
+    "OptionsIsSearchable": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "When true, users can search for all published CMS content types within the channel. The default value is false."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The connection type of the CMS channel. The connection type determines which audience can access the CMS content delivered in the channel. Possible values are: COMMUNITY: User access is controlled by the settings of the Experience Cloud site. CloudToCloud: Connects Salesforce CMS to the B2C Commerce Page Designer. ConnectedApp: User access to the channel is controlled by the connected application associated with the channel. PublicUnauthenticated: No user authentication required, content can be cached on public CDNs. Record: User access to the content is controlled by the user access to the associated record. Content is only accessible to users with access to the record. UserPermission: This value is reserved for future use."
+    }
+  },
+  "special_access_rules": "ManagedContentChannel is available when the Digital Experiences app is enabled.",
+  "usage": "ManagedContentChannel can be queried through the public sObject API. Use this object to retrieve information for a specific CMS channel.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ManagedContentChannel\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CacheControlMaxAge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Domain\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DomainHostName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MediaCacheControlMaxAge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptionsIsCacheControlPublic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsDomainLocked\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSearchable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CacheControlMaxAge": {
+      "field_label": "Cache Control Max Age",
+      "type": "long",
+      "digits": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Domain": {
+      "field_label": "Domain ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DomainHostName": {
+      "field_label": "Host name of the Domain",
+      "type": "string",
+      "length": "765"
+    },
+    "Id": {
+      "field_label": "Managed Content Channel ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MediaCacheControlMaxAge": {
+      "field_label": "Media Cache Control Max Age",
+      "type": "long",
+      "digits": "18"
+    },
+    "Name": {
+      "field_label": "Managed Content Channel Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OptionsIsCacheControlPublic": {
+      "field_label": "CacheControl header for this Channel should be set to Public",
+      "type": "boolean"
+    },
+    "OptionsIsDomainLocked": {
+      "field_label": "The Domain field is editable or read only for this Channel",
+      "type": "boolean"
+    },
+    "OptionsIsSearchable": {
+      "field_label": "Content Is Searchable in this Channel",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Managed Content Channel Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

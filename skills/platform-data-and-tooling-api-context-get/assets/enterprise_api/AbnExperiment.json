@@ -1,0 +1,287 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "AbnExperiment - Data API",
+  "description": "Represents an A/B/n experiment that's used with Marketing Cloud Next content, Experience Cloud websites, and platform automations. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier that refers to the data space where an experiment's resources originate. Required. This field is a relationship field.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Text description of the experiment. Optional."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "System or user-generated API name for the experiment. Required."
+    },
+    "LastAnalyzed": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Time and date of last analysis."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time an experiment was referenced by another resource."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates the last time a user viewed the experiment."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Text label that identifies the experiment. Required."
+    },
+    "PersonalizationSchemaEnum": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Picklist value that indicates the type of personalization schema, which is related to where a personalization decision is created. Possible values are: DecisionDefined ExperienceVariation FlowPath"
+    },
+    "PersonalizationSchemaId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to the schema that’s related to the experiment. This field is a relationship field.",
+      "relationship_name": "PersonalizationSchema",
+      "refers_to": "PersonalizationSchema"
+    },
+    "PrimaryMetricId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to engagement signal metrics, which are used to measure an experiment. This field is a polymorphic relationship field.",
+      "relationship_name": "PrimaryMetric",
+      "refers_to": "EngagementSignalCmpndMetric, EngagementSignalMetric"
+    },
+    "ProfileDataGraphId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to the profile data graph that’s used. This field is a relationship field.",
+      "relationship_name": "ProfileDataGraph",
+      "refers_to": "DataGraph"
+    },
+    "ScheduleFrequencyInMinutes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number of minutes that defines when personalized content can be made available."
+    },
+    "Source": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates where the experiment was created. Possible values are: BlockBuilder—CMS content editors ExperienceBuilder—Experience Site Builder FlowBuilder PersonalizationApp"
+    },
+    "SourceRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier that refers to the specific record that contains the experiment. This field is a polymorphic relationship field.",
+      "relationship_name": "SourceRecord",
+      "refers_to": "FlowRecordElement, ManagedContent"
+    },
+    "StartedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates when the experiment began or is scheduled to begin."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Picklist value that indicates the current state of the experiment. Possible values are: Archived Created Started Stopped The default value is Created."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Picklist value that indicates the current status of the experiment while an action is being performed. Possible values are: Active CreateError DeleteError Deleting EditError Processing The default value is Processing."
+    },
+    "StoppedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp that indicates when the experiment ended or is scheduled to end."
+    },
+    "WinnerSelectionMode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Possible values are: Automatic Manual The default value is Manual."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AbnExperimentChangeEvent**: Change events are available for the object.\n- **AbnExperimentFeed**: Feed tracking is available for the object.\n- **AbnExperimentHistory**: History is available for tracked fields of the object.\n- **AbnExperimentOwnerSharingRule**: Sharing rules are available for the object.\n- **AbnExperimentShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ChanceToWinThreshold": {
+      "field_label": "Chance To Win Threshold",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataSpaceId": {
+      "field_label": "Data Space ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Experiment API Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Experiment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRemote": {
+      "field_label": "Is Remote",
+      "type": "boolean"
+    },
+    "LastAnalyzed": {
+      "field_label": "Last Analyzed",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MaximumDurationInMinutes": {
+      "field_label": "Maximum Experiment Duration In Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "MinimumDurationInMinutes": {
+      "field_label": "Minimum Experiment Duration In Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "MinimumRequiredParticipants": {
+      "field_label": "Minimum Required Participants",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Experiment Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PersonalizationSchemaEnum": {
+      "field_label": "Response Template Enum",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PersonalizationSchemaId": {
+      "field_label": "Response Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PrimaryMetricId": {
+      "field_label": "Primary Metric ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProfileDataGraphId": {
+      "field_label": "Data Graph ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScheduleFrequencyInMinutes": {
+      "field_label": "Schedule Frequency In Minutes",
+      "type": "int",
+      "digits": "9"
+    },
+    "Source": {
+      "field_label": "Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SourceRecordId": {
+      "field_label": "Source Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartedDate": {
+      "field_label": "Started Date",
+      "type": "datetime"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StoppedDate": {
+      "field_label": "Stopped Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WinnerSelectionMode": {
+      "field_label": "Winner Selection Mode",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

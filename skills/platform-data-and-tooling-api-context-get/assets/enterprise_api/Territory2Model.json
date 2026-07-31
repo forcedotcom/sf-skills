@@ -1,0 +1,148 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "Territory2Model - Data API",
+  "description": "Represents a territory model. Available if Sales Territories has been enabled.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActivatedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the territory model was activated."
+    },
+    "DeactivatedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the territory model was archived."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The description of the territory model."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters and must be unique in your organization. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. The field label in the user interface is Territory Model Name.When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record.",
+      "required": true
+    },
+    "LastOppTerrAssignEndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read-only. The date when the opportunity territory assignment filter was last run. Used for Filter-Based Opportunity Territory Assignment (Pilot in Spring ’15 / API version 33)."
+    },
+    "LastRunRulesEndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the last rules run was completed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The territory model name. The field label in the user interface is Label."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The state of the territory model. Values are: Planning, Activating, Activation Failed, Active, Archiving, Archiving Failed, Archived, Deleting, and Deletion Failed."
+    }
+  },
+  "special_access_rules": "Standard and partner users can access this object. If a territory model is in Active state, any standard or partner user can view that model, including its territories and assignment rules. For territories in an active model, any standard or partner user can view assigned records and assigned users subject to your Salesforce sharing settings. Users cannot view territory models in other states (such as Planning or Archived).",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **Territory2ModelChangeEvent (API version 62.0)**: Change events are available for the object.\n- **Territory2ModelFeed**: Feed tracking is available for the object.\n- **Territory2ModelHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "ActivatedDate": {
+      "field_label": "Activated Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeactivatedDate": {
+      "field_label": "Deactivated Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Territory Model ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsCloneSource": {
+      "field_label": "Clone source",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsOppUnassignmentDone": {
+      "field_label": "Whether the job that archives  opportunity unassignment PK chunking has finished for a territory model",
+      "type": "boolean"
+    },
+    "IsSharingGroupDeleteDone": {
+      "field_label": "Whether the job that archives deleted sharing groups has finished for a territory model",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastOppTerrAssignEndDate": {
+      "field_label": "Last successful opportunity territory assignment date",
+      "type": "datetime"
+    },
+    "LastRunRulesEndDate": {
+      "field_label": "Last successful model realign date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

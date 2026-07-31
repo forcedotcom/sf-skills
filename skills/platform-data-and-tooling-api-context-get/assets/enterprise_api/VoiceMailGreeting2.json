@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "VoiceMailGreeting2 - Data API",
+  "description": "Represents information about a voicemail message that reps can drop during outbound customer calls, or set to play when they're unable to take calls from customers. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DurationInSeconds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The duration of the voicemail message in seconds."
+    },
+    "GreetingUrl": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The URL of the audio file for the voicemail message."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the voicemail message."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the voicemail message owner. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ReferenceGreetingResourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the content document that contains the voicemail message. This is a relationship field.",
+      "relationship_name": "ReferenceGreetingResource",
+      "refers_to": "ContentDocument"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of voicemail message. Possible values are: Greeting VoicemailDrop"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **VoiceMailGreeting2OwnerSharingRule**: Sharing rules are available for the object.\n- **VoiceMailGreeting2Share**: Sharing is available for the object."
+}

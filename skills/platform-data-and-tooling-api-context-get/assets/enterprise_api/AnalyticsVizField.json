@@ -1,0 +1,203 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AnalyticsVizField - Data API",
+  "description": "Represents a Tableau Next viusalization field. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdHocCalc": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "An ad-hoc calculation for the visualization field."
+    },
+    "DisplayCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The display category for the visualization field. Possible values are: Continuous—continuous Discrete—discrete"
+    },
+    "FieldKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The key for the visualization field."
+    },
+    "Function": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The function for the visualization field. Possible values are: Avg Count CountD DatePartDay DatePartHour DatePartMinute DatePartMonth DatePartQuarter DatePartSecond DatePartWeek DatePartWeekDay DatePartYear DateTruncDay DatePartHour DatePartMinute DateTruncMonth DateTruncQuarter DateTruncWeek DateTruncYear FiscalDatePartMonth FiscalDatePartQuarter FiscalDatePartWeek FiscalDatePartYear FiscalDateTruncMonth FiscalDateTruncQuarter FiscalDateTruncWeek FiscalDateTruncYear Max Mdy Median Min My Stdev Stdevp Sum UserAgg Var Varp"
+    },
+    "HierarchyName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The hierarchy name for the visualization field."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The label for the visualization field."
+    },
+    "PositionName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The position name for the visualization field."
+    },
+    "Positional": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The positional text for the visualization field."
+    },
+    "Role": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The role for the visualization field. Possible values are: Dimension Measure"
+    },
+    "SemanticFieldApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API for the field in the semantic model."
+    },
+    "SemanticObjectApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name for object the field belongs to in the semantic model."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type for the visualization field. Possible values are: Field MapPosition MeasureNames MeasureValues"
+    },
+    "UniqueIndex": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The unique index value for the visualization field. This field is a calculated field."
+    },
+    "VisualizationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the visualization the field belongs to. This field is a relationship field.",
+      "relationship_name": "Visualization",
+      "relationship_type": "Master-detail",
+      "refers_to": "AnalyticsVisualization (the master object)"
+    }
+  },
+  "special_access_rules": "To access this object, you must have Tableau Next enabled in your org and a Tableau Next permission set.",
+  "field_reference": {
+    "AdHocCalc": {
+      "field_label": "Ad-hoc Calculation",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DisplayCategory": {
+      "field_label": "Display Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FieldKey": {
+      "field_label": "Field Key",
+      "type": "string",
+      "length": "255"
+    },
+    "Function": {
+      "field_label": "Function",
+      "type": "picklist",
+      "length": "255"
+    },
+    "HierarchyName": {
+      "field_label": "Hierarchy Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "AnalyticsVizField ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PositionName": {
+      "field_label": "The position name of the field",
+      "type": "string",
+      "length": "255"
+    },
+    "Positional": {
+      "field_label": "The map positional of the field",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Role": {
+      "field_label": "Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SemanticFieldApiName": {
+      "field_label": "Semantic Field API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SemanticObjectApiName": {
+      "field_label": "Semantic Object API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UniqueIndex": {
+      "field_label": "Unique constraint formula for an analytics visualization field",
+      "type": "string",
+      "length": "255"
+    },
+    "VisualizationId": {
+      "field_label": "AnalyticsVisualization ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

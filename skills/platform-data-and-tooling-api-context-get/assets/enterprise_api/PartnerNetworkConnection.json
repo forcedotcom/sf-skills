@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "PartnerNetworkConnection - Data API",
+  "description": "Represents a Salesforce to Salesforce connection between Salesforce organizations.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Account associated with this connection."
+    },
+    "ConnectionName": {
+      "type": "string",
+      "properties": "Filter, idLookup, Sort",
+      "description": "A descriptive name for the connection. Limit: 295 characters."
+    },
+    "ConnectionStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the Salesforce to Salesforce connection. The picklist includes the following values: Sent Received Pending Accepted Rejected Inactive Disconnecting ConnectionSuspended SubscribeInProgress UsersInitialSync BulkSyncMetadata"
+    },
+    "ConnectionType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of Salesforce to Salesforce connection. The picklist includes the following values: Standard Replication This field is available in API version 30.0 and later."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Contact associated with this connection."
+    },
+    "IsSyncAuditFields": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether audit fields are synced between the primary and secondary organization in a replication connection. This field is available in API version 32.0 and later, and is only accessible in Salesforce organizations where Organization Sync is enabled."
+    },
+    "IsSyncMetadata": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether supported types of metadata are synced from the primary to the secondary organization in a replication connection. This field is available in API version 33.0 and later, and is only accessible in Salesforce organizations where Organization Sync is enabled."
+    },
+    "IsSyncUsers": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether users with standard Salesforce user licenses are synced between the primary and secondary organization in a replication connection. This field is available in API version 35.0 and later, and is only accessible in Salesforce organizations where Organization Sync is enabled."
+    },
+    "PrimaryContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the User associated with this connection."
+    },
+    "ReplicationRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The role of this Salesforce organization in the replication connection. The picklist includes the following values: Primary Secondary This field is available in API version 30.0 and later, and is only accessible in Salesforce organizations where Organization Sync is enabled."
+    },
+    "ResponseDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the connection was accepted or rejected."
+    }
+  },
+  "special_access_rules": "As of Winter ’21 and later, only authenticated internal and external users can access this object.",
+  "usage": "Represents Salesforce to Salesforce standard and replication connections. This object is referenced by all objects that have been shared with other organizations, enabling you to determine which connections shared a record with you. If the organization does not have Salesforce to Salesforce enabled, the PartnerNetworkConnection object is not available, and you can’t access it via the API."
+}

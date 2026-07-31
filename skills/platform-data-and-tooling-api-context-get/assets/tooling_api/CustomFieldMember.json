@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "CustomFieldMember - Tooling API",
+  "description": "Represents the working copy of a field for editing or saving in a MetadataContainer. This object is available in API version 33.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`, `PATCH`, `DELETE`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Content": {
+      "type": "string",
+      "properties": "None",
+      "description": "A string representation of CustomField that contains the field’s metadata."
+    },
+    "ContentEntityId": {
+      "type": "ID",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A reference to a custom field.There can be only one ContentEntityId per CustomField, otherwise, an error is reported."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "The full name of the associated object in the Metadata API. Use to avoid race conditions on create, before you have IDs. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Group, Nillable",
+      "description": "Indicates whether the object is marked as deleted (true) or not (false)."
+    },
+    "LastSyncDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date that this CustomField was replicated from the underlying entity."
+    },
+    "Metadata": {
+      "type": "CustomField",
+      "properties": "None",
+      "description": "An object that describes the version, status, and packaged versions of the corresponding CustomField. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    }
+  },
+  "special_access_rules": "To access CustomFieldMember, you must have both the View All Data and Customize Application user permissions.",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomFieldMember\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:CustomField\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"CustomField\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"businessOwnerGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"businessOwnerUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"businessStatus\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseSensitive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"complianceGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customDataType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"deleteConstraint\" minOccurs=\"0\" type=\"tns:DeleteConstraint\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"elementType\" minOccurs=\"0\" type=\"tns:ElementType\"/>\n        <xsd:element name=\"encryptionScheme\" minOccurs=\"0\" type=\"tns:EncryptionScheme\"/>\n        <xsd:element name=\"escapeMarkup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"externalDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalId\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"formulaTreatBlanksAs\" minOccurs=\"0\" type=\"tns:TreatBlanksAs\"/>\n        <xsd:element name=\"inlineHelpText\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isAIPredictionField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isConvertLeadDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isFilteringDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isNameField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSortingDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"length\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"lookupFilter\" minOccurs=\"0\" type=\"mns:LookupFilter\"/>\n        <xsd:element name=\"maskChar\" minOccurs=\"0\" type=\"tns:EncryptedFieldMaskChar\"/>\n        <xsd:element name=\"maskType\" minOccurs=\"0\" type=\"tns:EncryptedFieldMaskType\"/>\n        <xsd:element name=\"metadataRelationshipControllingField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"populateExistingRows\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"precision\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"referenceTargetField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"referenceTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"reparentableMasterDetail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"required\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"restrictedAdminField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"scale\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"securityClassification\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"startingNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"stripMarkup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"summarizedField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"summaryFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FilterItem\"/>\n        <xsd:element name=\"summaryForeignKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"summaryOperation\" minOccurs=\"0\" type=\"tns:SummaryOperations\"/>\n        <xsd:element name=\"trackFeedHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"trackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"trackTrending\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"translateData\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:FieldType\"/>\n        <xsd:element name=\"unique\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"valueSet\" minOccurs=\"0\" type=\"mns:ValueSet\"/>\n        <xsd:element name=\"visibleLines\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"writeRequiresMasterRead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "UserTeamMember - Data API",
+  "description": "Represents a single User on the default opportunity team of another User.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "OpportunityAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Restricted picklist, Update",
+      "description": "Level of access that the team member has to opportunities for which the user has added his or her default opportunity team. The possible values are: Read Edit This field must be set to an access level that is higher than the organization’s default access level for opportunities.",
+      "required": true
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the User who owns the default opportunity team. This field can’t be updated.",
+      "required": true
+    },
+    "TeamMemberRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Role that the team member has on opportunities for which the User has added his or her default opportunity team. The valid values are set by the organization’s administrator in the Opportunity Team Roles picklist. Label is Team Role."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the User who is a member of the default opportunity team. This field can’t be updated.",
+      "required": true
+    }
+  },
+  "usage": "If you attempt to create a record that matches an existing record, the create request updates any modified fields and returns the existing record. Users can set up their default opportunity team to include other users that typically work with them on opportunities.\n\nIf you attempt to create a record that matches an existing record, the create request updates any modified fields and returns the existing record.\n\nUsers can set up their default opportunity team to include other users that typically work with them on opportunities.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "User Team Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OpportunityAccessLevel": {
+      "field_label": "Opportunity Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TeamMemberRole": {
+      "field_label": "Team Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

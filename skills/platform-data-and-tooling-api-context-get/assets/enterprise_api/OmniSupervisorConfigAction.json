@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OmniSupervisorConfigAction - Data API",
+  "description": "Represents the actions available to the supervisors of a Command Center for Service configuration. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DisplayOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The order in which the action is displayed."
+    },
+    "OmniSupervisorActionType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "An action that a supervisor can perform. Possible values are: AgentDetails.CustomAction AllAgents.AWSDashboard—All Agents - View Amazon Real-Time Metrics AllAgents.AssignLearning AllAgents.ChangeQueues AllAgents.ChangeSkills AllAgents.CustomAction AssignedWork.AWSDashboard—Assigned Work - View Amazon Real-Time Metrics AssignedWork.CustomAction AssignedWorkDetails.CustomAction QueueDetails.CustomAction QueuesBacklog.AWSDashboard—Queues Backlog - View Amazon Real-Time Metrics QueuesBacklog.CustomAction QueuesBacklog.ManageQueues—Queues Backlog - Assign Agents to Queues SkillDetails.CustomAction SkillsBacklog.AWSDashboard—Skills Backlog - View Amazon Real-Time Metrics SkillsBacklog.CustomAction"
+    },
+    "OmniSupervisorConfigId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A unique identifier for the Command Center for Service configuration. This field is a relationship field.",
+      "relationship_name": "OmniSupervisorConfig",
+      "relationship_type": "Lookup",
+      "refers_to": "OmniSupervisorConfig"
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled. Only authenticated internal and external users can access this object.\n\nTo access this object, Omni-Channel must be enabled.\n\nOnly authenticated internal and external users can access this object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DisplayOrder": {
+      "field_label": "Display Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Omni Supervisor Configuration Action ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OmniSupervisorActionType": {
+      "field_label": "Omni Supervisor Action Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OmniSupervisorConfigId": {
+      "field_label": "Omni Supervisor Configuration ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

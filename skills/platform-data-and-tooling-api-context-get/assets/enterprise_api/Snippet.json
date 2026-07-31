@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "Snippet - Data API",
+  "description": "Represents a snippet, which is a container for rich text that can be reused across Account Engagement emails and email templates. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the snippet. Limited to 32 KB."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "This field value is unique to your org and is required for a Snippet to be resolved in marketing content. Label is API Name.",
+      "required": true
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the snippet.",
+      "required": true
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of content a snippet includes. Allowable values are: Date, Image, Link, Text. This field is for organizational purposes."
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The body content of a snippet. This field can contain plain or rich text. The value of a snippet is resolved when a marketing email is sent. The field does not support emojis, HTML, or image files."
+    }
+  },
+  "special_access_rules": "Snippets are available in Account Engagement business units with the Sales, CRM, or Service permission set license.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **SnippetFeed**: Feed tracking is available for the object."
+}

@@ -1,0 +1,769 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Asset - Data API",
+  "description": "Represents an item of commercial value, such as a product sold by your company or a competitor, that a customer has purchased.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "(Required) ID of the Account associated with this asset. Must be a valid account ID. Required if ContactId isn’t specified. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Represents the physical address or geolocation of the asset."
+    },
+    "AssetLevel": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The asset’s position in an asset hierarchy. If the asset has no parent or child assets, its level is 1. Assets that belong to a hierarchy have a level of 1 for the root asset, 2 for the child assets of the root asset, 3 for their children, and so forth. On assets created before the introduction of this field, the asset level defaults to –1. After the asset record is updated, the asset level is calculated and automatically updated."
+    },
+    "AssetProvidedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account that provided the asset, typically a manufacturer. This field is a relationship field.",
+      "relationship_name": "AssetProvidedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "AssetServicedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account in charge of servicing the asset. This field is a relationship field.",
+      "relationship_name": "AssetServicedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "AssetTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset type associated with the asset. This field is a relationship field. This field is available in API version 62.0 and later for users with the Health Cloud Appointment Management permission set.",
+      "relationship_name": "AssetType",
+      "relationship_type": "Lookup",
+      "refers_to": "AssetType"
+    },
+    "Availability": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of expected uptime where the asset was available for use."
+    },
+    "AveragetimetoRepair": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Represents the number of hours it typically takes to repair an asset after a failure."
+    },
+    "AveragetimeBetweenFailure": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Represents the number of hours that typically elapses before the asset is likely to fail again."
+    },
+    "AverageUptimePerDay": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The average number of hours per day the asset is expected to be available for use."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city detail for the address."
+    },
+    "ConsequenceOfFailure": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The business impact associated with the asset’s failure. Using this field, you can address the asset’s health and take action using Flows. To enable this field, use Object Manager to update the field availability. Make sure that the field is visible for field-level security and for page layout. To learn more, see What Determines Field Access. The picklist values aren’t predefined in orgs created before Winter ’22 that aren’t Field Service enabled. This field is available in API version 53.0 and later. Possible values are: Insignificant Minor Moderate Major Critical"
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required if AccountId isn’t specified. ID of the Contact associated with this asset. Must be a valid contact ID that has an account parent (but doesn’t need to match the asset’s AccountId). This field is a relationship field.",
+      "relationship_name": "Contact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact",
+      "required": true
+    },
+    "Country": {
+      "type": "String",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country detail for the address."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code associated with the invoice. The default value is USD. This field is available in API version 55.0 and later. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "CurrentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Reserved for future use. This field is available in API version 50.0 and later. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "CurrentLifecycleEndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents the end of the period shown as current. System-populated field inherited from the end date of the current asset state period. If that field is empty, as with an evergreen subscription, the Current Lifecycle End Date field is also empty. This field is available in API version 50.0 and later. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "CurrentMrr": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The asset’s monthly recurring revenue during the current asset state period. System-populated field inherited from the monthly recurring revenue on the current asset state period. If no asset state period is current, the value is 0. Label is Current Monthly Recurring Revenue. This field is available in API version 50.0 and later. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "CurrentQuantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The asset’s quantity during the current asset state period. System-populated field inherited from the quantity on the current asset state period. If no asset state period is current, the value is 0. This field is available in API version 50.0 and later. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the asset."
+    },
+    "DigitalAssetStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Status of digital tracking of the asset. The default picklist includes the following values: On Off Warning: Error"
+    },
+    "ExternalIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the matching record in an external system. This field is available in API version 49.0 and later."
+    },
+    "GeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the address."
+    },
+    "HasLifecycleManagement": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "True if this asset is a lifecycle-managed asset, otherwise false. You can’t switch an asset to a lifecycle-managed asset or the reverse. This field is system populated. The default value is false.This field is available in API version 50.0 and later. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "InstallDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Date when the asset was installed."
+    },
+    "IsCompetitorProduct": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this Asset represents a product sold by a competitor (true) or not (false). The default value is false. Its UI label is Competitor Asset."
+    },
+    "IsInternal": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates that the asset is produced or used internally (true) or not (false). The default value is false. Its UI label is Internal Asset."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the asset was last modified. Its UI label is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the asset was last viewed."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the precise geolocation of the address."
+    },
+    "LifecycleEndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents the end of the asset’s lifecycle. System-populated field inherited from the end date of the final asset state period. If that field is empty, as with an evergreen subscription, the lifecycle has no end date. This field is available in API version 50.0 and later. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "LifecycleStartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents the beginning of the asset’s lifecycle. System-populated field inherited from the start date of the earliest asset state period. This field can’t be edited. When a new asset action affects the start date of an asset state period, the period is deleted and a new one is generated. This field is available in API version 50.0 and later. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "LocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset’s location. Typically, this location is the place where the asset is stored, such as a warehouse or van. If you have access to the location entity, it doesn’t necessarily mean you can access the location id field. To access the location, you must have userHasLocation user access."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the precise geolocation of the address."
+    },
+    "ManufactureDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date when the asset was manufactured. This field is available from API version 49.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "(Required) Name of the asset. Label is Asset Name."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The asset’s owner. By default, the asset owner is the user who created the asset record. Its UI label is Asset Owner. This field is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset’s parent asset. Its UI label is Parent Asset. This field is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code for the address."
+    },
+    "Price": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Price paid for this asset."
+    },
+    "PricingSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Pricing source to use when amending or renewing an asset. Valid values are: LastTransaction—Last Transaction PriceBookListPrice—Price Book or List Price Available in API version 60.0 and later."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "(Optional) ID of the Product2 associated with this asset. Must be a valid Product2 ID. Its UI label is Product. This field is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "ProductCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The product code of the related product."
+    },
+    "ProductDescription": {
+      "type": "string",
+      "properties": "Filter, Sort, Nillable",
+      "description": "The product description of the related product."
+    },
+    "ProductFamily": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort, Nillable",
+      "description": "The product family of the related product."
+    },
+    "PurchaseDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Date on which this asset was purchased."
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Quantity purchased or installed. The Quantity field value isn’t set by Customer Asset Lifecycle Management. Instead, you can populate the field as you need."
+    },
+    "QuantityIncreasePricingType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specify which pricing type to use when the quantity of this asset is increased. Its UI label is Pricing Type for Quantity Increase. This field is available in API version 56.0 and later. This field is available when Revenue Cloud is enabled. Possible values are: LastNegotiatedPrice—Available in API version 58.0 and later. ListPrice"
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique identifier for the asset. This field is a relationship field.",
+      "relationship_name": "RecordType",
+      "relationship_type": "Lookup",
+      "refers_to": "RecordType"
+    },
+    "Reliability": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of expected uptime where the asset wasn’t subject to unplanned downtime."
+    },
+    "RenewalPricingType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The price used when renewing a subscription. Its UI label is Pricing Type for Renewal. This field is available in API version 55.0 and later. This field is available when Revenue Cloud is enabled. Possible values are: LastNegotiatedPrice ListPrice"
+    },
+    "RenewalTerm": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "With Renewal Term Unit, defines the default subscription term for renewal quotes. This field is available in API version 55.0 and later. This field is available when Revenue Cloud is enabled."
+    },
+    "RenewalTermUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The unit of time for a subscription term. This field is available in API version 55.0 and later. This field is available when Revenue Cloud is enabled. Possible values are: Annual—Available in API version 58.0 and later. —UI label is Years. Months"
+    },
+    "SalesStoreId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the RetailStore or WebStore associated with this Asset. This field is a polymorphic relationship field. To access this field, your org must have a Salesforce Order Management license or a B2B Commerce License. This field is available in API v60.0 and later.",
+      "relationship_name": "SalesStore",
+      "relationship_type": "Lookup",
+      "refers_to": "RetailStore, WebStore"
+    },
+    "SerialNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Serial number for this asset."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state detail for the address."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Customizable picklist of values. The default picklist includes the following values: Purchased Shipped Installed Registered Obsolete"
+    },
+    "StatusReason": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The explanation of the device status. This field is available from API version 49.0 and later. Possible values are: Not Ready Off Offline Online Paused Standby"
+    },
+    "StockKeepingUnit": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The SKU assigned to the related product."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street detail for the address."
+    },
+    "SumDowntime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Accumulated downtime (planned and unplanned), determined as follows: When only UptimeRecordStart is set, the sum of all downtime from UptimeRecordStart When UptimeRecordStart and UptimeRecordEnd are set, the sum of all downtime from UptimeRecordStart to UptimeRecordEnd Otherwise, downtime isn’t accumulated."
+    },
+    "SumUnplannedDowntime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Accumulated unplanned downtime, determined as follows: When only UptimeRecordStart is set, the sum of all unplanned downtime from UptimeRecordStart When UptimeRecordStart and UptimeRecordEnd are set, the sum of all unplanned downtime from UptimeRecordStart to UptimeRecordEnd Otherwise, unplanned downtime isn’t accumulated."
+    },
+    "TotalLifecycleAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total amount of revenue for the asset, including revenue from each stage in the asset lifecycle. This field is available when CPQ Plus, Salesforce Billing, or Revenue Cloud is enabled."
+    },
+    "UptimeRecordEnd": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date until which SumDowntime and SumUnplannedDowntime are accumulated."
+    },
+    "UptimeRecordStart": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date from which SumDowntime and SumUnplannedDowntime are accumulated."
+    },
+    "UsageEndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Date when usage for this asset ends or expires."
+    },
+    "Uuid": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID for the asset. This field is available in API version 49.0 and later."
+    }
+  },
+  "usage": "Use this object to track products sold to customers. With asset tracking, a client application can quickly determine which products were previously sold or are currently installed at a specific account. You can also create hierarchies of up to 10,000 assets. For example, suppose that your company wants to renew and upsell opportunities on products sold in the past. Similarly, your company can track competitive products in a customer environment where products can be replaced or swapped out. Asset tracking is also useful for product support, providing detailed information to assist with product-specific support issues. For example, the PurchaseDate or SerialNumber can indicate whether a given product has certain maintenance requirements, including product recalls. Similarly, the UsageEndDate can indicate when the asset was removed from service or when a license or warranty expires. If an application creates an Asset record, it must specify a Name and either an AccountId, ContactId, or both.\n\nUse this object to track products sold to customers. With asset tracking, a client application can quickly determine which products were previously sold or are currently installed at a specific account. You can also create hierarchies of up to 10,000 assets.\n\nFor example, suppose that your company wants to renew and upsell opportunities on products sold in the past. Similarly, your company can track competitive products in a customer environment where products can be replaced or swapped out.\n\nAsset tracking is also useful for product support, providing detailed information to assist with product-specific support issues. For example, the PurchaseDate or SerialNumber can indicate whether a given product has certain maintenance requirements, including product recalls. Similarly, the UsageEndDate can indicate when the asset was removed from service or when a license or warranty expires.\n\nIf an application creates an Asset record, it must specify a Name and either an AccountId, ContactId, or both.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, those objects are available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AssetChangeEvent (API version 44.0)**: Change events are available for the object.\n- **AssetFeed**: Feed tracking is available for the object.\n- **AssetHistory**: History is available for tracked fields of the object.\n- **AssetOwnerSharingRule**: Sharing rules are available for the object.\n- **AssetShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"Asset\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Address\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetAccountParticipantsAsset\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetAttributes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetContactParticipantAsset\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetDowntimePeriods\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetLevel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"AssetProcessExceptions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetProvidedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AssetProvidedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AssetServicedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AssetServicedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AssetStatePeriods\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Cases\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ChildAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Contact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContractLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CurrentAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CurrentLifecycleEndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CurrentMrr\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CurrentQuantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Entitlements\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HasLifecycleManagement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"InstallDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"IsCompetitorProduct\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsInternal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Latitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LifecycleEndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LifecycleStartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Location\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"LocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Longitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MaintenanceAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Price\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"PrimaryAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Product2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Product2\"/>\n        <element name=\"Product2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProductCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProductServiceCampaignItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PurchaseDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Quantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordsetFltrCritMonitors\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ResourcePreferences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RootAsset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"RootAssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SerialNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SerializedProducts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceAppointments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StockKeepingUnit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TotalLifecycleAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UsageEndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WarrantyAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkPlanSelectionRules\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Address": {
+      "field_label": "Address",
+      "type": "address"
+    },
+    "AssetLevel": {
+      "field_label": "Asset Level",
+      "type": "int",
+      "digits": "9"
+    },
+    "AssetProvidedById": {
+      "field_label": "Asset Provided By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssetServicedById": {
+      "field_label": "Asset Serviced By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Availability": {
+      "field_label": "Availability",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "AverageUptimePerDay": {
+      "field_label": "Average Uptime Per Day",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BindingInstanceTargetId": {
+      "field_label": "BindingInstanceTarget ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "ConsequenceOfFailure": {
+      "field_label": "Consequence Of Failure",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CurrentAmount": {
+      "field_label": "Current Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CurrentLifecycleEndDate": {
+      "field_label": "Current Lifecycle End Date",
+      "type": "datetime"
+    },
+    "CurrentMrr": {
+      "field_label": "Current Monthly Recurring Revenue",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CurrentQuantity": {
+      "field_label": "Current Quantity",
+      "type": "double",
+      "precision": "14",
+      "scale": "2"
+    },
+    "CurrentQuantityUnitId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DigitalAssetStatus": {
+      "field_label": "Digital Asset Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DoesAutomaticallyRenew": {
+      "field_label": "Automatically Renew",
+      "type": "boolean"
+    },
+    "ExternalIdentifier": {
+      "field_label": "External Id",
+      "type": "string",
+      "length": "255"
+    },
+    "GeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "HasLifecycleManagement": {
+      "field_label": "Lifecycle-managed asset",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Asset ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InstallDate": {
+      "field_label": "Install Date",
+      "type": "date"
+    },
+    "IsCompetitorProduct": {
+      "field_label": "Competitor Asset",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsInternal": {
+      "field_label": "Internal Asset",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "LifecycleEndDate": {
+      "field_label": "Lifecycle End Date",
+      "type": "datetime"
+    },
+    "LifecycleStartDate": {
+      "field_label": "Lifecycle Start Date",
+      "type": "datetime"
+    },
+    "LocationId": {
+      "field_label": "Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ManufactureDate": {
+      "field_label": "Manufacture Date",
+      "type": "date"
+    },
+    "MeanTimeBetweenFailures": {
+      "field_label": "Average Time Between Failures",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "MeanTimeToRepair": {
+      "field_label": "Average Time to Repair",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Name": {
+      "field_label": "Asset Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Parent Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PostalCode": {
+      "field_label": "Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "Price": {
+      "field_label": "Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PricingSource": {
+      "field_label": "Pricing Source",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductCode": {
+      "field_label": "Product Code",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductDescription": {
+      "field_label": "Product Description",
+      "type": "string",
+      "length": "4000"
+    },
+    "ProductFamily": {
+      "field_label": "Product Family",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PurchaseDate": {
+      "field_label": "Purchase Date",
+      "type": "date"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "Reliability": {
+      "field_label": "Reliability",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "RenewalTerm": {
+      "field_label": "Renewal Term",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "RenewalTermUnit": {
+      "field_label": "Renewal Term Unit",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RootAssetId": {
+      "field_label": "Root Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SerialNumber": {
+      "field_label": "Serial Number",
+      "type": "string",
+      "length": "80"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "string",
+      "length": "80"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StatusReason": {
+      "field_label": "Status Reason",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StockKeepingUnit": {
+      "field_label": "Product SKU",
+      "type": "string",
+      "length": "180"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SumDowntime": {
+      "field_label": "Cumulative Downtime",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SumUnplannedDowntime": {
+      "field_label": "Cumulative Unplanned Downtime",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalLifecycleAmount": {
+      "field_label": "Total Lifecycle Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitPriceUplift": {
+      "field_label": "Unit Price Uplift",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "UptimeRecordEnd": {
+      "field_label": "Uptime Record End Date",
+      "type": "datetime"
+    },
+    "UptimeRecordStart": {
+      "field_label": "Uptime Record Start Date",
+      "type": "datetime"
+    },
+    "UsageEndDate": {
+      "field_label": "Usage End Date",
+      "type": "date"
+    },
+    "Uuid": {
+      "field_label": "Unique Identifier",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

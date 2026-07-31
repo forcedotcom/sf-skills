@@ -1,0 +1,170 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ProductComponentGroup - Data API",
+  "description": "Represents the logical grouping of associated products in a bundle and the products’ arrangement policy (group cardinality). This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Describes the group items of a product bundle feature. For example, a group’s contents can be the associated products that accompany a main product in a bundle."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a related record or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it’s possible that the user indirectly accessed this record (LastReferencedDate), but not viewed it."
+    },
+    "MaxBundleComponents": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of associated products allowed in a group."
+    },
+    "MinBundleComponents": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The minimum number of associated products allowed in a group."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the product component group. Maximum length is 255 characters (of any type)."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The unique identifier of the owner of this object. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ParentProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique identifier associated with the main product record. This field is a relationship field.",
+      "relationship_name": "ParentProduct",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "Sequence": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Determines the arrangement of the order products when configuring a bundle or set."
+    }
+  },
+  "special_access_rules": "This object is available when Industries EPC or Subscription Management is enabled.",
+  "field_reference": {
+    "Code": {
+      "field_label": "Code",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "Id": {
+      "field_label": "Product Component Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MaxBundleComponents": {
+      "field_label": "Max Number of Components",
+      "type": "int",
+      "digits": "9"
+    },
+    "MinBundleComponents": {
+      "field_label": "Min Number of Components",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Group Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentGroupId": {
+      "field_label": "Product Component Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Sequence": {
+      "field_label": "Sequence",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

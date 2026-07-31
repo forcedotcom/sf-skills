@@ -1,0 +1,12 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "TagDefinition - Data API",
+  "description": "Defines the attributes of child Tag objects.",
+  "special_access_rules": "As of Summer ’20 and later, only authenticated internal and external users can access this object.",
+  "usage": "When you create a tag for a record, an association is created with to a corresponding TagDefinition: Each TagDefinition record has a one-to-many relationship with its child tag records. Custom objects may also be tagged. Tags for custom objects are identified by a suffix of two underscores immediately followed by the word tag. For example, a custom object named Meeting has a corresponding tag named Meeting__tag in that organization’s WSDL. Meeting__tag is only valid for Meeting objects. TagDefinition is useful for mass operations on any tag record. For instance, if you want to rename existing tags, you can search for the appropriate TagDefinition object, update it, and the child tag's Name values are also changed. The following Java example replaces all WC tags with the phrase West Coast: When a tag is deleted, its parent TagDefinition will also be deleted if the name is not being used; otherwise, the parent remains. Deleting a TagDefinition sends it to the Recycle Bin, along with any associated tag entries.\n\nWhen you create a tag for a record, an association is created with to a corresponding TagDefinition:\n\nEach TagDefinition record has a one-to-many relationship with its child tag records.\n\nCustom objects may also be tagged. Tags for custom objects are identified by a suffix of two underscores immediately followed by the word tag. For example, a custom object named Meeting has a corresponding tag named Meeting__tag in that organization’s WSDL. Meeting__tag is only valid for Meeting objects.\n\nTagDefinition is useful for mass operations on any tag record. For instance, if you want to rename existing tags, you can search for the appropriate TagDefinition object, update it, and the child tag's Name values are also changed. The following Java example replaces all WC tags with the phrase West Coast:\n\nWhen a tag is deleted, its parent TagDefinition will also be deleted if the name is not being used; otherwise, the parent remains. Deleting a TagDefinition sends it to the Recycle Bin, along with any associated tag entries."
+}

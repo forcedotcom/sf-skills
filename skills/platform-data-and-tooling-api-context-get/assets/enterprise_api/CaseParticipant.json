@@ -1,0 +1,179 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "CaseParticipant - Data API",
+  "description": "Represents a junction between a case, and an account or a contact. This object stores the details of the participant associated with a case. This participant could be the applicant, co-applicant, a household, or even a business account. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AuthorizationProof": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "How the participant communicated their consent. This field is available in API version 58.0 and later. Possible values are: Email Consent Joint Ownership Power of Attorney Verbal Consent"
+    },
+    "CaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The case associated with the case participant record. This field is a relationship field.",
+      "relationship_name": "Case",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, possibly the user only accessed this record or list view (LastReferencedDate) but didn't view it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the case participant record."
+    },
+    "ParticipantId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The participant associated with the case participant record. This field is a polymorphic relationship field.",
+      "relationship_name": "Participant",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Contact"
+    },
+    "PreferredCallTimeFrom": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The start of the preferred time window for contacting the participant. This field is available in API version 58.0 and later."
+    },
+    "PreferredCallTimeTo": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The end of the preferred time window for contacting the participant. This field is available in API version 58.0 and later."
+    },
+    "PreferredCommunicationMode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "How the participant prefers to receive messages. This field is available in API version 58.0 and later. Possible values are: Email Phone SMS"
+    },
+    "Role": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The role of the case participant. Possible values are: Applicant Complainant Representative (Available in API version 58.0 and later.) Inspection Officer Lawyer Observer Perpetrator Primary Caretaker Victim The default value is Applicant."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the case participant. Possible values are: Active Inactive In Review (Available in API version 58.0 and later.) Pending (Available in API version 58.0 and later.) Submitted (Available in API version 58.0 and later.)"
+    }
+  },
+  "special_access_rules": "Fields and values added in API version 58.0 are available if the add-on license for Financial Services Cloud is enabled.\n\nFields and values added in API version 58.0 are\n         available if the add-on license for Financial Services Cloud is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CaseParticipantFeed**: Feed tracking is available for the object.\n- **CaseParticipantHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "AuthorizationProof": {
+      "field_label": "Authorization Proof",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Case Participant ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParticipantId": {
+      "field_label": "Participant ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreferredCallTimeFrom": {
+      "field_label": "Preferred Contact Start Time",
+      "type": "time"
+    },
+    "PreferredCallTimeTo": {
+      "field_label": "Preferred Contact End Time",
+      "type": "time"
+    },
+    "PreferredCommunicationMode": {
+      "field_label": "Preferred Communication Mode",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Role": {
+      "field_label": "Role",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

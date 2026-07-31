@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "DevopsPipelnStgPromWkItem - Data API",
+  "description": "Represents the association between a work item and a pipeline stage promotion. The object tracks the merge status of the work item into the target stage branch in source control. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DevopsPipelnStgPromId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent pipeline stage promotion record. This field is a relationship field.",
+      "relationship_name": "DevopsPipelnStgProm",
+      "relationship_type": "Master-detail",
+      "refers_to": "DevopsPipelnStgProm (the parent object)"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "MergeCompletionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the merge operation for this specific work item was completed in the source control system."
+    },
+    "MergeRemoteReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A unique reference identifier from the remote source control provider, such as a Pull Request ID, for the merge associated with this promotion."
+    },
+    "MergeSourceBranchId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the source branch in the repository from which changes were merged for this work item during this promotion. This field is a relationship field.",
+      "relationship_name": "MergeSourceBranch",
+      "refers_to": "SourceCodeRepositoryBranch"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique identifier for the pipeline stage promotion work item record."
+    },
+    "WorkItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the work item that is promoted. This field is a relationship field.",
+      "relationship_name": "WorkItem",
+      "refers_to": "WorkItem"
+    }
+  },
+  "usage": "Use this object to track how individual work items move forward through the release lifecycle. When a work item is promoted, either individually as part of custom promotion or as part of a stage promotion, this record captures the source branch information and the completion status of the merge operation in the source control system.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **DevopsPipelnStgPromWkItemChangeEvent**: Change events are available for the object.\n- **DevopsPipelnStgPromWkItemFeed**: Feed tracking is available for the object.\n- **DevopsPipelnStgPromWkItemHistory**: History is available for tracked fields of the object.\n- **DevopsPipelnStgPromWkItemOwnerSharingRule**: Sharing rules are available for the object.\n- **DevopsPipelnStgPromWkItemShare**: Sharing is available for the object."
+}

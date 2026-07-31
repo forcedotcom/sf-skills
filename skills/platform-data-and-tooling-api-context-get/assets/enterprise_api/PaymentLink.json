@@ -1,0 +1,291 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "PaymentLink - Data API",
+  "description": "A link that a merchant can share with customers to collect payments for products and services. The payment link, which you can embed into a Salesforce app or send directly to a customer, directs the customer to a Pay Now payment page. The page can show a total amount owed or an itemized list or products, shipping and tax charges, and a total amount owed. The customer enters their contact and payment details, and submits their payment. The amounts are shown in the store's currency. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Payer account. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Amount the payer owes."
+    },
+    "CartId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the cart record.",
+      "relationship_name": "Cart",
+      "relationship_type": "Lookup",
+      "refers_to": "Webcart"
+    },
+    "CollectionPlanId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The collection plan associated with the payment link. This field is a relationship field. Available in API version 63.0 and later with Financial Services and Automotive Cloud.",
+      "relationship_name": "CollectionPlan",
+      "refers_to": "CollectionPlan"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "3-digit ISO code for the payment currency that is shown on the Pay Now page. Possible values are: EUR – Euro GBP – British Pound USD – US Dollar The default value is USD."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Text on the Pay Now payment page that’s visible to your customers. This text can communicate any information you want."
+    },
+    "Expiry Time": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time that the payment link expires. The time is based on the user’s time zone, not the org’s time zone."
+    },
+    "IsBusinessAccountPayment": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the payment link is for a business account (true) or not (false). The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record can be referenced and not viewed directly."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who owns this record.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PaymentInitiationSource": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The origin of the payment, based on the information in the Payment Link record."
+    },
+    "PaymentLinkNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-generated number that identifies the payment link."
+    },
+    "PaymentMethodSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Reference to the PaymentMethodSet object, which determines what payment methods are shown to the payer. This field is a relationship field.",
+      "relationship_name": "PaymentMethodSet",
+      "relationship_type": "Lookup",
+      "refers_to": "MerchAccPaymentMethodSet"
+    },
+    "PaymentScheduleItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The payment schedule item associated with the payment link. This field is a relationship field. Available in API version 63.0 and later with Financial Services and Automotive Cloud.",
+      "relationship_name": "PaymentScheduleItem",
+      "refers_to": "PaymentScheduleItem"
+    },
+    "PaymentUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique URL of the Pay Now page. This URL IS auto-generated, and not editable."
+    },
+    "QrCodeImageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reference to the QR code image included in the payment link record. This field is a relationship field.",
+      "relationship_name": "QrCodeImage",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentVersion"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the payment link is active and can be used. Possible values are: Active Disabled The default value is Active."
+    },
+    "TaxAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Amount of the tax for the purchase. This amount is shown on the Pay Now page."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Title of the Pay Now page, indicating what is being paid."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the type of payment link created, which the merchant can share with the customer to receive payment. The payment link also determines which Pay Now page is generated and what’s included on that page. Possible values are: CheckoutWithOrder (only for orgs with Payments and Commerce)—includes the amount owed based on the products you select, lists the products purchased, and calculates tax using the billing address and selected shipping options. After a customer makes a payment, this link type creates an order record. PredefinedAmount—shows only an amount due for products purchased. The merchant enters the amount due when creating the payment link. WithProducts—Deprecated. New payment links can't be created with this link type. The default value is PredefinedAmount."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Determines whether the payment link is used one time or multiple times before the configured expiration date and time. Possible values are: MultiUse SingleUse The default value is MultiUse."
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license with the Payments permission enabled for your org. Salesforce Payments entities are available only in Lightning Experience.\n\nTo access Salesforce Payments objects, you must\n         have a Salesforce Payments license with the Payments permission enabled for your org.\n         Salesforce Payments entities are available only in Lightning Experience.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PaymentLinkOwnerSharingRule**: Sharing rules are available for the object.\n- **PaymentLinkShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "CartId": {
+      "field_label": "Cart ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "ExpiryTime": {
+      "field_label": "Expiration",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Payment Link ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsBusinessAccountPayment": {
+      "field_label": "Is Business Account Payment",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentInitiationSource": {
+      "field_label": "Payment Initiation Source",
+      "type": "string",
+      "length": "1000"
+    },
+    "PaymentLinkNumber": {
+      "field_label": "Payment Link Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentMethodSetId": {
+      "field_label": "Merchant Account Payment Method Set ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentUrl": {
+      "field_label": "Payment URL",
+      "type": "url",
+      "length": "255"
+    },
+    "QrCodeImageId": {
+      "field_label": "Content Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxAmount": {
+      "field_label": "Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "80"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

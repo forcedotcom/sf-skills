@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ConvAnalysisTopic - Data API",
+  "description": "Represents a topic generated from the Sales Signals refresh or run. For example, a product experiencing issues due to high pricing could be a topic identified through the analysis of multiple calls. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CallPercentage": {
+      "type": "double",
+      "properties": "Create, Filter, Sort",
+      "description": "The percentage of calls that apply to a topic, out of the total number of calls that were analyzed.",
+      "required": true
+    },
+    "Category": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A classification or grouping used to filter topics. This field is used in conjunction with Keyword.",
+      "required": true
+    },
+    "ConvAnalysisSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The conversation analysis summary associated with the topic. This field is a relationship field.",
+      "relationship_name": "ConvAnalysisSummary",
+      "relationship_type": "Master-detail",
+      "refers_to": "ConvAnalysisSummary (the parent object)",
+      "required": true
+    },
+    "GenerationsIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID used to track the LLM-generated response for feedback purposes.",
+      "required": true
+    },
+    "Keyword": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A specific word used in conjunction with Category to filter topics. For example, Product:Salesforce, where the keyword is Salesforce.",
+      "required": true
+    },
+    "MentionCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The number of call insights associated with the topic.",
+      "required": true
+    },
+    "Order": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A numerical value used to sort topics in a sequence.",
+      "required": true
+    },
+    "Summary": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "A detailed explanation of the topic.",
+      "required": true
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The title of the topic that describes it.",
+      "required": true
+    },
+    "TopicSentiment": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The sentiment of the topic, whether it’s negative, neutral, or positive."
+    },
+    "TotalCalls": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The total number of calls analyzed for the topic."
+    },
+    "TotalCallsForCategoryKeyword": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The total number of calls analyzed for category:keyword. Multiple topics can be under a single category:keyword."
+    },
+    "TotalMentionsForCategoryKeyword": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The total number of mentions analyzed for category:keyword."
+    },
+    "TurnIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "UUID that is generated and used to track a group of LLM-generated content."
+    }
+  },
+  "special_access_rules": "Users need the Sales Signals permission set and the Sales Signals feature must be enabled."
+}

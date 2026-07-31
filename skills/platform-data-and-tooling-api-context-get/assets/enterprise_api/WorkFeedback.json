@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "WorkFeedback - Data API",
+  "description": "Represents the answer to a question that a person was asked via a feedback request. Also used to store offered feedback without linking it to a particular question.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Feedback": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Contains either the free-form text of the answer, or the choice selected by the user. Max length is 65536."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the WorkFeedback record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the WorkFeedback record."
+    },
+    "QuestionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The question this answer applies to. When this feedback is linked to a request of an unsolicited type, the question ID is null."
+    },
+    "RequestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the request this response belongs to, in case of offered feedback."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **WorkFeedbackOwnerSharingRule**: Sharing rules are available for the object.\n- **WorkFeedbackShare**: Sharing is available for the object."
+}

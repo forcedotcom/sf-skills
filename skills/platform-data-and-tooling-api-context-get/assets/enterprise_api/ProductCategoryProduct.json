@@ -1,0 +1,143 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ProductCategoryProduct - Data API",
+  "description": "Holds the relation between product and product category to assign products to a category. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Catalog": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The foreign key to the ProductCatalog ID of the Category."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Possible values are: EUR—Euro USD—U.S. Dollar The default value is USD."
+    },
+    "EffectiveEndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date after which the catalog is unavailable to end users."
+    },
+    "EffectiveStartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date on which the catalog is available to end users."
+    },
+    "IsPrimaryCategory": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the ProductCategory is the primaryProductCategory for a given product in a ProductCatalog. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the ProductCategoryProduct record."
+    },
+    "ProductCategory": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Foreign key to the ProductCategory ID."
+    },
+    "Product": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the product."
+    },
+    "ProductToCategory": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Concatenated Product ID and Category ID."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The lifecycle state of the catalog. Possible values include: Draft, Active, Inactive"
+    }
+  },
+  "special_access_rules": "You must have the Industries, Retail, or B2B Commerce license.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ProductCategoryProductEvent (API version 55.0)**: Change events are available for the object.",
+  "field_reference": {
+    "CatalogId": {
+      "field_label": "Catalog ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Product Category Product ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPrimaryCategory": {
+      "field_label": "Is Primary Category",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductCategoryId": {
+      "field_label": "Category ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductToCategory": {
+      "field_label": "Product/Category Concatenation",
+      "type": "string",
+      "length": "30"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AssetRelationship - Data API",
+  "description": "Represents a non-hierarchical relationship between assets due to an asset modification; for example, a replacement, upgrade, or other circumstance. In Revenue Lifecycle Management, this object represents an asset or assets grouped in a bundle or set. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique identifier of the new asset, which is the asset that is taking the place of the existing asset. This field is a relationship field.",
+      "relationship_name": "Asset",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "AssetRelationshipNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number identifying the asset relationship."
+    },
+    "AssetRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes the position of the main asset relative to the other assets in the relationship. This field is available in API version 58.0 and later. This field is available in orgs with Revenue Cloud. Possible values are: Add-on—The main asset is an add-on. Bundle—The main asset is the bundle parent. Set—The asset is the main asset in the set."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code associated with the asset. The default value is USD."
+    },
+    "FromDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the new asset was installed."
+    },
+    "GroupingKey": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "Read-only field used to indicate the bundle that an asset belongs to. For example, if two assets have the same GroupingKey value, then it means that the assets are bundled together. This field is available in API v.60.0 and later. This field is available in orgs with Revenue Cloud."
+    },
+    "ProductRelationshipTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier of the record that describes the relationship between the main and associated assets. This field is available in API version 58.0 and later. This field is available in orgs with Revenue Cloud. This field is a relationship field.",
+      "relationship_name": "ProductRelationshipType",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductRelationshipType"
+    },
+    "ProductRelatedComponent": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The product related component that’s associated with the asset relationship. This field is a relationship field. This field is available in API 60.0 and later in Revenue Cloud.",
+      "relationship_name": "ProductRelatedComponent",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductRelatedComponent"
+    },
+    "RelatedAssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The existing asset that is being modified. This field is a relationship field.",
+      "relationship_name": "RelatedAsset",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "RelatedAssetPricing": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies whether the price of the related asset is included in the bundle price. Valid values are: IncludedInBundlePrice NotIncludedInBundlePrice This field is available in API version 59.0 and later in Revenue Cloud."
+    },
+    "RelatedAssetQtyScaleMethod": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies how the quantity of the related asset changes relative to the quantity of the parent asset. Valid values are: Constant Proportional This field is available in API version 59.0 and later in Revenue Cloud."
+    },
+    "RelatedAssetRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes the position of the associated asset relative to other assets in the relationship. This field is available in API version 58.0 and later. This field is available in orgs with Revenue Cloud. Valid values are: Add-on—The main asset is an add-on. Bundle—The main asset is the bundle parent. Set—The asset is the main asset in the set. Simple—The asset is purchased individually and isn’t associated with variations. Variation Parent——The main asset is the variation parent."
+    },
+    "RelationshipType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of relationship between the existing asset and the new asset. This field comes with three values—Replacement, Upgrade, and Crossgrade—, but you can create more values in Setup. Possible values are: Crossgrade—The new asset is a crossgrade of an existing asset. For example, changing a subscription to a plan with the same service, but that runs for a longer amount of time. Replacement—The new asset is replacing an existing asset. For example, a customer’s faulty widget that was under warranty is being replaced with a new one. Upgrade—The new asset is an upgrade of an existing asset. For example, upgrading a customer’s existing subscription plan to a new plan with more services. The default value is Replacement."
+    },
+    "ToDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the modified asset is uninstalled."
+    }
+  },
+  "special_access_rules": "Some fields are available only in Revenue Cloud. Field availability is noted in the field detail column.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AssetRelationshipChangeEvent (API version 62.0)**: Change events are available for the object.\n- **AssetRelationshipFeed**: Feed tracking is available for the object.\n- **AssetRelationshipHistory**: History is available for tracked fields of the object.\n- **AssetRelationshipOwnerSharingRule (API version 58.0)**: Sharing rules are available for the object.\n- **AssetRelationshipShare (API version 58.0)**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"AssetRelationship\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Asset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"AssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AssetRelationshipNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FromDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedAsset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"RelatedAssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RelationshipType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ToDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssetRelationshipNumber": {
+      "field_label": "Asset Relationship Number",
+      "type": "string",
+      "length": "255"
+    },
+    "AssetRole": {
+      "field_label": "Asset Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FromDate": {
+      "field_label": "From Date",
+      "type": "datetime"
+    },
+    "GroupingKey": {
+      "field_label": "Grouping Key",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Asset Relationship ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ProductRelatedComponentId": {
+      "field_label": "Product Related Component ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductRelationshipTypeId": {
+      "field_label": "Product Relationship Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedAssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedAssetPricing": {
+      "field_label": "Related Asset Pricing",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedAssetQtyScaleMethod": {
+      "field_label": "Related Asset Quantity Scale Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedAssetRole": {
+      "field_label": "Related Asset Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelationshipType": {
+      "field_label": "Relationship Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ToDate": {
+      "field_label": "To Date",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "EmailInsightAction - Data API",
+  "description": "Represents the actions that have been taken, or could be taken, in relation to email insights. It logs different types of actions and associated metadata, helping to track and manage the activities and decisions made based on email insights. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionMetadata": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The metadata for the action."
+    },
+    "EmailInsightId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the email insight where the action is applied. This field is a relationship field.",
+      "relationship_name": "EmailInsight",
+      "refers_to": "EmailInsight",
+      "required": true
+    },
+    "InsightAction": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The action that's taken on the email insight. Possible values are: CreateCalendarEvent CreateTaskWithDate EciCreateEmail EciScheduleMeetings EciSendEmail EmailReply EmailReplyLater EmailReplyWithTemplate InsertFreeTime PostOnChatter ViewCalendar ViewContactProfile The default value is EmailReply.",
+      "required": true
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email insight action record is locked or not. The default value is false."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email insight action record can be edited or not. The default value is false."
+    },
+    "RowVersion": {
+      "type": "string",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "A system-generated, read-only field that tracks the version of a record. Each time a record is created or updated, the RowVersion value increments, providing a mechanism to detect changes and manage concurrency."
+    }
+  },
+  "special_access_rules": "EmailStream permission must be enabled. EmailStreamPref and SyncEmailToCoreActivity Org prefs must be enabled. To be able to see SyncEmailToCoreActivity preference, EACLegacyEmailSyncAWS Org permission, AnalyticsActivity, UnifiedActivities, and ActivityMetrics must be disabled. In addition, license to Standard Einstein Activity Capture and turning on Einstein Activity Capture and EmailInsights provisions the required permissions and preferences.\n\nEmailStream permission must be enabled.\n\nEmailStreamPref and SyncEmailToCoreActivity Org prefs must be enabled.\n\nTo be able to see SyncEmailToCoreActivity preference, EACLegacyEmailSyncAWS Org permission, AnalyticsActivity, UnifiedActivities, and ActivityMetrics must be disabled. In addition, license to Standard Einstein Activity Capture and turning on Einstein Activity Capture and EmailInsights provisions the required permissions and preferences."
+}

@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "MetadataPackageVersion - Tooling API",
+  "description": "Represents a package version (managed or unmanaged) that has been uploaded from the org you’re logged in to. Available in Tooling API version 38.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BuildNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The build number of the version. For example, if you upload two beta versions, they have build numbers 1 and 2. Then, when you upload a released build of the same version, the build number is 3. When you upload a new version, the build number resets to 1."
+    },
+    "IsDeprecated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the package version is deprecated. Available in API version 46.0 and later."
+    },
+    "MajorVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The first number in a package version number. A version number either has an x.y format or an x.y.z format. The x represents the major version, y the minor version, and z the patch version."
+    },
+    "MetadataPackageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character package ID, which starts with 033."
+    },
+    "MinorVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The second number in a package version number. A version number either has an x.y format or an x.y.z format. The x represents the major version, y the minor version, and z the patch version."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the package version."
+    },
+    "PatchVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The third number in a package version number, if present. A version number either has an x.y format or an x.y.z format. The x represents the major version, y the minor version, and z the patch version."
+    },
+    "ReleaseState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If the package version is a beta version, the value is Beta. Otherwise, the value is Released."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MetadataPackageVersion\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"BuildNumber\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeprecated\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"MajorVersion\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataPackage\" minOccurs=\"0\" type=\"ens:MetadataPackage\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataPackageId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"MinorVersion\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"PatchVersion\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"ReleaseState\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

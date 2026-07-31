@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "DatasetExportPart - Data API",
+  "description": "Represents a dataset exported from CRM Analytics. When a dataset is exported, the data is converted into a .csv file and the schema is stored in a separate JSON file. These files are stored in two objects: DatasetExport and DatasetExportPart. DatasetExportPart contains parts of the .csv file.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CompressedDataFileLength": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "This field is required when a record in an object contains a BLOB (binary large object) field. In the DataExportPart object, DataFile is the BLOB field."
+    },
+    "DataFile": {
+      "type": "base64",
+      "description": "Contains a part of the dataset data from the generated .csv file. Maximum size is 32 MB."
+    },
+    "DataFileLength": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "This field is required when a record in an object contains a BLOB (binary large object) field. In the DataExportPart object, DataFile is the BLOB field."
+    },
+    "DatasetExportId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the parent record that the part record is associated with."
+    },
+    "Owner": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "User ID of the owner, as specified in the userId parameter in the export node of the dataflow that created the record. Only the specified owner can read the content of the record."
+    },
+    "PartNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Used with the DatasetExportId to uniquely identify the data part. Parts are assembled sequentially based on their numbers."
+    }
+  },
+  "usage": "This object is used with the DatasetExport object for exporting data from a dataset in CRM Analytics for use in Einstein Discovery. An export is initiated using the export node in an Analytics dataflow.\n\nThis object is used with the DatasetExport object for exporting\n      data from a dataset in CRM Analytics for use in Einstein Discovery. An export is initiated\n      using the export node in an Analytics dataflow.",
+  "field_reference": {
+    "CompressedDataFileLength": {
+      "field_label": "Compressed Data File Length",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataFile": {
+      "field_label": "Data File",
+      "type": "base64"
+    },
+    "DataFileLength": {
+      "field_label": "Data File Length",
+      "type": "int",
+      "digits": "9"
+    },
+    "DatasetExportId": {
+      "field_label": "Dataset Export ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Dataset Export Part ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Owner": {
+      "field_label": "Owner",
+      "type": "string",
+      "length": "18"
+    },
+    "PartNumber": {
+      "field_label": "Part Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

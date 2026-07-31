@@ -1,0 +1,152 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentTermItem - Data API",
+  "description": "Defines the attributes of a payment term that your company uses. The PaymentTermItem is used to determine the due date on invoices. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "User-defined field that describes the details of the payment term item."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated sequential number, such as PTI-000001."
+    },
+    "PaymentTermId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the payment term that this payment term item is associated with. This field is a relationship field.",
+      "relationship_name": "PaymentTerm",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentTerm"
+    },
+    "PaymentTimeframe": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates the time period when the payment is expected. Possible values are: Standard—Indicates that payment is expected by the date specified in the payment term. If payment isn't received by the due date, the payment becomes overdue. The default value is Standard."
+    },
+    "Period": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the number of units in the payment period. Used with the PeriodUnit field. For example, to define a payment term of Net 30, enter 30 as the Period and select Days as the PeriodUnit."
+    },
+    "PeriodUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the unit of time for the payment period. Used with the Period field. For example, to define a payment term of Net 30, enter 30 as the Period and select Days as the PeriodUnit. Possible values are: Days"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies how the payment term and invoice due date are derived. Possible values are: Period-Based—Tells the system to use the Period and PeriodUnit fields to calculate the invoice due date. The default value is Period-Based."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Payment Term Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentTermId": {
+      "field_label": "Payment Term ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentTimeframe": {
+      "field_label": "Payment Timeframe",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Period": {
+      "field_label": "Period",
+      "type": "int",
+      "digits": "9"
+    },
+    "PeriodUnit": {
+      "field_label": "Period Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

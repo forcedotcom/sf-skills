@@ -1,0 +1,300 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OSAsyncChgCompletedEvent - Data API",
+  "description": "An event that allows the processing of the credit memo, invoices, and other entities after a bulk action has successfully completed. The event provides all of the values that would exist on the synchronous APIs. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionType": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The type of the action that gets applied to Order Summary Possible values are: CANCEL_ALL RETURN_ALL"
+    },
+    "AsyncOperationLogId": {
+      "type": "reference",
+      "properties": "Create, Nillable",
+      "description": "The ID of the AsyncOperationLog. This field is a relationship field.",
+      "relationship_name": "AsyncOperationLog",
+      "refers_to": "AsyncOperationLog"
+    },
+    "CurrencyIsoCode": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The ISO code for the currency of the OrderSummary that's associated with the FulfillmentOrder. This field is available only for orgs with multicurrencies enabled. Possible values are: CNY—Chinese Yuan GBP—British Pound USD—U.S. Dollar The default value is USD."
+    },
+    "EventUuid": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "Uniquely identifies an event message. The ID used to match the events that are returned in the callback result with the events in the publish call."
+    },
+    "FeeChangeOrderId": {
+      "type": "reference",
+      "properties": "Create, Nillable",
+      "description": "The change order for the fee ID. This order usually used for invoices. This field is a relationship field.",
+      "relationship_name": "FeeChangeOrder",
+      "refers_to": "Order"
+    },
+    "GrandTotalAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The new order summary's grand total. This amount is equal to TotalAmount + TotalTaxAmount."
+    },
+    "InFulfillmentChangeOrderId": {
+      "type": "reference",
+      "properties": "Create, Nillable",
+      "description": "The change order for any items during fulfillment. This field is a relationship field.",
+      "relationship_name": "InFulfillmentChangeOrder",
+      "refers_to": "Order"
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Nillable",
+      "description": "The foreign key for the master Order Summary entity. This field is a relationship field.",
+      "relationship_name": "OrderSummary",
+      "refers_to": "OrderSummary"
+    },
+    "PostFulfillmentChangeOrderId": {
+      "type": "reference",
+      "properties": "Create, Nillable",
+      "description": "The change order for any items post-fulfillment. This ID is used for credit memos refunds This field is a relationship field.",
+      "relationship_name": "PostFulfillmentChangeOrder",
+      "refers_to": "Order"
+    },
+    "PreFulfillmentChangeOrderId": {
+      "type": "reference",
+      "properties": "Create, Nillable",
+      "description": "The change order for any items that haven't been fulfilled. This field is a relationship field.",
+      "relationship_name": "PreFulfillmentChangeOrder",
+      "refers_to": "Order"
+    },
+    "TotalAdjDistAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total distributed adjustment amount without taxes."
+    },
+    "TotalAdjDistTaxAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total distributed adjustment taxes."
+    },
+    "TotalAdjustedDeliveryAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total delivery adjusted amount without taxes."
+    },
+    "TotalAdjustedDeliveryTaxAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total delivery adjusted tax amount ."
+    },
+    "TotalAdjustedProductAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total adjusted product amount without tax."
+    },
+    "TotalAdjustedProductTaxAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total adjusted product tax amount. This amount is equal to TotalAdjustmentAmount + TotalAdjustmentTaxAmount."
+    },
+    "TotalAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total amount, not including taxes."
+    },
+    "TotalExcessFundsAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The amount used to determine if a refund is needed pre-fulfillment."
+    },
+    "TotalFeeAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "Total fee amount, not including taxes."
+    },
+    "TotalFeeTaxAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total fee tax amount."
+    },
+    "TotalRefundableAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The amount that can be refunded to the client."
+    },
+    "TotalRequiredFundsAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The total amount of required funds."
+    },
+    "TotalTaxAmount": {
+      "type": "double",
+      "properties": "Create, Nillable",
+      "description": "The combined total of all taxes."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs.\n\nThis object is only available in Salesforce Order\n         Management orgs.",
+  "field_reference": {
+    "ActionType": {
+      "field_label": "Action Type",
+      "type": "string",
+      "length": "255"
+    },
+    "AsyncOperationLogId": {
+      "field_label": "Async Operation Log ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "string",
+      "length": "40"
+    },
+    "EventUuid": {
+      "field_label": "Order Summary Async Change Completed Event Event UUID",
+      "type": "string",
+      "length": "36"
+    },
+    "FeeChangeOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Grand Total Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "InFulfillmentChangeOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PostFulfillmentChangeOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreFulfillmentChangeOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReplayId": {
+      "field_label": "Order Summary Async Change Completed Event Replay ID",
+      "type": "string",
+      "length": "1000"
+    },
+    "TotalAdjDistAmount": {
+      "field_label": "Total Adjustment Distributed Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjDistTaxAmount": {
+      "field_label": "Total Adjustment Distributed Tax Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedDeliveryAmount": {
+      "field_label": "Total Adjusted Delivery Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedDeliveryTaxAmount": {
+      "field_label": "Total Adjusted Delivery Tax Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedProductAmount": {
+      "field_label": "Total Adjusted Product Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedProductTaxAmount": {
+      "field_label": "Total Adjusted Product Tax Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Total Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalExcessFundsAmount": {
+      "field_label": "Total Excess Funds Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAmount": {
+      "field_label": "Total Fee Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeTaxAmount": {
+      "field_label": "Total Fee Tax Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalRefundableAmount": {
+      "field_label": "Total Refundable Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalRequiredFundsAmount": {
+      "field_label": "Total Required Funds Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

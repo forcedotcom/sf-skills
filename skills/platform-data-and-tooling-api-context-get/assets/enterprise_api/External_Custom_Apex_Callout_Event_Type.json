@@ -1,0 +1,124 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "External Custom Apex Callout Event Type - Data API",
+  "description": "External Custom Apex Callout events represent external data callouts via custom adapters for Salesforce Connect. This event type is available in the EventLogFile object in API version 40.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "possible_values",
+    "example",
+    "examples"
+  ],
+  "fields": {
+    "ACTION": {
+      "type": "String",
+      "description": "Action performed by the callout.",
+      "possible_values": "query upsert delete"
+    },
+    "ENTITY": {
+      "type": "String",
+      "description": "Name of the external object being accessed.",
+      "example": "Order"
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "Type of event. Value is always ExternalCustomApexCallout."
+    },
+    "EXECUTE_MS": {
+      "type": "Number",
+      "description": "How long it took (in milliseconds) for Salesforce to prepare and execute the query. Available in API version 42.0 and later.",
+      "example": "102"
+    },
+    "FETCH_MS": {
+      "type": "Number",
+      "description": "How long it took (in milliseconds) to retrieve the query results from the external system. Available in API version 42.0 and later.",
+      "example": "607"
+    },
+    "FILTER": {
+      "type": "Text",
+      "description": "Field expressions to filter which rows to return. Corresponds to WHERE in SOQL queries.",
+      "example": "Filter:[columnName=CustomerID, columnValue=537, subfilters=null, tableName=Order, type=EQUALS]"
+    },
+    "LIMIT": {
+      "type": "Number",
+      "description": "Maximum number of rows to return for a query. Corresponds to LIMIT in SOQL queries.",
+      "example": "200"
+    },
+    "MESSAGE": {
+      "type": "String",
+      "description": "Error or warning message associated with the failed call.",
+      "example": "System.UnexpectedException: Query is either selecting too many fields or the filter conditions are too complicated"
+    },
+    "OFFSET": {
+      "type": "Number",
+      "description": "Number of rows to skip when paging through a result set. Corresponds to OFFSET in SOQL queries.",
+      "example": "0 (default)"
+    },
+    "ORDERBY": {
+      "type": "String",
+      "description": "Field or column to use for sorting query results, and whether to sort the results in ascending (default) or descending order. Corresponds to ORDER BY in SOQL queries.",
+      "examples": "(Order:[columnName=OrderDate, direction=ASCENDING, tableName=Order])"
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "15-character ID of the organization.",
+      "example": "00D000000000123"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "Unique ID of a transaction. A transaction can contain one or more events. All events in a transaction have the same REQUEST_ID.",
+      "example": "4A13-HSKv3CKs-0FKfceaV"
+    },
+    "ROWS": {
+      "type": "Number",
+      "description": "Total number of records in the result set.The value is always -1 if the custom adapter’s DataSource.Provider class doesn’t declare the QUERY_TOTAL_SIZE capability.",
+      "example": "200"
+    },
+    "ROWS_FETCHED": {
+      "type": "Number",
+      "description": "Number of rows fetched by the callout. Available in API version 42.0 and later.",
+      "example": "200"
+    },
+    "SELECT": {
+      "type": "String",
+      "description": "Comma-separated list of fields being queried. Corresponds to SELECT in SOQL queries.",
+      "example": "(ColumnSelection:[aggregation=NONE, columnName=Name, tableName=Order], ColumnSelection:[aggregation=NONE, columnName=CustomerID, tableName=Order], ColumnSelection:[aggregation=NONE, columnName=OrderDate, tableName=Order])"
+    },
+    "STATUS": {
+      "type": "Boolean",
+      "description": "Whether the query was successful.",
+      "possible_values": "1—Success 0—Failed Empty—Failed with no logged status or message"
+    },
+    "THROUGHPUT": {
+      "type": "Number",
+      "description": "Number of records retrieved in one second.",
+      "example": "302.57"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT. For example: 20130715233322.670."
+    },
+    "SUBQUERIES": {
+      "type": "Number",
+      "description": "Reserved for future use."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). For example: 2015-07-27T11:32:59.555Z. Timezone is GMT."
+    },
+    "TOTAL_MS": {
+      "type": "Number",
+      "description": "How long it took (in milliseconds) to prepare and execute the query and to retrieve the query results.",
+      "example": "709"
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "15-character ID of the user accessing the external system.",
+      "example": "00530000009M943"
+    }
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Prospect - Data API",
+  "description": "Represents a prospect. A prospect is an individual who has shared contact information, but isn't yet qualified. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Street address of the prospect. Up to 255 characters are allowed."
+    },
+    "AnnualRevenue": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The prospect company's yearly revenue."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "City that's included in the prospect’s address."
+    },
+    "Company": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The prospect's company."
+    },
+    "ConvertedAccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Object reference ID that points to the account into which the prospect converted. This is a relationship field.",
+      "relationship_name": "ConvertedAccount",
+      "refers_to": "Account"
+    },
+    "ConvertedContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Object reference ID that points to the contact into which the prospect converted. This is a relationship field.",
+      "relationship_name": "ConvertedContact",
+      "refers_to": "Contact"
+    },
+    "ConvertedDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Date on which this prospect was converted."
+    },
+    "ConvertedLeadId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Object reference ID that points to the lead into which the prospect has been converted. This is a relationship field. This field is a relationship field.",
+      "relationship_name": "ConvertedLead",
+      "refers_to": "Lead"
+    },
+    "ConvertedOpportunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Object reference ID that points to the opportunity into which the prospect has been converted. This is a relationship field.",
+      "relationship_name": "ConvertedOpportunity",
+      "refers_to": "Opportunity"
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Prospect's country."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Available only for organizations with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The prospect’s description."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The prospect's email address."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The prospect’s first name. Up to 40 characters allowed."
+    },
+    "GenderIdentity": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The prospect’s self-identified experience of their gender, which does or doesn’t correspond to the prospect’s designated sex at birth."
+    },
+    "GeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the address. For details on geolocation compound fields, see Geolocation Compound Field."
+    },
+    "Industry": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Primary business of the prospect’s company"
+    },
+    "IsConverted": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the prospect has been converted (true) or not (false). Label is Converted."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Last name of the prospect. Up to 80 characters are allowed.",
+      "required": true
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the precise geolocation of an address. Acceptable values are numbers between –90 and 90 up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "LeadSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The origin or source of the lead."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the precise geolocation of an address. Acceptable values are numbers between –180 and 180 up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Concatenation of FirstName, MiddleName, LastName, and Suffix up to 203 characters, including whitespaces."
+    },
+    "NumberOfEmployees": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of employees at the prospect's company. Label is Employees."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The prospect's phone number."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Postal code that's included in the prospect's address. Label is Zip/Postal Code."
+    },
+    "ProspectRecordName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the prospect record used for managing prospects."
+    },
+    "ProspectStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The status of the prospect. Possible values are: Contacted New Nurturing Qualified Unqualified The default value is New."
+    },
+    "Salutation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The prospect's preferred title. Possible values are: Dr. Mr. Mrs. Ms. Mx. Prof."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "State that's included in the prospect's address."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Street number or name that's included in the prospect's address."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The prospect's business title, such as CFO or CEO. The maximum size is 128 characters. When converting a prospect to a person account, the conversion fails if the prospect Title field contains more than 80 characters."
+    }
+  }
+}

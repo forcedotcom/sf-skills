@@ -1,0 +1,82 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "BusinessAlert - Data API",
+  "description": "Represents information about insight notifications that Einstein Relationship Insights explores, such as news mentions, job updates, and relationships. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AlertData": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Data associated with each alert."
+    },
+    "AlertRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The record that's referenced by the insight alert. This field is a polymorphic relationship field.",
+      "relationship_name": "AlertRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Asset, AuthorizationForm, AuthorizationFormConsent, AuthorizationFormDataUse, AuthorizationFormText, BusinessBrand, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, Contact, ContactPointAddress, ContactPointConsent, ContactPointEmail, ContactPointPhone, ContactPointTypeConsent, ContentVersion, Customer, DataUseLegalBasis, DataUsePurpose, EmailMessage, EngagementChannelType, Idea, Image, Individual, Lead, Location, Opportunity, PartyConsent, Pricebook2, Product2, ProfileSkill, QuickText, Recommendation, Scorecard, ScorecardMetric, Seller, SocialPersona, SocialPost, Solution, VideoCall, WorkBadgeDefinition"
+    },
+    "AlertType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of insight alert. Possible values are: JOB_CHANGE NEWS RELATIONSHIP The default value is NEWS."
+    },
+    "CurrentDesignation": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The current designation that's related to the job alert."
+    },
+    "CurrentEmployer": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the current employer that's related to the job alert."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed a record related to this alert record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this alert."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the alert record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who owns the record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PreviousDesignation": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The previous designation that's related to the job alert."
+    },
+    "PreviousEmployer": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the previous employer that's related to the job alert."
+    }
+  },
+  "special_access_rules": "The BusinessAlert object is available only if the ERI Growth User or ERI Starter User license is enabled."
+}

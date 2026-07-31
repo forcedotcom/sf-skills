@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "Metric - Data API",
+  "description": "The Metric object represents the components of a goal metric such as its name, metric type, and current value.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CompletionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The completion date of the metric."
+    },
+    "CurrentValue": {
+      "type": "double",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "The current value of the metric."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the metric. The maximum length is 65,535 characters."
+    },
+    "DueDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The due date of the metric."
+    },
+    "GoalId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the goal the metric is related to."
+    },
+    "InitialValue": {
+      "type": "double",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "The initial value of the metric."
+    },
+    "IsCompletionMetric": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read only. If true, the metric measures whether or not the metric is finished. If false, the metric measures how much is finished compared to a targeted value."
+    },
+    "LastComment": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A comment that provides more context about the metric, such as its status or progress. The maximum length is 255 characters."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp that indicates when a user last viewed a record that is related to this metric."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp that indicates when a user last viewed this metric. If this value is null, this record might have been only referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the metric."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who owns the metric."
+    },
+    "Progress": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The overall progress of the metric."
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the related record type."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The start date of the metric."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the metric. Possible values include: Not Started On Track Behind Critical Completed Postponed Canceled Not Completed"
+    },
+    "TargetValue": {
+      "type": "double",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "The target value of the metric."
+    },
+    "Weight": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The weight of the metric. The sum of the weights should equal 100%."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **MetricFeed**: Feed tracking is available for the object.\n- **MetricHistory**: History is available for tracked fields of the object.\n- **MetricOwnerSharingRule**: The original WDC feature is unavailable as of Spring '22. This object isn't available as of API version 54.0. For more information, see Phased WDC (legacy Work.com) Feature Retirement.\n- **MetricShare**: Sharing rules are available for the object."
+}

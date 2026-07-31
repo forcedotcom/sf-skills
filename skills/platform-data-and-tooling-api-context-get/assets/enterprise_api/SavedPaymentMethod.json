@@ -1,0 +1,475 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "SavedPaymentMethod - Data API",
+  "description": "Represents a payment method saved by an authenticated customer. This object is available in API version 58.0 and later",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountHolderEmail": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Email address of the payment method holder."
+    },
+    "AccountHolderName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Full name of the payment method holder."
+    },
+    "AsyncGatewayRefNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort",
+      "description": "The payment transaction ID created by the payment gateway for asynchronous payments. This field is available in API version 66.0 and later. For Adyen, use the pspReference. For Stripe, use the fingerprint value."
+    },
+    "BankAccountHolderType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Determines whether the bank account is held by a business or an individual. Possible values are: Business Individual"
+    },
+    "BankAccountType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Characterizes the bank account, such as a checking or savings account."
+    },
+    "BankCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Code that represents the bank who issued the payment method."
+    },
+    "BankName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the bank that issued the payment method."
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The billing address of the account holder of the payment method. This is the compound form of the billing address. Read-only. For details on compound address fields, see Address Compound Fields."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address. Maximum size is 40 characters."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address. Maximum size is 80 characters."
+    },
+    "BillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the billing address. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLongitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLatitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address. Maximum size is 20 characters."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address. Maximum size is 80 characters."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Details for the billing address."
+    },
+    "ExpiryMonth": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Month the payment method expires."
+    },
+    "ExpiryYear": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Year the payment method expires."
+    },
+    "ExtendedPaymentMethodType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Other saved payment methods used for the transaction. This field is required when the value of the Type field is extd_altrn_payment_method_type or extd_wallet. This field is available in API version 66.0 and later."
+    },
+    "GatewayReference": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "A reference to the saved payment owner at the payment gateway. For example, a Stripe customer ID."
+    },
+    "GatewayToken": {
+      "type": "encryptedstring",
+      "properties": "Nillable",
+      "description": "Unencrypted unique token ID generated by the payment gateway to represent the card payment method during transactions. GatewayToken is for use with APIs earlier than version 52.0. For version 53.0 and latter, use the GatewayTokenEncrypted field. To secure the token, use the GatewayTokenEncrypted field. An error message appears if you try to record a GatewayToken for a card payment method that already has a GatewayToken or GatewayTokenEncrypted value."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Customer’s default payment method. The default value is false."
+    },
+    "IsMerchantCreated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the merchant saved the payment method on behalf of the payer. The Payer must provide consent to the merchant to save this information. The default value is false."
+    },
+    "IsSharedWithinSameAccount": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the saved payment method is visible to all contacts in an account (true) or only to the contact who created it (false). The default value is false. This field is available in API version 64.0 and later."
+    },
+    "Issuer": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Financial institution issuing the payment method."
+    },
+    "Last4": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Last four digits of the payment method account number."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record or list view related to this record, but didn’t access it directly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it's possible the user referenced this record but didn’t view it directly."
+    },
+    "MerchantAccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Identifies the Salesforce Payments Merchant Account. This field is a relationship field.",
+      "relationship_name": "MerchantAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "MerchantAccount"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Name of the saved payment method."
+    },
+    "Network": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Saved payment method card network, for example Visa or Union Pay."
+    },
+    "Nickname": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Additional name or label to easily identify the payment method."
+    },
+    "PaymentGatewayId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The payment gateway that is used to create a gateway token. For transactions with a saved payment method in Salesforce, this field stores the payment gateway ID used in the transaction. This field is a relationship field. This field is a relationship field.",
+      "relationship_name": "PaymentGateway",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGateway"
+    },
+    "PaymentMethodSubType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "A payment method that exists as a subtype of a payment method type. For example, Visa, Mastercard, and American Express exist as subtypes of the Card payment method. This field is available in API version 66.0 and later."
+    },
+    "ProcessingMode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether the payment was made outside of the Salesforce platform. This field is available in API version 66.0 and later. Possible values are: External Salesforce"
+    },
+    "ReferenceOwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the Account or Contact record that owns the payment method. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceOwner",
+      "relationship_type": "Lookup",
+      "refers_to": "Account or Contact"
+    },
+    "StandardEntryClassCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "A three-letter code that indicates how a customer or a business initiated and authorized an ACH payment. Possible values are: CCD—Corporate credit or debit entry PPD—Prearranged payment or deposit entry TEL—Telephone-initiated entry WEB—Internet or mobile-initiated entry"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Status of the saved payment method. Possible values are: Active AwaitingPayment Errored—Failed Expired"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of saved payment method. Possible values are: au_becs_debit bacs_debit bancontact card extd_apm_type extd_wallet ideal sepa_debit us_bank_account – ACH Direct Debit"
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates if the payment method is used on or off session. Possible values are: OffSession OnSession RestrictedOffSession"
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects with the API, your org must have one or more of these licenses: Salesforce Payments, Salesforce Order Management, B2B Commerce, or D2C Commerce. Salesforce Payments objects are available only in Lightning Experience.\n\nTo access Salesforce Payments objects with the API, your\n         org must have one or more of these licenses: Salesforce Payments, Salesforce Order\n         Management, B2B Commerce, or D2C Commerce. Salesforce Payments objects are available only\n         in Lightning Experience.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SavedPaymentMethodChangeEvent**: Change events are available for the object.\n- **SavedPaymentMethodFeed**: Feed tracking is available for the object.\n- **SavedPaymentMethodHistory**: History is available for tracked fields of the object.\n- **SavedPaymentMethodOwnerSharingRule**: Sharing rules are available for the object.\n- **SavedPaymentMethodShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountHolderEmail": {
+      "field_label": "Account Holder Email",
+      "type": "string",
+      "length": "255"
+    },
+    "AccountHolderName": {
+      "field_label": "Account Holder Name",
+      "type": "string",
+      "length": "255"
+    },
+    "AsyncGatewayRefNumber": {
+      "field_label": "Async Gateway Reference Number",
+      "type": "string",
+      "length": "255"
+    },
+    "BankAccountHolderType": {
+      "field_label": "Account Ownership Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BankAccountType": {
+      "field_label": "Bank Account Type",
+      "type": "string",
+      "length": "25"
+    },
+    "BankCode": {
+      "field_label": "Bank Code",
+      "type": "string",
+      "length": "255"
+    },
+    "BankName": {
+      "field_label": "Bank Name",
+      "type": "string",
+      "length": "255"
+    },
+    "BillingAddress": {
+      "field_label": "Billing Address",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "Bill To City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Bill To Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Bill To Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Bill To Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Bill To Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingPostalCode": {
+      "field_label": "Bill To Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingState": {
+      "field_label": "Bill To State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Bill To Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Checksum": {
+      "field_label": "Checksum",
+      "type": "string",
+      "length": "63"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExpiryMonth": {
+      "field_label": "Expiration Month",
+      "type": "int",
+      "digits": "9"
+    },
+    "ExpiryYear": {
+      "field_label": "Expiration Year",
+      "type": "int",
+      "digits": "9"
+    },
+    "ExtendedPaymentMethodType": {
+      "field_label": "Extended Payment Method Type",
+      "type": "string",
+      "length": "255"
+    },
+    "GatewayReference": {
+      "field_label": "Gateway Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "GatewayToken": {
+      "field_label": "Gateway Token",
+      "type": "encryptedstring",
+      "length": "175"
+    },
+    "Id": {
+      "field_label": "Saved Payment Method ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Default",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsMerchantCreated": {
+      "field_label": "Saved By Merchant",
+      "type": "boolean"
+    },
+    "IsSharedWithinSameAccount": {
+      "field_label": "Shared within same Account",
+      "type": "boolean"
+    },
+    "Issuer": {
+      "field_label": "Issuer",
+      "type": "string",
+      "length": "255"
+    },
+    "Last4": {
+      "field_label": "Last 4 Characters",
+      "type": "string",
+      "length": "4"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MerchantAccountId": {
+      "field_label": "Merchant Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Saved Payment Method Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Network": {
+      "field_label": "Network",
+      "type": "string",
+      "length": "255"
+    },
+    "NickName": {
+      "field_label": "Saved Payment Method Nick Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentGatewayId": {
+      "field_label": "Payment Gateway ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodSubType": {
+      "field_label": "Payment Method Sub Type",
+      "type": "string",
+      "length": "255"
+    },
+    "ProcessingMode": {
+      "field_label": "Processing Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ReferenceOwnerId": {
+      "field_label": "Reference Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StandardEntryClassCode": {
+      "field_label": "Standard Entry Class Code (ACH)",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

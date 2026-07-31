@@ -1,0 +1,95 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "Territory2ObjectExclusion - Data API",
+  "description": "Represents the objects that aren’t included in territory assignment rule runs, even when they meet assignment rule criteria. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Note": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update"
+    },
+    "ObjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Account object to exclude from the territory assignment rule. This is a polymorphic relationship field.",
+      "relationship_name": "Object",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the territory to exclude from the territory model assignment rule. This is a relationship field.",
+      "relationship_name": "Territory2",
+      "relationship_type": "Lookup",
+      "refers_to": "Territory2"
+    }
+  },
+  "special_access_rules": "Available if Sales Territories has been enabled. Standard and partner users can access this object. If a territory model is in Active state, any standard or partner user can view that model, including its territories and assignment rules. For territories in an active model, any standard or partner user can view assigned records and assigned users subject to your org’s sharing settings. Users can’t view territory models in other states (such as Planning or Archived).\n\nAvailable if Sales Territories has been enabled.\n\nStandard and partner users can access this object. If a territory model is in Active state, any standard or partner user can view that model, including its territories and assignment rules. For territories in an active model, any standard or partner user can view assigned records and assigned users subject to your org’s sharing settings. Users can’t view territory models in other states (such as Planning or Archived).",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Territory Object Exclusion ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Note": {
+      "field_label": "Note",
+      "type": "string",
+      "length": "255"
+    },
+    "ObjectId": {
+      "field_label": "Object ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

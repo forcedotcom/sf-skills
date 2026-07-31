@@ -1,0 +1,184 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "AIInsightValue - Data API",
+  "description": "Represents an Einstein prediction insight value. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AiInsightActionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of the associated AIInsightAction. This is a relationship field.",
+      "relationship_name": "AiInsightAction",
+      "relationship_type": "Lookup",
+      "refers_to": "AIInsightAction"
+    },
+    "AiRecordInsightId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the associated AIRecordInsight. This is a relationship field.",
+      "relationship_name": "AiRecordInsight",
+      "relationship_type": "Lookup",
+      "refers_to": "AIRecordInsight"
+    },
+    "Confidence": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Relative confidence strength of the generated prediction insight. Higher values (near 1.0) indicate stronger confidence."
+    },
+    "Field": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The name of the target field Einstein is making predictions for, such as “AnnualRevenue”."
+    },
+    "FieldValueLowerBound": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The lower bound value."
+    },
+    "FieldValueUpperBound": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The upper bound value."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the AIInsightValue."
+    },
+    "SobjectLookupValueId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of the value object, if this insight value references an object. This is a relationship field.",
+      "relationship_name": "SobjectLookupValue",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, ActivationTarget, Address, AlternativePaymentMethod, ApiAnomalyEventStore, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskIndDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, AssociatedLocation, AuthorizationForm, AuthorizationFormConsent, AuthorizationFormDataUse, AuthorizationFormText, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CampaignMember, CardPaymentMethod, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CodeSet, CodeSetBundle, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, ConsumptionRate, ConsumptionSchedule, Contact, ContactEncounter, ContactEncounterParticipant, ContactPointAddress, ContactPointConsent, ContactPointEmail, ContactPointPhone, ContactPointTypeConsent, ContactRequest, ContentVersion, Contract, CoverageBenefit, CoverageBenefitItem, CredentialStuffingEventStore, CreditMemo, CreditMemoLine, DataUseLegalBasis, DataUsePurpose, DelegatedAccount, DigitalWallet, DocumentChecklistItem, DuplicateRecordItem, DuplicateRecordSet, EmailMessage, EngagementChannelType, EnrollmentEligibilityCriteria, Event, HealthCareDiagnosis, HealthCareProcedure, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, Idea, Identifier, IdentityDocument, Image, Individual, IndividualApplication, Invoice, InvoiceLine, Lead, Location, LocationTrustMeasure, MemberPlan, MessagingEndUser, OperatingHours, Opportunity, OpportunityContactRole, OpportunityLineItem, Order, OrderItem, OtherComponentTask, PartyConsent, Payment, PaymentAuthAdjustment, PaymentAuthorization, PaymentGateway, PaymentGroup, PaymentLineInvoice, PersonEducation, PersonLanguage, PersonLifeEvent, PersonName, PlanBenefit, PlanBenefitItem, Pricebook2, PricebookEntry, ProcessException, Product2, ProductConsumptionSchedule, ProductFulfillmentLocation, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, PurchaserPlan, PurchaserPlanAssn, QuickText, ReceivedDocument, Recommendation, Refund, RefundLinePayment, ReportAnomalyEventStore, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderItemAdjustment, ReturnOrderItemTax, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, ServiceTerritoryWorkType, SessionHijackingEventStore, SharingRecordCollection, Shift, Shipment, ShipmentItem, SkillRequirement, SocialPersona, SocialPost, Solution, Task, TimeSlot, UnitOfMeasure, UserProvisioningRequest, VideoCall, Visit, VisitedParty, Visitor, VoiceCall, VolunteerProject, WorkBadge, WorkBadgeDefinition, WorkOrder, WorkOrderLineItem, WorkThanks, WorkType, WorkTypeGroup, WorkTypeGroupMember"
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of the value object, such as Account or Case, if this insight value references an object."
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The prediction result insight value."
+    },
+    "ValueType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The data type of the prediction result insight value. Possible values are: Boolean—Boolean Currency—Currency DateTime—DateTime Enum—Enum Lookup—Lookup Number—Number String—String"
+    }
+  },
+  "special_access_rules": "Available when Einstein features such as Prediction Builder or Case Classification are enabled. To access an AIInsightValue record, you must have access to the related AIRecordInsight record. To grant a user the right to create an AIInsightValue record, you can use the AICreateInsightObjects or the CreateAIInsights permission.",
+  "usage": "When an Einstein feature makes a prediction and saves the results, the following events happen in a single atomic operation: When Einstein writes prediction results back to AI prediction fields, record save custom logic, such as Apex triggers, workflow rules, and assignment rules, aren’t run. To add custom logic based on Einstein prediction results, use a platform event subscriber, such as Process Builder, to get notifications for AIPredictionEvents that contain references to Einstein insight objects. Custom fields can’t be added to Einstein insight objects. Einstein insights contain information about target fields and predicted value. Your org may have created Einstein predictions that are associated with target fields with field-level security restrictions. To control how users access Einstein insights records, use Salesforce data access features such as user profiles and permission sets.\n\nWhen an Einstein feature makes a prediction and saves the results, the following events happen in a single atomic operation:\n\nWhen Einstein writes prediction results back to AI prediction fields, record save custom logic, such as Apex triggers, workflow rules, and assignment rules, aren’t run. To add custom logic based on Einstein prediction results, use a platform event subscriber, such as Process Builder, to get notifications for AIPredictionEvents that contain references to Einstein insight objects.\n\nCustom fields can’t be added to Einstein insight objects.\n\nEinstein insights contain information about target fields and predicted value. Your org may have created Einstein predictions that are associated with target fields with field-level security restrictions. To control how users access Einstein insights records, use Salesforce data access features such as user profiles and permission sets.",
+  "field_reference": {
+    "AiInsightActionId": {
+      "field_label": "AIInsightAction ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AiRecordInsightId": {
+      "field_label": "AI Record Insight ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Confidence": {
+      "field_label": "Confidence",
+      "type": "double",
+      "precision": "5",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Field": {
+      "field_label": "Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FieldValueLowerBound": {
+      "field_label": "Field Value Lower Bound",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "FieldValueUpperBound": {
+      "field_label": "Field Value Upper Bound",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Id": {
+      "field_label": "AI Insight Value ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SobjectLookupValueId": {
+      "field_label": "sObject Lookup Value ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SobjectType": {
+      "field_label": "sObject Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "ValueType": {
+      "field_label": "Value Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

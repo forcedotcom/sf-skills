@@ -4,15 +4,18 @@
 
 ## Overview
 
-Full deployment lifecycle for Agentforce agents: validate, deploy metadata, publish bundle, and activate.
+Release lifecycle for Agentforce agents: draft iteration (validate/deploy/preview), then explicit publish + activate when user approves release.
 
 ## Usage
 
 ```bash
-# Validate + publish
-sf agent publish authoring-bundle --json --api-name MyAgent -o <org-alias>
+# Draft iteration loop
+sf agent validate authoring-bundle --json --api-name MyAgent -o <org-alias>
+sf project deploy start --json --source-dir force-app -o <org-alias>
+sf agent preview start --json --use-live-actions --authoring-bundle MyAgent -o <org-alias>
 
-# Activate after publish
+# Release-only steps (after explicit user approval)
+sf agent publish authoring-bundle --json --api-name MyAgent -o <org-alias>
 sf agent activate --json --api-name MyAgent -o <org-alias>
 ```
 
@@ -21,7 +24,7 @@ sf agent activate --json --api-name MyAgent -o <org-alias>
 ### Phase 0: Safety Gate (Required)
 Read the `.agent` file and run safety review (see `safety-review-reference.md`). If any BLOCK finding exists, STOP deployment. WARN findings must be reported and acknowledged by the user before proceeding.
 
-### Phase 1: Pre-Deployment Validation
+### Phase 1: Draft Validation
 ```bash
 sf agent validate authoring-bundle --json --api-name MyAgent -o <org-alias>
 ```
@@ -29,18 +32,37 @@ sf agent validate authoring-bundle --json --api-name MyAgent -o <org-alias>
 ### Phase 1b: Target Dependency Check
 Verify all flow/apex targets exist in the org before publishing. If missing, scaffold and deploy them first.
 
-### Phase 2: Deploy Supporting Metadata
+### Phase 2: Draft Deploy of Supporting Metadata
 ```bash
 sf project deploy start --json --source-dir force-app -o <org-alias>
 ```
 
-### Phase 3: Publish Agent Bundle
+### Phase 3: Explicit Release Gate
+
+Confirm user approval before publish/activate. Do not auto-publish during authoring.
+
+#### Release Gate (shared checklist)
+
+The Create, Modify, and Deploy task domains all gate Publish on this same checklist. Stay in draft iteration unless the user explicitly asks to release. **If the user requests release, do NOT proceed to Publish unless ALL are true:**
+
+- `validate authoring-bundle` passes with zero errors
+- Live preview (`--use-live-actions`) tested with realistic utterances covering all routing branches
+- Traces confirm correct subagent routing, action invocation (`FunctionStep` present), and spec-compliant behavior
+- User explicitly approves deployment
+- **If the agent has a `knowledge:` block**: the Einstein Agent User has a Data Cloud permset/PSL assigned. Verify both:
+  ```bash
+  sf data query --json -q "SELECT PermissionSet.Name FROM PermissionSetAssignment WHERE Assignee.Username='<agent_user>'"
+  sf data query --json -q "SELECT PermissionSetLicense.DeveloperName FROM PermissionSetLicenseAssign WHERE Assignee.Username='<agent_user>'"
+  ```
+  One of `GenieDataPlatformStarterPsl`, `GenieUserEnhancedSecurity`, `DataCloudUser`, or `DataCloudArchitect` must appear in the combined results. If none does, run [Agent User Setup, Step 3b](agent-user-setup.md) discovery-then-assign and re-verify before proceeding. If a Data Cloud permset is assigned but a smoke-test grounded query returns empty `knowledgeSummary`, the **Data Space scope** also needs to be granted on that permset — UI-only, see [Agent User Setup, Step 3b.4](agent-user-setup.md).
+
+### Phase 4: Publish Agent Bundle
 ```bash
 sf agent publish authoring-bundle --json --api-name MyAgent -o <org-alias>
 ```
 4-step process: Validate (~1-2s) -> Publish (~8-10s) -> Retrieve (~5-7s) -> Deploy (~4-6s)
 
-### Phase 4: Activate Agent
+### Phase 5: Activate Agent
 ```bash
 sf agent activate --json --api-name MyAgent -o <org-alias>
 ```
@@ -48,7 +70,7 @@ Note: `sf agent activate` may not support `--json` in all CLI versions. If it re
 
 Publishing creates an **inactive** version. Without activation, preview fails with "No valid version available".
 
-## Deploy vs Publish
+## Draft Deploy vs Publish
 
 | What changes | `sf project deploy start` | `sf agent publish authoring-bundle` |
 |---|---|---|
@@ -56,7 +78,7 @@ Publishing creates an **inactive** version. Without activation, preview fails wi
 | `system: instructions:` | Yes (via activate) | Yes |
 | `reasoning: actions:` (transitions + invocations) | **NO** | Yes |
 
-**Always prefer `sf agent publish authoring-bundle`.** If you change `reasoning: actions:`, publish is required.
+Use draft deploy + preview for iterative development. Publish is the explicit release step when the user chooses to commit a version for end users.
 
 ## Common Errors
 

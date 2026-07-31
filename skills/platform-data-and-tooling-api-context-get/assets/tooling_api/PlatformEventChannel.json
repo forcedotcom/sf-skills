@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "PlatformEventChannel - Tooling API",
+  "description": "Represents a custom channel that you can subscribe to in order to receive a stream of change data capture events.",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ChannelType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The channel type. Valid values are: data—Change Data Capture channel corresponding to the selected entities. event—A channel that contains platform events.",
+      "required": true
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for the PlatformEventChannel object. The developer name doesn’t include the __chn custom channel suffix. For example, the developer name of the MyChannel__chn custom channel is MyChannel. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is automatically generated, but you can supply your own value if you create the record using the API. When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field. Note"
+    },
+    "EventType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of events that the channel can hold. A channel can hold only one type of events. Use this field to optionally specify a specific type of events for a channel in combination with the ChannelType field. Valid values are: custom—The channel contains custom platform events. This value is valid with the channelType of event. data—The channel contains change data capture events. This value is valid with the channelType of data. monitoring—The channel contains Real-Time Event Monitoring events. This value is valid with the channelType of event. standard—Reserved for internal use. Available in API version 61.0 and later."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated PlatformEventChannel in Metadata API. The full name can include a namespace prefix. The full name includes the __chn custom channel suffix. For example, the full name of the MyChannel custom channel is MyChannel__chn. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the MasterLabel."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The channel label. The label of this field is Label."
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "Platform event channel metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix."
+    }
+  },
+  "special_access_rules": "- To retrieve or query this object, you must have the View Setup and Configuration permission.\n- To create, update, or delete this object, you must have the Customize Application permission.",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PlatformEventChannel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:PlatformEventChannel\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"PlatformEventChannel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"channelType\" type=\"tns:PlatformEventChannelType\"/>\n        <xsd:element name=\"eventType\" minOccurs=\"0\" type=\"tns:PlatformEventChannelEventType\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformEventChannelEventType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"custom\"/>\n    <xsd:enumeration value=\"standard\"/>\n    <xsd:enumeration value=\"monitoring\"/>\n    <xsd:enumeration value=\"data\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PlatformEventChannelType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"event\"/>\n    <xsd:enumeration value=\"data\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

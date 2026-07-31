@@ -1,0 +1,124 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OrderAction - Data API",
+  "description": "Indicates the type of order, such as a new sale or a cancellation. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name given to the order action."
+    },
+    "OffsetOrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the previous order item that is being modified by the business action. For example, the order that is being canceled. This is a relationship field.",
+      "relationship_name": "OffsetOrderItem",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderItem"
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The order containing the order item that implements the business action. This is a relationship field.",
+      "relationship_name": "Order",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "SourceAssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset that is changed as a result of the business action. For example, the asset that is being canceled. This is a relationship field.",
+      "relationship_name": "SourceAsset",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "Subtype": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The subtype of the action on the order line item. Valid values are: FieldAmendment Rollback StartDateAdjustment TransferFrom TransferTo This field is available with Revenue Cloud in API version 64.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The business action that created the order product. Valid values are: Add Amend Cancel No Change Renew Transfer—Available with Revenue Cloud in API version 65.0 and later."
+    }
+  },
+  "special_access_rules": "This object is available if Subscription Management is enabled in your org.\n\nThis object is available if Subscription\n         Management is enabled in your org.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Order Action ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceAssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Subtype": {
+      "field_label": "Subtype",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

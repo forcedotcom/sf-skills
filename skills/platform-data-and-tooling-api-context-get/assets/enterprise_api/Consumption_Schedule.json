@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Consumption Schedule - Data API",
+  "description": "A consumption schedule organizes a set of consumption rates by which usage-based products are quoted and billed. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BillingTerm": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The number used with the billing term unit to determine billing frequency."
+    },
+    "BillingTermUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The unit used with the billing term to determine billing frequency Possible values are: Month— Quarter— Year—"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Possible values are: AUD—Australian Dollar CAD—Canadian Dollar GBP—British Pound JPY—Japanese Yen USD—U.S. Dollar"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the consumption schedule."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this record is active (true) or not (false). Label is Active."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "MatchingAttribute": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Salesforce Billing matches usage with a consumption schedule if the records share Matching Attribute value."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Default name of this record. Label is Product Name.",
+      "required": true
+    },
+    "NumberOfRates": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of consumption rates in this consumption schedule."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The user who owns a consumption schedule record. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RatingMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A specific use case to rate usage against the schedule. This field is the controlling picklist for the Type field. Possible values are: Tier"
+    },
+    "SBQQ__Category__c": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "This field is available only with Salesforce CPQ. You can define custom categories to organize consumption schedules in separate tabs on sales rep UI. If you do this, make sure to create a field set for each category. Possible values are: Rates"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines how rate tiers are calculated. Possible values are: Range—The schedule prices only using the tier that applies to the usage quantity. Slab—Usage within a given bound receives pricing equal to its tier’s value."
+    },
+    "UnitOfMeasure": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A unit of measure defines how you quantify instances of usage for your usage products. For example, if your usage product is a cloud storage subscription, you could provide a value of GB for your unit of measure."
+    },
+    "blng__BillingRule__c": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "This field is available only with Salesforce Billing. Salesforce Billing invoices usage summaries based off their related consumption schedule's billing rule."
+    },
+    "blng__RevenueRecognitionRule__c": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "This field is available only with Salesforce Billing. Salesforce Billing recognizes usage summary revenue based off the summary's related revenue recognition rule."
+    },
+    "blng__TaxRule__c": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "This field is available only with Salesforce Billing. Salesforce Billing taxes usage summary invoice lines based off the summary's related tax rule."
+    }
+  }
+}

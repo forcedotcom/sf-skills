@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "TopicUserEvent - Data API",
+  "description": "Represents an action (such as comment, post, like, or share) made by a user on a topic. This object is available in API version 42.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActionEnum": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The action taken by a user on a topic. The possible values are: LIKE COMMENT POST ASSIGN SHARE FAVORITE UNFAVORITE AT_MENTION BANG_MENTION COMMENT_LIKE USER_ENDORSEMENT SKILL_PEER_ENDORSEMENT SKILL_SELF_ENDORSEMENT BEST_ANSWER"
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Experience Cloud site where the action was performed."
+    },
+    "TopicId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Identifier of the topic."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique Salesforce user ID."
+    }
+  },
+  "special_access_rules": "Only users with the Modify All Data permission can view and delete these data.",
+  "usage": "Use the TopicUserEvent object to delete topic-related activities by Experience Cloud site users who would like all their topic-related activities to be removed from a site.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"TopicUserEvent\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActionEnum\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TopicId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActionEnum": {
+      "field_label": "Action",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedDate": {
+      "field_label": "Create Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Event ID",
+      "type": "id",
+      "length": "18"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TopicId": {
+      "field_label": "Topic ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

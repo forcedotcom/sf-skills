@@ -1,0 +1,33 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "MetadataPackage - Data API",
+  "description": "Represents a package that has been developed in the org you’re logged in to. Applies to unlocked, unmanaged, first-generation, and second-generation managed packages.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the package."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For first-generation and second-generation managed packages, and unlocked packages with namespaces, this field is the namespace prefix assigned to the package. For unmanaged packages, or no-namespace unlocked packages, this field is blank."
+    },
+    "PackageCategory": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of package. Valid values are: Application (internal use only) Module (internal use only) Package—Represents either an unmanaged package or a first-generation managed package. Package2—Represents either an unlocked package or a second-generation managed package. The default value is Package. This field is available in API version 49.0 and later."
+    }
+  },
+  "usage": "Here are examples of the types of API queries you can perform.\n\nShow all managed and unmanaged packages in the org\n\nSELECT Name, NamespacePrefix FROM\n\t\t\t\t\t\t\t\t\t\tMetadataPackage\n\nShow only managed packages in the org\n\nSELECT Name, NamespacePrefix FROM\n\t\t\t\t\t\t\t\t\t\tMetadataPackage WHERE NamespacePrefix <>\n\t\t\t\t\t\t\t\t\t''"
+}

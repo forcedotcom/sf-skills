@@ -17,6 +17,36 @@ sf agent validate authoring-bundle --api-name Local_Info_Agent --json
 sf agent validate authoring-bundle --api-name Local_Info_Agent
 ```
 
+**Stdout vs. stderr — keep them separate, read both.** With `--json`, the JSON
+payload goes to **stdout**; the CLI's update/warning banner (e.g. *"update
+available from x to y"*) — and, on failure, human-readable diagnostics — go to
+**stderr**. They are separate streams and **both carry useful information**: stdout
+is guaranteed JSON, stderr is free-form text you read as a string (never parse it as
+JSON). Don't throw stderr away by reflex. A bare `sf … --json | parser` is safe —
+the banner never enters the pipe, and it still prints to the terminal where you can
+see it. **Never `2>&1`**: it injects the stderr banner into the JSON and breaks
+parsing (`JSONDecodeError`). Use `2>/dev/null` only to silence the banner when you
+deliberately don't need the stderr text. Always check `status` before reading
+`result`; when `status: 1`, read the **whole** object — the error `data` can sit at
+the top level, not under `result` — and read stderr for the human-readable cause.
+
+```bash
+# BEST — no redirection: stdout is clean JSON, stderr (banner/warnings/errors) stays visible
+sf agent validate authoring-bundle --json --api-name Agent
+
+# ALSO FINE — pipe to a parser (any tool that consumes the WHOLE JSON object);
+# stderr never enters the pipe but still prints. If that parser is jq, use
+# `jq .` — never `jq '.result'`, which silently drops top-level error keys
+# (on failure the error `data` sits at the top level, not under `result`).
+sf agent validate authoring-bundle --json --api-name Agent | parser
+
+# OPTIONAL — silence the banner ONLY when you don't need the stderr text
+sf agent validate authoring-bundle --json --api-name Agent 2>/dev/null
+
+# WRONG — merges the stderr banner into stdout, corrupting the JSON
+sf agent validate authoring-bundle --json --api-name Agent 2>&1
+```
+
 Multiple metadata types in `--metadata` are space-separated arguments, NOT comma-separated. Wildcard patterns must be quoted.
 
 ```bash
@@ -51,7 +81,7 @@ The generated directory is placed at `<default_package_directory>/main/default/a
 
 The generate command creates this structure:
 
-```
+```text
 force-app/main/default/aiAuthoringBundles/
 └── Agent_API_Name/
     ├── Agent_API_Name.agent            # Agent Script file
@@ -77,13 +107,13 @@ sf agent validate authoring-bundle --json --api-name Agent_API_Name
 
 ## 4. Deploy
 
-### Deploy Apex, Flow, or other backing logic
+### Deploy Apex, Flow, or other action implementations
 
 ```bash
 sf project deploy start --json --metadata ApexClass:ClassName
 ```
 
-Deploy backing logic BEFORE deploying the AiAuthoringBundle. The bundle's action targets reference these components, and the platform validates they exist during bundle deploy.
+Deploy action implementations BEFORE deploying the AiAuthoringBundle. The bundle's action targets reference these components, and the platform validates they exist during bundle deploy.
 
 ALWAYS deploy each stub class IMMEDIATELY after customizing it. ALWAYS fix deploy errors BEFORE generating and deploying the next stub.
 
@@ -198,10 +228,12 @@ Preview runs the agent in a simulated or live environment for testing behavior b
 ### Start a preview session
 
 ```bash
-sf agent preview start --json --authoring-bundle Agent_API_Name
+sf agent preview start --json --authoring-bundle Agent_API_Name --simulate-actions
 ```
 
 Returns a `sessionId` for subsequent send/end commands.
+
+With `--authoring-bundle`, `start` **requires** an action mode — `--simulate-actions` (AI-generated action results) or `--use-live-actions` (real Apex/Flow/Prompt Template execution). Omitting both fails with `MissingModeFlag`. The mode is fixed for the session, so the flag is accepted on `start` only; `send` and `end` reject it with `Nonexistent flag`. All three subcommands must run from a directory containing `sfdx-project.json`, or they fail with `RequiresProjectError`.
 
 ### Send a message
 
@@ -218,13 +250,15 @@ sf agent preview send --json --authoring-bundle Agent_API_Name --session-id SESS
 sf agent preview end --json --authoring-bundle Agent_API_Name --session-id SESSION_ID
 ```
 
+Ending a single session by `--session-id` does not prompt. `--all` ends every active session — useful after an aborted run — and is the only mode that asks for confirmation, so pair it with `--no-prompt` (`-p`) in scripts. `--no-prompt` has no effect on a single-session `end`, and CLI versions below 2.135.5 reject the flag outright.
+
 ### Live preview (with real action execution)
 
 ```bash
 sf agent preview start --json --authoring-bundle Agent_API_Name --use-live-actions
 ```
 
-Add `--use-live-actions` to execute real backing logic instead of simulated responses. Live preview executes real Apex, Flows, and Prompt Templates in the org.
+Add `--use-live-actions` to execute real action implementations instead of simulated responses. Live preview executes real Apex, Flows, and Prompt Templates in the org.
 
 ### Anti-pattern: bare preview command
 
@@ -233,7 +267,7 @@ Add `--use-live-actions` to execute real backing logic instead of simulated resp
 sf agent preview --authoring-bundle Agent_API_Name
 
 # CORRECT — programmatic start/send/end
-sf agent preview start --json --authoring-bundle Agent_API_Name
+sf agent preview start --json --authoring-bundle Agent_API_Name --simulate-actions
 ```
 
 The bare `sf agent preview` command is an interactive REPL designed for humans. It cannot be used programmatically because automation cannot send the ESC key to exit.
@@ -378,6 +412,8 @@ sf data query --json -q "SELECT Username FROM User WHERE Profile.UserLicense.Nam
 ```
 
 After creating the user, continue with permission setup in [Agent User Setup & Permissions](agent-user-setup.md).
+
+**For knowledge-grounded agents (with a `knowledge:` block):** in addition to `AgentforceServiceAgentUser`, also assign a Data Cloud permset/PSL via the discovery-then-assign procedure in [Agent User Setup & Permissions, Step 3b](agent-user-setup.md). Without this, the agent user cannot read the ADL's data space and grounded queries return empty `knowledgeSummary` at runtime.
 
 ---
 

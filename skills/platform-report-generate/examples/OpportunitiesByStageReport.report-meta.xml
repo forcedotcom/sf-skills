@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Opportunities by Stage</name>
+    <reportType>Opportunity</reportType>
+    <format>Summary</format>
+    <scope>organization</scope>
+    <description>Groups open opportunities by stage with a sum of amount, and includes a vertical bar chart. Demonstrates a Summary report with one grouping, an aggregate column, and an embedded chart.</description>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <columns>
+        <field>OPPORTUNITY_NAME</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT_NAME</field>
+    </columns>
+    <columns>
+        <field>STAGE_NAME</field>
+    </columns>
+    <columns>
+        <field>AMOUNT</field>
+        <aggregateTypes>Sum</aggregateTypes>
+    </columns>
+    <columns>
+        <field>CLOSE_DATE</field>
+    </columns>
+    <columns>
+        <field>PROBABILITY</field>
+        <aggregateTypes>Average</aggregateTypes>
+    </columns>
+    <columns>
+        <field>FULL_NAME</field>
+    </columns>
+    <groupingsDown>
+        <field>STAGE_NAME</field>
+        <dateGranularity>None</dateGranularity>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <filter>
+        <criteriaItems>
+            <column>STAGE_NAME</column>
+            <isUnlocked>true</isUnlocked>
+            <operator>notEqual</operator>
+            <value>Closed Won,Closed Lost</value>
+        </criteriaItems>
+    </filter>
+    <params>
+        <name>open</name>
+        <value>all</value>
+    </params>
+    <params>
+        <name>probability</name>
+        <value>&gt;0</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <timeFrameFilter>
+        <dateColumn>CLOSE_DATE</dateColumn>
+        <interval>INTERVAL_CURY</interval>
+    </timeFrameFilter>
+    <chart>
+        <chartType>VerticalColumn</chartType>
+        <groupingColumn>STAGE_NAME</groupingColumn>
+        <chartSummaries>
+            <aggregate>Sum</aggregate>
+            <column>AMOUNT</column>
+        </chartSummaries>
+        <enableHoverLabels>true</enableHoverLabels>
+        <location>CHART_TOP</location>
+        <size>Medium</size>
+        <title>Pipeline by Stage</title>
+    </chart>
+</Report>

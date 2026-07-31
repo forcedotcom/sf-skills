@@ -1,0 +1,90 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "DeleteEvent - Data API",
+  "description": "Represents a record that has been soft deleted. Search on this object was available in API version 48.0, then removed in API version 50.0.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeletedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user who deleted the record. This is a relationship field.",
+      "relationship_name": "DeletedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "DeletedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the record was deleted."
+    },
+    "Record": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the record that was deleted."
+    },
+    "RecordName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the record that was deleted."
+    },
+    "SobjectName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of record that was deleted, for example, Account."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"DeleteEvent\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"DeletedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"DeletedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"DeletedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Record\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SobjectName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "DeletedById": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DeletedDate": {
+      "field_label": "Deleted Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Delete Event ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Record": {
+      "field_label": "Record ID",
+      "type": "string",
+      "length": "18"
+    },
+    "RecordName": {
+      "field_label": "Record Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SobjectName": {
+      "field_label": "Type",
+      "type": "string",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

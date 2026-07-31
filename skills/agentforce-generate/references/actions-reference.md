@@ -2,6 +2,9 @@
 
 Complete guide to Agent Actions in Agentforce: Flow, Apex, API actions, and escalation routing.
 
+> Primary reference for action properties, target types, and action wiring.
+> Pair with `feature-validity.md` for utility-vs-target property caveats.
+
 ---
 
 ## Action Properties Reference
@@ -180,30 +183,46 @@ reasoning:
       | To check shipping status, use {!@actions.track_shipment}.
 ```
 
-> See [action-patterns.md](action-patterns.md#2-instruction-action-references) for detailed usage patterns and examples.
+> See [patterns-by-requirement.md](patterns-by-requirement.md) and
+> [architecture-patterns.md](architecture-patterns.md) for pattern selection and usage guidance.
 
 ### Invoking Actions Deterministically with `run`
 
-The `run` keyword is only supported in `reasoning.actions:` post-action blocks and `instructions: ->` blocks.
+The `run` keyword uses the common deterministic action mechanism in
+`instructions: ->`, action callbacks, and lifecycle blocks such as
+`before_reasoning` and `after_reasoning`. What changes is when the containing
+block runs, not whether `run` is valid there.
 
 ```agentscript
-# ❌ DOES NOT WORK — run in before_reasoning (no LLM context)
+# Refresh immediately before the reasoning loop.
 before_reasoning:
-   run @actions.log_turn    # May not execute as expected
+    run @actions.refresh_context
+        with user_id=@variables.EndUserId
+        set @variables.current_context = @outputs.context
 
-# ✅ WORKS — run in reasoning.actions post-action block
+# Chain deterministic work from an invoked reasoning action.
 create: @actions.create_order
-   with customer_id = @variables.customer_id
-   run @actions.send_confirmation
-   set @variables.order_id = @outputs.id
+    with customer_id=@variables.customer_id
+    run @actions.send_confirmation
+        with order_id=@outputs.id
+    set @variables.order_id = @outputs.id
 
-# ✅ WORKS — run in instructions: -> block
+# Load data during instruction resolution.
 reasoning:
-   instructions: ->
-      run @actions.load_customer
-         with id = @variables.customer_id
-         set @variables.name = @outputs.name
+    instructions: ->
+        run @actions.load_customer
+            with id=@variables.customer_id
+            set @variables.name = @outputs.name
+
+# Log after the reasoning loop completes.
+after_reasoning:
+    run @actions.log_turn
+        with session_id=@variables.RoutableId
 ```
+
+Lifecycle timing still matters: for example, a transition may end the current
+path before a later hook is reached. Validate the intended trace; do not treat
+that timing question as a syntax restriction on `run`.
 
 ---
 
@@ -213,7 +232,7 @@ reasoning:
 
 - Standard Salesforce data operations (CRUD)
 - Business logic that can be expressed in Flow
-- Screen flows for guided user experiences
+- Autolaunched flows for guided logic execution (screen flows are not valid action targets)
 - Approval processes
 
 ### Implementation
@@ -452,7 +471,7 @@ public class WrappedAction {
 
 ### Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                  API ACTION ARCHITECTURE                    │
 ├─────────────────────────────────────────────────────────────┤
@@ -474,7 +493,7 @@ public class WrappedAction {
 
 ### Implementation Steps
 
-1. **Create Named Credential** (via integration-connectivity-generate skill)
+1. **Create Named Credential** (via the `integration-connectivity-generate` skill)
 2. **Create HTTP Callout Flow** wrapping the external call
 3. **Reference Flow in Agent Script** with `flow://` target
 
@@ -539,8 +558,11 @@ connection messaging:
 
 | Channel | Description | Use Case |
 |---------|-------------|----------|
-| `messaging` | Chat/messaging channels | Enhanced Chat, Web Chat, In-App |
-| `telephony` | Voice/phone channels | Service Cloud Voice, phone support |
+| `messaging` | Chat/messaging channels; also the escalation-routing surface | Enhanced Chat, Web Chat, In-App; human escalation via `@utils.escalate` |
+| `customer_web_client` | Enhanced Chat v2 (ECv2) surface — the voice-capable connection ADLC authors | Voice agents, Agent Builder Preview (see [Voice Modality Reference](voice-modality-reference.md)) |
+| `telephony` | Voice/phone routing channel | Service Cloud Voice, phone support (channel attachment is UI-only) |
+
+> **Voice agents** use `connection customer_web_client:` (ECv2) as the authored voice surface. `telephony` (Service Cloud Voice) is a real channel, but attaching a phone number / SIP endpoint is a UI-only step — see the voice reference. Do **not** author a `connection voice:` block; it does not exist.
 
 **CRITICAL**: Values like `"queue"`, `"skill"`, `"agent"` for `outbound_route_type` cause validation errors!
 
@@ -561,26 +583,81 @@ actions:
 
 ---
 
+## Voice-Safe Action Authoring
+
+When an agent has a `modality voice:` block (see [Voice Modality Reference](voice-modality-reference.md)), its actions need extra care: the planner **narrates** action descriptions and parameter names, and action outputs get spoken aloud. An action authored for a chat agent can embarrass a voice deployment. Apply these rules to every action a voice agent can invoke. (Latency-specific action patterns — sync writes, bulky retrieval — live in [voice-latency-heuristics.md](voice-latency-heuristics.md).)
+
+### 1. Descriptions must be voice-safe
+
+The planner reads (verbatim or paraphrased) the action `description` when it narrates its plan. Bad descriptions produce bad narration.
+
+- **Good:** `"Look up an account by phone number or account number. Returns the account name, status, and balance."`
+- **Bad:** `"AccountLookup runs SOQL against Account where Phone__c OR External_Id__c matches identifier; returns Account.Id, Account.Name, Account.Status__c."`
+
+Rules: plain English, no SOQL, no field API names (`__c`), no backticks; one or two sentences (what it does, then what it returns); if the action is slow, say so; never include example payloads.
+
+### 2. Parameter names must survive being spoken
+
+The model sometimes narrates parameter names to itself ("I'll need your account eye dee"). Avoid names that break in speech.
+
+- **Bad:** `accountId` → "account eye dee"; `custId`; `phone_num_e164`; `dt_from`.
+- **Good:** `phone_number`, `account_number`, `email`, `order_number`, `zip_code`.
+
+Rules: full words, snake_case, no cryptic suffixes (`__c`, `_pk`, `_ref`); prefer "number" over "id" for anything the caller says out loud.
+
+### 3. Enumerate small value sets in the description
+
+When a parameter has a small closed set (≤ ~10) of valid values, list them in the input `description` — Agent Script has no `enum` or `pattern` input attribute (the supported input properties are `description`, `label`, `is_required`, `is_user_input`, `complex_data_type_name`; see "Input Properties" above). Naming the values inline lets the planner route the caller's utterance to a canonical value in one shot instead of asking a clarifying question, and the model maps synonyms:
+
+```agentscript
+inputs:
+   priority: string
+      description: "Case priority — one of: low, medium, high, urgent. Map the caller's words to the closest value."
+```
+
+Keep the listed values short and lowercase. For open-ended inputs (names, order numbers) describe the expected format in words (e.g. "a 6-digit order number") rather than trying to enforce it — the planner has no format-validation attribute.
+
+### 4. Wrap internal IDs in a lookup step
+
+If an action needs an internal ID (record ID, case number, 18-char Salesforce ID) the caller doesn't know, **don't ask the caller for it.** Add or reuse a lookup action that resolves from what the caller *can* say (phone, email, order number, account name) to the internal ID, and instruct the agent to call the lookup first. Never speak an internal ID back to the caller.
+
+### 5. Voice-friendly error shapes
+
+When an action fails, its error goes through the model's next spoken turn. Return structured errors, not raw exceptions:
+
+```yaml
+success: false
+error_code: "account_not_found"
+message: "No account matched the input."
+suggested_next_step: "Ask the caller to spell their last name or provide their phone number."
+```
+
+A `suggested_next_step` field gives the model a scripted recovery path. Never surface stack traces or SOQL faults — they get read aloud. Pair with the empty-result fallback instruction rule in the voice reference.
+
+### 6. Ack phrases for slow actions
+
+Any action over ~800ms (SOQL, external HTTP, chained callouts, retrieval) feels slow on voice. The fix is **instructional**, not in the action: add a per-action filler-phrase directive in the agent's instructions (see the ack-phrase rule in [voice-modality-reference.md](voice-modality-reference.md)).
+
+### 7. Confirm before state-changing actions
+
+Any action that changes customer-visible state (`update_address`, `cancel_subscription`, `schedule_appointment`, `submit_payment`) must be paired with an instruction-level read-back-and-confirm rule. Payment and cancellation confirmations may have legally required phrasing — **flag those for a human**, don't auto-author them.
+
+> **What NOT to auto-change:** parameter names on actions called from other systems (breaking change), fixed value sets that are wire-level contracts with a downstream system, and legal confirmation phrasing on payment/cancellation actions. Surface these with a suggested rewrite and let a human decide.
+
+---
+
 ## Cross-Skill Integration
 
 ### Orchestration Order for API Actions
 
-When building agents with external API integrations, follow this order:
+When building agents with external API integrations, follow this order (each step names the skill that owns it):
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│  INTEGRATION + AGENTFORCE ORCHESTRATION ORDER                │
-├──────────────────────────────────────────────────────────────┤
-│  1. integration-connectivity-connected-app-configure  → Connected App (if OAuth needed) │
-│  2. integration-connectivity-generate → Named Credential + External Service │
-│  3. platform-apex-generate            → @InvocableMethod (if custom logic)  │
-│  4. automation-flow-generate            → Flow wrapper (HTTP Callout / Apex)  │
-│  5. platform-metadata-deploy          → Deploy all metadata to org          │
-│  6. agentforce-generate  → Agent with flow:// target           │
-│  7. platform-metadata-deploy          → Publish (sf agent publish           │
-│                           authoring-bundle)                  │
-└──────────────────────────────────────────────────────────────┘
-```
+1. **`integration-connectivity-generate`** → Named Credential + External Service
+2. **`platform-apex-generate`** → `@InvocableMethod` (if custom logic)
+3. **`automation-flow-generate`** → Flow wrapper (HTTP Callout / Apex)
+4. **`platform-metadata-deploy`** → Deploy all metadata to org
+5. **`agentforce-generate`** (this skill) → Agent with `flow://` target
+6. **`platform-metadata-deploy`** → Publish (`sf agent publish authoring-bundle`)
 
 ---
 
@@ -607,6 +684,7 @@ When building agents with external API integrations, follow this order:
 
 ## Related Documentation
 
-- [action-patterns.md](action-patterns.md) — Context-aware descriptions, instruction references, binding strategies
+- [patterns-by-requirement.md](patterns-by-requirement.md) — Requirement-to-pattern selection
 - [action-prompt-templates.md](action-prompt-templates.md) — Prompt template invocation (`generatePromptResponse://`)
-- [fsm-architecture.md](fsm-architecture.md) — FSM design and node patterns
+- [architecture-patterns.md](architecture-patterns.md) — Router-first architecture and transition mechanics
+- [feature-validity.md](feature-validity.md) — Property validity by context (`@utils.transition` vs `target:` actions)

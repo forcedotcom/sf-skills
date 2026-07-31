@@ -1,0 +1,172 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "Brief - Data API",
+  "description": "Represents a marketing brief. A brief contains information that’s used for positioning and grounding a marketing campaign. Agentforce can help you create a campaign that best fits the goals and requirements in your brief. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AdditionalNotes": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Context related to the campaign that isn’t represented in the other fields."
+    },
+    "AgentGuardrails": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Guardrails that the agent must follow when creating a campaign. Use these guardrails to prevent damage to your brand and to ensure safety and compliance."
+    },
+    "BrandId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique ID of your brand. This field is a relationship field.",
+      "relationship_name": "Brand",
+      "refers_to": "ManagedContent"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the brief."
+    },
+    "IsConversational": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the campaign contains conversational elements. The default value is false."
+    },
+    "KeyMessage": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The main theme or message that you want to deliver to your customers through the campaign that’s associated with the brief."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the brief was last referenced by a campaign."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the brief was last viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the brief."
+    },
+    "PlanName": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "An agent-generated name for the campaign. When you save a campaign preview, the resulting campaign has this name."
+    },
+    "PrimaryCtas": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The main calls-to-action (CTAs) for the brief. The agent uses this information to understand the actions that it can use to meet the goals of the campaign."
+    },
+    "PrimaryGoal": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The goal of the campaign that’s associated with the brief. The agent uses this field to understand the main objective of the campaign."
+    },
+    "PrimaryKpi": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The main key performance indicator (KPI) for measuring progress toward the goal. The agent uses this field to prioritize actions that contribute to the goal of the campaign."
+    },
+    "Priority": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The priority of the brief. The agent uses this field to prioritize actions that contribute to the goal of the campaign."
+    },
+    "TargetAudience": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the characteristics of the audience that you want to reach through the campaign that’s associated with this brief."
+    }
+  },
+  "field_reference": {
+    "AdditionalNotes": {
+      "field_label": "Additional Notes",
+      "type": "textarea",
+      "length": "1024"
+    },
+    "BrandId": {
+      "field_label": "Managed Content ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1024"
+    },
+    "Id": {
+      "field_label": "Brief ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "KeyMessage": {
+      "field_label": "Key Message",
+      "type": "textarea",
+      "length": "1024"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Brief Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetAudience": {
+      "field_label": "Target Audience",
+      "type": "textarea",
+      "length": "1024"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

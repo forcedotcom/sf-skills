@@ -1,0 +1,73 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SvcCatalogFulfillmentFlow - Tooling API",
+  "description": "Represents the flow associated with a specific catalog item in the Service Catalog. This object is available in API version 53.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Free-text description of the fulfillment flow."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Developer name for this fulfillment flow."
+    },
+    "FlowId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The flow represented by this SvcCatalogFulfillmentFlow. This is a relationship field.",
+      "relationship_name": "Flow",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowDefinition"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the fulfillment flow. This name has the following requirements: It must be unique across the org. It must contain only alphanumeric characters and underscores. It must begin with a letter. It must not include spaces. It must not end with an underscore. It must not contain two consecutive underscores. Query this field only if the query result contains up to one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Icon": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes the manageable state of a fulfillment flow that is contained in a package. Possible values are: beta—Managed-Beta deleted—Managed-Proposed-Deleted deprecated—Managed-Proposed-Deprecated deprecatedEditable—SecondGen-Installed-Deprecated installed—Managed-Installed installedEditable—SecondGen-Installed-Editable released—Managed-Released unmanaged—Unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The primary label for the fulfillment flow record."
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "The fulfillment flow’s metadata. Query this field only if the query result contains up to one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace associated with this fulfillment flow."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SvcCatalogFulfillmentFlow\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" type=\"xsd:string\"/>\n        <xsd:element name=\"flow\" type=\"xsd:string\"/>\n        <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"items\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:SvcCatalogFulfillFlowItem\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

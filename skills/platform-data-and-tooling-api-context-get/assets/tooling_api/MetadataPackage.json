@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "MetadataPackage - Tooling API",
+  "description": "Represents a package that has been developed in the org you’re logged in to. Applies to unlocked, unmanaged, first-generation, and second-generation managed packages. Available in Tooling API version 38.0 and later.",
+  "supported_soap_calls": "`query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the package."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For first-generation and second-generation managed packages, and unlocked packages with namespaces, this field is the namespace prefix assigned to the package. For unmanaged packages, or no-namespace unlocked packages, this field is blank."
+    },
+    "PackageCategory": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of package. Valid values are: Application (internal use only) Module (internal use only) Package—Represents either an unmanaged package or a first-generation managed package. Package2—Represents either an unlocked package or a second-generation managed package. The default value is Package. This field is available in API version 49.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"MetadataPackage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"MetadataPackageVersions\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"Name\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"NamespacePrefix\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"PackageCategory\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"QueryLocator\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"QueryResult\">\n  <xsd:sequence>\n    <xsd:element name=\"done\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"entityTypeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"nextRecordsUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryLocator\" type=\"tns:QueryLocator\"/>\n    <xsd:element name=\"records\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"ens:sObject\"/>\n    <xsd:element name=\"size\" type=\"xsd:int\"/>\n    <xsd:element name=\"totalSize\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

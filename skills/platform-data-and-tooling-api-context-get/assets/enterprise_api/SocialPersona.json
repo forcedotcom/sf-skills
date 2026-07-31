@@ -1,0 +1,354 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "SocialPersona - Data API",
+  "description": "Represents a snapshot of a contact's profile on a social network such as Facebook or Twitter. This object is available in API version 22.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AreWeFollowing": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether a Salesforce social account is following the social persona or not."
+    },
+    "AuthorLabels": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Comma-separated list of author type tags."
+    },
+    "AvatarUrl": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "Retrieves the user's social network avatar. It's a read-only field and you can't specify or update its value."
+    },
+    "Bio": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Biography of the social persona."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the social persona on the social network."
+    },
+    "ExternalPictureURL": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "URL to the picture of the social persona on the social network."
+    },
+    "Followers": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of followers that the social persona has."
+    },
+    "Following": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of people that the social persona is following."
+    },
+    "InfluencerScore": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Radian6 score describing the influence of the social persona. No longer used."
+    },
+    "IsBlacklisted": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether the social persona is blacklisted or not."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether the social persona supplies the default avatar image that’s displayed on the contact or account."
+    },
+    "IsFollowingUs": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether the social persona is following a Salesforce social account or not."
+    },
+    "IsVerified": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether the social persona is verified or not."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when the social persona was last referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when the social persona was last viewed."
+    },
+    "ListedCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Radian6 field. No longer used."
+    },
+    "MediaProvider": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Social network of the social persona."
+    },
+    "MediaType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Social network type of the social persona."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the social persona."
+    },
+    "NumberOfFriends": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of friends that the social persona has."
+    },
+    "NumberOfTweets": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of tweets made by the social persona."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the contact parent record for the social persona. This is a polymorphic relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Contact, Lead, SocialPost"
+    },
+    "ProfileType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Type of profile. Values are: Person Page"
+    },
+    "ProfileUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "URL for the profile."
+    },
+    "Provider": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Social network, such as Facebook or Twitter, of the social persona."
+    },
+    "R6SourceId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the social persona in Social Studio."
+    },
+    "RealName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Real name of the social persona."
+    },
+    "SourceApp": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Salesforce product that created the social persona."
+    },
+    "TopicType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of topic, such as keyword or managed."
+    }
+  },
+  "usage": "The fields on a SocialPersona object don’t provide real-time data. They provide a snapshot of information from the last time Salesforce collected a post from the social persona. Many of the Radian6-related fields are no longer accurate or used.\n\nThe fields on a SocialPersona object don’t provide real-time\n\t\t\tdata. They provide a snapshot of information from the last time Salesforce collected a\n\t\t\tpost from the social persona. Many of the Radian6-related fields are no longer accurate\n\t\t\tor used.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **SocialPersonaHistory (API version 26.0)**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "AreWeFollowing": {
+      "field_label": "Are we following",
+      "type": "boolean"
+    },
+    "AuthorLabels": {
+      "field_label": "Author Labels",
+      "type": "string",
+      "length": "255"
+    },
+    "AvatarUrl": {
+      "field_label": "Avatar URL",
+      "type": "string",
+      "length": "1024"
+    },
+    "Bio": {
+      "field_label": "Bio",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ExternalId": {
+      "field_label": "Social Persona Provider External Id",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalPictureURL": {
+      "field_label": "Provider External Picture URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Followers": {
+      "field_label": "Followers",
+      "type": "int",
+      "digits": "9"
+    },
+    "Following": {
+      "field_label": "Following",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Social Persona ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InfluencerScore": {
+      "field_label": "Influencer Score",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsBlacklisted": {
+      "field_label": "Blocklisted",
+      "type": "boolean"
+    },
+    "IsDefault": {
+      "field_label": "Default",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsFollowingUs": {
+      "field_label": "Is following us",
+      "type": "boolean"
+    },
+    "IsVerified": {
+      "field_label": "Verified",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ListedCount": {
+      "field_label": "Listed Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "MediaProvider": {
+      "field_label": "Social Studio Media Provider",
+      "type": "string",
+      "length": "255"
+    },
+    "MediaType": {
+      "field_label": "Social Studio Media Type",
+      "type": "string",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Social Handle",
+      "type": "string",
+      "length": "255"
+    },
+    "NumberOfFriends": {
+      "field_label": "Number Of Friends",
+      "type": "int",
+      "digits": "9"
+    },
+    "NumberOfTweets": {
+      "field_label": "Number Of Tweets",
+      "type": "int",
+      "digits": "9"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProfileType": {
+      "field_label": "Profile Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProfileUrl": {
+      "field_label": "Profile URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Provider": {
+      "field_label": "Social Network",
+      "type": "picklist",
+      "length": "255"
+    },
+    "R6SourceId": {
+      "field_label": "Social Studio Source Id",
+      "type": "string",
+      "length": "255"
+    },
+    "RealName": {
+      "field_label": "Real Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SourceApp": {
+      "field_label": "Source App",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TopicType": {
+      "field_label": "Topic Type",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

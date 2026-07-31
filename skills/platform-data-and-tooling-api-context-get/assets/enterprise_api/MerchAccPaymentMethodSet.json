@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "MerchAccPaymentMethodSet - Data API",
+  "description": "Defines an ordered list of payment methods that are available to a merchant's cudstomer during checkout. You can configure multiple payment method sets, each designated for a specific locale, payment region, or sale channel. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for organizations with the multicurrency feature enabled. The ISO code for any currency allowed by the organization."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Unique name for the object given by the Payments admin."
+    },
+    "MerchantAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Foreign key to the MerchantAccount. This field is a relationship field.",
+      "relationship_name": "MerchantAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "MerchantAccount"
+    },
+    "PaymentMethodSetNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-assigned ID for the MerchAccPaymentMethodSet."
+    },
+    "PaymentMethodSummary": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Summary field that is automatically populated with comma-separated values from MerchAccPaymentMethodType. This field is a calculated field."
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license with the Payments permission enabled for your org. Salesforce Payments entities are available only in Lightning Experience.\n\nTo access Salesforce Payments objects, you must\n         have a Salesforce Payments license with the Payments permission enabled for your org.\n         Salesforce Payments entities are available only in Lightning Experience.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeveloperName": {
+      "field_label": "Payment Method Set Key",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Merchant Account Payment Method Set ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MerchantAccountId": {
+      "field_label": "Merchant Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodSetNumber": {
+      "field_label": "Payment Method Set Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentMethodSummary": {
+      "field_label": "Payment Methods",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

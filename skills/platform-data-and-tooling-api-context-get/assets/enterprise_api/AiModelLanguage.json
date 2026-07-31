@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "AiModelLanguage - Data API",
+  "description": "An object that stores language related information that is generated for each AI model. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApplicationType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Type of application using the AI model. Possible values are: ARTICLE_RECOMMENDATION EAR_FOR_CONVERSATION EAR_FOR_VOICE FAQ REPLY_RECOMMENDATION USE_CASE_EXPLORER UTTERANCE_RECOMMENDATION"
+    },
+    "ExternalAiModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the AI model used to generate predictions. This field is a relationship field.",
+      "relationship_name": "ExternalAiModel",
+      "relationship_type": "Lookup",
+      "refers_to": "ExternalAIModel"
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Languages supported by this AI model. Possible values are: Arabic Chinese-simplified Chinese-traditional Dutch English French German Italian Japanese Korean Polish Portuguese Russian Spanish Thai Turkish"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "AI model name."
+    },
+    "ServingStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Determines if the language is enabled or disabled for this AI model."
+    },
+    "TranscriptCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Transcript count detected for each language."
+    }
+  },
+  "special_access_rules": "For Einstein Reply Recommendations:\n\nRequires the Einstein Reply Recommendations org permissions, Einstein Reply\n                  Recommendations org pref, and Admin user or user with Einstein Reply Manager\n                  permissions."
+}

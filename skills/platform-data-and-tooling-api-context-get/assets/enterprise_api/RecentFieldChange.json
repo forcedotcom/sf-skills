@@ -1,0 +1,123 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "RecentFieldChange - Data API",
+  "description": "Use this virtual object to see how an opportunity has changed in the past seven days. Learn the previous value of a field, who made the change, and when the change was made. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "properties",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ChangeDate": {
+      "type": "dateTime",
+      "description": "The date and time that the specified field was changed."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The ISO code for the currency value. Must be one of the valid alphabetic, three-letter currency ISO codes defined by the ISO 4217 standard, such as USD, GBP, or JPY. The default value is 'USD'."
+    },
+    "FieldName": {
+      "type": "string",
+      "properties": "Filter, Group",
+      "description": "The name of the opportunity field that you want the previous value of. Possible values are: Amount CloseDate StageName ForecastCategory NextStep"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group",
+      "description": "The ID of the opportunity that you want the change history for. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Opportunity"
+    },
+    "PreviousCurrencyValue": {
+      "type": "currency",
+      "properties": "Nillable",
+      "description": "The previous value of a currency field on an opportunity."
+    },
+    "PreviousDateOnlyValue": {
+      "type": "date",
+      "properties": "Group, Nillable",
+      "description": "The previous value of a date field on an opportunity."
+    },
+    "PreviousTextValue": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "The previous value of a text field on an opportunity."
+    },
+    "ValueChangedById": {
+      "type": "reference",
+      "properties": "Group",
+      "description": "The ID of the user who changed the specified field's value during the specified time period. This is a relationship field.",
+      "relationship_name": "ValueChangedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "To use RecentFieldChange, set up historical trend reporting for opportunities in your org. You must also have the Pipeline Inspection user permission and the Pipeline Inspection setting enabled.\n\nTo use RecentFieldChange, set up historical trend\n         reporting for opportunities in your org. You must also have the Pipeline Inspection user\n         permission and the Pipeline Inspection setting enabled.",
+  "usage": "One recentFieldChange record is returned for each field that was changed in the past seven days. The supported fields are Amount, Close Date, Forecast Category, Next Step, and Stage Name. Only the most recent previous value is returned.",
+  "field_reference": {
+    "ChangeDate": {
+      "field_label": "Change Date",
+      "type": "datetime"
+    },
+    "FieldName": {
+      "field_label": "Field Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Recent Change ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Opportunity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreviousCurrencyValue": {
+      "field_label": "Previous Currency Value",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PreviousDateOnlyValue": {
+      "field_label": "Previous Date Only Value",
+      "type": "date"
+    },
+    "PreviousNumberValue": {
+      "field_label": "Previous Number Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PreviousTextValue": {
+      "field_label": "Previous Text Value",
+      "type": "string",
+      "length": "255"
+    },
+    "ValueChangedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

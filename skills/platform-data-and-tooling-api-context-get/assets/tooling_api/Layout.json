@@ -1,0 +1,67 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "Layout - Tooling API",
+  "description": "Represents a page layout.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The Id of the EntityDefinition object associated with this object."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The unique name of the layout used as the identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "LayoutType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the type of the layout. Valid values are: GlobalQuickActionList ProcessDefinition Standard"
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "mns:Layout",
+      "properties": "Create, Nillable, Update",
+      "description": "Layout metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The layout name."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique string to distinguish this layout from any others. For example, if this layout is being using by a flow, use the NamespacePrefix to uniquely identify the layouts in multiple flow instances."
+    },
+    "ShowSubmitAndAttachButton": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Only allowed on Case layout. If true, Submit & Add Attachment displays on case edit pages to portal users in the Customer Portal."
+    },
+    "TableEnumOrId": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The enum (for example, Account) or ID of the object this layout is on."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Layout\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:Layout\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"Layout\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"customConsoleComponents\" minOccurs=\"0\" type=\"mns:CustomConsoleComponents\"/>\n        <xsd:element name=\"emailDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"excludeButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"feedLayout\" minOccurs=\"0\" type=\"mns:FeedLayout\"/>\n        <xsd:element name=\"headers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LayoutHeader\"/>\n        <xsd:element name=\"layoutSections\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:LayoutSection\"/>\n        <xsd:element name=\"miniLayout\" minOccurs=\"0\" type=\"mns:MiniLayout\"/>\n        <xsd:element name=\"multilineLayoutFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"platformActionList\" minOccurs=\"0\" type=\"mns:PlatformActionList\"/>\n        <xsd:element name=\"quickActionList\" minOccurs=\"0\" type=\"mns:QuickActionList\"/>\n        <xsd:element name=\"relatedContent\" minOccurs=\"0\" type=\"mns:RelatedContent\"/>\n        <xsd:element name=\"relatedLists\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:RelatedListItem\"/>\n        <xsd:element name=\"relatedObjects\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"runAssignmentRulesDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showEmailCheckbox\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showHighlightsPanel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showInteractionLogPanel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showKnowledgeComponent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showRunAssignmentRulesCheckbox\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showSolutionSection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showSubmitAndAttachButton\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"summaryLayout\" minOccurs=\"0\" type=\"mns:SummaryLayout\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"LayoutHeader\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PersonalTagging\"/>\n    <xsd:enumeration value=\"PublicTagging\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

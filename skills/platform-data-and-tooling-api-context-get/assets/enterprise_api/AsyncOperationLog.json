@@ -1,0 +1,193 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AsyncOperationLog - Data API",
+  "description": "Represents an async operations log containing progress and status information about external synchronizations to the Omnichannel Inventory service. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AsyncOperationNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated number assigned to the operation."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Description of the operation."
+    },
+    "Error": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The error message for the operation. Applies only if the operation has an error."
+    },
+    "ExternalReference": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The unique external reference ID per type."
+    },
+    "FinishedAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time the operation finished."
+    },
+    "LastStatusUpdateAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time the status of the operation was last updated."
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The related record ID for the async request. This field is available in API version 60.0 and later. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset, OrderItemSummary"
+    },
+    "Request": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The request sent to the external service."
+    },
+    "Response": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The full response from the external service."
+    },
+    "StartedAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time the operation started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the operation. Possible values are: Completed Error In Progress New"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of operation that is being tracked. Possible values are: CancelAsset—This value is available in API version 60.0 and later. CreateAsset—This value is available in API version 60.0 and later. CancelOrderItemSummaries ImportInventory LocationManagement OrderSummaryAdjustmentAggregate"
+    }
+  },
+  "special_access_rules": "This object is only available in Omnichannel Inventory orgs.",
+  "field_reference": {
+    "AsyncOperationNumber": {
+      "field_label": "Async Operation Number",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "Error": {
+      "field_label": "Error",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalReference": {
+      "field_label": "External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "FinishedAt": {
+      "field_label": "Finished At",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Async Operation Log ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastStatusUpdateAt": {
+      "field_label": "Last Status Update At",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "RelatedRecordId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Request": {
+      "field_label": "Request",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Response": {
+      "field_label": "Response",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "StartedAt": {
+      "field_label": "Started At",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

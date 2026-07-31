@@ -1,0 +1,202 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OrderItemTaxLineItemSummary - Data API",
+  "description": "Represents the current tax on an OrderItemSummary or OrderItemAdjustmentLineSummary. Corresponds to one or more order item tax line items, consisting of an original object and any change objects applicable to it. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Amount of tax represented by the OrderItemTaxLineItemSummary. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "CalculationReferenceNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reference number provided by the tax provider, such as Stripe, in the tax calculation API response."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "ISO code for the currency of the OrderSummary associated with the OrderItemTaxLineItemSummary. The default value is USD. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar This field is available in API version 49.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "Description of the OrderItemTaxLineItemSummary. This field can be edited."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the OrderItemTaxLineItemSummary."
+    },
+    "OrderItemAdjustmentLineSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If this object represents tax on an adjustment, this value is the ID of the OrderItemAdjustmentLineSummary to which the tax applies. If this value is null, the adjustment applies to an OrderItemSummary."
+    },
+    "OrderItemSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "If this object represents tax on an OrderItemSummary, this value is the ID of that OrderItemSummary. If this object represents tax on an adjustment, this value is the ID of the OrderItemSummary to which the adjustment applies."
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the OrderSummary that the associated OrderItemSummary or OrderItemAdjustmentLineSummary belongs to."
+    },
+    "OriginalOrderItemTaxLineItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the original order item tax line item associated with this summary object. Nillable=true only if the associated order summary is unmanaged. For managed order summaries, nillable=false."
+    },
+    "Rate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax rate used to calculate the Amount. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "ReferenceNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reference number provided by the tax provider (like Stripe) for each line item in the tax calculation API call. Use this unique ID to revert taxes during cancellation or return of an order."
+    },
+    "TaxEffectiveDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "Date on which the Amount was calculated. Important due to tax rate changes over time. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "TransactionReferenceNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Reference number provided by the tax provider, such as Stripe, in the tax transaction commit API request."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the Amount is actual or estimated. Possible values are: Actual Estimated If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderItemTaxLineItemSummaryChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CalculationReferenceNumber": {
+      "field_label": "Calculation Reference Number",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "Id": {
+      "field_label": "Order Product Tax Line Item Summary ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderItemAdjustmentLineSummaryId": {
+      "field_label": "Order Product Adjustment Line Item Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemSummaryId": {
+      "field_label": "Order Product Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OriginalOrderItemTaxLineItemId": {
+      "field_label": "Order Product Tax Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Rate": {
+      "field_label": "Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "ReferenceNumber": {
+      "field_label": "Reference Number",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxEffectiveDate": {
+      "field_label": "Tax Effective Date",
+      "type": "date"
+    },
+    "TransactionReferenceNumber": {
+      "field_label": "Transaction Reference Number",
+      "type": "string",
+      "length": "80"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

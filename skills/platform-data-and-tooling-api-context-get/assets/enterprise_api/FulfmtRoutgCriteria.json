@@ -1,0 +1,122 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "FulfmtRoutgCriteria - Data API",
+  "description": "Stores individual fulfillment criteria with their metadata, actions, and activation status within a fulfillment criteria group version. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionExpression": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For internal use only."
+    },
+    "ConditionExpression": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A logical expression that combines rule conditions by using identifiers. Defines the logical relationship between conditions."
+    },
+    "CanOverrideSplits": {
+      "type": "boolean",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates whether the routing criteria can override the max splits allowed restriction (true) or not (false). Default value is false. This field is available from API version 67.0 and later."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "An optional description of the rule."
+    },
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "An optional end date for the rule. NULL means no end date restriction."
+    },
+    "FulfmtRoutgCriteriaGrpVerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "A foreign key reference to the rule group version that this rule belongs to. Links the rule to its parent group version. This field is a relationship field.",
+      "relationship_name": "FulfmtRoutgCriteriaGrpVer",
+      "relationship_type": "Master-detail",
+      "refers_to": "FulfmtRoutgCriteriaGrpVer (the master object)"
+    },
+    "FulfmtRoutgCriteriaType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Determines the criteria type of the rule. Possible values are: Fulfillment"
+    },
+    "FulfmtRoutgCriteriaUsageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Determines the criteria usage type of the rule. Possible values are: Filter Weight"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the rule is active and included in DRL generation and execution (true) or not (false). Inactive rules are excluded from rule processing. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the criteria. Must be unique within the organization."
+    },
+    "RefFulfmtRoutgCriteria": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "A foreign key that points to the parent rule version. NULL for the first version of a rule. This field is a relationship field.",
+      "relationship_name": "FulfmtRoutgCriteria",
+      "relationship_type": "Master-detail",
+      "refers_to": "FulfmtRoutgCriteria (the master object)"
+    },
+    "ScoringType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Determines how scores are calculated for custom weighted rules. Null for template weighted rules. This field is available in API version 67.0 and later. Possible values are: InverseLinearRangeBased LinearRangeBased Static"
+    },
+    "ScoringTypeMetadata": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The metadata for scoring configuration stored as JSON for custom weighted rules. Null for template weighted rules. This field is available in API version 67.0 and later."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "An optional start date for the rule. NULL means no start date restriction."
+    },
+    "TemplateName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Determines the template name for the rule. Possible values are: InventoryMatchFilter—Inventory Availability MarkdownAvoidanceRule—Markdown Inventory OverstockScoreRule—Overstocked Inventory ProximityScoreRule—Nearest Location"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Determines how the rule operates and what actions it can perform. Possible values are: Filter Weight"
+    },
+    "Weight": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The numeric value that determines the relative importance of this rule in scoring calculations. NULL for filter rules."
+    }
+  },
+  "special_access_rules": "The Salesforce org must have:"
+}

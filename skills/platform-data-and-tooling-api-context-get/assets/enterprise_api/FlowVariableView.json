@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowVariableView - Data API",
+  "description": "Represents a variable within the flow version. This object is available in API version 46.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name of the flow variable."
+    },
+    "DataType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The data type of the flow variable. Valid values are: Apex—This value is available in API version 46.0 and later. Boolean Currency Date DateTime—This value is available in API version 30.0 and later. Number Multipicklist—This value is available in API version 34.0 and later. Picklist—This value is available in API version 34.0 and later. String sObject"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Flow variable information, specified by the org’s admin."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Id of the flow variable."
+    },
+    "FlowVersionViewId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The Id of the flow version. This is a relationship field.",
+      "relationship_name": "FlowVersionView",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowVersionView"
+    },
+    "IsCollection": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether or not the flow variable is a collection of values."
+    },
+    "IsInput": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicated whether or not the flow variable is available for input."
+    },
+    "IsOutput": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether or not the flow variable is available for output."
+    },
+    "ObjectType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the data type is sObject, this field indicates which object."
+    }
+  },
+  "usage": "Use this object to query information about flow variables. A query must be filtered by FlowVersionViewId to get results. Only variables with IsInput or IsOutput marked as true are visible.",
+  "wsdl_segment": "```xml\n<complexType name=\"FlowVariableView\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DataType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowVersionView\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowVersionView\"/>\n        <element name=\"FlowVersionViewId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsCollection\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsInput\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOutput\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ObjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "Variable API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "DataType": {
+      "field_label": "Variable Data Type",
+      "type": "string",
+      "length": "255"
+    },
+    "Description": {
+      "field_label": "Variable Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DurableId": {
+      "field_label": "Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "FlowVersionViewId": {
+      "field_label": "Flow Version View ID",
+      "type": "string",
+      "length": "512"
+    },
+    "Id": {
+      "field_label": "Flow Variable View ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsCollection": {
+      "field_label": "Variable allows multiple values (collection)",
+      "type": "boolean"
+    },
+    "IsInput": {
+      "field_label": "Variable is available for input",
+      "type": "boolean"
+    },
+    "IsOutput": {
+      "field_label": "Variable is available for output",
+      "type": "boolean"
+    },
+    "ObjectType": {
+      "field_label": "Record Variable Object",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

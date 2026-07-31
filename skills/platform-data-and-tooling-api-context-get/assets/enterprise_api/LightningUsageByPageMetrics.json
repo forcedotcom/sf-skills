@@ -1,0 +1,178 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "LightningUsageByPageMetrics - Data API",
+  "description": "Represents standard pages users viewed most frequently in Lightning Experience. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "MetricsDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "Date user viewed page in Lightning Experience."
+    },
+    "PageName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of page user viewed."
+    },
+    "TotalCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of pages viewed."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "UserId of user who viewed page. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "Not available in sandbox orgs.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"LightningUsageByPageMetrics\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CoresBin2To4\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CoresBin4To8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CoresBinOver8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CoresBinUnder2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DownlinkBin3To5\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DownlinkBin5To8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DownlinkBin8To10\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DownlinkBinOver10\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DownlinkBinUnder3\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"EptBin3To5\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"EptBin5To8\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"EptBin8To10\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"EptBinOver10\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"EptBinUnder3\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MetricsDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"PageName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordCountEPT\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RttBin50To150\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RttBinOver150\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RttBinUnder50\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SumEPT\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CoresBin2To4": {
+      "field_label": "CoresBin2To4",
+      "type": "int",
+      "digits": "9"
+    },
+    "CoresBin4To8": {
+      "field_label": "CoresBin4To8",
+      "type": "int",
+      "digits": "9"
+    },
+    "CoresBinOver8": {
+      "field_label": "CoresBinOver8",
+      "type": "int",
+      "digits": "9"
+    },
+    "CoresBinUnder2": {
+      "field_label": "CoresBinUnder2",
+      "type": "int",
+      "digits": "9"
+    },
+    "DownlinkBin3To5": {
+      "field_label": "DownlinkBin3To5",
+      "type": "int",
+      "digits": "9"
+    },
+    "DownlinkBin5To8": {
+      "field_label": "DownlinkBin5To8",
+      "type": "int",
+      "digits": "9"
+    },
+    "DownlinkBin8To10": {
+      "field_label": "DownlinkBin8To10",
+      "type": "int",
+      "digits": "9"
+    },
+    "DownlinkBinOver10": {
+      "field_label": "DownlinkBinOver10",
+      "type": "int",
+      "digits": "9"
+    },
+    "DownlinkBinUnder3": {
+      "field_label": "DownlinkBinUnder3",
+      "type": "int",
+      "digits": "9"
+    },
+    "EptBin3To5": {
+      "field_label": "EptBin3To5",
+      "type": "int",
+      "digits": "9"
+    },
+    "EptBin5To8": {
+      "field_label": "EptBin5To8",
+      "type": "int",
+      "digits": "9"
+    },
+    "EptBin8To10": {
+      "field_label": "EptBin8To10",
+      "type": "int",
+      "digits": "9"
+    },
+    "EptBinOver10": {
+      "field_label": "EptBinOver10",
+      "type": "int",
+      "digits": "9"
+    },
+    "EptBinUnder3": {
+      "field_label": "EptBinUnder3",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Lightning Usage By Page Metrics ID",
+      "type": "id",
+      "length": "18"
+    },
+    "MetricsDate": {
+      "field_label": "Metrics Date",
+      "type": "date"
+    },
+    "PageName": {
+      "field_label": "Page Name",
+      "type": "string",
+      "length": "40"
+    },
+    "RecordCountEPT": {
+      "field_label": "Record Count EPT",
+      "type": "int",
+      "digits": "9"
+    },
+    "RttBin50To150": {
+      "field_label": "RttBin50To150",
+      "type": "int",
+      "digits": "9"
+    },
+    "RttBinOver150": {
+      "field_label": "RttBinOver150",
+      "type": "int",
+      "digits": "9"
+    },
+    "RttBinUnder50": {
+      "field_label": "RttBinUnder50",
+      "type": "int",
+      "digits": "9"
+    },
+    "SumEPT": {
+      "field_label": "Sum EPT",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalCount": {
+      "field_label": "Total Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CalculationProcedureVariable - Data API",
+  "description": "Defines a variable in an Expression Set. The label for this object is Expression Set Variable. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of this variable."
+    },
+    "CalculationMatrixName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the Decision Matrix to which this variable belongs. Applicable only if this variable references a Decision Matrix column."
+    },
+    "CalculationProcedureVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Expression Set Version to which this variable belongs. This is a relationship field.",
+      "relationship_name": "CalculationProcedureVersion",
+      "relationship_type": "Lookup",
+      "refers_to": "CalculationProcedureVersion"
+    },
+    "DataType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The data type of this variable. Possible values are: Boolean Currency Date Number Percent Text"
+    },
+    "DefaultValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The default value of this variable."
+    },
+    "DisplayName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user-readable name of this variable."
+    },
+    "IsEditable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, specifies that a variable is NOT auto-imported from a step that calls a Decision Matrix or a child Expression Set. The default value is false."
+    },
+    "IsUserDefined": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether a variable is defined by the user. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of this variable."
+    },
+    "Precision": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of decimal places. Applicable if the DataType is Currency, Number, or Percent."
+    },
+    "UiDisplayOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The display order of the variable in the UI."
+    }
+  },
+  "special_access_rules": "Access to Expression Sets requires OmniStudio licenses.",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CalculationMatrixName": {
+      "field_label": "Decision Matrix Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CalculationProcedureVersionId": {
+      "field_label": "Calculation Procedure Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataType": {
+      "field_label": "Data Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DefaultValue": {
+      "field_label": "Default Value",
+      "type": "string",
+      "length": "255"
+    },
+    "DisplayName": {
+      "field_label": "Display Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Calculation Procedure Variable ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEditable": {
+      "field_label": "Editable",
+      "type": "boolean"
+    },
+    "IsUserDefined": {
+      "field_label": "User Defined",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Namespace": {
+      "field_label": "Namespace",
+      "type": "string",
+      "length": "255"
+    },
+    "Precision": {
+      "field_label": "Precision",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UiDisplayOrder": {
+      "field_label": "UI Display Order",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

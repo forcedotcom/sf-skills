@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "ObjectHierarchyRelationship - Tooling API",
+  "description": "Represents the mapping between an input source object and an output target object. For example, mapping details to transform a sales quote into a sales agreement. This object is available in API version 56.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object hierarchy relationship record. The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name. This field is automatically generated, but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated object hierarchy relationship record in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "InputObjRecordsGrpFieldName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The field name of the input object that groups records."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the ObjectHierarchyRelationship."
+    },
+    "MappingType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the type of relationship between the source and target object. Possible values are: ChildToChild—Child to Child ParentToChild—Parent to Child ParentToParent—Parent to Parent Support The default value is ParentToParent."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the ObjectHierarchyRelationship record."
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "The ObjectHierarchyRelationship’s metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "OutputPntRelationshipFieldName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Specifies the relationship between a child and parent for an output object."
+    },
+    "ParentRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the parent object mapping record. This field is a relationship field.",
+      "relationship_name": "ParentRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "ObjectHierarchyRelationship"
+    },
+    "ParentRelationshipFieldName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the field that defines the relationship between a parent and child."
+    },
+    "SourceReferenceRelaFieldName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The field name that defines the relationship between the input and output object."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies the usage type. Possible values are: CLMFieldMapping ConvertToSalesAgreement EligibleProgramRebateType MapJournalToMemberAggregate TransformationMapping"
+    }
+  }
+}

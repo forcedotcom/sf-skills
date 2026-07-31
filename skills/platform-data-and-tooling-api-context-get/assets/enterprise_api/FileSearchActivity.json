@@ -1,0 +1,156 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FileSearchActivity - Data API",
+  "description": "Represents search activity on a file. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AvgNumResults": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The number of search results returned for the search term. If Period is also included, this value is aggregated based on the time period specified."
+    },
+    "ClickRank": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The order that the file appeared in the search results when users clicked it from the list of results."
+    },
+    "CountQueries": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of searches for the period (day, month, or year)."
+    },
+    "CountUsers": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of individual users who clicked the file."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of search activity."
+    },
+    "Period": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The time period that the search count is applied to. For example, a record where the Count is 70 and the Period is Monthly indicates that 70 searches took place over the past month. Totals are aggregated daily for the current month, monthly from the past full month through the past full year, and yearly beyond that. Possible values are: DAY MONTH YEAR"
+    },
+    "QueryDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "The date of the search."
+    },
+    "QueryLanguage": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language filter that’s applied to the user’s search."
+    },
+    "SearchTerm": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The first 100 characters of the search term that was used to search published files."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"FileSearchActivity\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AvgNumResults\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ClickRank\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CountQueries\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CountUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Period\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"QueryDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"QueryLanguage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SearchTerm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AvgNumResults": {
+      "field_label": "Average Number of Results",
+      "type": "double",
+      "precision": "18",
+      "scale": "1"
+    },
+    "ClickRank": {
+      "field_label": "Average Click Rank",
+      "type": "double",
+      "precision": "18",
+      "scale": "1"
+    },
+    "CountQueries": {
+      "field_label": "Number of Searches",
+      "type": "int",
+      "digits": "9"
+    },
+    "CountUsers": {
+      "field_label": "Number of Users",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Search Activity Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Search Activity Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Period": {
+      "field_label": "Duration",
+      "type": "picklist",
+      "length": "255"
+    },
+    "QueryDate": {
+      "field_label": "Search Date",
+      "type": "date"
+    },
+    "QueryLanguage": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SearchTerm": {
+      "field_label": "Search Term",
+      "type": "string",
+      "length": "100"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "digits",
+    "length"
+  ]
+}

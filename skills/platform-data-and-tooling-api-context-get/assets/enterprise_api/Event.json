@@ -1,0 +1,528 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Event - Data API",
+  "description": "Represents an event in the calendar. In the user interface, event and task records are collectively referred to as activities.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AcceptedEventInviteeIds": {
+      "type": "JunctionIdList",
+      "properties": "Create, Update",
+      "description": "A string array of contact or lead IDs who accepted this event. This JunctionIdList is linked to the AcceptedEventRelation child relationship. Warning: Adding a JunctionIdList field name to the fieldsToNull property deletes all related junction records. This action can’t be undone."
+    },
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the ID of the related account. The AccountId is determined as follows.If the value of WhatId is any of the following objects, then Salesforce uses that object’s AccountId. Account Opportunity Contract Custom object that’s a child of Account If the value of the WhatId field is any other object, and the value of the WhoId field is a contact object, then Salesforce uses that contact’s AccountId. If your org uses Shared Activities, Salesforce uses the AccountId of the primary contact. Otherwise, Salesforce sets the value of the AccountId field to null. For information on IDs, see ID Field Type. This is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "ActivityDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Contains the event’s due date if the IsAllDayEvent flag is set to true. Doesn’t contain the event’s latest due date if the IsAllDayEvent flag is set to false. When IsAllDayEvent flag is set to true, use ActivityDateTime or StartDateTime. This field is a date field with a timestamp that’s always set to midnight in the Coordinated Universal Time (UTC) time zone. Don’t attempt to alter the timestamp to account for time zone differences. Label is Due Date Only.This field is required in API versions 12.0 and earlier if the IsAllDayEvent flag is set to true. The value for this field and StartDateTime must match, or one of them must be null."
+    },
+    "ActivityDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Contains the event’s due date if the IsAllDayEvent flag is set to false. The time portion of this field is always transferred in the Coordinated Universal Time (UTC) time zone. Translate the time portion to or from a local time zone for the user or the application, as appropriate. Label is Due Date Time.This field is required in API versions 12.0 and earlier if the IsAllDayEvent flag is set to false. The value for this field and StartDateTime must match, or one of them must be null."
+    },
+    "ClientGuid": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The client globally unique identifier identifies the external API client used to create the event. Label is Client GUID."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "DeclinedEventInviteeIds": {
+      "type": "JunctionIdLIst",
+      "properties": "Create, Update",
+      "description": "A string array of contact, lead, or user IDs who declined this event. This JunctionIdList is linked to the DeclinedEventRelation child relationship. Warning: Adding a JunctionIdList field name to the fieldsToNull property deletes all related junction records. This action can’t be undone."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Contains a text description of the event. Limit: 32,000 characters."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "A logical segment of your organization's data. For example, if your company is organized into different business units, you could create a division for each business unit, such as “North America,” “Healthcare,” or “Consulting.” Available only if the organization has the Division permission enabled."
+    },
+    "DurationInMinutes": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Contains the event length, in minutes. Even though this field represents a temporal value, it’s an integer type—not a Date/Time type.Required in API versions 12.0 and earlier if IsAllDayEvent is false. In API versions 13.0 and later, this field is optional, depending on the following: If IsAllDayEvent is true, you can supply a value for either DurationInMinutes or EndDateTime. Supplying values in both fields is allowed if the values add up to the same amount of time. If both fields are null, the duration defaults to one day. If IsAllDayEvent is false, a value must be supplied for either DurationInMinutes or EndDateTime. Supplying values in both fields is allowed if the values add up to the same amount of time. If the multiday event feature is enabled, then API versions 13.0 and later support values greater than 1440 for the DurationInMinutes field. API versions 12.0 and earlier can’t access event objects whose DurationInMinutes is greater than 1440. For more information, see Multiday Events. Depending on your API version, errors with the DurationInMinutes and EndDateTime fields may appear in different places. Versions 38.0 and before—Errors always appear in the DurationInMinutes field. Versions 39.0 and later—If there’s no value for the DurationInMinutes field, errors appear in the EndDateTime field. Otherwise, they appear in the DurationInMinutes field."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read-only. Available in API versions 46.0 and later. This field supplies the date value that appears in the EndDateTime field. This field is a date field with a timestamp that is always set to midnight in the Coordinated Universal Time (UTC) time zone."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Available in API versions 13.0 and later. The time portion of this field is always transferred in the Coordinated Universal Time (UTC) time zone. Translate the time portion to or from a local time zone for the user or the application, as appropriate.This field is optional, depending on the following: If IsAllDayEvent is true, you can supply a value for either DurationInMinutes or EndDateTime. Supplying values in both fields is allowed if the values add up to the same amount of time. If both fields are null, the duration defaults to one day. If IsAllDayEvent is false, a value must be supplied for either DurationInMinutes or EndDateTime. Supplying values in both fields is allowed if the values add up to the same amount of time. Depending on your API version, errors with the DurationInMinutes and EndDateTime fields may appear in different places. Versions 38.0 and before—Errors always appear in the DurationInMinutes field. Versions 39.0 and later—If there’s no value for the DurationInMinutes field, errors appear in the EndDateTime field. Otherwise, they appear in the DurationInMinutes field."
+    },
+    "EventSubtype": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Provides standard subtypes to facilitate creating and searching for events. This field isn’t updateable."
+    },
+    "EventWhoIds": {
+      "type": "JunctionIdList",
+      "properties": "Create, Update",
+      "description": "A string array of contact or lead IDs used to create many-to-many relationships with a shared event. EventWhoIds is available when the shared activities setting is enabled. The first contact or lead ID in the list becomes the primary WhoId if you don’t specify a primary WhoId. If you set the EventWhoIds field to null, all entries in the list are deleted and the value of WhoId is added as the first entry. Warning: Adding a JunctionIdList field name to the fieldsToNull property deletes all related junction records. This action can’t be undone."
+    },
+    "GroupEventType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Read-only. Available in API versions 19.0 and later. The possible values are: 0 (Non–group event)—An event with no invitees. 1 (Group event)—An event with invitees. 2 (Proposed event)—An event created when a user requests a meeting with a contact, lead, or person account using the Salesforce user interface. When the user confirms the meeting, the proposed event becomes a group event. You can’t create, edit, or delete proposed events in the API. This value is no longer used in API version 41.0 and later. 3 (IsRecurrence2 Series Pattern)—An event representing a template for a series recurrence pattern in Lightning Experience. You can't view, create, edit, or delete these events in the API."
+    },
+    "IsAllDayEvent": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the ActivityDate field (true) or the ActivityDateTime field (false) is used to define the date or time of the event. Label is All-Day Event. See also DurationInMinutes and EndDateTime."
+    },
+    "IsArchived": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the event has been archived."
+    },
+    "IsChild": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the event is a child of another event (true) or not (false). For a child event, you can update IsReminderSet and ReminderDateTime only. You can query and delete a child event. If the objects related to the child event are different from those objects related to the parent event (this difference is possible if you use API version 25.0 or earlier) and one of the objects related to the child event is deleted, the objects related to the parent event are updated to ensure data integrity."
+    },
+    "IsClientManaged": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the event is managed by an external client. If the value of this field is false, the event isn’t owned or managed by an external client, and Salesforce can be used to update it. If the value is true, Salesforce can be used to change only noncritical fields on the event. Label is Is Client Managed."
+    },
+    "IsGroupEvent": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the event is a group event—that is, whether it has invitees (true) or not (false)."
+    },
+    "IsPrivate": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether users other than the creator of the event can (false) or can’t (true) see the event details when viewing the event user’s calendar. However, users with the View All Data or Modify All Data permission can see private events in reports and searches, or when viewing other users’ calendars. Private events can’t be associated with opportunities, accounts, cases, campaigns, contracts, leads, or contacts. Label is Private."
+    },
+    "IsRecurrence": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a Salesforce Classic event is scheduled to repeat itself (true) or only occurs one time (false). This field is read-only when updating records, but not when creating them. If this field value is true, then RecurrenceEndDateOnly, RecurrenceStartDateTime, RecurrenceType, and any recurrence fields associated with the given recurrence type must be populated. Label is Create recurring series of events."
+    },
+    "IsRecurrence2": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only. This field is available in API version 44.0 and later. Indicates whether a Lightning Experience event is scheduled to repeat (true) or only occurs one time (false). If this field value is true, then Recurrence2PatternText and Recurrence2PatternVersion must be populated. Label is Repeat."
+    },
+    "IsRecurrence2Exception": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether an individual event in a series is different from the other events in the series, making it an exception. Changes made to the series aren’t made to an event that is an exception. Available in API version 44.0 and later. Read-only in API version 66 and earlier."
+    },
+    "IsRecurrence2Exclusion": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only. This field is available in API version 44.0 and later. Indicates when updates to a Lightning Experience event series recurrence pattern have been made, but affect future event occurrences only. For past event occurrences, IsRecurrence2Exclusion is set to true, excluding past occurrences from the series recurrence pattern."
+    },
+    "IsReminderSet": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the activity is a reminder (true) or not (false). To set IsReminderSet to true, the ReminderDateTime field must contain a valid date and time to trigger the reminder."
+    },
+    "IsVisibleInSelfService": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether an event associated with an object can be viewed in the Customer Portal (true) or not (false). If your org has enabled digital experiences, events marked IsVisibleInSelfService are visible to any external user in the Experience Cloud site, as long as the user has access to the record the event was created on. This field is available when Customer Portal or partner portal is enabled OR Digital experiences is enabled and you have Customer Portal or partner portal licenses"
+    },
+    "Location": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Contains the location of the event."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Contains the ID of the user or public calendar who owns the event. Label is Assigned to ID. This is a polymorphic relationship field. Important: By default, the event is assigned to the user who created it. If the event is created by the Automated Process user, add a different value for OwnerId. The Automated Process user isn’t a valid value for the OwnerId field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Calendar, User"
+    },
+    "Recurrence2PatternStartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read-only. This field is available in API version 44.0 and later. Indicates the date and time when the Lightning Experience event series begins. The time portion of this field is always transferred in the Coordinated Universal Time (UTC) time zone. Translate the time portion to or from a local time zone for the user or the application, as appropriate."
+    },
+    "Recurrence2PatternText": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "The RRULE that describes the recurrence pattern for Lightning Experience event series. Supports a subset of the RFC 5545 standard for internet calendaring and scheduling. See the Event Series section in this topic for usage examples. This field has a maximum length of 512 characters. This field is available in API version 44.0 and later, and has the Create property in API version 52.0 and later."
+    },
+    "Recurrence2PatternTimeZone": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is available in API version 44.0 and later. Indicates the time zone in which the Lightning Experience event series was created or updated. This field uses standard Java TimeZone IDs. For example, America/Los_Angeles."
+    },
+    "Recurrence2PatternVersion": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort,",
+      "description": "For internal use only. This field is available in API version 44.0 and later."
+    },
+    "RecurrenceActivityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read-only. Not required on create. Contains the ID of the main record of the Salesforce Classic recurring event. Subsequent occurrences have the same value in this field."
+    },
+    "RecurrenceDayOfMonth": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the day of the month on which the event repeats."
+    },
+    "RecurrenceDayOfWeekMask": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the day or days of the week on which the Salesforce Classic recurring event repeats. This field contains a bitmask. The values are as follows: Sunday = 1 Monday = 2 Tuesday = 4 Wednesday = 8 Thursday = 16 Friday = 32 Saturday = 64 Multiple days are represented as the sum of their numerical values. For example, Tuesday and Thursday = 4 + 16 = 20."
+    },
+    "RecurrenceEndDateOnly": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the last date on which the event repeats. For multiday Salesforce Classic recurring events, this date is the day on which the last occurrence starts. This field is a date field with a timestamp that is always set to midnight in the Coordinated Universal Time (UTC) time zone. Don’t attempt to alter the timestamp to account for time zone differences."
+    },
+    "RecurrenceInstance": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the frequency of the Salesforce Classic event’s recurrence. For example, 2nd or 3rd."
+    },
+    "RecurrenceInterval": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the interval between Salesforce Classic recurring events."
+    },
+    "RecurrenceMonthOfYear": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the month in which the Salesforce Classic recurring event repeats."
+    },
+    "RecurrenceStartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the date and time when the Salesforce Classic recurring event begins. The value must precede the RecurrenceEndDateOnly. The time portion of this field is always transferred in the Coordinated Universal Time (UTC) time zone. Translate the time portion to or from a local time zone for the user or the application, as appropriate."
+    },
+    "RecurrenceTimeZoneSidKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the time zone associated with a Salesforce Classic recurring event. For example, “UTC-8:00” for Pacific Standard Time."
+    },
+    "RecurrenceType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates how often the Salesforce Classic event repeats. For example, daily, weekly, or every nth month (where “nth” is defined in RecurrenceInstance)."
+    },
+    "ReminderDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Represents the time when the reminder is scheduled to fire, if IsReminderSet is set to true. If IsReminderSet is set to false, then the user may have deselected the reminder checkbox in the Salesforce user interface, or the reminder has already fired at the time indicated by the value."
+    },
+    "ShowAs": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates how this event appears when another user views the calendar: Busy, Out of Office, or Free. Label is Show Time As."
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the start date and time of the event. Available in versions 13.0 and later.If the Event IsAllDayEvent flag is set to true (indicating that it’s an all-day Event), then the event start date information is contained in the StartDateTime field. The time portion of this field is always transferred in the Coordinated Universal Time (UTC) time zone. Translate the time portion to or from a local time zone for the user or the application, as appropriate. If the Event IsAllDayEvent flag is set to false (indicating that it isn’t an all-day event), then the event start date information is contained in the StartDateTime field. The time portion is always transferred in the Coordinated Universal Time (UTC) time zone. You need to translate the time portion to or from a local time zone for the user or the application, as appropriate. If this field has a value, then ActivityDate and ActivityDateTime must either be null or match the value of this field."
+    },
+    "Subject": {
+      "type": "combobox",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The subject line of the event, such as Call, Email, or Meeting. Limit: 255 characters."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the event type, such as Call, Email, or Meeting."
+    },
+    "UndecidedEventInviteeIds": {
+      "type": "JunctionIdList",
+      "properties": "Create, Update",
+      "description": "A string array of contact, lead, or user IDs who are undecided about this event. This JunctionIdList is linked to the UndecidedEventRelation child relationship. Warning: Adding a JunctionIdList field name to the fieldsToNull property deletes all related junction records. This action can’t be undone."
+    },
+    "WhatCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Available if your organization has enabled Shared Activities. Represents the count of related EventRelations pertaining to the WhatId. The count of the WhatId must be 1 or less."
+    },
+    "WhatId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The WhatId represents nonhuman objects such as accounts, opportunities, campaigns, cases, or custom objects. WhatIds are polymorphic. Polymorphic means a WhatId is equivalent to the ID of a related object. The label is Related To ID. This is a polymorphic relationship field.",
+      "relationship_name": "What",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CommSubscriptionConsent, ContactEncounter, ContactEncounterParticipant, ContactRequest, Contract, CoverageBenefit, CoverageBenefitItem, CreditMemo, DelegatedAccount, DocumentChecklistItem, EnrollmentEligibilityCriteria, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, IdentityDocument, Image, IndividualApplication, Invoice, ListEmail, Location, MemberPlan, Opportunity, Order, OtherComponentTask, PartyConsent, PersonLifeEvent, PlanBenefit, PlanBenefitItem, ProcessException, Product2, ProductItem, ProductRequest, ProductRequestLineItem, ProductTransfer, PurchaserPlan, ReceivedDocument, ResourceAbsence, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, Shift, Shipment, ShipmentItem, Solution, Visit, VisitedParty, VolunteerProject, WorkOrder, WorkOrderLineItem"
+    },
+    "WhoCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Available to organizations that have Shared Activities enabled. Represents the count of related EventRelations pertaining to the WhoId."
+    },
+    "WhoId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The WhoId represents a human such as a lead or a contact. WhoIds are polymorphic. Polymorphic means a WhoId is equivalent to a contact’s ID or a lead’s ID. The label is Name ID.If Shared Activities is enabled, the value of this field is the ID of the related lead or primary contact. If you add, update, or remove the WhoId field, you might encounter problems with triggers, workflows, and data validation rules that are associated with the record. The label is Name ID. If the JunctionIdList field is used, all WhoIds are included in the relationship list. Beginning in API version 37.0, if the contact or lead ID in the WhoId field isn't in the EventWhoIds list, no error occurs and the ID is added to the EventWhoIds as the primary WhoId. If WhoId is set to null, an arbitrary ID from the existing EventWhoIds list is promoted to the primary position. This is a polymorphic relationship field.",
+      "relationship_name": "Who",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead"
+    }
+  },
+  "usage": "Use Event to manage calendar appointments. Querying and Filtering Events Queries on events are denied before they time out if they involve amounts of data that are deemed too large. In such cases, the exception code OPERATION_TOO_LARGE is returned. If you receive OPERATION_TOO_LARGE, refactor your query to return or scan a smaller amount of data. Alternatively, in API version 13.0 and later, you can find events with a specific due date by filtering on StartDateTime. For example, to find all events with a due date of February 14, 2003, filter with the StartDateTime greater than or equal to midnight on February 14, 2003 in the user's local time zone AND less than or equal to midnight on February 15, 2003 in the user's local time zone. The EventId field of an EventRelation object always points to the master record. An invitee on a group event can query the EventRelation object to view the master record. Event Series and Recurring Events In Lightning Experience, events with multiple occurrences are called event series, and are indicated when the IsRecurrence2 field is set to true. In Salesforce Classic, events with multiple occurrences are called recurring events, and are indicated when the IsRecurrence field is set to true. Both fields can’t be set to true for the same event. Limits for Lightning Experience event series and limits for Salesforce Classic recurring events also apply. Lightning Experience Event Series and Recurring Events\n\nUse Event to manage calendar appointments.\n\nQuerying and Filtering Events**\n\nQueries on events are denied before they time out if they involve amounts of data that are deemed too large. In such cases, the exception code OPERATION_TOO_LARGE is returned. If you receive OPERATION_TOO_LARGE, refactor your query to return or scan a smaller amount of data.\n\nAlternatively, in API version 13.0 and later, you can find events with a specific due date by filtering on StartDateTime. For example, to find all events with a due date of February 14, 2003, filter with the StartDateTime greater than or equal to midnight on February 14, 2003 in the user's local time zone AND less than or equal to midnight on February 15, 2003 in the user's local time zone.\n\nThe EventId field of an EventRelation object always points to the master record. An invitee on a group event can query the EventRelation object to view the master record.\n\nEvent Series and Recurring Events**\n\nIn Lightning Experience, events with multiple occurrences are called event series, and are indicated when the IsRecurrence2 field is set to true. In Salesforce Classic, events with multiple occurrences are called recurring events, and are indicated when the IsRecurrence field is set to true. Both fields can’t be set to true for the same event.\n\nLimits for Lightning Experience event series and limits for Salesforce Classic recurring events also apply.\n\nLightning Experience Event Series and Recurring Events**\n\nThe RRULE defined by Recurrence2PatternText supports a subset of the RFC 5545 standard for internet calendaring and scheduling. Supported RRULE parts include FREQ, BYMONTH, BYMONTHDAY, BYDAY, WKST, BYSETPOS, INTERVAL, UNTIL, and COUNT.\n\nFor example, to indicate weekly on Tuesday and Thursday until September 1, 2023, use RRULE:FREQ=WEEKLY;UNTIL=20230901T000000Z;BYDAY=TU,TH\n\nFor example, to indicate monthly on the third day of the month use: RRULE:FREQ=MONTHLY;BYMONTHDAY=3\n\nFor example, to indicate the last weekday of the month, use RRULE:FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1\n\nFor example, to indicate monthly on the first Friday for 10 occurrences, use RRULE:FREQ=MONTHLY;COUNT=10;BYDAY=1FR\n\nFor example, to indicate every year on the second Friday of January, use RRULE:FREQ=YEARLY;BYMONTH=1;BYDAY=FR;BYSETPOS=2\n\nFor example, to indicate every year on October 31, use RRULE:FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=31\n\nFor example, to create a maintenance pattern such as twice in May, and September on 7th and 15th; and one time in June/July/August on the 1st, use two RRULEs: RRULE: FREQ=MONTHLY; BYMONTH=5,9; BYMONTHDAY=7, 15 RRULE:FREQ=MONTHLY; BYMONTH=6,7,8; BYMONTHDAY=1\n\nEach BYDAY value can be preceded by an integer that indicates the nth occurrence of a specific day within the monthly or yearly RRULE. Allowed values are -1, 1, 2, 3, and 4. You can't use different numbers in the BYDAY values. For example, this RRULE isn’t supported: RRULE:FREQ=MONTHLY;INTERVAL=2;COUNT=10;BYDAY=1SU,-1SU If BYDAY values are prefaced with a number, the RRULE can't include BYSETPOS.\n\nFor example, to indicate the last weekday of the month, use: RRULE:FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1\n\nAn RRULE can't contain both UNTIL and COUNT. A recurring event without either UNTIL or COUNT repeats indefinitely.\n\nAn RRULE can't contain both UNTIL and COUNT. A recurring event without either UNTIL or COUNT repeats indefinitely.\n\nFor example, to indicate specific weeks in a year, use: RRULE: BYWEEKNO=20, -20.\n\nThis rule part can’t be used when the FREQ rule part is set to anything other than YEARLY. For example, 3 represents the third week of the year.\n\nNote: Assuming a Monday week start, week 53 can only occur when Thursday is January 1 or if it’s a leap year and Wednesday is January 1.\n\nFor example, to indicate specific days in a year, use: RRULE:BYYEARDAY=1,100,200; or, RRULE:BYYEARDAY=1,-2.\n\nSalesforce Classic Event Series and Recurring Events**\n\nThis table describes the usage of recurrence fields for Salesforce Classic recurring events. Each recurrence type must have all of its properties set. All unused properties must be set to null.\n\nAttendees, Invitees, and Resources**\n\nThe field GroupEventType indicates that event participants are included on an event. You can add a resource to an event only when the resource is available. The only attendance status that can be assigned to resources is Accepted. Events can’t be saved when resources you’ve added aren’t available.\n\nChild attendee events aren’t supported in Apex Triggers. When a recurring event has attendees, Salesforce creates child event records for each attendee for each recurrence. However, these child attendee event records don’t appear in Trigger.new or other trigger context variables. Only the host’s event records are accessible in the trigger context.\n\nJunctionIdList**\n\nSyncing Events with Lightning Sync**\n\nAttendee statuses (Accepted or Maybe, Declined, or No Response) sync from Microsoft® Exchange or Google to Salesforce, but not from Salesforce to Exchange or Google. Be wary of creating API flows that update attendee status in Salesforce for users set up to sync both ways. Eventually the original Exchange or Google status overrides the update made in Salesforce.\n\nShared Field-Level Security for Event and Task Objects**\n\nMetadata deployments for the Event object must include the field-level security for the Task object. Shared field-level security prevents each object from changing the field-level security of the associated object.\n\nMetadata deployments that include field-level security for only one of either the Event or Task objects can cause field-level security changes to the other object that aren't reflected in the metadata.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **EventChangeEvent (API version 44.0)**: Change events are available for the object.\n- **EventFeed (API version 20.0)**: Feed tracking is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"Event\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AcceptedEventInviteeIds\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ID\"/>\n        <element name=\"AcceptedEventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivityDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"ActivityDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ActivityFieldHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ChildEventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeclinedEventInviteeIds\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ID\"/>\n        <element name=\"DeclinedEventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurationInMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"EndDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EventSubtype\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GroupEventType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsAllDayEvent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsArchived\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsChild\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsGroupEvent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPrivate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRecurrence\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRecurrence2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRecurrence2Exception\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRecurrence2Exclusion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReminderSet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Location\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Recurrence2PatternStartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Recurrence2PatternText\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Recurrence2PatternTimeZone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Recurrence2PatternVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecurrenceActivityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RecurrenceDayOfMonth\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RecurrenceDayOfWeekMask\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RecurrenceEndDateOnly\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"RecurrenceInstance\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecurrenceInterval\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RecurrenceMonthOfYear\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecurrenceStartDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"RecurrenceTimeZoneSidKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecurrenceType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecurringEvents\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReminderDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ShowAs\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Subject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UndecidedEventInviteeIds\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ID\"/>\n        <element name=\"UndecidedEventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"What\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"WhatId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Who\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"WhoId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivityDate": {
+      "field_label": "Due Date Only",
+      "type": "date"
+    },
+    "ActivityDateTime": {
+      "field_label": "Due Date Time",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DurationInMinutes": {
+      "field_label": "Duration",
+      "type": "int",
+      "digits": "8"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "EndDateTime": {
+      "field_label": "End Date Time",
+      "type": "datetime"
+    },
+    "EventSubtype": {
+      "field_label": "Event Subtype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "GroupEventType": {
+      "field_label": "Group Event Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Activity ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAllDayEvent": {
+      "field_label": "All-Day Event",
+      "type": "boolean"
+    },
+    "IsArchived": {
+      "field_label": "Archived",
+      "type": "boolean"
+    },
+    "IsChild": {
+      "field_label": "Is Child",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsGroupEvent": {
+      "field_label": "Is Group Event",
+      "type": "boolean"
+    },
+    "IsPrivate": {
+      "field_label": "Private",
+      "type": "boolean"
+    },
+    "IsRecurrence": {
+      "field_label": "Create Recurring Series of Events",
+      "type": "boolean"
+    },
+    "IsRecurrence2": {
+      "field_label": "Repeat",
+      "type": "boolean"
+    },
+    "IsRecurrence2Exception": {
+      "field_label": "Is Exception",
+      "type": "boolean"
+    },
+    "IsRecurrence2Exclusion": {
+      "field_label": "Historical Event, Not Following Recurrence",
+      "type": "boolean"
+    },
+    "IsReminderSet": {
+      "field_label": "Reminder Set",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Location": {
+      "field_label": "Location",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Assigned To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Recurrence2PatternStartDate": {
+      "field_label": "Recurrence Pattern Start Date",
+      "type": "datetime"
+    },
+    "Recurrence2PatternText": {
+      "field_label": "Recurrence Pattern",
+      "type": "textarea",
+      "length": "512"
+    },
+    "Recurrence2PatternTimeZone": {
+      "field_label": "Recurrence Pattern Time Zone Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "Recurrence2PatternVersion": {
+      "field_label": "Pattern Version",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RecurrenceActivityId": {
+      "field_label": "Recurrence Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecurrenceDayOfMonth": {
+      "field_label": "Recurrence Day of Month",
+      "type": "int",
+      "digits": "9"
+    },
+    "RecurrenceDayOfWeekMask": {
+      "field_label": "Recurrence Day of Week Mask",
+      "type": "int",
+      "digits": "9"
+    },
+    "RecurrenceEndDateOnly": {
+      "field_label": "Recurrence End",
+      "type": "date"
+    },
+    "RecurrenceInstance": {
+      "field_label": "Recurrence Instance",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RecurrenceInterval": {
+      "field_label": "Recurrence Interval",
+      "type": "int",
+      "digits": "9"
+    },
+    "RecurrenceMonthOfYear": {
+      "field_label": "Recurrence Month of Year",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RecurrenceStartDateTime": {
+      "field_label": "Recurrence Start",
+      "type": "datetime"
+    },
+    "RecurrenceTimeZoneSidKey": {
+      "field_label": "Recurrence Time Zone",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RecurrenceType": {
+      "field_label": "Recurrence Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReminderDateTime": {
+      "field_label": "Reminder Date/Time",
+      "type": "datetime"
+    },
+    "ShowAs": {
+      "field_label": "Show Time As",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StartDateTime": {
+      "field_label": "Start Date Time",
+      "type": "datetime"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "combobox",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WhatId": {
+      "field_label": "Related To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WhoId": {
+      "field_label": "Name ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

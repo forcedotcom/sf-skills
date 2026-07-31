@@ -1,0 +1,128 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "DataStreamTemplate - Tooling API",
+  "description": "Represents metadata about the data stream that a user adds to a data kit. This object is available in API version 52.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type"
+  ],
+  "fields": {
+    "DataSourceBundleDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the DataSourceBundleDefinition, which refers to the data stream bundle to which a data stream template belongs. This field is a relationship field.",
+      "relationship_name": "DataSourceBundleDefinition",
+      "relationship_type": "Look up"
+    },
+    "DataSourceObjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the DataSourceObject, which represents the object from where the data was sourced.This field is a relationship field.",
+      "relationship_name": "DataSourceObject",
+      "relationship_type": "Look up"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique name for the data stream template. Identical value to FullName."
+    },
+    "FilterCriteria": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Describes the filter applied to the data stream before the information is sent to Data 360."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in Metadata API."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Languages supported in the deployment. Possible values are: af—Afrikaans am—Amharic ar—Arabic ar_AE—Arabic (United Arab Emirates) ar_BH—Arabic (Bahrain) ar_DZ—Arabic (Algeria) ar_EG—Arabic (Egypt) ar_IQ—Arabic (Iraq) ar_JO—Arabic (Jordan) ar_KW—Arabic (Kuwait) ar_LB—Arabic (Lebanon) ar_LY—Arabic (Libya) ar_MA—Arabic (Morocco) ar_OM—Arabic (Oman) ar_QA—Arabic (Qatar) ar_SA—Arabic (Saudi Arabia) ar_SD—Arabic (Sudan) ar_SY—Arabic (Syria) ar_TN—Arabic (Tunisia) ar_YE—Arabic (Yemen) bg—Bulgarian bn—Bengali bs—Bosnian ca—Catalan cac—Chuj cak—Kaqchikel cs—Czech cy—Welsh da—Danish de—German de_AT—German (Austria) de_BE—German (Belgium) de_CH—German (Switzerland) de_LI—German (Liechtenstein) de_LU—German (Luxembourg) el—Greek el_CY—Greek (Cyprus) en_AD—English (Andorra) en_AE—English (United Arab Emirates) en_AG—English (Antigua and Barbuda) en_AL—English (Albania) en_AT—English (Austria) en_AU—English (Australian) en_BA—English (Bosnia and Herzegovina) en_BB—English (Barbados) en_BE—English (Belgium) en_BG—English (Bulgaria) en_BS—English (Bahamas) en_BZ—English (Belize) en_CA—English (Canadian) en_CH—English (Switzerland) en_CY—English (Cyprus) en_CZ—English (Czechia) en_DE—English (Germany) en_DK—English (Denmark) en_DM—English (Dominica) en_EE—English (Estonia) en_ES—English (Spain) en_FI—English (Finland) en_FR—English (France) en_GB—English (UK) en_GD—English (Grenada) en_GI—English (Gibraltar) en_GR—English (Greece) en_GY—English (Guyana) en_HK—English (Hong Kong) en_HR—English (Croatia) en_HU—English (Hungary) en_IE—English (Ireland) en_IL—English (Israel) en_IN—English (Indian) en_IS—English (Iceland) en_IT—English (Italy) en_JM—English (Jamaica) en_JP—English (Japan) en_KN—English (St. Kitts and Nevis) en_KR—English (South Korea) en_LC—English (St. Lucia) en_LI—English (Liechtenstein) en_LT—English (Lithuania) en_LU—English (Luxembourg) en_LV—English (Latvia) en_MC—English (Monaco) en_ME—English (Montenegro) en_MK—English (North Macedonia) en_MT—English (Malta) en_MY—English (Malaysian) en_NL—English (Netherlands) en_NO—English (Norway) en_NZ—English (New Zealand) en_PH—English (Phillipines) en_PL—English (Poland) en_PT—English (Portugal) en_RO—English (Romania) en_RS—English (Serbia) en_SE—English (Sweden) en_SG—English (Singapore) en_SI—English (Slovenia) en_SK—English (Slovakia) en_TH—English (Thailand) en_TR—English (Turkey) en_TT—English (Trinidad and Tobago) en_TW—English (Taiwan) en_US—English en_VC—English (St. Vincent and the Grenadines) en_ZA—English (South Africa) eo—Esperanto (Pseudo) es—Spanish es_AD—Spanish (Andorra) es_AR—Spanish (Argentina) es_BO—Spanish (Bolivia) es_CL—Spanish (Chile) es_CO—Spanish (Colombia) es_CR—Spanish (Costa Rica) es_DO—Spanish (Dominican Republic) es_EC—Spanish (Ecuador) es_GT—Spanish (Guatemala) es_HN—Spanish (Honduras) es_MX—Spanish (Mexico) es_NI—Spanish (Nicaragua) es_PA—Spanish (Panama) es_PE—Spanish (Peru) es_PR—Spanish (Puerto Rico) es_PY—Spanish (Paraguay) es_SV—Spanish (El Salvador) es_US—Spanish (United States) es_UY—Spanish (Uruguay) es_VE—Spanish (Venezuela) et—Estonian eu—Basque fa—Farsi fi—Finnish fr—French fr_BE—French (Belgium) fr_CA—French (Canadian) fr_CH—French (Switzerland) fr_HT—French (Haiti) fr_LU—French (Luxembourg) fr_MA—French (Morocco) ga—Irish gu—Gujarati haw—Hawaiian hi—Hindi hmn—Hmong hr—Croatian ht—Haitian Creole hu—Hungarian hy—Armenian in—Indonesian is—Icelandic it—Italian it_CH—Italian (Switzerland) iw—Hebrew iw_EO—Esperanto RTL (Pseudo) ja—Japanese ji—Yiddish ka—Georgian kk—Kazakh kl—Greenlandic km—Khmer kn—Kannada ko—Korean lb—Luxembourgish lt—Lithuanian lv—Latvian mi—Te reo mk—Macedonian ml—Malayalam mr—Marathi ms—Malay mt—Maltese my—Burmese nl_BE—Dutch (Belgium) nl_NL—Dutch nl_SR—Dutch (Suriname) no—Norwegian pa—Punjabi pl—Polish pt_BR—Portuguese (Brazil) pt_PT—Portuguese (European) quc—Kiche rm—Romansh ro—Romanian ro_MD—Romanian (Moldova) ru—Russian ru_AM—Russian (Armenia) ru_BY—Russian (Belarus) ru_KG—Russian (Kyrgyzstan) ru_KZ—Russian (Kazakhstan) ru_LT—Russian (Lithuania) ru_MD—Russian (Moldova) ru_PL—Russian (Poland) ru_UA—Russian (Ukraine) sh—Serbian (Latin) sh_ME—Montenegrin sk—Slovak sl—Slovene sm—Samoan sq—Albanian sr—Serbian (Cyrillic) sv—Swedish sv_FI—Swedish (Finland) sw—Swahili ta—Tamil te—Telugu th—Thai tl—Tagalog tr—Turkish uk—Ukrainian ur—Urdu vi—Vietnamese xh—Xhosa zh_CN—Chinese (Simplified) zh_HK—Chinese (Hong Kong) zh_MY—Chinese (Malaysia) zh_SG—Chinese (Singapore) zh_TW—Chinese (Traditional) zu—Zulu"
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the state of an entity in a package. Possible values are: beta—Managed-Beta deleted—Managed-Proposed-Deleted deprecated—Managed-Proposed-Deprecated deprecatedEditable—SecondGen-Installed-Deprecated installed—Managed-Installed installedEditable—SecondGen-Installed-Editable released—Managed-Released unmanaged—Unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Indicates the name of the bundle."
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "Describes additional information that's necessary for the data stream template."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Namespace prefix associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix."
+    },
+    "RefreshDayOfMonth": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The duration of the day of the month after which the data stream template must be refreshed."
+    },
+    "RefreshDayOfWeek": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The duration of the day of the week after which the data stream must be refreshed."
+    },
+    "RefreshFrequency": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The frequency with which the data stream must be refreshed. Possible values are: BATCH—Batch DAILY—Daily EVERY_12_HOURS—Every 12 Hours EVERY_4_HOURS—Every 4 Hours HOURLY—Hourly MINUTES_15—15 Minutes MINUTES_30—30 Minutes MINUTES_5—5 Minutes MONTHLY—Monthly NONE—None NOT_APPLICABLE—Not Applicable STREAMING—Streaming WEEKLY—Weekly"
+    },
+    "RefreshHours": {
+      "type": "multipicklist",
+      "properties": "Filter, Nillable",
+      "description": "The duration after which the data stream template must be refreshed. Possible values are: 0 1 10 11 12 13 14 15 16 17 18 19 2 20 21 22 23 3 4 5 6 7 8 9"
+    },
+    "RefreshMode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The mode of refresh. Possible values are: FULL_REFRESH—Full Refresh INCREMENTAL—Incremental NEAR_REAL_TIME_INCREMENTAL—Near Real-time Incremental NOT_APPLICABLE—Not Applicable PARTIAL_UPDATE—Partial Update REPLACE—Replace By Date UPSERT—Upsert"
+    },
+    "RefreshStartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date to retrieve data based on the refresh frequency data. Available in API version 62.0 and later."
+    },
+    "SourceObjectName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the source object from which data is streamed. Available in API version 62.0 and later."
+    },
+    "StreamType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of data stream. Available in API version 62.0 and later. Possible values are: DIRECT_ACCESS—Direct Access DIRECT_ACCESS_ACCELERATED—Direct Access (Accelerated) INGEST—Ingest"
+    },
+    "StreamingAppDataConnectorType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The connector app for data streaming. Available in API version 63.0 and later. Possible values are: MobileApp—Mobile App WebApp—Web App"
+    },
+    "TemplateVersion": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The version number of the template. Available in API version 62.0 and later."
+    }
+  },
+  "special_access_rules": "You need Data 360 permission to access this object."
+}

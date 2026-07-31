@@ -1,0 +1,196 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ContentNote - Data API",
+  "description": "Represents a note created with the enhanced note-taking tool, released in Winter ’16. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Content": {
+      "type": "base64",
+      "properties": "Create, Nillable, Update",
+      "description": "The content or body of the note, which can include properly formatted HTML or plain text. When a document is uploaded or downloaded via the API, it must be base64 encoded (for upload) or decoded (for download). Any special characters within plain text in the Content field must be escaped. You can escape special characters by calling content.escapeHtml4(). If the input contains unsafe HTML characters or new lines, we automatically strip them out before saving the content."
+    },
+    "ContentModifiedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the document was modified. ContentModifiedDate updates when, for example, the document is renamed or a new document version is uploaded. This field is available in API version 48.0 and later."
+    },
+    "ContentSize": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the note in bytes for notes smaller than 2 GB. In API version 66.0 and later, use the ContentSizeLong field."
+    },
+    "ContentSizeLong": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the note in bytes, up to 10 GB. This field is available in API version 66.0 and later."
+    },
+    "FileExtension": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "File extension of the note."
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Type of file for the note. All notes have a file type of SNOTE."
+    },
+    "IsReadOnly": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group, Sort",
+      "description": "Indicates whether the note is read only."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the note was last viewed. This field is available in API version 35.0 and later."
+    },
+    "LatestContentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Lookup to the note's ContentBody. This field is available in API version 52.0 and later. This is a relationship field.",
+      "relationship_name": "LatestContent",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentBody"
+    },
+    "LatestPublishedVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the ContentVersion for the latest published version of the note."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create (for users assigned the Set Audit Fields Upon Creation permission), Defaulted on create, Filter, Group, Sort, Update (for users assigned the Set Audit Fields Upon Creation permission)",
+      "description": "ID of the owner of the note."
+    },
+    "SharingPrivacy": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Controls sharing privacy for a file. Only Salesforce admins and file owners with Collaborator access to the file can modify this field. Default is Visible to Anyone With Record Access. When set to Private on Records, the file is private on records but can be shared selectively with others.This field is available in API versions 41.0 and later."
+    },
+    "TextPreview": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A preview of the note’s content. This field is available in API version 35.0 and later."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Namefield, Sort, Update",
+      "description": "Title of the note."
+    }
+  },
+  "usage": "For example, the following Apex code creates a note and escapes any special characters so they’re converted to their HTML equivalents. In this example, the following code creates a note using text that is already formatted as HTML, so it doesn’t need to be escaped.\n\nFor example, the following Apex code creates a note and escapes any special characters so they’re converted to their HTML equivalents.\n\nIn this example, the following code creates a note using text that is already formatted as HTML, so it doesn’t need to be escaped.",
+  "field_reference": {
+    "Content": {
+      "field_label": "Content",
+      "type": "base64"
+    },
+    "ContentModifiedDate": {
+      "field_label": "Content Modified Date",
+      "type": "datetime"
+    },
+    "ContentSize": {
+      "field_label": "Content Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "ContentSizeLong": {
+      "field_label": "Content Size",
+      "type": "long",
+      "digits": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created",
+      "type": "datetime"
+    },
+    "FileExtension": {
+      "field_label": "File Extension",
+      "type": "string",
+      "length": "20"
+    },
+    "FileType": {
+      "field_label": "File Type",
+      "type": "string",
+      "length": "20"
+    },
+    "Id": {
+      "field_label": "Note Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsReadOnly": {
+      "field_label": "Is Read Only",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LatestContentId": {
+      "field_label": "Content Body ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LatestPublishedVersionId": {
+      "field_label": "Content Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SharingPrivacy": {
+      "field_label": "Note Privacy on Records",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TextPreview": {
+      "field_label": "Text Preview",
+      "type": "string",
+      "length": "255"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

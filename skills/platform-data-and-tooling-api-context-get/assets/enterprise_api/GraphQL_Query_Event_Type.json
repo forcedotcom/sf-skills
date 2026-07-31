@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "GraphQL Query Event Type - Data API",
+  "description": "GraphQL Query events contain information about executed queries, including total execution time, the number of invocations, and any reported errors.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "APP_TYPE": {
+      "type": "String",
+      "description": "The name of the application that the user accessed."
+    },
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CPU_TIME": {
+      "type": "Number",
+      "description": "The CPU time in milliseconds used to complete the request. This field indicates the amount of activity taking place in the app server layer."
+    },
+    "ELAPSED_TIME_MS": {
+      "type": "Number",
+      "description": "The time, in milliseconds, that it took for the GraphQL query to complete."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event."
+    },
+    "EXCEPTION": {
+      "type": "String",
+      "description": "Exception message if the request encountered an error. Empty indicates successful execution."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
+    },
+    "OPERATION_NAME": {
+      "type": "String",
+      "description": "The name of the GraphQL query. If the query was anonymous (i.e., no name was provided in the query string), this field will usually be empty or null in the logs."
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization. For example: 00D000000000123."
+    },
+    "QUERY": {
+      "type": "String",
+      "description": "The GraphQL JSON query."
+    },
+    "QUERY_LENGTH": {
+      "type": "Number",
+      "description": "The length of the GraphQL JSON query in characters."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID. For example: TID:000000000000c00fff."
+    },
+    "RUN_TIME": {
+      "type": "Number",
+      "description": "The amount of time that the request took in milliseconds."
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started. For example: d7DEq/ANa7nNZZVD."
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The time that the flow was executed in GMT. For example: 20210606032436.520."
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "CHECK",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ) For example: 2015-07-27T11:32:59.555Z. The timezone is GMT."
+    },
+    "URI": {
+      "type": "String",
+      "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
+    },
+    "URI_ID_DERIVED": {
+      "type": "String",
+      "description": "The 18-character case insensitive ID of the URI of the page that’s receiving the request."
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who executed the flow through the UI or the API. For example: 00530000009M943."
+    },
+    "USER_ID_DERIVED": {
+      "type": "String",
+      "description": "The 18-character case insensitive ID of the user who’s using Salesforce services through the UI or the API. For example: 00590000000I1SNIA0."
+    },
+    "USER_TYPE": {
+      "type": "String",
+      "description": "The category of user license. Possible values are: CsnOnly—Users whose access to the application is limited to Chatter. This user type includes Chatter Free and Chatter moderator users. CspLitePortal—CSP Lite Portal license. Users whose access is limited because they’re organization customers and access the application through a customer portal or an Experience Cloud site. CustomerSuccess—Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Guest—Users whose access is limited so that your customers can view and interact with your site without logging in. PowerCustomerSuccess—Power Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Users with this license type can view and edit data they directly own or data owned by or shared with users below them in the customer portal role hierarchy. PowerPartner—Power Partner license. Users whose access is limited because they’re partners and typically access the application through a partner portal or site. SelfService—Users whose access is limited because they’re organization customers and access the application through a self-service portal. Standard—Standard user license. This user type also includes Salesforce Platform and Salesforce Platform One user licenses, and admins for this org."
+    },
+    "VARIABLES": {
+      "type": "String",
+      "description": "A JSON string containing the name-value pairs of the variables used in the GraphQL operation."
+    }
+  }
+}

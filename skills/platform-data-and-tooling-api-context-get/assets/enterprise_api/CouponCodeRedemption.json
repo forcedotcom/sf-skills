@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CouponCodeRedemption - Data API",
+  "description": "Tracks each coupon code redemption. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Buyer": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Information about the buyer. Can be any buyer-specific information."
+    },
+    "CouponId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the redeemed coupon. This field is a relationship field.",
+      "relationship_name": "Coupon",
+      "relationship_type": "Lookup",
+      "refers_to": "Coupon"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Salesforce generated coupon code, such as CCR-000000002. Can’t be edited."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who created the coupon code redemption. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Transaction": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort",
+      "description": "ID of the transaction where the coupon code was redeemed. Must be a valid cart ID."
+    }
+  },
+  "special_access_rules": "This object is available through the B2B Commerce license. To access this object, the Promotions Coupon Redemption Limit user permission must be assigned.",
+  "field_reference": {
+    "Buyer": {
+      "field_label": "Buyer",
+      "type": "string",
+      "length": "255"
+    },
+    "CouponId": {
+      "field_label": "Coupon ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Coupon Code Redemption ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Coupon Code Redemption Number",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Transaction": {
+      "field_label": "Transaction",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

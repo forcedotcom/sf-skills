@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ContactCenterChannel - Tooling API",
+  "description": "Represents a junction object that relates a Bring Your Own Channel for Contact Center as a Service (CCaaS) messaging channel to a CallCenter object for Bring Your Own Channel for CCaaS. This object also represents the routing details for a voicemail configuration. This object is available in API version 56.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "For Bring Your Own Channel for CCaaS, this field represents the unique ID of the Bring Your Own Channel messaging channel (MessagingChannel) that’s associated with the contact center (CallCenterId). Available in API version 60.0 and later. This field is a relationship field.",
+      "relationship_name": "Channel",
+      "refers_to": "MessagingChannel"
+    },
+    "ContactCenterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "This field is a relationship field. For Bring Your Own Channel for CCaaS, this field represents the unique ID of the contact center (CallCenterId) that’s associated with the Bring Your Own Channel messaging channel (MessagingChannel). Available in API version 60.0 and later. This field is a relationship field.",
+      "relationship_name": "ContactCenter",
+      "relationship_type": "Master-detail",
+      "refers_to": "CallCenter (the master object)"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Available in API version 63.0 only. For internal use."
+    },
+    "VoicemailFallbackQueueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If voicemail routing is configured for the contact center, this field represents the unique ID of the fallback queue to use if voicemail routing fails. This field is a relationship field. Don't change the value in this field. Instead, configure voicemail routing in Lightning Experience. This field is a relationship field.",
+      "relationship_name": "VoicemailFallbackQueue",
+      "refers_to": "Group"
+    },
+    "VoicemailHandler": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If voicemail routing is configured for the contact center, this field represents the unique ID of the flow used to route voicemails. Don't change the value in this field. Instead, configure voicemail routing in Lightning Experience."
+    }
+  },
+  "special_access_rules": "To access this object, Service Cloud Voice with Amazon Connect, Service Cloud Voice with Partner Telephony, Service Cloud Voice with Partner Telephony from Amazon Connect, or Bring Your Own Channel for CCaaS must be enabled.\nTo access this Tooling object, you must be a SysAdmin user or have ViewSetup user permissions."
+}

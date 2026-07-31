@@ -1,0 +1,193 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ProcessInstanceHistory - Data API",
+  "description": "This read-only object shows all steps and pending approval requests associated with an approval process (ProcessInstance).",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActorId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who is assigned to this ProcessInstance. This is a polymorphic relationship field.",
+      "relationship_name": "Actor",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Comments": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Comments for a ProcessInstanceStep . This field doesn't apply to ProcessInstanceWorkitem records."
+    },
+    "ElapsedTimeInDays": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in days between when the approval process instance was started and when it was completed."
+    },
+    "ElapsedTimeInHours": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in hours between when the approval process instance was started and when it was completed."
+    },
+    "ElapsedTimeInMinutes": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in minutes between when the approval process instance was started and when it was completed."
+    },
+    "IsPending": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the ProcessInstance is pending (true) or not (false)."
+    },
+    "OriginalActorId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who was originally assigned this ProcessInstance. This is a polymorphic relationship field.",
+      "relationship_name": "OriginalActor",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ProcessInstanceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the ProcessInstance. This is a relationship field.",
+      "relationship_name": "ProcessInstance",
+      "relationship_type": "Lookup",
+      "refers_to": "ProcessInstance"
+    },
+    "ProcessNodeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of this step. This is a relationship field.",
+      "relationship_name": "ProcessNode",
+      "relationship_type": "Lookup",
+      "refers_to": "ProcessNode"
+    },
+    "RemindersSent": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number of reminders that have been sent. Default is 0 (zero)."
+    },
+    "StepStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the status of the ProcessInstanceStep."
+    },
+    "TargetObjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the object being approved. This is a polymorphic relationship field.",
+      "relationship_name": "TargetObject",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, ActivationTarget, Address, AlternativePaymentMethod, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskIndDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, AuthorizationForm, AuthorizationFormConsent, AuthorizationFormDataUse, AuthorizationFormText, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CodeSet, CodeSetBundle, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, ConsumptionRate, ConsumptionSchedule, Contact, ContactEncounter, ContactEncounterParticipant, ContactPointAddress, ContactPointConsent, ContactPointEmail, ContactPointPhone, ContactPointTypeConsent, Contract, CoverageBenefit, CoverageBenefitItem, CreditMemo, CreditMemoLine, DataStream, DataUseLegalBasis, DataUsePurpose, DelegatedAccount, DigitalSignature, DocumentChecklistItem, DuplicateRecordItem, DuplicateRecordSet, EmailMessage, EngagementChannelType, EnrollmentEligibilityCriteria, ExternalEventMapping, HealthCareDiagnosis, HealthCareProcedure, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, Identifier, IdentityDocument, Image, IndividualApplication, Invoice, InvoiceLine, Lead, Location, LocationTrustMeasure, MarketSegment, MarketSegmentActivation, MemberPlan, MessagingEndUser, MessagingSession, MktCalculatedInsight, Opportunity, Order, OrgMetricScanResult, OrgMetricScanSummary, OtherComponentTask, PartyConsent, PaymentAuthAdjustment, PersonEducation, PersonLanguage, PersonLifeEvent, PersonName, PlanBenefit, PlanBenefitItem, ProcessException, Product2, ProductFulfillmentLocation, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, PromptAction, PurchaserPlan, PurchaserPlanAssn, QuickTextUsage, ReceivedDocument, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderItemAdjustment, ReturnOrderItemTax, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, ServiceTerritoryWorkType, SharingRecordCollection, SharingRecordCollectionItem, SharingRecordCollectionMember, Shift, Shipment, ShipmentItem, SkillRequirement, SocialPost, Solution, StreamingChannel, UnitOfMeasure, UserProvisioningRequest, VideoCall, VideoCallParticipant, VideoCallRecording, Visit, VisitedParty, Visitor, VolunteerProject, WorkBadgeDefinition, WorkOrder, WorkOrderLineItem, WorkType, WorkTypeGroup, WorkTypeGroupMember"
+    }
+  },
+  "usage": "This object helps you replicate the related list functionality of the Salesforce user interface for approval processes. Use ProcessInstanceHistory for a unified read-only view of the ProcessInstanceStep and ProcessInstanceWorkItem objects. You can’t query ProcessInstanceHistory. Instead, you can query ProcessInstanceHistory by including it in a nested query on the parent ProcessInstance object. For example, this SOQL query returns all the ProcessInstanceHistory records related to individual ProcessInstance records. The nested query references StepsAndWorkitems, which is the child relationshipName for ProcessInstanceHistory in the ProcessInstance object. This object respects field-level security on the parent object.\n\nThis object helps you replicate the related list functionality of the Salesforce user interface for approval processes. Use ProcessInstanceHistory for a unified read-only view of the ProcessInstanceStep and ProcessInstanceWorkItem objects. You can’t query ProcessInstanceHistory. Instead, you can query ProcessInstanceHistory by including it in a nested query on the parent ProcessInstance object. For example, this SOQL query returns all the ProcessInstanceHistory records related to individual ProcessInstance records. The nested query references StepsAndWorkitems, which is the child relationshipName for ProcessInstanceHistory in the ProcessInstance object.\n\nThis object respects field-level security on the parent object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ProcessInstanceHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Actor\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ActorId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ElapsedTimeInDays\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ElapsedTimeInHours\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ElapsedTimeInMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPending\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OriginalActor\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OriginalActorId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstance\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProcessInstance\"/>\n        <element name=\"ProcessInstanceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessNode\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProcessNode\"/>\n        <element name=\"ProcessNodeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RemindersSent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StepStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TargetObject\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"TargetObjectId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActorId": {
+      "field_label": "Actor ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "string",
+      "length": "4000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ElapsedTimeInDays": {
+      "field_label": "Elapsed Time in Days",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ElapsedTimeInHours": {
+      "field_label": "Elapsed Time in Hours",
+      "type": "double",
+      "precision": "7",
+      "scale": "2"
+    },
+    "ElapsedTimeInMinutes": {
+      "field_label": "Elapsed Time in Minutes",
+      "type": "double",
+      "precision": "8",
+      "scale": "0"
+    },
+    "Id": {
+      "field_label": "Process Instance History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPending": {
+      "field_label": "Is Pending",
+      "type": "boolean"
+    },
+    "OriginalActorId": {
+      "field_label": "Original Actor ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProcessInstanceId": {
+      "field_label": "Process Instance ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProcessNodeId": {
+      "field_label": "Process Node ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RemindersSent": {
+      "field_label": "RemindersSent",
+      "type": "int",
+      "digits": "9"
+    },
+    "StepStatus": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetObjectId": {
+      "field_label": "Target Object ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

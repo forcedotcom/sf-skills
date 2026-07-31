@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "WorkItemEvent - Data API",
+  "description": "Represents real-time notifications for work item status changes in a DevOps Center project. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "EventUuid": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The universally unique identifier (UUID) for the event."
+    },
+    "NewStatus": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The work item status after the lifecycle update, such as Ready to Promote or Promoted."
+    },
+    "OldStatus": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The work item status before the lifecycle update, such as In Progress."
+    },
+    "Project": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The ID of the project that contains the work item."
+    },
+    "ReplayId": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The event bus replay ID. Subscribers can use this value to replay event messages within the retention window."
+    },
+    "WorkItemName": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The name of the work item. For example, WI-000001."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"WorkItemEvent\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EventUuid\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NewStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OldStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Project\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReplayId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"WorkItemName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```"
+}

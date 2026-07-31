@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ApexTestResult - Tooling API",
+  "description": "Represents the result of an Apex test method execution. Available from API version 30.0 or later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Apex class whose test methods were executed."
+    },
+    "ApexLogId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Points to the ApexLog for this test method execution if debug logging is enabled; otherwise, null."
+    },
+    "ApexTestRunResultId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the ApexTestRunResult that represents the entire test run."
+    },
+    "AsyncApexJobId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Points to the AsyncApexJob that represents the entire test run. This field points to the same object as ApexTestQueueItem.ParentJobId."
+    },
+    "IsTestSetup": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the results are for a test setup method. The default is false."
+    },
+    "Message": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The exception error message if a test failure occurs; otherwise, null."
+    },
+    "MethodName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the test method."
+    },
+    "Outcome": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The result of the test. Valid values are: Pass Fail CompileFail Skip"
+    },
+    "QueueItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Points to the ApexTestQueueItem which is the class that this test method is part of."
+    },
+    "RunTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The time it took the test method to run, in seconds."
+    },
+    "StackTrace": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The Apex stack trace if the test failed; otherwise, null."
+    },
+    "TestCategory": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The category of the test class. This field is available in API version 65.0 and later. Possible values are: Apex–run Apex tests. Flow–run flow tests. IntegrationTest–run integration tests. This field is available as a Developer Preview in API version 67.0 and later. See Apex Integration Tests for Agentforce and Data 360 Services (Developer Preview) in the Apex Developer Guide."
+    },
+    "TestName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the test class. This field is available in API version 65.0 and later."
+    },
+    "TestNamespace": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The namespace of the test class. Apex tests are in the default namespace, so theTestNamespace value for Apex tests is null. Flow tests are in the FlowTesting namespace. If a flow test is in a namespaced package or org, the TestNamespace value is FlowTesting.<NamepacePrefix>. This field is available in API version 65.0 and later."
+    },
+    "TestTimestamp": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The start time of the test method."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexTestResult\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ApexClass\" minOccurs=\"0\" type=\"ens:ApexClass\" nillable=\"true\"/>\n        <xsd:element name=\"ApexClassId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"ApexLog\" minOccurs=\"0\" type=\"ens:ApexLog\" nillable=\"true\"/>\n        <xsd:element name=\"ApexLogId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"ApexTestResults\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"ApexTestRunResult\" minOccurs=\"0\" type=\"ens:ApexTestRunResult\" nillable=\"true\"/>\n        <xsd:element name=\"ApexTestRunResultId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"AsyncApexJob\" minOccurs=\"0\" type=\"ens:AsyncApexJob\" nillable=\"true\"/>\n        <xsd:element name=\"AsyncApexJobId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"IsTestSetup\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Message\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"MethodName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Outcome\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"QueueItem\" minOccurs=\"0\" type=\"ens:ApexTestQueueItem\" nillable=\"true\"/>\n        <xsd:element name=\"QueueItemId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"RunTime\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"StackTrace\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"TestCategory\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"TestName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"TestNamespace\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"TestTimestamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"QueryLocator\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"QueryResult\">\n  <xsd:sequence>\n    <xsd:element name=\"done\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"entityTypeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"nextRecordsUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryLocator\" type=\"tns:QueryLocator\"/>\n    <xsd:element name=\"records\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"ens:sObject\"/>\n    <xsd:element name=\"size\" type=\"xsd:int\"/>\n    <xsd:element name=\"totalSize\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

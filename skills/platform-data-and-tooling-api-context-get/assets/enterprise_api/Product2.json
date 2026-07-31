@@ -1,0 +1,477 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Product2 - Data API",
+  "description": "Represents a product that your company sells.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BillingPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related billing policy. This field is available when Subscription Management is enabled. This field is available in API version 55.0 and later. This field is a relationship field.",
+      "relationship_name": "BillingPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "BillingPolicy"
+    },
+    "CanUseQuantitySchedule": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the product can have a quantity schedule (true) or not (false). Label is Quantity Scheduling Enabled."
+    },
+    "CanUseRevenueSchedule": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the product can have a revenue schedule (true) or not (false). Label is Revenue Scheduling Enabled."
+    },
+    "ConnectionReceivedId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the PartnerNetworkConnection that shared this record with your org. This field is available when Salesforce to Salesforce is enabled."
+    },
+    "ConnectionSentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the PartnerNetworkConnection that this record is shared with. This field is available Salesforce to Salesforce is enabled. In API version 16.0 and later, this value is null. Use PartnerNetworkRecordConnection object to forward records to connections."
+    },
+    "ConfigureDuringSale": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Determines whether a user can edit a configuration when creating a bundle order or quote. This field is available in API version 58.0 and later. This field is available when Industries Automotive or Subscription Management is enabled. Possible values are: Allowed— Changes are allowed while adding line items to a bundle; for example, when adding products or editing quantity. NotAllowed—Changes aren’t allowed."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the org."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A text description of this record. Label is Product Description."
+    },
+    "DisplayUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "URL leading to a specific version of a record in the linked external data source."
+    },
+    "ExternalDataSourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the related external data source."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique identifier of a record in the linked external data source. For example, ID #123."
+    },
+    "Family": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the product family associated with this record. Product families are configured as picklists in the user interface. To obtain a list of valid values, call describeSObjects() and process the result for the values associated with the Family field. Label is Product Family."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this record is active (true) or not (false). Inactive Product2 records are hidden in many areas in the user interface. You can change the IsActive flag on a Product2 object as often as necessary. Label is Active."
+    },
+    "IsArchived": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Describes whether the product is archived. The default value is false."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "IsSerialized": {
+      "type": "boolean",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Indicates if a product is a serialized product (true) or not (false). Label is Serialized."
+    },
+    "IsSoldOnlyWithOtherProds": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether the product can be sold independently or only as part of a bundle. This field is available in API version 58.0 and later. This field is available when Industries Automotive or Subscription Management is enabled. The default value is false, which means that the product can be sold independently."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it's possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Default name of this record. Label is Product Name.",
+      "required": true
+    },
+    "NumberOfQuantityInstallments": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the product has a quantity schedule, the number of installments."
+    },
+    "NumberOfRevenueInstallments": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the product has a revenue schedule, the number of installments."
+    },
+    "ProductClass": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "This field is read-only. Its value is determined by the value of the Type field and whether the product is associated with a ProductAttribute record. It describes whether a product is a bundle, set, or simple product, a variation parent, or a product variation. Possible values are: Bundle—This product is a parent or component in a product bundle. Set—This product is included in a product set. Simple—This product has no variations VariationParent—This product is a variation parent. It’s the base product for one or more product variations and, though it has its own stock-keeping unit (SKU), isn’t a sellable entity. Instead, it’s the parent of sellable entities—its variations. Variation—This product is a variation of a parent product. Each variation has its own SKU. When the value of ProductClass = VariationParent, it never changes. The value of ProductClass changes between Simple and Variation when you attach or detach a ProductAttribute record to the product. If you attach a ProductAttribute record to a product, then the product’s ProductClass value changes to Variation. Conversely, when you detach all ProductAttribute records from a product, the ProductClass value changes to Simple. The default value is Simple. This field is available in API version 50.0 and later. It was introduced to support of B2B and B2C Commerce implementations."
+    },
+    "ProductCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Default product code for this record. Your org defines the product’s code-naming pattern."
+    },
+    "QuantityInstallmentPeriod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If the product has a quantity schedule, the amount of time covered by the schedule."
+    },
+    "QuantityScheduleType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of the quantity schedule, if the product has one."
+    },
+    "QuantityUnitOfMeasure": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Unit of the product; for example, kilograms, liters, or cases. This field comes with only one value, Each, so consider creating your own. The QuantityUnitOfMeasure field on ProductItem inherits this field’s values."
+    },
+    "RecalculateTotalPrice": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Changes behavior of OpportunityLineItem calculations when a line item has child schedule rows for the Quantity value. When enabled, if the rollup quantity changes, then the quantity rollup value is multiplied against the sales price to change the total price."
+    },
+    "RevenueInstallmentPeriod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If the product has a revenue schedule, the time period covered by the schedule."
+    },
+    "RevenueScheduleType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of the revenue schedule, if the product has one."
+    },
+    "StockCheckMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The method for how a product's inventory is checked. Stock checks on parent products are common when bundles are prepackaged and individual child components can't be sold separately. Stock checks on child products are common when bundles aren't prepackaged and must be put together during fulfillment. If bundles aren’t prepackaged, child components can usually be sold separately. Possible values are: Null—Check stock on the product SKU. DoNotCheck —The stock shouldn't be check. ParentProduct —If the product is a parent of a bundle, check stock on the parent product. ChildProducts —If the product is a parent of a bundle, check stock on the child components."
+    },
+    "StockKeepingUnit": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The SKU for the product. Use in tandem with or instead of the ProductCode field. For example, you can track the manufacturer’s identifying code in the Product Code field and assign the product a SKU when you resell it."
+    },
+    "TaxPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related tax policy. This field is available when Subscription Management is enabled. This field is available in API version 55.0 and later. This field is a relationship field.",
+      "relationship_name": "TaxPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxPolicy"
+    },
+    "TransferRecordMode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If serialized, indicates when the serial number is recorded. This field is visible based on field-level security. The value affects the read-only value of the Product2TransferMode field on the ProductTransfer object. Possible values are: SendAndReceive —The serial number is recorded when sending or receiving. ReceiveOnly —The serial number is recorded when receiving only."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of product. This field's value affects the read-only value of the ProductClass field on the Product2 object. The following mappings define how the Type selection updates the ProductClass. Base—When Type = Base, then ProductClass = VariationParent. Null—When Type = Null, then ProductClass = Simple for standalone products. Null—When Type = Null, then ProductClass = Variation for variation products. Bundle—When Type = Bundle, then ProductClass = Bundle. Set—When Type = Set, then ProductClass = Set. Revenue Cloud doesn't support products with these specific combinations: Type = Base and ProductClass = VariationParent or Type = Null and ProductClass = Variation. Values Null, Base, Bundle, and Set are available in environments where both Commerce and Revenue Cloud co-exist. The Type field can only be updated from Null to Bundle for products with a Simple ProductClass Note: This field is available when Revenue Cloud, B2B Commerce, B2C Commerce, or other clouds with PCM add-on is enabled. This field is available in API version 50.0 and later."
+    },
+    "UnitOfMeasureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the unit of measure associated with the product. This field is a relationship field. This field is available when Revenue Cloud is enabled. This field is available in API version 63.0 and later.",
+      "relationship_name": "UnitOfMeasure",
+      "refers_to": "UnitOfMeasure"
+    }
+  },
+  "special_access_rules": "The ConfigureDuringSale and IsSoldOnlyWithOtherProds fields are available in version 58.0 and later when Industry Automotive or Subscription Management is enabled.",
+  "usage": "Use this object to define the default product information for your org. This object is associated by reference with Pricebook2 objects via PricebookEntry objects. The same product can be represented in different price books as price book entries. In fact, the same product can be represented multiple times (as separate PricebookEntry records) in the same price book with different prices or currencies. A product can only have one price for a given currency within the same price book. To be used in custom price books, all standard prices must be added as price book entries to the standard price book. Note: You can’t create lookup fields to Product2 object, which have Required check box set to true or the Don't Allow Deletion\" radio button selected, as the platform would otherwise interpret this and throw an error that you cannot create a master-detail relationship to the object.\n\nUse this object to define the default product information for your org. This object is associated by reference with Pricebook2 objects via PricebookEntry objects. The same product can be represented in different price books as price book entries. In fact, the same product can be represented multiple times (as separate PricebookEntry records) in the same price book with different prices or currencies. A product can only have one price for a given currency within the same price book. To be used in custom price books, all standard prices must be added as price book entries to the standard price book.\n\nNote: You can’t create lookup fields to Product2 object, which have Required** check box set to true or the Don't Allow Deletion**\" radio button selected, as the platform would otherwise interpret this and throw an error that you cannot create a master-detail relationship to the object.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **Product2ChangeEvent (API version 44.0)**: Change events are available for the object.\n- **Product2Feed (API version 18.0)**: Feed tracking is available for the object.\n- **Product2History**: History is available for tracked fields of the object.\n- **Product2OwnerSharingRule (API version 50.0)**: Sharing rules are available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"Product2\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Assets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Cases\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContractLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DisplayUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ExternalDataSourceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Family\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsArchived\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsSerialized\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ListEmails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ParentRecords\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PricebookEntries\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProductConsumptionSchedules\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductRequestLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductServiceCampaignItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductServiceCampaignProducts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductTransfers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductWarrantyTermProducts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductsConsumed\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductsRequired\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"QuantityUnitOfMeasure\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SerializedProducts\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShipmentItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"StockKeepingUnit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkPlanSelectionRules\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AvailabilityDate": {
+      "field_label": "Availability Date",
+      "type": "datetime"
+    },
+    "BasedOnId": {
+      "field_label": "Product Classification ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingPolicyId": {
+      "field_label": "Billing Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CanRamp": {
+      "field_label": "Ramp",
+      "type": "boolean"
+    },
+    "CanUseQuantitySchedule": {
+      "field_label": "Quantity Scheduling Enabled",
+      "type": "boolean"
+    },
+    "CanUseRevenueSchedule": {
+      "field_label": "Revenue Scheduling Enabled",
+      "type": "boolean"
+    },
+    "ConfigureDuringSale": {
+      "field_label": "Configure During Sale",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CustomDecompositionScope": {
+      "field_label": "Custom Decomposition Scope",
+      "type": "string",
+      "length": "80"
+    },
+    "DecompositionScope": {
+      "field_label": "Decomposition Scope",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Description": {
+      "field_label": "Product Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "DiscontinuedDate": {
+      "field_label": "Discontinued Date",
+      "type": "datetime"
+    },
+    "DisplayUrl": {
+      "field_label": "Display URL",
+      "type": "url",
+      "length": "1000"
+    },
+    "EndOfLifeDate": {
+      "field_label": "End Of Life Date",
+      "type": "datetime"
+    },
+    "ExternalDataSourceId": {
+      "field_label": "External Data Source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExternalId": {
+      "field_label": "External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Family": {
+      "field_label": "Product Family",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FulfillmentQtyCalcMethod": {
+      "field_label": "Fulfillment Quantity Calculation Method",
+      "type": "picklist",
+      "length": "40"
+    },
+    "HelpText": {
+      "field_label": "Help Text",
+      "type": "textarea",
+      "length": "32768"
+    },
+    "Id": {
+      "field_label": "Product ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsArchived": {
+      "field_label": "Archived",
+      "type": "boolean"
+    },
+    "IsAssetizable": {
+      "field_label": "Is Assetizable",
+      "type": "boolean"
+    },
+    "IsCommodity": {
+      "field_label": "Commodity Product",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsSerialized": {
+      "field_label": "Serialized",
+      "type": "boolean"
+    },
+    "IsSoldOnlyWithOtherProds": {
+      "field_label": "Sell only with other products",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Product Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NumberOfQuantityInstallments": {
+      "field_label": "Number Of Quantity Installments",
+      "type": "int",
+      "digits": "3"
+    },
+    "NumberOfRevenueInstallments": {
+      "field_label": "Number Of Revenue Installments",
+      "type": "int",
+      "digits": "3"
+    },
+    "ProductClass": {
+      "field_label": "Product Class",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ProductCode": {
+      "field_label": "Product Code",
+      "type": "string",
+      "length": "255"
+    },
+    "ProductPurpose": {
+      "field_label": "Product Purpose",
+      "type": "picklist",
+      "length": "40"
+    },
+    "QuantityInstallmentPeriod": {
+      "field_label": "Quantity Installment Period",
+      "type": "picklist",
+      "length": "40"
+    },
+    "QuantityScheduleType": {
+      "field_label": "Quantity Schedule Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "QuantityUnitOfMeasure": {
+      "field_label": "Quantity Unit Of Measure",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecordTypeId": {
+      "field_label": "Record Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RevenueInstallmentPeriod": {
+      "field_label": "Revenue Installment Period",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RevenueScheduleType": {
+      "field_label": "Revenue Schedule Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SpecificationType": {
+      "field_label": "Specification Type",
+      "type": "string",
+      "length": "255"
+    },
+    "StockKeepingUnit": {
+      "field_label": "Product SKU",
+      "type": "string",
+      "length": "180"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxPolicyId": {
+      "field_label": "Tax Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TransferRecordMode": {
+      "field_label": "Transfer Record Mode",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Type": {
+      "field_label": "Product Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UsageModelType": {
+      "field_label": "Usage Model Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UsedFor": {
+      "field_label": "Used for",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

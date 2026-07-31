@@ -1,0 +1,185 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OrderItemTaxLineItem - Data API",
+  "description": "The tax amount that has been applied to an order item. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The total amount of the tax line. The value is rounded to the nearest possible amount associated with the currency of the order item."
+    },
+    "CalculationReferenceNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Reference number provided by the tax provider, such as Stripe, in the tax calculation API response. This field is available in API version 62.0."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Users can add a custom description to the record to provide additional detail."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the tax line."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the parent order for the order item related to the tax line"
+    },
+    "OrderItemAdjustmentLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The order item adjustment line item that the tax line applies to."
+    },
+    "OrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The order item that the tax line applies to."
+    },
+    "Rate": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage value of the tax. Null if the tax is a flat amount."
+    },
+    "ReferenceNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Reference number provided by the tax provider (like Stripe) for each line item in the tax calculation API call. Use this unique ID to revert taxes during cancellation or return of an order. This field is available in API version 62.0."
+    },
+    "RelatedTaxLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The original order item tax line. Useful for reference in change order scenarios."
+    },
+    "TaxEffectiveDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The date used to calculate the effective tax rate. This field may require an update to accommodate different buyer time zones."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Shows whether the amount on the tax line is an estimate or the final calculated amount. Doesn’t set a value by default. Users can define automation to set and change the value as needed. Possible values are: Actual Estimated"
+    }
+  },
+  "special_access_rules": "To access Commerce Orders entities, your org must have a Salesforce Order Management license. Commerce Orders entities are available only in Lightning Experience.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CalculationReferenceNumber": {
+      "field_label": "Calculation Reference Number",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Id": {
+      "field_label": "Order Product Tax Line Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemAdjustmentLineItemId": {
+      "field_label": "Order Product Adjustment Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemId": {
+      "field_label": "Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Rate": {
+      "field_label": "Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "ReferenceNumber": {
+      "field_label": "Reference Number",
+      "type": "string",
+      "length": "80"
+    },
+    "RelatedTaxLineItemId": {
+      "field_label": "Order Product Tax Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxEffectiveDate": {
+      "field_label": "Tax Effective Date",
+      "type": "date"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

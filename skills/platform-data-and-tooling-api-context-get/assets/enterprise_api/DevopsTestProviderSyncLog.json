@@ -1,0 +1,74 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsTestProviderSyncLog - Data API",
+  "description": "Tracks synchronization activities between the DevOps framework and external test providers. It records the lifecycle of synchronization operations, including execution start and end times, status, error details, and the associated DevOps pipeline and test provider. This object enables monitoring, troubleshooting, and auditing of test provider synchronization processes. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DevopsPipelineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the DevOps pipeline associated with this record.",
+      "relationship_name": "DevopsPipeline",
+      "refers_to": "DevopsPipeline"
+    },
+    "DevopsTestProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the external test provider associated with this record.",
+      "relationship_name": "DevopsTestProvider",
+      "refers_to": "DevopsTestProvider"
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Stores the date and time when the operation or execution completed."
+    },
+    "ErrorDetails": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Stores details about errors encountered during the operation or execution."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, such as through a related record or list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record directly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique identifier for the record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or queue that owns the record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Stores the date and time when the operation or execution started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates the current status of the operation or execution. Possible values are: Error Failed InProgress Passed The default value is Passed."
+    }
+  }
+}

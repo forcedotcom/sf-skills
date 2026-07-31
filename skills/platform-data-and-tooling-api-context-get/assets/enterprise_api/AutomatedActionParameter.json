@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "AutomatedActionParameter - Data API",
+  "description": "Represents the values or field references evaluated by the automated action. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AutomatedActionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the automated action. This field is a relationship field.",
+      "relationship_name": "AutomatedAction",
+      "relationship_type": "Lookup",
+      "refers_to": "AutomatedAction"
+    },
+    "DataType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The data type of the value or field reference value. Possible values are: Boolean Double Int None String ValueList"
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action parameter record is locked or not. The default value is false."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action parameter record can be edited or not. The default value is false."
+    },
+    "ParameterName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the invocable action parameter the value maps to."
+    },
+    "ReferenceField": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The reference to the field that’s resolved at runtime. For example, LeadID. If Value has a value, this field is null."
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The value to be passed to the invocable action parameter at runtime. If ReferenceField has a value, this field is null."
+    }
+  }
+}

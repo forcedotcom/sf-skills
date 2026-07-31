@@ -1,0 +1,316 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "VideoCall - Data API",
+  "description": "Represents a video call. One VideoCall record can be related to several VideoCallRecording records — for example, a video call can have several video recordings and a transcript. As well, one video call record can be associated with several video call participant records. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "AcceptanceTimeStamp": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The timestamp when the user consented for uploading the video call recording. Reserved for future use. This field is available in API version 62.0 and later."
+    },
+    "ConsentedUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who consented to upload the video call recording. Reserved for future use. This field is available in API version 62.0 and later. This field is a relationship field.",
+      "relationship_name": "ConsentedUser",
+      "refers_to": "User"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the video call. Typically, the sales rep enters the description."
+    },
+    "DurationInSeconds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The video call duration in seconds."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Time the video call ended, in universal time coordinated (UTC)."
+    },
+    "EventId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the event record associated with this video call. The related record and suggested participant information can also be pulled from the associated event. This is a relationship field.",
+      "relationship_name": "Event",
+      "relationship_type": "Lookup",
+      "refers_to": "Event"
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The ID of the video call, sent by the video call provider."
+    },
+    "HostId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user who hosted the meeting. This is a relationship field.",
+      "relationship_name": "Host",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "IntelligenceScore": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Einstein Intelligence score for the video call. Video calls with higher scores are likely to contain more relevant information. For example, video calls where product names and competitor names are mentioned tend to have a higher score."
+    },
+    "IsCallCoachingIncluded": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether Einstein Conversation Insights is available for this org and this user (true) or not (false)."
+    },
+    "IsDiarizationOptIn": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether optimal speaker separation (diarization) is opted in (true) or not (false) for the call."
+    },
+    "IsLegacyProcessingSkipped": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether legacy processing is skipped (true) or not (fales). The default value is false."
+    },
+    "IsRecorded": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the video call was recorded (true) or not (false)."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "MeetingType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of the call. Reserved for future use. This field is available in API version 61.0 and later. Possible values are: EXTERNAL—A call with two or more participants (default). MANUAL—A call that is manually uploaded. SINGLE_USER—A single user call where the sales rep is evaluated and coached."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the video call. Typically entered by the sales rep."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who created the video call. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the account or opportunity related to this video call. This is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Opportunity"
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time that the video call started, in universal time coordinated (UTC)."
+    },
+    "TranscribedLanguage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The language that is transcribed for this video call."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The cloud using the VideoCall. This field is available in API version 63.0 and later. Possible values are: Life Sciences—Remote Engagement. Sales Cloud"
+    },
+    "VendorMeetingKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The vendor's ID for this video call."
+    },
+    "VendorMeetingUuid": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The vendor's unique identifier for this video call."
+    },
+    "VendorName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The name of the vendor providing the video call software. Possible values are: AMAZON CHIME—Amazon Chime ConversationAgent—Conversation Agent Gong INTERNAL—Internal InPerson—In Person ZOOM—Zoom googlemeet—Google Meet msteams—Microsoft Teams twilio—Twilio"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **VideoCallChangeEvent (API version 51.0)**: Change events are available for the object.\n- **VideoCallOwnerSharingRule (API version 66.0)**: Sharing rules are available for the object.\n- **VideoCallShare (API version 66.0)**: Sharing is available for the object.",
+  "field_reference": {
+    "AcceptanceTimeStamp": {
+      "field_label": "Acceptance Time",
+      "type": "datetime"
+    },
+    "ConsentedUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DurationInSeconds": {
+      "field_label": "Call Duration",
+      "type": "int",
+      "digits": "8"
+    },
+    "EndDateTime": {
+      "field_label": "Call Ended",
+      "type": "datetime"
+    },
+    "EventId": {
+      "field_label": "Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExternalId": {
+      "field_label": "External Id",
+      "type": "string",
+      "length": "255"
+    },
+    "HostId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Video Call ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IntelligenceScore": {
+      "field_label": "Intelligence Score",
+      "type": "int",
+      "digits": "8"
+    },
+    "IsCallCoachingIncluded": {
+      "field_label": "Is Call Coaching Included",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDiarizationOptIn": {
+      "field_label": "Is Diarization Opted In",
+      "type": "boolean"
+    },
+    "IsLegacyProcessingSkipped": {
+      "field_label": "Is Legacy Processing Skipped",
+      "type": "boolean"
+    },
+    "IsRecorded": {
+      "field_label": "Is Recorded",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MeetingType": {
+      "field_label": "Meeting Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartDateTime": {
+      "field_label": "Call Started",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TranscribedLanguage": {
+      "field_label": "Language",
+      "type": "string",
+      "length": "10"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "VendorMeetingKey": {
+      "field_label": "Vendor Meeting Key",
+      "type": "string",
+      "length": "255"
+    },
+    "VendorMeetingUuid": {
+      "field_label": "Vendor Meeting Uuid",
+      "type": "string",
+      "length": "255"
+    },
+    "VendorName": {
+      "field_label": "Provider",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

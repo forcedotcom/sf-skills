@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "EnblPgmTaskMeasureProgress - Data API",
+  "description": "Represents a user’s progress through the object and field requirements that an Enablement measure defines for an outcome or milestone in an Enablement program. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContributingRecordCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of records that qualify for a user’s progress towards completing an outcome or milestone. To qualify, the activity must meet the criteria that the corresponding Enablement measure defines for specific objects, fields, and field values."
+    },
+    "EnblProgramTaskMeasureId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the record that represents the connection between a specific Enablement measure and a specific milestone or outcome in an Enablement program. This field is a relationship field.",
+      "relationship_name": "EnblProgramTaskMeasure",
+      "relationship_type": "Lookup",
+      "refers_to": "EnblProgramTaskMeasure"
+    },
+    "EnblProgramTaskProgressId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the record that represents the progress through the milestone or outcome. This field is a relationship field.",
+      "relationship_name": "EnblProgramTaskProgress",
+      "relationship_type": "Master-detail",
+      "refers_to": "EnblProgramTaskProgress (the master object)"
+    },
+    "MeasureComputationResult": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The calculated progress through the measure’s requirements for a milestone or outcome. For example, if the measure is the dollar amount of all closed opportunities, then the field value is measured in dollars. For a composite milestone or a composite outcome, this value represents the progress through only one measure associated with the milestone or outcome."
+    }
+  }
+}

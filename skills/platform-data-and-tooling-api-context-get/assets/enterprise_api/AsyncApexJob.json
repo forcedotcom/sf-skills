@@ -1,0 +1,183 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AsyncApexJob - Data API",
+  "description": "Represents an individual Apex sharing recalculation job, a batch Apex job, a method with the future annotation, or a job that implements Queueable or Schedulable. Use this object to query Apex batch jobs in your organization.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Apex class executing the job. Label is Class ID. This is a relationship field.",
+      "relationship_name": "ApexClass",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass"
+    },
+    "CompletedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the job was completed."
+    },
+    "CronTriggerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the CronTrigger for the AsyncApexJob. This field only applies to ScheduledApex job type. This field is available in API version 53.0 and later. For scheduled jobs created before version 53.0, this field is populated on subsequent execution. This is a relationship field.",
+      "relationship_name": "CronTrigger",
+      "relationship_type": "Lookup",
+      "refers_to": "CronTrigger"
+    },
+    "ExtendedStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If one or more errors occurred during the batch processing, this field contains a short description of the first error. A more detailed description of that error, along with any subsequent errors, is emailed to the last user who modified the batch class. This field is available in API version 19.0 and later."
+    },
+    "JobItemsProcessed": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Number of job items processed. Label is Batches Processed."
+    },
+    "JobType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of job being processed. Valid values are: ApexToken BatchApex BatchApexWorker Future Queueable ScheduledApex SharingRecalculation TestRequest TestWorker"
+    },
+    "LastProcessed": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Last ID that was processed and committed."
+    },
+    "LastProcessedOffset": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Offset of the last ID that was processed and committed."
+    },
+    "MethodName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the Apex method being executed. Label is Apex Method."
+    },
+    "NumberOfErrors": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of batches with a failure. A batch is considered transactional, so any unhandled exceptions constitute an entire failure of the batch. Label is Failures."
+    },
+    "ParentJobId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For batch Apex jobs that run using chunking implementation, multiple child jobs of type BatchApexWorker are created. Each of these child job records contains the job Id of the parent Apex job that started their execution. For batch Apex jobs that run using a non-chunking implementation, child jobs aren’t created."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the job. Valid values are: Aborted Completed Failed Holding1 Preparing Processing Queued 1 This status applies to batch jobs in the Apex flex queue."
+    },
+    "TotalJobItems": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of batches processed. Each batch contains a set of records. Label is Total Batches."
+    }
+  },
+  "special_access_rules": "If Apex isn’t running in system mode, users must have the View Setup and Configuration permission to access this object and to enqueue asynchronous Apex jobs.",
+  "usage": "Use this object to query Apex batch jobs in your organization.",
+  "wsdl_segment": "```xml\n<complexType name=\"AsyncApexJob\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApexClass\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"ApexClassId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AsyncApex\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CompletedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CronTrigger\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CronTrigger\"/>\n        <element name=\"CronTriggerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ExtendedStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"JobItemsProcessed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"JobType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastProcessed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastProcessedOffset\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MethodName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NumberOfErrors\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ParentJobId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TotalJobItems\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ApexClassId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CompletedDate": {
+      "field_label": "Completion Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CronTriggerId": {
+      "field_label": "Scheduled Job ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExtendedStatus": {
+      "field_label": "Status Detail",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Apex Job ID",
+      "type": "id",
+      "length": "18"
+    },
+    "JobItemsProcessed": {
+      "field_label": "Batches Processed",
+      "type": "int",
+      "digits": "9"
+    },
+    "JobType": {
+      "field_label": "Job Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastProcessed": {
+      "field_label": "Last ID processed and committed",
+      "type": "string",
+      "length": "15"
+    },
+    "LastProcessedOffset": {
+      "field_label": "Offset of last ID processed and committed",
+      "type": "int",
+      "digits": "9"
+    },
+    "MethodName": {
+      "field_label": "Apex Method",
+      "type": "string",
+      "length": "255"
+    },
+    "NumberOfErrors": {
+      "field_label": "Failures",
+      "type": "int",
+      "digits": "9"
+    },
+    "ParentJobId": {
+      "field_label": "Apex Job ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TotalJobItems": {
+      "field_label": "Total Batches",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ShiftSegment - Data API",
+  "description": "Represents a scheduled activity within a shift. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date and time when the shift segment ends."
+    },
+    "IsInAdherence": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the agent is in adherence (true) or not (false) for the scheduled segment activity. The default value is true."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the shift segment."
+    },
+    "SegmentTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique ID of the associated shift segment type. This is a relationship field.",
+      "relationship_name": "SegmentType",
+      "relationship_type": "Lookup",
+      "refers_to": "ShiftSegmentType"
+    },
+    "ShiftId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique ID of the shift in which the segment is scheduled. This is a relationship field.",
+      "relationship_name": "Shift",
+      "relationship_type": "Lookup",
+      "refers_to": "Shift"
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date and time when the shift segment starts."
+    }
+  },
+  "special_access_rules": "The org must have the Workforce Engagement license and Workforce Engagement must be enabled. The user requires the Workforce Engagement Planner or Workforce Engagement Admin permission set.\n\nThe org must have the Workforce Engagement license\n         and Workforce Engagement must be enabled. The user requires the Workforce Engagement\n         Planner or Workforce Engagement Admin permission set."
+}

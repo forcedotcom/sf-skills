@@ -1,0 +1,216 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "RevenueAsyncOperation - Data API",
+  "description": "Represents the status of an asynchronous process initiated by a REST request in Subscription Management. This object is available in API versions 57.0 to 59.0. Use AsyncOperationTracker instead of RevenueSyncOperation in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AsyncOperationNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique identifier for this revenue async operation record."
+    },
+    "CorrelationIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique identifier for the API request associated with this revenue async operation."
+    },
+    "ExpiresAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp indicating when this record will be deleted."
+    },
+    "FailedJobItems": {
+      "type": "integer",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of items that weren’t successfully processed by the sync operation."
+    },
+    "FinishedAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp indicating when the asynchronous process was completed."
+    },
+    "JobType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The REST request that initiated the asynchronous process. Valid values are: ASMAdServerCheckAvailability ASMAdServerIntegration ASMApplyMediaPlanTemplateJob ASMApplyTargetingTemplateJob ASMBulkEditLineItemDetail. This field is available in API version 67.0 and later. ASMCalcLinearMediaSpotPrc. This field is available in API version 66.0 and later. ASMCreateAmendQuoteJob ASMFileProcessorJob. This field is available in API version 66.0 and later. ASMLinearSpotGenerationJob. This field is available in API version 67.0 and later. ASMMediaPlanAsTemplate ASMMediaPlanClone ASMMediaPlanCopyJob AbandonedCart. This field is available in API version 67.0 and later. AssetizationAsyncJob AutomatedNegativeInvoiceLineConversion AutomaticRefunds CommerceVariationsUpsert ContextPersistence CreateCPQContractsJob CreditMemoRecovery. This field is available in API version 66.0 and later. DeltaCatalogSyndicationAsyncJob FullCatalogSyndicationAsyncJob InvoicedDocgenJob InvoicedDocgenPostProcessJob InvoicedDocfenRetryJob InvoiceDraftToPosted InvoiceEstimatedTaxCallout LoadSalesRecipientData. This field is available in API version 66.0 and later. MultisiteAutoQuote. This field is available in API version 66.0 and later. PST Base Job - Top-Level PSTConfig - Configuration PSTPersist - Save PSTPrice - Price PearAmendQtyAssets PearCancelAssets PearRenewAssets PersonalizationRecommender. This field is available in API version 67.0 and later. PlaceOrder PlaceOrderPersistSync PlaceOrderPriceAsync PlaceOrderTaxAsync PostOrderCampaign. This field is available in API version 67.0 and later. PlaceQuote PlaceQuotePersistAndPriceSync PlaceQuotePersistSync PlaceQuotePriceAsync PlaceQuoteTaxAsync PriceRuleDeployment PriceSheetDeployJob QuoteToOrderJob RuleLibraryDeployment SmsDltTemplateIngestion. This field is available in API version 66.0 and later. StandaloneBillingSchedulesCreation StatementOfAccountGeneration. This field is available in API version 66.0 and later. TestSerialMessageStepJob TransactionLineBom VoidCreditMemo. This field is available in API version 66.0 and later. energyAgreementSetup. This field is available in API version 66.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "ParentOperationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use. This field is a relationship field.",
+      "relationship_name": "ParentOperation",
+      "relationship_type": "Lookup",
+      "refers_to": "RevenueAsyncOperation"
+    },
+    "ReferenceEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Contains the ID of a record associated with the asynchronous request. For example, if the asynchronous request is associated with a credit memo, this field contains the ID of the credit memo. This field is a polymorphic field.",
+      "relationship_name": "ReferenceEntity",
+      "relationship_type": "Lookup",
+      "refers_to": "CreditMemo, Order, Product2, Quote"
+    },
+    "StartedAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp indicating when Salesforce started the asynchronous process."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the asynchronous process. Possible values are: Completed CompletedWithFailures Failure InProgress Submitted"
+    },
+    "SubmittedAt": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp indicating when the asynchronous process was submitted by the REST request."
+    },
+    "SuccessfulJobItems": {
+      "type": "integer",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of items successfully processed by the sync operation."
+    },
+    "TotalJobItems": {
+      "type": "integer",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of items processed by the sync operation, including both successfully processed items and failed items."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management.\n\nThis object is available with Subscription\n         Management.",
+  "field_reference": {
+    "AsyncOperationNumber": {
+      "field_label": "Async Operation Number",
+      "type": "string",
+      "length": "255"
+    },
+    "CorrelationIdentifier": {
+      "field_label": "Correlation Identifier",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExpiresAt": {
+      "field_label": "Expires At",
+      "type": "datetime"
+    },
+    "FailedJobItems": {
+      "field_label": "Failed Job Items",
+      "type": "int",
+      "digits": "9"
+    },
+    "FinishedAt": {
+      "field_label": "Finished At",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Revenue Async Operation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JobType": {
+      "field_label": "Job Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ParentOperationId": {
+      "field_label": "Revenue Async Operation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReferenceEntityId": {
+      "field_label": "Reference Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Response": {
+      "field_label": "Response",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "StartedAt": {
+      "field_label": "Started At",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubmittedAt": {
+      "field_label": "Submitted At",
+      "type": "datetime"
+    },
+    "SuccessfulJobItems": {
+      "field_label": "Successful Job Items",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalJobItems": {
+      "field_label": "Total Job Items",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "BusinessAlertStatus - Data API",
+  "description": "Represents information about the read status of an insight alert. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BusinessAlertId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The insight alert related to the status. This field is a relationship field.",
+      "relationship_name": "BusinessAlert",
+      "relationship_type": "Lookup",
+      "refers_to": "BusinessAlert"
+    },
+    "IsAlertRead": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the insight alert is read by the user (true) or not (false). The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Specifies the activation status of the insight alert."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who is associated with the alert. This field is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "The BusinessAlertStatus object is available only if the ERI Growth User or ERI Starter User license is enabled."
+}

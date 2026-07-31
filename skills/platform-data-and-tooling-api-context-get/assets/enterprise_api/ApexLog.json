@@ -1,0 +1,147 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ApexLog - Data API",
+  "description": "Represents a debug log containing information about a transaction, including information about Apex, Visualforce, and workflow and validation rules. This object is available in API version 19.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Application": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "This value depends on the client type that triggered the log. For API clients, this value is the client ID. For browser clients, this value is Browser."
+    },
+    "DurationMilliseconds": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Duration of the transaction in milliseconds."
+    },
+    "Location": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the location of the origin of the log. Values are: Monitoring—Log is generated as part of debug log monitoring. These types of logs are maintained for seven days or until a user deletes them. SystemLog—Log is generated from the Developer Console. These types of logs are maintained for 24 hours or until the user clears them."
+    },
+    "LogLength": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Length of the log in bytes."
+    },
+    "LogUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the user whose actions triggered the debug log. This is a polymorphic relationship field.",
+      "relationship_name": "LogUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Operation": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Name of the operation that triggered the debug log, such as APEXSOAP, Apex Sharing Recalculation, and so on."
+    },
+    "Request": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Request type. Values are: API—Request came from the API Application—Request came from the Salesforce user interface"
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier of the request that triggered the debug log. Use this request identifier to correlate multiple debug logs triggered by the same request."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "Start time of the transaction."
+    },
+    "Status": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Status of the transaction. This value is either Success, or the text of an unhandled Apex exception."
+    }
+  },
+  "usage": "You can read information about this object, as well as delete it, but you can't update or insert it.\n\nYou can read information about this object, as well as delete it,\n      but you can't update or insert it.",
+  "wsdl_segment": "```xml\n<complexType name=\"ApexLog\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Application\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurationMilliseconds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Location\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LogLength\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LogUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"LogUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Operation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Request\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RequestIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "Application": {
+      "field_label": "Application",
+      "type": "string",
+      "length": "64"
+    },
+    "DurationMilliseconds": {
+      "field_label": "Duration (ms)",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Log ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Date",
+      "type": "datetime"
+    },
+    "Location": {
+      "field_label": "Location",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LogLength": {
+      "field_label": "Log Size (bytes)",
+      "type": "int",
+      "digits": "9"
+    },
+    "LogUserId": {
+      "field_label": "Log User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Operation": {
+      "field_label": "Operation",
+      "type": "string",
+      "length": "128"
+    },
+    "Request": {
+      "field_label": "Request Type",
+      "type": "string",
+      "length": "16"
+    },
+    "RequestIdentifier": {
+      "field_label": "Request ID",
+      "type": "string",
+      "length": "84"
+    },
+    "StartTime": {
+      "field_label": "Start Time",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

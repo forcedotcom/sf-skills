@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SessionPermSetActivation - Data API",
+  "description": "The SessionPermSetActivation object represents a permission set assignment activated during an individual user session. When a SessionPermSetActivation object is inserted into a permission set, an activation event fires, allowing the permission settings to apply to the user’s specific session. This object is available in API versions 37.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AuthSessionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The session ID related to this permission set assignment for its duration. This is a relationship field.",
+      "relationship_name": "AuthSession",
+      "relationship_type": "Lookup",
+      "refers_to": "AuthSession"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The session details, such as device used and browser."
+    },
+    "PermissionSetGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The permission set group ID related to this permission set group assignment and user for its duration. This field is available in API version 53.0 and later. This is a relationship field.",
+      "relationship_name": "PermissionSetGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSetGroup"
+    },
+    "PermissionSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The permission set ID related to this permission set assignment and user for its duration. This is a relationship field.",
+      "relationship_name": "PermissionSet",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSet"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The user ID of the user to whom this permission set assignment applies for its duration. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users who have one of these permissions can access this object:",
+  "usage": "Use SessionPermSetActivation to create a permission set available only for a specified session’s duration. For example, create permission sets that provide access to specific applications only during authenticated sessions. In the following Apex example, an identified session is activated after session information is submitted via a button. Successful activation results in a confirmation message displayed to the user. To deactivate a session-based permission set for the current session, delete the matching SessionPermSetActivation record. Removing that record ends the activation for that permission set in that session. In this example, a deactivate() method is added to the class from the previous example.\n\nUse SessionPermSetActivation to create a permission set available only for a specified session’s duration. For example, create permission sets that provide access to specific applications only during authenticated sessions.\n\nIn the following Apex example, an identified session is activated after session information is submitted via a button. Successful activation results in a confirmation message displayed to the user.\n\nTo deactivate a session-based permission set for the current session, delete the matching SessionPermSetActivation record. Removing that record ends the activation for that permission set in that session. In this example, a deactivate() method is added to the class from the previous example.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"SessionPermSetActivation\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AuthSession\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AuthSession\"/>\n        <element name=\"AuthSessionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PermissionSet\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSet\"/>\n        <element name=\"PermissionSetGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSetGroup\"/>\n        <element name=\"PermissionSetGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PermissionSetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AuthSessionId": {
+      "field_label": "Auth Session ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "SessionPermSetActivation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PermissionSetGroupId": {
+      "field_label": "Permission Set Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PermissionSetId": {
+      "field_label": "Permission Set ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

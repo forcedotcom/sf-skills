@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "KnowledgeArticleVoteStat - Data API",
+  "description": "Provides the weighted rating for the specified article on a scale of 1 to 5 across all article types. This object is read-only and available in API version 20.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Channel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The channel where the article is rated: AllChannels for article views across all channels. App for the internal Salesforce Knowledge application. Pkb for article views in public knowledge base. Csp for Customer Portal. Prm for article view in partner portal."
+    },
+    "NormalizedScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Article's weighted score on a scale of 1 to 5. A higher score means more votes. Articles without recent votes trend towards an average rating of three stars."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The rated article. This corresponds to a KnowledgeArticle record."
+    }
+  },
+  "special_access_rules": "Knowledge must be enabled in your org. Users must have access to the published version of an article to retrieve its votes. For more information on published article version, see the PublishStatus field in KnowledgeArticleVersion",
+  "usage": "Use this object to query or retrieve the rating for an article. Alternatively, client applications can use the article type API Name followed by __VoteStat to query or retrieve the rating for an article for a specific article type.\n\nUse this object to query or retrieve the rating for an article.\n\nAlternatively, client applications can use the article type API Name followed by __VoteStat to query or retrieve the rating for an article for a specific article type.",
+  "field_reference": {
+    "Channel": {
+      "field_label": "Channel",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Vote Stat ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "NormalizedScore": {
+      "field_label": "Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "4"
+    },
+    "ParentId": {
+      "field_label": "Knowledge Article ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

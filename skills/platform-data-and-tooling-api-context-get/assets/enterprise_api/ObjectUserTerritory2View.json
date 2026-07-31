@@ -1,0 +1,84 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ObjectUserTerritory2View - Data API",
+  "description": "Represents a user and object, such as an account or lead, assigned to a territory. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ObjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Required field for querying ObjectUserTerritory2View. ID of the object that the territory user is assigned to. This field is a polymorphic relationship field.",
+      "relationship_name": "Object",
+      "refers_to": "Account, Lead",
+      "required": true
+    },
+    "RoleInTerritory2": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Role of the user assigned to the territory."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the territory to which the object and user are assigned. This field is a relationship field.",
+      "relationship_name": "Territory2",
+      "refers_to": "Territory2"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the user assigned to the territory. This field is a relationship field.",
+      "relationship_name": "User",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "To see this object, enable Sales Territories.",
+  "field_reference": {
+    "Id": {
+      "field_label": "Object User Territory2 View ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Modified Date",
+      "type": "datetime"
+    },
+    "ObjectId": {
+      "field_label": "Object ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RoleInTerritory2": {
+      "field_label": "Role in Territory",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

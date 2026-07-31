@@ -1,0 +1,134 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ObjectRelatedUrl - Data API",
+  "description": "Represents a URL slug for a Product or Category page on a B2B Commerce or D2C Commerce LWR site, or a custom object, account, or contact page on an enhanced LWR Experience Cloud site. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "LanguageCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The combined language and locale ISO code, which controls the language of the object-related URL. The maximum length is 8 characters.",
+      "required": true
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the object-related URL. This field isn’t editable."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the parent record that the UrlName refers to. ParentId can point only to Product2, ProductCategory, and custom object, account, and contact record pages. This field is a polymorphic relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2, ProductCategory, account, contact, and custom objects",
+      "required": true
+    },
+    "Scope": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Helps ensure uniqueness of the UrlName field across all records with the same Scope and LanguageCode values. The maximum length is 18 characters.",
+      "required": true
+    },
+    "UniqueIndex": {
+      "type": "string",
+      "properties": "Filter, idLookup, Nillable, Sort",
+      "description": "Ensures uniqueness for each record within your org and creates an index for lookup. This field isn’t editable. This field is a calculated field."
+    },
+    "UrlName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The URL slug for the record.",
+      "required": true
+    }
+  },
+  "special_access_rules": "Your org must have B2B Commerce or D2C Commerce license enabled for commerce use cases. ObjectRelatedUrl is available for Product2 and ProductCategory records in Commerce, and on custom object, account and contact record pages in enhanced LWR sites.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ObjectRelatedUrlChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Object Related URL ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LanguageCode": {
+      "field_label": "Language Code",
+      "type": "string",
+      "length": "8"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Scope": {
+      "field_label": "Scope",
+      "type": "string",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UniqueIndex": {
+      "field_label": "Unique Index",
+      "type": "string",
+      "length": "291"
+    },
+    "UrlName": {
+      "field_label": "URL Name",
+      "type": "string",
+      "length": "150"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

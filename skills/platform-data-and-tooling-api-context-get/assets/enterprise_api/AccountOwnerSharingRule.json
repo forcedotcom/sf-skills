@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "AccountOwnerSharingRule - Data API",
+  "description": "Represents the rules for sharing an account with a User other than the owner.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Update",
+      "description": "A value that represents the type of sharing being allowed. The possible values are: Read Edit All (This value isn’t valid for creating or updating.)"
+    },
+    "CaseAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A value that represents the type of access granted to the target Group for all child cases. The possible values are: None Read Edit"
+    },
+    "ContactAccessLevel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "A value that represents the type of access granted to the target Group, UserRole, or User for any associated contacts. The possible values are: None Read Edit Note: When DefaultContactAccess is set to Controlled by Parent, you can’t create or update this field."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A description of the sharing rule. Maximum size is 1000 characters. This field is available in API version 29.0 and later."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Corresponds to Rule Name in the user interface. This field is available in API version 24.0 and later. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record."
+    },
+    "GroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID representing the source group. An Account owned by a User in the source Group triggers the rule to give access."
+    },
+    "OpportunityAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A value that represents the type of access granted to the target Group for any associated Opportunity. The possible values are: None Read Edit"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Label of the sharing rule as it appears in the user interface. Limited to 80 characters. Corresponds to Label on the user interface."
+    },
+    "UserOrGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID representing the User or Group being granted access."
+    }
+  },
+  "special_access_rules": "Customer Portal users can't access this object.",
+  "usage": "Use this object to manage the sharing rules for accounts. General sharing and territory management-related sharing use this object. For example, the following code creates an account owner sharing rule between two public groups, which can also contain portal users.\n\nAccountOwnerSharingRule\n\nAccountOwnerSharingRule\n\n// Set the sharing rule name\n\nsetDeveloperName\n\n\"RuleDeveloperName\"\n\n// Set the sharing rule developer name\n\n\"00Gx00000000000\"\n\n// Set the group of users to share records from\n\nsetUserOrGroupId\n\n\"00Gx00000000001\"\n\n// Set the group of users to share records to\n\nsetAccountAccessLevel\n\nsetOpportunityAccessLevel\n\nsetCaseAccessLevel\n\nThe original territory management feature is now unavailable. For more information, see\n\nThe Original Territory Management Module Will Be Retired in\n          the Summer ’21 Release\n\n. The information in this topic applies to the original\n        territory management feature only, and not to Enterprise Territory Management."
+}

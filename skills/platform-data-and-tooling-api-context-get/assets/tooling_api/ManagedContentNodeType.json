@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ManagedContentNodeType - Tooling API",
+  "description": "Represents standard and custom content node types created for use with your org. Available in API version 47.0 and later.",
+  "supported_soap_calls": "`query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "HelpText": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Provides assistive text in the UI, displayed as an info bubble for the field. If this field is empty, no info bubble icon or text is displayed."
+    },
+    "NodeLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Declares the label for the field as it appears in the UI."
+    },
+    "NodeName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique name of the NodeType within the content type. NodeName is a simple text field that allows up to 100 alphanumeric characters and underscores. The name must begin with a letter, not include spaces, can’t have two consecutive underscores, and can’t end with an underscore."
+    },
+    "NodeOptionsIsLocalizable": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Declares a field as localizable so it’s exported (true) or not (false) by the content translation service in the Digital Experiences app. Default is false."
+    },
+    "NodeOptionsIsRequired": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Declares a field as required (true) or not (false). Fields declared as a required are indicated by a red asterisk. If a value isn’t added to the field, the form can't be saved and a standard error is displayed. Default is false."
+    },
+    "NodeType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Identifies the supported type of content in the node. Passed as a string. There’s a maximum of 15 node types per content type. Valid values are: TEXT—Simple text node (maximum length 255 characters) MTEXT—Multi-line text node (maximum length 2000 characters) RTE—Rich text node (maximum length 65536 characters) IMG—Image node URL—URL node (maximum length 255 characters)URL accepts protocol string values starting with http://, https://, mailto:, tel:, and /. DATE—Date node DATE accepts dates only in the format yyyy-MM-dd. DATETIME—Datetime node DATETIME accepts date and time in the format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z' (UTC datetime in ISO 8601 format). NAMEFIELD—Declares the field as the name that represents the content when referenced in the UI. For example, in a list of available content in the Digital Experiences app or as available for inclusion in a collection in Experience Cloud sites. Declare only one NodeType in your managed content type as NAMEFIELD. NAMEFIELD is a string type of 200 characters or less. When NAMEFIELD is used, isRequired must also be set to True for the field."
+    },
+    "PlaceholderText": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Provides assistive text in the UI, displayed as placeholder, or ghost text, in a field before any entry is made. For example, Enter a title for your article..."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"MCNodeType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TEXT\"/>\n    <xsd:enumeration value=\"MTEXT\"/>\n    <xsd:enumeration value=\"RTE\"/>\n    <xsd:enumeration value=\"IMG\"/>\n    <xsd:enumeration value=\"NAMEFIELD\"/>\n    <xsd:enumeration value=\"URL\"/>\n    <xsd:enumeration value=\"DATETIME\"/>\n    <xsd:enumeration value=\"DATE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ManagedContentNodeType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"HelpText\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"NodeLabel\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"NodeName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"NodeOptionsAddToCompact\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"NodeOptionsIsLocalizable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"NodeOptionsIsRepeatable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"NodeOptionsIsRequired\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"NodeType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"PlaceholderText\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "FulfmtRoutgCriteriaCond - Data API",
+  "description": "Stores atomic conditions that make up fulfillment criteria logic, with globally unique identifiers. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "FulfmtRoutgCriteriaId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The numeric identifier used in the rule's expression to reference this condition. Must be unique within the rule and used in logical expressions. This field is a relationship field.",
+      "relationship_name": "FulfmtRoutgCriteria",
+      "relationship_type": "Master-detail",
+      "refers_to": "FulfmtRoutgCriteria (the master object)"
+    },
+    "Identifier": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "An operator that determines the type of comparison performed on the left and right sides of the condition."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "LeftEntity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "A field on the left entity that specifies which property of the entity to check for comparison. Possible values are: Calendar Config FulfillmentRoutingSpec Location LocationProductInventory ProductItem"
+    },
+    "LeftField": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The target entity for comparisons when comparing two entity fields. NULL when comparing against a literal value."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the condition."
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "An operator that determines the type of comparison performed on the left and right sides of the condition. Possible values are: After Before Contains Equals Greater_Than—Greater Than Greater_Than_Or_Equals—Greater Than Or Equals Is_Not_Null—Is Not Null Is_Null—Is Null Less_Than—Less Than Less_Than_Or_Equals—Less Than Or Equals Not_Contains Not_Equals—Not Equals"
+    },
+    "RightEntity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The field on the right entity for comparisons when comparing two entity fields. NULL when comparing against a literal value. Possible values are: Calendar Config FulfillmentRoutingSpec Location LocationProductInventory ProductItem"
+    },
+    "RightField": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Literal value for comparisons when comparing against a constant value. NULL when comparing two entity fields."
+    },
+    "RightValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Literal value for comparisons when comparing against a constant value. NULL when comparing two entity fields."
+    }
+  },
+  "special_access_rules": "The Salesforce org must have:"
+}

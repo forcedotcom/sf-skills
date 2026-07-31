@@ -1,0 +1,150 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CronTrigger - Data API",
+  "description": "Contains schedule information for a scheduled job. CronTrigger is similar to a cron job on UNIX systems. This object is available in API version 17.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CronExpression": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The cron expression used to initiate the schedule. Syntax:Seconds Minutes Hours Day_of_month Month Day_of_week Optional_year See schedule(jobName, cronExpression, schedulableClass) in the Apex Reference Guide."
+    },
+    "CronJobDetailId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the CronJobDetail record containing more details about this scheduled job. This is a relationship field.",
+      "relationship_name": "CronJobDetail",
+      "relationship_type": "Lookup",
+      "refers_to": "CronJobDetail"
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the job either finished or will finish."
+    },
+    "NextFireTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The next date and time the job is scheduled to run. null if the job is not scheduled to run again."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Owner of the job."
+    },
+    "PreviousFireTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent date and time the job ran. null if the job has not run before current local time."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the most recent iteration of the scheduled job started."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The current state of the job. The job state is managed by the system. Possible values are: WAITING—The job is waiting for execution. ACQUIRED—The job has been picked up by the system and is about to execute. EXECUTING—The job is executing. COMPLETE—The trigger has fired and is not scheduled to fire again. ERROR—The trigger definition has an error. DELETED—The job has been deleted. PAUSED—A job can have this state during patch and major releases. After the release has finished, the job state is automatically set to WAITING or another state. BLOCKED—Execution of a second instance of the job is attempted while one instance is running. This state lasts until the first job instance is completed. PAUSED_BLOCKED—A job has this state due to a release occurring. When the release has finished and no other instance of the job is running, the job’s status is set to another state."
+    },
+    "TimesTriggered": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times this job has been triggered."
+    },
+    "TimeZoneSidKey": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Returns the timezone ID. For example, America/Los_Angeles."
+    }
+  },
+  "usage": "Use this object to query scheduled jobs in your organization.",
+  "wsdl_segment": "```xml\n<complexType name=\"CronTrigger\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CronExpression\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CronJobDetail\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CronJobDetail\"/>\n        <element name=\"CronJobDetailId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"EndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"NextFireTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PreviousFireTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"StartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TimeZoneSidKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TimesTriggered\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CronExpression": {
+      "field_label": "Cron Expression",
+      "type": "string",
+      "length": "255"
+    },
+    "CronJobDetailId": {
+      "field_label": "Job ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EndTime": {
+      "field_label": "End Time",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Scheduled Job ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NextFireTime": {
+      "field_label": "Next Run Time",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreviousFireTime": {
+      "field_label": "Previous Run Time",
+      "type": "datetime"
+    },
+    "StartTime": {
+      "field_label": "Start Time",
+      "type": "datetime"
+    },
+    "State": {
+      "field_label": "Job State",
+      "type": "string",
+      "length": "16"
+    },
+    "TimeZoneSidKey": {
+      "field_label": "Java Time Zone Id",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TimesTriggered": {
+      "field_label": "Job Fired Count",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

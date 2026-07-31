@@ -1,0 +1,175 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "MLModelMetric - Data API",
+  "description": "Represents a metric or statistic about the related model, such as accuracy, precision, or RSquared. Use a model’s metrics to learn about its performance and to compare it with other models. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BasicMetricValue": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The value of a basic metric. A basic metric is a single number. For metrics that comprise a set of graph points, see ComplexMetricValue ."
+    },
+    "ComplexMetricValue": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The X and Y values for a complex metric. A complex metric is a coordinate on a graph. For example, in classification models, you can use a line on a graph to create classification categories."
+    },
+    "DataSetType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of dataset. Possible values are: Baseline HoldOut Live Model Training"
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the model training finished."
+    },
+    "GraphType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of graph. Possible values are: ConfidencePlot ConfusionMatrixPerThreshold DiscountedCumulativeGainsGraph HitRateGraph KBasedRankingGraph LiftPlot MeanReciprocalRankGraph MultiClassConfusionMatrixPerThreshold MultiClassMisclassifications NormalizedDiscountedCumulativeGainsGraph PrecisionGraph RecallGraph RegressionErrorBands"
+    },
+    "MetricType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of metric. Possible values are: Accuracy AveragePrecision BalancedAccuracy DiscountedCumulativeGainAtK ExpectedTopAbsoluteRank ExpectedTopPercentileRank F1Score FMeasure HitRateAtK LiftBucket MeanAbsoluteError MeanAbsoluteRank MeanAveragePrecisionAtK MeanPercentileRank MeanReciprocalRank MeanReciprocalRankAtK MeanTopReciprocalRank NormalizedDiscountedCumulativeGainsAtK Precision PrecisionAtK RSquared Recall RecallAtK RootMeanSquaredError auPR auROC"
+    },
+    "ModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related MLModel. This field is a polymorphic relationship field.",
+      "relationship_name": "Model",
+      "relationship_type": "Lookup",
+      "refers_to": "MLModel"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An automatically generated ID that uniquely identifies the metric."
+    },
+    "RowCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of rows."
+    },
+    "Span": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The time span for the metric. Possible values are: Day Hour Month SinceLastAction Week"
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the model training started."
+    }
+  },
+  "special_access_rules": "Available with Einstein Prediction Builder and Einstein Recommendation Builder.\n\nAvailable with Einstein Prediction Builder and\n         Einstein Recommendation Builder.",
+  "field_reference": {
+    "BasicMetricValue": {
+      "field_label": "Basic Metric Value",
+      "type": "double",
+      "precision": "24",
+      "scale": "8"
+    },
+    "ComplexMetricValue": {
+      "field_label": "Complex Metric Value",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataSetType": {
+      "field_label": "Dataset Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EndTime": {
+      "field_label": "End Time",
+      "type": "datetime"
+    },
+    "GraphType": {
+      "field_label": "Graph Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "ML Model Metric ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MetricType": {
+      "field_label": "Metric Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ModelId": {
+      "field_label": "ML Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RowCount": {
+      "field_label": "Row Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Span": {
+      "field_label": "Metric Span",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StartTime": {
+      "field_label": "Start Time",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

@@ -1,14 +1,41 @@
 ---
 name: experience-ui-bundle-frontend-generate
-description: "MUST activate before editing ANY file under uiBundles/*/src/ for visual or UI changes to an EXISTING app — pages, components, sections, layout, styling, colors, fonts, navigation, animations, or any look-and-feel change. Use this skill when modifying pages, components, layout, styling, or navigation in an existing UI bundle app. Activate when the project contains appLayout.tsx, routes.tsx, src/pages/, src/components/, or src/styles/global.css. This skill contains critical project-specific conventions (appLayout.tsx shell, shadcn/ui components, Tailwind CSS, Salesforce base-path routing, module restrictions) that override general knowledge. Without this skill, generated code will use wrong imports, break routing, or ignore project structure. Do NOT use when creating a new app from scratch (use experience-ui-bundle-app-coordinate instead)."
+description: "MUST activate before editing ANY file under uiBundles/*/src/ (or the bundle's index.html) for visual or UI changes to an EXISTING app — pages, components, sections, layout, styling, colors, fonts, navigation, animations, branding, or any look-and-feel change. Use this skill when modifying pages, components, layout, styling, navigation, or branding in an existing UI bundle app. Activate when the project contains appLayout.tsx, routes.tsx, src/pages/, src/components/, src/styles/global.css, or the bundle's index.html. This skill contains critical project-specific conventions (appLayout.tsx shell, shadcn/ui components, Tailwind CSS, Salesforce base-path routing, module restrictions) that override general knowledge. Without this skill, generated code will use wrong imports, break routing, or ignore project structure. Do NOT use when creating a new app from scratch or the bundle has not been scaffolded yet (use experience-ui-bundle-app-coordinate instead)."
 metadata:
-  version: "1.0"
+  version: "1.1"
   relatedSkills:
     - "experience-ui-bundle-app-coordinate"
+    - "experience-ui-bundle-metadata-generate"
     - "experience-ui-bundle-salesforce-data-access"
+  cliTools:
+    - tool: ["npm"]
+      semver: ">=8.0.0"
+    - tool: ["python3"]
+      semver: ">=3.10.0"
 ---
 
 # UI Bundle UI
+
+## Resolve the Bundle Directory
+
+**MUST** run `scripts/resolve-ui-bundle.sh [project-root]` before applying any rule below or writing any file — an ad-hoc `find`/`ls` is not a substitute; it does not enforce the exit-code gate below. It reads `sfdx-project.json`'s `packageDirectories[0].path` (does not assume `force-app` — the source path is configurable) and looks under `<sourceDir>/main/default/uiBundles/`:
+
+- **Exit 0**, bundle path printed to stdout: exactly one bundle directory found — that is the bundle directory. Use that exact directory name; never substitute a different name (e.g. a generic "AcmePortal" example from a prompt template) for the one actually printed.
+- **Exit 2**, candidates printed to stderr: multiple `uiBundles/*` subdirectories exist — do not guess, and do not write to any of them, or to a bundle name not in the printed list. Ask the user which app/bundle they mean before editing or running any command.
+- **Exit 1**: `sfdx-project.json` missing/invalid, or no bundle directory found at all.
+
+Run all `npm`/lint/build/dev commands from inside the resolved bundle directory, never from the project root.
+
+## Preconditions
+
+Before applying any rule below, confirm this is an existing, scaffolded UI bundle: **MUST** run `scripts/check-preconditions.sh <bundle-dir>` with the directory `resolve-ui-bundle.sh` printed.
+
+- **Single-bundle (exit 0) case**: run it once, on that bundle.
+- **Multi-bundle (exit 2) case**: do not run it yet — first ask the user which app/bundle they mean, per the Resolve step above. Once the user names the bundle, run `check-preconditions.sh` on that one bundle only. Never run it against multiple candidates speculatively before the user has chosen — that means touching/inspecting bundles the user didn't ask about.
+- **Exit 0**: the bundle has `src/appLayout.tsx`, `src/routes.tsx`, and `src/components/ui/` — proceed.
+- **Exit 1**, missing pieces listed: this is a fresh SFDX project, a non-UI-bundle React project, or a partially-scaffolded bundle — **stop**. Do not fall back to generic React knowledge (e.g. `react-router-dom`, a hardcoded basename, or raw HTML), and do not hand-write `appLayout.tsx`/`routes.tsx`/a page/a component to "fill in" the missing scaffold, even for a casual, vague, or urgent-sounding request ("just change the header", "make the background blue"). Tell the user the bundle isn't scaffolded yet and direct them to `experience-ui-bundle-app-coordinate` (or `experience-ui-bundle-metadata-generate`) to scaffold it first. If, after the user names their intended bundle, that one turns out to be unscaffolded, stop and redirect for it — do not silently switch to scaffolding a different candidate instead.
+
+Never invent, assume, or fall back to a bundle name that doesn't appear in the actual `<sourceDir>/main/default/uiBundles/` listing on disk — including a name that only appears as example/template text elsewhere (a prompt, a directive, prior conversation). If what's on disk doesn't match that example, disk wins.
 
 ## Identify the Task
 
@@ -17,8 +44,10 @@ Determine which category the request falls into:
 | Category | Examples | Implementation Guide |
 |----------|----------|---------------------|
 | **Page** | New routed page (contacts, dashboard, settings) | `references/page.md` |
-| **Header / Footer** | Site-wide nav bar, footer, branding | `references/header-footer.md` |
+| **Header / Footer** | Site-wide nav bar, footer, branding, renaming the app | `references/header-footer.md` |
 | **Component** | Widget, card, table, form, dialog | `references/component.md` |
+
+A request to rename/rebrand the app (e.g. "call it X everywhere a user would see it") is a **Header / Footer** task even though it doesn't mention "header" by name — it always touches at least two files: `src/appLayout.tsx` (header/nav brand text) AND `index.html`'s `<title>` (browser tab title). Treat these as one atomic change; a rename that only updates one of the two is incomplete.
 
 ---
 
@@ -32,12 +61,14 @@ When making any change that affects navigation, header, footer, sidebar, theme, 
 2. Replace all default/template nav items and labels with app-specific links and names
 3. Replace placeholder app name everywhere: header, nav brand, footer, `<title>` in `index.html`
 
-Before finishing, confirm: Did I update `appLayout.tsx` with real nav items and branding?
+`index.html` lives at the bundle root (not under `src/`), but it is still in scope for this skill whenever branding or the app name changes — the leftover `<title>React App</title>` / `Vite + React` boilerplate is a common ship-blocker that `npm run lint`/`npm run build` never catches.
+
+Before finishing, confirm: Did I update `appLayout.tsx` with real nav items and branding? Then run `scripts/verify-rules.sh` to check for residual boilerplate (see Verification below).
 
 | What | Where |
 |------|-------|
 | Layout, nav, branding | `src/appLayout.tsx` |
-| Document title | `index.html` |
+| Document title | `index.html` (bundle root, outside `src/` — still in scope for branding) |
 | Root page content | Component at root route in `routes.tsx` |
 
 ---
@@ -75,7 +106,7 @@ Apps run behind dynamic base paths. Router navigation (`<Link to>`, `navigate()`
 
 ### Module Restrictions
 
-React UI bundles must not import Salesforce platform modules like `lightning/*` or `@wire` (LWC-only). For data access, use the `experience-ui-bundle-salesforce-data-access` skill.
+React UI bundles must not import Salesforce platform modules like `lightning/*` or `@wire` (LWC-only). **Before writing any data-access code (GraphQL, REST, SDK initialization, or a hook that fetches data), you MUST invoke the `experience-ui-bundle-salesforce-data-access` skill first.** Do not write `fetch`/`axios` calls or invent a different data API inline in this skill — this applies even if the clarifying-question answer only implies data fetching in passing.
 
 ---
 
@@ -137,4 +168,13 @@ Ask one question at a time and stop when you have enough context.
 
 ## Verification
 
-Before completing, run lint and build from the UI bundle directory. Lint must result in 0 errors and build must succeed.
+Before completing, run all of the following from the resolved UI bundle directory (see "Resolve the Bundle Directory" above):
+
+1. `npm run lint` — must result in 0 errors.
+2. `npm run build` — must succeed.
+3. `npm run dev` (or the project's dev-server script) — confirm the app starts cleanly so the change is verified at runtime, not just at build time.
+
+**`lint`/`build` alone do not catch the highest-risk rules in this skill** — a wrong `react-router-dom` import, a hardcoded basename, an inline `style={{}}`, or a stray `lightning/*` import can all lint and build clean while breaking at runtime. After any change that touches routing, layout, styling, or module imports, run `scripts/verify-rules.sh <files-or-dirs-you-edited>`:
+
+- **Exit 0**: no violations found.
+- **Exit 1**, violations listed by rule and file: fix every one before considering the task complete, even if lint and build passed.

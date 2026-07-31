@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VoiceCallInsightReason - Data API",
+  "description": "Represents the voice call insight reason that contains the insight keyword, insight moments associated with a keyword, and the number of keyword occurrences. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the insight reason.",
+      "required": true
+    },
+    "OccurrenceInfo": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The metadata associated with the insight reason."
+    },
+    "OccurrenceSnippet": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The specific excerpt from the voice call transcript that helped generate the insight. Reserved for future use."
+    },
+    "VoiceCallInsightId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the VoiceCallInsight data associated with a voice call. Each record represents the call insight of a specific recording or transcript within a call. This field is a relationship field.",
+      "relationship_name": "VoiceCallInsight",
+      "relationship_type": "Master-detail",
+      "refers_to": "VoiceCallInsight (the master object)",
+      "required": true
+    }
+  },
+  "special_access_rules": "Einstein Conversation Insight must be enabled and the user requires the Conversation Insights for Sales permission set."
+}

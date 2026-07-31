@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "UnifiedActivityInsight - Data API",
+  "description": "Represents an insight related to a unified activity. This object is available for reports and dashboards in the Winter ’24 release and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the unified activity that this insight is associated with. This field is a polymorphic relationship field.",
+      "relationship_name": "Activity",
+      "relationship_type": "Lookup",
+      "refers_to": "UnifiedActivity, UnifiedEmail, UnifiedMeeting, UnifiedTask, UnifiedVideoCall, UnifiedVoiceCall"
+    },
+    "AggregatedKeywordOccurrences": {
+      "type": "int",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The number of keyword occurrences that triggered this insight. This field is the sum of occurrences for all the attached UnifiedActivityInsightKeyword objects."
+    },
+    "InsightType": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Type of the insight."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Optional. ID of the owner of the insight. Only user-scoped insights have owners (Scope=USER). This field is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Scope": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist, Sort",
+      "description": "The scope of the insight. Possible values are: ORG USER"
+    }
+  },
+  "field_reference": {
+    "ActivityId": {
+      "field_label": "Unified Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AggregatedKeywordOccurrences": {
+      "field_label": "Aggregated Keyword Occurrences",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalId": {
+      "field_label": "External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Unified Activity Insight ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InsightType": {
+      "field_label": "Insight Type",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Scope": {
+      "field_label": "Scope",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

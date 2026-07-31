@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "GroupMember - Data API",
+  "description": "Represents a User or Group that is a member of a public group.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "GroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Group. This is a relationship field.",
+      "relationship_name": "Group",
+      "relationship_type": "Lookup",
+      "refers_to": "Group",
+      "required": true
+    },
+    "UserOrGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the User or Group that is a direct member of the group. This field is a polymorphic relationship field.",
+      "relationship_name": "UserOrGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User",
+      "required": true
+    }
+  },
+  "usage": "If your group contains more than 10,000 members, for improved performance, you can adjust group membership using the GroupMember API object instead of the group's detail page in Setup. You can also adjust membership using the public group's access summary or user access policies in Setup. A record exists for every User or Group who is a direct member of a public group whose Type field is set to Regular. User records that are indirect members of Regular public groups aren't listed as group members. A User can be an indirect member of a group if he or she is in a UserRole above the direct group member in the hierarchy, or if he or she is a member of a group that is included as a subgroup in that group. If you attempt to create a record that matches an existing record, the system simply returns the existing record.\n\nIf your group contains more than 10,000 members, for improved performance, you can adjust group membership using the GroupMember API object instead of the group's detail page in Setup. You can also adjust membership using the public group's access summary or user access policies in Setup.\n\nA record exists for every User or Group who is a direct member of a public group whose Type field is set to Regular. User records that are indirect members of Regular public groups aren't listed as group members. A User can be an indirect member of a group if he or she is in a UserRole above the direct group member in the hierarchy, or if he or she is a member of a group that is included as a subgroup in that group.\n\nIf you attempt to create a record that matches an existing record, the system simply returns the existing record.",
+  "wsdl_segment": "```xml\n<complexType name=\"GroupMember\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Group\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Group\"/>\n        <element name=\"GroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserOrGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserOrGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "GroupId": {
+      "field_label": "Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Group Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserOrGroupId": {
+      "field_label": "User/Group ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerTntPermSetLic - Data API",
+  "description": "Represents Permission Set License (PSL) tracking for a tenant package in a Partner Business Org (PBO). Used to track seats, expiration dates, and license statuses from both the management and subscriber org for PSLs. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "ManagementExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the license expires for the management org."
+    },
+    "ManagementLicenseStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes whether the licenses from the management org have been provisioned. Possible values are: Active Free Trial"
+    },
+    "ManagementProvisionedSeats": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number of seats provisioned from the partner org."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated name of the PSL in the format: PTPL-{00000000}."
+    },
+    "PartnerTenantPackageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the tenant package this PSL record belongs to. This field is a relationship field.",
+      "relationship_name": "PartnerTenantPackage",
+      "refers_to": "SfdcPartnerTenantPackage"
+    },
+    "SfdcPartnerPermSetLicenseId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the PSL definition being tracked. This field is a relationship field.",
+      "relationship_name": "SfdcPartnerPermSetLicense",
+      "refers_to": "SfdcPartnerPermSetLicense"
+    },
+    "SubscriberExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the license expires for the subscriber."
+    },
+    "SubscriberLicenseStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes whether the licenses for the subscriber have been provisioned. Possible values are: Active Free Trial"
+    },
+    "SubscriberProvisionedSeats": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of seats provisioned in the Subscriber Org."
+    },
+    "UsedSeats": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of seats for the license that have been assigned at the subscriber org."
+    }
+  }
+}

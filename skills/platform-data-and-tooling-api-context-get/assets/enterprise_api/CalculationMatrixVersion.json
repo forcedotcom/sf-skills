@@ -1,0 +1,234 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CalculationMatrixVersion - Data API",
+  "description": "Defines a version of a Decision Matrix. The label for this object is Decision Matrix Version. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of the decision matrix version. This field is available in API version 56.0 and later."
+    },
+    "CalculationMatrixId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Decision Matrix to which this version belongs. This is a relationship field.",
+      "relationship_name": "CalculationMatrix",
+      "relationship_type": "Lookup",
+      "refers_to": "CalculationMatrix"
+    },
+    "DecisionMatrixDefinitionVerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The decision matrix definition version associated with this calculation matrix version. This field is a relationship field.",
+      "relationship_name": "DecisionMatrixDefinitionVer",
+      "relationship_type": "Lookup",
+      "refers_to": "DecisionMatrixDefinitionVersion"
+    },
+    "DscnModelNoteExportStatus": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Indicates the export status of a decision matrix version in the Decision Model and Notation (DMN) format. Possible values are: Initiated InProgress Complete Failed"
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last date on which this matrix version is active."
+    },
+    "GroupKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A key for grouping matrix rows in different versions, such as geographic region or product code. Derived from the associated Decision Matrix (CalculationMatrix object)."
+    },
+    "GroupKeyValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the GroupKey for this version. For example, if the GroupKey is Country, the GroupKeyValue can be United States."
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether this version is active. The default value is false."
+    },
+    "LoadProcessStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of a data upload from a .csv file. Possible values are: Completed CompletedWithErrors Failed InProgress Pending"
+    },
+    "MatrixType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The matrix type, either Standard or Grouped. A Grouped Decision Matrix groups rows in different Decision Matrix Versions by one or two keys such as geographic region or product code. Derived from the associated Decision Matrix (CalculationMatrix object)."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The matrix version name."
+    },
+    "Rank": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "When the invocation time of a matrix call is between the StartDateTime and EndDateTime of more than one enabled matrix version, the version with the highest Rank is chosen."
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The first date on which this matrix version is active."
+    },
+    "SubGroupKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A subkey for grouping matrix rows in different versions, such as geographic region or product code. For example, if the GroupKey is Country, the SubGroupKey can be State or Province. Derived from the associated Decision Matrix (CalculationMatrix object)."
+    },
+    "SubGroupKeyValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SubGroupKey for this version. For example, if the SubGroupKey is State or Province, the SubGroupKeyValue can be California."
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The version number."
+    }
+  },
+  "special_access_rules": "Access to Decision Matrices requires Omnistudio licenses.",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "80"
+    },
+    "CalculationMatrixId": {
+      "field_label": "Decision Matrix ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DecisionMatrixDefinitionVerId": {
+      "field_label": "Decision Matrix Definition Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DscnModelNoteExportStatus": {
+      "field_label": "Decision Model and Notation Export Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EndDateTime": {
+      "field_label": "End Date Time",
+      "type": "datetime"
+    },
+    "GroupKey": {
+      "field_label": "Group Key",
+      "type": "string",
+      "length": "255"
+    },
+    "GroupKeyValue": {
+      "field_label": "Group Key Value",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Decision Matrix Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEnabled": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LoadProcessStatus": {
+      "field_label": "Load Process Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MatrixType": {
+      "field_label": "Matrix Type",
+      "type": "string",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Namespace": {
+      "field_label": "Namespace",
+      "type": "string",
+      "length": "255"
+    },
+    "Rank": {
+      "field_label": "Rank",
+      "type": "int",
+      "digits": "9"
+    },
+    "StartDateTime": {
+      "field_label": "Start Date Time",
+      "type": "datetime"
+    },
+    "SubGroupKey": {
+      "field_label": "Sub Group Key",
+      "type": "string",
+      "length": "255"
+    },
+    "SubGroupKeyValue": {
+      "field_label": "Sub Group Key Value",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

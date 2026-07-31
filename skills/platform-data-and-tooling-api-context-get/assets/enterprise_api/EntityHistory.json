@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "EntityHistory - Data API",
+  "description": "Represents historical information about an object’s changed field values. This object is only available to users with the “View All Data” permission. This object is unavailable beginning with API version 8.0. Use the object-specific Historyobjects instead.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "FieldName": {
+      "type": "picklist",
+      "properties": "Filter, Restricted picklist",
+      "description": "ID of the standard or custom field."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "NewValue": {
+      "type": "anyType",
+      "properties": "Nillable",
+      "description": "New value of the modified field."
+    },
+    "OldValue": {
+      "type": "anyType",
+      "properties": "Nillable",
+      "description": "Previous value of the modified field."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter",
+      "description": "ID of the object that contains the field."
+    },
+    "ParentSobjectType": {
+      "type": "picklist",
+      "properties": "Filter, Restricted picklist",
+      "description": "The kind of object that contains the field."
+    }
+  },
+  "usage": "In API version 7.0 and later, this object works with Case, Contract, and Solution objects:"
+}

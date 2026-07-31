@@ -1,0 +1,158 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "CartValidationOutput - Data API",
+  "description": "Associate errors to cart entities, such as cart line items, delivery groups, and the like, in a store built with B2B Commerce or D2C Commerce. An example error is “Out of stock.” Available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BackgroundOperationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the background operation that ran the validation."
+    },
+    "CartId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the related WebCart."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO code for the currency that’s specified on the buyer’s account. Default value is USD.Possible values are: EUR—Euro USD—U.S. Dollar"
+    },
+    "IsDismissed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the validation process is finished. Default value is false."
+    },
+    "Level": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Describes the type of output resulting from the validation process. Possible values are: 0 (Info) 1 (Error) 2 (Warning)"
+    },
+    "Message": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Defines the message to show in the log when validation is complete. Message can be up to 255 characters."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of this CartValidationOutput record. Name can be up to 255 characters."
+    },
+    "RelatedEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Foreign key to WebCart, CartItem, and CartDeliveryGroup."
+    },
+    "RelatedEntityPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Three-character prefix for the related entity."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The CartValidationOutput type. Possible values are: CartSave — Available in API version 64.0 and later. Entitlement Inventory Other Pricing Promotions Shipping ShippingPromotions SystemError Taxes"
+    }
+  },
+  "special_access_rules": "The CartValidationOutput object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. Unless it’s noted, associated objects are available in the same API version as this object.\n\n- **CartValidationOutputChangeEvent (API version 58.0)**: Change events are available for the object.",
+  "field_reference": {
+    "BackgroundOperationId": {
+      "field_label": "Background Operation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CartId": {
+      "field_label": "Cart ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Cart Message ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDismissed": {
+      "field_label": "Is Dismissed",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Level": {
+      "field_label": "Level",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Message": {
+      "field_label": "Message",
+      "type": "string",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Cart Validation Output",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedEntityId": {
+      "field_label": "Cart Delivery Group ID or Cart Item ID or Web Cart ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedEntityPrefix": {
+      "field_label": "Related Entity Prefix",
+      "type": "string",
+      "length": "3"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

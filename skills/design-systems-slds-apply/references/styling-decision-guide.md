@@ -156,7 +156,7 @@ Typography hooks break from the `{prefix}-{number}` pattern used by spacing and 
 
 Not all CSS properties have styling hooks. Not all values have hook equivalents either (e.g., `min-width: 7rem` for label alignment). Use this decision tree:
 
-```
+```text
 Does a hook exist for this property?
 ├─ YES → Use it: var(--slds-g-*, fallback)
 ├─ NO → Is there a utility class?

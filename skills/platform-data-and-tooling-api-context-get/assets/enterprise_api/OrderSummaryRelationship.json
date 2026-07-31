@@ -1,0 +1,152 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OrderSummaryRelationship - Data API",
+  "description": "Junction object used to track how an original order summary (created before any exchanges have occurred) relates to other order summary objects in a chain of exchange orders. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssociatedOrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated OrderSummary. This field is a relationship field.",
+      "relationship_name": "AssociatedOrderSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderSummary"
+    },
+    "AssociatedOrderSummaryStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Status of the associated OrderSummary. Possible values are: Activated Approved Canceled Created Fulfilled Returned Waiting to Fulfill The default value is Created."
+    },
+    "AssociatedRelationshipType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Relationship type of the associated OrderSummary. Possible values are: Exchange"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization. Possible values are: EUR—Euro USD—U.S. Dollar The default value is USD."
+    },
+    "MainAttachedToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of an Order (Change Order) or a ReturnOrder that belongs to the parent OrderSummary (whose ID is stored in the MainOrderSummaryId field). This field is a polymorphic relationship field.",
+      "relationship_name": "MainAttachedTo",
+      "relationship_type": "Lookup",
+      "refers_to": "Order, ReturnOrder"
+    },
+    "MainOrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated OrderSummary’s parent. This field is a relationship field.",
+      "relationship_name": "MainOrderSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderSummary"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the OrderSummaryRelationship."
+    },
+    "RootOrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the original OrderSummary that existed before any exchange orders were created. This field is a relationship field.",
+      "relationship_name": "RootOrderSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderSummary"
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "AssociatedOrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssociatedOrderSummaryStatus": {
+      "field_label": "Associated Order Summary Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AssociatedRelationshipType": {
+      "field_label": "Relationship Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Order Summary Relationship Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MainAttachedToId": {
+      "field_label": "Main Attached To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MainOrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RootOrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

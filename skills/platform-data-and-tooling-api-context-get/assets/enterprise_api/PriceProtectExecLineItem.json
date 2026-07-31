@@ -1,0 +1,161 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "PriceProtectExecLineItem - Data API",
+  "description": "Represents a line item created as part of a Price Protection Execution. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the partner account related to the transaction being evaluated for price protection. This field is a relationship field.",
+      "relationship_name": "Account",
+      "refers_to": "Account"
+    },
+    "CalculatedAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Total protected amount calculated based on the applicable price difference and quantity."
+    },
+    "CalculationReferenceRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the rebate or pricing rule used to compute the claim. This field is a relationship field.",
+      "relationship_name": "CalculationReferenceRecord",
+      "refers_to": "ProgramRebateType"
+    },
+    "ClaimReferenceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Links to the related rebate claim, if one has been generated. This field is a polymorphic relationship field.",
+      "relationship_name": "ClaimReference",
+      "refers_to": "RebateClaim"
+    },
+    "HasWarnings": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the execution line item has associated warnings. The default value is false."
+    },
+    "InTransitQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Quantity of the product in transit."
+    },
+    "IsEligible": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the record qualifies for price protection. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the record was last referenced by a user or system."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and timestamp when the record was last opened in the UI."
+    },
+    "LocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the inventory or sales location relevant to the line item. This field is a relationship field.",
+      "relationship_name": "Location",
+      "refers_to": "Location"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-generated identifier for the line item record."
+    },
+    "NewSalePricePerUnit": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The new sale price per unit after the price change."
+    },
+    "NewSalePriceType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of sale price applied post-adjustment (e.g., List Price, Net Price)."
+    },
+    "PriceDifference": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Difference between the old and new sale price per unit. This field is a calculated field."
+    },
+    "PriceProtectionExecutionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Links to the parent Price Protection Execution record. This field is a relationship field.",
+      "relationship_name": "PriceProtectionExecution",
+      "relationship_type": "Master-detail",
+      "refers_to": "PriceProtectionExecution (the master object)"
+    },
+    "PriceProtectionTermId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the Price Protection Term used for evaluating eligibility and calculations. This field is a relationship field.",
+      "relationship_name": "PriceProtectionTerm",
+      "refers_to": "PriceProtectionTerm"
+    },
+    "ProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the product involved in the price protection claim. This field is a relationship field.",
+      "relationship_name": "Product",
+      "refers_to": "Product2"
+    },
+    "RemainingQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Quantity of product still eligible for claim after partial adjustments."
+    },
+    "SalePricePerUnit": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Original sale price per unit before the price adjustment."
+    },
+    "SalePriceType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of sale price recorded during the original transaction."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Current processing state of the line item. Possible values are: Complete Error New ReadyForClaim—Ready For Claim ReadyForPricing—Ready For Pricing ReadyForSimulation—Ready For Simulation"
+    },
+    "StatusReason": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Additional explanation or message associated with the current status."
+    },
+    "TransactionDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Date when the original sale or transaction occurred."
+    },
+    "TransactionReferenceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reference to the transaction record from which this line item originates. This field is a polymorphic relationship field.",
+      "relationship_name": "TransactionReference",
+      "refers_to": "PartnerUnsoldInventory"
+    },
+    "WarningMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Descriptive warning associated with this line item, if applicable."
+    }
+  }
+}

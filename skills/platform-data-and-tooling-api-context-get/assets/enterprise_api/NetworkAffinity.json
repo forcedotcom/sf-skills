@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "NetworkAffinity - Data API",
+  "description": "Represents a junction object that associates a user profile with a Network object, that is, with an Experience Cloud site. Use NetworkAffinity to assign a default Experience Cloud site to a user profile. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the default Experience Cloud site associated with a user profile."
+    },
+    "ProfileId": {
+      "type": "reference",
+      "properties": "CreateFilter, Group, Sort, Update",
+      "description": "ID of the user profile the default Experience Cloud site is assigned to."
+    }
+  },
+  "special_access_rules": "To work with the NetworkAffinity object, you must have View Setup or Customize Application permission.",
+  "usage": "The default Experience Cloud site allows you to stamp site-agnostic email notifications to all users with that profile with the selected site's branding. The default Experience Cloud site also becomes the target destination for email notification links. Site-agnostic email notifications include notifications about records, such as cases, accounts, and opportunities. The NetworkId field is not updatable through the Apex, REST API, or SOAP API. If you want to change the value for NetworkId, you must delete the record and create one with the right value.\n\nThe default Experience Cloud site allows you to stamp site-agnostic email notifications to all users with that profile with the selected site's branding. The default Experience Cloud site also becomes the target destination for email notification links. Site-agnostic email notifications include notifications about records, such as cases, accounts, and opportunities.\n\nThe NetworkId field is not updatable through the Apex, REST API, or SOAP API. If you want to change the value for NetworkId, you must delete the record and create one with the right value.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Default Community ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

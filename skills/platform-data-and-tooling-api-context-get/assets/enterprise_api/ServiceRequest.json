@@ -1,0 +1,147 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "ServiceRequest - Data API",
+  "description": "Represents a formal request from a user for something to be provided, such as access, information, hardware, or software. This object manages the lifecycle of these tasks, which are typically low-risk, and can be fulfilled through a defined, repeatable process. For example, a Service Request can be created for an employee requesting a new laptop or a student needing a transcript. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AssignedGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the user group assigned to the service request. This field is a relationship field.",
+      "relationship_name": "AssignedGroup",
+      "refers_to": "Group"
+    },
+    "AssignedUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the user assigned to the service request. This field is a relationship field.",
+      "relationship_name": "AssignedUser",
+      "refers_to": "User"
+    },
+    "BusinessHoursId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID for the business hours used to determine the SLA calculation. This field is a relationship field.",
+      "relationship_name": "BusinessHours",
+      "refers_to": "BusinessHours"
+    },
+    "ClosedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the service request was closed."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A detailed description of the service request."
+    },
+    "IsClosed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the service request is closed (true) or not (false). The default value is false. The default value is false."
+    },
+    "IsPaused": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates if the SLA timer is paused (true) or not (false). The default value is false. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record"
+    },
+    "MilestoneStatus": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "Information about the milestone the service request reached."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the service request record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who created the record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ParentServiceRequestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the parent request that this service request belongs to. This field is a relationship field.",
+      "relationship_name": "ParentServiceRequest",
+      "refers_to": "ServiceRequest"
+    },
+    "Priority": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Priority of a service request. Valid values are: High Medium Low The default value is Low."
+    },
+    "ReportedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the person who reported the service request. This field is a polymorphic relationship field.",
+      "relationship_name": "ReportedBy",
+      "refers_to": "Account, User"
+    },
+    "ResolutionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the service request was resolved."
+    },
+    "ResolutionSummary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Resolution summary for the service request."
+    },
+    "SlaEndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the SLA timer ended."
+    },
+    "SlaPauseDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the SLA timer was paused."
+    },
+    "SlaStartDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the SLA timer started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the status of a service request."
+    },
+    "StatusCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The code that displays the status of the service request lifecycle. Valid values are: Closed Canceled InProgress New OnHold Resolved The default value is New."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A short description of the service request."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ServiceRequestFeed**: Feed tracking is available for the object.\n- **ServiceRequestHistory**: History is available for tracked fields of the object.\n- **ServiceRequestShare**: Sharing is available for the object."
+}

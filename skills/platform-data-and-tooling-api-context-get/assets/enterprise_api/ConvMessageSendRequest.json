@@ -1,0 +1,340 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ConvMessageSendRequest - Data API",
+  "description": "Represents a request to send a template-based messaging component to a series of messaging users in an enhanced messaging channel or Messaging for In-App. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AllowExistingSessionStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the message can be sent only at certain times. Possible values are: Any—Send the message regardless of whether the messaging user is engaged in an active messaging session with the business. Closed—Send the message unless the messaging user is engaged in a messaging session with a status other than Error or Ended, in which case it’s never sent. NonActive—Send the message unless the messaging user is engaged in a messaging session with a status of Active, in which case it’s never sent."
+    },
+    "CommSubscriptionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related communication subscription, if applicable. This field is a relationship field that refers to CommSubscription."
+    },
+    "CompletedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when the request completes and all messages associated with the request are sent or failed to be sent."
+    },
+    "FailedMessageCount": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The number of messages that failed to be delivered to a messaging user. For example, if a flow sends the message to 50 messaging users and 4 don’t receive the message, this value is 4."
+    },
+    "FailedMessageErrorReasons": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The error reason for each of the failed messages. For example, if 4 messages fail to send, this field shows the error reason for each failed message."
+    },
+    "FailedMessageIdentifiers": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The IDs of the messages that failed to send. For example, if 4 messages fail to send, this field shows 4 message IDs."
+    },
+    "FailedMeuPlatformKeys": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A list of platform keys for messaging end users with messages that failed to send. Available in API version 65.0 and later."
+    },
+    "InProgressMessageCount": {
+      "type": "int",
+      "properties": "Defaulted on Create, Filter, Group, Sort",
+      "description": "The number of messages in the process of being sent."
+    },
+    "InProgressMessageIdentifiers": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A list of IDs of the messages being sent."
+    },
+    "InProgressMessagingEndUserIds": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A list of IDs of messaging end users with messages that are being sent. Available in API version 65.0 and later."
+    },
+    "InProgressMessagingSessionIds": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A list of IDs of messaging sessions with messages that are being sent. Available in API version 65.0 and later."
+    },
+    "InProgressMeuPlatformKeys": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A list of platform keys for messaging end users with messages that are being sent. Available in API version 65.0 and later."
+    },
+    "MessageDefinition": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the messaging component being sent. Only active messaging components can be sent."
+    },
+    "MessageDefinitionParameters": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A list of parameters used to dynamically construct the message that is being sent. Available in API version 65.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated ID for the request that uses the format MSJ-{00000000}."
+    },
+    "PendingMessageCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of messages that haven’t yet been sent."
+    },
+    "PendingMessageEndUserIds": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A list of IDs of the messaging end users with pending messages. Available in API version 65.0 and later."
+    },
+    "PendingMeuPlatformKeys": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A list of platform keys of the messaging end users with pending messages. Available in API version 65.0 and later."
+    },
+    "PendingMessageIdentifiers": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A list of IDs of the pending messages."
+    },
+    "RequestConsentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether the flow applies the consent settings of the messaging end user or the communication subscription. Possible values are: CommunicationSubscription MessagingEndUser"
+    },
+    "RequestStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the request. Possible values are: Completed Pending In Progress—The system is actively trying to send the message. If a message can’t be sent, the RequestStatus returns to Pending and sending is tried again later."
+    },
+    "RequestType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of request. Possible values are: SendNotificationMessages"
+    },
+    "SessionLongevityPreference": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether to end the session after the message is sent. Possible values are: KeepSessionOpen—After the flow sends the message, keep the messaging session in a New state. If the end user doesn’t respond within 48 hours, the session ends. Use this option if you expect customers to respond to automated messages and want service reps to see their response in context. EndSession—After the flow sends the message, end the messaging session. If the customer responds, a new messaging session is created and routed to your support team. KeepSessionOpenOrAppend—If there’s an existing session with the messaging end user in the New state, use that session to send the message. Otherwise, follow the behavior documented for the KeepSessionOpen option. Available in API version 65.0 and later."
+    },
+    "ShouldEnforceChannelConsent": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the existing Messaging channel consent preferences are applied when determining who receives the message. Setting this value to true is the most common approach. The default value, false, allows you to add custom consent logic—for example, to customize a flow to send the message to both implicitly opted-in users and explicitly opted-in users."
+    },
+    "SuccessMessageCount": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The number of messages that were successfully sent to messaging users. Delivery can occur much later than sending, depending on factors such as the connectivity status of the recipient. Delivery is reflected in the messaging session transcript."
+    },
+    "SuccessMessageIdentifiers": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A list of IDs of the messages that were sent."
+    },
+    "SuccessMeuPlatformKeys": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A list of platform keys for messaging end users with messages that were sent. Available in API version 65.0 and later."
+    },
+    "TotalMessageCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of messages that the related flow attempted to send. This field is a calculated field."
+    }
+  },
+  "special_access_rules": "Messaging and its associated objects are available only in Enterprise, Unlimited, and Developer Editions for Service Cloud or Sales Cloud with the Digital Engagement add-on license.\n\nMessaging and its associated objects are available\n         only in Enterprise, Unlimited, and Developer Editions for Service Cloud or Sales Cloud with\n         the Digital Engagement add-on license.",
+  "usage": "A ConvMessageSendRequest can be generated by a flow, Apex code, or REST API call that invokes the sendConversationMessages invocable action. Use the ConvMessageSendRequest object to query messages sent by the sendConversationMessages invocable action.",
+  "wsdl_segment": "```xml\n<complexType name=\"ConvMessageSendRequest\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AllowExistingSessionStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CommSubscription\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CommSubscription\"/>\n        <element name=\"CommSubscriptionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CompletedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FailedMessageCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FailedMessageErrorReasons\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FailedMessageIdentifiers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FailedMeuPlatformKeys\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InProgressMessageCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"InProgressMessageIdentifiers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InProgressMessagingEndUserIds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InProgressMessagingSessionIds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InProgressMeuPlatformKeys\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessageDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessageDefinitionParameters\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PendingMessageCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"PendingMessageIdentifiers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PendingMessagingEndUserIds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PendingMeuPlatformKeys\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RequestConsentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RequestStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RequestType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SessionLongevityPreference\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShouldEnforceChannelConsent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SuccessMessageCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SuccessMessageIdentifiers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SuccessMeuPlatformKeys\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalMessageCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AllowExistingSessionStatus": {
+      "field_label": "Send Condition",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CommSubscriptionId": {
+      "field_label": "Communication Subscription ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CompletedDate": {
+      "field_label": "Completed Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FailedMessageCount": {
+      "field_label": "Failed Message Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "FailedMessageErrorReasons": {
+      "field_label": "Failed Message Error Reasons",
+      "type": "textarea",
+      "length": "700"
+    },
+    "FailedMessageIdentifiers": {
+      "field_label": "Failed Message Identifiers",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "FailedMeuPlatformKeys": {
+      "field_label": "Failed Message Platform Keys",
+      "type": "textarea",
+      "length": "8000"
+    },
+    "Id": {
+      "field_label": "Conversation Message Send Request ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InProgressMessageCount": {
+      "field_label": "In Progress Message Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "InProgressMessageIdentifiers": {
+      "field_label": "In Progress Message Identifiers",
+      "type": "string",
+      "length": "255"
+    },
+    "InProgressMessagingEndUserIds": {
+      "field_label": "In Progress Messaging User Ids",
+      "type": "string",
+      "length": "255"
+    },
+    "InProgressMessagingSessionIds": {
+      "field_label": "In Progress Messaging Session Ids",
+      "type": "string",
+      "length": "255"
+    },
+    "InProgressMeuPlatformKeys": {
+      "field_label": "In Progress Messaging Session Platform Keys",
+      "type": "string",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MessageDefinition": {
+      "field_label": "Message Definition",
+      "type": "string",
+      "length": "255"
+    },
+    "MessageDefinitionParameters": {
+      "field_label": "Message Definition Parameters",
+      "type": "textarea",
+      "length": "8000"
+    },
+    "Name": {
+      "field_label": "Conversation Message Send Request Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PendingMessageCount": {
+      "field_label": "Pending Message Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "PendingMessageIdentifiers": {
+      "field_label": "Pending Message Identifiers",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "PendingMessagingEndUserIds": {
+      "field_label": "Pending Messaging User Ids",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "PendingMeuPlatformKeys": {
+      "field_label": "Pending Messaging User Platform Keys",
+      "type": "textarea",
+      "length": "8000"
+    },
+    "RequestConsentType": {
+      "field_label": "Consent Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RequestStatus": {
+      "field_label": "Send Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RequestType": {
+      "field_label": "Send Message Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SessionLongevityPreference": {
+      "field_label": "Messaging Session Longevity",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ShouldEnforceChannelConsent": {
+      "field_label": "Enforce Channel Consent",
+      "type": "boolean"
+    },
+    "SuccessMessageCount": {
+      "field_label": "Success Message Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "SuccessMessageIdentifiers": {
+      "field_label": "Success Message Identifiers",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "SuccessMeuPlatformKeys": {
+      "field_label": "Success Message Platform Keys",
+      "type": "textarea",
+      "length": "8000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalMessageCount": {
+      "field_label": "Total Message Count",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

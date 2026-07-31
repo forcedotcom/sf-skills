@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "UserAccessPolicy - Data API",
+  "description": "Represents a user access policy. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BooleanFilter": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The logic that determines how your user criteria filters are applied in the user access policy."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Description of the user access policy."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for the user access policy."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the user access policy."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the user access policy. In the UI, this field is Label."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition organization that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values: In Developer Edition organizations, the namespace prefix is set to the namespace prefix of the organization for all objects that support it. There is an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition organization of the package developer. In organizations that are not Developer Edition organizations, NamespacePrefix is only set for objects that are part of an installed managed package. There is no namespace prefix for all other objects."
+    },
+    "Order": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the order for which active policy is applied when a user meets the criteria for multiple policies. Must be an integer from 0 to 10,000. Only the active policy with the lowest Order value is applied. This field is required only if the Status field is set to Active. Available in API version 61.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the user access policy. Possible values are: Active Completed Design Failed Migrate Testing Updating The default value is Design."
+    },
+    "TriggerType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of user record trigger for which this user access policy runs. Possible values are: Create—The user access policy runs when a user who matches the policy criteria is created. CreateAndUpdate—The user access policy runs when a user who matches the policy criteria is either created or updated. Update—The user access policy runs when a user who matches the policy criteria is updated."
+    }
+  },
+  "special_access_rules": "To create or modify user access policies, users must have the Manage User Access Policies permission."
+}

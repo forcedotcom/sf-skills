@@ -1,0 +1,294 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "ProgramRebateType - Data API",
+  "description": "Represents a rebate structure associated with a Rebate Program. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "AccrualRate": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The rate of accrual based on the value selected in the Measure Type field. For example, when the measure type is percent and you enter 10, the accrual rate is 10%."
+    },
+    "AggregateObjectName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The object that stores the aggregation results."
+    },
+    "BenefitQualifierField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The field on the aggregation object used to define thresholds for qualifying benefits (minimum or maximum)."
+    },
+    "CalcObjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Links to a calculation definition from the Data Processing Engine. This field is a relationship field.",
+      "relationship_name": "CalcObject",
+      "refers_to": "BatchCalcJobDefinition"
+    },
+    "CalculationBasis": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the method used to calculate the rebate amount. Possible values are: Accrual Payout PayoutAndAccrual—Payout and Accrual The default value is Payout."
+    },
+    "CalculationMethod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Defines how tiered rebate benefits are calculated. Possible values are: Retrospective Stepped The default value is Retrospective."
+    },
+    "CalculationType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of rebate calculation logic to use. Possible values are: AggregateBased—Aggregate Based Custom GrowthBased—Growth Based PerTransaction—Per Transaction"
+    },
+    "ExecutionProcedureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Links to business rules that define custom execution logic. This field is a relationship field.",
+      "relationship_name": "ExecutionProcedure",
+      "refers_to": "ExpressionSet"
+    },
+    "FilterAction": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Logical operator to apply between filter conditions. Possible values are: AllConditionsMet—All Conditions Are Met (AND) AnyConditionMet—Any Condition Is Met (OR) CustomLogic—Custom Condition Logic NoConditionsMet—No Conditions Are Met"
+    },
+    "FilterCriteria": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Holds the filter conditions in textual format. Used to define eligibility criteria for rebate qualification."
+    },
+    "FilterLogic": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Logical formula used to combine filter conditions, typically using field references and logical operators."
+    },
+    "IsIntegratable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "When selected, allows this rebate type to be applied on transactional records such as orders or opportunities. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and the timestamp when the record was last referenced by the user. Useful for user activity tracking."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and the timestamp when the record was last opened or viewed. Tracks user interaction history."
+    },
+    "MeasureField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The aggregation object field used with measure type and benefit value to calculate the rebate amount. This is required for the Amount per Unit and Percentage of Revenue measure types."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Unique name that identifies the rebate type configuration. Used as a reference label across related components."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or group that owns this record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ProductFilterType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether the rebate applies to included or excluded products. Possible values are: ExcludeProducts—Exclude Products IncludeProducts—Include Products"
+    },
+    "RebateMeasureType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the method to measure benefit payout. Possible values are: AmountperUnit—Amount per Unit Custom FixedAmount—Fixed Amount PercentageOfRevenue—Percentage of Revenue"
+    },
+    "RebateProgramId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Links this rebate type to its parent rebate program. This field is a relationship field.",
+      "relationship_name": "RebateProgram",
+      "relationship_type": "Master-detail",
+      "refers_to": "RebateProgram (the master object)"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies whether the rebate type is currently active. Possible values are: Active Inactive The default value is Inactive."
+    },
+    "UnitOfMeasureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Identifies the unit of measure associated with the rebate type. This field is a relationship field.",
+      "relationship_name": "UnitOfMeasure",
+      "refers_to": "UnitOfMeasure"
+    },
+    "ValidityDuration": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Duration for which the inventory is eligible for price protection."
+    },
+    "ValidityDurationType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Unit of time used to measure ValidityDuration. Possible values are: Days Months Years The default value is Years."
+    }
+  },
+  "field_reference": {
+    "AccrualRate": {
+      "field_label": "Accrual Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AggregateObjectName": {
+      "field_label": "Custom Object Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BenefitQualifierField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CalcObjectId": {
+      "field_label": "Batch Calculation Job Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CalculationBasis": {
+      "field_label": "Calculation Basis",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CalculationMethod": {
+      "field_label": "Calculation Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CalculationType": {
+      "field_label": "Calculation Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FilterAction": {
+      "field_label": "Filter Action",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FilterCriteria": {
+      "field_label": "Filter Criteria",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "FilterLogic": {
+      "field_label": "Filter Logic",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Program Rebate Type ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsIntegratable": {
+      "field_label": "Integratable",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MeasureField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductFilterType": {
+      "field_label": "Product Filter Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RebateMeasureType": {
+      "field_label": "Measure Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RebateProgramId": {
+      "field_label": "Rebate Program ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

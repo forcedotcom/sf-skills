@@ -1,0 +1,109 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "BuyerGroupMember - Data API",
+  "description": "Represents a member of a buyer group. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BuyerGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the buyer group to which the member belongs. BuyerGroupId is a relationship field.",
+      "relationship_name": "BuyerGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "BuyerGroup"
+    },
+    "BuyerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the account or guest buyer profile. BuyerId is a polymorphic relationship field.",
+      "relationship_name": "Buyer",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, GuestBuyerProfile"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the buyer group member."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The ID of the member group or user. OwnerId is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    }
+  },
+  "special_access_rules": "The BuyerGroupMember object is available only if the Commerce Buyer and Entitlements Integrator permission is granted.",
+  "field_reference": {
+    "BuyerGroupId": {
+      "field_label": "Buyer Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BuyerId": {
+      "field_label": "Buyer ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Buyer Group Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Buyer Group Member Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

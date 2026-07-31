@@ -1,0 +1,425 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "PublicComplaint - Data API",
+  "description": "Represents the complaints submitted by public users. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the Account associated with this complaint. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "BusinessAddress": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The address of the business."
+    },
+    "BusinessName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the business."
+    },
+    "CauseSubtype": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The subtype of complaint cause. This field is available in API version 58.0 and later. Possible values are: Misleading advertisement or documentation"
+    },
+    "CauseType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of complaint cause. This field is available in API version 58.0 and later. Possible values are: Product Communication"
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Additional details about the complaint. This field is available in API version 51.0 and later."
+    },
+    "CompensationAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Any amount of money offered to resolve the complaint. This field is available in API version 58.0 and later."
+    },
+    "ComplaintCaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related Case. This field is available in API version 58.0 and later. This field is a relationship field.",
+      "relationship_name": "ComplaintCase",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "ComplaintCaseStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The status of the related Case. This field is available in API version 58.0 and later. Possible values are: Closed Escalated In Progress Merged New On Hold Response Received Waiting for Customer Working The default value is New."
+    },
+    "ComplaintSubType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The subtype of complaint. All values except Fire Safety are available in API version 58.0 and later. Possible values are: Account Opening/Closure Amount Not Dispensed Attempts to Collect Debt not Owed Auto Debit Mandate Communication Tactics Credit Limit Changed Credit Report / Credit Score Delays / Timescales Disputes over sums/charges Errors / not following instructions Fire Safety Fraud Handling Inaccessible ATMs Inaccessible Branch Entrances Inaccessible Mobile banking features Inaccessible Website Misleading Advertising Mobile Banking - Features or Functionality No Written Notification About Debt Online Banking - Features or Functionality Other General Admin/Customer Service Others Problem when Making Payments Product Disclosure Information Product Performance/Features Unauthorised Transaction(s) Unclear Arrangement Unclear Guidance Unsuitable Advice"
+    },
+    "ComplaintSummary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The summary of customer complaints and related cases. This field is available in API version 62.0 and later."
+    },
+    "ComplaintType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of complaint. All values except Safety are available in API version 58.0 and later. Possible values are: Accessibility Issues Advising, Selling and Arranging Digital or Technology Financial Hardship or Collections General Admin/ Customer Service Information, sums/ charges or Product Performance Lending / Credit Marketing or Corporate Communications Others Safety Transaction Related"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A description of the complaint."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email of the complainant."
+    },
+    "EscalationCause": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The reason the complaint was escalated. This field is available in API version 58.0 and later. Possible values are: Alleged ADA Violation Alleged Discrimination Alleged MLA Violation Alleged SCRA Violation Alleged UDAAP Violation Consumer Protection Agency Involvement Lawsuit Filed Media Involvement None Received by Executive Leadership The default is None."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The given name of the complainant."
+    },
+    "IncidentDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The date of the incident. The default is the date this record was created, but this field is editable."
+    },
+    "IsComplainantAuthorized": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether the person who filed the complaint is an authorized representative of the Account. This field is available in API version 58.0 and later. The default value is false."
+    },
+    "IsReporterConfidential": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The reporter's request for confidentiality. The default value is false."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The family name of the complainant."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, possibly the user only accessed this record or list view (LastReferencedDate) but didn't view it."
+    },
+    "MobileNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The mobile number of the complainant."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the complaint."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the complaint owner. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Priority": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The priority of the complaint. Possible values are: Critical High Low Medium The default value is Medium."
+    },
+    "ProductType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The product that the complaint is about. This field is available in API version 58.0 and later. Possible values are: ATM / debit card Credit Card or Prepaid Card Insurance Investments Merchant Services Mobile / electronic banking Money transfers, virtual currency, and money services Mortgage / Home Finance Other Personal Loan / other loans Vehicle loan or lease"
+    },
+    "ReceivedDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date the complaint was received. This field is available in API version 58.0 and later."
+    },
+    "ReferenceRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset, vehicle, or financial account that’s associated with the public complaint. This field is available in API version 64.0 and later with Automotive Cloud. This field is a relationship field.",
+      "relationship_name": "ReferenceRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Financial Account, Asset, Vehicle, Product2"
+    },
+    "ReporterAddress": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The address of the reporter for further communication."
+    },
+    "ReporterCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Role of the reporter in the organization. Possible values are: Childcare Providers Healthcare worker Law Enforcement Medical Examiners Mental Health Professionals Other School Personnel Social Worker The default value is School Personnel."
+    },
+    "ReporterOrganization": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The organization the reporter is part of."
+    },
+    "ShouldInclInRegulatoryRpt": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether this complaint must be included in a regulatory report. This field is available in API version 58.0 and later. The default value is false."
+    },
+    "SourceType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The source of the complaint. This field is available in API version 58.0 and later. Possible values are: Branch Consumer Protection Agency Contact Centre Mobile App Regulatory Agency Social Media Web Chat"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The status of the complaint. Possible values are: In Review Resolved Submitted The default value is Submitted."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Subject of the complaint. This field is available in API version 51.0 and later."
+    }
+  },
+  "special_access_rules": "Fields added in API version 58.0 are available if the add-on license for Financial Services Cloud is enabled.\n\nFields added in API version 58.0 are available if\n         the add-on license for Financial Services Cloud is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PublicComplaintFeed**: Feed tracking is available for the object.\n- **PublicComplaintHistory**: History is available for tracked fields of the object.\n- **PublicComplaintOwnerSharingRule**: Sharing rules are available for the object.\n- **PublicComplaintShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BusinessAddress": {
+      "field_label": "Business Address",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "BusinessName": {
+      "field_label": "Business Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CauseSubtype": {
+      "field_label": "Cause Subtype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CauseType": {
+      "field_label": "Cause Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "65000"
+    },
+    "CompensationAmount": {
+      "field_label": "Compensation Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ComplaintCaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ComplaintCaseStatus": {
+      "field_label": "Complaint Case Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ComplaintSubType": {
+      "field_label": "Subtype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ComplaintType": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "20000"
+    },
+    "Email": {
+      "field_label": "Email ID",
+      "type": "email",
+      "length": "80"
+    },
+    "EscalationCause": {
+      "field_label": "Escalation Cause",
+      "type": "picklist",
+      "length": "40"
+    },
+    "FirstName": {
+      "field_label": "First Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Public Complaint ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IncidentDate": {
+      "field_label": "Incident Date",
+      "type": "date"
+    },
+    "IsComplainantAuthorized": {
+      "field_label": "Is Complainant Authorized",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsReporterConfidential": {
+      "field_label": "Is Reporter Confidential",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastName": {
+      "field_label": "Last Name",
+      "type": "string",
+      "length": "255"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MobileNumber": {
+      "field_label": "Mobile Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "Name": {
+      "field_label": "Complaint ID",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ProductType": {
+      "field_label": "Product Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReceivedDate": {
+      "field_label": "Received Date",
+      "type": "date"
+    },
+    "ReporterAddress": {
+      "field_label": "Reporter Address",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "ReporterCategory": {
+      "field_label": "Reporter Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReporterOrganization": {
+      "field_label": "Reporter Organization",
+      "type": "string",
+      "length": "255"
+    },
+    "ShouldInclInRegulatoryRpt": {
+      "field_label": "Include In Regulatory Report",
+      "type": "boolean"
+    },
+    "SourceType": {
+      "field_label": "Source Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

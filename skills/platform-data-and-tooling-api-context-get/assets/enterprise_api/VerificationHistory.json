@@ -1,0 +1,196 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "VerificationHistory - Data API",
+  "description": "Represents the past six months of your org users’ attempts to verify their identity. This object is available in API version 36.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Activity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The action the user attempted that requires identity verification. The label is User Activity. Available values are: AccessReports—The user attempted to access reports or dashboards. Apex—The user attempted to access a Salesforce resource with a verification Apex method. ChangeEmail—The user attempted to change an email address. ConnectSms—The user attempted to connect a phone number. ConnectToopher—The user attempted to connect Salesforce Authenticator. ConnectTotp—The user attempted to connect a one-time password generator. ConnectU2F—The user attempted to register a U2F security key. ConnectWebAuth—The user attempted to register a built-in authenticator. ConnectedApp—The user attempted to access a connected app. EnableLL—The user attempted to enroll in Lightning Login. ExportPrintReports—The user attempted to export or print reports or dashboards. ExternalClientApp— The user attempted to access an external client app. ExtraVerification—Reserved for future use. ListView—The user attempted to access a list view. Login—The user attempted to log in. Registration—Reserved for future use. TempCode—The user attempted to generate a temporary verification code."
+    },
+    "EventGroup": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the verification attempt. Verification can involve several attempts and use different verification methods. For example, in a user’s session, a user enters an invalid verification code (first attempt). The user then enters the correct code and successfully verifies identity (second attempt). Both attempts are part of a single verification and, therefore, have the same ID. The label is Verification Attempt."
+    },
+    "LoginGeoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character ID for the record of the geographic location of the user for a successful or unsuccessful identity verification attempt. Due to the nature of geolocation technology, the accuracy of geolocation fields (for example, country, city, postal code) can vary. This is a relationship field.",
+      "relationship_name": "LoginGeo",
+      "relationship_type": "Lookup",
+      "refers_to": "LoginGeo"
+    },
+    "LoginHistoryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID for the record of the user’s successful or unsuccessful login attempt. This is a relationship field.",
+      "relationship_name": "LoginHistory",
+      "relationship_type": "Lookup",
+      "refers_to": "LoginHistory"
+    },
+    "Policy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The identity verification security policy or setting. The label is Triggered By. Available values are: CustomApex—Identity verification made by a verification Apex method. DeviceActivation—Identity verification required for users logging in from an unrecognized device or new IP address. This verification is part of Salesforce’s risk-based authentication. EnableLightningLogin—Identity verification required for users enrolling in Lightning Login. This verification is triggered when the user attempts to enroll. Users are eligible to enroll if they have the Lightning Login User user permission and the org has enabled Allow Lightning Login in Session Settings. ExtraVerification—Reserved for future use. HighAssurance—High assurance session required for resource access. This verification is triggered when the user tries to access a resource, such as a connected app, report, or dashboard, that requires a high-assurance session level. LightningLogin—Identity verification required for internal users logging in via Lightning Login. This verification is triggered when the enrolled user attempts to log in. Users are eligible to log in if they have the Lightning Login User user permission and have successfully enrolled in Lightning Login. Also, from Session Settings in Setup, Allow Lightning Login must be enabled. PageAccess—Identity verification required for users attempting to perform an action, such as changing an email address or adding a verification method for multi-factor authentication (MFA). PasswordlessLogin—Identity verification required for customers attempting to log in to an Experience Cloud site that is set up for passwordless login. The admin controls which registered verification methods can be used, for example, email, SMS, Salesforce Authenticator, or TOTP. ProfilePolicy—Session security level required at login. This verification is triggered by the Session security level required at login setting on the user’s profile. TwoFactorAuthentication—Multi-factor authentication (formerly called two-factor authentication) required at login. This verification is triggered by the Multi-Factor Authentication for User Interface Logins user permission assigned to a custom profile. Or the user permission is included in a permission set that is assigned to a user."
+    },
+    "Remarks": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The text the user sees on the page or in Salesforce Authenticator when prompted to verify identity. For example, if identity verification is required for a user’s login, the user sees “You’re trying to Log In to Salesforce.” In this case, the Remarks value is “Log In to Salesforce.” But if the Activity value is Apex, the Remarks value is a custom description passed by an Apex method. If the user is verifying identity using Salesforce Authenticator, the custom description also appears in the app. If the custom description isn’t specified, the value is the name of the Apex method. The label is Activity Message."
+    },
+    "ResourceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the Activity value is ConnectedApp, the ResourceId value is the ID of the connected app. The label is Connected App ID. This is a relationship field.",
+      "relationship_name": "Resource",
+      "relationship_type": "Lookup",
+      "refers_to": "ConnectedApplication"
+    },
+    "SourceIp": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The IP address of the machine from which the user attempted the action that requires identity verification. For example, the IP address of the machine from where the user tried to log in or access reports. If it’s a non-login action that required verification, the IP address can be different from the address from where the user logged in. This address can be an IPv4 or IPv6 address."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the identity verification attempt. Available values are: AutomatedSuccess—Salesforce Authenticator approved the request for access because the request came from a trusted location. After users enable location services in Salesforce Authenticator, they can designate trusted locations. When a user trusts a location for a particular activity, such as logging in from a recognized device, that activity is approved from the trusted location for as long as the location is trusted. Denied—The user denied the approval request in the authenticator app, such as Salesforce Authenticator. FailedGeneralError—An error caused by something other than an invalid verification code, too many verification attempts, or authenticator app connectivity. FailedInvalidCode—The user entered an invalid verification code. FailedInvalidPassword—The user entered an invalid password. FailedPasswordLockout—The user attempted to enter a password too many times. FailedTooManyAttempts—The user attempted to verify identity too many times. For example, the user entered an invalid verification code repeatedly. Initiated—Salesforce initiated identity verification but hasn’t yet challenged the user. InProgress—Salesforce challenged the user to verify identity and is waiting for the user to respond or for Salesforce Authenticator to send an automated response. RecoverableError—Salesforce can’t reach the authenticator app to verify identity, but it continues to retry. ReportedDenied—The user denied the approval request in the authenticator app, such as Salesforce Authenticator, and also flagged the approval request to report to an administrator. Succeeded—The user’s identity was verified."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user verifying identity. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "VerificationMethod": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The method by which the user attempted to verify identity in the verification event. The label is Method. Available values are: BuiltInAuthenticator—A built-in authenticator set up on the user’s device, such as Touch ID or Windows Hello, generated the required credentials. This value is available in API version 53.0 and later. Email—Salesforce sent an email with a verification code to the address associated with the user’s account. EnableLL—Salesforce Authenticator sent a notification to the user’s mobile device to enroll in Lightning Login. This value is available in API version 38.0 and later. LL—Salesforce Authenticator sent a notification to the user’s mobile device to approve login via Lightning Login. This value is available in API version 38.0 and later. PwlessPasskey (beta)—Salesforce prompted the user to use a passkey to perform passwordless login. This value is available in API version 66.0 and later.Passwordless login with passkeys is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion. SalesforceAuthenticator—Salesforce Authenticator sent a notification to the user’s mobile device to verify account activity. Sms—Salesforce sent a text message with a verification code to the user’s mobile device. SMS messaging requires a Salesforce add-on license for Identity Verification Credits. TempCode—A Salesforce admin or a user with the Manage Multi-Factor Authentication in User Interface permission generated a temporary verification code for the user. This value is available in API version 37.0 and later. Totp—An authenticator app generated a time-based, one-time password (TOTP) on the user’s mobile device. U2F—A U2F security key generated required credentials for the user. This value is available in API version 38.0 and later."
+    },
+    "VerificationTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time of the identity verification attempt, for example, 7/19/2025, 3:19:13 PM PDT. The time zone is based on GMT. The label is Time."
+    }
+  },
+  "special_access_rules": "Only users with Manage Users permission can access this object.",
+  "usage": "Here are two examples queries that you can perform on VerificationHistory.\n\nShow verification history for a user’s login record\n\nSELECT Activity, EventGroup, Policy,\n\t\t\t\t\t\t\t\t\tRemarks, Status, UserId,VerificationMethod, VerificationTime\n\t\t\t\t\t\t\t\t\tFROM VerificationHistory WHERE LoginHistoryId =\n\t\t\t\t\t\t\t\t\t'0YaD000#########'\n\nGet detailed geographic location information for a user’s\n\t\t\t\t\t\t\t\tverification attempt\n\nSELECT City, CountryIso, Latitude,\n\t\t\t\t\t\t\t\t\tLongitude, PostalCode FROM LoginGeo WHERE LoginGeoId =\n\t\t\t\t\t\t\t\t\t'0LE###############'",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"VerificationHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Activity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EventGroup\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LoginGeo\" nillable=\"true\" minOccurs=\"0\" type=\"ens:LoginGeo\"/>\n        <element name=\"LoginGeoId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LoginHistory\" nillable=\"true\" minOccurs=\"0\" type=\"ens:LoginHistory\"/>\n        <element name=\"LoginHistoryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Policy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Remarks\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Resource\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ConnectedApplication\"/>\n        <element name=\"ResourceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SourceIp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"VerificationMethod\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"VerificationTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Activity": {
+      "field_label": "User Activity",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EventGroup": {
+      "field_label": "Verification Attempt",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Identity Verification ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LoginGeoId": {
+      "field_label": "Login Geo Data ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LoginHistoryId": {
+      "field_label": "Login History ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Policy": {
+      "field_label": "Triggered By",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Remarks": {
+      "field_label": "Activity Message",
+      "type": "string",
+      "length": "255"
+    },
+    "ResourceId": {
+      "field_label": "Connected App ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceIp": {
+      "field_label": "Source IP",
+      "type": "string",
+      "length": "200"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "VerificationMethod": {
+      "field_label": "Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "VerificationTime": {
+      "field_label": "Time",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

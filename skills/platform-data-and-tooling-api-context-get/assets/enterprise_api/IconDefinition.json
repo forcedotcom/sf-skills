@@ -1,0 +1,108 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "IconDefinition - Data API",
+  "description": "Represents the icon-related metadata for a custom tab. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The tab icon’s content type, for example, “image/png.”"
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique virtual Salesforce ID for the icon."
+    },
+    "Height": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The tab icon’s height in pixels. If the icon content type is an SVG type, height and width values are not used."
+    },
+    "TabDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The TabDefinition ID. This is a relationship field.",
+      "relationship_name": "TabDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "TabDefinition"
+    },
+    "Theme": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The icon’s theme."
+    },
+    "Url": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The fully qualified URL for this icon."
+    },
+    "Width": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The tab icon’s width in pixels. If the icon content type is an SVG type, height and width values are not used."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"IconDefinition\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Height\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"TabDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:TabDefinition\"/>\n        <element name=\"TabDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Theme\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Url\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Width\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ContentType": {
+      "field_label": "Content Type",
+      "type": "string",
+      "length": "255"
+    },
+    "DurableId": {
+      "field_label": "Icon Definition Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Height": {
+      "field_label": "Height",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Icon Definition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "TabDefinitionId": {
+      "field_label": "Tab Definition ID",
+      "type": "string",
+      "length": "512"
+    },
+    "Theme": {
+      "field_label": "Theme",
+      "type": "string",
+      "length": "255"
+    },
+    "Url": {
+      "field_label": "URL",
+      "type": "string",
+      "length": "255"
+    },
+    "Width": {
+      "field_label": "Width",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

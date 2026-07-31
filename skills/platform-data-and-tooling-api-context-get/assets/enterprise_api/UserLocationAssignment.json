@@ -1,0 +1,122 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "UserLocationAssignment - Data API",
+  "description": "Represents the assignment between a location and a user. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "UserLocationAssignmentNumber": {
+      "type": "text",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-generated number for the association"
+    },
+    "AssignedTo": {
+      "type": "foreignkey (user)",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "User being associated with the location"
+    },
+    "Location": {
+      "type": "foreignkey (location)",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Location being associated to the User"
+    },
+    "Username": {
+      "type": "string (derived)",
+      "properties": "Filter, Sort",
+      "description": "Username of the User that is associated to the Location"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Whether the location is active or not"
+    }
+  },
+  "field_reference": {
+    "AssignedToId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssignmentType": {
+      "field_label": "Assignment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "User Location Assignment Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LocationId": {
+      "field_label": "Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserLocationAssignmentNumber": {
+      "field_label": "User Location Assignment Number",
+      "type": "string",
+      "length": "255"
+    },
+    "Username": {
+      "field_label": "Username",
+      "type": "string",
+      "length": "80"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

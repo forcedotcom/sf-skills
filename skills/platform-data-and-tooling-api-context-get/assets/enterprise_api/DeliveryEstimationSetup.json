@@ -1,0 +1,243 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "DeliveryEstimationSetup - Data API",
+  "description": "Shows the configuration options for the commerce delivery service offered through a web store or sales channel. Includes settings such as delivery location group, channel, fulfillment types, and default fulfillment time. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Channel": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID for the web store or sales channel associated with the delivery estimation configuration."
+    },
+    "DefaultBusinessHours": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID for the default business hours. This is a relationship field.",
+      "relationship_name": "DefaultBusinessHours",
+      "refers_to": "BusinessHours"
+    },
+    "DefaultPickupTime": {
+      "type": "time",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Default pickup time."
+    },
+    "DefaultProcessingTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Default processing time."
+    },
+    "DefaultProcessingTimeUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Default processing time unit. Possible values are: Hours Days Weeks"
+    },
+    "ExternalReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Unique code, reference, or identifier for the delivery estimation configuration record used by external systems. Can be the name of the web store or sales channel associated with the configuration to ensure a unique ID within the organization. For example, DefaultWebstore123."
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the given delivery estimation configuration is active. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the record was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastSyncedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "User ID of who performed the last sync for this delivery estimation configuration. This field is available in API version 62.0 and later. This is a relationship field.",
+      "relationship_name": "LastSyncedBy",
+      "refers_to": "User"
+    },
+    "LastSyncedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date the delivery estimation configuration was last synced. This field is available in API version 62.0 and later."
+    },
+    "LastSyncedMessage": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Message that occurred during the last sync. This field is available in API version 62.0 and later."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Last time the delivery estimation configuration was viewed."
+    },
+    "LocationGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Represents a group of Omnichannel Inventory locations. This is a relationship field.",
+      "relationship_name": "LocationGroup",
+      "refers_to": "LocationGroup"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the delivery estimation setup configuration."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who currently owns this DeliveryEstimationSetup object. Default value is the user logged in to the API to perform the create. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "RoutingType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Determines an order's route and calculates delivery estimations. This field is available in API version 65.0 and later. Possible values are: DRE None Standard The default value is None."
+    },
+    "ServiceRegion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "An org's commerce delivery service provisioning region (North America, Europe, or Asia) that's set when Delivery Estimation is enabled in the Order Management app. It can't be changed. If the field is empty, provisioning hasn't occurred yet. Available in API version 63.0 and later."
+    },
+    "SyncStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Sync status of the delivery estimation setup configuration. Possible values are: Deleting Deprovisioned Error None Synced Syncing The default value is NONE. This field is available in API version 62.0 and later."
+    }
+  },
+  "special_access_rules": "The DeliveryEstimationSetup object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "ChannelId": {
+      "field_label": "Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DefaultBusinessHoursId": {
+      "field_label": "Business Hours ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DefaultPickupTime": {
+      "field_label": "Default Pickup Time",
+      "type": "time"
+    },
+    "DefaultProcessingTime": {
+      "field_label": "Default Processing Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "DefaultProcessingTimeUnit": {
+      "field_label": "Default Processing Time Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ExternalReference": {
+      "field_label": "External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Delivery Estimation Setup ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEnabled": {
+      "field_label": "Is Enabled",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastSyncedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastSyncedDate": {
+      "field_label": "Last Synced Date",
+      "type": "datetime"
+    },
+    "LastSyncedMessage": {
+      "field_label": "Last Synced Message",
+      "type": "textarea",
+      "length": "10000"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LocationGroupId": {
+      "field_label": "Location Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceRegion": {
+      "field_label": "Service Region",
+      "type": "string",
+      "length": "256"
+    },
+    "SyncStatus": {
+      "field_label": "Sync Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

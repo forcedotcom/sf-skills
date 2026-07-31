@@ -1,0 +1,120 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AssetStatePeriodAttribute - Data API",
+  "description": "Represents a virtual object that holds the key-value pair of the asset attribute in a specified asset state period. This object is a child object of AssetStatePeriod. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssetStatePeriodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The asset state period that's associated with the asset attribute. This field is a relationship field.",
+      "relationship_name": "AssetStatePeriod",
+      "relationship_type": "Master-detail",
+      "refers_to": "AssetStatePeriod (the master object)"
+    },
+    "AttributeDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The attribute definition that's associated with the asset state period attribute. This field is a relationship field.",
+      "relationship_name": "AttributeDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "AttributeDefinition"
+    },
+    "AttributeName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the asset attribute."
+    },
+    "AttributePicklistValueId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value specified in the picklist type field that corresponds to the attribute in the AttributePicklistValue object. This field is a relationship field.",
+      "relationship_name": "AttributePicklistValue",
+      "relationship_type": "Lookup",
+      "refers_to": "AttributePicklistValue"
+    },
+    "AttributeValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value of the asset state period attribute. For example, a shirt can have the value of blue, which indicates the shirt's color, or it can have the value of small, which indicates the shirt's size. You can use this field to filter records only if the DataType value in the related AttributeDefinitionId record is Text. If the DataType value is Picklist, use the value in the AttributePicklistValueId field for filtering. You can’t use this field to filter records if the DataType value is Checkbox, Currency, Date, Datetime, Multipicklist, Number, or Percent."
+    }
+  },
+  "special_access_rules": "This object is available in Enterprise, Unlimited, and Developer Editions of Revenue Cloud with the Access Lifecycle-Managed Assets user permission. This object is editable only through API and not the UI.",
+  "usage": "This object doesn’t support custom fields, validation rules, or triggers. In SOQL queries, you can filter records by using Id and AttributeDefinition. You can’t use AttributeValue in the WHERE clause.",
+  "wsdl_segment": "```xml\n<complexType name=\"AssetStatePeriodAttribute\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AssetStatePeriod\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AssetStatePeriod\"/>\n        <element name=\"AssetStatePeriodId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttributeDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AttributeDefinition\"/>\n        <element name=\"AttributeDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttributeName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AttributePicklistValue\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AttributePicklistValue\"/>\n        <element name=\"AttributePicklistValueId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttributeValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AssetStatePeriodId": {
+      "field_label": "Asset State Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AttributeDefinitionId": {
+      "field_label": "Attribute Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AttributeName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "AttributePicklistValueId": {
+      "field_label": "Attribute Picklist Value ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AttributeValue": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "150"
+    },
+    "CreatedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalId": {
+      "field_label": "External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Asset State Period Attribute ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

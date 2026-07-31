@@ -1,0 +1,173 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Lightning Performance Event Type - Data API",
+  "description": "Lightning Performance events track trends in Lightning Experience and Salesforce mobile app performance. This event type is available in the EventLogFile object in API version 39.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "example",
+    "possible_values"
+  ],
+  "fields": {
+    "APP_NAME": {
+      "type": "String",
+      "description": "The name of the application that the user accessed."
+    },
+    "BROWSER_NAME": {
+      "type": "String",
+      "description": "The name of the browser that the user accessed.",
+      "example": "Chrome, Safari"
+    },
+    "BROWSER_VERSION": {
+      "type": "String",
+      "description": "The version of the browser that the user accessed in major.minor version format. Some browsers don’t provide a minor version."
+    },
+    "CLIENT_GEO": {
+      "type": "String",
+      "description": "The geolocation of the client in the form of <Country>/<State|Province>.",
+      "example": "United States/California"
+    },
+    "CLIENT_ID": {
+      "type": "String",
+      "description": "The API client ID."
+    },
+    "CLIENT_IP": {
+      "type": "String",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CONNECTION_TYPE": {
+      "type": "String",
+      "description": "The type of connection.",
+      "possible_values": "CDMA1x CDMA EDGE EVDO0 EVDOA EVDOB GPRS HRPD HSDPA HSUPA LTE WIFI"
+    },
+    "DEVICE_ID": {
+      "type": "String",
+      "description": "The unique identifier used to identify a device when tracking events. DEVICE_ID is a generated value that’s created when the mobile app is initially run after installation."
+    },
+    "DEVICE_MODEL": {
+      "type": "String",
+      "description": "The name of the device model.",
+      "example": "iPad, iPhone"
+    },
+    "DEVICE_PLATFORM": {
+      "type": "String",
+      "description": "The type of application experience in name:experience:form format.",
+      "possible_values": "name: APP_BUILDER, CUSTOM, S1, SFX experience: BROWSER, HYBRID form: DESKTOP, PHONE, TABLET"
+    },
+    "DEVICE_SESSION_ID": {
+      "type": "Id",
+      "description": "The unique identifier of the user’s session based on page load time. When the user reloads a page, a new session is started.",
+      "example": "321a1ddfaf924803a075f1e69fc87bc06f53ccd0"
+    },
+    "DURATION": {
+      "type": "Number",
+      "description": "The duration in milliseconds since the page start time."
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always LightningPerformance."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a user’s login session. It starts with a login event and ends with either a logout event or the user session expiring.",
+      "example": "GeJCsym5eyvtEK2I"
+    },
+    "ORGANIZATION_ID": {
+      "type": "String",
+      "description": "The 15-character ID of the org.",
+      "example": "00D000000000123"
+    },
+    "OS_NAME": {
+      "type": "String",
+      "description": "The operating system name, derived from USER_AGENT.",
+      "example": "Android, iOS, OSX, Windows"
+    },
+    "OS_VERSION": {
+      "type": "String",
+      "description": "The operating system version, derived from USER_AGENT."
+    },
+    "PAGE_START_TIME": {
+      "type": "Number",
+      "description": "The time when the page was initially loaded, measured in milliseconds.",
+      "example": "1471564788642"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID.",
+      "example": "3nWgxWbDKWWDIk0FKfF5DV"
+    },
+    "SDK_APP_TYPE": {
+      "type": "String",
+      "description": "The mobile SDK application type.",
+      "possible_values": "HYBRID HYBRIDLOCAL HYBRIDREMOTE NATIVE REACTNATIVE"
+    },
+    "SDK_APP_VERSION": {
+      "type": "String",
+      "description": "The mobile SDK application version number.",
+      "example": "5.0"
+    },
+    "SDK_VERSION": {
+      "type": "String",
+      "description": "The mobile SDK version number.",
+      "example": "2.1.0"
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all events in Lightning Experience within a session. When the user logs out and logs in again, a new session is started.",
+      "example": "cdd09305cb6babf34059e27f70e47f1b11dec868"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT.",
+      "example": "20130715233322.670"
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ).",
+      "example": "2015-07-27T11:32:59.555Z. The timezone is GMT."
+    },
+    "UI_EVENT_ID": {
+      "type": "String",
+      "description": "Id of the Lightning event type.",
+      "possible_values": "ltng:error ltng:interaction ltng:pageView ltng:performance Note: Any other value, such as ltng:bootstrap, is for internal usage only."
+    },
+    "UI_EVENT_SOURCE": {
+      "type": "String",
+      "description": "The user action on the record or records. This field’s value indicates whether the user’s action was on a single record or multiple records. For example, read indicates that one record was read (such as on a record detail page); reads indicates that multiple records were read (such as in a list view).",
+      "example": "click create delete hover read update"
+    },
+    "UI_EVENT_TIMESTAMP": {
+      "type": "Number",
+      "description": "The time at which this event occurred, measured in milliseconds.",
+      "example": "1479769912796"
+    },
+    "UI_EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of performance event.",
+      "example": "bootstrap, defs, performance"
+    },
+    "USER_AGENT": {
+      "type": "String",
+      "description": "The numeric code for the type of client used to make the request (for example, browser, application, or API) as a string."
+    },
+    "USER_ID": {
+      "type": "String",
+      "description": "The 15-character ID of the user accessing Salesforce services through the UI or API.",
+      "example": "00530000009M943"
+    },
+    "USER_ID_DERIVED": {
+      "type": "Id",
+      "description": "The 18-character case-insensitive ID of the user who’s using Salesforce services through the UI or the API.",
+      "example": "00590000000I1SNIA0"
+    },
+    "USER_TYPE": {
+      "type": "String",
+      "description": "The category of user license of the user accessing Salesforce services through the UI or API.",
+      "possible_values": "A: Automated Process b: High Volume Portal C: Customer Portal User D: External Who F: Self Service G: Guest L: Package License Manager N: Salesforce to Salesforce n: CSN Only O: Power Custom o: Custom P: Partner p: Customer Portal Manager S: Standard X: Salesforce Administrator"
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "WorkforceCapacityUnit - Data API",
+  "description": "Represents the number of resources allocated or needed for a specific set of work items at a timestamp within a specific duration. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssignedTotalCount": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The number of shifts assigned at specific time period."
+    },
+    "AvailableTotalCount": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The total number of shifts scheduled at a specific time period."
+    },
+    "Capacity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Staffing prediction for a capacity plan. This field is available in API version 54.0 and later."
+    },
+    "DateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The timestamp of the data point."
+    },
+    "IsOmni": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Derived from the isOmni field on WorkforceCapacity. Indicates that the workload is Omni-based. The default value is 'false'."
+    },
+    "IsShiftTemplateNonStandard": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the shift template that’s used at a specific time period is a non-standard shift. This field is available in API version 53.0 and later. The default value is false."
+    },
+    "JobProfileName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The derived field from the WorkDemographic SkillSet field."
+    },
+    "MaxCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The max number of resources allocated or needed at a specific time period."
+    },
+    "MeasureUnit": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The time interval (in minutes) used in capacity plans. Possible values are: 43200—Monthly for long-term capacity plans. This value is available in API version 54.0 and later. 10080—Weekly 1440—Daily 60—Hourly 30—30 minutes. Reserved for future use. 15—15 minutes. Reserved for future use. The default value is '1440'."
+    },
+    "OriginalTotalCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The original total number of resources allocated or needed at specific time period calculated from the planning process."
+    },
+    "ResourceGap": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the resource gap between the available and required resources."
+    },
+    "ServiceTerritoryName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The derived field from the WorkDemographic Region field."
+    },
+    "ShiftTemplateDuration": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The duration of the shift template that’s used at a specific time period. This field is available in API version 53.0 and later."
+    },
+    "ShiftTemplateDurationType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the duration of the shift template that’s used at a specific time period is in minutes or hours. This field is available in API version 53.0 and later. Possible values are: H—Hours M—Minutes The default value is H."
+    },
+    "ShiftTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the shift template that’s used at a specific time period. This field is available in API version 53.0 and later. This is a relationship field.",
+      "relationship_name": "ShiftTemplate",
+      "relationship_type": "Lookup",
+      "refers_to": "ShiftTemplate"
+    },
+    "ShiftTemplateJobProfile": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The job profile that relates to the shift template that’s used at a specific time period. This field is available in API version 53.0 and later."
+    },
+    "ShiftTemplateName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the shift template that’s used at a specific time period. This field is available in API version 53.0 and later."
+    },
+    "ShiftTemplateStartTime": {
+      "type": "time",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The start time of the shift template that’s used at a specific time period. This field is available in API version 53.0 and later."
+    },
+    "TotalCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of resources allocated or needed at specific time period. It represents the updated count after the adjustment. This value is the same as OriginalTotalCount if no adjustments were made. This is a calculated field."
+    },
+    "WorkDemographicId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The foreign key to WorkDemographic object. This is a relationship field.",
+      "relationship_name": "WorkDemographic",
+      "relationship_type": "Lookup",
+      "refers_to": "WorkDemographic"
+    },
+    "WorkforceCapacityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The foreign key to WorkCapacity object. This is a relationship field.",
+      "relationship_name": "WorkforceCapacity",
+      "relationship_type": "Lookup",
+      "refers_to": "WorkforceCapacity"
+    }
+  },
+  "special_access_rules": "The org must have the Workforce Engagement license. To view, create, edit, or delete records, the user must have the Workforce Engagement Analyst permission set.\n\nThe org must have the Workforce Engagement\n         license. To view, create, edit, or delete records, the user must have the Workforce\n         Engagement Analyst permission set."
+}

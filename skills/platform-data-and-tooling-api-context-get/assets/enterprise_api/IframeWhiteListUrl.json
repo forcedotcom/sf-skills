@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "IframeWhiteListUrl - Data API",
+  "description": "Represents a list of trusted external domains that you allow to frame your Embedded Service, Surveys, and Visualforce pages. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Context": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of content in the iframe. Valid values are: Surveys VisualforcePages DisclosureAndComplianceHubConnector"
+    },
+    "Url": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique domain that is allowed to frame your Visualforce pages, surveys, or Disclosure and Compliance Hub Connector. Accepts these formats: example.com, *example.com, and https://example.com."
+    }
+  },
+  "usage": "To use this object for framing Visualforce pages, on Session Settings in Setup, select Enable clickjack protection for customer Visualforce pages either with headers disabled or with standard headers. These options both allow framing of Visualforce pages on trusted external domains and provide clickjack protection. Alternatively, you can customize session settings via the SecuritySettings Metadata API type. To use the IframeWhiteListUrl object, set either the enableClickjackNonsetupUser or enableClickjackNonsetupUserHeaderless field to true. For more information, see SecuritySettings in the Metadata API Developer Guide.\n\nTo use this object for framing Visualforce pages, on Session Settings in Setup, select Enable clickjack protection for customer Visualforce pages** either with headers disabled** or with standard headers**. These options both allow framing of Visualforce pages on trusted external domains and provide clickjack protection.\n\nAlternatively, you can customize session settings via the SecuritySettings Metadata API type. To use the IframeWhiteListUrl object, set either the enableClickjackNonsetupUser or enableClickjackNonsetupUserHeaderless field to true. For more information, see SecuritySettings in the Metadata API Developer Guide.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"IframeWhiteListUrl\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Context\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Url\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Context": {
+      "field_label": "IFrame Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Trusted Domain for Inline Frames ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Url": {
+      "field_label": "Domain",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

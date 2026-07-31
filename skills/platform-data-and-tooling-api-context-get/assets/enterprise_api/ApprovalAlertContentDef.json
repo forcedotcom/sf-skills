@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "ApprovalAlertContentDef - Data API",
+  "description": "Represents the mapping that links specific user-created email templates to different notification events such as initial assignment or reassignment within an Advanced Approvals flow. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ApprovalFlowApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The API name of the approval workflow."
+    },
+    "ApprovalStepApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique API name of the approval step."
+    },
+    "EmailTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email template that's associated with an approval step in the approval workflow. This field is a relationship field.",
+      "relationship_name": "EmailTemplate",
+      "refers_to": "EmailTemplate"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the approval alert content definition."
+    },
+    "NotificationReason": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The reason within an approval step's lifecycle that triggers the notification for which an email is sent. For example, when an approval work item is moved from one user to another, a reassignment notification email is sent to the user. Possible values are: ApprovalCreationSuccess ApprovalStepAssignment ApprovalStepAssignmentToDelegate ApprovalStepReassignment ApprovalStepReassignmentToDelegate ApprovalSubmissionApprovedOrRejectedStatusUpdate ApprovalWorkItemStatusUpdate AutoApprovalConfirmation"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object.\n\n- **ApprovalAlertContentDefHistory**: History is available for tracked fields of the object."
+}

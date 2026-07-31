@@ -1,0 +1,93 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentDocumentLink - Data API",
+  "description": "Represents the link between a Salesforce CRM Content document, Salesforce file, or ContentNote and where it's shared. A file can be shared with other users, groups, records, and Salesforce CRM Content libraries. This object is available in versions 21.0 and later for Salesforce CRM Content documents and Salesforce Files.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentDocumentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the document. This is a relationship field.",
+      "relationship_name": "ContentDocument",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentDocument"
+    },
+    "LinkedEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the linked object. Can include Chatter users, groups, records (any that support Chatter feed tracking including custom objects), and Salesforce CRM Content libraries. Using the API only, you can relate notes to custom settings. This is a polymorphic relationship field.",
+      "relationship_name": "LinkedEntity",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, ActivationTarget, ActivationTrgtIntOrgAccess, ApiAnomalyEventStore, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskIndDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CodeSet, CollaborationGroup, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, ConsumptionSchedule, Contact, ContactEncounter, ContactEncounterParticipant, ContentWorkspace, Contract, ConversationEntry, CoverageBenefit, CoverageBenefitItem, CredentialStuffingEventStore, CreditMemo, CreditMemoLine, Dashboard, DashboardComponent, DataStream, DelegatedAccount, DocumentChecklistItem, EmailMessage, EmailTemplate, EngagementChannelType, EnhancedLetterhead, EnrollmentEligibilityCriteria, Event, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, Identifier, Image, IndividualApplication, Invoice, InvoiceLine, Lead, ListEmail, Location, MarketSegment, MarketSegmentActivation, MemberPlan, MessagingSession, MktCalculatedInsight, OperatingHours, Opportunity, Order, OrderItem, Organization, OtherComponentTask, OutgoingEmail, PartyConsent, PersonEducation, PersonLanguage, PersonLifeEvent, PersonName, PlanBenefit, PlanBenefitItem, Product2, ProductFulfillmentLocation, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, ProviderSearchSyncLog, PurchaserPlan, PurchaserPlanAssn, ReceivedDocument, Report, ReportAnomalyEventStore, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, ServiceTerritoryWorkType, SessionHijackingEventStore, Shift, Shipment, ShipmentItem, Site, SkillRequirement, SocialPost, Solution, Task, ThreatDetectionFeedback, Topic, User, Visit, VisitedParty, Visitor, VoiceCall, VolunteerProject, WorkBadgeDefinition, WorkOrder, WorkOrderLineItem, WorkType, WorkTypeGroup, WorkTypeGroupMember"
+    },
+    "ShareType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The permission granted to the user of the shared file in a library. This is determined by the permission the user already has in the library. This field is available in API version 25.0 and later. V Viewer permission. The user can explicitly view but not edit the shared file. C Collaborator permission. The user can explicitly view and edit the shared file. You can retrieve the ShareType for ContentDocumentLink, but you can't create a ContentDocumentLink with a ShareType of C from an Apex trigger. I Inferred permission. The user’s permission is determined by the related record. For shares with a library, this is defined by the permissions the user has in that library. Inferred permission on shares with libraries and file owners is available in API versions 21.0 and later. Inferred permission on shares with standard objects is available in API versions 36.0 and later. Inferred permission can’t be used on shares with the Organization object.",
+      "required": true
+    },
+    "Visibility": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies whether this file is available to all users, internal users, or shared users. This field is available in API version 26.0 and later.Valid values are: AllUsers—The file is available to all users who have permission to see the file. InternalUsers—The file is available only to internal users who have permission to see the file. SharedUsers—The file is available to all users who can see the feed to which the file is posted. SharedUsers is used only for files shared with users, and is available only when an org has private org-wide sharing on by default. The SharedUsers value is available in API version 32.0 and later. Note the following exceptions for Visibility. AllUsers & InternalUsers values apply to files posted on standard and custom object records, but not to users, groups, or content libraries. For posts to a record feed, Visibility is set to InternalUsers for all internal users by default. External users can set Visibility only to AllUsers. On user and group posts, only internal users can set Visibility to InternalUsers. For posts to a user feed, if the organization-wide default for user sharing is set to private, Visibility is set to SharedUsers. Only internal users can update Visibility. Visibility can be updated on links to files posted on standard and custom object records, but not to users, groups, or content libraries. Visibility is updatable in API version 43.0 and later."
+    }
+  },
+  "usage": "Use this object to query the locations where a file is shared or query which files are linked to a particular location. For example, the following query returns a particular document shared with a Chatter group: The ContentDocumentLink object supports triggers before and after these operations: insert, update, delete. A ContentDocumentLink trigger executes whenever there is an addition or deletion of the ContentDocumentLink. When a file is deleted, a ContentDocument delete trigger executes, but the cascaded ContentDocumentLink delete does not trigger ContentDocumentLink triggers.\n\nUse this object to query the locations where a file is shared or query which files are linked to a particular location. For example, the following query returns a particular document shared with a Chatter group:\n\nThe ContentDocumentLink object supports triggers before and after these operations: insert, update, delete. A ContentDocumentLink trigger executes whenever there is an addition or deletion of the ContentDocumentLink. When a file is deleted, a ContentDocument delete trigger executes, but the cascaded ContentDocumentLink delete does not trigger ContentDocumentLink triggers.",
+  "associated_objects": "This object has the following associated objects. Unless noted, associated objects are available in the same API version as this object.\n\n- **ContentDocumentLinkChangeEvent (API version 55.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentDocumentLink\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentDocument\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentDocument\"/>\n        <element name=\"ContentDocumentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LinkedEntity\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"LinkedEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ShareType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Visibility\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ContentDocumentId": {
+      "field_label": "Content Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "ContentDocumentLink ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Is Deleted",
+      "type": "boolean"
+    },
+    "LinkedEntityId": {
+      "field_label": "Linked Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShareType": {
+      "field_label": "Share Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Visibility": {
+      "field_label": "Visibility",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

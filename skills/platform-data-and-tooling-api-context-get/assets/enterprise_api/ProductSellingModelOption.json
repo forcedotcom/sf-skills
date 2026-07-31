@@ -1,0 +1,161 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ProductSellingModelOption - Data API",
+  "description": "A junction object between Product Selling Model and Product2. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the product selling model option."
+    },
+    "DisplayName": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the product selling model option to display to customers."
+    },
+    "Increment": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of pricing term units that can be used to increase a subscription term."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indcates the default product selling model for a product. Setting a default is optional. A product can only have one default product selling model. The default value is false. This field requires Industries EPC."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view but not viewed it."
+    },
+    "Maximum": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of pricing term units for a subscription term."
+    },
+    "Minimum": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The minimum number of pricing term units for a subscription term."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the product selling model."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the Product2 record associated with this ProductSellingModelOption record. This is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "ProductSellingModelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the ProductSellingModel record associated with this ProductSellingModelOption record. This is a relationship field.",
+      "relationship_name": "ProductSellingModel",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductSellingModel"
+    },
+    "ProrationPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the ProrationPolicy record associated with this ProductSellingModelOption record. This is a relationship field.",
+      "relationship_name": "ProrationPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "ProrationPolicy"
+    }
+  },
+  "special_access_rules": "This object is available when Subscription Management or Commerce Subscriptions is enabled. Some fields require Industries EPC to be enabled.\n\nThis object is available when Subscription\n         Management or Commerce Subscriptions is enabled. Some fields require Industries EPC to be\n         enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Product Selling Model Option ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Default",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Product Selling Model Option Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductSellingModelId": {
+      "field_label": "Product Selling Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProrationPolicyId": {
+      "field_label": "Proration Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

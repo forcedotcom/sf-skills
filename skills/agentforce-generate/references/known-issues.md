@@ -239,13 +239,23 @@ Unresolved platform bugs, limitations, and edge cases that affect Agent Script d
 ---
 
 ### Issue 18: `connection messaging:` only generates `Messaging` plannerSurface — `CustomerWebClient` dropped on every publish
-- **Status**: OPEN
+- **Status**: RESOLVED (2026-07-23) — the `connection customer_web_client:` DSL block now compiles a `CustomerWebClient` plannerSurface directly. No post-publish patch is needed.
 - **Date Discovered**: 2026-02-17
-- **Affects**: Agent Builder Preview, Agent Runtime API testing, CLI testing (`sf agent test`, `sf agent preview`)
-- **Symptom**: After `sf agent publish authoring-bundle`, the compiled GenAiPlannerBundle only contains a `Messaging` plannerSurface. `CustomerWebClient` is never auto-generated. Agent Builder Preview shows "Something went wrong. Refresh and try again." because it requires `CustomerWebClient`.
-- **Root Cause**: The `connection messaging:` DSL block only generates a `Messaging` plannerSurface during compilation. There is no `connection customerwebclient:` DSL syntax — attempting it causes `ERROR_HTTP_404` on publish. The compiler has no mechanism to auto-generate `CustomerWebClient`.
-- **Impact**: Every publish overwrites the GenAiPlannerBundle, dropping any manually-added `CustomerWebClient` surface. This requires a post-publish patch after EVERY publish.
-- **Workaround — 6-Step Post-Publish Patch Workflow:**
+- **Resolution**: Author the surface with the **`connection customer_web_client:`** block (underscores) in the `.agent` file — see [Voice Modality Reference](voice-modality-reference.md) "Connection Blocks" and [actions-reference.md](actions-reference.md) "Supported Channels". The original failed attempt used `connection customerwebclient:` (no underscores), which does not exist and returns `ERROR_HTTP_404`; the correct token is `customer_web_client`. **Verified 2026-07-23**: published `Pizza_Order_Agent_Voice` to `storm` and retrieved the compiled `GenAiPlannerBundle` — it contains **both** `Messaging` and `CustomerWebClient` `<plannerSurfaces>`, auto-generated from the DSL, with no manual patch:
+  ```xml
+  <plannerSurfaces>
+      <surface>SurfaceAction__Messaging</surface>
+      <surfaceType>Messaging</surfaceType>
+  </plannerSurfaces>
+  <plannerSurfaces>
+      <surface>SurfaceAction__CustomerWebClient</surface>
+      <surfaceType>CustomerWebClient</surfaceType>
+  </plannerSurfaces>
+  ```
+- **Affects (historical)**: Agent Builder Preview, Agent Runtime API testing, CLI testing (`sf agent test`, `sf agent preview`)
+- **Symptom (historical)**: After `sf agent publish authoring-bundle`, the compiled GenAiPlannerBundle only contained a `Messaging` plannerSurface. `CustomerWebClient` was never auto-generated. Agent Builder Preview showed "Something went wrong. Refresh and try again." because it requires `CustomerWebClient`.
+- **Root Cause (historical)**: The `connection messaging:` DSL block alone only generates a `Messaging` plannerSurface. At the time there was no known DSL syntax to emit `CustomerWebClient`; `connection customerwebclient:` (no underscores) caused `ERROR_HTTP_404`. The `connection customer_web_client:` (underscored) block that resolves this was not yet in use.
+- **Historical fallback — 6-Step Post-Publish Patch Workflow** (only if a specific org's compiler still drops the surface):
   1. `sf agent publish authoring-bundle --json --api-name AgentName -o TARGET_ORG` → creates new version (e.g., v22)
   2. `sf project retrieve start --json --metadata "GenAiPlannerBundle:AgentName_vNN" -o TARGET_ORG` → retrieve compiled bundle
   3. Manually add second `<plannerSurfaces>` block to the XML with `<surfaceType>CustomerWebClient</surfaceType>` (copy the existing `Messaging` block, change surfaceType and surface fields)

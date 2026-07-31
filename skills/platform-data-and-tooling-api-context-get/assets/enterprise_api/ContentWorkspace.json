@@ -1,0 +1,176 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentWorkspace - Data API",
+  "description": "Represents a content library. This object is available in versions 17.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DefaultRecordTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the default content type for the library. Content types are the containers for custom fields in Salesforce CRM Content."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Text description of the content library."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique name of the library in the API. Allows a link to the library to be packaged when an asset file is added to a package. Although libraries aren’t a packageable entity, references to libraries with a developer name will be included in the package when asset files are packaged. These links can then be restored in the target org. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Label is Unique Name. This field is available in API version 39.0 and later."
+    },
+    "IsRestrictContentTypes": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read only. Indicates whether content types have been restricted (true) or not (false)."
+    },
+    "IsRestrictLinkedContentTypes": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read only. Indicates whether linked content types have been restricted (true) or not (false)."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the library."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique name of the library in the API. Allows a link to the library to be packaged when an asset file is added to a package. Limit: 15 characters. This field is available in API version 39.0 and later."
+    },
+    "RootContentFolderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of root folder of the library. This field is available in API version 39.0 and later."
+    },
+    "ShouldAddCreatorMembership": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Group",
+      "description": "Automatically create a library membership for the user creating the library. Note this field isn’t meant for query and always returns false in query. This field is available in API version 40.0 and later."
+    },
+    "TagModel": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of tagging assigned to a library. Valid values are: U — Unrestricted. No restrictions on tagging. Users can enter any tag when publishing or editing content. G — Guided. Users can enter any tag when publishing or editing content, but they’re also offered a list of suggested tags. R — Restricted. Users must choose from a list of suggested tags."
+    },
+    "WorkspaceImageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of a library image. Image files can be assigned to libraries for branding and easy identification. Library image is visible to all users, even if they aren’t library members. This field is available in API version 43.0 and later."
+    },
+    "WorkspaceType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Differentiates between different types of libraries. Valid values are: R — Regular library B — Org asset library This field is available in API version 39.0 and later."
+    }
+  },
+  "usage": "Use this object to query libraries to find out where documents can be published. If the content type isn’t specified when publishing a new version into a library, it is determined by the DefaultRecordTypeId of the primary library. As of 40.0, you can create, update, or delete a library via the API.\n\nUse this object to query libraries to find out where documents can be published.\n\nIf the content type isn’t specified when publishing a new version into a library, it is determined by the DefaultRecordTypeId of the primary library.\n\nAs of 40.0, you can create, update, or delete a library via the API.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentWorkspace\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentFolderLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentWorkspaceMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DefaultRecordTypeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsRestrictContentTypes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRestrictLinkedContentTypes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastWorkspaceActivityDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RootContentFolderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ShouldAddCreatorMembership\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TagModel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"WorkspaceImage\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentAsset\"/>\n        <element name=\"WorkspaceImageId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"WorkspaceType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DefaultRecordTypeId": {
+      "field_label": "Record Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "500"
+    },
+    "DeveloperName": {
+      "field_label": "Unique Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Library ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsRestrictContentTypes": {
+      "field_label": "Restrict Record Types",
+      "type": "boolean"
+    },
+    "IsRestrictLinkedContentTypes": {
+      "field_label": "Restrict Linked Record Types",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastWorkspaceActivityDate": {
+      "field_label": "Last Activity",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "RootContentFolderId": {
+      "field_label": "Content Folder ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShouldAddCreatorMembership": {
+      "field_label": "Add Creator Membership",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TagModel": {
+      "field_label": "Tag Model",
+      "type": "picklist",
+      "length": "40"
+    },
+    "WorkspaceImageId": {
+      "field_label": "Asset File ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WorkspaceType": {
+      "field_label": "Library Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

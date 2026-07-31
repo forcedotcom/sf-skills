@@ -1,0 +1,84 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CommerceEntitlementPolicyShare - Data API",
+  "description": "Represents the entitlement rule for sharing products and prices with users other than the owner. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Possible values are: All—Owner Edit—Read/Write Read—Read Only"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique ID of the parent entitlement policy."
+    },
+    "RowCause": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Reason that this sharing entry exists. If you’re creating a sharing entry, the only permitted value is Manual. If no value is specified, the field defaults to Manual. All other RowCause values are read-only. After the sharing entry is created, this field can’t be edited. Possible values are: CompliantCollaboration—Compliant Data Sharing GuestParentImplicit—Associated guest user sharing GuestPersonImplicit—Associated Guest User Sharing GuestRule—Guest User Sharing Rule ImplicitChild—Account Sharing ImplicitParent—Associated record owner or sharing ImplicitPerson—Person Contact Manual—Manual Sharing Owner Rule—Sharing Rule SurveyShare—Survey Sharing Rule Team—Sales Team Territory—Territory Assignment Rule Territory2AssociationManual—Territory Manual Territory2Forecast—Territory assignment for forecasting and reporting TerritoryManual—Territory Manual TerritoryRule—Territory Sharing Rule"
+    },
+    "UserOrGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique ID of the associated user or buyer group."
+    }
+  },
+  "special_access_rules": "The CommerceEntitlementPolicyShare object is available only if the B2B Commerce license is enabled.",
+  "field_reference": {
+    "AccessLevel": {
+      "field_label": "Custom Object Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Custom Object Share ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RowCause": {
+      "field_label": "Row Cause",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UserOrGroupId": {
+      "field_label": "User/Group ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

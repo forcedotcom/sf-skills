@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "OpptyLineItemSplitType - Data API",
+  "description": "Represents an opportunity product split type. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Group, Sort",
+      "description": "Text description of the opportunity line item split type. Limit: 80 characters."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer (API) name of the opportunity line item split type."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the opportunity line item split type is active (true) or not (false). The value of this field is inherited from the IsActive field of the parent OpportunitySplitType record."
+    },
+    "IsTotalValidated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the OpportunityLineItemSplit records associated with the OpportunityLineItem must have SplitPercent values that aggregate to 100% (true) or not (false). The value of this field is inherited from the IsTotalValidated field of the parent OpportunitySplitType record."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the opportunity line item split type."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The opportunity line item split type label."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object."
+    },
+    "OpportunitySplitTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the parent OpportunitySplitType. Every OpptyLineItemSplitType must have a parent OpportunitySplitType. This field is a relationship field.",
+      "relationship_name": "OpportunitySplitType",
+      "relationship_type": "Lookup",
+      "refers_to": "OpportunitySplitType"
+    },
+    "SplitDataStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The state of the asynchronous job to delete OpportunityLineItemSplit records when the associated OpptyLineItemSplitType record is deleted. Possible values are: DeletionFailed–The job failed the last time it ran. Ready–The job hasn't run or isn't running. OpportunityLineItemSplit records associated with the OpptyLineItemSplitType can be interacted with. ToBeDeleted–The job is running."
+    },
+    "SplitEntity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Name or ID of the entity that contains the field being split. In API version 58.0, this value is always OpportunityLineItem."
+    },
+    "SplitField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Name or ID of the field on OpportunityLineItem that is being split. If it's a standard field, then the value is the API name of the field. If it’s a custom field, the value is the custom field definition ID."
+    }
+  },
+  "usage": "When an OpportunitySplitType has product splits enabled in Setup, then an OpptyLineItemSplitType record is created. For example, if there is an OpportunitySplitType record with a SplitField of Amount and product splits is enabled in Setup, then there is an OpptyLineItemSplitType record with a SplitField of TotalPrice (since the TotalPrice field rolls up to Amount)."
+}

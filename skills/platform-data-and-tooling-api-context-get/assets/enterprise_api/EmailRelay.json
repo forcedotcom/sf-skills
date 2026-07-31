@@ -1,0 +1,130 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EmailRelay - Data API",
+  "description": "Represents the configuration for sending an email relay. An email relay routes email sent from Salesforce through your company’s email servers. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AuthType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted Picklist, Sort, Update",
+      "description": "Specifies which SASL mechanism Salesforce uses for SMTP authentication. This field is available when Enable SMTP Auth is selected. Select an option: PLAIN- Salesforce uses PLAIN SASL mechanism for SMTP authentication. Default. LOGIN- Salesforce uses LOGIN SASL mechanism for SMTP authentication This field is available in API version 52.0 and later."
+    },
+    "Host": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Indicates the host name or IP address of your company's SMTP server."
+    },
+    "IsRequireAuth": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether (true) or not (false) authentication is required. When setting this field to true, the TlsSetting must be set to RequiredVerify. This field is available in API version 44.0 and later."
+    },
+    "Password": {
+      "type": "encryptedstring",
+      "properties": "Create, Nillable, Update",
+      "description": "Specifies the password for relay host STMP authentication. When IsRequireAuth is set to true, this field is required. This field is available in API version 44.0 and later."
+    },
+    "Port": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates the port number of your company's SMTP server. 25 587 10025 11025"
+    },
+    "TlsSetting": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies whether Salesforce uses TLS for SMTP sessions. Off: TLS is turned off. SMTP session continues through an insecure connection. Preferred: If the remote server supports TLS, Salesforce upgrades the current SMTP session to use TLS. If TLS is unavailable, Salesforce continues the session without TLS. Required: Salesforce continues the session only if the remote server supports TLS. If TLS is unavailable, Salesforce terminates the session without delivering the email. PreferredVerify: If the remote server supports TLS, Salesforce upgrades the current SMTP session to use TLS. Before the session begins, Salesforce verifies that the certificate is signed by a valid certificate authority, and that the common name presented in the certificate matches the domain or mail exchange of the current connection. If TLS is available but the certificate is not signed or the common name does not match, Salesforce disconnects the session and does not deliver the email. If TLS is unavailable, Salesforce continues the session without TLS. RequiredVerify: Salesforce continues the session only if the remote server supports TLS, the certificate is signed by a valid certificate authority, and the common name presented in the certificate matches the domain or mail exchange to which Salesforce is connected. If any of these criteria are not met, Salesforce terminates the session without delivering the email."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the username for relay host STMP authentication. When IsRequireAuth is set to true, this field is required. This field is available in API version 44.0 and later."
+    }
+  },
+  "special_access_rules": "You must have the Email Administration, Customize Application, and View Setup user permissions to use this object.",
+  "usage": "An email relay must be associated with an active email domain filter to take effect. If you set up multiple email relays in one org, they are processed in the priority order of their email domain filters.\n\nIf you also plan to activate Bounce Management and Email Compliance\n\t\t\t\tManagement, confirm with your email admin that your company allows relaying email\n\t\t\t\tsent from Salesforce. For more information on bounce management, see\n\nConfigure Deliverability Settings for Emails Sent from\n\t\t\t\tSalesforce",
+  "wsdl_segment": "```xml\n<complexType name=\"EmailRelay\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AuthType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Filters\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Host\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRequireAuth\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Password\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Port\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TlsSetting\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Username\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AuthType": {
+      "field_label": "Auth Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Host": {
+      "field_label": "Host",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Email Relay ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRequireAuth": {
+      "field_label": "Enable SMTP Auth",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Password": {
+      "field_label": "Password",
+      "type": "encryptedstring",
+      "length": "100"
+    },
+    "Port": {
+      "field_label": "Port",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TlsSetting": {
+      "field_label": "TLS Setting",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Username": {
+      "field_label": "Username",
+      "type": "string",
+      "length": "100"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

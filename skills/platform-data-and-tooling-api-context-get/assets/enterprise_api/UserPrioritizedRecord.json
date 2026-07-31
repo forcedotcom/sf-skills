@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "UserPrioritizedRecord - Data API",
+  "description": "Represents records that Pipeline Inspection, Account Intelligence, Contact Intelligence, and Lead Intelligence users flag as important for tracking in pipeline and intelligence views and filters. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who marked this record as important. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the target object that is marked as important. Supported objects include: Account Contact Lead Opportunity This field is a polymorphic relationship field.",
+      "relationship_name": "Target",
+      "relationship_type": "Lookup",
+      "refers_to": "Account Contact Lead Opportunity"
+    },
+    "TargetKeyPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The key prefix of the target object that is marked as important."
+    }
+  },
+  "special_access_rules": "To use UserPrioritizedRecord in Pipeline Inspection and the Account Intelligence, Contact Intelligence, and Lead Intelligence views, enable the Pipeline Inspection user permission and the Pipeline Inspection setting.\n\nTo use UserPrioritizedRecord in Pipeline\n         Inspection and the Account Intelligence, Contact Intelligence, and Lead Intelligence views,\n         enable the Pipeline Inspection user permission and the Pipeline Inspection\n         setting.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **UserPrioritizedRecordOwnerSharingRule**: Sharing rules are available for the object.\n- **UserPrioritizedRecordShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "User Prioritized Record ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetId": {
+      "field_label": "Target ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TargetKeyPrefix": {
+      "field_label": "Target Key Prefix",
+      "type": "string",
+      "length": "3"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

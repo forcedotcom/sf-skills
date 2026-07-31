@@ -35,11 +35,12 @@ Apps scaffolded from the standard template typically ship these primitives under
 | Select | `select.tsx` | |
 | Separator | `separator.tsx` | |
 | Skeleton | `skeleton.tsx` | |
+| Sonner (Toast) | `sonner.tsx` | Exists as a file but is typically **not** barrel-exported — check `index.ts` first, or import `{ Toaster, toast }` directly from `@/components/ui/sonner` |
 | Spinner | `spinner.tsx` | |
 | Table | `table.tsx` | `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableCell` |
 | Tabs | `tabs.tsx` | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` |
 
-**Not part of this baseline** — do not assume these exist without checking: `Sheet`, `Combobox`, `Accordion`, `Toast`/`Sonner`, `Slider`, `Switch`, `RadioGroup`, `Command`, `Menubar`, `NavigationMenu`, `Tooltip`, `Progress`, `Carousel`, `Drawer`. If the task needs one of these, check `src/components/ui/` first; if it's genuinely missing, either compose it from an existing primitive or tell the user it needs to be added rather than fabricating an import.
+**Not part of this baseline** — do not assume these exist without checking: `Sheet`, `Combobox`, `Accordion`, `Slider`, `Switch`, `RadioGroup`, `Command`, `Menubar`, `NavigationMenu`, `Tooltip`, `Progress`, `Carousel`, `Drawer`. If the task needs one of these, check `src/components/ui/` first; if it's genuinely missing, either compose it from an existing primitive or tell the user it needs to be added rather than fabricating an import.
 
 ### File Location — Component
 

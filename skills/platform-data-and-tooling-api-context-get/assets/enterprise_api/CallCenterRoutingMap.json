@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "CallCenterRoutingMap - Data API",
+  "description": "Stores a mapping between a user or queue in a Salesforce org to a user or queue in an external system’s call center. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CallCenterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Reference to a call center. This is a relationship field.",
+      "relationship_name": "CallCenter",
+      "relationship_type": "Lookup",
+      "refers_to": "CallCenter"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The developer name is a combination of the Salesforce user ID or queue name, and the call center ID, with an underscore between these two values. [SALESFORCE_USER_ID]_[CALL_CENTER_ID] [SALESFORCE_QUEUE_NAME]_[CALL_CENTER_ID]"
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Unique identifier for the external system’s user or queue."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the MasterLabel."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The master label of the CallCenterRoutingMap."
+    },
+    "QuickConnect": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Amazon Connect QuickConnectId ARN used to determine agent availability for Omni-Channel call transfers. Available in API version 56.0 and later. This is a polymorphic relationship field."
+    },
+    "ReferenceRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Lookup field to a Salesforce user or queue. This is a polymorphic relationship field.",
+      "relationship_name": "ReferenceRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    }
+  },
+  "special_access_rules": "Access to standard objects requires Salesforce admin privileges or the Customize Application permission. Access to call center routing map records requires Salesforce Voice Contact Center Admin, Salesforce Voice Contact Center Admin (Partner Telephony), Salesforce Voice Contact Center Supervisor, or Manage Call Centers permission.\n\nAccess to standard objects requires Salesforce admin privileges or the Customize Application permission.\n\nAccess to call center routing map records requires Salesforce Voice Contact Center Admin, Salesforce Voice Contact Center Admin (Partner Telephony), Salesforce Voice Contact Center Supervisor, or Manage Call Centers permission.",
+  "field_reference": {
+    "CallCenterId": {
+      "field_label": "Call Center ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Call Center Routing Map Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ExternalId": {
+      "field_label": "External Id",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Call Center Routing Map ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Call Center Routing Map Label",
+      "type": "string",
+      "length": "80"
+    },
+    "QuickConnect": {
+      "field_label": "Quick Connect",
+      "type": "string",
+      "length": "255"
+    },
+    "ReferenceRecordId": {
+      "field_label": "ReferenceRecord ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

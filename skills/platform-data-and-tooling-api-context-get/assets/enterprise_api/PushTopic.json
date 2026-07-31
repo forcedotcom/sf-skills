@@ -1,0 +1,170 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PushTopic - Data API",
+  "description": "Represents a query that is the basis for notifying Streaming API clients of changes to records in an org. This object is available in API version 21.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "API version to use for executing the query specified in Query. It must be an API version greater than 20.0. If your query applies to a custom object from a package, this value must match the package's ApiVersion.Example value: 66.0",
+      "required": true
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Description of the PushTopic. Limit: 400 characters"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the record currently counts towards the organization's allocation."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Descriptive name of the PushTopic, such as MyNewCases or TeamUpdatedContacts. Limit: 25 characters. This value identifies the channel and must be unique.",
+      "required": true
+    },
+    "NotifyForFields": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies which fields are evaluated to generate a notification. Possible values are: All Referenced (default) Select Where"
+    },
+    "NotifyForOperationCreate": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "true if a create operation should generate a notification, otherwise, false. Defaults to true. This field is available in API version 29.0 and later."
+    },
+    "NotifyForOperationDelete": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "true if a delete operation should generate a notification, otherwise, false. Defaults to true. Clients must connect using the cometd/29.0 (or later) Streaming API endpoint to receive delete and undelete event notifications. This field is available in API version 29.0 and later."
+    },
+    "NotifyForOperationUndelete": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "true if an undelete operation should generate a notification, otherwise, false. Defaults to true. Clients must connect using the cometd/29.0 (or later) Streaming API endpoint to receive delete and undelete event notifications. This field is available in API version 29.0 and later."
+    },
+    "NotifyForOperationUpdate": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "true if an update operation should generate a notification, otherwise, false. Defaults to true. This field is available in API version 29.0 and later."
+    },
+    "NotifyForOperations": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies which record events may generate a notification.In API version 29.0 and later, this field is read-only, and doesn’t contain information about delete and undelete events. Use NotifyForOperationCreate, NotifyForOperationDelete, NotifyForOperationUndelete and NotifyForOperationUpdate to specify which record events should generate a notification. Possible values are: All (default) Create Extended Update A value of Extended means that neither create or update operations are set to generate events."
+    },
+    "Query": {
+      "type": "string",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The SOQL query statement that determines which record changes trigger events to be sent to the channel. Limit: 1,300 characters",
+      "required": true
+    }
+  },
+  "usage": "The PushTopic defines when notifications are generated in the channel. Determine which fields to configure by checking out these links in the .\n\nThe PushTopic defines when notifications are generated in the channel. Determine which\n        fields to configure by checking out these links in the\n\nStreaming API Developer\n          Guide\n\nPushTopic Queries\n\nNotifications",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PushTopic\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NotifyForFields\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NotifyForOperationCreate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"NotifyForOperationDelete\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"NotifyForOperationUndelete\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"NotifyForOperationUpdate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"NotifyForOperations\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Query\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApiVersion": {
+      "field_label": "API Version",
+      "type": "double",
+      "precision": "18",
+      "scale": "1"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "400"
+    },
+    "Id": {
+      "field_label": "Push Topic ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Topic Name",
+      "type": "string",
+      "length": "25"
+    },
+    "NotifyForFields": {
+      "field_label": "Notify For Fields",
+      "type": "picklist",
+      "length": "40"
+    },
+    "NotifyForOperationCreate": {
+      "field_label": "Create",
+      "type": "boolean"
+    },
+    "NotifyForOperationDelete": {
+      "field_label": "Delete",
+      "type": "boolean"
+    },
+    "NotifyForOperationUndelete": {
+      "field_label": "Undelete",
+      "type": "boolean"
+    },
+    "NotifyForOperationUpdate": {
+      "field_label": "Update",
+      "type": "boolean"
+    },
+    "NotifyForOperations": {
+      "field_label": "Notify For Operations",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Query": {
+      "field_label": "SOQL Query",
+      "type": "string",
+      "length": "1300"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

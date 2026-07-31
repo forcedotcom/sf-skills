@@ -1,37 +1,43 @@
 # Complete Agent Examples
 
-> Extracted from SKILL.md Sections 9 + 10. This file is loaded on demand when complete agent examples are needed.
+> Long-form walkthrough examples.  
+> For copy/paste-ready starter templates, use `assets/agents/` first.
+
+## How to Use This File
+
+- Use `assets/agents/hello-world.agent` or `assets/agents/template-*.agent` to start quickly.
+- Use this file when you want richer, end-to-end examples with commentary.
+- Keep this file and `assets/agents/` aligned.
 
 ## Minimal Service Agent
 
 This is the absolute minimum for a deployable service agent:
 
-```
+```agentscript
 system:
 	instructions: "You are a helpful customer service agent."
 	messages:
 		welcome: "Hello! How can I help you today?"
 		error: "Something went wrong. Please try again."
 
+access:
+	default_agent_user: "agent@00dxx000001234.ext"
+
 config:
 	developer_name: "MinimalAgent"
 	agent_label: "Minimal Agent"
 	description: "A minimal service agent"
-	default_agent_user: "agent@00dxx000001234.ext"
 
 variables:
 	EndUserId: linked string
 		source: @MessagingSession.MessagingEndUserId
 		description: "Messaging End User ID"
-		visibility: "External"
 	RoutableId: linked string
 		source: @MessagingSession.Id
 		description: "Messaging Session ID"
-		visibility: "External"
 	ContactId: linked string
 		source: @MessagingEndUser.ContactId
 		description: "Contact ID"
-		visibility: "External"
 
 language:
 	default_locale: "en_US"
@@ -64,7 +70,7 @@ Companion `bundle-meta.xml` (MUST be this exact content -- no extra fields):
 
 Employee agents differ from service agents in their config, variables, and connection blocks. This example shows a 2-subagent IT Knowledge agent deployed to internal employees.
 
-```
+```agentscript
 system:
 	instructions: |
 		You are an AI-powered IT assistant for Acme Corp employees.
@@ -116,7 +122,7 @@ subagent knowledge_search:
 	actions:
 		search_articles:
 			description: "Search knowledge base for articles"
-			target: "apex://ITKnowledge.searchArticles"
+			target: "apex://ITKnowledgeSearchArticles"
 			inputs:
 				query: string
 					description: "Search query"
@@ -176,7 +182,7 @@ subagent account_support:
 ```
 
 **What's deliberately absent (vs. service agents):**
-- No `default_agent_user` in config (agent runs as logged-in employee)
+- No `access.default_agent_user` (agent runs as the logged-in employee)
 - No `connection messaging:` block (no messaging channel)
 - No `EndUserId`/`RoutableId`/`ContactId` linked variables (no `@MessagingSession`)
 - No `@utils.escalate` action (requires `connection messaging:`)
@@ -185,7 +191,7 @@ subagent account_support:
 
 ## Multi-Subagent Agent with Actions
 
-```
+```agentscript
 system:
 	instructions: |
 		You are a customer service agent for TechCorp.
@@ -195,25 +201,24 @@ system:
 		welcome: "Welcome to TechCorp Support! How can I assist you?"
 		error: "I apologize for the issue. Please try again."
 
+access:
+	default_agent_user: "einstein@00dxx000001234.ext"
+
 config:
 	developer_name: "TechCorpAgent"
 	agent_label: "TechCorp Support Agent"
 	description: "Handles order inquiries, returns, and general support"
-	default_agent_user: "einstein@00dxx000001234.ext"
 
 variables:
 	EndUserId: linked string
 		source: @MessagingSession.MessagingEndUserId
 		description: "Messaging End User ID"
-		visibility: "External"
 	RoutableId: linked string
 		source: @MessagingSession.Id
 		description: "Messaging Session ID"
-		visibility: "External"
 	ContactId: linked string
 		source: @MessagingEndUser.ContactId
 		description: "Contact ID"
-		visibility: "External"
 	order_id: mutable string = ""
 		description: "Current order being discussed"
 	order_status: mutable string = ""
@@ -348,3 +353,68 @@ subagent confirmation:
 			end_chat: @actions.end_conversation
 				description: "End the conversation"
 ```
+
+---
+
+## Minimal Syntax Example
+
+A compact, syntax-focused example for quick orientation:
+
+```agentscript
+system:
+    messages:
+        welcome: "Hello! How can I help you today?"
+        error: "Sorry, something went wrong."
+    instructions: "You are a helpful customer service agent."
+
+access:
+    default_agent_user: "agent_user@yourorg.com"
+
+config:
+    developer_name: "simple_agent"
+    description: "A minimal working agent example"
+    agent_type: "AgentforceServiceAgent"
+
+variables:
+    customer_verified: mutable boolean = False
+
+start_agent entry:
+    description: "Entry point for all conversations"
+    reasoning:
+        instructions: |
+            Greet the customer and route to the main subagent.
+        actions:
+            go_main: @utils.transition to @subagent.main
+                description: "Navigate to main conversation"
+
+subagent main:
+    description: "Main conversation handler"
+    reasoning:
+        instructions: ->
+            if @variables.customer_verified == True:
+                | You are speaking with a verified customer.
+                | Help them with their request.
+            else:
+                | Please verify the customer's identity first.
+        actions:
+            verify: @actions.verify_customer
+                description: "Verify customer identity"
+                set @variables.customer_verified = @outputs.verified
+    actions:
+        verify_customer: apex://VerifyCustomerAction
+            description: "Verify customer identity"
+            inputs:
+                customer_id: string
+                    label: "Customer ID"
+            outputs:
+                verified: boolean
+                    label: "Verified"
+```
+
+### Minimal Example Notes
+
+- `config.developer_name` must match the bundle folder name (case-sensitive).
+- `default_agent_user` must be a valid Einstein Agent User in target orgs.
+- `instructions: ->` enables conditionals and deterministic directives.
+- `instructions: |` is for literal static instruction text.
+- `set @variables.X = @outputs.Y` persists action outputs in state.

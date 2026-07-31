@@ -1,0 +1,212 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowOrchestrationLog - Data API",
+  "description": "Represents logging data for a FlowOrchestrationInstance. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Actor": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "For an interactive step, the user that completed the work item. For a background or MuleSoft step, the username of the user that the step ran as."
+    },
+    "Assignee": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For an interactive step, the user, group, or queue assigned to a work item when the FlowOrchestrationLog relates to an interactive FlowOrchestrationStep."
+    },
+    "AssigneeType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "For an interactive step, the assignee type associated with an interactive step's work item. Valid values are: Group Invalid Queue User"
+    },
+    "Comments": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The string stored in an output variable with the API name of Comments from a flow called by a completed orchestration step."
+    },
+    "Context": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the record where the assigned user completed the flow associated with an interactive step in the Work Guide component."
+    },
+    "Duration": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A long number that indicates the duration, in seconds, of the associated FlowOrchestrationInstance, FlowOrchestrationStage, FlowOrchestrationStep, or FlowOrchestrationWorkItem."
+    },
+    "Kind": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The milestone associated with the FlowOrchestrationLog. Valid values are: CancelInstance—The associated FlowOrchestrationInstance was canceled. DiscontinueStage—The associated FlowOrchestrationStage was discontinued. DiscontinueStep—The associated FlowOrchestrationStep was discontinued. EndInstance—The associated FlowOrchestrationInstance was completed successfully. EndStage—The associated FlowOrchestrationStage was exited successfully. EndStep—The associated FlowOrchestrationStep was exited successfully. EndWorkItem—The associated FlowOrchestrationWorkItem was completed successfully. FailInstance—The associated FlowOrchestrationInstance encountered an error. FailStage—The associated FlowOrchestrationStage encountered an error. FailStep—The associated FlowOrchestrationStep encountered an error. ResumeInstance—A failed or paused orchestration instance was resumed. ReassignWorkItem—The associated FlowOrchestrationWorkItem was reassigned. RunRecallPath—The associated approval submission was recalled. StartInstance—The associated FlowOrchestrationInstance started. StartStage—The associated FlowOrchestrationStage started. StartStep—The associated FlowOrchestrationStep started. StartWorkItem—The associated FlowOrchestrationWorkItem started. SuspendInstance—The associated FlowOrchestrationInstance was suspended. SuspendStage—The associated FlowOrchestrationStage was suspended."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, Sort",
+      "description": "The name for the FlowOrchestrationLog record."
+    },
+    "OrchestationInstanceId": {
+      "type": "reference",
+      "properties": "Filter, Sort, Group",
+      "description": "The FlowOrchestrationInstance associated with the FlowOrchestrationLog. This field is a relationship field.",
+      "relationship_name": "OrchestrationInstance",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowOrchestrationInstance"
+    },
+    "OrchestrationName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup , Sort",
+      "description": "The API name of the orchestration."
+    },
+    "OrchestrationVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "An integer for the FlowDefinitionVersion of the orchestration associated with the FlowOrchestrationLog."
+    },
+    "StageName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name of the stage in the associated orchestration."
+    },
+    "StepName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API name of the step in the associated orchestration."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time when the FlowOrchestrationLog milestone occured."
+    }
+  },
+  "special_access_rules": "If sharing rules are defined for FlowOrchestrationInstance and the Inherit orchestration run sharing rules to control orchestration run log record access setting is enabled, then orchestration run log record access is inherited from related orchestration run records. If the Inherit orchestration run sharing rules to control orchestration run log record access setting isn’t enabled, a user must have the Manage Flow permission. Or the user must have the View All Data permission.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **FlowOrchestrationLogFeed**: Feed tracking is available for the object.\n- **FlowOrchestrationLogHistory**: History is available for tracked fields of the object.\n- **FlowOrchestrationLogOwnerSharingRule**: Sharing rules are available for the object.\n- **FlowOrchestrationLogShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"FlowOrchestrationLog\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Actor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Assignee\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AssigneeType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Context\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Duration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Kind\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OrchestrationInstance\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowOrchestrationInstance\"/>\n        <element name=\"OrchestrationInstanceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"OrchestrationName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OrchestrationVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StageName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StepName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Timestamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "Actor": {
+      "field_label": "Completed By",
+      "type": "string",
+      "length": "255"
+    },
+    "Assignee": {
+      "field_label": "Assigned To",
+      "type": "string",
+      "length": "255"
+    },
+    "AssigneeType": {
+      "field_label": "Assignment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "string",
+      "length": "1333"
+    },
+    "Context": {
+      "field_label": "Context Record",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Duration": {
+      "field_label": "Duration (seconds)",
+      "type": "long",
+      "digits": "18"
+    },
+    "Id": {
+      "field_label": "Orchestration Run Log ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Kind": {
+      "field_label": "Milestone",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrchestrationInstanceId": {
+      "field_label": "Orchestration Run ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrchestrationName": {
+      "field_label": "Orchestration Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OrchestrationVersion": {
+      "field_label": "Orchestration Version",
+      "type": "int",
+      "digits": "9"
+    },
+    "StageName": {
+      "field_label": "Stage",
+      "type": "string",
+      "length": "80"
+    },
+    "StepName": {
+      "field_label": "Step",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Timestamp": {
+      "field_label": "Timestamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

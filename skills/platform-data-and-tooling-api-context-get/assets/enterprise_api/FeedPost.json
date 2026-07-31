@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "FeedPost - Data API",
+  "description": "FeedPost represents the following types of changes in a record feed, such as AccountFeed: text posts, link posts, and content posts. This object is available in API version 18.0 through 21.0. FeedPost is no longer available in later versions. Starting with API version 21.0, use FeedItem to represent text posts, link posts, and content posts in feeds.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Body": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The content of the FeedPost. Required when Type is TextPost or AdvancedTextPost. Optional when Type is ContentPost or LinkPost."
+    },
+    "ContentData": {
+      "type": "base64",
+      "properties": "Create, Nillable",
+      "description": "This field is required if Type is ContentPost. Encoded file data in any format, and can’t be 0 bytes. Setting this field automatically sets Type to ContentPost."
+    },
+    "ContentDescription": {
+      "type": "string",
+      "properties": "Create, Nillable, Sort",
+      "description": "The description of the file specified in ContentData."
+    },
+    "ContentFileName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable, Sort",
+      "description": "This field is required if Type is ContentPost. The name of the file uploaded to the feed. Setting ContentFileName automatically sets Type to ContentPost."
+    },
+    "ContentSize": {
+      "type": "int",
+      "properties": "Group, Nillable, Sort",
+      "description": "This field is the size of the file (in bytes) uploaded to the feed. This field is read-only and is automatically determined during insert."
+    },
+    "ContentType": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "This field is the MIME type of the file uploaded to the feed. This field is read-only and is automatically determined during insert."
+    },
+    "FeedItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the feed containing the FeedPost."
+    },
+    "InsertedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who added this item to the feed. For example, if an application migrates posts and comments from another application into a feed, the InsertedBy value is set to the ID of the context user."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the record has been moved to the Recycle Bin (true) or not (false). This field is a standard system field."
+    },
+    "LinkUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The URL of a LinkPost."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the object type to which the FeedPost is related. For example, set this field to a UserId to post to someone’s profile feed, or an AccountId to post to a specific account."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The title of the FeedPost. When the Type is LinkPost, the Body is the URL and the Title is the label for the link."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of FeedPost: UserStatus—automatically generated when a user updates their status TrackedChange—ignore TextPost—a direct text entry on a feed LinkPost—a URL posting on a feed ContentPost—an uploaded file on a feed Note: If you set Type to ContentPost, you must specify ContentData and ContentFileName."
+    }
+  },
+  "special_access_rules": "Only users with this permission can delete items in unlisted groups. Only users with the Modify All Data permission can delete a feed item of Type TrackedChange. If the context user has the Insert System Field Values for Chatter Feeds user permission, the create field property is available on CreatedBy and CreatedDate system fields. During migration, the context user can set these fields to the original post’s author and creation date. The fields can’t be updated after migration.\n\nOnly users with this permission can delete items in unlisted groups.\n\nOnly users with the Modify All Data permission can delete a feed item of Type TrackedChange.\n\nIf the context user has the Insert System Field Values for Chatter Feeds user permission, the create field property is available on CreatedBy and CreatedDate system fields. During migration, the context user can set these fields to the original post’s author and creation date. The fields can’t be updated after migration.",
+  "usage": "SELECT Id, Type, FeedPost.Body\n\nFROM AccountFeed\n\nWHERE ParentId = AccountId ORDER BY CreatedDate DESC\n\nThis\n      object is hard deleted. It isn’t sent to the Recycle Bin."
+}

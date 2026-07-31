@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "EntityLimit - Tooling API",
+  "description": "Represents the limits for an object as displayed in the Setup UI.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. Use this field to simplify queries."
+    },
+    "EntityDefinition": {
+      "type": "EntityDefinition",
+      "properties": "Filter, Group, Sort",
+      "description": "The object to which these limits apply."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the object to which these limits apply."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label of the object to which these limits apply."
+    },
+    "Max": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The maximum number of objects that the organization is allowed to have."
+    },
+    "Remaining": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of objects still available. For example, if the limit on custom objects is 100, and you create 75, this value is 25."
+    },
+    "Type": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "What type of component the limit applies to: ActiveLookupFilters ActiveRules ActiveValidationRules ApprovalProcesses CbsSharingRules CustomFields CustomRelationship RollupSummary SharingRules TotalRules VLookup"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EntityLimit\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinition\" minOccurs=\"0\" type=\"ens:EntityDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"EntityDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Label\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Max\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Remaining\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Type\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

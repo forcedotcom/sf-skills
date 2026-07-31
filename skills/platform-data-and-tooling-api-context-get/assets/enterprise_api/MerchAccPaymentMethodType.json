@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "MerchAccPaymentMethodType - Data API",
+  "description": "Refers to a payment method that is in a payment method set, which is defined by the MerchAccPaymentMethodSet object. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only when the multicurrency feature is enabled. Contains the ISO code for any currency used by the org."
+    },
+    "PaymentInstrumentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of instrument the payer can pay with. Possible values are: us_bank_account - ACH_Debit affirm - Affirm afterpay - Afterpay afterpay_clearpay - Afterpay/Clearpay amazon_pay - Amazon Pay applepay - Apple Pay au_becs_debit - BECS_Debit bacs_debit - BACS_Debit bancontact - Bancontact card - Credit Cards cashapp - Cash App clearpay - Clearpay eps - EPS googlepay - Google Pay ideal - iDEAL klarna - Klarna link - Link paypal - PayPal sepa_debit - SEPA Debit venmo - Venmo wechat_pay - WeChat Pay"
+    },
+    "PaymentMethodSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the MerchAccPaymentMethodSet. This field is a relationship field.",
+      "relationship_name": "PaymentMethodSet",
+      "relationship_type": "Lookup",
+      "refers_to": "MerchAccPaymentMethodSet"
+    },
+    "PaymentMethodSetTypeNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-assigned ID for the MerchAccPaymentMethodSet."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Sort order for the MechAccPaymentMethodType within the MerchAccPaymentMethodSetExperience."
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license with the Payments permission enabled for your org. Salesforce Payments entities are available only in Lightning Experience.\n\nTo access Salesforce Payments objects, you must\n         have a Salesforce Payments license with the Payments permission enabled for your org.\n         Salesforce Payments entities are available only in Lightning Experience.",
+  "associated_objects": "This object has these associated object. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **MerchAccPaymentMethodTypeHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Merchant Account Payment Method Type ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PaymentInstrumentType": {
+      "field_label": "Payment Instrument Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PaymentMethodSetId": {
+      "field_label": "Merchant Account Payment Method Set ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodSetTypeNumber": {
+      "field_label": "Merchant Account Payment Method Type Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

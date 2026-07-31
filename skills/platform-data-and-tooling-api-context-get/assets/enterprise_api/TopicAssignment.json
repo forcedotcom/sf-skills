@@ -1,0 +1,109 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "TopicAssignment - Data API",
+  "description": "Represents the assignment of a topic to a specific feed item, record, or file. This object is available in API version 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Identifier of the feed item, record, or file. This is a polymorphic relationship field.",
+      "relationship_name": "Entity",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Asset, Campaign, Case, Contact, ContentDocument, Contract, Event, FeedItem, Lead, Opportunity, Order, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, Shift, Shipment, Solution, Task, WorkOrder, WorkOrderLineItem"
+    },
+    "EntityKeyPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The first three digits of the EntityID field, which identify the object type (account, opportunity, etc). This read-only field is available in API version 32.0 and later. Interface label is “Record Key Prefix,” which appears only in reports."
+    },
+    "EntityType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The standard name for the object type (account, opportunity, etc). This read-only field is available in API version 33.0 and later. Note: Querying topic assignments for the ManagedContentVersion entity type isn’t supported. Interface label is “Object Type,” which appears only in reports. Tip: In most cases, you should use this field rather than EntityKeyPrefix, which exists primarily to support older reports."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Identifier of the community to which the TopicAssignment belongs. This field is available only if digital experiences is enabled in your org."
+    },
+    "TopicId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Identifier of the topic. This is a relationship field.",
+      "relationship_name": "Topic",
+      "relationship_type": "Lookup",
+      "refers_to": "Topic"
+    }
+  },
+  "usage": "Use this object to query the assignments of topics to feed items, records, or files. To assign or remove topics, you must have the “Assign Topics” permission. In SOQL SELECT syntax, this object supports nested semi-joins, allowing queries on Knowledge articles assigned to specific topics. For example: There is no SOQL limit if the logged-in user has the “View All Data” permission. If they do have that permission, do one of the following:\n\nUse this object to query the assignments of topics to feed items, records, or files. To assign or remove topics, you must have the “Assign Topics” permission.\n\nIn SOQL SELECT syntax, this object supports nested semi-joins, allowing queries on Knowledge articles assigned to specific topics. For example:\n\nThere is no SOQL limit if the logged-in user has the “View All Data” permission. If they do have that permission, do one of the following:",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"TopicAssignment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Entity\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"EntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"EntityKeyPrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EntityType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Topic\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Topic\"/>\n        <element name=\"TopicId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EntityId": {
+      "field_label": "Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EntityKeyPrefix": {
+      "field_label": "Record Key Prefix",
+      "type": "string",
+      "length": "3"
+    },
+    "EntityType": {
+      "field_label": "Object Type",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Topic Assignment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TopicId": {
+      "field_label": "Topic ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

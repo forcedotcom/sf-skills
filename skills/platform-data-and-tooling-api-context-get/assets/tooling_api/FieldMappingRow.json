@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "FieldMappingRow - Tooling API",
+  "description": "Represents a field in a data service record that maps to a field in an object record in the org.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "FieldMappingID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A foreign key reference to the parent FieldMapping for this FieldMappingRow."
+    },
+    "FieldName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The set of picklist values includes all the standard and custom object types in your org."
+    },
+    "Operation": {
+      "type": "picklist",
+      "properties": "Create (reserved for future use), Defaulted on create (reserved for future use), Filter, Group, Nillable (reserved for future use), Restricted picklist (reserved for future use), Sort, Update (reserved for future use)",
+      "description": "The comparison operation that the data service applies when it compares the value of this FieldMappingRow to the mapped field in the object specified in SObjectType. The following values are supported. Autofill fills empty fields and keeps values of fields that already contain data. Overwrite fills empty fields and updates fields that already contain data. History tracking is required for fields set to Overwrite."
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "CreateFilter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The standard or custom object in your org that contains the field mapped by this FieldMappingRow. The set of picklist values includes all the standard and custom object types in your org. However, if you specify an object that the data service doesn’t support, the API call returns an error."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FieldMappingRow\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMapping\" minOccurs=\"0\" type=\"ens:FieldMapping\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMappingId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"FieldMappingRows\" minOccurs=\"0\" type=\"tns:QueryResult\" nillable=\"true\"/>\n        <xsd:element name=\"FieldName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Operation\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SobjectType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"MappingOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Autofill\"/>\n    <xsd:enumeration value=\"Overwrite\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

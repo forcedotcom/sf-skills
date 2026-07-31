@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ConvAnalysisTopicEntry - Data API",
+  "description": "Represents a single entry under the ConvAnalysisTopic object. An entry represents a segment of a video or voice call that is associated with a conversation analysis topic. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "BulletGenerationsIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The generation ID used to track the LLM-generated response for feedback purposes."
+    },
+    "CallId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The unique identifier of the voice or video call that corresponds to the entry. This field is a polymorphic relationship field.",
+      "relationship_name": "Call",
+      "refers_to": "VideoCall, VoiceCall"
+    },
+    "ConvAnalysisTopicId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The conversation analysis topic associated with the entry. This field is a relationship field.",
+      "relationship_name": "ConvAnalysisTopic",
+      "relationship_type": "Master-detail",
+      "refers_to": "ConvAnalysisTopic (the parent object)",
+      "required": true
+    },
+    "SnippetStartTime": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the call is associated with the current topic entry."
+    },
+    "Summary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The LLM-generated call summary that corresponds to the parent topic."
+    }
+  },
+  "special_access_rules": "Users need the Sales Signals permission set and the Sales Signals feature must be enabled."
+}

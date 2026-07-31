@@ -1,0 +1,212 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "PartnerMarketingBudget - Data API",
+  "description": "Represents a budget that provides funds to channel partners for selling and marketing products and services. This object is available in API version 41.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Total amount of the budget."
+    },
+    "ChannelPartnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the channel partner. This field is available in API version 45.0 and later. Note: The ChannelPartnerId field isn’t supported for formula fields, custom buttons, or custom links for the PartnerMarketingBudget object. This limitation also applies to the PartnerFundAllocation and PartnerFundRequest objects."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the budget."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Date when the budget is no longer available."
+    },
+    "IsIgnoreValidation": {
+      "type": "boolean"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it's possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the budget."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Date when the budget becomes available."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Title of the budget."
+    },
+    "TotalAllocatedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total funds allocated to channel partners or as a fund pool."
+    },
+    "TotalApprovedFcs": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of approved fund claims."
+    },
+    "TotalApprovedFrs": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of approved fund requests."
+    },
+    "TotalReimbursedFcs": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of reimbursed fund claims."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Type of budget. Values are: Co-Operated Budget—Funds accrue based on a percentage of partner sales. The funds are available based on previous activity. Marketing Funds—Funds are issued to partners in advance of sales. The funds are awarded based on predicted or expected behavior."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **PartnerMarketingBudgetFeed**: Feed tracking is available for the object.\n- **PartnerMarketingBudgetHistory**: History is available for tracked fields of the object.\n- **PartnerMarketingBudgetOwnerSharingRule**: Sharing rules are available for the object.\n- **PartnerMarketingBudgetShare**: Sharing is available for the object.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ChannelPartnerId": {
+      "field_label": "Channel Partner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Partner Marketing Budget ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsIgnoreValidation": {
+      "field_label": "Ignore Validation Rules",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Title": {
+      "field_label": "Partner Marketing Budget Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TotalAllocatedAmount": {
+      "field_label": "Total Allocated Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalApprovedFcs": {
+      "field_label": "Total Approved Fund Claims",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalApprovedFrs": {
+      "field_label": "Total Approved Fund Requests",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalReimbursedFcs": {
+      "field_label": "Total Reimbursed Fund Claims",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Type": {
+      "field_label": "Budget Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ChangeRequestRelatedIssue - Data API",
+  "description": "Represents a junction object that relates a ChangeRequest to an Incident or Problem due to a service failure. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ChangeRequestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ChangeRequest ID that's linked to the Problem or Incident.",
+      "relationship_name": "ChangeRequest",
+      "relationship_type": "Lookup",
+      "refers_to": "ChangeRequest"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A description of the change request as it relates to the problem or incident."
+    },
+    "RelatedEntityType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The name of the related object type. Possible values are: Incident Problem"
+    },
+    "RelatedIssueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A polymorphic relationship field that represents the related Problem or Incident.",
+      "relationship_name": "RelatedIssue",
+      "relationship_type": "Lookup",
+      "refers_to": "Incident, Problem"
+    },
+    "RelationshipType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Shows how the ChangeRequest and Incident or Problem records relate to each other. Possible values are: Caused By Fixed By The default value is 'Caused By'."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ChangeRequestRelatedIssueChangeEvent**: Change events are available for the object.\n- **ChangeRequestRelatedIssueFeed**: Feed tracking is available for the object.\n- **ChangeRequestRelatedIssueHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "ChangeRequestId": {
+      "field_label": "Change Request ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Change Request Related Issue ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Change Request Related Issue Number",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedEntityType": {
+      "field_label": "Related Issue Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedIssueId": {
+      "field_label": "Related Issue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelationshipType": {
+      "field_label": "Relationship Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

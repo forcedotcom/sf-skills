@@ -1,0 +1,144 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "LoginGeo - Data API",
+  "description": "Represents the geographic location of the user’s IP address for a login event. Due to the nature of geolocation technology, the accuracy of geolocation fields (for example, country, city, postal code) may vary. This object is available in API version 34.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "City": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The city where the user’s IP address is physically located. This value is not localized."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The country where the user’s IP address is physically located. This value is not localized."
+    },
+    "CountryIso": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ISO 3166 code for the country where the user’s IP address is physically located. For more information, see Country Codes - ISO 3166"
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The latitude where the user’s IP address is physically located."
+    },
+    "LoginTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "Time of the login attempt, in GMT time zone."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The longitude where the user’s IP address is physically located."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The postal code where the user’s IP address is physically located. This value is not localized."
+    },
+    "Subdivision": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the subdivision where the user’s IP address is physically located. In the U.S., this value is usually the state name (for example, Pennsylvania). This value is not localized."
+    }
+  },
+  "special_access_rules": "Only users with Manage Users permissions can access this object.",
+  "usage": "The API allows you to do many powerful queries. A few examples are:\n\nSample Query\n\nQuery String\n\nQuery showing the country for a login event, where\n\nId=LoginGeoId\n\nfrom AuthSession\n\nSELECT Country FROM LoginGeo WHERE Id =\n                           '0LE###############'\n\nQuery showing the city and postal code for a login event, where\n\nId=LoginGeoId\n\nfrom LoginHistory\n\nSELECT City, PostalCode FROM LoginGeo WHERE Id\n                           = '0SO###############'",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"LoginGeo\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CountryIso\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Latitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LoginTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Longitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subdivision\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "200"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "200"
+    },
+    "CountryIso": {
+      "field_label": "Country Code",
+      "type": "string",
+      "length": "3"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Login Geo Data ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "LoginTime": {
+      "field_label": "Login Time",
+      "type": "datetime"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "PostalCode": {
+      "field_label": "Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "Subdivision": {
+      "field_label": "Subdivision",
+      "type": "string",
+      "length": "200"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

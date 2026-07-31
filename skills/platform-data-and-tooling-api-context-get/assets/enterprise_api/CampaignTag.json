@@ -1,0 +1,38 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "CampaignTag - Data API",
+  "description": "Associates a word or short phrase with a Campaign.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ItemId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the tagged item."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter",
+      "description": "Name of the tag. If this value does not already exist, a new TagDefinition is created and becomes the parent of this Tag object. Otherwise, a TagDefinition with the same name becomes the parent of this Tag object. Parent relationships are created automatically."
+    },
+    "TagDefinitionId": {
+      "type": "reference",
+      "properties": "Filter",
+      "description": "ID of the parent TagDefinition object that owns the tag."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Restricted picklist",
+      "description": "Defines the visibility of a tag. Valid values: Public—The tag can be viewed and manipulated by all users in an organization. Personal—The tag can be viewed or manipulated only by a user with a matching OwnerId."
+    }
+  },
+  "usage": "CampaignTag stores the relationship between its parent TagDefinition and the Campaign being tagged. Tag objects act as metadata, allowing users to describe and organize their data. When a tag is deleted, its parent TagDefinition will also be deleted if the name is not being used; otherwise, the parent remains. Deleting a TagDefinition sends it to the Recycle Bin, along with any associated tag entries.\n\nCampaignTag stores the relationship between its parent TagDefinition and the Campaign being tagged. Tag objects act as metadata, allowing users to describe and organize their data.\n\nWhen a tag is deleted, its parent TagDefinition will also be deleted if the name is not being used; otherwise, the parent remains. Deleting a TagDefinition sends it to the Recycle Bin, along with any associated tag entries."
+}

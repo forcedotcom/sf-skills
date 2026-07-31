@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "IconDefinition - Tooling API",
+  "description": "Represents an icon, such as used for a tab. Available in API version 43.0 and later.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContentType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The tab icon’s content type, for example, image/png."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "Height": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Height of the icon in pixels. If the icon content type is SVG, the Height and Width values are not used."
+    },
+    "TabDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The ID of the tab this definition belongs to. Defaults to null."
+    },
+    "Theme": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user interface theme this definition is associated with."
+    },
+    "Url": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The fully qualified URL for this icon. The default icon is a cloud."
+    },
+    "Width": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The icon’s width in pixels. If the icon content type is SVG, the Height and Width values are not used."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"IconDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ContentType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Height\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"TabDefinition\" minOccurs=\"0\" type=\"ens:TabDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"TabDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Theme\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Url\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Width\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

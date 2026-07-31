@@ -1,0 +1,147 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "KnowledgeArticleVersionHistory - Data API",
+  "description": "Enables read-only access to the full history of an article. This object is available in API version 25.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of data that is tracked in the history table. This field is available in API version 50.0 and later."
+    },
+    "EventType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of event that is tracked in the history table."
+    },
+    "FieldName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Name of the tracked field."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language that the article is written in, such as French or Chinese (Traditional). Querying or searching articles in SOSL requires that you specify the Language field in the WHERE clause. The language must be the same for all article types."
+    },
+    "NewValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The new value of the field that was changed."
+    },
+    "OldValue": {
+      "type": "anyType",
+      "properties": "Nillable, Sort",
+      "description": "The most recent value of the field before it was changed."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the article."
+    },
+    "ParentSobjectType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of object that contains the field."
+    },
+    "VersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID assigned to a version of the article. This is a polymorphic relationship field."
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number assigned to a version of an article. This field is available in API version 24.0 and later."
+    }
+  },
+  "special_access_rules": "Knowledge must be enabled in your org. This object respects field, entity, and record-level security. You must have at least “Read” permission on the article type or the field to access its history. For data category security, Salesforce determines access based on the categorization of the online version of an article. If there’s no online version, then security is applied based on the archived version, followed by the security of the draft version.",
+  "usage": "Use this object to query events in the history of an article. For example, you can retrieve the number of edits a particular user has made to an article, how many times the article has been published, and so on.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataType": {
+      "field_label": "Datatype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "EventType": {
+      "field_label": "Event Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "FieldName": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Entity Version History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "NewValue": {
+      "field_label": "New Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "OldValue": {
+      "field_label": "Old Value",
+      "type": "anyType",
+      "length": "255"
+    },
+    "ParentId": {
+      "field_label": "Knowledge Article ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentSobjectType": {
+      "field_label": "Parent SObject Type Name",
+      "type": "picklist",
+      "length": "40"
+    },
+    "VersionId": {
+      "field_label": "Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "6"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

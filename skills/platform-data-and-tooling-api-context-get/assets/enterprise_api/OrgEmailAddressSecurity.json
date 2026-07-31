@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OrgEmailAddressSecurity - Data API",
+  "description": "Defines the assignment of a user profile to an org-wide email address. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "OrgWideEmailAddressId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of an organization-wide email address. This field is a relationship field.",
+      "relationship_name": "OrgWideEmailAddress",
+      "relationship_type": "Lookup",
+      "refers_to": "OrgWideEmailAddress"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The profile ID that’s allowed to use an organization-wide email address. This field is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Profile"
+    }
+  },
+  "special_access_rules": "Only authenticated users with the View Setup and Configuration permission can access this object.",
+  "usage": "You can use this object with OrgWideEmailAddress and Profile objects to retrieve user profiles that have access to a specific org-wide email address. To find specific users, use the ProfileId field on the User object. You can also retrieve the org-wide email addresses that a specific user can access. Note that any users assigned to those org-wide email addresses via permission set aren’t returned.\n\nYou can use this object with OrgWideEmailAddress and Profile objects to retrieve user profiles that have access to a specific org-wide email address. To find specific users, use the ProfileId field on the User object.\n\nYou can also retrieve the org-wide email addresses that a specific user can access. Note that any users assigned to those org-wide email addresses via permission set aren’t returned.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OrgEmailAddressSecurity\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"OrgWideEmailAddress\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OrgWideEmailAddress\"/>\n        <element name=\"OrgWideEmailAddressId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Profile\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Id": {
+      "field_label": "Organization Email Address Security ID",
+      "type": "id",
+      "length": "18"
+    },
+    "OrgWideEmailAddressId": {
+      "field_label": "Organization-wide From Email Address ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

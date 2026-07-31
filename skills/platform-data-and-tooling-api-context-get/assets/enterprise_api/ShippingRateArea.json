@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ShippingRateArea - Data API",
+  "description": "A designated geographical area that’s available for shipping. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Countries": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Countries in the shipping rate area."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the shipping rate area."
+    },
+    "Regions": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Reserved for future use."
+    },
+    "ShippingRateGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the shipping rate group This field is a relationship field.",
+      "relationship_name": "ShippingRateGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "ShippingRateGroup"
+    }
+  },
+  "special_access_rules": "The ShippingRateArea object is available only if the B2B Commerce or D2C Commerce license is enabled.\n\nThe ShippingRateArea object is available only if\n         the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "Countries": {
+      "field_label": "Countries",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Shipping Rate Area ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Shipping Zone Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Regions": {
+      "field_label": "Regions",
+      "type": "textarea",
+      "length": "8000"
+    },
+    "ShippingRateGroupId": {
+      "field_label": "Shipping Rate Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

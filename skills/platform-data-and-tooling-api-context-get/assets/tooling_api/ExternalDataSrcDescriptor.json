@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ExternalDataSrcDescriptor - Tooling API",
+  "description": "Contains the metadata information for the external schema of an external data source. Use the metadata to map attributes from an AWS data source, such as Amazon DynamoDB and Amazon Athena, to Salesforce external object fields. Also, use the metadata to customize the data retrieval queries to an AWS data source. This object is available in API version 55.0 and later for Amazon DynamoDB and in API version 56.0 and later for Amazon Athena.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CustomObjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If set, the ID of the external object associated with the descriptor. This is a relationship field.",
+      "relationship_name": "CustomObject",
+      "relationship_type": "Lookup",
+      "refers_to": "CustomObject"
+    },
+    "Descriptor": {
+      "type": "base64",
+      "properties": "Nillable",
+      "description": "The descriptor document that contains the metadata information."
+    },
+    "DescriptorVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the external system supports schema versioning for the data source, the optional descriptor document version tracks the external system's schema version. Several descriptors with different document versions may be active."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the child-level setup entity."
+    },
+    "ExternalDataSourceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Salesforce ID of the external data source that defines the external system. This is a relationship field.",
+      "relationship_name": "ExternalDataSource",
+      "relationship_type": "Lookup",
+      "refers_to": "ExternalDataSource"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated type in Tooling API."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the descriptor document."
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The manageable state of the descriptor that is contained in a package. Possible values are: beta—Managed-Beta deleted—Managed-Proposed-Deleted deprecated—Managed-Proposed-Deprecated deprecatedEditable—SecondGen-Installed-Deprecated installed—Managed-Installed installedEditable—SecondGen-Installed-Editable released—Managed-Released unmanaged—Unmanaged"
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "The external data source descriptor's metadata."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object."
+    },
+    "Subtype": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The subtype of the descriptor. Possible values are: SchemaTableDDL—Used to store the metadata for the external data source. SchemaTableMetadata—Used to cache information about the external system. SchemaTableQualifiers—Used to customize the data retrieval query to the external system."
+    },
+    "SystemVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The version that defines the descriptor format and allows compatibility with descriptor formats between Salesforce releases."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of the descriptor. Possible value: Schema"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ExternalDataSrcDescSubtype\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SchemaTableQualifiers\"/>\n    <xsd:enumeration value=\"SchemaTableMetadata\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExternalDataSrcDescType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Schema\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ExternalDataSrcDescriptor\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:ExternalDataSrcDescriptor\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"ExternalDataSrcDescriptor\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"descriptor\" type=\"xsd:string\"/>\n        <xsd:element name=\"descriptorVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalDataSource\" type=\"xsd:string\"/>\n        <xsd:element name=\"subtype\" type=\"tns:ExternalDataSrcDescSubtype\"/>\n        <xsd:element name=\"systemVersion\" type=\"xsd:int\"/>\n        <xsd:element name=\"type\" type=\"tns:ExternalDataSrcDescType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

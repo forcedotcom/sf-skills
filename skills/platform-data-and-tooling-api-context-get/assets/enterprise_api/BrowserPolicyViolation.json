@@ -1,0 +1,134 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "BrowserPolicyViolation - Data API",
+  "description": "Represents a violation that occurred within the last seven days related to the Trusted URLs and Trusted URLs for External Redirects allowlists. These violations include blocked resource requests based on your content security policy (CSP) and blocked redirections. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The developer name of the violation. Only users with View DeveloperName or View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The language for the blocked request."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Master label for this violation."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Namespace prefix for this violation."
+    },
+    "UntrustedUrl": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The URL associated with the blocked request, without the path. For example, if a blocked requested resource is an image with the URL https://www.example.com/images/image1.png, the UntrustedUrl is https://www.example.com."
+    },
+    "ViolationContext": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If the ViolationType is img-src (image), font-src (fonts), or frame-src (iframe content), the content security policy (CSP) context for the request. The CSP context controls which pages can load content from a CspTrustedSite. Possible values are: Lightning—The blocked request is related to a Lightning Experience page. Not Applicable—ViolationContext isn’t applicable to this violation. For example, violations with a ViolationType of Redirection."
+    },
+    "ViolationImpact": {
+      "type": "String",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The impact of this violation. Possible values are: Blocked–The policy was enforced and prevented the resource from loading. The impact of blocked redirections and malformed URLs is always Blocked. Reported–This violation is blocked only after stricter CSP settings are configured.For example, some resource requests associated with the frame-src, font-src, and img-src ViolationType are blocked only when the Adopt updated CSP directives setting is enabled in Session Settings."
+    },
+    "ViolationType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The violation type. Possible values are: img-src–At least one request to load an image file from the URL was blocked because the UntrustedUrl isn’t a CspTrustedSite object with this CSP directive. font-src–At least one request to load a font from the URL was blocked because the UntrustedUrl isn’t a CspTrustedSite object with this CSP directive. frame-src–At least one request to load content in an iframe that originated from the URL was blocked because the UntrustedUrl isn’t a CspTrustedSite object with this CSP directive. MalformedUrl–At least one redirection to this URL failed because the UntrustedUrl is malformed. Redirect–At least one redirection to this URL was blocked because the UntrustedUrl isn’t a RedirectWhitelistUrl object."
+    }
+  },
+  "special_access_rules": "Only users with the Customize Application and Modify All Data permissions can access this object.",
+  "wsdl_segment": "```xml\n<complexType name=\"BrowserPolicyViolation\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UntrustedUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ViolationContext\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ViolationImpact\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ViolationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Violation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Violation Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UntrustedUrl": {
+      "field_label": "Untrusted URL",
+      "type": "string",
+      "length": "255"
+    },
+    "ViolationContext": {
+      "field_label": "CSP Context",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ViolationImpact": {
+      "field_label": "Impact",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ViolationType": {
+      "field_label": "Violation Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

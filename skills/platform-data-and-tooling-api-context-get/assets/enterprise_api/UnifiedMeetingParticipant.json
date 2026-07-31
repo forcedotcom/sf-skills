@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "UnifiedMeetingParticipant - Data API",
+  "description": "Represents a participant in a meeting. This object is available for reports and dashboards in the Winter ’24 release and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the meeting that the person is participating in. This field is a relationship field.",
+      "relationship_name": "Activity",
+      "relationship_type": "Lookup",
+      "refers_to": "UnifiedMeeting"
+    },
+    "ChannelAddress": {
+      "type": "string",
+      "properties": "Filter, Nillable",
+      "description": "The email address of the participant. The email address is captured at the time of the communication; it doesn’t change if the contact’s email address is updated later."
+    },
+    "ParticipantType": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist",
+      "description": "The participant’s role in the meeting. Possible values are: AssignedTo Attendee BCC CC From OptionalAttendee Organizer To"
+    },
+    "PersonId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the contact, lead, or user participating in the meeting. This field is a polymorphic relationship field.",
+      "relationship_name": "Person",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead, User"
+    }
+  },
+  "special_access_rules": "Einstein Activity Capture and Activity 360 Reporting must be enabled.\n\nEinstein Activity Capture and Activity 360\n         Reporting must be enabled."
+}

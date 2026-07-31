@@ -2,7 +2,7 @@
 
 ## Summary Report
 
-```
+```text
 Agentforce Agent Test Report
 ===========================================
 
@@ -24,7 +24,7 @@ Status: PASSED WITH WARNINGS
 
 ## Detailed Test Cases
 
-```
+```text
 Test Case 1: "Where is my order?"
   Expected Topic: order_mgmt
   Actual Topic: order_mgmt (pass)
@@ -149,7 +149,7 @@ sf agent test run --json \
 
 ### Test File Location Convention
 
-```
+```text
 <project-root>/
   tests/
     <AgentApiName>-testing-center.yaml  # Full smoke suite (Mode B -- Testing Center)

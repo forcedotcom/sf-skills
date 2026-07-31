@@ -1,0 +1,90 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerOfferItem - Data API",
+  "description": "Represents a line item within a partner offer. Line items map to defined products or SKUs that are sold as part of the offer. Includes quantity. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CustomerUnitPricePerMonth": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The unit price of the product per month. For example, if the unit price is $1 and a customer orders 10 items, the cost is $10/month."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "LineItemPeriodTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The line item total calculated as CustomerPricePerMonth * Quantity."
+    },
+    "LineItemTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Derived field. The total cost of a single line item within an offer, calculated as CustomerPricePerMonth * Quantity * Offer.ServiceTerm."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Auto-generated offer item number"
+    },
+    "OfferItemNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, Sort",
+      "description": "Autonumber field for the offer item."
+    },
+    "PartnerOfferId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The offer to which the offer item belongs. This field is a relationship field.",
+      "relationship_name": "PartnerOffer",
+      "relationship_type": "Master-detail",
+      "refers_to": "SfdcPartnerOffer"
+    },
+    "PartnerProvisionProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Partner Provision Product being sold as part of this offer line item. Used for provisioning of order or commodity code for tax calculations. This field is a relationship field.",
+      "relationship_name": "PartnerProvisionProduct",
+      "refers_to": "SfdcPartnerProvisionProduct"
+    },
+    "PartnerProvisionProductName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field. The name of the related partner provisionable product."
+    },
+    "PartnerPurchaseOrderNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used to override the value of the Partner PO Number at the item level."
+    },
+    "Quantity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Number of units being sold on this offer line item.",
+      "required": true
+    },
+    "ServiceStartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field. The date when the contract terms begin. Copied from the SfdcPartnerOffer object when the offer item is created and used to assist provisioning."
+    }
+  }
+}

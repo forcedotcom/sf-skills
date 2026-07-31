@@ -1,0 +1,162 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "AiJobRun - Data API",
+  "description": "Represents an execution instance of an AI job. This object tracks the overall status and manages the lifecycle of the job from initiation to completion. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time when the job run ends."
+    },
+    "ErrorCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the job run fails, this field indicates the specific error that occurred."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Contains a detailed, human-readable message that explains the reason for the job run failure."
+    },
+    "JobType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Defines the job's logic. Possible values are: PromptTemplate"
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A user-defined name or label for the job run, which can be used for identification and tracking."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique, system-generated identifier for the AiJobRun record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The user group that owns the AiJobRun record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time when the job run's status changes to InProgress."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Tracks the lifecycle of the job run. Valid values are: New: The job run has been created. ReadyToStart: The job run is ready for the user to initiate processing. Queued: The job run is queued to start. InProgress: The job run is currently processing. Completed: The job run completed. Failed: The job run failed. Aborted: The job run was aborted by the user. Archived: The job run was archived by the user."
+    },
+    "Target": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A metadata field used to specify job-specific details, such as a PromptTemplateId, PromptTemplateName, or ModelId. This provides further context for the job execution."
+    }
+  },
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EndTime": {
+      "field_label": "End Time",
+      "type": "datetime"
+    },
+    "ErrorCode": {
+      "field_label": "Error Code",
+      "type": "string",
+      "length": "40"
+    },
+    "ErrorMessage": {
+      "field_label": "Error Message",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "AI Job Run ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JobType": {
+      "field_label": "Job Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartTime": {
+      "field_label": "Start Time",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Target": {
+      "field_label": "Target",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

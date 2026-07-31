@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "SfdcPartnerTermSetProduct - Data API",
+  "description": "Represents a product within a partner term set. SfdcPartnerTermSetProduct is a Partner Business Org (PBO) standard object storing Partner Product Catalogue that are propagated from the Channel Orders Application (COA). This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CancellationTerms": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Controls the amount of time a customer has to cancel the contract in days."
+    },
+    "FloorPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The minimum product price."
+    },
+    "IsContractAutoRenew": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Controls whether a contract associated with this product is set to auto renew or not. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the product.",
+      "required": true
+    },
+    "PartnerProductCatalog": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The 18 character ID of the associated Partner Product Catalog record in the COA.",
+      "required": true
+    },
+    "PartnerTermSetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Associated Partner Term Set record from the COA. This field is a relationship field.",
+      "relationship_name": "PartnerTermSet",
+      "refers_to": "SfdcPartnerTermSet",
+      "required": true
+    },
+    "Product": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Copied from the COA field Product ID.",
+      "required": true
+    },
+    "ProductDescription": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Description of the partner product."
+    },
+    "ProductSpecialTerms": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Special terms applicable to this product."
+    },
+    "RenewalTerms": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the length of a renewed contract for this product in months."
+    },
+    "RevenueSharePercentage": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The percentage of net revenue that Salesforce receives from the sale of the product."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The current status of the partner product. Possible values are: Active Inactive Retired"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SfdcPartnerTermSetProductOwnerSharingRule**: Sharing rules are available for the object.\n- **SfdcPartnerTermSetProductShare**: Sharing is available for the object."
+}

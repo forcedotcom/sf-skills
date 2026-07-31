@@ -1,0 +1,281 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "Employee - Data API",
+  "description": "Represents an employee within a company or organization. This object is available in API version 48.0 and later. In API version 49.0 and later, this object supports reports, criteria-based sharing rules, and history tracking, plus you can exclude individual fields from custom page layouts.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AboutMe": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Information about the employee, such as areas of interest or skills. Values can be provided on Employee’s profile page. This field is available even if Chatter is disabled."
+    },
+    "AlternateEmail": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s alternate email address."
+    },
+    "Availability": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s availability status. Possible values are: In The Office Out Of Office Out Sick PTO Volunteering Time Off Working Remotely"
+    },
+    "AvailabilityEndDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The end date of the Employee’s availability, inclusive of the date."
+    },
+    "AvailabilityStartDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The start date of the Employee’s availability, inclusive of the date."
+    },
+    "BannerPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The URL for the employee's banner photo. Available in API v51.0 and later."
+    },
+    "CurrentWellnessStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s current wellness status. Possible values are: Available To Work Remote Work Only Unavailable Unknown"
+    },
+    "DateOfBirth": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s date of birth."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The employee’s email address. This field is unique within your organization."
+    },
+    "EmployeeNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The employee's employment ID for the organization they were hired into. This field is unique within your organization.",
+      "required": true
+    },
+    "EmployeeStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The employee's current work status. Possible values are: Active Inactive Leave Terminated",
+      "required": true
+    },
+    "EmploymentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee's full-time or part-time status. Possible values are: Full-Time Part-Time"
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The employee’s first name.",
+      "required": true
+    },
+    "FullPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The URL for the employee's profile photo. The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo has been uploaded, the URL returned for an older photo isn’t guaranteed to return a photo. Query this field for the URL of the most recent photo. Available in API v51.0 and later."
+    },
+    "Gender": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s gender. Possible values are: Female Male Non-Binary / Non-Conforming Other Prefer Not to State Transgender Female Transgender Male"
+    },
+    "HomeAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The employee’s home address."
+    },
+    "HomeCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city for the employee’s home address."
+    },
+    "HomeCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The county for the employee’s home address."
+    },
+    "HomeGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The level of accuracy of an employee’s home address geographical coordinates compared with its physical address. A geocoding service typically provides this value based on the address’s latitude and longitude coordinates. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "HomeLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with HomeLongitude to specify the precise geolocation of the employee’s home address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "HomeLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with HomeLatitude to specify the precise geolocation of the employee’s home address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "HomePhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s home phone number."
+    },
+    "HomePostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code for the employee’s home address."
+    },
+    "HomeState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state for the employee’s home address."
+    },
+    "HomeStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street for the employee’s home address."
+    },
+    "IndividualId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the Individual record that this employee is assigned to."
+    },
+    "InternalOrganizationUnitId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the InternalOrganizationUnit this employee is assigned to."
+    },
+    "JobProfile": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s job profile at the company."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The employee’s last name.",
+      "required": true
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "LocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the Location that this employee is assigned to."
+    },
+    "ManagerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the Employee record of the employee's manager."
+    },
+    "MediumPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The URL for the medium-sized employee's profile photo. The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo has been uploaded, the URL returned for an older photo isn’t guaranteed to return a photo. Query this field for the URL of the most recent photo. Available in API v51.0 and later."
+    },
+    "MiddleName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s middle name."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "A compound field of Employee.FirstName, Employee.MiddleName, and Employee.LastName."
+    },
+    "NameSuffix": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s suffix."
+    },
+    "OutOfOfficeMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The message portion of the employee availability. This message can provide reasons or details about the change in availability. The maximum length of this string is 40 characters."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who currently owns this record. Default value is the user logged in to the API to perform the create operation."
+    },
+    "PreferredFirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name the employee prefers to be called."
+    },
+    "PreferredPronoun": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee's preferred pronoun. Possible values are: He/Him/His Other/Ask Me She/Her/Hers They/Them/Theirs"
+    },
+    "RelatedPersonId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Links an employee to a person account with a unique value. Reserved for future use. Don’t edit it."
+    },
+    "SmallPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The URL for the small-sized employee's profile photo. The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo has been uploaded, the URL returned for an older photo isn’t guaranteed to return a photo. Query this field for the URL of the most recent photo. Available in API v51.0 and later."
+    },
+    "StatusAsOf": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Start date of the employee’s current status.",
+      "required": true
+    },
+    "StatusEndDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Planned end date for the employee’s status."
+    },
+    "TimeZone": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The time zone which the employee’s work hours fall within."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Lookup field to associate an Employee record with a user in the org. The field is optional and unique."
+    },
+    "WorkPhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee's formatted work phone number including country code and extension."
+    },
+    "WorkerType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of worker for the employee. Possible values are: Alumnus Contractor Employee Intern Temporary",
+      "required": true
+    },
+    "WorkingHoursEnd": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The end time of the employee’s working hours."
+    },
+    "WorkingHoursStart": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The start time of the employee’s working hours."
+    }
+  },
+  "special_access_rules": "To access this object, you must have a Workplace Command Center permission set license and the Provides access to Workplace Command Center features system permission or have the Employee Management and Employee User add-on licenses.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **EmployeeHistory (API version 49.0)**: History is available for tracked fields of the object.\n- **EmployeeOwnerSharingRule**: Sharing rules are available for the object.\n- **EmployeesShare (API version 49.0)**: Sharing is available for the object."
+}

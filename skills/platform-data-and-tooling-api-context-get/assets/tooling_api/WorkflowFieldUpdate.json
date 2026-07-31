@@ -1,0 +1,84 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "WorkflowFieldUpdate - Tooling API",
+  "description": "Represents a workflow field update.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `search()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "EntityDefinition": {
+      "type": "EntityDefinition",
+      "properties": "Filter, Group, Sort.",
+      "description": "Available in API version 34.0. The entity definition for the object associated with this workflow field update.",
+      "required": true
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the entity containing the workflow field update."
+    },
+    "FieldDefinition": {
+      "type": "FieldDefinition",
+      "properties": "Filter, Group, Sort",
+      "description": "The definition of this field.",
+      "required": true
+    },
+    "FieldDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the field for the workflow field update."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "LiteralValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the update uses a literal value, this is that value."
+    },
+    "LookupValueId": {
+      "type": "ID",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the update looks up a value, this lookup value is referenced."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "mns:WorkflowFieldUpdate",
+      "properties": "Create, Nillable, Update",
+      "description": "The workflow field update metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the workflow field update."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the package containing the workflow field update object."
+    },
+    "SourceTableEnumOrId": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The enum (for example, Account) or ID of the object this workflow field update is on."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"FieldUpdateOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Formula\"/>\n    <xsd:enumeration value=\"Literal\"/>\n    <xsd:enumeration value=\"Null\"/>\n    <xsd:enumeration value=\"NextValue\"/>\n    <xsd:enumeration value=\"PreviousValue\"/>\n    <xsd:enumeration value=\"LookupValue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"LookupValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"Queue\"/>\n    <xsd:enumeration value=\"RecordType\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"WorkflowFieldUpdate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:WorkflowFieldUpdate\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"WorkflowFieldUpdate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"field\" type=\"xsd:string\"/>\n        <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"literalValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lookupValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lookupValueType\" minOccurs=\"0\" type=\"tns:LookupValueType\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"notifyAssignee\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"operation\" type=\"tns:FieldUpdateOperation\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"reevaluateOnChange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"targetObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

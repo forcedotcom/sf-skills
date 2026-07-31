@@ -1,0 +1,131 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "NetworkDataCategory - Data API",
+  "description": "Represents data categories in Lightning Web Runtime (LWR) Experience Cloud Sites. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DataCategoryGroupName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the data category group that contains one or more data categories."
+    },
+    "DataCategoryName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the data category."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Description of the data category."
+    },
+    "ImageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Image associated with the data category. This field is a relationship field.",
+      "relationship_name": "Image",
+      "relationship_type": "Lookup",
+      "refers_to": "ManagedContent"
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the data category shown in the UI."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated Experience site. This field is a relationship field.",
+      "relationship_name": "Network",
+      "relationship_type": "Lookup",
+      "refers_to": "Network"
+    }
+  },
+  "special_access_rules": "This object is available only when your org has Digital Experiences and Knowledge or Service Catalog enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataCategoryGroupName": {
+      "field_label": "Data Category Group Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DataCategoryLabel": {
+      "field_label": "Data Category Label",
+      "type": "string",
+      "length": "255"
+    },
+    "DataCategoryName": {
+      "field_label": "Data Category Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "Id": {
+      "field_label": "Network Data Category ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImageId": {
+      "field_label": "Managed Content ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

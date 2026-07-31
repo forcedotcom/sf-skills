@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "LookupFilter - Tooling API",
+  "description": "Represents a lookup filter, which restricts the valid values and lookup dialog results for lookup, master-detail, and hierarchical relationship fields.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Active": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the lookup filter is active."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Namefield, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsOptional": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the lookup filter is optional.",
+      "required": true
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "LookupFilter",
+      "properties": "Create, Nillable, Update",
+      "description": "The metadata for this lookup filter. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the custom field, which is sometimes different from the object’s namespace."
+    },
+    "SourceFieldDefinition": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The field that this filter applies to."
+    },
+    "SourceFieldDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Durable ID of the object specified in SourceFieldDefinition."
+    },
+    "SourceObject": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The object that contains the lookup field that uses this lookup filter. Null if the lookup filter doesn’t reference fields on the source object."
+    },
+    "TargetEntityDefinition": {
+      "type": "EntityDefinition",
+      "properties": "Filter, Group, Sort",
+      "description": "The entity definition for the source lookup field."
+    },
+    "TargetEntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the TargetEntityDefinition."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LookupFilter\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:LookupFilter\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"LookupFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"errorMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"filterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:FilterItem\"/>\n    <xsd:element name=\"infoMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isOptional\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

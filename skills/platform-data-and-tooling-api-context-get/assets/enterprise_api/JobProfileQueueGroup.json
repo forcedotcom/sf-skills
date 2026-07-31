@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "JobProfileQueueGroup - Data API",
+  "description": "JobProfileQueueGroup defines the mapping between Queue and JobProfile and configurations for capacity plans in Workforce Engagement. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AnswerTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The answer time (in seconds) for a specific group."
+    },
+    "CapacityPerJobProfile": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The max number of work units that an agent can handle for a specific job profile."
+    },
+    "GroupCapacity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The distributed number of work units among groups to which a specific job profile is associated."
+    },
+    "GroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Identifies the group or queue record. This is a relationship field.",
+      "relationship_name": "Group",
+      "relationship_type": "Lookup",
+      "refers_to": "Group"
+    },
+    "JobProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Identifies the job profile record. This is a relationship field.",
+      "relationship_name": "JobProfile",
+      "relationship_type": "Lookup",
+      "refers_to": "JobProfile"
+    },
+    "JobProfileShrinkage": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The shrinkage for a specific job profile."
+    },
+    "Priority": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The priority of a group per job profile."
+    },
+    "ServiceLevelAgreementPerc": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The expected SLA percentage for a specific group."
+    },
+    "WorkType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A type of group, indicating whether a queue is synchronous or asynchronous. Possible values are: A—Async S—Sync The default value is 'S'."
+    }
+  },
+  "special_access_rules": "Org must have the Workforce Engagement, Workforce Engagement Configuration, and Omni org preferences enabled. User must have the Workforce Engagement Analyst or Planner user permission set.\n\nOrg must have the Workforce Engagement, Workforce\n         Engagement Configuration, and Omni org preferences enabled. User must have the Workforce\n         Engagement Analyst or Planner user permission set."
+}

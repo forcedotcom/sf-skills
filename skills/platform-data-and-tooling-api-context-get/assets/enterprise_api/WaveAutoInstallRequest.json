@@ -1,0 +1,172 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "WaveAutoInstallRequest - Data API",
+  "description": "Provides access to the concrete object that represents a CRM Analytics auto-install request. The auto-install request tracks the progress of CRM Analytics applications created from CRM Analytics templates by the automated process user. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Configuration": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "CRM Analytics application configuration for the auto-install request."
+    },
+    "FailedReason": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "If the CRM Analytics application fails to complete successfully, this value indicates why the failure occurred. Values can be: OrganizationIncompatible: the org didn't pass the template compatibility checks. AppInstallationSkipped: the org didn't pass the template compatibility checks and was skipped. RetriesExhausted: the request exhausted the maximum number of retries. RequestCancelled: the user canceled the request. AppCreateFailure: the app or folder creation failed. Check the request log and try again. AppUpdateFailure: the app or folder update failed. Check the request log and try again. AppConstructionFailure: the app or folder construction failed. Check the request log and try again. WaveDisabled: the org doesn't have the Wave org permission or preference enabled. Check the licenses for CRM Analytics and try again. CancelFailed: canceling an in-progress app failed. Check the request log and try again. DeleteFailed: deleting an app failed. Check the request log and try again. DependencyFailure: a dependent auto-install request failed. Check App Install History and try again. DependencyCancelled: the user canceled a dependent auto-install request. Check App Install History and try again. FailedToEnqueue: the request failed to enqueue. Check the request log and try again. FailedOther: the request failed for another reason. Check the request log and try again."
+    },
+    "FolderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the CRM Analytics application created by the auto-install request. This is a relationship field.",
+      "relationship_name": "Folder",
+      "relationship_type": "Lookup",
+      "refers_to": "Folder"
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the auto-install request is locked or not."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the auto-install request can be edited or not."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the auto-install request, provided at creation by the user."
+    },
+    "RequestLog": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A log of the auto-install progress and completion results."
+    },
+    "RequestStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the auto-install request. Values can be New, Enqueued, Cancelled, In Progress, AppInProgress, Failed, and Success."
+    },
+    "RequestType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of auto-install request. Values can be WaveEnable, OrgCompatibilityCheck, WaveAppCreate, WaveAppUpdate, WaveAppDelete, and StartDataflow."
+    },
+    "TemplateApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The API name of the CRM Analytics template to create the CRM Analytics app from."
+    },
+    "TemplateVersion": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The version of the CRM Analytics template to create the CRM Analytics app from."
+    }
+  },
+  "special_access_rules": "CRM Analytics must be enabled in your org. A user must have the Auto Install permission enabled.",
+  "usage": "Use this object to query and create auto-install requests for CRM Analytics applications in your org. This object is useful to troubleshoot issues with templated applications that the automated process user creates.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WaveAutoInstallRequestChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "Configuration": {
+      "field_label": "Configuration",
+      "type": "textarea",
+      "length": "100000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FailedReason": {
+      "field_label": "Failed Reason",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FolderId": {
+      "field_label": "Folder ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Request Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Request Name",
+      "type": "string",
+      "length": "255"
+    },
+    "RequestLog": {
+      "field_label": "Request Log",
+      "type": "textarea",
+      "length": "100000"
+    },
+    "RequestStatus": {
+      "field_label": "Request Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RequestType": {
+      "field_label": "Request Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TemplateApiName": {
+      "field_label": "Wave Template API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TemplateVersion": {
+      "field_label": "Wave Template Version",
+      "type": "string",
+      "length": "50"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

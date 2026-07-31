@@ -1,0 +1,167 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ShippingCarrierMethod - Data API",
+  "description": "Shipping service provided by a shipping carrier. Examples include Ground, 2Day, and NextDay. Service depends on the range of transit times available for each carrier. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ExternalReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Unique code, reference, or identifier for the shipping carrier associated with the delivery. Can be used for internal tracking or integration purposes."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the record was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date the record was last viewed."
+    },
+    "ManagedShippingCarrierMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Salesforce-managed shipping carrier method that provides estimated transit times. This field is available in API version 65.0 and later."
+    },
+    "MaxTransitTime": {
+      "type": "integer",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Maximum amount of time required for the carrier to transport and deliver an order. Measured in a specific unit, such as days, hours, or weeks. For example, if the maximum transit time is set to 3, the carrier takes no more than 3 units of the specified transit time unit to deliver the order."
+    },
+    "MinTransitTime": {
+      "type": "integer",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Minimum amount of time required for the carrier to transport and deliver an order. Measured in a specific unit, such as days, hours, or weeks. For example, if the minimum transit time is set to 1, the carrier takes at least 1 unit of the specified transit time unit to deliver the order."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the shipping carrier associated with the delivery."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who currently owns this ShippingCarrierMethod object. Default value is the user logged in to the API to perform the create. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ShippingCarrierId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Id of the company or service responsible for transporting and delivering the order to the customer. This is a relationship field.",
+      "relationship_name": "ShippingCarrier",
+      "refers_to": "ShippingCarrier"
+    },
+    "ShippingScope": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Type of shipping carrier method. This field is available in API version 65.0 and later. Possible values are: Domestic DomesticAndInternational International The default value is Domestic."
+    },
+    "TransitTimeUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Unit of measurement used for transit time. Specifies the time interval in which the minimum and maximum transit times are expressed. The available options are: Days Hours Weeks"
+    }
+  },
+  "special_access_rules": "The ShippingCarrierMethodId object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ExternalReference": {
+      "field_label": "External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Shipping Carrier Method ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MaxTransitTime": {
+      "field_label": "Maximum Transit Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "MinTransitTime": {
+      "field_label": "Minimum Transit Time",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShippingCarrierId": {
+      "field_label": "Shipping Carrier ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TransitTimeUnit": {
+      "field_label": "Transit Time Unit",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

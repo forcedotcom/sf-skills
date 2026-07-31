@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "RecommendationStrategy - Tooling API",
+  "description": "Represents a recommendation strategy. Recommendation strategies are applications, similar to data flows, that determine a set of recommendations to be delivered to the client through data retrieval, branching, filtering, and logic operations. Available in API 45.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContextRecordType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The sObject type of the $Record used by the flow."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Description of the recommendation strategy."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the recommendation strategy in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name."
+    },
+    "Fullname": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata type in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsTemplate": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the recommendation strategy is a template (true) or not (false). When installed from managed packages, recommendation strategies can’t be viewed or cloned by subscribers because of intellectual property (IP) protection. But when those recommendation strategies are templates, subscribers can open them in a builder, clone them, and customize the clones. The default value is false. Available in API version 47.0 and later."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the recommendation strategy.",
+      "required": true
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the recommendation strategy."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Master label for the recommendation strategy. This display value is the internal label that is not translated. Limit: 40 characters."
+    },
+    "Metadata": {
+      "type": "mns: RecommendationStrategy",
+      "properties": "Create, Nillable, Update",
+      "description": "The recommendation strategy’s metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance. If the recommendation strategy is part of a managed package, this field will be Null. Metadata isn’t returned for recommendation strategies in managed packages, unless the recommendation strategies are templates."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition organization that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values: In Developer Edition organizations, the namespace prefix is set to the namespace prefix of the organization for all objects that support it. There is an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition organization of the package developer. In organizations that are not Developer Edition organizations, NamespacePrefix is only set for objects that are part of an installed managed package. There is no namespace prefix for all other objects."
+    },
+    "OnBehalfOfExpression": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Formula expression defining the intended target of the recommendations (for example, the Contact associated with a Case). Mainly used for reaction tracking."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"RecommendationStrategy\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:RecommendationStrategy\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"RecommendationStrategy\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionContext\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyAction\"/>\n        <xsd:element name=\"contextRecordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"filter\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeFilter\"/>\n        <xsd:element name=\"if\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeIf\"/>\n        <xsd:element name=\"invocableAction\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeInvocableAction\"/>\n        <xsd:element name=\"isTemplate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"map\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeMap\"/>\n        <xsd:element name=\"mutuallyExclusive\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeExclusive\"/>\n        <xsd:element name=\"onBehalfOfExpression\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"recommendationLimit\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeRecommendationLimit\"/>\n        <xsd:element name=\"recommendationLoad\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeRecommendationLoad\"/>\n        <xsd:element name=\"sort\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeSort\"/>\n        <xsd:element name=\"union\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:StrategyNodeUnion\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

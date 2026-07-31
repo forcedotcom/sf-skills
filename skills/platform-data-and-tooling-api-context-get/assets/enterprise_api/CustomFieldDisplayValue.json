@@ -1,0 +1,115 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "CustomFieldDisplayValue - Data API",
+  "description": "Stores variation details for the product attribute item view. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Color": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The color variation in hexadecimal value format, for example #FF0000."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The currency ISO code allowed by the organization. Possible value is: USD—U.S. Dollar The default value is USD."
+    },
+    "CustomFieldDisplayId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the custom field display that this variation is associated with. This field is a relationship field.",
+      "relationship_name": "CustomFieldDisplay",
+      "refers_to": "CustomFieldDisplay"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the custom field display value."
+    },
+    "PickListApiValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The API name of the color variation picklist value, for example, red_c."
+    }
+  },
+  "special_access_rules": "CustomFieldDisplayValue is available only if the B2B or D2C Commerce license is enabled.",
+  "usage": "This object only gets populated when display type in the CustomFieldDisplay object is ColorSwatch.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as CustomFieldDisplayValue.\n\n- **CustomFieldDisplayValueChangeEvent**: Change events are available for the object.\n- **CustomFieldDisplayValueFeed**: Feed tracking is available for the object.\n- **CustomFieldDisplayValueHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "Color": {
+      "field_label": "Color",
+      "type": "string",
+      "length": "7"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CustomFieldDisplayId": {
+      "field_label": "Custom Field Display ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Custom Field Display Value ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Custom Field Display Value Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PickListApiValue": {
+      "field_label": "Pick List API Value",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "SourceCodeRepositoryBranch - Data API",
+  "description": "Represents a specific branch within a source control repository, such as a feature branch for a work item or a release branch for a pipeline stage. Work Item and Pipeline Stage records refer to this object. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IgnoreRules": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Serialized JSON representation of the preprocessed contents of the .forceignore file on the branch."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the branch as it exists in the source control provider. For example, feature/WI-000001."
+    },
+    "ParentRemoteReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique identifier of the parent branch from which this branch was originally created. In GitHub, this ID is called a SHA. DevOps Center uses this ID to recreate the branch if necessary."
+    },
+    "RemoteReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique identifier representing the latest synced state of this branch in the source control provider. In GitHub, this ID is called the HEAD SHA."
+    },
+    "RemoteReferenceDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last date and time when the branch identified by Remote Reference field was last updated or synced."
+    },
+    "SourceCodeRepositoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent SourceCodeRepository record in which the branch lives. This field is a relationship field.",
+      "relationship_name": "SourceCodeRepository",
+      "relationship_type": "Master-detail",
+      "refers_to": "SourceCodeRepository (the master object)"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the current health or sync state of the branch. Possible values are: DEPLOYMENT_ERROR—A deployment to the environment associated with this branch failed. MERGE_CONFLICT—A conflict exists between this branch and its target promotion branch."
+    }
+  },
+  "usage": "Use this object to track the state of the feature branch every time a developer starts a new work item. Similarly, each stage in a pipeline is mapped to a specific branch defined in this object. It stores remote references (commit SHAs) and tracks sync issues like merge conflicts.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SourceCodeRepositoryBranchChangeEvent**: Change events are available for the object.\n- **SourceCodeRepositoryBranchFeed**: Feed tracking is available for the object.\n- **SourceCodeRepositoryBranchHistory**: History is available for tracked fields of the object.\n- **SourceCodeRepositoryBranchOwnerSharingRule**: Sharing rules are available for the object.\n- **SourceCodeRepositoryBranchShare**: Sharing is available for the object."
+}

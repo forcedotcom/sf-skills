@@ -1,0 +1,215 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "AIRecordInsight - Data API",
+  "description": "Represents an Einstein prediction insight. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AiApplicationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of the AiApplication that generated this prediction. This is a relationship field.",
+      "relationship_name": "AiApplication",
+      "relationship_type": "Lookup",
+      "refers_to": "AIApplication"
+    },
+    "Confidence": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Relative confidence strength of the generated prediction insight, from 0.0 to 1.0. Higher values (near 1.0) indicate stronger confidence."
+    },
+    "MlPredictionDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is a relationship field.",
+      "relationship_name": "MlPredictionDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "MLPredictionDefinition"
+    },
+    "ModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the model to use when generating the insight. This field is a polymorphic relationship field.",
+      "relationship_name": "Model",
+      "relationship_type": "Lookup",
+      "refers_to": "MLModel"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the AIRecordInsight."
+    },
+    "PredictionField": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label of the field that Einstein is making predictions for, such as “Case.IsEscalated”."
+    },
+    "RunGuid": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "A unique identifier for the Einstein process that made the prediction."
+    },
+    "RunStartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time the Einstein prediction process was started."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of this insight. Possible values are: Defunct—The insight has been consumed by the Einstein feature that owns the prediction. For example, Case Classification marks an insight as defunct if a predicted recommendation was presented to a user and the user either accepted or ignored the recommendation. This behavior ensures that the same recommendation isn’t presented multiple times to the user. New—The insight hasn’t been consumed by the Einstein feature."
+    },
+    "TargetField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The field to which prediction results are written. Case Classification doesn’t use this field."
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the record Einstein is making predictions for. This is a relationship field.",
+      "relationship_name": "Target",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, ActivationTarget, Address, AlternativePaymentMethod, ApiAnomalyEventStore, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskIndDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, AssociatedLocation, AuthorizationForm, AuthorizationFormConsent, AuthorizationFormDataUse, AuthorizationFormText, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CampaignMember, CardPaymentMethod, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CodeSet, CodeSetBundle, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, ConsumptionRate, ConsumptionSchedule, Contact, ContactEncounter, ContactEncounterParticipant, ContactPointAddress, ContactPointConsent, ContactPointEmail, ContactPointPhone, ContactPointTypeConsent, ContactRequest, ContentVersion, Contract, CoverageBenefit, CoverageBenefitItem, CredentialStuffingEventStore, CreditMemo, CreditMemoLine, DataUseLegalBasis, DataUsePurpose, DelegatedAccount, DigitalWallet, DocumentChecklistItem, DuplicateRecordItem, DuplicateRecordSet, EmailMessage, EngagementChannelType, EnrollmentEligibilityCriteria, Event, HealthCareDiagnosis, HealthCareProcedure, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, Idea, Identifier, IdentityDocument, Image, Individual, IndividualApplication, Invoice, InvoiceLine, Lead, Location, LocationTrustMeasure, MemberPlan, MessagingEndUser, OperatingHours, Opportunity, OpportunityContactRole, OpportunityLineItem, Order, OrderItem, OtherComponentTask, PartyConsent, Payment, PaymentAuthAdjustment, PaymentAuthorization, PaymentGateway, PaymentGroup, PaymentLineInvoice, PersonEducation, PersonLanguage, PersonLifeEvent, PersonName, PlanBenefit, PlanBenefitItem, Pricebook2, PricebookEntry, ProcessException, Product2, ProductConsumptionSchedule, ProductFulfillmentLocation, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, PurchaserPlan, PurchaserPlanAssn, QuickText, ReceivedDocument, Recommendation, Refund, RefundLinePayment, ReportAnomalyEventStore, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderItemAdjustment, ReturnOrderItemTax, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, ServiceTerritoryWorkType, SessionHijackingEventStore, SharingRecordCollection, Shift, Shipment, ShipmentItem, SkillRequirement, SocialPersona, SocialPost, Solution, Task, TimeSlot, UnitOfMeasure, UserProvisioningRequest, VideoCall, Visit, VisitedParty, Visitor, VoiceCall, VolunteerProject, WorkBadge, WorkBadgeDefinition, WorkOrder, WorkOrderLineItem, WorkThanks, WorkType, WorkTypeGroup, WorkTypeGroupMember"
+    },
+    "TargetSobjectType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of the target object, such as Account or Case."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of insight. Possible values are: Action—An insight that indicates a suggested action, such as sending an email. Lookup—An insight that indicates a related value not directly related to the target object and field. MultiValue—An insight with multiple values, such as a multi-class classification. SimilarRecord—An insight that indicates similar or duplicate records. SingleValue—A single value insight, such as a regression number or a score."
+    },
+    "ValidUntil": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The day and time this insight is valid until. After this day and time, the insight might no longer be valid due to new prediction results from new or changed data. If this field is null, this insight never expires."
+    }
+  },
+  "special_access_rules": "Prediction insight objects are available in orgs that have Einstein features, such as Prediction Builder or Case Classification, enabled.",
+  "usage": "Custom fields can’t be added to Einstein insight objects. Einstein insights contain information about target fields and predicted value. Your org may have created Einstein predictions that are associated with target fields with field-level security restrictions. To control how users access Einstein insights records, use Salesforce data access features such as user profiles and permission sets.\n\nCustom fields can’t be added to Einstein insight objects.\n\nEinstein insights contain information about target fields and predicted value. Your org may have created Einstein predictions that are associated with target fields with field-level security restrictions. To control how users access Einstein insights records, use Salesforce data access features such as user profiles and permission sets.",
+  "field_reference": {
+    "AiApplicationId": {
+      "field_label": "AI Application ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Confidence": {
+      "field_label": "Confidence",
+      "type": "double",
+      "precision": "4",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "AI Record Insight ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MlPredictionDefinitionId": {
+      "field_label": "ML Prediction Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ModelId": {
+      "field_label": "AI Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PredictionField": {
+      "field_label": "Prediction Field",
+      "type": "string",
+      "length": "250"
+    },
+    "RunGuid": {
+      "field_label": "Run GUID",
+      "type": "string",
+      "length": "250"
+    },
+    "RunStartTime": {
+      "field_label": "Run Start Time",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetField": {
+      "field_label": "Target Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TargetId": {
+      "field_label": "Target ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TargetSobjectType": {
+      "field_label": "Target sObject Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ValidUntil": {
+      "field_label": "Valid Until",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

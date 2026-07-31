@@ -1,0 +1,93 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "CspViolationEventLog - Data API",
+  "description": "CSP violation events capture details about blocked resource requests from Lightning Experience pages based on your content security policy (CSP). This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "examples",
+    "example",
+    "possible_values"
+  ],
+  "fields": {
+    "BlockedUri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The full string of the blocked resource. If the call to the blocked resource used a URL, BLOCKED_URI is the full URL. Or,for violations with a DIRECTIVE of script-src directives, inline or eval.",
+      "examples": "https://www.example.com/images/picture.png file://host1:0002/media/video.mp4 inline"
+    },
+    "BlockedUriDomain": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If BLOCKED_URI is a URL, the domain for that URL. To allow resources to be loaded from the BLOCKED_URI, BLOCKED_URI_DOMAIN is the endpointUrl value to add or update in the CspTrustedSite Metadata API."
+    },
+    "ColumnNumber": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The column number in the document or worker script at which the violation occurred. This value is relevant only when DIRECTIVE is script-src. For those violations, use this value with LINE_NUMBER to identify the location of the violation.",
+      "example": "27"
+    },
+    "Context": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The content security policy (CSP) context for the request. The CSP context controls which pages can load content from a CspTrustedSite. CSP violation events capture details about blocked resource requests from only Lightning Experience pages, this value is always Lightning."
+    },
+    "Directive": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The CSP directive that blocked the resource request.",
+      "possible_values": "font-src frame-src img-src media-src style-src script-src For information on these directives and a full list of all CSP directives, see MDN Web Docs: Content-Security-Policy."
+    },
+    "Disposition": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The CSP violation handling instruction for the user agent at the time of the violation.",
+      "possible_values": "enforce—Enforce the policy violation. For violations with this DISPOSITION, the resource request was blocked. report—Report the policy violation. For violations with this DISPOSITION, the resource request wasn’t blocked, but the violation was reported."
+    },
+    "LineNumber": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The line number in the document or worker script at which the violation occurred. This value is relevant only when DIRECTIVE is script-src. For those violations, use this value with COLUMN_NUMBER to identify the location of the violation.",
+      "example": "12"
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID."
+    },
+    "ResourceSample": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A sample of the resource that caused the violation, usually the first 40 characters, or the empty string."
+    },
+    "Source": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The page where this CSP violation originated. For example, if your CSP policy prevented an image from loading on a Visualforce page, SOURCE contains the URL of that page."
+    },
+    "SourceFile": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL of the script in which the violation occurred. If the violation didn’t occur in a script, SOURCE_FILE is null."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT."
+    },
+    "UniqueIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A string identifier for the CSP violation."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission.",
+  "usage": "Only one CSP violation event log file is available at a time. When the daily incremental event log file is generated during the daily background process, the new file replaces the existing file. If the event log file doesn’t exist, either the log generation process hasn’t run yet or there’s no violation data to report for that 24-hour window. The event log file is generated only when at least one violation occurred for the day. To collect CSP violation logs for multiple days, schedule a daily query of the CSP Violation event type via REST API. For example, you can configure a cron job in Unix or a scheduled task in Windows to run the query.\n\nOnly one CSP violation event log file is available at a time. When the daily incremental event log file is generated during the daily background process, the new file replaces the existing file.\n\nIf the event log file doesn’t exist, either the log generation process hasn’t run yet or there’s no violation data to report for that 24-hour window. The event log file is generated only when at least one violation occurred for the day.\n\nTo collect CSP violation logs for multiple days, schedule a daily query of the CSP Violation event type via REST API. For example, you can configure a cron job in Unix or a scheduled task in Windows to run the query."
+}

@@ -4,6 +4,22 @@ description: "Salesforce Connected Apps and External Client Apps OAuth configura
 allowed-tools: Bash Read Write Edit Glob Grep WebFetch AskUserQuestion TodoWrite
 metadata:
   version: "1.1"
+  minApiVersion: "57.0"
+  relatedSkills:
+    - "integration-connectivity-generate"
+    - "platform-apex-generate"
+    - "platform-metadata-deploy"
+  cliTools:
+    - tool: ["curl"]
+      semver: ">=7.0.0"
+    - tool: ["jq"]
+      semver: ">=1.7.0"
+    - tool: ["openssl"]
+      semver: ">=1.1.0"
+    - tool: ["python3"]
+      semver: ">=3.10.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # integration-connectivity-connected-app-configure: Salesforce Connected Apps & External Client Apps

@@ -1,0 +1,169 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "RecordActionHistory - Data API",
+  "description": "Represents the lifecycle of a RecordAction as it goes through different states. Available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "properties",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionDefinitionApiName": {
+      "type": "string",
+      "description": "The API name of the action associated with the record. To distinguish a quick action from a flow with the same API name, we prepend \"QuickAction\" to the API name of every quick action.",
+      "required": true
+    },
+    "ActionDefinitionLabel": {
+      "type": "string",
+      "description": "The label of the action that took place.",
+      "required": true
+    },
+    "ActionType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Restricted picklist",
+      "description": "The type of action associated with the record. Possible values are: Flow (default) QuickAction",
+      "required": true
+    },
+    "IsMandatory": {
+      "type": "boolean",
+      "properties": "Defaulted on create",
+      "description": "Optional. Specifies whether the action is mandatory. The default value is false."
+    },
+    "LoggedTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The timestamp when the state change occurred.",
+      "required": true
+    },
+    "ParentRecordId": {
+      "type": "reference",
+      "properties": "Filter, Sort",
+      "description": "The parent record for the associated action. This is a relationship field.",
+      "relationship_name": "ParentRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Address, Asset, AssetRelationship, AssociatedLocation, Case, ChangeRequest, CollaborationGroup, Contact, ContactRequest, Contract, EnhancedLetterhead, Incident, Lead, Location, OperatingHours, Opportunity, Order, Pricebook2, PricebookEntry, Problem, Product2, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, RebateMemberAggregateItem, ResourceAbsence, Scorecard, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, Shipment, SkillRequirement, SocialPersona, SocialPost, TimeSlot, User, Visit, VoiceCall, WorkType",
+      "required": true
+    },
+    "Pinned": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Nillable, Restricted picklist",
+      "description": "Optional. Specifies whether the action is pinned to the top or bottom, or unpinned. Possible values are: None Top Bottom"
+    },
+    "RecordActionId": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "The ID of the RecordAction.",
+      "required": true
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Restricted picklist",
+      "description": "The state of the action. A state change triggers the logging of a history event. Possible values are: Started (default) Paused Resumed Completed Unlinked—The action was unlinked because the flow was paused and the current record for the flow interview changed.",
+      "required": true
+    },
+    "UserId": {
+      "type": "reference",
+      "description": "The user that conducted the action. This is a polymorphic relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User",
+      "required": true
+    }
+  },
+  "special_access_rules": "This object is always read-only.",
+  "usage": "The RecordActionHistory object represents the lifecycle of an action on a record as it goes through different states. For example, this SOQL query follows the ParentRecordId, LoggedTime (DESC) pattern. Asynchronous SOQL queries do not need to follow a pattern, and can query any field. Apex triggers cannot reference big object records. Use SOQL queries if you want to query RecordActionHistory records in Apex. For more information about the Actions & Recommendations component and how it works with RecordActions, see the Lightning Flow for Service Developer Guide. Learn more about big objects and how to query them in the Query Big Objects module on Trailhead.\n\nThe RecordActionHistory object represents the lifecycle of an action on a record as it goes through different states.\n\nFor example, this SOQL query follows the ParentRecordId, LoggedTime (DESC) pattern.\n\nAsynchronous SOQL queries do not need to follow a pattern, and can query any field.\n\nApex triggers cannot reference big object records. Use SOQL queries if you want to query RecordActionHistory records in Apex.\n\nFor more information about the Actions & Recommendations component and how it works with RecordActions, see the Lightning Flow for Service Developer Guide. Learn more about big objects and how to query them in the Query Big Objects* module on Trailhead.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"RecordActionHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActionDefinitionApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActionDefinitionLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActionType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsMandatory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LoggedTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ParentRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"ParentRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Pinned\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordActionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActionDefinitionApiName": {
+      "field_label": "Action Definition API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ActionDefinitionLabel": {
+      "field_label": "Action Definition Label",
+      "type": "string",
+      "length": "255"
+    },
+    "ActionType": {
+      "field_label": "Action Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Record Action History ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsMandatory": {
+      "field_label": "Is Mandatory",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LoggedTime": {
+      "field_label": "Logged Time",
+      "type": "datetime"
+    },
+    "ParentRecordId": {
+      "field_label": "Parent Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Pinned": {
+      "field_label": "Pinned",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecordActionId": {
+      "field_label": "RecordAction Id",
+      "type": "string",
+      "length": "18"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

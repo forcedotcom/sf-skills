@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentTaxonomyTermRelatedTerm - Data API",
+  "description": "Represents the relationship between two terms in a content taxonomy. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentTaxonomyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the content taxonomy to which the term belongs. This field is a relationship field.",
+      "relationship_name": "ContentTaxonomy",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentTaxonomy object"
+    },
+    "ContentTaxonomyTermId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the primary term that has a relationship with another term. This field is a relationship field.",
+      "relationship_name": "ContentTaxonomyTerm",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentTaxonomyTerm object"
+    },
+    "ContentTaxonomyTrmRelaTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the type of relationship between the two taxonomy terms. This field is a relationship field.",
+      "relationship_name": "ContentTaxonomyTrmRelaType",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentTaxonomyTermRelationshipType object"
+    },
+    "RelatedContentTaxonomyTermId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the term that is related to the primary term. This field is a relationship field.",
+      "relationship_name": "RelatedContentTaxonomyTerm",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentTaxonomyTerm object"
+    }
+  },
+  "special_access_rules": "To view this object, users need the permission View Content Taxonomy enabled. To edit this object, users need View Content Taxonomy and Manage Content Taxonomy enabled.",
+  "usage": "To relate a term to another term in a content taxonomy, use this object in addition to the ContentTaxonomyTerm object. This object can’t be updated. You can only create and delete it.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentTaxonomyTermRelatedTerm\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentTaxonomy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentTaxonomy\"/>\n        <element name=\"ContentTaxonomyId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentTaxonomyTerm\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentTaxonomyTerm\"/>\n        <element name=\"ContentTaxonomyTermId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentTaxonomyTrmRelaType\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentTaxonomyTermRelationshipType\"/>\n        <element name=\"ContentTaxonomyTrmRelaTypeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"RelatedContentTaxonomyTerm\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentTaxonomyTerm\"/>\n        <element name=\"RelatedContentTaxonomyTermId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ContentTaxonomyId": {
+      "field_label": "Content Taxonomy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentTaxonomyTermId": {
+      "field_label": "Content Taxonomy Term ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentTaxonomyTrmRelaTypeId": {
+      "field_label": "Content Taxonomy Term Relationship Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Content Taxonomy Term Related Term ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RelatedContentTaxonomyTermId": {
+      "field_label": "Content Taxonomy Term ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

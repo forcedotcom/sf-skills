@@ -1,0 +1,486 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "recordtypessupported_metadata",
+    "recordtypeinfo_metadata",
+    "wsdl_segment"
+  ],
+  "title": "EntityDefinition - Tooling API",
+  "description": "Provides row-based access to metadata about standard and custom objects.",
+  "supported_soap_calls": "`query()`, `search()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApexTriggers": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the Apex triggers associated with this object. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "AssignmentRules": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents assignment rules that allow you to automatically route cases to the appropriate users or queues. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "AutoResponseRules": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the auto-response rules defined for the object. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "BusinessProcesses": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the business processes defined for the object. Business processes display different picklist values for users based on their profile and associated record type. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "ChildRelationships": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the child relationships defined for the object. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "CompactLayouts": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the compact layouts defined for the object. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "CustomFields": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the custom fields defined for the object. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "DefaultCompactLayout": {
+      "type": "CompactLayoutInfo",
+      "properties": "Create, Nillable, Update",
+      "description": "Metadata about the compact layout defined as the default for this object, if any."
+    },
+    "DefaultCompactLayoutId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the default compact layout, if any."
+    },
+    "DefaultImplementation": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "DeploymentStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the deployment status of the object. Controls whether a custom object and its associated custom tab, related lists, and reports are visible to non-admin users. This field is available in Tooling API version 37.0 and later. Valid values are: InDevelopment Deployed"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The description of the object. A meaningful description makes it easier to distinguish between custom objects when they're viewed in a list. This field is available in Tooling API version 37.0 and later."
+    },
+    "DetailUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL to the read-only detail page for this object. Corresponds to the urlDetail field in DescribeSobjectResult. This field is available in Tooling API version 34.0 and later."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The developer’s internal name for the object. This field isn't unique, so if you query by this field, you can get multiple records with the same DeveloperName value. For example, in an org, you could have these three objects with a DeveloperName of Account: a standard Account object, a custom object, and a packaged custom object. If you want to query by a unique identifier, use QualifiedApiName."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. Simplify queries by using this field instead of making multiple queries."
+    },
+    "EditDefinitionUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is available in Tooling API version 34.0 and later."
+    },
+    "EditUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL used when editing the custom object definition. Corresponds to the urlEdit field on DescribeSobjectResult. This field is available in Tooling API version 34.0 and later."
+    },
+    "ExtendedBy": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "ExtendsInterfaces": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "ExternalSharingModel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The external sharing model. Possible values are: None Read Edit ControlledByLeadOrContact ControlledByCampaign This field is available in Tooling API version 38.0 and later."
+    },
+    "FieldSets": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the field sets defined for the object. Because this field represents a relationship, use only in subqueries."
+    },
+    "Fields": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the standard and custom fields defined for this object. Because this field represents a relationship, use only in subqueries."
+    },
+    "FormulaVariables": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the formulas that are built on this object."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The name of the object. If a field, the name must specify the parent object, for example Account.FirstName. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "HelpSettingPageName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the custom help setting page. This field is available in Tooling API version 34.0 and later."
+    },
+    "HelpSettingPageUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL pointing to the custom help setting page for custom objects. This field is available in Tooling API version 34.0 and later."
+    },
+    "ImplementedBy": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "ImplementsInterfaces": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "InternalSharingModel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The internal sharing model. Possible values are: None Read Edit ControlledByLeadOrContact ControlledByCampaign This field is available in Tooling API version 38.0 and later."
+    },
+    "IsActivityTrackable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, activities, such as tasks and scheduled calendar events associated with the custom object, can be tracked. Can be enabled only for custom objects. This field is available in Tooling API version 37.0 and later."
+    },
+    "IsApexTriggerable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, Apex triggers can be defined for the object."
+    },
+    "IsAutoActivityCaptureEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object is enabled for Einstein Activity Capture. This field is available in Tooling API version 41.0 and later."
+    },
+    "IsCompactLayoutable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object supports compact layouts. That is, compact layouts can be defined, a system compact layout can be synthesized, or both."
+    },
+    "IsCreatable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, records based on the object (true) can be created. This field is unavailable starting with version 35.0. Use IsCreatable on UserEntityAccess instead."
+    },
+    "IsCustomSetting": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object is a custom setting. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsCustomizable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, custom fields can be defined for the object."
+    },
+    "IsDeletable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object can be deleted. This field is unavailable starting with version 35.0. Use IsDeletable on UserEntityAccess instead."
+    },
+    "IsDeprecatedAndHidden": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, this object is unavailable for the current version. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsEverCreatable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object can be created using an API, assuming the current user has the appropriate permissions. If false, the application server manages the object and no user can create it. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsEverDeletable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object can be created using an API, assuming the current user has the appropriate permissions. If false, the application server manages the object and no user can delete it. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsEverUpdatable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object can be created using an API, assuming the current user has the appropriate permissions. If false, the application server manages the object and no user can modify it. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsFeedEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the Chatter feed is enabled for this object. This field is available in Tooling API version 34.0 and later."
+    },
+    "IsFieldHistoryTracked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, your org can track changes to fields on the custom object records. History data is available for reporting, so users can easily create audit trail reports. Can be enabled only for custom objects. This field is available in Tooling API version 37.0 and later."
+    },
+    "IsFlsEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, you can set field-level security on applicable fields. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsIdEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, you can include Id in the SELECT clause of a query on this object. This field is available in Tooling API version 35.0 and later.For example, assume that there's an object backed by an OData data source with the High Data Volume option selected. That object’s IsIdEnabled field is false."
+    },
+    "IsInterface": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Reserved for future use."
+    },
+    "IsLayoutable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, layouts can be defined for the object. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsMruEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, Most Recently Used (MRU) list functionality is enabled for this object. This field is available in Tooling API version 37.0 and later."
+    },
+    "IsQueryable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object can be queried."
+    },
+    "IsReplicateable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object can be replicated. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsReportingEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the data in the custom object's records is available for reporting. Can be enabled only on custom objects. This field is available in Tooling API version 37.0 and later."
+    },
+    "IsRetrieveable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the object can be retrieved. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsSearchable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, records of this object are indexed for search. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsSearchLayoutable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, you can customize search layouts for this object. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsTriggerable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, you can use triggers with this object. This field is available in Tooling API version 35.0 and later."
+    },
+    "IsWorkflowEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, workflow rules can be defined for the object."
+    },
+    "KeyPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The first three digits of the object’s ID, which identify the object type, such as Account or Opportunity."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for this object, used in the compact layout and in the user's language locale."
+    },
+    "Layouts": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the layouts defined for this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "Limits": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The limits defined for this object. Corresponds to the Limits page for each standard object in Setup, or the Limits related list for each custom object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "LookupFilters": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the lookup filters defined for this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label for this object, which displays in Setup. The master label is in the default language locale for the organization. If there's no default language locale, the label is in en_US."
+    },
+    "Metadata": {
+      "type": "mns: CustomObject",
+      "properties": "Create, Nillable, Update",
+      "description": "Metadata about the standard or custom object. Details are available in the CustomObject entry in the metadata namespace in the Tooling API WSDL. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with this object. Each Developer Edition organization that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of these values: In Developer Edition organizations, the namespace prefix is set to the namespace prefix of the organization for all objects that support it. There’s an exception if an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition organization of the package developer. In organizations that aren't Developer Edition organizations, NamespacePrefix is set only for objects that are part of an installed managed package. There’s no namespace prefix for all other objects."
+    },
+    "NewUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL used when editing a new standard or custom record. Corresponds to the urlNew field on DescribeSobjectResult. This field is available in Tooling API version 34.0 and later."
+    },
+    "OwnerChangeOptions": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Use only in subqueries. This field is available in Tooling API version 35.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "Particles": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The particles defined for this object. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "PluralLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The plural version of the object’s Label."
+    },
+    "Publisher": {
+      "type": "Publisher",
+      "properties": "Create, Nillable, Update",
+      "description": "The publisher of this object, for example Salesforce, a user, or a package name. This field is available in Tooling API version 34.0 and later."
+    },
+    "PublisherId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the publisher associated with this object. This field is available in Tooling API version 34.0 and later."
+    },
+    "QualifiedApiName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "A unique external ID for the object of the form NamespacePrefix__DeveloperName for standard objects and NamespacePrefix__DeveloperName__c for custom objects. When performing SOQL queries with Custom Metadata Type relationship fields, use this field to obtain fully qualified namespaces."
+    },
+    "QuickActionDefinitions": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the quick actions defined for this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "RecordTypes": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the record types defined for this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "RecordTypesSupported": {
+      "type": "RecordTypesSupported",
+      "properties": "Nillable",
+      "description": "Represents the record types defined for this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later."
+    },
+    "RelatedListDefinitions": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents related lists defined for this object. Because this field represents a relationship, use only in subqueries. Available in API version 55.0 and later."
+    },
+    "RelationshipDomains": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Metadata about the relationships with other objects that this object has. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "RunningUserEntityAccess": {
+      "type": "UserEntityAccess",
+      "properties": "Create, Nillable, Update",
+      "description": "Represents the running user’s access to this object. This field is available in Tooling API version 34.0 and later."
+    },
+    "RunningUserEntityAccessId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the UserEntityAccess record associated with this object. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "SearchLayouts": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the search layouts associated with this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "StandardActions": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the standard actions defined for this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "ValidationRules": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the validation rules defined for this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "WebLinks": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the Weblinks associated with this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "WorkflowAlerts": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the workflow alerts associated with this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "WorkflowFieldUpdates": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the workflow field updates for this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "WorkflowOutboundMessages": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the workflow outbound messages associated with this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    },
+    "WorkflowTasks": {
+      "type": "QueryResult",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the workflow tasks associated with this object. Use only in subqueries. This field is available in Tooling API version 34.0 and later. Because this field represents a relationship, use only in subqueries."
+    }
+  },
+  "recordtypessupported_metadata": {
+    "recordTypeInfos": {
+      "type": "RecordTypeInfo",
+      "description": "Represents the RecordTypeInfo records for the object. Use only in subqueries. This field is available in Tooling API version 35.0 and later."
+    }
+  },
+  "recordtypeinfo_metadata": {
+    "available": {
+      "type": "boolean",
+      "description": "If true, this record type is available for use. This field is available in Tooling API version 35.0 and later."
+    },
+    "defaultRecordTypeMapping": {
+      "type": "boolean",
+      "description": "This field is available in Tooling API version 35.0 and later."
+    },
+    "developerName": {
+      "type": "string",
+      "description": "The developer name of the record type. This field is available in API version 43.0 and later."
+    },
+    "master": {
+      "type": "boolean",
+      "description": "This field is available in Tooling API version 35.0 and later."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the record type. This field is available in Tooling API version 35.0 and later."
+    },
+    "recordTypeId": {
+      "type": "Id",
+      "description": "ID of the record type. This field is available in Tooling API version 35.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EntityDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:CustomObject\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"CustomObject\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ActionOverride\"/>\n        <xsd:element name=\"allowInChatterGroups\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"compactLayoutAssignment\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHelp\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHelpPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customSettingsType\" minOccurs=\"0\" type=\"tns:CustomSettingsType\"/>\n        <xsd:element name=\"deploymentStatus\" minOccurs=\"0\" type=\"tns:DeploymentStatus\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableActivities\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBulkApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataTranslation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDivisions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedLookup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeeds\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLicensing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePublishStatusTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReports\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSearch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableStreamingApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"eventType\" minOccurs=\"0\" type=\"tns:PlatformEventType\"/>\n        <xsd:element name=\"externalDataSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalRepository\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"gender\" minOccurs=\"0\" type=\"tns:Gender\"/>\n        <xsd:element name=\"household\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"nameField\" minOccurs=\"0\" type=\"mns:CustomField\"/>\n        <xsd:element name=\"pluralLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"profileSearchLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:ProfileSearchLayouts\"/>\n        <xsd:element name=\"publishBehavior\" minOccurs=\"0\" type=\"tns:PlatformEventPublishBehavior\"/>\n        <xsd:element name=\"recordTypeTrackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"searchLayouts\" minOccurs=\"0\" type=\"mns:SearchLayouts\"/>\n        <xsd:element name=\"sharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"startsWith\" minOccurs=\"0\" type=\"tns:StartsWith\"/>\n        <xsd:element name=\"visibility\" minOccurs=\"0\" type=\"tns:SetupObjectVisibility\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"QueryLocator\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"QueryResult\">\n  <xsd:sequence>\n    <xsd:element name=\"done\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"entityTypeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"nextRecordsUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"queryLocator\" type=\"tns:QueryLocator\"/>\n    <xsd:element name=\"records\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"ens:sObject\"/>\n    <xsd:element name=\"size\" type=\"xsd:int\"/>\n    <xsd:element name=\"totalSize\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordTypeInfo\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"available\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"defaultRecordTypeMapping\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"master\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"recordTypeId\" type=\"tns:ID\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordTypesSupported\">\n  <xsd:sequence>\n    <xsd:element name=\"recordTypeInfos\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordTypeInfo\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

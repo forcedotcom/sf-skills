@@ -1,0 +1,133 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Partner - Data API",
+  "description": "Represents a partner relationship between two Account records or between an Opportunity record and an Account record.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountFromId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Required if OpportunityId is null. ID of the main account in a partner relationship between two accounts. Specifying this field when creating a Partner record creates two AccountPartner records, one for each direction of the relationship. If you specify the OpportunityId field, you can’t specify this field as well. This is a relationship field.",
+      "relationship_name": "AccountFrom",
+      "relationship_type": "Lookup",
+      "refers_to": "Account",
+      "required": true
+    },
+    "AccountToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Partner Account related to either an opportunity or an account. You must specify this field when creating an Opportunity Partner or an Account Partner record. This is a relationship field.",
+      "relationship_name": "AccountTo",
+      "relationship_type": "Lookup",
+      "refers_to": "Account",
+      "required": true
+    },
+    "IsPrimary": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Valid for Opportunity Partners only. Indicates that the account is the primary partner for the opportunity. Only one account can be marked as primary for an opportunity. If you set this field to 1 (true) upon insert of a new opportunity partner, this field is automatically set to 0 (false) for any other primary partners for that opportunity. Label is Primary."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Required if AccountFromId is null. ID of the opportunity in a partner relationship between an account and an opportunity. Specifying this field when creating a record creates an OpportunityPartner record. If you specify the AccountFromId field, you can’t also specify this field. This is a relationship field.",
+      "relationship_name": "Opportunity",
+      "relationship_type": "Lookup",
+      "refers_to": "Opportunity",
+      "required": true
+    },
+    "ReversePartnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the reciprocal Parnter record in a partner relationship."
+    },
+    "Role": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "UserRole that the account has toward the related opportunity or account, such as consultant or distributor."
+    }
+  },
+  "special_access_rules": "Customer Portal users can't access this object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"Partner\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AccountFrom\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountFromId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AccountTo\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountToId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPrimary\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Opportunity\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Opportunity\"/>\n        <element name=\"OpportunityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ReversePartnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Role\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AccountFromId": {
+      "field_label": "Account From ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AccountToId": {
+      "field_label": "Account To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Partner ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPrimary": {
+      "field_label": "Primary",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OpportunityId": {
+      "field_label": "Opportunity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReversePartnerId": {
+      "field_label": "Reverse Partner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Role": {
+      "field_label": "Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

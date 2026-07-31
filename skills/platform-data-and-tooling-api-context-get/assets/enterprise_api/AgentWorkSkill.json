@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "AgentWorkSkill - Data API",
+  "description": "Represents a skill used to route a work assignment to an agent. AgentWorkSkill is used for reporting and represents the result of a routing decision. This object is available in API version 42.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AgentWorkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The AgentWork object associated with this skill."
+    },
+    "IsAdditionalSkill": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "After a designated timeout period, a skill marked as additional is dropped from Omni-Channel routing. The case is then routed to the best-matched agent, even if the agent doesn’t have all the skills. The default value is false. Available in API version 48.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An automatically generated ID number that identifies the record."
+    },
+    "SkillId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The skill that is required or additional."
+    },
+    "SkillLevel": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The level of the required or additional skill. Skill levels can range from 1 to 10. Depending on your business needs, you might want the skill level to reflect years of experience, certification levels, or license classes."
+    },
+    "SkillPriority": {
+      "type": "int",
+      "properties": "Aggregatable, Filter, Group, Nillable, Sort",
+      "description": "For additional skills, specifies the order in which skills are dropped if after the specified timeout no agent with that skill is available. Higher priority-value skills are dropped first. Lower priority-value skills, for example 0, are dropped last. Skills with the same priority value are dropped as a group. You can set skill priority using attribute setup for skills-based routing or Apex code."
+    },
+    "WasDropped": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "For skills marked as additional, indicates if the skill was dropped from Omni-Channel routing because an agent with this skill was not available. The default value is false. Available in API version 48.0 and later."
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AgentWorkSkillChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "AgentWorkId": {
+      "field_label": "Agent Work ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Agent Work Skill ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAdditionalSkill": {
+      "field_label": "Is Additional Skill",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SkillId": {
+      "field_label": "Skill ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SkillLevel": {
+      "field_label": "SkillLevel",
+      "type": "double",
+      "precision": "4",
+      "scale": "2"
+    },
+    "SkillPriority": {
+      "field_label": "Skill Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WasDropped": {
+      "field_label": "Was Dropped",
+      "type": "boolean"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

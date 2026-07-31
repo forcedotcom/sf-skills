@@ -1,0 +1,104 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsTestExecution - Data API",
+  "description": "Tracks the execution of individual tests within a test suite execution. It records execution timing, status, results, severity, error messages, and related reporting information, enabling teams to monitor, analyze, and troubleshoot test outcomes as part of the DevOps testing process. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DevopsTestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the test definition associated with this execution record.",
+      "relationship_name": "DevopsTest",
+      "refers_to": "DevopsTest"
+    },
+    "DevopsTestSuiteExecutionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the test suite execution that contains this test execution.",
+      "relationship_name": "DevopsTestSuiteExecution",
+      "refers_to": "DevopsTestSuiteExecution"
+    },
+    "ExecutionEndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Stores the date and time when the test execution completed."
+    },
+    "ExecutionStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Stores the date and time when the test execution started."
+    },
+    "ExternalTestRef": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores the identifier or reference of the test in an external testing system."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, such as through a related record or list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "LearnMore": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores a URL that provides additional information or guidance related to the test result."
+    },
+    "Message": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores a summary message or outcome associated with the test execution."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique identifier for the test execution record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or queue that owns the test execution record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ReportUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores a URL linking to the detailed execution report."
+    },
+    "ResultDetails": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores detailed information about the execution results, including failures and outcomes."
+    },
+    "SampleCode": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores sample code, snippets, or examples related to the test execution result."
+    },
+    "Severity": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the severity level associated with the test result. Possible values range from 5 (lowest) to 1 (highest). The default value is 5."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates the current execution status of the test. Possible values are: Error Failed InProgress Passed The default value is Passed."
+    }
+  }
+}

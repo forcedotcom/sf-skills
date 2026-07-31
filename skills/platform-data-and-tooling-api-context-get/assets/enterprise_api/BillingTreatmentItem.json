@@ -1,0 +1,214 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "BillingTreatmentItem - Data API",
+  "description": "A billing treatment item defines how the order item's total amount is distributed into billing schedules over the course of the order item's lifecycle. In the Subscription Management pilot, billing treatments must have only one billing treatment item, so that the billing treatment item covers 100% of the order item's total value. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BillingTreatmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The parent billing treatment for the billing treatment item. This field is a relationship field.",
+      "relationship_name": "BillingTreatment",
+      "relationship_type": "Lookup",
+      "refers_to": "BillingTreatment"
+    },
+    "BillingType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines when Subscription Management invoices a product or service relative to when it’s provided to the customer. Advance billing invoices a product or service before it's provided, while arrears billing invoices a product or service after it has provided Subscription Management evaluates billing type when calculating an order product’s next billing date. Possible values are: Advance – If the order item is billed in advance, Subscription Management evaluates the order’s billing day of month to choose the nearest date on or before the order product’s start date. For example, if a monthly order product’s start date is January 1, and the order’s billing day of month is 15, the next billing date is December 15. Arrears – If the order item is billed in arrears, Subscription Management evaluates the order’s billing day of month to choose the nearest date after the order product’s start date. For example, if a monthly order product’s start date is January 1 and the order’s billing day of month is 15, the order product’s next billing date is January 15. Important: Arrears billing isn't available in Subscription Management API Version 54.0."
+    },
+    "Controller": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "During the invoicing process, this field determines which value Subscription Management uses when the billing schedule group and billing schedule have a shared field with different values. For example, when Controller has a value of BillingScheduleGroup, if the billing schedule's billing day of month is 5 while the billing schedule group's billing day of month is 10, Subscription Management uses the value of 10. In the Subscription Management API version 54.0, only BillingScheduleGroup is supported. Possible values are: BillingScheduleGroup—"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Three-letter ISO 4217 currency code associated with the billing treatment item."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Optional user-defined description for the billing treatment item."
+    },
+    "FlatAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The amount in terms of units of currency (such as $10 or $21.52) to invoice from the order item. Used only when Type has a value of FlatAmount."
+    },
+    "Handling0Amount": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Shows how Subscription Management invoices billing period items that have an amount of $0. Possible values are: CreateInvoice—Create a $0 invoice line. Null —No invoice line is created."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Default name of this record.",
+      "required": true
+    },
+    "Percentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage (such as 10% or 12.5%) to invoice from the order item. Used only when Type has a value of Percentage."
+    },
+    "ProcessingOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Defines the order in which Subscription Management creates billing schedules based on each billing treatment item. Lower numbers are evaluated first. For example, if your billing treatment has a billing treatment item that invoices at 25 Percentage and a ProcessingOrder of 1, and another item that invoices at 75 Percentage and a ProcessingOrder of 2, your first billing schedule will be for 25 percent of the order item's total amount, and your second billing schedule will be for 75% of the order item's total amount."
+    },
+    "Sequencing": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Allows users to define the number used to start invoice numbers on invoices generated from this billing treatment item. Subscription Management API Version 54.0 supports only manual sequencing. Possible values are: Manual—Invoices created from this billing treatment item begin with an invoice number of 1."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Draft billing treatment items aren't evaluated for creating billing schedules. Possible values are: Active Draft"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines whether billing schedules created from this billing treatment item are based on a flat amount or a percentage of the order item's total amount. Possible values are: FlatAmount—The billing schedule is for a flat currency amount of the order item's total amount (for example, $50 or $200.50.) Percentage—The billing schedule is for a percentage of the order item's total amount (for example, 12.5% or 54%)."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **BillingTreatmentItemHistory (API version 55.0)**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "BillingTreatmentId": {
+      "field_label": "Billing Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingType": {
+      "field_label": "Billing Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Controller": {
+      "field_label": "Controller",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "FlatAmount": {
+      "field_label": "Flat Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Handling0Amount": {
+      "field_label": "Zero Amount Behavior",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Billing Treatment Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Percentage": {
+      "field_label": "Percentage",
+      "type": "percent",
+      "precision": "3",
+      "scale": "0"
+    },
+    "ProcessingOrder": {
+      "field_label": "Processing Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "Sequencing": {
+      "field_label": "Sequencing",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

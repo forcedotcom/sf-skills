@@ -1,0 +1,744 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Organization - Data API",
+  "description": "Represents key configuration information for an organization.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "AllowsSelfServiceLogin": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Update",
+      "description": "Indicates whether the organization allows Self-Service login (true) or not (false)."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the city for the organization's address."
+    },
+    "ComplianceBccEmail": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Email address for compliance blind carbon copies. Limit: 80 characters."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the country for the organization's address. Limit: 80 characters."
+    },
+    "CountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country code for the organization’s address. Enable state and country/territory picklists to use this field. For more information, see Enable and Disable State and Country/Territory Picklists in Salesforce Help."
+    },
+    "DailyWebToCaseCount": {
+      "type": "int",
+      "properties": "Filter, Nillable",
+      "description": "The number of web form submissions that have been converted to cases for the day."
+    },
+    "DailyWebToCaseLimit": {
+      "type": "int",
+      "properties": "Filter, Nillable",
+      "description": "The maximum number of web form submissions that can be converted to cases per day."
+    },
+    "DailyWebToLeadCount": {
+      "type": "int",
+      "properties": "Filter, Nillable",
+      "description": "The number of web form submission that have been converted to leads for the day"
+    },
+    "DailyWebToLeadLimit": {
+      "type": "int",
+      "properties": "Filter, Nillable",
+      "description": "The maximum number of web form submissions that can be converted to leads per day."
+    },
+    "DefaultAccountAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "In API version 10.0 and later, represents the default access level for accounts, contracts, and assets. The possible values are: None Read Edit ControlledByLeadOrContact ControlledByCampaign In versions before 10.0, DefaultAccountAndContactAccess represented this value."
+    },
+    "DefaultAccountAndContactAccess": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist",
+      "description": "Default access level for accounts, contacts, contracts, and assets. This field is supported for backward compatibility only and is not available in API version 10.0 or later. In version 10.0 and later, use either DefaultAccountAccess or DefaultContactAccess."
+    },
+    "DefaultCalendarAccess": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Default access level for calendars. The possible values are listed, followed by the user interface labels in parentheses: HideDetails (Hide Details) HideDetailsInsert (Hide Details and Add Events) ShowDetails (Show Details) ShowDetailsInsert (Show Details and Add Events) AllowEdits (Full Access)"
+    },
+    "DefaultCampaignAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Default access level for campaigns. The possible values are: None Read Edit All"
+    },
+    "DefaultCaseAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Default access level for cases. The possible values are: None Read Edit ReadEditTransfer"
+    },
+    "DefaultContactAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Default access level for contacts. The possible values are: None Read Edit ControlledByParent In versions before 10.0, DefaultAccountAndContactAccess represented this value. When DefaultContactAccess is set to “Controlled by Parent,” you can’t update the ContactAccessLevel field."
+    },
+    "DefaultLeadAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Default access level for leads. The possible values are: NoneRead Edit ReadEditTransfer"
+    },
+    "DefaultLocaleSidKey": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Default locale SID key. For more information on picklist options, see Supported Number, Name, and Address Formats (ICU) in Salesforce help."
+    },
+    "DefaultOpportunityAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Default access level for opportunities. The possible values are: None Read Edit ControlledByLeadOrContact ControlledByCampaign"
+    },
+    "DefaultPricebookAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Default access level for price books. The possible values are listed, followed by the user interface labels in parentheses: None (No access) Read (Read only) ReadSelect (Use)"
+    },
+    "DefaultTerritoryCaseAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Default access level for cases associated with accounts in territories. The possible values are: None Read Edit ControlledByLeadOrContact ControlledByCampaign"
+    },
+    "DefaultTerritoryContactAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Default access level for contacts associated with accounts in territories. The possible values are: NoneRead Edit ControlledByLeadOrContact ControlledByCampaign When DefaultContactAccess is set to “Controlled by Parent” you can’t update this field."
+    },
+    "DefaultTerritoryOppAccess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Default access level for opportunities in territories. Valid values: NoneRead Edit ControlledByLeadOrContact ControlledByCampaign"
+    },
+    "Division": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the division for this organization. This field is not related to the Division object."
+    },
+    "Fax": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Fax number. Limit: 40 characters."
+    },
+    "FiscalYearStartMonth": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Number that corresponds to the month that this organization's fiscal year starts."
+    },
+    "HomepageHtml": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "The Home tab custom links and company message for this organization."
+    },
+    "InstanceName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read-only. The name of the instance. Available in API version 31.0 or later."
+    },
+    "IsSandbox": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only. Indicates whether the current organization is a sandbox (true) or production (false) instance. Available in API version 31.0 or later."
+    },
+    "LanguageLocaleKey": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The same as Language, the two-to-five character code which represents the language and locale ISO code. This controls the language for labels displayed in an application."
+    },
+    "LastWebToCaseDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable",
+      "description": "The last date that a web form submission was converted to a case."
+    },
+    "LastWebToLeadDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable",
+      "description": "The last date that a web form submission was converted to a lead."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the precise geolocation of an address. Acceptable values are numbers between –90 and 90 up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the precise geolocation of an address. Acceptable values are numbers between –180 and 180 up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "MaxActionsPerRule": {
+      "type": "int",
+      "properties": "Filter, Nillable",
+      "description": "Maximum number of actions per workflow, assignment, escalation, and auto-response rules. This field is unavailable in version 15.0 and later."
+    },
+    "MaxRulesPerEntity": {
+      "type": "int",
+      "properties": "Filter, Nillable",
+      "description": "Maximum number of rules per object, inclusive of workflow, assignment, escalation, and auto-response rules. This field is unavailable in version 15.0 and later."
+    },
+    "MonthlyPageViewsEntitlement": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of page views allowed for the current calendar month for the sites in your organization. To access this field, Salesforce Sites must be enabled for your organization. This field is generally available in API versions 18.0 and later."
+    },
+    "MonthlyPageViewsUsed": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of page views used in the current calendar month for the sites in your organization. To access this field, Salesforce Sites must be enabled for your organization. This field is generally available in API versions 18.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the organization."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix."
+    },
+    "OrganizationType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Edition of the organization, for example Enterprise Edition or Unlimited Edition."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number for the organization."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Postal code for the address of the organization. Limit: 20 characters."
+    },
+    "PreferencesEventScheduler": {
+      "type": "boolean",
+      "properties": "Update",
+      "description": "Indicates whether opportunities require products (true) or not (false)."
+    },
+    "PreferencesRequireOpportunityProducts": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether opportunities require products (true) or not (false)."
+    },
+    "PreferencesS1BrowserEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the Salesforce mobile web is enabled for all users in your organization (true) or is disabled for all users (false).This field is available in API version 29.0 or later."
+    },
+    "PreferencesTerminateOldestSession": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the oldest login session is automatically closed when a policy specifying the maximum number of sessions is triggered.This field is available in API version 35.0 — 49.0. As of API version 50.0, this field is removed."
+    },
+    "PreferencesTransactionSecurityPolicy": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the Transaction Security feature has been enabled.This field is available in API version 35.0 — 49.0. As of API version 50.0, this field is removed."
+    },
+    "PrimaryContact": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the primary contact for the organization. Limit: 80 characters."
+    },
+    "ReceivesAdminInfoEmails": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the organization receives administrator emails (true) or not (false)."
+    },
+    "ReceivesInfoEmails": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the organization receives informational email from Salesforce (true) or not (false)."
+    },
+    "SelfServiceCasePlural": {
+      "type": "string",
+      "properties": "Filter, Nillable, Update",
+      "description": "The plural version of the term used to represent the Case object in the Self-Service portal."
+    },
+    "SelfServiceCaseSingle": {
+      "type": "string",
+      "properties": "Filter, Nillable, Update",
+      "description": "The singular version of the term used to represent the Case object in the Self-Service portal."
+    },
+    "SelfServiceCaseSubmitRecordTypeId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the record type associated with a case submitted via the Self-Service portal."
+    },
+    "SelfServicDefaultCaseOrigin": {
+      "type": "string",
+      "properties": "Filter, Nillable, Update",
+      "description": "The default origin of a case submitted via the Self-Service portal."
+    },
+    "SelfServiceEmailSenderAddress": {
+      "type": "email",
+      "properties": "Filter, Nillable, Update",
+      "description": "The Self-Service email address from which new Self-Service user and password email messages are sent, such as support@acme.com."
+    },
+    "SelfServiceEmailSenderName": {
+      "type": "string",
+      "properties": "Filter, Nillable, Update",
+      "description": "The name associated with the email address in the SelfServiceEmailSenderAddress field, such as Acme Customer Support."
+    },
+    "SelfServiceEmailUserOnCaseCreationTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the email template used when email is sent to a Self-Service user when he or she creates a case."
+    },
+    "SelfServiceEnabledForResponseRules": {
+      "type": "boolean",
+      "properties": "Filter, Nillable, Update",
+      "description": "Indicates whether the Self-Service portal is enabled for auto-response rules (true) or not (false)."
+    },
+    "SelfServiceFeatureConfig": {
+      "type": "int",
+      "properties": "Filter, Nillable, Update",
+      "description": "An integer representing the active Self-Service feature configuration for this organization."
+    },
+    "SelfServiceLogoutUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Update",
+      "description": "The Web page that displays when a Self-Service user logs out of the Self-Service portal."
+    },
+    "SelfServiceMaxNumSuggestions": {
+      "type": "int",
+      "properties": "Filter, Nillable, Update",
+      "description": "The maximum number of suggested solutions allowed for a Self-Service case."
+    },
+    "SelfServiceNewCommentCheckedByDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Update",
+      "description": "If true, When a customer notification is automatically sent when a new comment is added to a case."
+    },
+    "SelfServiceNewCommentTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the email template used to send a notification to Self-Service users when a public comment is added to one of their cases."
+    },
+    "SelfServiceNewPassTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the email template used when new passwords are generated for Self-Service users."
+    },
+    "SelfServiceNewUserTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the email template used when new Self-Service users are enabled."
+    },
+    "SelfServicePageHeight": {
+      "type": "int",
+      "properties": "Filter, Nillable, Update",
+      "description": "The maximum height in pixels of Self-Service pages."
+    },
+    "SelfServicePageWidth": {
+      "type": "int",
+      "properties": "Filter, Nillable, Update",
+      "description": "The maximum width in pixels of Self-Service pages."
+    },
+    "SelfServiceSelfClosedCaseStatus": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Update",
+      "description": "The default status for cases closed by Self-Service users."
+    },
+    "SelfServiceSolutionCategoryAvailable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Update",
+      "description": "Indicates whether solution categories are available in the Self-Service portal (true) or not (false)."
+    },
+    "SelfServiceSolutionCategoryStartNodeId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the top-level category in the Self-Service portal."
+    },
+    "SelfServiceSolutionPlural": {
+      "type": "string",
+      "properties": "Filter, Nillable, Update",
+      "description": "The plural version of the term used to represent the Solution object in the Self-Service portal."
+    },
+    "SelfServiceSolutionSingle": {
+      "type": "string",
+      "properties": "Filter, Nillable, Update",
+      "description": "The singular version of the term used to represent the Solution object in the Self-Service portal."
+    },
+    "SelfServiceStyleSheetUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Update",
+      "description": "The public URL of your organization's Self-Service portal stylesheet."
+    },
+    "SelfServiceWelcomePageConfig": {
+      "type": "int",
+      "properties": "Filter, Nillable, Update",
+      "description": "Integer that represents the welcome page configuration for the Self-Service portal."
+    },
+    "SelfServiceWelcomeText": {
+      "type": "string",
+      "properties": "Filter, Nillable, Update",
+      "description": "The custom welcome message displayed at the top of the Self-Service home page when Self-Service users log in. Limit: 32,000 characters."
+    },
+    "SignupCountryIsoCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ISO country code specified by the user for a sign-up request."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "State of the address of the organization. Limit: 80 characters."
+    },
+    "StateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO state code for the organization’s address."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Street address for the organization. Limit: 255 characters."
+    },
+    "TrialExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date that this organization's trial license expires."
+    },
+    "TimeZoneSidKey": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Identifies the default time zone of the organization."
+    },
+    "UiSkin": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The user interface theme selected for the organization."
+    },
+    "UsesStartDateAsFiscalYearName": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the calendar year when the fiscal year begins is referred to as the year of the company's fiscal year (true) or not (false). For example, if the fiscal year begins in February 2006, a true value means the fiscal year is FY2006, and a false value means the fiscal year is FY2007."
+    },
+    "UsesWebToCase": {
+      "type": "boolean",
+      "properties": "Filter, Nillable, Update",
+      "description": "Indicates whether this organization can use Web-to-Case (true) or not (false)."
+    },
+    "UsesWebToLead": {
+      "type": "boolean",
+      "properties": "Filter, Nillable, Update",
+      "description": "Indicates whether this organization can use Web-to-Lead (true) or not (false)."
+    },
+    "WebToCaseAssignedEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the email template used when a new case is assigned to a user via Web-to-Case."
+    },
+    "WebToCaseCreatedEmailTemplateId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the email template used when a new case is created via Web-to-Case."
+    },
+    "WebToCaseDefaultCreatorId": {
+      "type": "reference",
+      "properties": "Filter, Nillable, Update",
+      "description": "The ID of the user specified as the default creator of cases created via Web-to-Case."
+    },
+    "WebToCaseDefaultOrigin": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The default value for the Case Origin field on cases submitted via Web-to-Case. Limit: 40 characters."
+    }
+  },
+  "special_access_rules": "Customer Portal users can't access this object.",
+  "usage": "Query this object to obtain information about an organization's settings. Only one organization object exists per organization.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"Organization\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Address\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ComplianceBccEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomBrands\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"DefaultAccountAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultCalendarAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultCampaignAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultCaseAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultContactAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultLeadAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultLocaleSidKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultOpportunityAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultPricebookAccess\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DelegatedAuthenticationServiceUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Division\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Fax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FiscalYearStartMonth\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InstanceName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsReadOnly\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsSandbox\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LanguageLocaleKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Latitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Longitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"MonthlyPageViewsEntitlement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MonthlyPageViewsUsed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NumKnowledgeService\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"OrganizationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PreferencesAutoSelectIndividualOnMerge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesConsentManagementEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesLightningLoginEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesOnlyLLPermUserAllowed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesRequireOpportunityProducts\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PreferencesTransactionSecurityPolicy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PrimaryContact\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReceivesAdminInfoEmails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ReceivesInfoEmails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SignupCountryIsoCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TimeZoneSidKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TrialExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UiSkin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UsesStartDateAsFiscalYearName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"WebToCaseDefaultOrigin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "Address": {
+      "field_label": "Address",
+      "type": "address"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "ComplianceBccEmail": {
+      "field_label": "Compliance BCC Email",
+      "type": "email",
+      "length": "80"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DefaultAccountAccess": {
+      "field_label": "Default Account Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DefaultCalendarAccess": {
+      "field_label": "Default Calendar Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DefaultCampaignAccess": {
+      "field_label": "Default Campaign Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DefaultCaseAccess": {
+      "field_label": "Default Case Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DefaultContactAccess": {
+      "field_label": "Default Contact Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DefaultLeadAccess": {
+      "field_label": "Default Lead Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DefaultLocaleSidKey": {
+      "field_label": "Locale",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DefaultOpportunityAccess": {
+      "field_label": "Default Opportunity Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DefaultPricebookAccess": {
+      "field_label": "Default Price Book Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DelegatedAuthenticationServiceUrl": {
+      "field_label": "Single Sign-On Gateway URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Division": {
+      "field_label": "Division",
+      "type": "string",
+      "length": "80"
+    },
+    "Fax": {
+      "field_label": "Fax",
+      "type": "phone",
+      "length": "40"
+    },
+    "FiscalYearStartMonth": {
+      "field_label": "Fiscal Year Starts In",
+      "type": "int",
+      "digits": "9"
+    },
+    "GeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Organization ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InstanceName": {
+      "field_label": "Instance Name",
+      "type": "string",
+      "length": "40"
+    },
+    "IsReadOnly": {
+      "field_label": "Is Read Only",
+      "type": "boolean"
+    },
+    "IsSandbox": {
+      "field_label": "Is Sandbox",
+      "type": "boolean"
+    },
+    "LanguageLocaleKey": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "MonthlyPageViewsEntitlement": {
+      "field_label": "Monthly Page Views Allowed",
+      "type": "int",
+      "digits": "9"
+    },
+    "MonthlyPageViewsUsed": {
+      "field_label": "Monthly Page Views Used",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "NumKnowledgeService": {
+      "field_label": "Knowledge Licenses",
+      "type": "int",
+      "digits": "9"
+    },
+    "OrganizationType": {
+      "field_label": "Edition",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PostalCode": {
+      "field_label": "Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "PreferencesAutoSelectIndividualOnMerge": {
+      "field_label": "AutoSelectIndividualOnMerge",
+      "type": "boolean"
+    },
+    "PreferencesConsentManagementEnabled": {
+      "field_label": "ConsentManagementEnabled",
+      "type": "boolean"
+    },
+    "PreferencesLightningLoginEnabled": {
+      "field_label": "LightningLoginEnabled",
+      "type": "boolean"
+    },
+    "PreferencesOnlyLLPermUserAllowed": {
+      "field_label": "OnlyLLPermUserAllowed",
+      "type": "boolean"
+    },
+    "PreferencesRequireOpportunityProducts": {
+      "field_label": "RequireOpportunityProducts",
+      "type": "boolean"
+    },
+    "PreferencesTransactionSecurityPolicy": {
+      "field_label": "TransactionSecurityPolicy",
+      "type": "boolean"
+    },
+    "PrimaryContact": {
+      "field_label": "Primary Contact",
+      "type": "string",
+      "length": "80"
+    },
+    "ReceivesAdminInfoEmails": {
+      "field_label": "Info Emails Admin",
+      "type": "boolean"
+    },
+    "ReceivesInfoEmails": {
+      "field_label": "Info Emails",
+      "type": "boolean"
+    },
+    "SignupCountryIsoCode": {
+      "field_label": "Signup Country",
+      "type": "string",
+      "length": "2"
+    },
+    "State": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeZoneSidKey": {
+      "field_label": "Time Zone",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TrialExpirationDate": {
+      "field_label": "Trial Expiration Date",
+      "type": "datetime"
+    },
+    "UiSkin": {
+      "field_label": "UI Skin",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UsesStartDateAsFiscalYearName": {
+      "field_label": "Fiscal Year Name by Start",
+      "type": "boolean"
+    },
+    "WebToCaseDefaultOrigin": {
+      "field_label": "Web to Cases Default Origin",
+      "type": "string",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

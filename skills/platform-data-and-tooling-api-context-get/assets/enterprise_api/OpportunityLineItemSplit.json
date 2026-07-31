@@ -1,0 +1,88 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "OpportunityLineItemSplit - Data API",
+  "description": "Represents information about an opportunity product split, including percentages, amounts, and owner. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ArchivedTerritoryName": {
+      "type": "String",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the associated territory that’s on an archived territory model. If the OpportunityLineItemSplit isn’t associated with a territory on an archived territory model, the field value is null. This field is available in API version 62.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for organizations with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization. If the organization has multicurrency enabled, and a Pricebook2 is specified on the opportunity (that is, the Pricebook2Id field isn’t blank on the opportunity referenced by this object’s OpportunityId), then the value of this field must match the currency of the CurrencyIsoCode field on the PricebookEntry records that are associated with this object. Possible values are: BRL—Brazilian Real CAD—Canadian Dollar EUR—Euro USD—U.S. Dollar The default value is USD."
+    },
+    "OpportunityLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated parent OpportunityLineItem. This field is a relationship field.",
+      "relationship_name": "OpportunityLineItem",
+      "relationship_type": "Lookup",
+      "refers_to": "OpportunityLineItem",
+      "required": true
+    },
+    "Split": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Read-only. Automatically generated number identifying the split within the opportunity."
+    },
+    "SplitAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount or value of the split."
+    },
+    "SplitNote": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Optional text about the split."
+    },
+    "SplitOwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the user who is the owner of the split. This field is a relationship field.",
+      "relationship_name": "SplitOwner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "SplitPercentage": {
+      "type": "percent",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The percentage of the OpportunityLineItem's value that the split represents."
+    },
+    "SplitTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated OpptyLineItemSplitType. This field is a relationship field.",
+      "relationship_name": "SplitType",
+      "relationship_type": "Lookup",
+      "refers_to": "OpptyLineItemSplitType"
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the associated territory. This field is a relationship field, and is available in API version 62.0 and later.",
+      "relationship_name": "Territory2",
+      "relationship_type": "Lookup",
+      "refers_to": "Territory2"
+    }
+  },
+  "special_access_rules": "Before creating OpportunityLineItemSplit records, enable Team Selling, set up opportunity splits, and enable product splits on at least one opportunity split type in Setup.",
+  "usage": "Use the OpportunityLineItemSplit object to manage opportunity product splits for an opportunity.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OpportunityLineItemSplitHistory (API version 59.0)**: History is available for tracked fields of the object."
+}

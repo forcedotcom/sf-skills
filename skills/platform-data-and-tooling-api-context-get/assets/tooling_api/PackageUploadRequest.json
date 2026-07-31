@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "PackageUploadRequest - Tooling API",
+  "description": "Represents a request to upload a first-generation package version and its components so that subscribers can install it. Available in API version 38.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `create()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "A description of the package and what this version contains."
+    },
+    "Errors": {
+      "type": "complexvalue",
+      "properties": "Nillable",
+      "description": "Errors that occurred during upload, if any."
+    },
+    "IsReleaseVersion": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "For managed packages only. Indicates whether the managed package is a released version (true) or a beta version (false). The default is false."
+    },
+    "MajorVersion": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The first number in a package version number. A version number either has an x.y format or an x.y.z format. The x represents the major version, y the minor version, and z the patch version. (The patch version can’t be specified; it’s automatically assigned when a managed beta is uploaded.)If IsReleaseVersion is false, MajorVersion is ignored. If IsReleaseVersion is true, and a managed beta is the latest uploaded version for the package, the major version must match the major version of the last uploaded beta."
+    },
+    "MetadataPackageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The 18-character package ID, which starts with 033."
+    },
+    "MetadataPackageVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 18-character package version ID representing the non-deprecated package you’re uploading."
+    },
+    "MinorVersion": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The second number in a package version number. A version number either has an x.y format or an x.y.z format. The x represents the major version, y the minor version, and z the patch version. (The patch version can’t be specified; it’s automatically assigned when a managed beta is uploaded.)If MinorVersion isn’t specified, the default value is 1 more than the minor version of the currently released package (0 if not released). If IsReleaseVersion is false, MinorVersion is ignored. If IsReleaseVersion is true and a managed beta is the latest uploaded version for the package, the minor version must match the minor version of the last uploaded beta."
+    },
+    "Password": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "An optional installation key for sharing the package privately with anyone who has the password value. Don't include the password if you want to make the package available to anyone on AppExchange and share your package publicly."
+    },
+    "PostInstallUrl": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "The fully qualified URL of the post-installation instructions. Instructions are shown as a link after installation and are available from the package detail view."
+    },
+    "ReleaseNotesUrl": {
+      "type": "textarea",
+      "properties": "Create, Nillable",
+      "description": "The fully qualified URL of the package release notes. Release notes are shown as a link during the installation process and are available from the package detail view after installation."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the upload. Valid values are: Error In Progress Queued Success"
+    },
+    "VersionName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The name of the package version. Example: Spring 2016.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"PackageUploadRequest\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"Description\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Errors\" minOccurs=\"0\" type=\"ens:PackageUploadErrors\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsReleaseVersion\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"MajorVersion\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataPackage\" minOccurs=\"0\" type=\"ens:MetadataPackage\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataPackageId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataPackageVersion\" minOccurs=\"0\" type=\"ens:MetadataPackageVersion\" nillable=\"true\"/>\n        <xsd:element name=\"MetadataPackageVersionId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"MinorVersion\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"Password\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"PostInstallUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ReleaseNotesUrl\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Status\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"VersionName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

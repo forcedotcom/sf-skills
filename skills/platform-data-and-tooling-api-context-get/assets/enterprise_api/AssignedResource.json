@@ -1,0 +1,189 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AssignedResource - Data API",
+  "description": "Represents a service resource who is assigned to a service appointment in Field Service and Lightning Scheduler. Assigned resources appear in the Assigned Resources related list on service appointments. This object is available in API version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActualTravelTime": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The number of minutes that the service resource needs to travel to the assigned service appointment. You can enter a value with up to two decimal places."
+    },
+    "ApptAssistantInfoUrl": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The URL that contains the status of the mobile worker approaching the service appointment, the Community URL, and the expiry of the URL. Available in version 51.0 and later."
+    },
+    "AssignedResourceNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number identifying the resource assignment."
+    },
+    "EstimatedTravelTime": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The estimated number of minutes needed for the service resource to travel to the service appointment they’re assigned to. You can enter a value with up to two decimal places."
+    },
+    "LocationStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the mobile worker approaching the service appointment. When the location status changes to one of these values, a status update containing ApptAssistantInfoUrl is sent to the customer. Available in version 51.0 and later. Possible values are: EnRoute LastMile"
+    },
+    "IsPrimaryResource": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the service resource is a primary resource or not. The default value is false. Available in API version 47.0 and later."
+    },
+    "ServiceAppointmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The service appointment that the resource is assigned to. This is a relationship field.",
+      "relationship_name": "ServiceAppointment",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceAppointment"
+    },
+    "ServiceCrewId": {
+      "type": "reference",
+      "properties": "Create, Update, Filter, Group, Sort, Nillable",
+      "description": "The service crew that the resource is assigned to. Note: Since service resources can represent crews or individuals, appointments are typically assigned to crews in the following way:"
+    },
+    "ServiceResourceId": {
+      "type": "reference",
+      "properties": "Create, Update, Filter, Group, Sort",
+      "description": "The resource who is assigned to the service appointment. This is a relationship field.",
+      "relationship_name": "ServiceResource",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceResource"
+    },
+    "Transaction": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The last transaction ID of the scheduling and optimization request that updated this object. The transaction ID is automatically generated and populated by the Enhanced Scheduling and Optimization engine. Available in API version 63.0 and later."
+    }
+  },
+  "usage": "You can assign multiple service resources to a service appointment. Service resources who are assigned to service appointments cannot be deactivated until they are removed from the appointments.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AssignedResourceChangeEvent (API version 48.0)**: Change events are available for the object.\n- **AssignedResourceHistory(API version 61.0)**: History is available for tracked fields of the object.\n- **AssignedResourceFeed**: Feed tracking is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"AssignedResource\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ActualTravelTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssignedResourceNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EstimatedTravelTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceAppointment\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceAppointment\"/>\n        <element name=\"ServiceAppointmentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceCrew\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceCrew\"/>\n        <element name=\"ServiceCrewId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceResource\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceResource\"/>\n        <element name=\"ServiceResourceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Transaction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TravelTimeBuffer\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ActualTravelTime": {
+      "field_label": "Actual Travel Time (Minutes)",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ApptAssistantInfoUrl": {
+      "field_label": "Appointment Assistant Info URL",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "AssignedResourceNumber": {
+      "field_label": "Assigned Resource Number",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EstimatedTravelTime": {
+      "field_label": "Estimated Travel Time (Minutes)",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "EventId": {
+      "field_label": "Activity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Assigned Resource ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRequiredResource": {
+      "field_label": "Required Resource",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LocationStatus": {
+      "field_label": "Location Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Role": {
+      "field_label": "Role",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ServiceAppointmentId": {
+      "field_label": "Service Appointment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceCrewId": {
+      "field_label": "Service Crew ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceResourceId": {
+      "field_label": "Service Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Transaction": {
+      "field_label": "Transaction",
+      "type": "string",
+      "length": "255"
+    },
+    "TravelTimeBuffer": {
+      "field_label": "Travel Time Buffer (in minutes)",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "CustomTab - Tooling API",
+  "description": "Represents a custom tab.",
+  "supported_soap_calls": "`create()`, `delete()`, `query()`, `retrieve()`, `update()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read-only. The ID of the item that the custom tab points to. For Lightning components, this is the ID of the component bundle. For custom object tabs, this field is null."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The tab’s description."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The developer’s internal name for the custom tab."
+    },
+    "EncodingKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read-only. Type of encoding assigned to the URL called by the tab. The default encoding setting is Unicode: UTF-8. Change it if you are passing information to a URL that requires data in a different format. This option is available when the value URL is selected in the tab type. Valid values are: UTF-8—Unicode (UTF-8) ISO-8859-1—General US & Western Europe (ISO-8859–1, ISO-LATIN-1) Shift_JIS—Japanese (Shift-JIS) ISO-2022-JP—Japanese (JIS) EUC-JP—Japanese (EUC-JP) x-SJIS_0213—Japanese (Shift-JIS_2004) ks_c_5601-1987—Korean (ks_c_5601-1987) Big5—Traditional Chinese (Big5) GB2312—Simplified Chinese (GB2312) Big5-HKSCS—Traditional Chinese Hong Kong (Big5–HKSCS)"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The name of the tab. The value of this field depends on the type of tab, and the API version. For custom object tabs, the fullName is the developer-assigned name of the custom object (MyCustomObject__c, for example). For Web tabs, the fullName is the developer-assigned name of the tab (MyWebTab, for example). Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "HasSidebar": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the tab displays the sidebar panel."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The label for the custom tab, which displays in Setup.",
+      "required": true
+    },
+    "Metadata": {
+      "type": "CustomTabMetadata",
+      "properties": "Create, Nillable, Update",
+      "description": "Custom tab metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "MotifName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Read-only. The name of the tab style assigned to the custom tab."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the package of which the custom tab is a part."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of custom tab. Valid values are: apexPage aura customObject flexiPage sControl url"
+    },
+    "Url": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the external web-page to embed in this tab."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomTab\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:CustomTab\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"CustomTab\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"auraComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customObject\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"flexiPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"frameHeight\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"hasSidebar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lwcComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"motif\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"scontrol\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"splashPageLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"url\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"urlEncodingKey\" minOccurs=\"0\" type=\"tns:Encoding\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"Encoding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UTF-8\"/>\n    <xsd:enumeration value=\"ISO-8859-1\"/>\n    <xsd:enumeration value=\"Shift_JIS\"/>\n    <xsd:enumeration value=\"ISO-2022-JP\"/>\n    <xsd:enumeration value=\"EUC-JP\"/>\n    <xsd:enumeration value=\"ks_c_5601-1987\"/>\n    <xsd:enumeration value=\"Big5\"/>\n    <xsd:enumeration value=\"GB2312\"/>\n    <xsd:enumeration value=\"Big5-HKSCS\"/>\n    <xsd:enumeration value=\"x-SJIS_0213\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

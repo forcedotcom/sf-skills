@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "FulfmtRoutgCriteriaGrpVer - Data API",
+  "description": "Manages versioning and lifecycle states for fulfillment criteria groups, providing stable external references while supporting versioning. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "An optional description of the rule group."
+    },
+    "FulfmtRoutgCriteriaGrpId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "A foreign key reference to the parent RuleGroup entity. Links this version to its parent group and establishes the versioning relationship. This field is a relationship field.",
+      "relationship_name": "FulfmtRoutgCriteriaGrp",
+      "relationship_type": "Master-detail",
+      "refers_to": "FulfmtRoutgCriteriaGrp (the master object)"
+    },
+    "IsByPassSplits": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "MaxSplitsAllowed": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the rule group. Usually inherited from the parent RuleGroup, though it is customizable."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The current lifecycle state of this rule group version. Determines which operations are allowed and whether the version is active in production. Possible values are: Archived Draft PendingArchive—Pending Archive PendingPublished—Pending Published Published"
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The sequential version number that increments automatically with each new version. This field is system-managed and can't be manually edited."
+    }
+  },
+  "special_access_rules": "The Salesforce org must have:",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **FulfmtRoutgCriteriaGrpVerHistory**: History is available for tracked fields of the object."
+}

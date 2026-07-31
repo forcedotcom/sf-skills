@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "ActivationPlatform - Tooling API",
+  "description": "Represents metadata about ActivationPlatform, such as platform name, delivery schedule, output format, and destination folder. This object is available in API version 54.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The description of the activation platform."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for the ActivationPlatform object. The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name. This field is automatically generated, but you can supply your own value if you create the record using the API."
+    },
+    "Enabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this Activation Platform is enabled (true) or not (false). The default value is false."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated ActivationPlatform in Metadata API. The full name can include a namespace prefix."
+    },
+    "IncludeSegmentNames": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether to include the segment name in the metadata (true) or not (false). The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the ActivationPlatform. The value for this field is the language value of the org."
+    },
+    "LogoUrl": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Logo for the activation channel destination."
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package. Possible values are: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the ActivationPlatform. In the UI, this field is ActivationPlatform."
+    },
+    "Metadata": {
+      "type": "ActivationPlatform",
+      "properties": "Create, Nillable, Update",
+      "description": "Provides access to the associated type."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the ActivationPlatform."
+    },
+    "Notes": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Notes for this ActivationPlatform."
+    },
+    "OutputFormat": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The output format of the file. Possible values are: CSV JSON PARQUET"
+    },
+    "OutputGrouping": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The grouping of the output. Possible values are: PER_ACCOUNT PER_SEGMENT PER_USER"
+    },
+    "PeriodicRefreshFrequency": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The full refresh frequency in days for incremental refresh mode. Available in API version 54.0 and later. Possible values are: REFRESH_30 - Full refresh every 30 days REFRESH_60 - Full refresh every 60 days This field applies only when outputGrouping is PER_SEGMENT and refreshMode is INCREMENTAL."
+    },
+    "RefreshFrequency": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates how often the activation platform accepts data delivery in hours. Possible values are: TWENTY_FOUR"
+    },
+    "RefreshMode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The mode of refreshing the file. Possible values are: INCREMENTAL"
+    }
+  }
+}

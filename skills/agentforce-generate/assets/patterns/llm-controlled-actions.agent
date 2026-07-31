@@ -1,184 +1,117 @@
 # LLM-Controlled Actions Pattern
-# Demonstrates both deterministic and LLM-controlled action invocation
+# =================================
 #
-# ★ When To Use This Pattern:
-#   - When the LLM should decide which actions to invoke based on context
-#   - When actions should only be available under certain conditions
-#   - When you want the agent to make intelligent choices about tool usage
+# A complete, read-only catalog agent that contrasts:
+# - deterministic action execution in a lifecycle hook; and
+# - model-chosen action execution from reasoning.actions.
 #
-# ★ Key Insight:
-#   - Deterministic: "run @actions.x" - ALWAYS runs when code path is reached
-#   - LLM-Controlled: "{!@actions.x}" in instructions - LLM decides based on context
-#   - Tools in reasoning.actions - LLM chooses which to invoke
+# Use deterministic `run` only when execution is required whenever its
+# containing hook is reached. Put optional, intent-dependent actions in
+# `reasoning.actions` so the model can choose whether to invoke them.
 #
-# ★ Two Invocation Methods:
-#   1. Deterministic (run @actions.x): Use in before/after_reasoning, action callbacks
-#   2. LLM-Controlled ({!@actions.x}): Reference in reasoning instructions
-#
-# This is a PARTIAL template - integrate into a complete agent file
+# This example intentionally exposes no action that changes money, records,
+# access, commitments, or other external state. UI confirmation and prose
+# instructions alone are not sufficient guards for consequential actions.
 
-# Variables for tracking action context
+system:
+    instructions: |
+        You are a public product-catalog assistant. Help users discover products
+        and check current availability. Use the read-only actions before making
+        claims about catalog matches or availability. Treat action results as
+        the source of truth, and say when a lookup returns no result or fails.
+        Ask only for information required by the requested lookup.
+    messages:
+        welcome: "Hello! I can help you search the catalog or check product availability."
+        error: "I couldn't retrieve the requested catalog information. Please try again."
+
+config:
+    developer_name: "LLM_Controlled_Actions"
+    agent_label: "Catalog Action Patterns"
+    description: "Demonstrates deterministic hooks and model-chosen read-only actions"
+
+access:
+    default_agent_user: "agent@company.salesforce.com"
+
 variables:
-	# ... standard linked variables ...
-	has_order_id: mutable boolean = False
-		description: "Whether user has provided an order ID"
-	order_id: mutable string
-		description: "The order ID provided by user"
-	action_taken: mutable string
-		description: "Last action taken by agent"
+    service_notice: mutable string = ""
+        description: "Trusted notice refreshed before every turn; the hook owns and overwrites it, and reasoning reads only the current-turn value"
 
-subagent order_assistance:
-	label: "Order Assistance"
-	description: "Helps customers with order-related questions"
+language:
+    default_locale: "en_US"
 
-	# Define available actions
-	actions:
-		get_order_status:
-			description: "Retrieves order status by order ID"
-			inputs:
-				order_id: string
-					description: "The order ID to look up"
-			outputs:
-				status: string
-					description: "Current order status"
-				delivery_date: string
-					description: "Expected delivery date"
-			target: "flow://Get_Order_Status"
+start_agent catalog_assistance:
+    label: "Catalog Assistance"
+    description: "Searches a public catalog and checks current product availability"
 
-		update_order:
-			description: "Updates an existing order"
-			require_user_confirmation: True    # ★ Ask user before executing
-			inputs:
-				order_id: string
-					description: "Order to update"
-				changes: string
-					description: "Changes to make"
-			outputs:
-				success: boolean
-					description: "Whether update succeeded"
-			target: "flow://Update_Order"
+    actions:
+        get_service_notice:
+            description: "Returns the current public catalog service notice for this locale"
+            inputs:
+                locale: string
+                    description: "Locale for the service notice"
+            outputs:
+                notice: string
+                    description: "Current service notice, or an empty string when none applies"
+            target: "flow://Get_Catalog_Service_Notice"
 
-		cancel_order:
-			description: "Cancels an order"
-			require_user_confirmation: True    # ★ Destructive action - confirm first
-			include_in_progress_indicator: True
-			inputs:
-				order_id: string
-					description: "Order to cancel"
-				reason: string
-					description: "Cancellation reason"
-			outputs:
-				refund_amount: number
-					description: "Refund amount"
-					filter_from_agent: False     # Show this to LLM
-			target: "flow://Cancel_Order"
+        search_catalog:
+            description: "Searches the public catalog; choose this for product discovery, not for current availability"
+            inputs:
+                query: string
+                    description: "Product name, category, or features requested by the user"
+            outputs:
+                matches: string
+                    description: "Current catalog matches returned by the search"
+                    is_displayable: True
+            target: "flow://Search_Public_Catalog"
 
-		log_interaction:
-			description: "Logs customer interaction for analytics"
-			inputs:
-				interaction_type: string
-					description: "Type of interaction"
-			outputs:
-				logged: boolean
-					description: "Whether log succeeded"
-			target: "flow://Log_Interaction"
+        check_availability:
+            description: "Checks current public availability; choose this when the user asks whether or where a product is available"
+            inputs:
+                product: string
+                    description: "Product name or identifier to check"
+                postal_code: string
+                    description: "Postal code where availability should be checked"
+            outputs:
+                availability: string
+                    description: "Current availability returned by the inventory service"
+                    is_displayable: True
+            target: "flow://Check_Public_Availability"
 
-	# ★ Deterministic logging before reasoning
-	before_reasoning:
-		run @actions.log_interaction
-			with interaction_type="order_inquiry"
+    # service_notice lifecycle:
+    # - owner: catalog_assistance
+    # - writer: this before_reasoning hook and get_service_notice output
+    # - reader: the current turn's reasoning instructions
+    # - reset: empty before each refresh
+    # - expiry: the next reasoning turn
+    # - correction: the next trusted refresh replaces the current notice
+    # - cancellation: no reset is needed because the notice neither gates nor
+    #   changes an action
+    # Deterministic refresh is justified by external freshness ordering.
+    before_reasoning:
+        set @variables.service_notice = ""
+        run @actions.get_service_notice
+            with locale="en_US"
+            set @variables.service_notice = @outputs.notice
 
-	reasoning:
-		# ★ LLM-Controlled: Reference actions in natural language
-		# The LLM decides when to use these based on conversation context
-		instructions: ->
-			| Help the customer with their order inquiry.
-			|
-			| Available capabilities:
-			| - Use {!@actions.get_order_status} to look up order details when they provide an order ID
-			| - Use {!@actions.update_order} if they want to modify their order (requires confirmation)
-			| - Use {!@actions.cancel_order} if they want to cancel (requires confirmation)
-			|
-			| Always confirm destructive actions before proceeding.
-			| If they haven't provided an order ID, ask for it first.
+    reasoning:
+        instructions: ->
+            | Help with the user's current public-catalog request.
+            | The service notice refreshed for this turn is:
+            | {!@variables.service_notice}
+            |
+            | Mention that notice only when it is relevant.
+            | Use catalog_search for product discovery.
+            | Use availability_lookup only for current availability.
+            | If a required lookup value is absent, ask for that value instead
+              of invoking an action with a guess.
 
-		# ★ Tools: LLM chooses which to invoke based on conversation
-		actions:
-			# Slot filling - LLM extracts order_id from conversation
-			lookup: @actions.get_order_status
-				with order_id=...
-				set @variables.order_id = @outputs.status
+        # Model-chosen: these read-only actions are available to reasoning, but
+        # execute only when the user's current request calls for them.
+        actions:
+            catalog_search: @actions.search_catalog
+                with query=...
 
-			# Conditional availability - only show when order ID is known
-			update: @actions.update_order
-				with order_id=@variables.order_id
-				with changes=...
-				available when @variables.has_order_id == True
-
-			# Conditional availability with multiple conditions
-			cancel: @actions.cancel_order
-				with order_id=@variables.order_id
-				with reason=...
-				available when @variables.has_order_id == True
-				available when @variables.order_status != "shipped"
-
-			# Subagent transitions
-			go_help: @utils.transition to @subagent.general_help
-			go_escalation: @utils.transition to @subagent.escalation
-				available when @variables.needs_human == True
-
-# ★ Insight: When to Use Each Method
-#
-# DETERMINISTIC (run @actions.x):
-#   - Audit logging (must always run)
-#   - Required follow-up actions
-#   - Guaranteed side effects
-#   - In before_reasoning / after_reasoning blocks
-#   - In action callbacks (run after parent)
-#
-# LLM-CONTROLLED (reasoning.actions or {!@actions.x}):
-#   - User-driven choices
-#   - Context-dependent operations
-#   - Optional actions based on conversation
-#   - When intelligence is needed to decide
-#
-# CONDITIONAL (available when):
-#   - Guard destructive operations
-#   - Show options only when prerequisites met
-#   - Enforce business rules
-
-# ★ Example: Action Callback Pattern (Deterministic Chaining)
-# Use "run" for guaranteed follow-up actions after a primary action
-
-subagent checkout:
-	label: "Checkout"
-	description: "Handles order checkout"
-
-	actions:
-		create_order:
-			description: "Creates a new order"
-			inputs:
-				items: list[string]
-					description: "Items to order"
-			outputs:
-				order_id: string
-					description: "Created order ID"
-			target: "flow://Create_Order"
-
-		send_confirmation:
-			description: "Sends order confirmation email"
-			inputs:
-				order_id: string
-					description: "Order to confirm"
-			target: "flow://Send_Confirmation"
-
-	reasoning:
-		instructions: ->
-			| Process the customer's checkout request.
-		actions:
-			# ★ Action callback: send_confirmation ALWAYS runs after create_order
-			process_checkout: @actions.create_order
-				with items=...
-				set @variables.order_id = @outputs.order_id
-				run @actions.send_confirmation                # ★ Guaranteed to run
-					with order_id=@variables.order_id
+            availability_lookup: @actions.check_availability
+                with product=...
+                with postal_code=...

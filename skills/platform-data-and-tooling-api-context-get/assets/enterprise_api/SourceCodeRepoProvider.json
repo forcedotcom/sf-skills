@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "SourceCodeRepoProvider - Data API",
+  "description": "Represents a supported source (version) control system like GitHub or Bitbucket. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "BaseUrl": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The base URL of the source control repository provider. For example, https://github.com."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The unique name for the source control repository provider."
+    },
+    "NamedCredential": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the named credential that DevOps Center uses to connect to this source control provider."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user or group that owns this record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "Provider": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The provider of this repository. Possible values are: BITBUCKET GITHUB The default value is GITHUB."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SourceCodeRepoProviderChangeEvent**: Change events are available for the object.\n- **SourceCodeRepoProviderFeed**: Feed tracking is available for the object.\n- **SourceCodeRepoProviderHistory**: History is available for tracked fields of the object.\n- **SourceCodeRepoProviderOwnerSharingRule**: Sharing rules are available for the object.\n- **SourceCodeRepoProviderShare**: Sharing is available for the object."
+}

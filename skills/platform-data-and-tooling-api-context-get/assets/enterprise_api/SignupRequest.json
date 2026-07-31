@@ -1,0 +1,322 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "SignupRequest - Data API",
+  "description": "Represents a request for a new sign-up. SignupRequest isn’t supported in sandbox instances and will result in an error. This object is available in API version 27.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AuthCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A one-time authorization code that can be exchanged for an OAuth access token and refresh token using standard Salesforce APIs. It’s used with ConnectedAppCallbackUrl and ConnectedAppConsumerKey when the specified connected app hasn’t been configured with an X.509 certificate. The system provides this read-only field after the sign-up request has been processed. This field is available in API version 29.0 and later."
+    },
+    "Company": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The name of the company requesting the trial sign-up."
+    },
+    "ConnectedAppCallbackUrl": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "When used with ConnectedAppConsumerKey, specifies a connected app that’s approved automatically during the sign-up creation. This field is available in API version 28.0 and later."
+    },
+    "ConnectedAppConsumerKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "When used with ConnectedAppCallbackUrl, specifies a connected app that’s approved automatically during the sign-up creation. This field is available in API version 28.0 and later."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The default value is the country of the requesting org. To override the default, enter the two-character, uppercase ISO-3166 country code (Alpha-2 code). A complete list of the codes is located at https://www.iso.org/obp/ui/#search. The language of the trial org is auto-determined based on the value of this field."
+    },
+    "CreatedOrgId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character org ID of the trial org created. The system provides this read-only field after the sign-up request has been processed."
+    },
+    "CreatedOrgInstance": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The server instance of the new trial org, for example, “na8.” This field is available in API version 29.0 and later."
+    },
+    "Edition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The Salesforce template that is used to create the trial org. Possible values are Partner Group, Professional, Partner Professional, Sales Enterprise, Professional TSO, Enterprise, Partner Enterprise, Service Professional, Enterprise TSO, Developer, and Partner Developer. This field is available in API version 35.0 and later."
+    },
+    "ErrorCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The error code if the sign-up request isn’t successful. The system provides this read-only field for support purposes."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The first name of the admin user for the trial sign-up."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The last name of the admin user for the trial sign-up."
+    },
+    "PreferredLanguage": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the trial org being created. Specify the language using a language code listed under Fully Supported Languages in Supported Languages in Salesforce Help. For example, use zh_CN for simplified Chinese. The value you select overrides the language set by the locale. If you specify an invalid language, the org defaults to the default language of the country. Likewise, if you specify a language that isn’t supported by the Salesforce edition associated with your trial template, the trial org defaults to the default language of the country. This field is available in API version 35.0 and later."
+    },
+    "ResolvedTemplateId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Populated during the sign-up request and for internal use by Salesforce. This field is available in API version 35.0 and later."
+    },
+    "ShouldConnectToEnvHub": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "When set to true, the trial org is connected to the Environment Hub. The sign-up must take place in the hub main org or a spoke org. This field is available in API version 35.0 and later."
+    },
+    "SignupEmail": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The email address of the admin user for the trial sign-up."
+    },
+    "SignupSource": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "A user-specified description of the trial sign-up, up to 60 characters. This field is available in API version 36.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The status of the request. Possible values are New, In Progress, Error, or Success. The default is New."
+    },
+    "Subdomain": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The My Domain name for the new trial org used in the org’s login and application URLs. In Developer Edition orgs, your name must contain at least 3 characters and no more than 27 characters. In all other editions, it must be at least 3 characters and no more than 34 characters. It can include letters, numbers, and hyphens, but you can’t start the name with a hyphen. If you don’t choose a My Domain during sign-up, Salesforce assigns one for you based on your company name. If you don’t like the one we set, you can change it. For details, see My Domain in Salesforce Help."
+    },
+    "SuppressSignupEmails": {
+      "type": "boolean",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When set to true, no sign-up emails are sent when the trial org is created. This field is used for the Proxy Signup feature and is available in API version 29.0 and later."
+    },
+    "TemplateId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the Trialforce template that is the basis for the trial sign-up. Salesforce must approve the template. If you don’t specify an edition, a template ID is required."
+    },
+    "TrialDays": {
+      "type": "anyType",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "The duration of the trial sign-up in days. Must be equal to or less than the trial days for the approved Trialforce template. If not provided, it defaults to the trial duration specified for the Trialforce template."
+    },
+    "TrialSourceOrgId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character org ID of the Trialforce Source Organization (TSO) from which the Trialforce template was created."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The username of the admin user for the trial sign-up. It must follow the address convention specified in RFC822: www.w3.org/Protocols/rfc822/#z10."
+    }
+  },
+  "usage": "The Java class uses REST API to create a SignupRequest object. It authenticates to the Trialforce Management Organization (TMO) and then posts a request to the SignupRequest object. Here are the variables to specify in this example.\n\nThe Java class uses REST API to create a SignupRequest object. It authenticates to the Trialforce Management Organization (TMO) and then posts a request to the SignupRequest object.\n\nHere are the variables to specify in this example.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.",
+  "field_reference": {
+    "AuthCode": {
+      "field_label": "Connected App Authorization Code",
+      "type": "string",
+      "length": "120"
+    },
+    "Company": {
+      "field_label": "Company",
+      "type": "string",
+      "length": "80"
+    },
+    "ConnectedAppCallbackUrl": {
+      "field_label": "Connected App Callback URL",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "ConnectedAppConsumerKey": {
+      "field_label": "Connected App Consumer Key",
+      "type": "string",
+      "length": "120"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "3"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreatedOrgId": {
+      "field_label": "Created Org",
+      "type": "string",
+      "length": "15"
+    },
+    "CreatedOrgInstance": {
+      "field_label": "Created Org Instance",
+      "type": "string",
+      "length": "10"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Edition": {
+      "field_label": "Edition",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EmailBrandId": {
+      "field_label": "Email Brand Id",
+      "type": "string",
+      "length": "15"
+    },
+    "ErrorCode": {
+      "field_label": "Error Code",
+      "type": "string",
+      "length": "8"
+    },
+    "FirstName": {
+      "field_label": "First Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Signup Request ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsSignupEmailSuppressed": {
+      "field_label": "Suppress signup email",
+      "type": "boolean"
+    },
+    "IsTso": {
+      "field_label": "Apply TSO Licensing",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastName": {
+      "field_label": "Last Name",
+      "type": "string",
+      "length": "80"
+    },
+    "LoginBrandId": {
+      "field_label": "Login Brand Id",
+      "type": "string",
+      "length": "15"
+    },
+    "Name": {
+      "field_label": "Number",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PreferredLanguage": {
+      "field_label": "Preferred Language",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ResolvedTemplateId": {
+      "field_label": "Resolved Template Id",
+      "type": "string",
+      "length": "15"
+    },
+    "ShouldConnectToEnvHub": {
+      "field_label": "Connect to Environment Hub",
+      "type": "boolean"
+    },
+    "SignupEmail": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "SignupSource": {
+      "field_label": "Signup Source Description",
+      "type": "string",
+      "length": "60"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Subdomain": {
+      "field_label": "Subdomain",
+      "type": "string",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TemplateDescription": {
+      "field_label": "Template Description",
+      "type": "string",
+      "length": "255"
+    },
+    "TemplateId": {
+      "field_label": "Template",
+      "type": "string",
+      "length": "15"
+    },
+    "TrialDays": {
+      "field_label": "Trial Days",
+      "type": "int",
+      "digits": "9"
+    },
+    "TrialSourceOrgId": {
+      "field_label": "Source Org",
+      "type": "string",
+      "length": "15"
+    },
+    "Username": {
+      "field_label": "Username",
+      "type": "string",
+      "length": "80"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

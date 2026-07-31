@@ -1,0 +1,101 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PickTicketAssignment - Data API",
+  "description": "Represents the association of a FulfillmentOrder with a PickTicket. A PickTicket has one PickTicketAssignment for each FulfillmentOrder containing products to be picked as part of that PickTicket. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AttachedToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the FulfillmentOrder to associate with a PickTicket. This field is a relationship field.",
+      "relationship_name": "AttachedTo",
+      "relationship_type": "Lookup",
+      "refers_to": "FulfillmentOrder"
+    },
+    "PickTicketAssignmentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the PickTicketAssignment."
+    },
+    "PickTicketId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the PickTicket to associate with a FulfillmentOrder. This field is a relationship field.",
+      "relationship_name": "PickTicket",
+      "relationship_type": "Lookup",
+      "refers_to": "PickTicket"
+    }
+  },
+  "special_access_rules": "This object is available with an Order Management Growth license.",
+  "field_reference": {
+    "AttachedToId": {
+      "field_label": "Fulfillment Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Pick Ticket Assignment Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PickTicketAssignmentNumber": {
+      "field_label": "Pick Ticket Assignment Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PickTicketId": {
+      "field_label": "Pick Ticket ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

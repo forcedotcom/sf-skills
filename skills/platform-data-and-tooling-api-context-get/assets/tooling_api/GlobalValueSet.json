@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "GlobalValueSet - Tooling API",
+  "description": "Represents a set of values used by a global picklist. Available from API version 39.0 or later.",
+  "supported_soap_calls": "`create()`, `query()`, `retrieve()`, `search()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`, `PATCH`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CustomValue": {
+      "type": "CustomValue[]",
+      "properties": "Filter, Group, Sort",
+      "description": "A list of the global picklist values."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A picklist value’s description. It’s useful to include a description for a picklist value so the reason for creating it can be tracked. Limit: 255 characters."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in the Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance.Any global value set created in API version 57.0 or later automatically has the __gvs suffix appended to FullName. When you make any CRUD-based call with the GlobalValueSet type, you must append the suffix to the FullName field when you reference the type."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort"
+    },
+    "Sorted": {
+      "type": "boolean",
+      "properties": "Filter, Group, Sort",
+      "description": "True if the picklist values are sorted alphabetically."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"GlobalValueSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:GlobalValueSet\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"GlobalValueSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customValue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:CustomValue\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"sorted\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

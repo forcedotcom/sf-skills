@@ -1,0 +1,165 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionPlanTemplateItemValue - Data API",
+  "description": "Represents the value associated with an action plan template item. This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionPlanTemplateItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the action plan template item that this value relates to.",
+      "relationship_name": "ActionPlanTemplateItem",
+      "relationship_type": "Master-detail",
+      "refers_to": "ActionPlanTemplateItem (the master object)"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the task created from this template item is active. The default value is false."
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this action plan template item value is locked or not. The default value is false."
+    },
+    "ItemEntityFieldName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The name of the field on the action plan template item that this value is for. Available fields include: AssessmentTask.AssessmentTaskDefinitionId—Assessment Task Definition ID AssessmentTask.AssignedToId—AssignedTo ID AssessmentTask.Description—Description AssessmentTask.EndTime—End Time AssessmentTask.IsRequired—Required AssessmentTask.Name—Name AssessmentTask.OwnerId—Owner ID AssessmentTask.ParentId—Visit ID AssessmentTask.ReferenceRecordId—ReferenceRecord ID AssessmentTask.SequenceNumber—Sequence AssessmentTask.StartTime—Start Time AssessmentTask.Status—Status AssessmentTask.TaskDefinitionId—TaskDefinition ID AssessmentTask.TaskType—Task Type DocumentChecklistItem.Comments—Comments DocumentChecklistItem.DocumentCategoryId—Document Category ID DocumentChecklistItem.DocumentTypeId—Document Type ID DocumentChecklistItem.Instruction—Instructions DocumentChecklistItem.IsAccepted—Accepted DocumentChecklistItem.IsFrozen—Frozen DocumentChecklistItem.IsRequired—Required DocumentChecklistItem.Name—Name DocumentChecklistItem.OwnerId—Owner ID DocumentChecklistItem.ParentRecordId—Parent Record ID DocumentChecklistItem.ReceivedDocumentId—Received Document ID DocumentChecklistItem.Status—Status DocumentChecklistItem.ValidatedById—User ID DocumentChecklistItem.ValidationDateTime—Validation Date Time DocumentChecklistItem.WhoId—Who ID Event.ActivityDate—Due Date Only Event.ActivityDateTime—Due Date Time Event.Description—Description Event.DurationInMinutes—Duration Event.EndDateTime—End Date Time Event.EventSubtype—Event Subtype Event.IsAllDayEvent—All-Day Event Event.IsPrivate—Private Event.IsRecurrence—Create Recurring Series of Events Event.IsReminderSet—Reminder Set Event.Location—Location Event.OwnerId—Assigned To ID Event.Recurrence2PatternText—Recurrence Pattern Event.RecurrenceDayOfMonth—Recurrence Day of Month Event.RecurrenceDayOfWeekMask—Recurrence Day of Week Mask Event.RecurrenceEndDateOnly—Recurrence End Event.RecurrenceInstance—Recurrence Instance Event.RecurrenceInterval—Recurrence Interval Event.RecurrenceMonthOfYear—Recurrence Month of Year Event.RecurrenceStartDateTime—Recurrence Start Event.RecurrenceTimeZoneSidKey—Recurrence Time Zone Event.RecurrenceType—Recurrence Type Event.ReminderDateTime—Reminder Date/Time Event.ShowAs—Show Time As Event.StartDateTime—Start Date Time Event.Subject—Subject Event.Type—Type Event.WhatId—Related To ID Event.WhoId—Name ID GenericVisitTask.DefinitionReferenceId—Generic Visit Task ID GenericVisitTask.Description—Description GenericVisitTask.EndDateTime—End Date Time GenericVisitTask.IsRequired—Required GenericVisitTask.Name—Name GenericVisitTask.OwnerId—Owner ID GenericVisitTask.Sequence—Sequence GenericVisitTask.StartDateTime—Start Date Time GenericVisitTask.Status—Status GenericVisitTask.VisitId—Visit ID OtherComponentTask.Description—Description OtherComponentTask.FullyQualifiedName—Fully Qualified Name OtherComponentTask.Name—Name OtherComponentTask.OwnerId—Owner ID OtherComponentTask.ParentTaskId—Assessment Task ID OtherComponentTask.ParticipantRoleId—ParticipantRole ID RecordAction.ActionDefinition—Action Definition RecordAction.ActionType—Action Type RecordAction.FlowDefinition—Interaction Definition ID RecordAction.FlowInterviewId—FlowInterview ID RecordAction.IsMandatory—Is Mandatory RecordAction.IsUiRemoveHidden—Hide Remove Action in UI RecordAction.Order—Order RecordAction.ParticipantRoleId—ParticipantRole ID RecordAction.Pinned—Pinned RecordAction.RecordId—Parent Record ID RecordAction.Status—Status SignatureTask.Description—Description SignatureTask.Name—Name SignatureTask.ParentTaskId—Assessment Task ID Task.APT_Custom_Text_1_c__c—APT Custom Text - 1 Task.ActivityDate—Due Date Only Task.Boolean_Test__c—Boolean Test Task.CallDisposition—Call Result Task.CallDurationInSeconds—Call Duration Task.CallObject—Call Object Identifier Task.CallType—Call Type Task.Custom_Picklist__c—Custom Picklist Task.Description—TEstActivityDEs Task.IsRecurrence—Create Recurring Series of Tasks Task.IsReminderSet—Reminder Set Task.OwnerId—Assigned To ID Task.Priority—Priority Task.RecurrenceDayOfMonth—Recurrence Day of Month Task.RecurrenceDayOfWeekMask—Recurrence Day of Week Mask Task.RecurrenceEndDateOnly—Recurrence End Task.RecurrenceInstance—Recurrence Instance Task.RecurrenceInterval—Recurrence Interval Task.RecurrenceMonthOfYear—Recurrence Month of Year Task.RecurrenceRegeneratedType—Repeat This Task Task.RecurrenceStartDateOnly—Recurrence Start Task.RecurrenceTimeZoneSidKey—Recurrence Time Zone Task.RecurrenceType—Recurrence Type Task.ReminderDateTime—Reminder Date/Time Task.Status—Status Task.Subject—Subject Task.TaskSubtype—Task Subtype Task.Type—Type Task.WhatId—Related To ID Task.WhoId—Name ID Task.test__c—test Task.text_3__c—text 3"
+    },
+    "ItemEntityType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of action plan template item. Possible values are: Document Checklist Item Event—Available in API version 63.0 and later with the Sales Action Plans add-on license and the Sales Action Plans default permission set. RecordAction Task"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent date on which a user referenced this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent date on which a user viewed this record."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this action plan template item value can be edited or not. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The unique identifier for this record."
+    },
+    "ValueFormula": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A formula used to calculate the value for this action plan template item."
+    },
+    "ValueLiteral": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The value for this action plan template item."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn't specified, they're available in the same API versions as this object. Otherwise, they're available in the specified API version and later.\n\n- **ActionPlanTemplateItemValueChangeEvent**: Change events are available for the object.\n- **ActionPlanTemplateItemValueFeed**: Feed tracking is available for the object.\n- **ActionPlanTemplateItemValueHistory**: History is available for tracked fields of the object.\n- **ActionPlanTemplateItemValueOwnerSharingRule**: Sharing rules are available for the object.\n- **ActionPlanTemplateItemValueShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ActionPlanTemplateItemId": {
+      "field_label": "Action Plan Template Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Action Plan Template Item Value ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "ItemEntityFieldName": {
+      "field_label": "Field Name",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ItemEntityType": {
+      "field_label": "Item Entity Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Item Value Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ValueFormula": {
+      "field_label": "Field Value - Dynamic",
+      "type": "string",
+      "length": "255"
+    },
+    "ValueLiteral": {
+      "field_label": "Field Value - Static",
+      "type": "textarea",
+      "length": "32000"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

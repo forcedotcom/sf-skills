@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "EmailRoutingAddress - Data API",
+  "description": "An email address used for Email-to-Case. Email routing addresses store a unique email services address provided by Salesforce and configuration options for emails received by this address.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "PersonalName": {
+      "type": "string",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The display name of the EmailRoutingAddress. Maximum size is 300 characters."
+    },
+    "Address": {
+      "type": "email",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The email address to which your customers direct their questions. Emails are forwarded from this address."
+    },
+    "EmailServicesAddress": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A unique, Salesforce-generated email address. This field value is read-only and can't be modified. Emails are forwarded to this address."
+    }
+  },
+  "special_access_rules": "To access this object, Email-to-Case must be enabled. Only admin users can access this object.\n\nTo access this object, Email-to-Case must be\n         enabled. Only admin users can access this object.",
+  "field_reference": {
+    "Address": {
+      "field_label": "Email Address",
+      "type": "email",
+      "length": "270"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EmailServicesAddressId": {
+      "field_label": "Email Services Address ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "EmailRoutingAddress ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PersonalName": {
+      "field_label": "Routing Name",
+      "type": "string",
+      "length": "300"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

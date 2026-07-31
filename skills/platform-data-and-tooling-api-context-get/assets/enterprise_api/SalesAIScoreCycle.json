@@ -1,0 +1,28 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "SalesAIScoreCycle - Data API",
+  "description": "Represents the cycle type and ID used to score records. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CycleType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The cycle used to create scores on opportunity records can be one of two types. OpportunityScoreModeling—Provides model factors, which Sales Cloud Einstein uses to build a scoring model. OpportunityScoreScoring—Provides scores and key factors to individual records, which are based on Sales Cloud Einstein’s scoring model. Note: When the value OpportunityScoreModeling is returned, use the Sales AI Score Model Factor object to get information about the model factors."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The ID of the cycle. Currently, the name is a system-generated unique value."
+    }
+  },
+  "special_access_rules": "To see score cycle information, users need a Sales Cloud Einstein license with the View Scoring Model Factors permission enabled. The permission isn’t enabled by default. As of the Spring ’20 release, Pardot and Sales Engagement users no longer have access to this object."
+}

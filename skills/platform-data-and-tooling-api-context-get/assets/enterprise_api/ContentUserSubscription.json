@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentUserSubscription - Data API",
+  "description": "Represents a subscription for a user following another user. This object is available in API version 42.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "SubscribedToUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who is followed by another user. This is a relationship field.",
+      "relationship_name": "SubscribedToUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "SubscriberUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who follows another user. This is a relationship field.",
+      "relationship_name": "SubscriberUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "Only users with Modify All Data permission have access to this object.\n\nOnly users with Modify All Data permission have\n      access to this object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentUserSubscription\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"SubscribedToUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"SubscribedToUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SubscriberUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"SubscriberUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "Id": {
+      "field_label": "ContentUserSubscription ID",
+      "type": "id",
+      "length": "18"
+    },
+    "SubscribedToUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SubscriberUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

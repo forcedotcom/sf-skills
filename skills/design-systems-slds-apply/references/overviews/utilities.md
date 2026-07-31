@@ -57,7 +57,7 @@ Utility classes are single-purpose CSS classes that apply specific styling to el
 
 **SLDS utility naming convention:**
 
-```
+```text
 slds-[property]-[direction]_[size/value]
 ```
 

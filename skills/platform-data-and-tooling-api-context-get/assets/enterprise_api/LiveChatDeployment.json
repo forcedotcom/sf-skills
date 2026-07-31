@@ -1,0 +1,176 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "LiveChatDeployment - Data API",
+  "description": "Represents the general settings for deploying Live Agent on a website. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BrandingId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The record ID of the static image resource that’s displayed in the chat window."
+    },
+    "ConnectionTimeoutDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Indicates the amount of time before the chat times out, in seconds."
+    },
+    "ConnectionWarningDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Indicates the amount of time before a time-out warning is displayed to the agent, in seconds."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "Domains": {
+      "type": "textarea",
+      "properties": "Create, Filter (unavailable in API version 25.0 and later), Nillable, Sort (unavailable in API version 25.0 and later)",
+      "description": "A comma-separated list of domains the deployment is allowlisted for. Leave this blank to allow the deployment to be used on any domain."
+    },
+    "HasTranscriptSave": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Determines whether visitors can download and save transcripts from the chat window."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the deployment."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The name of the deployment"
+    },
+    "MobileBrandingId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The record ID of the static image resource displayed in the mobile version of the chat window."
+    },
+    "OptionsHasPrechatApi": {
+      "type": "boolean",
+      "properties": "Create, Filter",
+      "description": "Determines whether developers can access the Pre-Chat API."
+    },
+    "SiteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The record ID of the site used for loading static resources."
+    },
+    "WindowTitle": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The text displayed in the title bar of the browser window used to launch the chat window."
+    }
+  },
+  "usage": "Use this object to query and manage live chat deployments.",
+  "field_reference": {
+    "BrandingId": {
+      "field_label": "Static Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConnectionTimeoutDuration": {
+      "field_label": "Idle Connection Timeout Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "ConnectionWarningDuration": {
+      "field_label": "Idle Connection Warning Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Domains": {
+      "field_label": "Permitted Domains",
+      "type": "textarea",
+      "length": "4096"
+    },
+    "HasTranscriptSave": {
+      "field_label": "Allow Visitors to Save Transcripts",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Chat Deployment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Chat Deployment Name",
+      "type": "string",
+      "length": "80"
+    },
+    "MobileBrandingId": {
+      "field_label": "Static Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OptionsHasPrechatApi": {
+      "field_label": "Allow Access to Prechat API",
+      "type": "boolean"
+    },
+    "SiteId": {
+      "field_label": "Site ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WindowTitle": {
+      "field_label": "Chat Window Title",
+      "type": "string",
+      "length": "80"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

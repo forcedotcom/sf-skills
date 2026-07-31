@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Permission Update Event Type - Data API",
+  "description": "Permission update events represent changes to object, field, and user permissions and setup entity access that occur in profiles and permission sets. The event type also tracks if you clone profiles or change whether session activation is required in permission sets or permission set groups.",
+  "fields_columns": [
+    "type",
+    "description",
+    "example"
+  ],
+  "fields": {
+    "CONTEXT": {
+      "type": "String",
+      "description": "Reserved for future use."
+    },
+    "DESCRIPTION": {
+      "type": "String",
+      "description": "A description of the update that occurred in the profile, permission set, or permission set group.",
+      "example": "UserPerm: ConvertLeads disabled"
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always PermissionUpdate."
+    },
+    "FEATURE_ID": {
+      "type": "Id",
+      "description": "The ID of the feature, such as a profile, permission set, or permission set group, that was updated."
+    },
+    "LOGIN_KEY": {
+      "type": "String",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring.",
+      "example": "GeJCsym5eyvtEK2I"
+    },
+    "ORGANIZATION_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the organization.",
+      "example": "00DXXXXXXXXXXXX"
+    },
+    "PERMISSION_TYPE": {
+      "type": "String",
+      "description": "The type of permission, such as user, object, or field, or setup entity access, such as tab settings or Apex class access, that was updated.",
+      "example": "EntityObject"
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID.",
+      "example": "3nWgxWbDKWWDIk0FKfF5DV"
+    },
+    "SESSION_KEY": {
+      "type": "String",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started.",
+      "example": "d7DEq/ANa7nNZZVD"
+    },
+    "TIMESTAMP": {
+      "type": "String",
+      "description": "The access time of Salesforce services in GMT.",
+      "example": "20130715233322.670"
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ).",
+      "example": "2015-07-27T11:32:59.555Z"
+    },
+    "UPDATE_TYPE": {
+      "type": "String",
+      "description": "For object permissions, user permissions, and setup entity access, the type of update that occurred. For example, a permission was updated or deleted. For other changes in profiles, permission sets, or permission set groups, this information is tracked in the DESCRIPTION field.",
+      "example": "delete"
+    },
+    "USER_ID": {
+      "type": "Id",
+      "description": "The 15-character ID of the user who made the permission update.",
+      "example": "005XXXXXXXXXXXX"
+    }
+  }
+}

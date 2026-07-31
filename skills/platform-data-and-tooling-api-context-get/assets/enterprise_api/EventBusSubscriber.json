@@ -1,0 +1,160 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EventBusSubscriber - Data API",
+  "description": "Represents a trigger, process, or flow that’s subscribed to a platform event or a change data capture event. Doesn’t include CometD or Pub/Sub API subscribers.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the subscriber. For example, the trigger ID."
+    },
+    "IsPartitioned": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the platform event Apex trigger is configured with parallel subscriptions (true) or not (false). The default value is false. See Platform Event Processing at Scale with Parallel Subscriptions for Apex Triggers in the Platform Events Developer Guide. This field is available in API version 62.0 and later."
+    },
+    "LastError": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The error message that the last thrown EventBus.RetryableException contains. This field applies to Apex triggers only. Available in API version 43.0 and later."
+    },
+    "LastProcessed": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The replay ID of the last event that the subscriber processed. This field replaces Position as of API level 66.0."
+    },
+    "LastPublished": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The replay ID of the last published event. This field replaces Tip as of API level 66.0. Note: For high-volume platform events and change events, the value for Tip isn’t available and is always -1."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the subscribed item, such as the trigger or process name. If the subscribed item’s name is “Process”, at least one flow Pause element is subscribed to the event."
+    },
+    "Position": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The replay ID of the last event that the subscriber processed. This field has been deprecated as of API level 66.0 and should no longer be used. Use LastProcessed instead. This field may not be properly represented if the value exceeds the maximum integer size."
+    },
+    "Retries": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times the trigger was retried due to throwing the EventBus.RetryableException. This field applies to Apex triggers only. Available in API version 43.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the status of the subscriber. Can be one of these values: Error— The subscriber was disconnected and stopped receiving published events. A trigger reaches this state when it exceeds the number of maximum retries with the EventBus.RetryableException. Trigger assertion failures and unhandled exceptions don’t cause the error state. We recommend limiting the retries to fewer than nine times to avoid reaching this state. When you fix and save the trigger, or for a managed package trigger, if you redeploy the package, the trigger resumes automatically from the tip, starting from new events. Also, you can resume a trigger subscription in the subscription detail page that you access from the platform event page. Repartitioning—The system is in the process of modifying the trigger's parallel subscription configuration. Running—The subscriber is actively listening to events. If you modify the subscriber, the subscription continues to process events. Suspended—The subscriber is disconnected and can’t receive events because a Salesforce admin suspended it or due to an internal error. You can resume a trigger subscription in the subscription detail page that you access from the platform event page. To resume a process, deactivate it and then reactivate it. If you modify the subscriber, the subscription resumes automatically from the tip, starting from new events. For more information, see View and Manage an Event’s Subscribers on the Platform Event’s Detail Page in the Platform Events Developer Guide."
+    },
+    "Tip": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The replay ID of the last published event. This field has been deprecated as of API level 66.0 and should no longer be used. Use LastPublished instead. This field may not be properly represented if the value exceeds the maximum integer size. Note: For high-volume platform events and change events, the value for Tip isn’t available and is always -1."
+    },
+    "Topic": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the subscription channel that corresponds to a platform event or change event. For a platform event, the topic name is the event name appended with __e, such as MyEvent__e. For a change event, the topic is the name of the change event, such as AccountChangeEvent."
+    },
+    "Type": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The subscriber type (ApexTrigger). If the subscriber is a process or flow Pause element, the type is blank."
+    }
+  },
+  "special_access_rules": "EventBusSubscriber is read only and can only be queried. As of Summer ’20 and later, only your Salesforce org's internal users can access this object.",
+  "usage": "Use EventBusSubscriber to query details about subscribers to a platform event. You can get all subscribers for a particular event by filtering on the Topic field, as follows.\n\nSELECT ExternalId, Name, Position, Status, Tip, Type\n\nFROM EventBusSubscriber\n\nWHERE Topic='Low_Ink__e'",
+  "wsdl_segment": "```xml\n<complexType name=\"EventBusSubscriber\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsPartitioned\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastError\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastProcessed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastPublished\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Position\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Retries\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Tip\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Topic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ExternalId": {
+      "field_label": "External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Event ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsPartitioned": {
+      "field_label": "Is Partitioned",
+      "type": "boolean"
+    },
+    "LastError": {
+      "field_label": "Last Error Message",
+      "type": "string",
+      "length": "255"
+    },
+    "LastProcessed": {
+      "field_label": "Last Processed",
+      "type": "string",
+      "length": "1000"
+    },
+    "LastPublished": {
+      "field_label": "Last Published",
+      "type": "string",
+      "length": "1000"
+    },
+    "Name": {
+      "field_label": "Subscriber Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Position": {
+      "field_label": "Position",
+      "type": "int",
+      "digits": "9"
+    },
+    "Retries": {
+      "field_label": "Retry Attempts",
+      "type": "int",
+      "digits": "9"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Tip": {
+      "field_label": "Tip",
+      "type": "int",
+      "digits": "9"
+    },
+    "Topic": {
+      "field_label": "Topic",
+      "type": "string",
+      "length": "80"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "string",
+      "length": "80"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OauthToken - Data API",
+  "description": "Represents an OAuth access token for connected app authentication. Use this object to create a user interface for token management. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccessToken": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The refresh token for authorization."
+    },
+    "AppMenuItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID for the App Picker menu item that’s associated with this OAuth token. This is a relationship field.",
+      "relationship_name": "AppMenuItem",
+      "relationship_type": "Lookup",
+      "refers_to": "AppMenuItem"
+    },
+    "AppName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the connected app that’s associated with this OAuth token."
+    },
+    "DeleteToken": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A token that can be used at the revoke OAuth token endpoint to remove this token."
+    },
+    "Id": {
+      "type": "ID",
+      "properties": "Defaulted on create, Filter, Group, idLookup, Sort",
+      "description": "Reserved for future use. Currently, the value is always null."
+    },
+    "LastUsedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent date when the OAuth token was used."
+    },
+    "RequestToken": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The authorization code that was used to request the corresponding AccessToken. With this authorization code, you can revoke the corresponding AccessToken by passing the DeleteToken."
+    },
+    "UseCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "How often the token has been used."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The owner of the token. This is a relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "special_access_rules": "Users with the Customize Application permission see all tokens for all users in the org. Otherwise, you see only your own tokens. If you try to use Apex DML operations and then query this object in the same call, you get an UncommittedWork error with this description. To avoid this error, execute DML operations and queries in separate, asynchronous calls.\n\nUsers with the Customize Application permission see all tokens for all users in the org. Otherwise, you see only your own tokens.\n\nIf you try to use Apex DML operations and then query this object in the same call, you get an UncommittedWork error with this description.\n\nTo avoid this error, execute DML operations and queries in separate, asynchronous calls.",
+  "usage": "To delete an AccessToken, send a request to the revoke OAuth token endpoint with the DeleteToken as the parameter. For example, the URL https://MyDomainName.my.salesforce.com/services/oauth2/revoke?token=(the Delete Token) causes the deletion of the token. In API version 34.0 and later, this object was enhanced to help manage high instance counts. A query() call returns up to 500 rows. A queryMore() call returns 500 more, up to 2,500 total. No more records are returned after 2,500. To make sure that you don’t miss any records, issue a COUNT() query in a SELECT clause for OauthToken. This query gives you the total number of records. If there are more than 2,500 records, use these options to manage your results. For example, use an initial query with this structure. Then, run another query with an offset of 2,000.\n\nTo delete an AccessToken, send a request to the revoke OAuth token endpoint with the DeleteToken as the parameter. For example, the URL https://MyDomainName.my.salesforce.com/services/oauth2/revoke?token=(the Delete Token) causes the deletion of the token.\n\nIn API version 34.0 and later, this object was enhanced to help manage high instance counts. A query() call returns up to 500 rows. A queryMore() call returns 500 more, up to 2,500 total. No more records are returned after 2,500. To make sure that you don’t miss any records, issue a COUNT() query in a SELECT clause for OauthToken. This query gives you the total number of records. If there are more than 2,500 records, use these options to manage your results.\n\nFor example, use an initial query with this structure.\n\nThen, run another query with an offset of 2,000.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OauthToken\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AccessToken\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AppMenuItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AppMenuItem\"/>\n        <element name=\"AppMenuItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AppName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeleteToken\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastUsedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"RequestToken\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UseCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"User\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AccessToken": {
+      "field_label": "Access Token",
+      "type": "string",
+      "length": "255"
+    },
+    "AppMenuItemId": {
+      "field_label": "AppMenuItem ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AppName": {
+      "field_label": "Application Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeleteToken": {
+      "field_label": "Delete Token",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "OAuth Token ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastUsedDate": {
+      "field_label": "Last Used Date",
+      "type": "datetime"
+    },
+    "RequestToken": {
+      "field_label": "Request Token",
+      "type": "string",
+      "length": "255"
+    },
+    "UseCount": {
+      "field_label": "Use Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

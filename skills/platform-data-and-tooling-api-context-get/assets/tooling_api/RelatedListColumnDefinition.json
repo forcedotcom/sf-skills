@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "RelatedListColumnDefinition - Tooling API",
+  "description": "Represents information about a column in a related list. A related list specifies a set of records for a related object, based on specific criteria. This object is available in API version 55.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`",
+  "supported_rest_api_http_methods": "`Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Alias": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique alias of the column in the related list."
+    },
+    "ColumnSoql": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The SOQL query string used in a SELECT clause for the column."
+    },
+    "DataType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The field type of the column."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier for the column. Always retrieve this value before using it, as the value can change from one release to the next. Simplify queries by using this field instead of making multiple queries."
+    },
+    "FieldDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the FieldDefinition associated with the column, if applicable. This is a relationship field.",
+      "relationship_name": "FieldDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "FieldDefinition"
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the column appears on the related list by default (true) or not (false). The default value is false."
+    },
+    "IsDescribable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the column can appear in the results of a describeLayout call containing the related list (true) or not (false). The default value is false."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the column."
+    },
+    "LookupId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The lookup ID for the column."
+    },
+    "RelatedListDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the RelatedListDefinition that contains the column. This is a relationship field.",
+      "relationship_name": "RelatedListDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "RelatedListDefinition"
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"RelatedListColumnDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"Alias\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ColumnSoql\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DataType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"FieldDefinition\" minOccurs=\"0\" type=\"ens:FieldDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"FieldDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsDefault\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsDescribable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"Label\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"LookupId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RelatedListDefinition\" minOccurs=\"0\" type=\"ens:RelatedListDefinition\" nillable=\"true\"/>\n        <xsd:element name=\"RelatedListDefinitionId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

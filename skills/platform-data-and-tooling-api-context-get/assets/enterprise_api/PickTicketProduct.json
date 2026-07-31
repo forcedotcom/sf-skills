@@ -1,0 +1,168 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "PickTicketProduct - Data API",
+  "description": "Represents a quantity of a product to be picked as part of a PickTicket. It can include quantities for multiple FulfillmentOrders. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "PickTicketId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the PickTicket associated with the PickTicketProduct. This field is a relationship field.",
+      "relationship_name": "PickTicket",
+      "relationship_type": "Lookup",
+      "refers_to": "PickTicket"
+    },
+    "PickTicketProductNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the PickTicketProduct."
+    },
+    "PickedQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Quantity of the PickTicketProduct that has been picked."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the product associated with the PickTicketProduct. This field is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "ProductCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Product code of the product associated with the PickTicketProduct."
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Total quantity that’s requested to be picked of the associated product."
+    },
+    "RejectReason": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The reason why some or all of the requested quantity isn’t being picked. Possible values are: Defected Other Out of stock"
+    },
+    "RejectedQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The requested quantity that hasn’t been picked. When the status category of the associated PickTicket is set to Completed, this value is automatically calculated as Quantity - PickedQuantity."
+    },
+    "StockKeepingUnit": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The stock keeping unit (SKU) of the associated product."
+    }
+  },
+  "special_access_rules": "This object is available with an Order Management Growth license.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PickTicketProductFeed**: Feed tracking is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Pick Ticket Product ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PickTicketId": {
+      "field_label": "Pick Ticket ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PickTicketProductNumber": {
+      "field_label": "Pick Ticket Product Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PickedQuantity": {
+      "field_label": "Picked Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductCode": {
+      "field_label": "Product Code",
+      "type": "string",
+      "length": "255"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "RejectReason": {
+      "field_label": "Reject Reason",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RejectedQuantity": {
+      "field_label": "Rejected Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "StockKeepingUnit": {
+      "field_label": "Product SKU",
+      "type": "string",
+      "length": "180"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

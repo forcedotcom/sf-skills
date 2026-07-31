@@ -1,0 +1,92 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "CustomApplication - Tooling API",
+  "description": "Represents a custom or standard application. An application is a list of tab references, a description, and a logo. It also includes access to the associated CustomApplication type and related fields in Metadata API. Available in Tooling API version 42.0 or later.",
+  "supported_soap_calls": "`describeSObjects()`, `create()`, `delete()`, `query()`, `retrieve()`, `update()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`, `PATCH`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The optional description of the application."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The developer name of the application."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the application."
+    },
+    "IsNavAutoTempTabsDisabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the navigation automatically creates temporary tabs settings. Defaults to false. Available in API version 43.0 and later."
+    },
+    "IsNavPersonalizationDisabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether navigation personalization is disabled. Defaults to false. Available in API version 43.0 and later."
+    },
+    "IsNavTabPersistenceDisabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether workspace tabs are cleared for each new console session (true) or not (false). Defaults to false. Available in API version 54.0 and later."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label of the application."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "mns:CustomApplication",
+      "properties": "Create, Nillable, Update",
+      "description": "Provides access to the associated CustomApplication type and related fields in Metadata API."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix of the application."
+    },
+    "NavType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Not updateable. The type of navigation the application uses. Valid values are: Console Standard"
+    },
+    "UiType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of user interface that the application uses. Valid values are: Aloha Lightning"
+    },
+    "UtilityBar": {
+      "type": "FlexiPage",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Lightning page used as the utility bar for the application."
+    },
+    "UtilityBarId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the utility bar associated with this application."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomApplication\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:CustomApplication\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"CustomApplication\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:AppActionOverride\"/>\n        <xsd:element name=\"brand\" minOccurs=\"0\" type=\"mns:AppBrand\"/>\n        <xsd:element name=\"consoleConfig\" minOccurs=\"0\" type=\"mns:ServiceCloudConsoleConfig\"/>\n        <xsd:element name=\"defaultLandingTab\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"formFactors\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FormFactor\"/>\n        <xsd:element name=\"isNavAutoTempTabsDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isNavPersonalizationDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isNavTabPersistenceDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isOmniPinnedViewEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isServiceCloudConsole\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"logo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"navType\" minOccurs=\"0\" type=\"tns:NavType\"/>\n        <xsd:element name=\"preferences\" minOccurs=\"0\" type=\"mns:AppPreferences\"/>\n        <xsd:element name=\"profileActionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:AppProfileActionOverride\"/>\n        <xsd:element name=\"setupExperience\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"subscriberTabs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"tabs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"uiType\" minOccurs=\"0\" type=\"tns:UiType\"/>\n        <xsd:element name=\"utilityBar\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"workspaceConfig\" minOccurs=\"0\" type=\"mns:AppWorkspaceConfig\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"FormFactor\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Small\"/>\n    <xsd:enumeration value=\"Medium\"/>\n    <xsd:enumeration value=\"Large\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"NavType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"Console\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UiType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Aloha\"/>\n    <xsd:enumeration value=\"Lightning\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "StagedUnmtchdEmailAddrRela - Data API",
+  "description": "Represents data about the message or event activity associated with an email address that Einstein Activity Capture can’t match with an existing user, contact, or lead record. Related to StagedUnmtchdEmailAddr, which represents data about the unmatched email address. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "RelatedActivityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the related activity record, such as an email message or calendar event. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedActivity",
+      "refers_to": "EmailMessage, Event, StagedEmail"
+    },
+    "SourceActivity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The activity type. Possible values are: Event StagedEmail EmailAddress"
+    },
+    "StagedUnmatchedEmailAddressId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the related unmatched email address record. This field is a relationship field.",
+      "relationship_name": "StagedUnmatchedEmailAddress",
+      "relationship_type": "Master-detail",
+      "refers_to": "StagedUnmtchdEmailAddr"
+    }
+  },
+  "special_access_rules": "This object is available with Einstein Activity Capture when Sync Email as Salesforce Activity is turned on. If you turn on Einstein Activity Capture in Summer ’25 or later, Sync Email as Salesforce Activity is enabled by default.\n\nThis object is available with Einstein Activity\n         Capture when Sync Email as Salesforce Activity is turned on. If you turn on Einstein\n         Activity Capture in Summer ’25 or later, Sync Email as Salesforce Activity is enabled by\n         default."
+}

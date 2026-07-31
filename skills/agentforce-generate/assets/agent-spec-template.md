@@ -9,38 +9,58 @@ What domain does it operate in?
 
 Describe the key behavioral rules that govern the agent:
 - What must the agent know before taking action?
-- What backing logic types are used (Apex, Flow, Prompt Template)?
-- What guardrails apply (off-topic handling, escalation)?
-- What information persists across subagent switches?
+- What action implementation types are used (Apex, Flow, Prompt Template)?
+- What guardrails apply, if any (for example, off-topic handling or escalation)?
+- Which exact values, if any, must deterministic runtime logic consume?
+- Which conversational facts remain in surviving history and therefore need no
+  variable?
+
+## Subagent Posture
+
+For each subagent, specify posture and why:
+
+| Subagent | Posture (scripted/mixed/agentic) | Why this posture? | Deterministic controls (if any) |
+|----------|-----------------------------------|-------------------|-----------------------------------|
+| primary | agentic | one focused objective and action set | none |
+
+Use [references/posture-and-determinism.md](../references/posture-and-determinism.md) for posture rules.
 
 ## Subagent Map
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[start_agent<br/>agent_router]
-
-    A -->|description of routing condition| B[subagent_name<br/>Subagent]
-    A -->|unclear intent| C[ambiguous_question<br/>Subagent]
-    A -->|out of scope| D[off_topic<br/>Subagent]
-    A -->|needs escalation| E[escalation<br/>Subagent]
+    A[start_agent<br/>primary]
 ```
 
-Expand the diagram to show actions, gating logic, and variable state changes
-within each subagent. See the Subagent Map Diagrams reference for conventions.
+Add another node only when its boundary changes objective, instructions,
+available actions, authority, or escalation behavior and that difference
+cannot remain coherent in `primary`. A greeting, cancellation acknowledgment,
+completion message, ambiguity question, or ordinary dialogue step is a branch
+by default. Expand the diagram to show justified boundaries, actions, and
+required deterministic controls. Show a variable state change only when a
+named later runtime expression or action consumes it. See the Subagent Map
+Diagrams reference for conventions.
 
-## Variables
+## Variables (Optional)
 
-- `variable_name` (mutable type = default) — What this variable tracks.
-  Set by: which action or utility. Read by: which topics for gating or
-  conditional instructions.
+Default: **None.** Surviving conversation history carries ordinary names,
+preferences, prior answers, corrections, and current intent.
 
-## Actions & Backing Logic
+Add one row only for trusted action output, authorization/eligibility/
+confirmation proof, exact later action data flow, required external ordering,
+or persistence beyond the configured history window.
+
+| Variable | Type / Default | Trusted Writer | Named Consumer | Cause | Reset / Expiry / Correction / Cancel |
+|----------|----------------|----------------|----------------|-------|--------------------------------------|
+| `verified_customer_id` | `mutable string = ""` | `verify_customer` output | protected action input and `available when` gate | authorization | reset on verification failure, expiry, logout, or user cancellation |
+
+## Actions
 
 ### action_name (subagent_name subagent)
 
 - **Target:** `apex://ClassName` or `flow://FlowName` or `prompt://PromptTemplateName`
-- **Backing Status:** EXISTS / NEEDS STUB / NEEDS IMPLEMENTATION
+- **Status:** EXISTS / NEEDS STUB / NEEDS CREATION
 
 #### Inputs
 
@@ -70,21 +90,46 @@ If NEEDS STUB:
 
 Repeat for each action.
 
-## Gating Logic
+## Action Invocation Strategy
+
+For each action, decide how it gets invoked:
+
+| Action | Subagent | Invocation Mode | Why |
+|--------|----------|-----------------|-----|
+| action_name | subagent_name | `run` / planner slot-fill / `setVariables` | Rationale |
+
+**Modes:**
+- **`run @actions.X` in `instructions: ->`** — Deterministic. Fires every time the condition holds. Use only when regulation, authorization, confirmed consequence, external ordering, or a reproduced trace failure requires it.
+- **Planner slot-fill (`with param = ...` in `reasoning.actions:`)** — LLM decides when to invoke. Use for user-initiated actions where the LLM should judge intent.
+- **`@utils.setVariables`** — LLM captures a value and ends the turn. Use only
+  when a named later deterministic consumer needs the exact value and it cannot
+  remain action-local. Do not use it to mirror conversational history.
+
+## Deterministic Controls (When Needed)
 
 - `action_name` visibility: `available when @variables.variable_name != ""`
-  — Rationale for why this gate exists.
+  — Named cause, trusted writer, and protected outcome.
 
-List all gating conditions with their rationale.
+Include only controls required by regulation, authorization, confirmed
+consequence, external ordering, or observed failures.
 
 ## Architecture Pattern
 
-State the architecture pattern: hub-and-spoke, chain, hybrid, etc.
-Describe the routing strategy and how topics relate to each other.
+Default to exactly one execution block: `start_agent <domain>:` with its
+reasoning and actions, and zero `subagent` blocks. Do not create an
+`agent_router` that only transitions to one domain. Add a boundary only when
+objective, instructions, actions, authority, or escalation behavior changes
+and cannot remain coherent in the current scope. Greeting, cancellation,
+completion, ambiguity, and ordinary dialogue branches do not require their own
+subagents. Use router-first only when multiple genuine domains require
+current-intent classification.
+State any externally ordered workflow-local flows inside the execution block
+that owns them, including correction and cancellation paths.
+Describe the routing strategy and how subagents relate to each other.
 
 ## Agent Configuration
 
 - **developer_name:** `Agent_API_Name`
 - **agent_label:** `Agent Display Name`
 - **agent_type:** `AgentforceEmployeeAgent` or `AgentforceServiceAgent` — state the reasoning based on prompt signals (e.g., "accessible by employees" → Employee, "customer-facing channel" → Service)
-- **default_agent_user:** Required for `AgentforceServiceAgent`. Forbidden for `AgentforceEmployeeAgent`. If specified, MUST be **user name**. MUST NEVER be **user ID**. User MUST have `Einstein Agent` license.
+- **access.default_agent_user:** Required for `AgentforceServiceAgent`. Normally omitted for `AgentforceEmployeeAgent`. If specified, MUST be a **user name**, never a **user ID**, and the user MUST have an `Einstein Agent` license.

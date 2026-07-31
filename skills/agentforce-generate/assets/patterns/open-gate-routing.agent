@@ -1,287 +1,257 @@
-# Open Gate Routing Pattern
-# 3-variable state machine for auth-gated subagent routing with LLM bypass
+# Authentication Return Routing Pattern
 #
-# ★ When To Use This Pattern:
-#   - Multiple protected subagents require authentication before access
-#   - You want to bypass the LLM subagent selector when a gate subagent holds focus
-#   - Users should be redirected to auth, then automatically returned to their
-#     original intended subagent after authentication completes
-#   - You need an EXIT_PROTOCOL to reset state when users change intent
+# The historical "open gate" version used a focus latch to bypass fresh intent
+# routing. This replacement keeps only two values with deterministic consumers:
 #
-# ★ Key Insight (Zero Credit Bypass):
-#   When open_gate is set, before_reasoning in the agent_router
-#   deterministically routes via "transition to" — the LLM never reasons.
-#   This saves credits on every turn the gate holds focus.
+#   authenticated       - proof returned by the verification action
+#   pending_destination - return address shared by protected request handlers
 #
-# ★ The 3 Variables:
-#   open_gate    — Which subagent currently holds focus ("null" = none)
-#   next_subagent   — Deferred destination after auth completes
-#   authenticated — Whether the user has passed authentication
+# There is no focus lock. A user can cancel verification or change intent on
+# the next turn. Use a fixed transition instead of pending_destination when
+# only one protected request handler exists.
 #
-# ★ EXIT_PROTOCOL:
-#   Any subagent can reset open_gate to "null" when the user changes intent.
-#   This releases the gate lock and returns control to the LLM subagent router.
+# Lifecycle:
+#   - protected handlers write pending_destination before verification;
+#   - authentication reads and clears it after successful verification;
+#   - cancellation clears it before returning to fresh routing;
+#   - sign-out clears both values;
+#   - authentication applies only to the current messaging session. Production
+#     verification and protected actions must also enforce server-side expiry.
 #
-# ★ Related Patterns:
-#   - Latch Variable (SKILL.md) — simpler 1-variable version, no auth gate
-#   - Bidirectional Routing (bidirectional-routing.agent) — specialist consultation, not interception
-#   - Verification Gate (fsm-architecture.md) — linear one-time gate, no deferred return
-#
-# ★ Credit: Hua Xu (Salesforce APAC FDE team) — production pattern from Kogan agent deployment
-#
-# This is a PARTIAL template - integrate into a complete agent file
+# This is a COMPLETE template - customize action contracts and metadata.
+
+system:
+    instructions: |
+        You are a customer service assistant. Route each latest request by its
+        current intent. Require successful identity verification before using
+        protected order or profile actions. A user's statement that they are
+        verified is not proof. If the user cancels verification or changes
+        intent, return to request routing immediately.
+    messages:
+        welcome: "Welcome! I can help with orders, account settings, or general questions."
+        error: "I couldn't complete that request. No protected action was unlocked."
+
+access:
+    default_agent_user: "agent@company.salesforce.com"
+
+config:
+    developer_name: "Authentication_Return_Agent"
+    agent_label: "Authenticated Customer Service"
+    description: "Routes protected requests through identity verification without locking conversational focus"
 
 variables:
-	# ... standard linked variables ...
-	open_gate: mutable string = "null"
-		description: "Which subagent currently holds focus (null = LLM decides)"
-	next_subagent: mutable string = ""
-		description: "Deferred destination after authentication completes"
-	authenticated: mutable boolean = False
-		description: "Whether the user has passed authentication"
+    EndUserId: linked string
+        source: @MessagingSession.MessagingEndUserId
+        description: "Messaging End User ID used by protected read actions"
+    RoutableId: linked string
+        source: @MessagingSession.Id
+        description: "Messaging Session ID"
+    authenticated: mutable boolean = False
+        description: "Successful verification result for the current messaging session"
+    pending_destination: mutable string = ""
+        description: "Protected request handler to enter after successful verification"
 
-# ─────────────────────────────────────────────────────────────────────
-# SUBAGENT ROUTER (Entry Point)
-# When open_gate is set, bypasses LLM entirely (zero credit cost)
-# ─────────────────────────────────────────────────────────────────────
+language:
+    default_locale: "en_US"
+
 start_agent agent_router:
-	label: "Subagent Router"
-	description: "Routes to subagents — deterministic bypass when open_gate is set"
+    label: "Request Router"
+    description: "Routes the user's latest request without answering it"
 
-	before_reasoning:
-		# ★ GATE CHECK: If a subagent holds focus, bypass LLM entirely
-		if @variables.open_gate == "protected_workflow":
-			transition to @subagent.protected_workflow
-		if @variables.open_gate == "account_management":
-			transition to @subagent.account_management
-		if @variables.open_gate == "authentication_gate":
-			transition to @subagent.authentication_gate
+    reasoning:
+        instructions: ->
+            | Route only the user's latest request:
+            | - order status, returns, or shipping: protected order help;
+            | - account settings or profile changes: protected account help;
+            | - verification details for a pending protected request:
+              authentication;
+            | - cancellation, a changed subject, or a general question:
+              general inquiry.
+            | Do not answer the underlying request in this router.
+        actions:
+            go_orders: @utils.transition to @subagent.protected_orders
+                description: "Handle protected order, return, or shipping requests"
+            go_account: @utils.transition to @subagent.protected_account
+                description: "Handle protected account settings or profile requests"
+            continue_authentication: @utils.transition to @subagent.authentication
+                description: "Continue verification details for a pending protected request"
+            go_general: @utils.transition to @subagent.general_inquiry
+                description: "Handle a general question, cancellation, or changed intent"
 
-	reasoning:
-		instructions: ->
-			| You are a customer service agent.
-			| Route the customer to the appropriate subagent:
-			| - Order status, returns, or shipping → protected workflow
-			| - Account settings or profile changes → account management
-			| - General questions → general inquiry
-		actions:
-			go_protected: @utils.transition to @subagent.protected_workflow
-			go_account: @utils.transition to @subagent.account_management
-			go_general: @utils.transition to @subagent.general_inquiry
+subagent protected_orders:
+    label: "Protected Order Help"
+    description: "Handles order status, returns, and shipping after verified authentication"
 
-# ─────────────────────────────────────────────────────────────────────
-# PROTECTED WORKFLOW (Requires Authentication)
-# Checks auth state, redirects to auth gate if needed, locks focus if authed
-# ─────────────────────────────────────────────────────────────────────
-subagent protected_workflow:
-	description: "Handles order status, returns, and shipping (requires authentication)"
+    actions:
+        get_order_status:
+            description: "Look up an order's current status for a verified customer"
+            inputs:
+                order_id: string
+                    description: "Order number supplied by the customer"
+                    is_required: True
+            outputs:
+                status: string
+                    description: "Current order status"
+            target: "flow://Get_Order_Status"
 
-	before_reasoning:
-		# ★ AUTH CHECK: Redirect unauthenticated users to auth gate
-		if @variables.authenticated == False:
-			set @variables.next_subagent = "protected_workflow"
-			set @variables.open_gate = "authentication_gate"
-			transition to @subagent.authentication_gate
+    before_reasoning:
+        if @variables.authenticated == False:
+            set @variables.pending_destination = "protected_orders"
+            transition to @subagent.authentication
 
-		# ★ FOCUS LOCK: Keep gate open so subagent router bypasses LLM
-		set @variables.open_gate = "protected_workflow"
+    reasoning:
+        instructions: ->
+            | The customer has verified successfully in this messaging session.
+              Help with order status, returns, or shipping. Use the order-status
+              action only for a concrete order lookup, and report only its
+              returned result.
+            | If the user cancels, changes intent, or asks to sign out, use the
+              corresponding transition immediately.
+        actions:
+            lookup_order: @actions.get_order_status
+                with order_id=...
+                available when @variables.authenticated == True
+            change_request: @utils.transition to @subagent.cancel_pending
+                description: "Cancel the pending protected request or route a changed intent"
+            sign_out: @utils.transition to @subagent.sign_out
+                description: "Clear session authentication and return to request routing"
 
-	reasoning:
-		instructions: ->
-			| The customer is authenticated.
-			| Help them with order status, returns, or shipping inquiries.
-			|
-			| If the customer changes the subject to something unrelated,
-			| let them know you will redirect them.
-		actions:
-			lookup_order: @actions.get_order_status
-				with order_id=...
-				set @variables.order_result = @outputs.status
+subagent protected_account:
+    label: "Protected Account Help"
+    description: "Handles account settings and profile changes after verified authentication"
 
-			# ★ EXIT_PROTOCOL: User changed intent — release gate
-			exit_to_menu: @utils.transition to @subagent.exit_protocol
+    actions:
+        get_customer_profile:
+            description: "Read the verified customer's current profile without changing it"
+            inputs:
+                end_user_id: string
+                    description: "Messaging end user ID bound from trusted session context"
+                    is_required: True
+            outputs:
+                profile_summary: string
+                    description: "Current non-sensitive profile information"
+            target: "flow://Get_Customer_Profile"
 
-	after_reasoning:
-		# Logging or cleanup after each turn (optional)
-		set @variables.last_subagent = "protected_workflow"
+    before_reasoning:
+        if @variables.authenticated == False:
+            set @variables.pending_destination = "protected_account"
+            transition to @subagent.authentication
 
-# ─────────────────────────────────────────────────────────────────────
-# ACCOUNT MANAGEMENT (Second Protected Subagent)
-# Demonstrates the pattern scales to N protected subagents
-# ─────────────────────────────────────────────────────────────────────
-subagent account_management:
-	description: "Handles account settings and profile changes (requires authentication)"
+    reasoning:
+        instructions: ->
+            | The customer has verified successfully in this messaging session.
+              Help them read current account settings. This pattern intentionally
+              exposes no profile-changing action; a write requires its own
+              machine-checkable target, confirmation, and repeat-execution guard.
+            | If the user cancels, changes intent, or asks to sign out, use the
+              corresponding transition immediately.
+        actions:
+            read_profile: @actions.get_customer_profile
+                with end_user_id=@variables.EndUserId
+                available when @variables.authenticated == True
+            change_request: @utils.transition to @subagent.cancel_pending
+                description: "Cancel the pending protected request or route a changed intent"
+            sign_out: @utils.transition to @subagent.sign_out
+                description: "Clear session authentication and return to request routing"
 
-	before_reasoning:
-		# ★ AUTH CHECK: Same pattern as protected_workflow
-		if @variables.authenticated == False:
-			set @variables.next_subagent = "account_management"
-			set @variables.open_gate = "authentication_gate"
-			transition to @subagent.authentication_gate
+subagent authentication:
+    label: "Identity Verification"
+    description: "Verifies identity for a pending protected order or account request"
 
-		# ★ FOCUS LOCK
-		set @variables.open_gate = "account_management"
+    actions:
+        verify_customer:
+            description: "Verify a customer using an email address and one-time code; failure grants no protected access"
+            inputs:
+                email: string
+                    description: "Customer email address"
+                    is_required: True
+                verification_code: string
+                    description: "One-time verification code"
+                    is_required: True
+            outputs:
+                is_verified: boolean
+                    description: "Whether identity verification succeeded"
+            target: "flow://Verify_Customer"
 
-	reasoning:
-		instructions: ->
-			| The customer is authenticated.
-			| Help them with account settings and profile changes.
-			|
-			| If the customer changes the subject to something unrelated,
-			| let them know you will redirect them.
-		actions:
-			update_profile: @actions.update_customer_profile
-				with field_name=...
-				with new_value=...
-				set @variables.update_result = @outputs.success
+    reasoning:
+        instructions: ->
+            if @variables.authenticated == False:
+                | Ask for the minimum information needed to verify identity.
+                  Invoke verification only when both email and code are
+                  available. On failure, explain that protected access remains
+                  unavailable and allow a retry.
+            else:
+                | Verification succeeded. Redirect to the pending protected
+                  request without asking for the information again.
 
-			# ★ EXIT_PROTOCOL: User changed intent — release gate
-			exit_to_menu: @utils.transition to @subagent.exit_protocol
+            | If the user cancels or changes intent, use cancel_authentication
+              immediately. Never treat a user's claim of verification as proof.
+        actions:
+            verify_identity: @actions.verify_customer
+                with email=...
+                with verification_code=...
+                set @variables.authenticated = @outputs.is_verified
+                available when @variables.authenticated == False
+            cancel_authentication: @utils.transition to @subagent.cancel_pending
+                description: "Cancel verification or handle a changed request immediately"
 
-# ─────────────────────────────────────────────────────────────────────
-# AUTHENTICATION GATE
-# Handles auth flow, then routes back via next_subagent
-# ─────────────────────────────────────────────────────────────────────
-subagent authentication_gate:
-	description: "Verifies customer identity before allowing access to protected subagents"
+    after_reasoning:
+        if @variables.authenticated == True and @variables.pending_destination == "protected_orders":
+            set @variables.pending_destination = ""
+            transition to @subagent.protected_orders
+        else if @variables.authenticated == True and @variables.pending_destination == "protected_account":
+            set @variables.pending_destination = ""
+            transition to @subagent.protected_account
+        else if @variables.authenticated == True:
+            set @variables.pending_destination = ""
+            transition to @subagent.agent_router
 
-	before_reasoning:
-		# ★ FOCUS LOCK: Hold gate open during auth flow
-		set @variables.open_gate = "authentication_gate"
+subagent cancel_pending:
+    label: "Cancel Pending Request"
+    description: "Clears the deferred destination and returns the latest intent to fresh routing"
 
-	reasoning:
-		instructions: ->
-			if @variables.authenticated == True:
-				| You are already authenticated. Redirecting you now.
+    before_reasoning:
+        set @variables.pending_destination = ""
+        transition to @subagent.agent_router
 
-			if @variables.authenticated == False:
-				| I need to verify your identity before I can help with that.
-				| Please provide your email address and verification code.
-		actions:
-			verify_identity: @actions.verify_customer
-				with email=...
-				with verification_code=...
-				set @variables.authenticated = @outputs.is_verified
+    reasoning:
+        instructions: ->
+            | The pending protected request has been cancelled.
 
-	after_reasoning:
-		# ★ POST-AUTH ROUTING: If authenticated, route to deferred destination
-		if @variables.authenticated == True:
-			if @variables.next_subagent == "protected_workflow":
-				set @variables.open_gate = "protected_workflow"
-				transition to @subagent.protected_workflow
-			if @variables.next_subagent == "account_management":
-				set @variables.open_gate = "account_management"
-				transition to @subagent.account_management
+subagent sign_out:
+    label: "Sign Out"
+    description: "Clears session authentication and any deferred destination"
 
-# ─────────────────────────────────────────────────────────────────────
-# EXIT PROTOCOL (Resets Gate State)
-# Clears open_gate so LLM subagent router regains control
-# ─────────────────────────────────────────────────────────────────────
-subagent exit_protocol:
-	description: "Resets gate state and returns to subagent router"
+    before_reasoning:
+        set @variables.authenticated = False
+        set @variables.pending_destination = ""
+        transition to @subagent.agent_router
 
-	before_reasoning:
-		# ★ RELEASE GATE: Clear all gate state
-		set @variables.open_gate = "null"
-		set @variables.next_subagent = ""
-		transition to @subagent.agent_router
+    reasoning:
+        instructions: ->
+            | Session authentication has been cleared.
 
-	reasoning:
-		instructions: ->
-			| Redirecting you to the main menu.
-
-# ─────────────────────────────────────────────────────────────────────
-# GENERAL INQUIRY (Unprotected Subagent)
-# Demonstrates that not every subagent needs gating
-# ─────────────────────────────────────────────────────────────────────
 subagent general_inquiry:
-	description: "Handles general questions that do not require authentication"
+    label: "General Inquiry"
+    description: "Handles general questions, cancellations, and requests that do not need authentication"
 
-	reasoning:
-		instructions: ->
-			| Help the customer with general questions.
-			| No authentication is needed for this subagent.
-			|
-			| If the customer needs help with orders or account settings,
-			| let them know they will need to verify their identity first.
-		actions:
-			go_protected: @utils.transition to @subagent.protected_workflow
-			go_account: @utils.transition to @subagent.account_management
+    reasoning:
+        instructions: ->
+            | Address the user's latest general question. If they cancelled a
+              protected request, acknowledge the cancellation. If they now want
+              protected order or account help, route to the matching protected
+              request handler.
+        actions:
+            go_orders: @utils.transition to @subagent.protected_orders
+                description: "Begin protected order help"
+            go_account: @utils.transition to @subagent.protected_account
+                description: "Begin protected account help"
+            sign_out: @utils.transition to @subagent.sign_out
+                description: "Clear session authentication"
 
-# ═════════════════════════════════════════════════════════════════════
-# ARCHITECTURE DIAGRAM
-# ═════════════════════════════════════════════════════════════════════
-#
-#                       ┌─────────────────────┐
-#                       │   agent_router    │
-#                       │   (start_agent)     │
-#                       │                     │
-#                       │ before_reasoning:   │
-#                       │ if open_gate <> null │
-#                       │   → bypass LLM      │
-#                       └──────────┬──────────┘
-#              ┌───────────────────┼───────────────────┐
-#              ▼                   ▼                   ▼
-#   ┌──────────────────┐ ┌────────────────┐ ┌─────────────────┐
-#   │ protected_workflow│ │account_mgmt   │ │ general_inquiry  │
-#   │ (auth required)  │ │(auth required)│ │ (no auth needed) │
-#   │                  │ │               │ │                  │
-#   │ before_reasoning:│ │ before_reas.: │ │ (no gate logic)  │
-#   │ if !auth → gate  │ │ if !auth→gate │ │                  │
-#   │ if auth → lock   │ │ if auth→lock  │ │                  │
-#   └────────┬─────────┘ └───────┬───────┘ └─────────────────┘
-#            │                   │
-#            ▼                   ▼
-#   ┌──────────────────────────────────────┐
-#   │         authentication_gate          │
-#   │                                      │
-#   │ before_reasoning: lock gate          │
-#   │ reasoning: verify identity           │
-#   │ after_reasoning:                     │
-#   │   if auth → route via next_subagent     │
-#   └──────────────────────────────────────┘
-#
-# ═════════════════════════════════════════════════════════════════════
-# VARIABLE STATE FLOW WALKTHROUGH
-# ═════════════════════════════════════════════════════════════════════
-#
-# User says: "I want to check my order status"
-#
-# Step 1: agent_router
-#   open_gate = "null" → LLM reasons → routes to protected_workflow
-#
-# Step 2: protected_workflow.before_reasoning
-#   authenticated = False → set next_subagent = "protected_workflow"
-#   → set open_gate = "authentication_gate"
-#   → transition to authentication_gate
-#
-# Step 3: authentication_gate.before_reasoning
-#   open_gate = "authentication_gate" (lock)
-#
-# Step 4: User provides email + code → verify_customer succeeds
-#   authenticated = True
-#
-# Step 5: authentication_gate.after_reasoning
-#   authenticated = True, next_subagent = "protected_workflow"
-#   → set open_gate = "protected_workflow"
-#   → transition to protected_workflow
-#
-# Step 6: protected_workflow.before_reasoning
-#   authenticated = True → set open_gate = "protected_workflow" (lock)
-#   → LLM reasons with full access to protected actions
-#
-# Step 7: User says "actually, never mind"
-#   → LLM selects exit_to_menu action
-#   → exit_protocol.before_reasoning: open_gate = "null"
-#   → transition to agent_router (subagent router regains control)
-#
-# ═════════════════════════════════════════════════════════════════════
-# PATTERN COMPARISON
-# ═════════════════════════════════════════════════════════════════════
-#
-# Pattern              | Variables | Auth Gate | Deferred Return | LLM Bypass
-# ─────────────────────┼───────────┼───────────┼─────────────────┼───────────
-# Latch Variable       | 1         | No        | No              | Partial
-# Bidirectional Route  | 1-2       | No        | Yes (manual)    | No
-# Verification Gate    | 1         | Yes       | No              | No
-# Open Gate (this)     | 3         | Yes       | Yes (automatic) | Full
+# Review checklist:
+#   - No open_gate or active-workflow latch bypasses fresh intent routing.
+#   - pending_destination is a return address, never a focus lock.
+#   - Failed verification leaves authenticated=False and cannot unlock actions.
+#   - Cancellation clears the return address on the next turn.
+#   - Sign-out resets session proof; production actions enforce their own expiry.

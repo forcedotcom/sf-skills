@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "AttachedContentNote - Data API",
+  "description": "This read-only object contains all ContentNote objects associated with an object.This object is available in API version 35.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContentDocumentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the attached ContentNote"
+    },
+    "ContentSize": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Size of the note in bytes for notes smaller than 2 GB. In API version 66.0 and later, we recommend that you use the ContentSizeLong field even for notes smaller than 2 GB."
+    },
+    "ContentSizeLong": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The size of the note in bytes up to 10 GB. This field is available in API version 66.0 and later."
+    },
+    "FileExtension": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "File extension of the attached ContentNote."
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Type of file for the note. All notes have a file type of SNOTE."
+    },
+    "LinkedEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the record the ContentNote is attached to."
+    },
+    "TextPreview": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A preview of the note, up to 255 characters."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Title of the note."
+    }
+  },
+  "special_access_rules": "Beginning in Summer ’26, Chatter is default turned off in all new\n    orgs. For any features in these orgs that require access to Chatter functionality or the Chatter\n    APIs, turn on Chatter by going to\n\nChatter Settings\n\nand selecting\n\n. For details, see\n\nChatter Is Turned Off by Default in New Orgs\n     Beginning in Summer ’26",
+  "usage": "Use this object to list all ContentNote objects attached to an object. To retrieve ContentNote objects, issue a describe call on an object, which returns a describe result for each note created or attached. You can’t directly query this object.\n\nUse this object to list all ContentNote objects attached to an object.\n\nTo retrieve ContentNote objects, issue a describe call on an object, which returns a describe result for each note created or attached. You can’t directly query this object.",
+  "field_reference": {
+    "ContentDocumentId": {
+      "field_label": "Content Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContentSize": {
+      "field_label": "Content Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "ContentSizeLong": {
+      "field_label": "Content Size",
+      "type": "long",
+      "digits": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created",
+      "type": "datetime"
+    },
+    "FileExtension": {
+      "field_label": "File Extension",
+      "type": "string",
+      "length": "40"
+    },
+    "FileType": {
+      "field_label": "File Type",
+      "type": "string",
+      "length": "20"
+    },
+    "Id": {
+      "field_label": "Note Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Content Modified Date",
+      "type": "datetime"
+    },
+    "LinkedEntityId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TextPreview": {
+      "field_label": "Text Preview",
+      "type": "string",
+      "length": "255"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

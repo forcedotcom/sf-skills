@@ -1,0 +1,133 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "WorkFeedbackRequest - Data API",
+  "description": "Represents a single feedback request on a subject or topic (question) to a single recipient in the feedback application. In the case of offered feedback, WorkFeedbackRequest represents feedback that is offered about a subject. In the performance application, WorkFeedbackRequest represents a request for feedback on a set of questions from a question set, on a subject—for the recipient to complete and submit.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AdHocFeedback": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The content of the feedback."
+    },
+    "AdHocQuestion": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The content of the feedback question."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The description of the WorkFeedbackRequest."
+    },
+    "FeedbackRequestState": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The current state of the feedback request. Allowed picklist values are: Draft Submitted Declined"
+    },
+    "FeedbackType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies the type of request. Picklist values that are used for performance summaries: Unspecified Peer Summary Self Summary Manager Summary Skip Level Summary Picklist values that are used for feedback: Personal Unsolicited to User Unsolicited to Manager Unsolicited to User and Manager On Topic The type of the feedback determines the sharing and visibility rules that are applied to answers."
+    },
+    "IsDeployed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the feedback is part of a deployed performance summary cycle."
+    },
+    "IsShareWithSubject": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the feedback is shared with the summary subject."
+    },
+    "IsUnreadByOwner": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the submitted request has not been seen by the requester."
+    },
+    "IsUnsolicited": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the feedback request is unsolicited feedback offered to another user."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time stamp that indicates when the current user last viewed a record that is related to this WorkFeedbackRequest."
+    },
+    "LastRemindDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last time a reminder was sent to the recipient of this draft request."
+    },
+    "LastSharedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last time this request was shared with another user or group."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time stamp that indicates when the current user last viewed this WorkFeedbackRequest. If this value is null, this record might have been only referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the WorkFeedbackRequest."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the WorkFeedbackRequest."
+    },
+    "PerformanceCycleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Used by performance summaries to link to a summary cycle. This field applies only to performance summaries."
+    },
+    "QuestionSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Question set associated with the current request."
+    },
+    "RecipientId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "User asked to provide feedback on the subject."
+    },
+    "RelatedObjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Specifies a record in the system that this feedback request is related to. Used by ad-hoc feedback to gather feedback in the context of an opportunity or WDC goal. Used by performance summaries to link to a summary cycle."
+    },
+    "SharingScope": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The users that see the feedback. SharingScope can have the following values: Nobody Subject Manager SubjectAndManager"
+    },
+    "SubjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the user that this request (or offer) is about."
+    },
+    "SubmitFeedbackToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the person this performance summary feedback request (and its respective answers) is shared with. It’s also the ID of the person who owns the requested subject’s manager summary request. This field applies only to performance summaries."
+    },
+    "SubmittedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The last time (in case it was reopened by admin) this request was submitted by the recipient. This field applies only to performance summaries."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **WorkFeedbackRequestFeed**: Feed tracking is available for the object.\n- **WorkFeedbackRequestOwnerSharingRule**: Sharing rules are available for the object.\n- **WorkFeedbackRequestShare**: Sharing is available for the object."
+}

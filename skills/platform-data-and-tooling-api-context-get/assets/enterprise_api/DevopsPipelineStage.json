@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "DevopsPipelineStage - Data API",
+  "description": "Represents a connection between a pipeline, an environment, and the source control branch used for that stage. The collection of all pipeline stages in a project make up the DevOps Center pipeline. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "DevOpsEnvironmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the associated pipeline stage where these stage operations happen. Currently all environments are Salesforce orgs. This field is a relationship field.",
+      "relationship_name": "DevOpsEnvironment",
+      "refers_to": "DevopsEnvironment"
+    },
+    "DevopsPipelineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent DevopsPipeline record that this stage belongs to. This field is a relationship field.",
+      "relationship_name": "DevopsPipeline",
+      "relationship_type": "Master-detail",
+      "refers_to": "DevopsPipeline (the parent object)"
+    },
+    "IsBundled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether work items in this stage are bundled together for promotion. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastSyncDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time the stage environment was last synced with the source control branch."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the pipeline stage. For example, Staging or UAT."
+    },
+    "NextStageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the next stage in the release pipeline. For a production stage, this value is NULL. This field is a relationship field.",
+      "relationship_name": "NextStage",
+      "refers_to": "DevopsPipelineStage"
+    },
+    "ReviewRemoteReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to a change request associated with this stage in the source control."
+    },
+    "SourceCodeRepositoryBranchId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the specific branch in the source control that corresponds to this pipeline stage. This field is a relationship field.",
+      "relationship_name": "SourceCodeRepositoryBranch",
+      "refers_to": "SourceCodeRepositoryBranch"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **DevopsPipelineStageFeed**: Feed tracking is available for the object.\n- **DevopsPipelineStageHistory**: History is available for tracked fields of the object."
+}

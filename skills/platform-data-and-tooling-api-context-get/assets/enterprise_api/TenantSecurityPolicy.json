@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityPolicy - Data API",
+  "description": "Stores security policies created and deployed in Security Center. For more information, see Define and Deploy Security Policies. This object is available to Security Center subscribers in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The API name of the policy. This field is unique within your organization."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The description of the policy."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the policy."
+    },
+    "PolicyData": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "The policy details contained in JSON format."
+    },
+    "PolicyIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The ID of this policy. Contains a unique virtual key from child to parent."
+    },
+    "PolicyType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The type of policy. For example, Health Check Baseline."
+    },
+    "SourceRowIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the policy that is applied to the tenant. This value is specific to the org that owns this record."
+    },
+    "Status": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The status of the policy. For example, the policy is active or inactive."
+    },
+    "Version": {
+      "type": "int",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The version of the policy."
+    }
+  },
+  "special_access_rules": "This object is read/write.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityPolicyChangeEvent**: Change events are available for the object.\n- **TenantSecurityPolicyFeed**: Feed tracking is available for the object.\n- **TenantSecurityPolicyHistory**: History is available for tracked fields of the object.\n- **TenantSecurityPolicyOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityPolicyShare**: Sharing is available for the object."
+}

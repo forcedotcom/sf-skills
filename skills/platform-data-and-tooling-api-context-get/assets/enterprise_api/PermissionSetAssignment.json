@@ -1,0 +1,124 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PermissionSetAssignment - Data API",
+  "description": "Represents a user’s assignment to a permission set or permission set group. This object is available in API version 22.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssigneeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the user that is assigned the permission set indicated in PermissionSetId or the permission set group indicated in PermissionSetGroupId. This is a relationship field.",
+      "relationship_name": "Assignee",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date that the assignment of the permission set or permission set group expires for the specified user. This field is available in API version 52.0 and later."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the assignment is active (true) or not (false). Defaults to false. This field is available in API version 52.0 and later."
+    },
+    "IsRevoked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the assignment was revoked (true) or not (false). Defaults to false. This field is available only if user access policies are enabled. This field is available in API version 57.0 and later."
+    },
+    "LastCreatedByChangeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user access change record related to this permission set or permission set group assignment. This field is available only if user access policies are enabled. This field is available in API version 57.0 and later. This field is a relationship field.",
+      "relationship_name": "LastCreatedByChange",
+      "relationship_type": "Lookup",
+      "refers_to": "UserAccessChange"
+    },
+    "LastDeletedByChangeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the user access change record related to this permission set or permission set group assignment being revoked. This field is available only if user access policies are enabled. This field is available in API version 57.0 and later. This field is a relationship field.",
+      "relationship_name": "LastCreatedByChange",
+      "relationship_type": "Lookup",
+      "refers_to": "UserAccessChange"
+    },
+    "PermissionSetGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the permission set group assigned to the user specified in AssigneeId. This field is available in API version 45.0 and later. This is a relationship field.",
+      "relationship_name": "PermissionSetGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSetGroup"
+    },
+    "PermissionSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the permission set assigned to the user specified in AssigneeId. This is a relationship field.",
+      "relationship_name": "PermissionSet",
+      "relationship_type": "Lookup",
+      "refers_to": "PermissionSet"
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users who have one of these permissions can access this object:",
+  "usage": "- **Finding Permission Set Assignments**: Use the PermissionSetAssignment object to query permission set assignments to find out which permission sets are assigned to which users. Because each user can be assigned to many permission sets and each permission set can be assigned to many users, each PermissionSetAssignment ID represents the association of a single user and single permission set.\n- **User Licenses**: For example, to search for all permission sets assigned to a particular user:SELECT Id, PermissionSetId FROM PermissionSetAssignment WHERE AssigneeId = '005600000017cKt'` To search for all users assigned to a particular permission set:SELECT Id, AssigneeId FROM PermissionSetAssignment WHERE PermissionSetId = '0PS30000000000e'` You can also create a new permission set assignment, or use delete to remove a permission set that's assigned to a user. To update an assignment, delete an existing assignment and insert a new one.\n- **Revoked Assignments from User Access Policies**: When assigning a permission set, if the PermissionSet has a UserLicenseId, its UserLicenseId and the Profile UserLicenseId must match. To determine a user's license assignment, query the user's profile and then query the profile's license.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PermissionSetAssignment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Assignee\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"AssigneeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRevoked\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionSet\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSet\"/>\n        <element name=\"PermissionSetGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PermissionSetGroup\"/>\n        <element name=\"PermissionSetGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PermissionSetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AssigneeId": {
+      "field_label": "Assignee ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExpirationDate": {
+      "field_label": "Expires On",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Permission Set Assignment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "IsRevoked": {
+      "field_label": "Is Revoked",
+      "type": "boolean"
+    },
+    "PermissionSetGroupId": {
+      "field_label": "Permission Set Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PermissionSetId": {
+      "field_label": "Permission Set ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "Date Assigned",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

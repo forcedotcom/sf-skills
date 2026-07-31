@@ -1,0 +1,30 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "RecordVisibility (Pilot) - Data API",
+  "description": "Represents the visibility attributes that determine a record’s read access. This object is read only and is available in API version 46.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "RecordId": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The ID of the record."
+    },
+    "VisibilityAttribute": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The visibility attributes that determine the read access of a given record. For example, a user ID, parent record ID, or group ID. The output of visibility attributes is in JSON format and must be deserialized."
+    }
+  },
+  "special_access_rules": "To access this object, you need a CRM Analytics license or to contact Salesforce to participate in the pilot program. You must also have the “View All Data” or “Enable RecordVisibility API” user permission.\n\nWe provide the RecordVisibility object to selected customers through a pilot program that\n\t\t\t\trequires agreement to specific terms and conditions. To be nominated to participate\n\t\t\t\tin the program, contact Salesforce. Pilot programs are subject to change, and we\n\t\t\t\tcan’t guarantee acceptance. The RecordVisibility object isn’t generally available\n\t\t\t\tunless or until Salesforce announces its general availability in documentation or in\n\t\t\t\tpress releases or public statements. We can’t guarantee general availability within\n\t\t\t\tany particular time frame or at all. Make your purchase decisions only on the basis\n\t\t\t\tof generally available products and features. You can provide feedback and\n\t\t\t\tsuggestions for the RecordVisibility object in the group in the\n\nTrailblazer Community",
+  "usage": "Use this object to query the attributes that determine the visibility of one or more records. You can’t create, delete, or update any records using this object. Up to 200 record IDs can be queried. You can include an ORDER BY clause for any field that is being selected in the query. This sample query returns the visibility attributes for the indicated record. The RecordId and VisibilityAttribute fields must be a part of the fields that are being selected despite RecordId being used in the filter criteria as well. RecordVisibility is a foreign key on the records. This query returns the visibility attributes for Account records: You can’t filter RecordId fields when using RecordVisibility as a lookup or foreign key. You can use RecordVisibilityContext to filter WITH clauses in queries. For more information, see WITH filteringExpression in the SOQL and SOSL Reference.\n\nUse this object to query the attributes that determine the visibility of one or more records. You can’t create, delete, or update any records using this object.\n\nUp to 200 record IDs can be queried. You can include an ORDER BY clause for any field that is being selected in the query.\n\nThis sample query returns the visibility attributes for the indicated record.\n\nThe RecordId and VisibilityAttribute fields must be a part of the fields that are being selected despite RecordId being used in the filter criteria as well.\n\nRecordVisibility is a foreign key on the records. This query returns the visibility attributes for Account records:\n\nYou can’t filter RecordId fields when using RecordVisibility as a lookup or foreign key.\n\nYou can use RecordVisibilityContext to filter WITH clauses in queries. For more information, see WITH filteringExpression* in the SOQL and SOSL Reference."
+}

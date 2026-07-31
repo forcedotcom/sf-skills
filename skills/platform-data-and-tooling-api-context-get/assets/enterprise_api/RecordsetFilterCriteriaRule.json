@@ -1,0 +1,195 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "RecordsetFilterCriteriaRule - Data API",
+  "description": "Represents a rule using fields from the designated source object to create filters on the filtered, or target, object. RecordsetFilterCriteriaRule is associated with the RecordsetFilterCriteria object. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CriteriaField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The field the filter rule is applied to. Asset fields are available in API version 52.0 and later. Possible values are derived from the source object’s standard and custom fields. Possible standard source objects are Asset and ServiceAppointment. The format is, for example, Asset.PricingSource or ServiceAppointment.GroupAppointmentAccessType. All standard and custom fields are allowed except those with these field types: encryptedstring multipicklist textarea url"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the recordset filter criteria rule was last referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the recordset filter criteria rule was last viewed."
+    },
+    "NextOccurence": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "This field’s value is compared to the Usage Field to determine if the rule is true. Possible values are derived from the source object’s standard and custom fields. Possible standard source objects are Asset and ServiceAppointment. The format is, for example, Asset.PricingSource or ServiceAppointment.GroupAppointmentAccessType. All standard and custom fields are allowed except those with these field types: encryptedstring multipicklist textarea url"
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The relational operator between CriteriaField and Value. Available in API version 52.0 or later. Possible values are: Equals—Default GreaterOrEqual GreaterThan LessOrEqual LessThan"
+    },
+    "RecordsetFilterCriteriaId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the RecordsetFilterCriteria record to associate this rule with."
+    },
+    "RecordsetFilterCriteriaRuleNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The automatically assigned number of the recordset filter criteria rule."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of criteria rule. Possible values are: Criteria—Default Usage UsageCounter— Usage(Counter) UsageDuration— Usage(Duration)"
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The expected value of CriteriaField applied to the filter rule."
+    },
+    "Usage Rate Field": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Stores the daily usage rate of the asset. The unit for the usage rate must be per day. Possible values are derived from the source object’s standard and custom fields. Possible standard source objects are Asset and ServiceAppointment. The format is, for example, Asset.PricingSource or ServiceAppointment.GroupAppointmentAccessType."
+    },
+    "Usage Rate Unit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Defines the rate for Usage Rate Field. Possible values are: DAYS"
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "usage": "If you want to create a filter rule for service appointments with a dispatched status, set CriteriaField to ServiceAppointment.Status and Value to Dispatched. Then add the ID from a RecordsetFilterCriteria record to RecordsetFilterCriteriaId to associate this rule with a filter criteria for shifts.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"RecordsetFilterCriteriaRule\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CriteriaField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FirstOccurrence\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Frequency\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Index\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastOccurrence\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"NextOccurrenceField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Operator\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordsetFilterCriteria\" nillable=\"true\" minOccurs=\"0\" type=\"ens:RecordsetFilterCriteria\"/>\n        <element name=\"RecordsetFilterCriteriaId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RecordsetFilterCriteriaRuleNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UsageRateField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UsageRateUnit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"Value\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CriteriaField": {
+      "field_label": "Criteria Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FirstOccurrence": {
+      "field_label": "First Occurrence",
+      "type": "string",
+      "length": "255"
+    },
+    "Frequency": {
+      "field_label": "Frequency",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Recordset Filter Criteria Rule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Index": {
+      "field_label": "Index",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastOccurrence": {
+      "field_label": "Last Occurrence",
+      "type": "string",
+      "length": "255"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "NextOccurrenceField": {
+      "field_label": "Next Occurrence Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Operator": {
+      "field_label": "Operator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecordsetFilterCriteriaId": {
+      "field_label": "Recordset Filter Criteria ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecordsetFilterCriteriaRuleNumber": {
+      "field_label": "Recordset Filter Criteria Rule Number",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Recordset Filter Criteria Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UsageRateField": {
+      "field_label": "Usage Rate Field",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UsageRateUnit": {
+      "field_label": "Usage Rate Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "textarea",
+      "length": "256"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "TwoFactorTempCode - Data API",
+  "description": "Stores information about a user’s temporary verification code for confirming their identity when logging in. This object is available in API version 37.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Expiration": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time when the temporary verification code expires. The code expires in 1 to 24 hours after it’s generated. Salesforce admins and non-admin users with the Manage Multi-Factor Authentication in User Interface permission set the expiration time when generating the code."
+    },
+    "Identifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique identifier for the temporary code. This is a required field that can take any value."
+    },
+    "TempCode": {
+      "type": "encryptedstring",
+      "description": "A request for this value always returns null."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID for the user who’s associated with the temporary verification code."
+    }
+  },
+  "special_access_rules": "You need the Manage Multi-Factor Authentication in API permission to access this object. (Note that multi-factor authentication was formerly called two-factor authentication.)"
+}

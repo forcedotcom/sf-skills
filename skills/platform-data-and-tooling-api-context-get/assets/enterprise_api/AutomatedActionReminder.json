@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "AutomatedActionReminder - Data API",
+  "description": "Represents a reminder to the end user to take an action in the future. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionTakenDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Timestamp of when the user took the action suggested by the reminder."
+    },
+    "AutomatedActionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the automated action. This field is a relationship field.",
+      "relationship_name": "AutomatedAction",
+      "relationship_type": "Lookup",
+      "refers_to": "AutomatedAction"
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action reminder record is locked or not. The default value is false."
+    },
+    "IsValidForUser": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action is active and accessible to the user who owns the record (true) or not (false). The default value is false."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the automated action reminder record can be edited or not. The default value is false."
+    },
+    "ReferenceRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The record that triggered the reminder. For example, when a rule is set to Case, the value of this field is CaseId. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Case, Contact, Invoice, Lead, Opportunity"
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date and time this reminder is scheduled to be displayed to the user."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the reminder. Possible values are: Active Completed Disabled Dismissed Expired"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of automated action reminder. Possible values are: Reminder"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AutomatedActionReminderOwnerSharingRule**: Sharing rules are available for the object.\n- **AutomatedActionReminderShare**: Sharing is available for the object."
+}

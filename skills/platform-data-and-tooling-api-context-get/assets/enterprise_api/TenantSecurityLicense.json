@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityLicense - Data API",
+  "description": "Stores license usage information within Security Center. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Action": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The type of change made to the license. Possible values are: ADDED REMOVED UPDATED"
+    },
+    "ActionDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when this change was made."
+    },
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The unique identifier for this detail record."
+    },
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date on which this license expires."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the corresponding TenantSecurityMonitorMetric."
+    },
+    "MetricsType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of license collected by this metric."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the license."
+    },
+    "Status": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The status of the license."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant with this license."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the tenant with this license."
+    },
+    "TotalLicenses": {
+      "type": "int",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The total number of licenses."
+    },
+    "UsedLicenses": {
+      "type": "int",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The number of used licenses."
+    },
+    "UsedLicensesLastUpdated": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date that the used licenses were last updated for this tenant."
+    }
+  },
+  "special_access_rules": "This object is available only for Security Center subscribers. This object is read-only.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **TenantSecurityLicenseChangeEvent**: Change events are available for the object.\n- **TenantSecurityLicenseFeed**: Feed tracking is available for the object.\n- **TenantSecurityLicenseHistory**: History is available for tracked fields of the object.\n- **TenantSecurityLicenseOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityLicenseShare**: Sharing is available for the object."
+}

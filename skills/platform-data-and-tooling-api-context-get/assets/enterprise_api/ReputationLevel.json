@@ -1,0 +1,101 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ReputationLevel - Data API",
+  "description": "Represents a reputation level defined for an Experience Cloud site. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the reputation level."
+    },
+    "LevelNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The rank of the reputation level."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the parent Experience Cloud site the reputation level applies to."
+    },
+    "Threshold": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The lower limit of reputation points associated with this reputation level. The maximum number of reputation points a user can accrue is 999,999,999,999,999."
+    }
+  },
+  "special_access_rules": "This object is available only if digital experiences is enabled in your org. Only users with permissions to create or manage an Experience Cloud site can view the ReputationPointsRule records.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Reputation Level ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Level Name",
+      "type": "string",
+      "length": "50"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LevelNumber": {
+      "field_label": "Level Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Threshold": {
+      "field_label": "Point Threshold",
+      "type": "double",
+      "precision": "15",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

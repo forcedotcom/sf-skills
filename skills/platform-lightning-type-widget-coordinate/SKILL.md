@@ -2,13 +2,15 @@
 name: platform-lightning-type-widget-coordinate
 description: "Orchestrate Apex-backed Lightning Type + HXL widget generation. TRIGGER only when the prompt EXPLICITLY invokes Lightning Types: user says 'Lightning Type', 'CLT', 'Custom Lightning Type', 'Apex-backed type', references '@apexClassType/...', asks to build a widget or card for a named Lightning Type, asks to create a new Lightning Type and widget together, or grounds a widget in a specific Apex class as its schema. DO NOT TRIGGER when the prompt names only a subject, domain, feature, or entity noun. Also DO NOT TRIGGER when: authoring only a Custom Lightning Type (use platform-custom-lightning-type-generate), only an Apex class (use platform-apex-generate), editing an existing widget without any Lightning Type change, or grounding a widget on an object/JSON-based Lightning Type (lightning__objectType with primitives)."
 metadata:
-  version: "1.1"
+  version: "1.2"
   minApiVersion: "68.0"
   relatedSkills:
-    - "platform-widget-generate"
-    - "platform-custom-lightning-type-generate"
     - "platform-apex-generate"
+    - "platform-custom-lightning-type-generate"
+    - "platform-widget-generate"
   cliTools:
+    - tool: ["git"]
+      semver: ">=2.0.0"
     - tool: ["jq"]
       semver: ">=1.6.0"
     - tool: ["sf"]
@@ -117,13 +119,13 @@ Execute the sub-skill load order from the chosen path's row in the Phase 1 table
 **`existing-lightning-type-with-widget` handoff contract:**
 
 - Hand the widget skill the Lightning Type `schema.json` path and the Apex class FQN captured in Phase 2. The widget skill derives its own `schema.json` from the Apex class's `@AuraEnabled` fields (see `platform-widget-generate/references/schema-from-lightning-type.md`).
-- After the widget bundle is written, author the Lightning Type's renderer wiring per the **renderer.json wiring step** below. The Lightning Type `schema.json` is NOT modified (`lightning-type-unchanged` enforces this) — only `lightningDesktopGenAi/renderer.json` is written.
+- After the widget bundle is written, author the Lightning Type's renderer wiring per the **renderer.json wiring step** below. The Lightning Type `schema.json` is NOT modified (`lightning-type-unchanged` enforces this) — only `renderer.json` is written.
 
 **Renderer.json wiring step (BOTH flows — never optional):**
 
 **First, Read `platform-custom-lightning-type-generate/references/widget-rendition.md` (REQUIRED — do NOT skip; do not author `renderer.json` from memory or by copying an existing project sample, which may use a deprecated shape).**
 
-After the widget bundle exists, author `<pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json` using the **widget-rendition pattern** documented in `platform-custom-lightning-type-generate/references/widget-rendition.md`. The renderer file is a thin wrapper — its first child references the widget via `"definition": "@widget/c/<widgetName>"` and maps **every widget schema property** to the Lightning Type instance's matching attribute via `{!$attrs.<schemaPropertyName>}`. Do **NOT** duplicate the widget body inside `renderer.json`; the widget bundle is the single source of truth for the rendering tree.
+After the widget bundle exists, author `<pkgDir>/lightningTypes/<TypeName>/renderer.json` using the **widget-rendition pattern** documented in `platform-custom-lightning-type-generate/references/widget-rendition.md`. The renderer file is a thin wrapper — its first child references the widget via `"definition": "@widget/c/<widgetName>"` and maps **every widget schema property** to the Lightning Type instance's matching attribute via `{!$attrs.<schemaPropertyName>}`. Do **NOT** duplicate the widget body inside `renderer.json`; the widget bundle is the single source of truth for the rendering tree.
 
 Existing-renderer handling (`existing-lightning-type-with-widget` only): if `renderer.json` already exists at the target path, read it first.
 
@@ -142,7 +144,7 @@ Read `references/validation-gates.md` and **run every gate**. The orchestrator r
 **Hard — block on failure:**
 
 1. `lightning-type-unchanged` — **`existing-lightning-type-with-widget` only.** Recompute SHA-256 of the on-disk Lightning Type `schema.json` and compare against the SHA captured in Phase 2. Mismatch = orchestrator silently edited the type.
-2. `renderer-wires-widget` — **both paths.** Confirm `<pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json` exists, parses as JSON, wires this widget via `componentOverrides["$"].definition === "@widget/c/<widgetName>"`, and `componentOverrides["$"].attributes` binds every widget schema property as `{!$attrs.<schemaPropertyName>}`. See "renderer.json wiring step" in Phase 4 and `validation-gates.md` for the required shape.
+2. `renderer-wires-widget` — **both paths.** Confirm `<pkgDir>/lightningTypes/<TypeName>/renderer.json` exists, parses as JSON, wires this widget via `componentOverrides["$"].definition === "@widget/c/<widgetName>"`, and `componentOverrides["$"].attributes` binds every widget schema property as `{!$attrs.<schemaPropertyName>}`. See "renderer.json wiring step" in Phase 4 and `validation-gates.md` for the required shape.
 
 **Warn — advisory:**
 
@@ -167,8 +169,8 @@ FILES GENERATED:
     <pkgDir>/uiWidgets/<widgetName>/<widgetName>.uiwidget-meta.xml
 
   Lightning Type bundle:
-    <pkgDir>/lightningTypes/<TypeName>/schema.json                              # only when newly created
-    <pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json      # always — wires the Lightning Type to the widget
+    <pkgDir>/lightningTypes/<TypeName>/schema.json                # only when newly created
+    <pkgDir>/lightningTypes/<TypeName>/renderer.json              # always — wires the Lightning Type to the widget
 
   Apex (only when newly created):
     <pkgDir>/classes/<ClassName>.cls
@@ -198,7 +200,7 @@ NEXT STEPS:
 6. **Always load the leaf skill** before generation. Do not author from memory.
 7. **Out-of-scope types stop the orchestrator.** If Phase 2 discovers an object/JSON-based Lightning Type, route the user to `platform-custom-lightning-type-generate` and `platform-widget-generate` separately.
 8. **Run gates, do not describe them.** Phase 5 gates are concrete checks/commands. Reporting `pass` without executing the gate is a hard violation; report `not run` instead.
-9. **Lightning Type rendition is mandatory, never optional.** Both paths end with `<pkgDir>/lightningTypes/<TypeName>/lightningDesktopGenAi/renderer.json` wiring the Lightning Type to the widget via `@widget/c/<widgetName>` with attribute mapping per the widget-rendition pattern. Without this, the widget bundle ships dead. `renderer-wires-widget` enforces existence and binding.
+9. **Lightning Type rendition is mandatory, never optional.** Both paths end with `<pkgDir>/lightningTypes/<TypeName>/renderer.json` wiring the Lightning Type to the widget via `@widget/c/<widgetName>` with attribute mapping per the widget-rendition pattern. Without this, the widget bundle ships dead. `renderer-wires-widget` enforces existence and binding.
 10. **No shell metacharacters that trigger the Vibes safe-shell filter.** In every `Bash` tool call emitted by this orchestrator and by any leaf skill it invokes, do NOT use command substitution (`$(…)` or backticks), process substitution (`<(…)`, `>(…)`), brace expansion (`{a,b,c}` or `{1..N}`), or `eval` / `exec`. These patterns force manual approval even under Bypass mode and stall the eval. Instead: run separate commands (`mkdir -p a && mkdir -p b`, not `mkdir -p {a,b}`); print each intermediate value with its own command and reason about the result rather than capturing it (`jq … file` on its own, not `X=$(jq … file)`); use plain shell variables (`X=literal`) or here-strings when a value must be reused across commands.
 
 ---

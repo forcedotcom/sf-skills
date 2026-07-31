@@ -1,0 +1,259 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ApprovalWorkItem - Data API",
+  "description": "Contains run-time information about each step in an approval workflow, such as assignees and their decisions regarding the object's approval. Has a master-detail relationship with ApprovalSubmission. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApprovalChainName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the related approval chain. This field is populated when there are multiple approval chains that are run in parallel. This field is only available with Advanced Approvals enabled."
+    },
+    "ApprovalConditionName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the condition that assigns the work item to a user or group for approval."
+    },
+    "ApprovalSubmissionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The approval submission that's associated with this item. This field is a relationship field.",
+      "relationship_name": "ApprovalSubmission",
+      "relationship_type": "Master-detail",
+      "refers_to": "ApprovalSubmission (the master object)"
+    },
+    "AssignedToId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The user, group, or queue that was assigned the work item. This field is a polymorphic relationship field.",
+      "relationship_name": "AssignedTo",
+      "refers_to": "Group (Type = Regular), Group (Type = Queue), User"
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "The comments that the user adds when they review or override the work item."
+    },
+    "FlowOrchestrationWorkItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The identifier of the associated flow orchestration work item. This field is a relationship field.",
+      "relationship_name": "FlowOrchestrationWorkItem",
+      "refers_to": "FlowOrchestrationWorkItem"
+    },
+    "IsAutoReviewed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the work item was auto-reviewed (true) or not (false). The default value is false. This field is only available with Advanced Approvals enabled."
+    },
+    "IsEligibleForAutoApproval": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether custom logic is used for auto-approval of this approval work item (true) or not (false). This field is only available with Advanced Approvals enabled."
+    },
+    "IsEligibleForSmartApproval": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the approval work item is eligible for smart approval (true) or not (false). The default value is false. This field is only available with Advanced Approvals enabled."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The sequentially-generated name of the related record that’s submitted for approval, for example AWI-000000001."
+    },
+    "ParentWorkItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the parent approval work item. When multiple group members receive child work items, this field links each child to its parent. This field is available in API version 67.0 and later.",
+      "relationship_name": "ParentWorkItem",
+      "relationship_type": "Lookup",
+      "refers_to": "ApprovalWorkItem"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of the related record that's submitted for approval.",
+      "relationship_name": "RelatedRecord",
+      "refers_to": "The objects that you have access to for approvals."
+    },
+    "RelatedRecordObjectName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the related record that's submitted for approval."
+    },
+    "ReviewedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The identifier of the user that reviewed the work item. This field is a relationship field.",
+      "relationship_name": "ReviewedBy",
+      "refers_to": "User"
+    },
+    "ReviewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The date and time when the work item was reviewed."
+    },
+    "SmartApprovalBasisWorkItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The previous approval work item used as a reference for the auto-approval evaluation. This field is a relationship field. This field is only available with Advanced Approvals enabled.",
+      "relationship_name": "SmartApprovalBasisWorkItem",
+      "refers_to": "ApprovalWorkItem"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the approval work item. Possible values are: Approved Assigned Canceled Errored—Error Recalled Rejected Withdrawn"
+    }
+  },
+  "special_access_rules": "This object is available in Enterprise, Performance, Unlimited, and Developer Editions for users with access to the Approval Submission object.\n\nThis object is available\n         in Enterprise, Performance, Unlimited, and Developer Editions for users with access to the\n         Approval Submission object.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ApprovalWorkItemHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ApprovalWorkItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalConditionName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApprovalSubmission\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApprovalSubmission\"/>\n        <element name=\"ApprovalSubmissionDetails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssignedTo\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"AssignedToId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ChildApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowOrchestrationWorkItem\"/>\n        <element name=\"FlowOrchestrationWorkItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RelatedRecordObjectName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReviewedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ReviewedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ReviewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ApprovalChainName": {
+      "field_label": "Approval Chain Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ApprovalConditionName": {
+      "field_label": "Approval Condition Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ApprovalSubmissionId": {
+      "field_label": "Approval Submission ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssignedToId": {
+      "field_label": "Assigned To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FlowOrchestrationWorkItemId": {
+      "field_label": "Orchestration Work Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Approval Work Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAutoReviewed": {
+      "field_label": "Auto Reviewed",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEligibleForAutoApproval": {
+      "field_label": "Eligible For Auto-Approval",
+      "type": "boolean"
+    },
+    "IsEligibleForSmartApproval": {
+      "field_label": "Eligible For Smart Approval",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Approval Work Item Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentWorkItemId": {
+      "field_label": "Approval Work Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordObjectName": {
+      "field_label": "Related Record Object Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ReviewedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReviewedDate": {
+      "field_label": "Reviewed Date",
+      "type": "datetime"
+    },
+    "SmartApprovalBasisWorkItemId": {
+      "field_label": "Approval Work Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

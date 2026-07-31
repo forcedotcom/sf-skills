@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "OrgDomainLog - Tooling API",
+  "description": "Represents a Salesforce org’s previous My Domain. This object is available in API version 51.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`, `HEAD`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DomainPartition": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The partition for this org. When none, partitioned domains aren’t enabled. Otherwise, My Domain hostnames include the partition value. For example, the format of a My Domain login hostname for a Developer Edition org with partitioned domains is MyDomainName.develop.my.salesforce.com.Possible values are: demo—Used in demo orgs. Available in API version 60.0 and later. develop—Used in Developer Edition orgs. Also used in patch orgs where partitioned domains were deployed before Winter ’24. free—Reserved for internal use. none—Indicates that this org doesn’t use partitioned domains. patch—Used in patch orgs. Available in API version 59.0 and later. sandbox—Used in sandboxes with enhanced domains. These orgs are always partitioned. scratch—Used in scratch orgs. sfdctest—Reserved for internal use. trailblaze—Used in Trailblazer Playgrounds. Available in API version 55.0 and later."
+    },
+    "MyDomainName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A previous My Domain name for the Salesforce org."
+    },
+    "ProdSuffixType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "A previous Salesforce domain suffix, which is appended to the My Domain name. Possible values are: CloudforceLimited—cloudforce.com DatabaseLimited—database.com MySalesforce—my.salesforce.com with enhanced domains MySalesforceLimited—my.salesforce.com without enhanced domains OrgLevelCertificateLimited—legacy version of my-salesforce.com that’s noncompliant with browser settings that block third-party cookies OrgLevelCertificate—my-salesforce.com Restricted1—Reserved for future use. Restricted2—Reserved for future use."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OrgDomainLog\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"DomainPartition\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"MyDomainName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ProdSuffixType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,204 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AnalyticsDashboard - Data API",
+  "description": "Represents a Tableau Next dashboard. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AnalyticsWorkspaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Tableau Next workspace the dashboard is associated with. This field is a relationship field.",
+      "relationship_name": "AnalyticsWorkspace",
+      "refers_to": "AnalyticsWorkspace"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The description of the dashboard."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The API name of the dashboard."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The supported languages for the visualization. There are over 50+ supported language and dialect values."
+    },
+    "LastDraftModifiedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The last modified date for the dashboard in draft mode."
+    },
+    "LastPublishedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The last published date for the dashboard."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The label for the dashboard."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix for the dashboard."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The user ID of the user who created the dashboard. This field is a relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "User"
+    },
+    "Style": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The widget style for the dashboard, represented as a JSON string. For example, {\"widgetStyle\":{\"backgroundColor\":\"#ffffff\",\"borderEdges\":[],\"borderColor\":\"#cccccc\",\"borderWidth\":1,\"borderRadius\":0}}"
+    },
+    "TemplateAssetSourceName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the dashboard was created from a template, this is name of the asset source."
+    },
+    "TemplateSource": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the dashboard was created from a template, this is name of the template."
+    },
+    "Version": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The API version for the dashboard."
+    }
+  },
+  "special_access_rules": "To access this object, you must have Tableau Next enabled in your org and a Tableau Next permission set.",
+  "field_reference": {
+    "AnalyticsWorkspaceId": {
+      "field_label": "Analytics Workspace ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BackgroundSourceId": {
+      "field_label": "Asset File ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomConfig": {
+      "field_label": "Custom Config",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Analytics Dashboard ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastDraftModifiedDate": {
+      "field_label": "Last Draft Modified Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastPublishedDate": {
+      "field_label": "Last Published Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "OwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Style": {
+      "field_label": "Style",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TemplateAssetSourceName": {
+      "field_label": "TemplateAssetSourceName",
+      "type": "string",
+      "length": "255"
+    },
+    "TemplateSource": {
+      "field_label": "TemplateSource",
+      "type": "string",
+      "length": "255"
+    },
+    "Version": {
+      "field_label": "Version",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

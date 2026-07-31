@@ -2,7 +2,14 @@
 name: design-systems-slds-apply
 description: "Apply SLDS-compliant UI using the correct blueprints, styling hooks, utility classes, and icons. Use when building any UI that needs SLDS, choosing between Lightning Base Components and SLDS Blueprints, applying styling hooks for theming, using utility classes for layout and spacing, or selecting icons. Triggers include \"build a modal\", \"create a form\", \"data table\", \"SLDS styling\", \"style with hooks\", \"add an icon\"."
 metadata:
-  version: "1.0"
+  version: "1.1"
+  relatedSkills:
+    - "design-systems-slds-validate"
+  cliTools:
+    - tool: ["npx"]
+      semver: ">=7.0.0"
+    - tool: ["node"]
+      semver: ">=18.0.0"
 ---
 
 # Applying SLDS
@@ -47,7 +54,7 @@ The **Salesforce Lightning Design System (SLDS)** is a CSS framework with thousa
 
 Always follow this order:
 
-```
+```text
 1. Lightning Base Components (LWC only)    ← Check first
 2. SLDS Blueprints (any framework)         ← Use exact SLDS classes
 3. Custom with Styling Hooks               ← Use var(--slds-g-*)
@@ -249,9 +256,9 @@ npx @salesforce-ux/slds-linter@latest lint <component-path>
 
 The linter catches hardcoded values, class overrides, and deprecated tokens. **Fix all violations before proceeding.** Do not rationalize violations as acceptable.
 
-**Step 2: Verify no invented hooks.** Confirm every `--slds-g-*` hook in the output exists in `assets/hooks-index.json`. Cross-reference against the T051 check in [checklists.md](checklists.md).
+**Step 2: Verify no invented hooks.** Confirm every `--slds-g-*` hook in the output exists in `assets/hooks-index.json`. Cross-reference against the T051 check in [checklists.md](references/checklists.md).
 
-**Step 3: Run through [checklists.md](checklists.md)** for the checks the linter cannot automate:
+**Step 3: Run through [checklists.md](references/checklists.md)** for the checks the linter cannot automate:
 - All `var(--slds-g-*)` have fallback values (T002)
 - Surface/accent/feedback color hooks are properly paired (T010–T013)
 - Spacing uses hooks or utility classes — no magic `px` values (T020–T021)
@@ -306,11 +313,11 @@ font-size: var(--slds-g-font-scale-2, 0.875rem);
 
 ## Examples
 
-See [examples.md](examples.md) for worked examples demonstrating the full workflow from intent to SLDS artifact selection.
+See [examples.md](references/examples.md) for worked examples demonstrating the full workflow from intent to SLDS artifact selection.
 
 ## Validation
 
-See [checklists.md](checklists.md) for validation checklists aligned with the design-systems-slds-validate skill.
+See [checklists.md](references/checklists.md) for validation checklists aligned with the design-systems-slds-validate skill.
 
 ## Resources
 

@@ -1,0 +1,77 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "WorkItemComponent - Data API",
+  "description": "Represents a metadata component or configuration data record that’s linked to a WorkItemComponentList record in a DevOps Center project. The record includes details such as the change type, metadata member, and change tracking information. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ChangeType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of change applied to the component or configuration data record. The default value is NEW. Possible values are: CHANGE—An update to an existing component or configuration data record. DATA—A configuration data record change. DELETE—A destructive change that removes the component or configuration data record. MANUAL—A component or configuration data record added manually by you. requiring manual deployment steps. NEW—A new component or configuration data record. The default value is NEW."
+    },
+    "ChangedBy": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name or identifier of the user who made the change in the development environment."
+    },
+    "ChangedOn": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date an time when the change occurred."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "MemberName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the metadata component or configuration data record. For example, MyCustomTrigger."
+    },
+    "MemberType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The type of metadata component. For example, ApexClass, CustomObject, or Layout."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The unique, automatically generated name of the work item component record. For example, WIC-XXXXXXXXX."
+    },
+    "NumberOfRecords": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of records included in the tracked change."
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The version number for the component or configuration data record."
+    },
+    "WorkItemComponentListId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent WorkItemComponentList record that this component belongs to. This is a relationship field. This field is a relationship field.",
+      "relationship_name": "WorkItemComponentList",
+      "relationship_type": "Master-detail",
+      "refers_to": "WorkItemComponentList (the parent object)"
+    }
+  }
+}

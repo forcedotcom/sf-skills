@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "ContentHubItem - Data API",
+  "description": "Represents a file or folder in a Files Connect external data source, such as Microsoft SharePoint or OneDrive for Business. This object is available in API version 33.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContentHubRepositoryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable",
+      "description": "The ID for the related external data source described by the ContentHubRepository object."
+    },
+    "ContentItemSize": {
+      "type": "long",
+      "properties": "Group, Nillable",
+      "description": "The size of the file or folder. Available in API version 65.0 and later."
+    },
+    "ContentModifiedDate": {
+      "type": "dateTime",
+      "properties": "Nillable",
+      "description": "Date the file or folder content last changed."
+    },
+    "ContentSize": {
+      "type": "int",
+      "properties": "Group, Nillable",
+      "description": "The size of the file or folder that's less than 2 GB."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "Explanation of item in external data source."
+    },
+    "ExternalContentUrl": {
+      "type": "url",
+      "properties": "Group, Nillable",
+      "description": "The URL of the document content in the external data source."
+    },
+    "ExternalDocumentUrl": {
+      "type": "url",
+      "properties": "Group, Nillable",
+      "description": "The URL of the detail page in the external data source."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID for the file or folder in the external data source."
+    },
+    "FileExtension": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "File format extension, such as .doc or .pdf"
+    },
+    "FileType": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "Complete file type, such as “Microsoft Word Document.”"
+    },
+    "IsFolder": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether item is a folder or file."
+    },
+    "MimeType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "MIME type of the content."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Name of the file or folder in the external data source."
+    },
+    "Owner": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "Username of the content owner in the external data source."
+    },
+    "ParentId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "The ID of the parent folder for the record. This field isn’t returned in queries or searches of the ContentHubItem object. It supports only WHERE clauses, such as the following: WHERE ContentHubRepositoryId = <ID of external source> and ParentId = <ID of parent folder or record>. Or specify WHERE ParentId = <name of root folder> to return the children of the root folder. Tip: The ParentId field supports both Salesforce IDs (in the format “0CHxxx”) and external IDs."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "The title that appears in the content, which often differs from the Name of the containing file or folder."
+    },
+    "UpdatedBy": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "Username for the person who last updated the file."
+    }
+  },
+  "special_access_rules": "Chatter and Files Connect must be enabled for the organization.",
+  "usage": "The following SOQL query examples show how to retrieve files and folders from a Files Connect external data source. These examples use placeholders for ID values for the repository ID and folder IDs. Before running these queries, replace the placeholders with valid ID values for your external data source and folders. Example 1: Get the ID and name of the root folder in an external file source. Example 2: List all folders and files under the specified root folder. Example 3: List all external file data sources by querying ContentHubRepository. Example 4: List all files and folders in a given folder and external file source. Example 5: To return only folders in the result set, add IsFolder = true in the WHERE clause to a query that returns files and folders. For example, the following query lists all folders under the root folder. Example 6: Retrieve a link that is used to open the specified document in an external source. SOSL Example: Retrieve the ID and name of all documents that contain the search string. The result set is limited to the first 10 documents.\n\nThe following SOQL query examples show how to retrieve files and folders from a Files Connect external data source. These examples use placeholders for ID values for the repository ID and folder IDs. Before running these queries, replace the placeholders with valid ID values for your external data source and folders.\n\nExample 1:** Get the ID and name of the root folder in an external file source.\n\nExample 2:** List all folders and files under the specified root folder.\n\nExample 3:** List all external file data sources by querying ContentHubRepository.\n\nExample 4:** List all files and folders in a given folder and external file source.\n\nExample 5:** To return only folders in the result set, add IsFolder = true in the WHERE clause to a query that returns files and folders. For example, the following query lists all folders under the root folder.\n\nExample 6:** Retrieve a link that is used to open the specified document in an external source.\n\nSOSL Example:** Retrieve the ID and name of all documents that contain the search string. The result set is limited to the first 10 documents."
+}

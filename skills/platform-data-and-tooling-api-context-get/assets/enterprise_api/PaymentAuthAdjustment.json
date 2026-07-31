@@ -1,0 +1,309 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PaymentAuthAdjustment - Data API",
+  "description": "Shows information about an adjustment made to an authorized transaction. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account for the payment authorization adjustment. Inherited from the payment authorization. This is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Amount of adjustment applied to the parent payment authorization."
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Users can add comments to provide additional details about a record. Maximum of 1000 characters."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code associated with the payment authorization adjustment record."
+    },
+    "Date": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date that the adjustment occurred."
+    },
+    "EffectiveDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date that the adjustment takes effect on the authorization."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email address of the parent payment authorization owner."
+    },
+    "GatewayDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time that the reversal transaction occurred in the payment gateway."
+    },
+    "GatewayRefDetails": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Additional data that can’t be stored in other fields on the payment record. You can use this field for transactions following the initial transaction that creates the payment record. You can use any data that isn’t normalized in financial entities. This field has a maximum length of 1000 characters and can store data as JSON or XML."
+    },
+    "GatewayRefNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Unique transaction ID created by the payment gateway."
+    },
+    "GatewayResultCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Gateway-specific result code. Must be mapped to a Salesforce-specific result code"
+    },
+    "GatewayResultCodeDescription": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the gateway’s result code. This field is useful for providing more information around why the gateway returned a certain result code."
+    },
+    "IpAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The IP address of the user who initiated the payment adjustment."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "MacAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The MAC address of the person who initiated the payment."
+    },
+    "PaymentAuthAdjustmentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-provided unique ID for a payment authorization adjustment record."
+    },
+    "PaymentAuthorizationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the payment authorization on which the adjustment occurred. This is a relationship field.",
+      "relationship_name": "PaymentAuthorization",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentAuthorization"
+    },
+    "PaymentIntentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the payment intent record. This field is a relationship field.",
+      "relationship_name": "PaymentIntent",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentIntent"
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number of the customer who initiated the authorization adjustment."
+    },
+    "ProcessingMode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines whether the payment has been made outside of the payment platform. Possible values are: External—Transactions happened outside of the Salesforce payments platform. Salesforce—Salesforce made and recorded an external call to the payment gateway."
+    },
+    "SfResultCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Salesforce-specific result code that can map to one or more gateway result codes. We recommend configuring the payment gateway adapter layer to map gateway result codes to the appropriate Salesforce result code. Possible values are: Decline—The gateway call failed, but it might work if the transaction is attempted again. For example, the customer had insufficient funds or briefly lost their connection. Indeterminate—The gateway didn’t respond to the call. This response usually happens when Salesforce times out while waiting for a response from the gateway. PermanentFail—The gateway call failed and won’t work even if tried again. Gateway calls fail permanently for one of two reasons: Hard Decline: The customer’s payment account has been closed or terminated. Fraud: The gateway recognized the payment or payment method as known fraud. RequiresReview—The customer bank requires more information before completing the payment. Success—The gateway call succeeded. SystemError—Salesforce ended the payment request before receiving a response. For example, Salesforce lost credentials or access to its server. Salesforce ends payment calls if it doesn’t receive a response from the gateway within two minutes. ValidationError—Customer payment data was incorrect, such as a misspelling in the credit card address or an incorrect CVV."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines the state of the payment authorization reversal. Possible values are: Canceled—The payment authorization reversal has been canceled. The parent authorization has returned to its pre-reversal balance. Draft: The payment authorization reversal can be edited before applying it against the parent authorization. Pending: The payment authorization reversal is pending. This value is available in API version 61.0 and later. Processed—The payment authorization reversal has been finalized. Users can manually change the Status field’s values as follows: Draft to Processed Processed to Canceled Draft to Canceled"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines how the customer used the reversal. Possible value is: Reversal"
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects with the API, your org must have one or more of these licenses: Salesforce Payments, Salesforce Order Management, B2B Commerce, or D2C Commerce. Salesforce Payments objects are available only in Lightning Experience.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PaymentAuthAdjustment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Amount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Date\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EffectiveDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Email\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"GatewayRefDetails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayRefNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayResultCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayResultCodeDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IpAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MacAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentAuthAdjustmentNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PaymentAuthorization\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PaymentAuthorization\"/>\n        <element name=\"PaymentAuthorizationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentGatewayLogs\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessingMode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SfResultCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Date": {
+      "field_label": "Date",
+      "type": "datetime"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "datetime"
+    },
+    "Email": {
+      "field_label": "Audit Email",
+      "type": "email",
+      "length": "80"
+    },
+    "GatewayDate": {
+      "field_label": "Gateway Date",
+      "type": "datetime"
+    },
+    "GatewayRefDetails": {
+      "field_label": "Gateway Reference Details",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "GatewayRefNumber": {
+      "field_label": "Gateway Reference Number",
+      "type": "string",
+      "length": "255"
+    },
+    "GatewayResultCode": {
+      "field_label": "Gateway Result Code",
+      "type": "string",
+      "length": "64"
+    },
+    "GatewayResultCodeDescription": {
+      "field_label": "Gateway Result Code Description",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Payment Authorization Adjustment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IpAddress": {
+      "field_label": "IP Address",
+      "type": "string",
+      "length": "39"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MacAddress": {
+      "field_label": "MAC Address",
+      "type": "string",
+      "length": "32"
+    },
+    "PaymentAuthAdjustmentNumber": {
+      "field_label": "Payment Authorization Adjustment Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentAuthorizationId": {
+      "field_label": "Payment Authorization ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentIntentId": {
+      "field_label": "Payment Intent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "ProcessingMode": {
+      "field_label": "Processing Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SfResultCode": {
+      "field_label": "Salesforce Result Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Adjustment Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

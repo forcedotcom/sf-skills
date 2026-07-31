@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "GenAiFunctionDefinition - Data API",
+  "description": "Represents an agent action. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "A description explaining the general purpose and domain of the action."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name for this object."
+    },
+    "InvocationTarget": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Target invocation used by invocation operations."
+    },
+    "InvocationTargetType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Invocable action types used by invocation operations. Possible values are: apex flow generatePromptResponse"
+    },
+    "IsConfirmationRequired": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether confirmation is required for this action. The default value is false."
+    },
+    "IsLocal": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "This field is a calculated field and is set to true if this action is an edited version of a standard action. The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the GenAiFunctionDefinition. The value for this field is the language value of the org."
+    },
+    "LocalDeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique name for this action within a topic."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The master label for the generative AI action."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the GenAiFunctionDefinition."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the object that owns the action. This field is a relationship field.",
+      "relationship_name": "Parent",
+      "refers_to": "GenAiPlannerFunctionDef"
+    },
+    "PlannerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The agent planner service for this action. This field is a relationship field.",
+      "relationship_name": "Planner",
+      "refers_to": "GenAiPlannerDefinition"
+    },
+    "PluginId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The agent topic for this agent action. This field is a relationship field.",
+      "relationship_name": "Plugin",
+      "refers_to": "GenAiPluginDefinition"
+    },
+    "Source": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The optional source standard or custom action from which this action's configuration, including description, input, and output, is copied. If there's no value, the action is used only within the parent topic."
+    }
+  },
+  "special_access_rules": "To access this object, Agents must be enabled in your org.\n\nTo access this object, Agents must be enabled in\n         your org."
+}

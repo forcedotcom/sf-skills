@@ -1,0 +1,203 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "WebStoreInventorySource - Data API",
+  "description": "Used to configure the inventory source for a webstore. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DoesAllowGuestInventoryLevel": {
+      "type": "boolean",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Indicates whether guest users can view a product’s inventory levels when guest checkout is disabled."
+    },
+    "InventoryCacheTtl": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Amount of time in seconds before cache expires."
+    },
+    "InventoryDimension": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies which field within inventory levels to use to determine availability. Possible values are AvailableToFulfill,AvailableToOrder,OnHand."
+    },
+    "IsBopisEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the location supports buy online, pick up in store. The default value is false."
+    },
+    "IsChkInvOnActiveCartEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the inventory is checked when a customer adds or edits an item in the active cart. If an admin wants to enable the inventory check feature for their store, they must set this value to true. The default value is true."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this is the default inventory source value (true) or not (false). The default value is false."
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the default inventory source is active. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "LocationSourceExtRef": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "The external reference identifier associated with the LocationSourceId."
+    },
+    "LocationSourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The location ID or location group ID for this webstore. This field is a polymorphic relationship field.",
+      "relationship_name": "LocationSource",
+      "relationship_type": "Lookup",
+      "refers_to": "Location, LocationGroup"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The source name for this entity."
+    },
+    "ReservationDurationInSeconds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The amount of time in seconds that a reservation stays active and doesn’t expire. Required for implementations using Omnichannel Inventory."
+    },
+    "ShowGuestInventoryLevel": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Displays the inventory level to guest users, even when guest checkout is disabled. The default value is false. This field is available in API version 65.0 and later."
+    },
+    "WebStoreId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique store ID related to this inventory source. This field is a relationship field.",
+      "relationship_name": "WebStore",
+      "relationship_type": "Lookup",
+      "refers_to": "WebStore"
+    }
+  },
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DoesAllowGuestInventoryLevel": {
+      "field_label": "Allows guest user access to inventory level.",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Web Store Inventory Source ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InventoryCacheTtl": {
+      "field_label": "Inventory Cache Time To Live (Seconds).",
+      "type": "int",
+      "digits": "9"
+    },
+    "InventoryDimension": {
+      "field_label": "Inventory Dimension",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsBopisEnabled": {
+      "field_label": "BOPIS Enabled",
+      "type": "boolean"
+    },
+    "IsChkInvOnActiveCartEnabled": {
+      "field_label": "Check Inventory on Products For an Active Cart.",
+      "type": "boolean"
+    },
+    "IsDefault": {
+      "field_label": "Default",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEnabled": {
+      "field_label": "Enabled",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LocationSourceExtRef": {
+      "field_label": "Location Source External Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "LocationSourceId": {
+      "field_label": "Location Source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Web Store Inventory Source Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ReservationDurationInSeconds": {
+      "field_label": "Reservation Duration (Seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WebStoreId": {
+      "field_label": "Store ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

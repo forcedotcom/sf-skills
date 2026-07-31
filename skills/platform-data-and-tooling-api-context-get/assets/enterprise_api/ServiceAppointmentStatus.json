@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ServiceAppointmentStatus - Data API",
+  "description": "Represents a possible status of a service appointment in field service.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApiName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The API name of the status value."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates that the status value is the default status on service appointments. Only one status value can be the default."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the picklist value that appears in the UI."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value’s position in the drop-down list of values in the UI."
+    },
+    "StatusCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status category that the value corresponds to. The Status Category field has seven values which are identical to the default Status values."
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.\n\nField Service must be\n\t\t\tenabled.",
+  "usage": "The Status field on service appointments comes with the following values: The ServiceAppointmentStatus object corresponds to the Status field. Adding a value to the Status field—for example, Waiting—creates a service appointment status record, and vice versa.\n\nThe Status field on service appointments comes with the following values:\n\nNone—Default value.\n\nScheduled—Appointment has been assigned to a service resource.\n\nDispatched—Assigned service resource has been notified about their\n\t\t\t\t\t\tassignment.\n\nIn Progress—Work has begun.\n\nCompleted—Work is complete.\n\nCannot Complete—Work could not be completed.\n\nCanceled—Work is canceled, typically before any work began\n\nCheckedIn—The customer has arrived for their scheduled\n\t\t\t\t\t\tappointment.\n\nWhile you can set the status to null via the API, setting the\n\t\t\t\t\tstatus to null returns an error. To prevent errors, use one of the documented\n\t\t\t\t\tpicklist values.\n\nThe ServiceAppointmentStatus object\n\t\t\t\tcorresponds to the Status field. Adding a value to the Status field—for\n\t\t\t\texample, Waiting—creates a service appointment status record, and vice\n\t\t\t\t\tversa.\n\nService appointments also come with a StatusCategory field whose\n\t\t\t\t\tvalues are identical to the default Status values. If you create custom Status\n\t\t\t\t\tvalues, you must indicate which category it belongs to. For example, if you\n\t\t\t\t\tcreate a\n\nCustomer Absent\n\nvalue, you may decide that it\n\t\t\t\t\tbelongs in the\n\nCannot Complete\n\ncategory. To learn which\n\t\t\t\t\tprocesses reference StatusCategory, see\n\nHow are Status Categories\n\t\t\t\t\t\tUsed?",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ServiceAppointmentStatus\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"StatusCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Service Appointment Status Value ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Is Default",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Master Label",
+      "type": "string",
+      "length": "255"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "StatusCode": {
+      "field_label": "Status Code",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "FlowTestCoverage - Tooling API",
+  "description": "Represents test coverage for a flow or process by a given Apex method. Available in API version 44.0 and later.",
+  "supported_soap_calls": "`delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`",
+  "supported_rest_api_http_methods": "`GET`, `HEAD`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ApexTestClassId": {
+      "type": "ID",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The ID of the Apex test class."
+    },
+    "FlowVersionId": {
+      "type": "ID",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the flow version that was executed by the test method."
+    },
+    "NumElementsCovered": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The number of elements that were executed by the test method."
+    },
+    "NumElementsNotCovered": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The number of elements that weren’t executed by the test method."
+    },
+    "TestMethodName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the Apex method that executed the flow version."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FlowTestCoverage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"ApexTestClass\" minOccurs=\"0\" type=\"ens:ApexClass\" nillable=\"true\"/>\n        <xsd:element name=\"ApexTestClassId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"FlowTest\" minOccurs=\"0\" type=\"ens:FlowTest\" nillable=\"true\"/>\n        <xsd:element name=\"FlowTestId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"FlowVersion\" minOccurs=\"0\" type=\"ens:Flow\" nillable=\"true\"/>\n        <xsd:element name=\"FlowVersionId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"IsStale\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"NumElementsCovered\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"NumElementsNotCovered\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"TestMethodName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

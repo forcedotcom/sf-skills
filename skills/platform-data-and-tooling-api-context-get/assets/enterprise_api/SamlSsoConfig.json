@@ -1,0 +1,313 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SamlSsoConfig - Data API",
+  "description": "Represents a SAML Single Sign-On configuration.This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AttributeFormat": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For SAML 2.0 only and when identityLocation is set to Attribute. Possible values include unspecified, emailAddress, or persistent. All legal values can be found in the “Name Identifier Format Identifiers” section of the Assertions and Protocols SAML 2.0 specification."
+    },
+    "AttributeName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the identity provider’s application. Get this name value from your identity provider."
+    },
+    "Audience": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The Issuer, also called the “Entity ID.” The value is a URL that uniquely identifies the SAML identity provider."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package, and the changes are reflected in a subscriber’s organization. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "ErrorUrl": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "When there's an error during login, specify the URL of the page where users are directed. It must be publicly accessible, such as a public site Visualforce page. The URL can be absolute or relative."
+    },
+    "ExecutionUserID": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user that runs the Apex handler class. The user must have the “Manage Users” permission. A user is required if you specify a SAML JIT handler class. This is a relationship field.",
+      "relationship_name": "ExecutionUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "IdentityLocation": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The location in the assertion where a user is identified. Valid values are: SubjectNameId—The identity is in the <Subject> statement of the assertion. Attribute—The identity is specified in an <AttributeValue>, located in the <Attribute> of the assertion."
+    },
+    "IdentityMapping": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The identifier that the service provider uses for the user during Just-in-Time user provisioning. Valid values are: Username—The user’s Salesforce username. FederationId—The federation ID from the user object; the identifier that’s used by the service provider for the user. UserId—The user ID from the user’s Salesforce organization."
+    },
+    "Issuer": {
+      "type": "string",
+      "properties": "Filter, idLookup, Group, Sort",
+      "description": "Also called the “Entity ID.” The value is a URL that uniquely identifies the SAML identity provider."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language for the organization."
+    },
+    "LoginUrl": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "For SAML 2.0 only: The URL where Salesforce sends a SAML request to start the login sequence."
+    },
+    "LogoutUrl": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "For SAML 2.0 only: The URL to direct users to where they click the Logout link. The default is https://salesforce.com."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The text that’s used to identify the Visualforce page in the Setup area of Salesforce."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix."
+    },
+    "OptionsSpInitBinding": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The service provider initiated request binding, either HTTP Redirect (true) or HTTP POST (false)."
+    },
+    "OptionsUseConfigRequestMethod": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "If true, applies the selected Request Signature Method (RSM) during single logout. If false, the default RSM (RSA-SHA1) is applied."
+    },
+    "OptionsUseSameDigestAlgoForSigning": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "If true, uses a SAML digest algorithm based on the selected Request Signature Method (RSM). For example, if the selected RSM is RSA-SHA256, the digest algorithm is set to SHA-256. If false, uses the default digest algorithm (SHA-1), regardless of the selected RSM. This field is available in API version 55.0 and later. You can edit this field only for legacy SAML configurations created before the Spring ’22 release. For configurations created after Spring ’22, this field is true by default."
+    },
+    "OptionsRequireMfaSaml": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Requires multi-factor authentication (MFA) for single sign-on with this SAML configuration based on the MFA status of each user. For this setting to trigger MFA, you must apply MFA directly to users via one of two methods. 1) Assign the user permission Multi-Factor Authentication for User Interface Logins. 2) Enable the org setting Require multi-factor authentication (MFA) for all direct UI logins to your Salesforce org."
+    },
+    "OptionsUserProvisioning": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "If true, Just-in-Time user provisioning is enabled, which creates users on the fly the first time that they try to log in. Specify Federation ID for the identityMapping value to use this feature."
+    },
+    "RequestSignatureMethod": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The method that’s used to sign the SAML request. Valid values are: RSA-SHA1 RSA-SHA256"
+    },
+    "SamlJitHandlerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of an existing Apex class that implements the Auth.SamlJitHandler interface. This is a relationship field.",
+      "relationship_name": "SamlJitHandler",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass"
+    },
+    "SingleLogoutBinding": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Determines where to put the LogoutRequest or LogoutResponse in the SAML request during single logout (SLO). The value is base64 encoded. Valid values are: RedirectBinding — Sent in the query string, deflated. PostBinding — Sent in the POST body, not deflated."
+    },
+    "SingleLogoutUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The SAML single logout endpoint. This URL is the endpoint where Salesforce sends LogoutRequests (when Salesforce initiates a logout), or LogoutResponses (when the identity provider initiates a logout)."
+    },
+    "ValidationCert": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "The certificate that’s used to validate the request. Get this certificate value from your identity provider."
+    },
+    "Version": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The SAML version. Valid values are: SAML1_1 SAML2_2"
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users with the View Setup and Configuration permission or both the Customize Application and Modify All Data permissions can access this object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"SamlSsoConfig\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AttributeFormat\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AttributeName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Audience\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ErrorUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExecutionUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ExecutionUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IdentityLocation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IdentityMapping\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Issuer\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LoginUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LogoutUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptionsRequireMfaSaml\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsSpInitBinding\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsUseConfigRequestMethod\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsUseSameDigestAlgoForSigning\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsUserProvisioning\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"RequestSignatureMethod\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SamlJitHandler\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"SamlJitHandlerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SingleLogoutBinding\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SingleLogoutUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ValidationCert\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Version\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AttributeFormat": {
+      "field_label": "Name ID Format",
+      "type": "string",
+      "length": "255"
+    },
+    "AttributeName": {
+      "field_label": "Attribute Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Audience": {
+      "field_label": "Entity ID",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ErrorUrl": {
+      "field_label": "Custom Error URL",
+      "type": "string",
+      "length": "500"
+    },
+    "ExecutionUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "SAML Single Sign-On Setting ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IdentityLocation": {
+      "field_label": "SAML Identity Location",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IdentityMapping": {
+      "field_label": "SAML Identity Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Issuer": {
+      "field_label": "Issuer",
+      "type": "string",
+      "length": "255"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LoginUrl": {
+      "field_label": "Identity Provider Login URL",
+      "type": "string",
+      "length": "1500"
+    },
+    "LogoutUrl": {
+      "field_label": "Identity Provider Logout URL",
+      "type": "string",
+      "length": "1500"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "OptionsRequireMfaSaml": {
+      "field_label": "RequireMfaSaml",
+      "type": "boolean"
+    },
+    "OptionsSpInitBinding": {
+      "field_label": "SpInitBinding",
+      "type": "boolean"
+    },
+    "OptionsUseConfigRequestMethod": {
+      "field_label": "UseConfigRequestMethod",
+      "type": "boolean"
+    },
+    "OptionsUseSameDigestAlgoForSigning": {
+      "field_label": "UseSameDigestAlgoForSigning",
+      "type": "boolean"
+    },
+    "OptionsUserProvisioning": {
+      "field_label": "UserProvisioning",
+      "type": "boolean"
+    },
+    "RequestSignatureMethod": {
+      "field_label": "Request Signature Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SamlJitHandlerId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SingleLogoutBinding": {
+      "field_label": "Single Logout Request Binding",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SingleLogoutUrl": {
+      "field_label": "Identity Provider Single Logout URL",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ValidationCert": {
+      "field_label": "Identity Provider Certificate",
+      "type": "string",
+      "length": "4000"
+    },
+    "Version": {
+      "field_label": "SAML Version",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "SchedulingAdherenceSummary - Data API",
+  "description": "Represents daily shift adherence data for a service resource in a service territory and job profile on a specific date. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "formula",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdherencePercentage": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "Percentage of time that the agent was present during the scheduled shift time. This is a calculated field.",
+      "formula": "AdherencePercentage = TotalAdherenceMinutes / TotalScheduledMinutes"
+    },
+    "ConformancePercentage": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "Percentage of time when the agent was present versus the duration of scheduled shifts. The time that the agent is present can extend beyond the scheduled shift. This is a calculated field.",
+      "formula": "ConformancePercentage = TotalPresenceMinutes / TotalScheduledMinutes"
+    },
+    "Date": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Date for which the adherence data is calculated."
+    },
+    "JobProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the job profile. This is a relationship field.",
+      "relationship_name": "JobProfile",
+      "relationship_type": "Lookup",
+      "refers_to": "JobProfile"
+    },
+    "JobProfileName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the job profile."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A number that identifies this summary record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The user who owns the schedule adherence summary. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ServiceResourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the service resource. This is a relationship field.",
+      "relationship_name": "ServiceResource",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceResource"
+    },
+    "ServiceResourceName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the service resource."
+    },
+    "ServiceTerritoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the service territory. This is a relationship field.",
+      "relationship_name": "ServiceTerritory",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceTerritory"
+    },
+    "ServiceTerritoryName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the service territory."
+    },
+    "TotalAdherenceMinutes": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Total minutes that the agent was present during a shift."
+    },
+    "TotalInteractionMinutes": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Total minutes that the agent was actively receiving work."
+    },
+    "TotalPresenceMinutes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total minutes of agent presence time. This is a calculated field.",
+      "formula": "TotalPresenceMinutes = TotalInteractionMinutes + TotalShrinkageMinutes"
+    },
+    "TotalScheduledMinutes": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Total minutes of scheduled shift time for the agent."
+    },
+    "TotalShrinkageMinutes": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Total minutes that the agent was present but not receiving work, such as break times."
+    }
+  },
+  "special_access_rules": "The org requires a Workforce Engagement license, and both Workforce Engagement and Omni-Channel must be enabled. The user requires the Workforce Engagement Planner or Workforce Engagement Admin permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SchedulingAdherenceSummaryOwnerSharingRule**: Sharing rules are available for the object.\n- **SchedulingAdherenceSummaryShare**: Sharing is available for the object."
+}

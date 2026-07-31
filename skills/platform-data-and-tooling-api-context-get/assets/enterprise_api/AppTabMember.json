@@ -1,0 +1,91 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AppTabMember - Data API",
+  "description": "Represents the list of tabs for each of the available apps. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AppDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The ID of the AppDefinition object. This is a relationship field.",
+      "relationship_name": "AppDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "AppDefinition"
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique virtual Salesforce ID for the color."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number used to sort this tab in the application."
+    },
+    "TabDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The ID of the TabDefinition object. This is a relationship field.",
+      "relationship_name": "TabDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "TabDefinition"
+    },
+    "WorkspaceDriverField": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Refers to the workspace mapping in the CustomApplication Metadata API object."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"AppTabMember\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AppDefinition\"/>\n        <element name=\"AppDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SortOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"TabDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:TabDefinition\"/>\n        <element name=\"TabDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"WorkspaceDriverField\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AppDefinitionId": {
+      "field_label": "App Definition ID",
+      "type": "string",
+      "length": "512"
+    },
+    "DurableId": {
+      "field_label": "Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "App Tab Member ID",
+      "type": "id",
+      "length": "18"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "TabDefinitionId": {
+      "field_label": "Tab Definition ID",
+      "type": "string",
+      "length": "512"
+    },
+    "WorkspaceDriverField": {
+      "field_label": "Workspace Driver Field",
+      "type": "string",
+      "length": "30"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

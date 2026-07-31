@@ -1,0 +1,324 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PlatformAction - Data API",
+  "description": "PlatformAction is a virtual read-only object. It enables you to query for actions displayed in the UI, given a user, a context, device format, and a record ID. Examples include standard and custom buttons, quick actions, and productivity actions.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionListContext": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The list context this action applies to. Valid values are: Assistant BannerPhoto Chatter Dockable FeedElement Flexipage Global ListView ListViewDefinition ListViewRecord Lookup MruList MruRow ObjectHomeChart Photo Record RecordEdit RelatedList RelatedListRecord",
+      "required": true
+    },
+    "ActionTarget": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The URL to invoke or describe the action when the action is invoked. If the action is a standard button overridden by a Visualforce page, the ActionTarget returns the URL of the Visualforce page, such as /apex/pagename. This field is available in API version 35.0 and later."
+    },
+    "ActionTargetType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of the target when this action is triggered. Valid values are: Describe—applies to actions with a user interface, such as quick actions Invoke—applies to actions with no user interface, such as action links or invocable actions Visualforce—applies to standard buttons overridden by a Visualforce page"
+    },
+    "ActionTargetUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL to invoke or describe the action when the action is invoked. This field is deprecated in API version 35.0 and later. Use ActionTarget instead."
+    },
+    "Category": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Applies only to action links. Denotes whether the action link shows up in the feed item list of actions or the overflow list of actions. Valid values are: Primary Overflow"
+    },
+    "ConfirmationMessage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Applies only to action links. The message to display before the action is invoked. Field is null if no confirmation is required before invoking the action."
+    },
+    "DeviceFormat": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies which action icon the PlatformAction query returns. If this field isn’t specified, it defaults to Phone. Valid values are: Aloha Desktop Phone Tablet"
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID for the PlatformAction. If the action doesn’t have an ID, its API name is used."
+    },
+    "GroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a group of action links."
+    },
+    "IconContentType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The content type—such as .jpg, .gif, or .png—of the icon for this action. Applies to both custom and standard icons assigned to actions."
+    },
+    "IconHeight": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The height of the icon for this action. Applies only to standard icons."
+    },
+    "IconUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL of the icon for this action."
+    },
+    "IconWidth": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The width of the icon for this action. Applies only to standard icons."
+    },
+    "InvocationStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the action within the feed item. Applies to action links only. Valid values are: Failed New Pending Successful"
+    },
+    "InvokedByUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who most recently invoked this action within the current feed item. Applies to action links only. This is a relationship field.",
+      "relationship_name": "InvokedByUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "IsGroupDefault": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Denotes whether this action is the default in an action link group. False for other action types. Applies to action links only."
+    },
+    "IsMassAction": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the action can be performed on multiple records.This field is available in API version 38.0 and later."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label to display for this action."
+    },
+    "PrimaryColor": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The primary color of the icon for this action."
+    },
+    "RelatedListRecordId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the ID of a record in an object’s related list.This field is available in API version 38.0 and later."
+    },
+    "RelatedSourceEntity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When the ActionListContext is RelatedList or RelatedListRecord, this field represents the API name of the related list to which the action belongs."
+    },
+    "Section": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The section of the user interface the action resides in. Applicable only to Lightning Experience. Valid values are: ActivityComposer CollaborateComposer NotesComposer Page SingleActionLinks This field is available in API version 35.0 and later."
+    },
+    "SourceEntity": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The object or record with which this action is associated.",
+      "required": true
+    },
+    "Subtype": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The subtype of the action. For quick actions, the subtype is QuickActionType. For custom buttons, the subtype is WebLinkTypeEnum. For action links, subtypes are Api, ApiAsync, Download, and Ui. Standard buttons and productivity actions have no subtype."
+    },
+    "TargetObject": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of object record the action creates, such as a contact or opportunity.This field is available in API version 41.0 and later."
+    },
+    "TargetUrl": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL that a custom button or link points to.This field is available in API version 41.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of the action. Valid values are: ActionLink—An indicator on a feed element that targets an API, a web page, or a file, represented by a button in the Salesforce Chatter feed UI. CustomButton—When clicked, opens a URL or a Visualforce page in a window or executes JavaScript. InvocableAction ProductivityAction—Productivity actions are predefined and attached to a limited set of objects. Productivity actions include Send Email, Call, Map, View Website, and Read News. Except for the Call action, you can’t edit productivity actions. QuickAction—A global or object-specific action. StandardButton—A predefined Salesforce button such as New, Edit, and Delete."
+    }
+  },
+  "usage": "PlatformAction can be described using describeSObject().\n\nYou can directly query for PlatformAction. For example, this query returns all fields for\n    actions associated with each of the records of the listed\n     objects:\n\nSELECT ExternalId, ActionTargetType, ActionTargetUrl, ApiName, Category,\n\nConfirmationMessage, ExternalId, GroupId, UiTheme, IconUrl, IconContentType,\n\nIconHeight, IconWidth, PrimaryColor, InvocationStatus, InvokedByUserId,\n\nIsGroupDefault, Label, LastModifiedDate, Subtype, SourceEntity, Type\n\nFROM PlatformAction\n\nWHERE SourceEntity IN ('001xx000003DGsH', '001xx000003DHBq', ‘Task’) AND\n\nActionListContext = ‘Record’;\n\nTo query PlatformAction, provide the\n\nActionListContext\n\nSourceEntity\n\n. If you query for\n\nActionListContext\n\nwith a value of\n\nRelatedList\n\n, and don't specify a\n\nRelatedSourceEntity\n\n, the query\n     returns the API name of the related list. In API v43.0 and before,\n\nSourceEntity = '\n\nObject API Name\n\n' and ActionListContext =\n      'ListView'\n\nis an invalid combination to fetch quick actions in a SOQL query. Use\n\nSourceEntity = '\n\n' and\n      ActionListContext = 'ListView'\n\nThis query uses multiple\n\nActionListContext\n\nvalues in its\n\nclause to return all actions in the Lightning Experience user\n    interface (\n\nDeviceFormat = 'Desktop'\n\n) for the specified\n    object:\n\nSELECT ActionListContext, Label, Type, Subtype, Section, SourceEntity,\n\nRelatedSourceEntity, ActionTarget, ActionTargetType, ApiName, Category,\n\nConfirmationMessage, DeviceFormat, ExternalId, GroupId, IconContentType,\n\nIconHeight, IconUrl, IconWidth, Id, InvocationStatus, InvokedByUserId,\n\nIsGroupDefault, LastModifiedDate, PrimaryColor\n\nFROM PlatformAction\n\nWHERE ActionListContext IN ('Record','Chatter','RelatedList') AND\n\nSourceEntity = '001xx000003DlvX' AND\n\nDeviceFormat = 'Desktop'",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PlatformAction\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActionListContext\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActionTarget\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActionTargetType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Category\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ConfirmationMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeviceFormat\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IconContentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IconHeight\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"IconUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IconWidth\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"InvocationStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InvokedByUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"InvokedByUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsGroupDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsMassAction\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OpenType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PrimaryColor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RelatedListRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RelatedSourceEntity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RetrievalMode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Section\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SourceEntity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subtype\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetObject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TargetUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActionListContext": {
+      "field_label": "Action List Context",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ActionTarget": {
+      "field_label": "Action Target",
+      "type": "textarea",
+      "length": "2048"
+    },
+    "ActionTargetType": {
+      "field_label": "Action Target Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ConfirmationMessage": {
+      "field_label": "Confirmation Message",
+      "type": "string",
+      "length": "255"
+    },
+    "DeviceFormat": {
+      "field_label": "Device Format",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ExternalId": {
+      "field_label": "Platform Action ID",
+      "type": "string",
+      "length": "255"
+    },
+    "GroupId": {
+      "field_label": "Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IconContentType": {
+      "field_label": "Icon Content Type",
+      "type": "string",
+      "length": "255"
+    },
+    "IconHeight": {
+      "field_label": "Icon Height",
+      "type": "int",
+      "digits": "9"
+    },
+    "IconUrl": {
+      "field_label": "Icon URL",
+      "type": "url",
+      "length": "255"
+    },
+    "IconWidth": {
+      "field_label": "Icon Width",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Not used ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvocationStatus": {
+      "field_label": "Invocation Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "InvokedByUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsGroupDefault": {
+      "field_label": "Is Group Default",
+      "type": "boolean"
+    },
+    "IsMassAction": {
+      "field_label": "Is Mass Action",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OpenType": {
+      "field_label": "Open Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PrimaryColor": {
+      "field_label": "Primary Color",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedListRecordId": {
+      "field_label": "Related List Record ID",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedSourceEntity": {
+      "field_label": "Related Source Entity",
+      "type": "string",
+      "length": "255"
+    },
+    "RetrievalMode": {
+      "field_label": "Retrieval Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Section": {
+      "field_label": "Section",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SourceEntity": {
+      "field_label": "Source Entity",
+      "type": "string",
+      "length": "255"
+    },
+    "Subtype": {
+      "field_label": "Subtype",
+      "type": "string",
+      "length": "255"
+    },
+    "TargetObject": {
+      "field_label": "Target Object",
+      "type": "string",
+      "length": "255"
+    },
+    "TargetUrl": {
+      "field_label": "Target URL",
+      "type": "string",
+      "length": "2048"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

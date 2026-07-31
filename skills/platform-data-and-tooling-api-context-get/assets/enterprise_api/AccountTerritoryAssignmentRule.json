@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "AccountTerritoryAssignmentRule - Data API",
+  "description": "An account assignment rule that assigns accounts to territories based on account fields. Available if Sales Territories has been enabled.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BooleanFilter": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Advanced filter conditions that were specified for the rule in the online application. For example, “(1 AND 2) OR 3.”"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Update",
+      "description": "Indicates whether the rule is active (true) or inactive (false). Via the API, active rules run automatically when new accounts are created and existing accounts are edited. The exception is when the IsExcludedFromRealign field on an account is true, which prevents account assignment rules from evaluating that account."
+    },
+    "IsInherited": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Update",
+      "description": "Indicates whether the rule is an inherited rule (true) or a local rule (false). An inherited rule also acts upon territories below it in the territory hierarchy. A local rule is created at the immediate territory and only impacts the immediate territory."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Update",
+      "description": "A name for the rule. Limit is 80 characters."
+    },
+    "TerritoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Update",
+      "description": "ID of the territory where accounts that satisfy this rule are assigned."
+    }
+  },
+  "special_access_rules": "Users with the View Setup and Configuration permission can access this object. Users with the Manage Territories permission can edit this object.",
+  "usage": "A territory will not have any accounts (with the exception of manually assigned accounts) unless at least one account assignment rule is active for the territory."
+}

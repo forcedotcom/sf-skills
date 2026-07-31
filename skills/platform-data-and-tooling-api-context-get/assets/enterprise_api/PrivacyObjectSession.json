@@ -1,0 +1,274 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PrivacyObjectSession - Data API",
+  "description": "Represents the status of each object being processed in past, ongoing, and scheduled policy jobs in Privacy Center. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrentEntity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the object in the policy."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Represents the job session record. This is a serialized, automatically generated number field."
+    },
+    "ObjectFailureLog": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "This field is reserved for later use."
+    },
+    "ObjectStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The policy execution status for the object. Possible values are: processing_completed processing_failed processing_ongoing processing_pending traversal_completed traversal_failed traversal_ongoing"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the owner of the account associated with the customer that the policy was executed for. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PolicyNode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the object in the serialized policy. This field associates the object session in the policy execution with the coordinating object in the Privacy Center policy."
+    },
+    "Position": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents a record’s position in the batch queue for the object being processed."
+    },
+    "PrivacyJobSessionObjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the policy job session. This field is a relationship field.",
+      "relationship_name": "PrivacyJobSessionObject",
+      "relationship_type": "Lookup",
+      "refers_to": "PrivacyJobSession"
+    },
+    "ProcessType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of action being executed on the object in the policy. Possible values are: delete mask retry_delete retry_mask"
+    },
+    "ProcessedFailures": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of records the policy execution failed to process."
+    },
+    "ProcessedSuccesses": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of records the policy execution successfully processed."
+    },
+    "ProcessedTotal": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of records processed in the policy job."
+    },
+    "Processor": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the deletion, masking, or traversal processor executing the policy job."
+    },
+    "Queue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is reserved for later use."
+    },
+    "QueueLength": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of records in the queue to be processed by the policy job."
+    },
+    "RecordsAffected": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of records processed by the policy job."
+    },
+    "Retry": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The queue number of the retry session after a failed policy execution attempt. Each attempt to retry the policy execution is put into a retry queue."
+    },
+    "TraversalEndTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The end time of the record-capturing phase for the object session."
+    },
+    "TraversalStartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The start time of the record-capturing phase for the object session."
+    },
+    "UniqueConstraint": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "For internal use only."
+    }
+  },
+  "special_access_rules": "This object is available for users with the Privacy Center license and the Manage Privacy Center Policies user permission.\n\nThis object is available for users with the\n         Privacy Center license and the Manage Privacy Center Policies user permission.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PrivacyObjectSessionOwnerSharingRule**: Sharing rules are available for the object.\n- **PrivacyObjectSessionShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PrivacyObjectSession\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CurrentEntity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ObjectFailureLog\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ObjectStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PolicyNode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Position\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"PrivacyJobSessionObject\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PrivacyJobSession\"/>\n        <element name=\"PrivacyJobSessionObjectId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PrivacySessionRecordFailures\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessedFailures\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ProcessedSuccesses\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ProcessedTotal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Processor\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Queue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"QueueLength\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RecordsAffected\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Retry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TraversalEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TraversalStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UniqueConstraint\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CurrentEntity": {
+      "field_label": "Current Entity",
+      "type": "string",
+      "length": "128"
+    },
+    "Id": {
+      "field_label": "Privacy Object Session ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ObjectFailureLog": {
+      "field_label": "Object Failure Log",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "ObjectStatus": {
+      "field_label": "Object Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PolicyNode": {
+      "field_label": "Policy Node",
+      "type": "string",
+      "length": "128"
+    },
+    "Position": {
+      "field_label": "Position",
+      "type": "int",
+      "digits": "9"
+    },
+    "PrivacyJobSessionObjectId": {
+      "field_label": "Privacy Job Session ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProcessType": {
+      "field_label": "Process Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProcessedFailures": {
+      "field_label": "Processed Failures",
+      "type": "int",
+      "digits": "9"
+    },
+    "ProcessedSuccesses": {
+      "field_label": "Processed Successes",
+      "type": "int",
+      "digits": "9"
+    },
+    "ProcessedTotal": {
+      "field_label": "Processed Total",
+      "type": "int",
+      "digits": "9"
+    },
+    "Processor": {
+      "field_label": "Processor",
+      "type": "string",
+      "length": "128"
+    },
+    "Queue": {
+      "field_label": "Queue",
+      "type": "string",
+      "length": "128"
+    },
+    "QueueLength": {
+      "field_label": "Queue Length",
+      "type": "int",
+      "digits": "9"
+    },
+    "RecordsAffected": {
+      "field_label": "Records Affected",
+      "type": "int",
+      "digits": "9"
+    },
+    "Retry": {
+      "field_label": "Retry",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TraversalEndTime": {
+      "field_label": "Traversal End Time",
+      "type": "datetime"
+    },
+    "TraversalStartTime": {
+      "field_label": "Traversal Start Time",
+      "type": "datetime"
+    },
+    "UniqueConstraint": {
+      "field_label": "Unique Constraint",
+      "type": "string",
+      "length": "128"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

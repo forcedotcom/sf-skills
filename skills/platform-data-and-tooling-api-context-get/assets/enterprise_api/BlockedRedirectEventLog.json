@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "BlockedRedirectEventLog - Data API",
+  "description": "Blocked Redirect events capture information about blocked redirections from Salesforce to untrusted and malformed URLs. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BlockedUri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The full string of the target for the redirection."
+    },
+    "BlockedUriDomain": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If BLOCKED_URI is a URL, the domain for that URL. To allow future redirections to the BLOCKED_URI, BLOCKED_URI_DOMAIN is the value to add to RedirectWhitelistUrl."
+    },
+    "IsMalformedUrl": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this redirection was blocked because the target URL failed a syntax check or not. The default value is false."
+    },
+    "Origin": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The origin that caused the request to the BLOCKED_URI. For example, if a form on an Experience Cloud Visualforce site page redirects a user to an untrusted URL via the saveURL parameter, ORIGIN contains the base URL of that site."
+    },
+    "Referrer": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The absolute or partial address from which the request to the BLOCKED_URI came. The Referrer-Policy HTTP Header of the request determines how much of the URL is shared."
+    },
+    "RemoteAddress": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Remote IP address of the client making the request."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

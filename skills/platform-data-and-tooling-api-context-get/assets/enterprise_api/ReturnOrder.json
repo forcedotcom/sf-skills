@@ -1,0 +1,653 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ReturnOrder - Data API",
+  "description": "Represents the return or repair of inventory or products in Field Service, or the return of order products in Order Management. This object is available in API version 42.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account associated with the return order. This is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "CaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The case associated with the return order. This is a relationship field.",
+      "relationship_name": "Case",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The contact associated with the return order. This is a relationship field.",
+      "relationship_name": "Contact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. ISO code for the currency of the OrderSummary associated with the ReturnOrder. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD. This field is available in API version 49.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Notes or context about the return order."
+    },
+    "DestinationLocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The location where the items are being returned to. For example, if the return order tracks the return of products from a technician’s van to a warehouse, the warehouse is the destination location. This is a relationship field.",
+      "relationship_name": "DestinationLocation",
+      "relationship_type": "Lookup",
+      "refers_to": "Location"
+    },
+    "ExpectedArrivalDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the items are expected to arrive at the destination location."
+    },
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Authorizations can’t be captured after their expiration dates. This field is available in API version 50.0 and later."
+    },
+    "GrandTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including adjustments and tax, of the products, fees, and delivery charges on the return order. This includes all return order line items associated with the return order. This amount is equal to TotalAmount + TotalTaxAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the return order was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the return order was last viewed."
+    },
+    "LifeCycleType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies whether the order summary is managed by Salesforce Order Management (MANAGED) or by an external system (UNMANAGED). An unmanaged order summary is stored in Salesforce for reference purposes. Some Order Management APIs reject input records that are associated with unmanaged order summaries. Order Management does not update financial bucket fields on some records that are associated with unmanaged order summaries. A user with the EditUnmanagedOrderSummaries or B2BCommerceIntegrator permission can edit certain fields on objects related to unmanaged order summaries that are normally only accessible via APIs. Possible values are: MANAGED—Managed UNMANAGED—Unmanaged This field is available in API version 50.0 and later."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The order associated with the return order. When you associated a return order with an order, you can associate the return order’s line items with order products. This is a relationship field.",
+      "relationship_name": "Order",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the order summary associated with the return order. This field is available in API version 50.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of the return order. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ProductRequestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The product request associated with the return order. When you associated a return order with a product request, you can associate the return order’s line items with the product request’s line items.A return order might be related to a product request if the return order tracks the return of unused products or products to be repaired or replaced. For example, a technician creates a product request for three motors to prepare for a field visit. If the technician finds that only two motors are needed, they can create a return order to return the third to the original location, and list the product request in this field. This is a relationship field.",
+      "relationship_name": "ProductRequest",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductRequest"
+    },
+    "ProductServiceCampaignId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The product service campaign associated with the return order This field is available only if Field Service is enabled."
+    },
+    "RefundInstructionsHint": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Stores a JSON representation of the payment credit and refund sequences for ensure credit, ensure refund, and the change orders associated with it. This field is available in API version 65.0 and later."
+    },
+    "ReturnOrderNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "(Read only) Auto-generated number identifying the return order."
+    },
+    "ReturnedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the user returning the items. This is a relationship field.",
+      "relationship_name": "ReturnedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ShipFromAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The return shipping address. This address tracks the location of the items at the start of the return or repair. For example, if a customer is returning an item, the Ship From address is the customer’s address."
+    },
+    "ShipFromCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city of the return shipping address. This address tracks the location of the items at the start of the return or repair. For example, if a customer is returning an item, the Ship From address is the customer’s address."
+    },
+    "ShipFromCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country of the return shipping address. This address tracks the location of the items at the start of the return or repair. For example, if a customer is returning an item, the Ship From address is the customer’s address."
+    },
+    "ShipFromGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the return shipping address. See Compound Fields Considerations and Limitations for details on geolocation compound fields. This field is available in the API only."
+    },
+    "ShipFromLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the precise geolocation of the return shipping address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. See Compound Fields Considerations and Limitations for details on geolocation compound fields. This field is available in the API only."
+    },
+    "ShipFromLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the precise geolocation of the return shipping address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Fields Considerations and Limitations for details on geolocation compound fields. This field is available in the API only."
+    },
+    "ShipFromPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code of the return shipping address. This address tracks the location of the items at the start of the return or repair. For example, if a customer is returning an item, the Ship From address is the customer’s address."
+    },
+    "ShipFromState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state of the return shipping address. This address tracks the location of the items at the start of the return or repair. For example, if a customer is returning an item, the Ship From address is the customer’s address."
+    },
+    "ShipFromStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street of the return shipping address. This address tracks the location of the items at the start of the return or repair. For example, if a customer is returning an item, the Ship From address is the customer’s address."
+    },
+    "ShipmentType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of shipment associated with the return order. Available values are: Standard (default value) Rush Overnight Next Business Day Pick Up"
+    },
+    "SourceLocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The items’ location at the start of the return or repair. For example, if the return order tracks the return of products from a technician’s service vehicle to a warehouse, the service vehicle is the source location. This is a relationship field.",
+      "relationship_name": "SourceLocation",
+      "relationship_type": "Lookup",
+      "refers_to": "Location"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The status of the return order. Available values are: Draft Submitted Approved Canceled Closed If return orders are enabled by a Salesforce Order Management license, they must be created with a Status corresponding to the Status Category Activated. The default Statuses corresponding to Activated are Submitted and Approved."
+    },
+    "StatusCategory": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status category of the return order. Processing of the return order depends on this value. Each status category corresponds to one or more statuses. Possible values are: Activated Canceled Closed Draft Pending This field is available in API version 50.0 and later."
+    },
+    "TaxLocaleType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The system used to handle tax on the original order associated with the return order. Gross usually applies to taxes like value-added tax (VAT), and Net usually applies to taxes like sales tax. Possible values are: Automatic (displays most prices and taxes as combined values) Gross (displays most prices and taxes as combined values) Net (displays most prices and taxes as separate values) This field is available in API version 50.0 and later."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Adjusted total, not including tax, of the return order line items, including products, fees, and delivery charges, on the ReturnOrder. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalDeliveryAdjustAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the delivery charges on the return order. This value only includes adjustments to return order line items of type code Charge. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalDeliveryAdjustAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the delivery charges on the return order, inclusive of tax. This value only includes adjustments to return order line items of type code Charge. This amount is equal to TotalDeliveryAdjustAmount + TotalDeliveryAdjustTaxAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalDeliveryAdjustTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalDeliveryAdjustAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalDeliveryAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of the delivery charges on the return order. This value only includes return order line items of type code Charge. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalDeliveryAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the delivery charges on the return order, inclusive of tax. This value only includes return order line items of type code Charge. This amount is equal to TotalDeliveryAmount + TotalDeliveryTaxAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalDeliveryTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalDeliveryAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalFeeAdjustAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the fees on the return order. This value only includes adjustments to return order line items of type Fee. This is a calculated field. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAdjustAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the fees on the return order, inclusive of tax. This value only includes adjustments to return order line items of type Fee. This amount is equal to TotalFeeAdjustAmount + TotalFeeAdjustTaxAmount. This is a calculated field. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAdjustTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalFeeAdjustAmount. This is a calculated field. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of the fees on the return order. This value only includes return order line items of type Fee. This is a calculated field. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the fees on the return order, inclusive of tax. This value only includes return order line items of type Fee. This amount is equal to TotalFeeAmount + TotalFeeTaxAmount. This is a calculated field. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalFeeAmount. This is a calculated field. This field is available in API version 56.0 and later."
+    },
+    "TotalProductAdjustAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the products on the return order. This value only includes adjustments to return order line items of type code Product. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalProductAdjustAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the price adjustments applied to the products on the return order, inclusive of tax. This value only includes adjustments to return order line items of type code Product. This amount is equal to TotalProductAdjustAmount + TotalProductAdjustTaxAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalProductAdjustTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalProductAdjustmentAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalProductAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of the product charges on the return order. This value only includes return order line items of type code Product. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalProductAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the product charges on the return order, inclusive of tax. This value only includes return order line items of type code Product. This amount is equal to TotalProductAmount + TotalProductTaxAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalProductTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalProductAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAmount. This is a calculated field. This field is available in API version 50.0 and later."
+    }
+  },
+  "special_access_rules": "Field Service or Order Management must be enabled. If return orders are enabled by a Salesforce Order Management license, they must be created with a Status corresponding to the Status Category Activated. The default Statuses corresponding to Activated are Submitted and Approved.",
+  "usage": "You can use return orders to track customer returns, customer repairs, or the return of inventory from a technician’s van stock to a warehouse or supplier. Customers can initiate a return from a community, or agents can create return orders in response to a customer call or technician request. Return orders are composed of return order line items, which allow you to add details about the items being returned. To represent the returned items, each line item must list one or more of the following: product, product item, asset, product request line item, and order product. Return orders can be associated with a product request, case, account, contact, and order if needed. This versatility lets you use return orders to track a wide range of return scenarios.\n\nYou can use return orders to track customer returns, customer repairs, or the return of inventory from a technician’s van stock to a warehouse or supplier. Customers can initiate a return from a community, or agents can create return orders in response to a customer call or technician request.\n\nReturn orders are composed of return order line items, which allow you to add details about the items being returned. To represent the returned items, each line item must list one or more of the following: product, product item, asset, product request line item, and order product. Return orders can be associated with a product request, case, account, contact, and order if needed. This versatility lets you use return orders to track a wide range of return scenarios.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ReturnOrderChangeEvent (API version 48.0)**: Change events are available for the object.\n- **ReturnOrderFeed**: Feed tracking is available for the object.\n- **ReturnOrderHistory**: History is available for tracked fields of the object.\n- **ReturnOrderOwnerSharingRule**: Sharing rules are available for the object.\n- **ReturnOrderShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"ReturnOrder\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Case\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Case\"/>\n        <element name=\"CaseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Contact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DestinationLocation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"DestinationLocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ExpectedArrivalDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Order\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Order\"/>\n        <element name=\"OrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessExceptions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductRequest\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProductRequest\"/>\n        <element name=\"ProductRequestId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProductServiceCampaign\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProductServiceCampaign\"/>\n        <element name=\"ProductServiceCampaignId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProductTransfers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnOrderNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReturnOrderShipments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ReturnedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShipFromAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ShipFromCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShipFromLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShipFromPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipFromStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShipmentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SourceLocation\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"SourceLocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StatusCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DestinationLocationId": {
+      "field_label": "Destination Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExpectedArrivalDate": {
+      "field_label": "Expected Arrival Date",
+      "type": "datetime"
+    },
+    "ExpirationDate": {
+      "field_label": "Expiration Date",
+      "type": "datetime"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Total with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Return Order ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LifeCycleType": {
+      "field_label": "Life Cycle Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductRequestId": {
+      "field_label": "Product Request ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductServiceCampaignId": {
+      "field_label": "Product Service Campaign ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RefundInstructionsHint": {
+      "field_label": "Refund Instructions Hint",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "ReturnOrderNumber": {
+      "field_label": "Return Order Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ReturnedById": {
+      "field_label": "Returned By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShipFromAddress": {
+      "field_label": "Ship From Address",
+      "type": "address"
+    },
+    "ShipFromCity": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShipFromCountry": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShipFromGeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShipFromLatitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShipFromLongitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShipFromPostalCode": {
+      "field_label": "Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShipFromState": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "ShipFromStreet": {
+      "field_label": "Address",
+      "type": "textarea",
+      "length": "255"
+    },
+    "ShipmentType": {
+      "field_label": "Shipment Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SourceLocationId": {
+      "field_label": "Source Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StatusCategory": {
+      "field_label": "Status Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxLocaleType": {
+      "field_label": "Tax Locale Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TotalAmount": {
+      "field_label": "Pretax Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjustAmount": {
+      "field_label": "Shipping Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjustAmtWithTax": {
+      "field_label": "Shipping Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjustTaxAmount": {
+      "field_label": "Shipping Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAmount": {
+      "field_label": "Shipping Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAmtWithTax": {
+      "field_label": "Shipping Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryTaxAmount": {
+      "field_label": "Shipping Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjustAmount": {
+      "field_label": "Fee Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjustAmtWithTax": {
+      "field_label": "Fee Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjustTaxAmount": {
+      "field_label": "Fee Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAmount": {
+      "field_label": "Fee Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAmtWithTax": {
+      "field_label": "Fee Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeTaxAmount": {
+      "field_label": "Fee Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjustAmount": {
+      "field_label": "Product Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjustAmtWithTax": {
+      "field_label": "Product Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjustTaxAmount": {
+      "field_label": "Product Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAmount": {
+      "field_label": "Product Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAmtWithTax": {
+      "field_label": "Product Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductTaxAmount": {
+      "field_label": "Product Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

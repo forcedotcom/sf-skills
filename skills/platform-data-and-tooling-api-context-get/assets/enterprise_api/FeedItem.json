@@ -1,0 +1,322 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FeedItem - Data API",
+  "description": "FeedItem represents an entry in the feed, such as changes in a record feed, including text posts, link posts, and content posts. This object is available in API version 21.0 and later. This object replaces FeedPost.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BestCommentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the comment marked as best answer on a question post. This is a relationship field.",
+      "relationship_name": "BestComment",
+      "relationship_type": "Lookup",
+      "refers_to": "FeedComment"
+    },
+    "Body": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Sort, Update",
+      "description": "The body of the feed item. Required when Type is TextPost or AdvancedTextPost. Optional when Type is ContentPost or LinkPost. Although a value for Body isn’t required for the ContentPost type, an attachment is required. If an attachment isn’t present, the type changes to TextPost or AdvancedTextPost, depending on the API version. TextPost and AdvancedTextPost do require a value for Body. Tip: See the IsRichText field for a list of HTML tags supported in the body of rich text posts."
+    },
+    "CommentCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of comments associated with this feed item."
+    },
+    "ConnectionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When a PartnerNetworkConnection modifies a record that is tracked, the CreatedBy field contains the ID of the system administrator. The ConnectionId contains the ID of the PartnerNetworkConnection. Available if Salesforce to Salesforce is enabled for your org."
+    },
+    "ContentData": {
+      "type": "base64",
+      "properties": "Create, Nillable",
+      "description": "This field was removed in API version 35.0, and is available in earlier versions for backward compatibility only. This field is required if Type is ContentPost. Encoded file data in any format, and can’t be 0 bytes. Setting this field automatically sets Type to ContentPost."
+    },
+    "ContentDescription": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Sort",
+      "description": "This field was removed in API version 35.0, and is available in earlier versions for backward compatibility only. The description of the file specified in ContentData."
+    },
+    "ContentFileName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable, Sort",
+      "description": "This field was removed in API version 35.0, and is available in earlier versions for backward compatibility only. The name of the file uploaded to the feed. Setting ContentFileName automatically sets Type to ContentPost."
+    },
+    "ContentSize": {
+      "type": "int",
+      "properties": "Group, Nillable, Sort",
+      "description": "This field was removed in API version 35.0, and is available in earlier versions for backward compatibility only. This field is the size of the file (in bytes) uploaded to the feed. This field is read-only and is automatically determined during insert."
+    },
+    "ContentType": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "This field was removed in API version 35.0, and is available in earlier versions for backward compatibility only. This field is the MIME type of the file uploaded to the feed. This field is read-only and is automatically determined during insert."
+    },
+    "FeedPostId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field was removed in API version 22.0, and is available in earlier versions for backward compatibility only. ID of the associated FeedPost. A FeedPost represents the following types of changes in a feed item: changes to tracked fields, text posts, link posts, and content posts."
+    },
+    "HasContent": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the feed item has content."
+    },
+    "HasFeedEntity": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the feed item has a feed entity, for example, a post, as an attachment. Available in API version 39 and later when sharing a feed entity in Lightning Experience."
+    },
+    "HasLink": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the feed item has a link attached."
+    },
+    "HasVerifiedComment": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Determines whether a question has an answer that is marked as Company Verified.This field is available in API version 41.0 and later."
+    },
+    "InsertedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who added this item to the feed. For example, if an application migrates posts and comments from another application into a feed, the InsertedBy value is set to the ID of the context user. This is a polymorphic relationship field.",
+      "relationship_name": "InsertedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "IsClosed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "As of API version 43, a read-only field that indicates whether the feed item is open or closed to new actions. A value of true places restrictions on the actions a user can take on a feed item and its comments. For more information, see the Usage section."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Standard system field. Indicates whether the record has been moved to the Recycle Bin (true) or not (false)."
+    },
+    "IsRichText": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the feed item Body contains rich text. If you post a rich text feed comment using SOAP API, set IsRichText to true and escape HTML entities from the body. Otherwise, the post is rendered as plain text. Rich text supports the following HTML tags: <p> Tip: Though the <br> tag isn’t supported, you can use <p>&nbsp;</p> to create lines. <a> <b> <code> <i> <u> <s> <ul> <ol> <li> <img>The <img> tag is accessible only through the API and must reference files in Salesforce similar to this example: <img src=\"sfdc://069B0000000omjh\"></img> Note: In API version 35.0 and later, the system replaces special characters in rich text with escaped HTML. In API version 34.0 and prior, all rich text appears as a plain-text representation."
+    },
+    "LastEditById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the user who last edited the feed item."
+    },
+    "LastEditDate": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date the feed item was last edited."
+    },
+    "LikeCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of likes associated with this feed item."
+    },
+    "LinkUrl": {
+      "type": "url",
+      "properties": "Create, Nillable, Sort",
+      "description": "The URL of a LinkPost."
+    },
+    "NetworkScope": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies whether this feed item is available in the default Experience Cloud site, a specific Experience Cloud site, or all sites. This field is available in API version 26.0 and later, if digital experiences is enabled for your org. NetworkScope can have the following values: NetworkId—The ID of the Experience Cloud site in which the FeedItem is available. If left empty, the feed item is only available in the default Experience Cloud site. AllNetworks—The feed item is available in all Experience Cloud sites. Note the following exceptions for NetworkScope: Only feed items with a Group or User parent can set a NetworkId or a null value for NetworkScope. For feed items with a record parent, users can set NetworkScope only to AllNetworks. You can’t filter a feed item on the NetworkScope field."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the object type to which the feed item is related. For example, set this field to a UserId to post to someone’s profile feed, or an AccountId to post to a specific account. This is a polymorphic relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, ActivationTarget, ActivationTrgtIntOrgAccess, ApiAnomalyEventStore, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskIndDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CodeSet, CollaborationGroup, CommSubscription, CommSubscriptionChannelType, CommSubscriptionConsent, CommSubscriptionTiming, ConsumptionSchedule, Contact, ContactEncounter, ContactEncounterParticipant, ContentDocument, Contract, CoverageBenefit, CoverageBenefitItem, CredentialStuffingEventStore, CreditMemo, CreditMemoLine, Dashboard, DashboardComponent, DataStream, DelegatedAccount, DocumentChecklistItem, EngagementChannelType, EnhancedLetterhead, EnrollmentEligibilityCriteria, Event, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, Identifier, Image, IndividualApplication, Invoice, InvoiceLine, Lead, Location, MarketSegment, MarketSegmentActivation, MemberPlan, MessagingSession, MktCalculatedInsight, OperatingHours, Opportunity, Order, OrderItem, OtherComponentTask, PartyConsent, PersonEducation, PersonLanguage, PersonLifeEvent, PersonName, PlanBenefit, PlanBenefitItem, Product2, ProductFulfillmentLocation, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, ProfileSkill, ProfileSkillEndorsement, ProfileSkillUser, ProviderSearchSyncLog, PurchaserPlan, PurchaserPlanAssn, ReceivedDocument, Report, ReportAnomalyEventStore, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, ServiceTerritoryWorkType, SessionHijackingEventStore, Shift, Shipment, ShipmentItem, Site, SkillRequirement, SocialPost, Solution, Task, ThreatDetectionFeedback, Topic, User, Visit, VisitedParty, Visitor, VoiceCall, VolunteerProject, WorkBadgeDefinition, WorkOrder, WorkOrderLineItem, WorkType, WorkTypeGroup, WorkTypeGroupMember"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Group, Nillable, Sort",
+      "description": "ID of the ContentVersion record associated with a ContentPost. For WDC thanks posts, it’s the ID of the WorkThanks object associated with a RypplePost. This field is typically null for all posts except ContentPost and RypplePost.For example, set this field to an existing ContentVersion ID and post it to a feed with Type set to ContentPost."
+    },
+    "Revision": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The revision number of the feed item."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether this feed item is published and visible to all who can access the feed. This field is available in API version 37.0 and later. Possible values are: Published—The item’s visible to all with access to the feed. PendingReview —The item’s visible to its author and users who see the item and have View All Data or Can Approve Feed Post and Comment permission. Some people can delete and edit the item. They include the author and users who see the item and have Can Approve Feed Post and Comment or Modify All Data permission. Note: These permissions don’t apply when you retrieve feed items using SOQL. To filter out Pending Review feed items you must add an explicit clause. Some actions are blocked when a feed item is pending review: Comment Like and unlike Bookmark Share Isolated—The item is visible only to admins. After an item is isolated, the author no longer has view or edit access. The admin user can edit, view, and delete isolated feed items."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The title of the feed item. When the Type is LinkPost, the LinkUrl is the URL and this field is the link name. The Title field can be updated on posts of Type QuestionPost."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of feed item. Except for ContentPost, LinkPost, QuestionPost, and TextPost, all the FeedItem types listed here are system-generated. In most situations, we recommend that you don't create system-generated fields using Apex or our APIs. One exception is during Chatter data migrations, which can require admins to migrate system-generated post types. ActivityEvent—indirectly generated event when a user or the API adds a Task associated with a feed-enabled parent record (excluding email tasks on cases). Also occurs when a user or the API adds or updates a Task or Event associated with a case record (excluding email and call logging). For a recurring Task with CaseFeed disabled, one event is generated for the series only. For a recurring Task with CaseFeed enabled, events are generated for the series and each occurrence. AdvancedTextPost—created when a user posts a group announcement and, in Lightning Experience as of API version 39.0 and later, when a user shares a post. AnnouncementPost—Not used. ApprovalPost—generated when a user submits an approval. BasicTemplateFeedItem—Not used. CanvasPost—a post made by a canvas app posted on a feed. CollaborationGroupCreated—generated when a user creates a public group. CollaborationGroupUnarchived—Not used. ContentPost—a post with an attached file. CreatedRecordEvent—generated when a user creates a record from the publisher. DashboardComponentAlert—generated when a dashboard metric or gauge exceeds a user-defined threshold. DashboardComponentSnapshot—created when a user posts a dashboard snapshot on a feed. LinkPost—a post with an attached URL. PollPost—a poll posted on a feed. ProfileSkillPost—generated when a skill is added to a user’s Chatter profile. QuestionPost—generated when a user posts a question. ReplyPost—generated when Chatter Answers posts a reply. RypplePost—generated when a user creates a Thanks badge in WDC. TextPost—a direct text entry on a feed. TrackedChange—a change or group of changes to a tracked field. UserStatus—automatically generated when a user adds a post. Deprecated. The following values appear in the Type picklist for all feed objects but apply only to CaseFeed: AttachArticleEvent—generated event when a user attaches an article to a case. CallLogPost—generated event when a user logs a call for a case through the user interface. CTI calls also generate this event. CaseCommentPost—generated event when a user adds a case comment for a case object. ChangeStatusPost—generated event when a user changes the status of a case. ChatTranscriptPost—generated event when Chat transcript is saved to a case. EmailMessageEvent—generated event when an email related to a case object is sent or received. FacebookPost—generated when a Facebook post is created from a case. Deprecated. MilestoneEvent—generated when a case milestone is completed or reaches violation status. SocialPost—generated when a social post is created from a case. Note: If you set Type to ContentPost, also specify ContentData and ContentFileName."
+    },
+    "Visibility": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether this feed item is available to all users or internal users only. This field is available in API version 26.0 and later, if digital experiences is enabled for your org. Visibility can have the following values: AllUsers—The feed item is available to all users who have permission to see the feed item. InternalUsers—The feed item is available to internal users only. Note the following exceptions for Visibility: For record posts, Visibility is set to InternalUsers for all internal users by default. External users can set Visibility only to AllUsers. Visibility can be updated on record posts. The Update property is supported only for feed items posted on records."
+    }
+  },
+  "special_access_rules": "Only users with this permission can delete items in unlisted groups. If the context user has the Insert System Field Values for Chatter Feeds user permission, the create field property is available on CreatedBy and CreatedDate system fields. During migration, the context user can set these fields to the original post’s author and creation date. The fields can’t be updated after migration.\n\nOnly users with this permission can delete items in unlisted groups.\n\nIf the context user has the Insert System Field Values for Chatter Feeds user permission, the create field property is available on CreatedBy and CreatedDate system fields. During migration, the context user can set these fields to the original post’s author and creation date. The fields can’t be updated after migration.",
+  "usage": "Then insert the attachment.\n\nWhen a feed item’s IsClosed field is set to true, some actions are blocked and others are blocked to most users. This table sets out the actions that are blocked when a feed item is closed.\n\nEditing is blocked specifically for the feed item title, feed item body, and feed content body fields.",
+  "wsdl_segment": "```xml\n<complexType name=\"FeedItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"BestComment\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FeedComment\"/>\n        <element name=\"BestCommentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Body\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CommentCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedComments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedItemThanks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedLikes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedRevisions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSignals\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedTrackedChanges\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"HasContent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasFeedEntity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasLink\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasVerifiedComment\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"InsertedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"InsertedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsClosed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRichText\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastEditById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastEditDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LikeCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LinkUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RelatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Revision\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "BestCommentId": {
+      "field_label": "Best Comment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Body": {
+      "field_label": "Body",
+      "type": "textarea",
+      "length": "10000"
+    },
+    "CommentCount": {
+      "field_label": "Comment Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "HasContent": {
+      "field_label": "Has Content",
+      "type": "boolean"
+    },
+    "HasFeedEntity": {
+      "field_label": "Has Feed Entity Attachment",
+      "type": "boolean"
+    },
+    "HasLink": {
+      "field_label": "Has Link",
+      "type": "boolean"
+    },
+    "HasVerifiedComment": {
+      "field_label": "Has Verified Comment",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Feed Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InsertedById": {
+      "field_label": "InsertedBy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsClosed": {
+      "field_label": "Is Closed",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRichText": {
+      "field_label": "Is Rich Text",
+      "type": "boolean"
+    },
+    "LastEditById": {
+      "field_label": "Last Edit By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastEditDate": {
+      "field_label": "Last Edit Date",
+      "type": "datetime"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LikeCount": {
+      "field_label": "Like Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "LinkUrl": {
+      "field_label": "Link URL",
+      "type": "url",
+      "length": "1000"
+    },
+    "NetworkScope": {
+      "field_label": "Network Scope",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Revision": {
+      "field_label": "Revision",
+      "type": "int",
+      "digits": "9"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "255"
+    },
+    "Type": {
+      "field_label": "Feed Item Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Visibility": {
+      "field_label": "Visibility",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

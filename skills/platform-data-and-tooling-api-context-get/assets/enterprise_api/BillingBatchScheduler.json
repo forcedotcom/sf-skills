@@ -1,0 +1,278 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "BillingBatchScheduler - Data API",
+  "description": "Represents a scheduled processing job that triggers recurring invoice batch runs and payment batch runs in Subscription Management. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "BillingSchedulerName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Name of the scheduler."
+    },
+    "Comments": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Optional field for comments about the scheduler."
+    },
+    "CronExpression": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Determines how often the scheduler recurs."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date when the scheduler stops triggering batch processing jobs."
+    },
+    "FrequencyCadence": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates how often the scheduler triggers the invoice batch run or the payment batch run. Possible values are: Daily—The scheduled job recurs every day. Monthly—The scheduled job recurs every month. Once—The scheduled job occurs one time and doesn’t recur. Weekly—The scheduled job recurs every week."
+    },
+    "FrequencyOptions": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Derived field that stores the scheduler configuration."
+    },
+    "JobType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates the type of batch processing job that the scheduler triggers. Possible values are: Invoice—The scheduler starts a batch invoice run. Payment—The scheduler starts a batch payment run."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "NextRunTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and timestamp of the next scheduled batch invoice run or batch payment run are shown in the user's time zone."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user who created the scheduler. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RecurringSubType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the frequency at which the batch processing job recurs when the FrequencyCadence is set to Monthly. Possible values are: Every—The processing job recurs at every instance of the frequency of the value. For example, if the RecurringSubType is Every and the FrequencyCadence is Weekly, then the batch processing job recurs every week. SpecificDate—The scheduler triggers the batch processing job on the selected date. For example, if the selected date is 5, and the FrequencyCadence is Monthly, then the job recurs on the fifth day of each month."
+    },
+    "RecurringType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the frequency at which the batch processing job is repeated when the FrequencyCadence is set to Weekly. Possible values are: Every"
+    },
+    "RecursOn": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the interval at which the scheduler triggers a batch processing job. If the FrequencyCadence is Monthly, you must select either the specific date or the interval when the schedule triggers the job. Possible values are: First Fourth Last Second Third Example: To tell the scheduler to trigger the job on the first Monday of the month, set the following fields: FrequencyCadence=Monthly RecursOn=First RecursOnDay= Monday"
+    },
+    "RecursOnDate": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Specifies the date on which the scheduler triggers a batch processing job. Example: To tell the scheduler to trigger the job on the fifth day of the month, set the following fields: FrequencyCadence=Monthly RecursOnDate=5 Example: To tell the scheduler to trigger the job on the second to last day of the month, set the following fields: FrequencyCadence=Monthly RecursOnDate=SecondToLast If you select Last, SecondToLast, or ThirdToLast, the date of the batch processing job varies depending on the number of days in the month. For example, suppose SecondToLast is selected. If the month has 30 days, such as June, then the batch processing job occurs on the 28th day. If the month has 31 days, such as July, then the batch processing job occurs on the 29th day."
+    },
+    "RecursOnDay": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the day on which the scheduler triggers a batch processing job. If the FrequencyCadence field is set to Weekly, then you must select the day when the scheduler runs. The scheduler recurs every week on the selected day; for example, weekly on Monday. Possible values are: Sunday Monday Tuesday Wednesday Thursday Friday Saturday"
+    },
+    "RunCriteriaId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the filter criteria that’s defined for the invoice batch run or the payment batch run. This field is a polymorphic relationship field.",
+      "relationship_name": "RunCriteria",
+      "relationship_type": "Lookup",
+      "refers_to": "InvoiceBatchRunCriteria, PaymentBatchRunCriteria"
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort",
+      "description": "The date when the scheduler triggers its first batch processing job."
+    },
+    "StartTime": {
+      "type": "time",
+      "properties": "Filter, Sort",
+      "description": "The time when the scheduler triggers the batch processing job."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the scheduler. Only Active schedulers can trigger batch processing jobs. Possible values are: Active Canceled Draft Inactive"
+    },
+    "TimeZone": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The time zone is either the value selected when the run was configured, or it's the user's time zone. The time zone is shown in Greenwich Mean Time (GMT)."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "BillingSchedulerName": {
+      "field_label": "Billing Scheduler Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CronExpression": {
+      "field_label": "Cron Expression",
+      "type": "string",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "FrequencyCadence": {
+      "field_label": "Frequency",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FrequencyOptions": {
+      "field_label": "Recurrence",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Id": {
+      "field_label": "Billing Scheduler ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JobType": {
+      "field_label": "Job Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "NextRunTime": {
+      "field_label": "Next Run",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecurringSubType": {
+      "field_label": "Recurring subtype",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecurringType": {
+      "field_label": "Recurring type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecursOn": {
+      "field_label": "Recurs on",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecursOnDate": {
+      "field_label": "Recurs on date",
+      "type": "string",
+      "length": "3"
+    },
+    "RecursOnDay": {
+      "field_label": "Recurs on day",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RunCriteriaId": {
+      "field_label": "Run Criteria ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShouldExcludeWkendAndHldy": {
+      "field_label": "Bypass weekend",
+      "type": "boolean"
+    },
+    "ShouldStartRunImmediately": {
+      "field_label": "Start Run Immediately",
+      "type": "boolean"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "StartTime": {
+      "field_label": "Start Time",
+      "type": "time"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeZone": {
+      "field_label": "Time Zone",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

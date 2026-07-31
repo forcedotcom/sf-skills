@@ -1,0 +1,155 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ProcessInstanceStep - Data API",
+  "description": "Represents one work item in an approval process (ProcessInstance).",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActorId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who’s assigned to this approval step. This is a polymorphic relationship field.",
+      "relationship_name": "Actor",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Comments": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Limit: 4,000 bytes.The contents of this field can be publicly viewed."
+    },
+    "ElapsedTimeInDays": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in days since this step was started."
+    },
+    "ElapsedTimeInHours": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in hours since this step was started."
+    },
+    "ElapsedTimeInMinutes": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in minutes since this step was started."
+    },
+    "OriginalActorId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who was originally assigned to this approval step. This is a polymorphic relationship field.",
+      "relationship_name": "OriginalActor",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ProcessInstanceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the ProcessInstance that this approval step belongs to. This is a relationship field.",
+      "relationship_name": "ProcessInstance",
+      "relationship_type": "Lookup",
+      "refers_to": "ProcessInstance"
+    },
+    "StepNodeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the node currently assigned to this approval step."
+    },
+    "StepStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of this approval step. Approved Fault Held NoResponse Pending Reassigned Rejected Removed Started If the approval step requires unanimous approval and one approver rejects the request, the value of this field for the other approvers changes to NoResponse. Likewise, if approval is based on the first response and an approver responds, the value of this field for the other approvers changes to NoResponse."
+    }
+  },
+  "usage": "Query or retrieve a new step in an approval process (ProcessInstance).",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **ProcessInstanceStepChangeEvent (API Version 58.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ProcessInstanceStep\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Actor\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ActorId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Comments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ElapsedTimeInDays\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ElapsedTimeInHours\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ElapsedTimeInMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"OriginalActor\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OriginalActorId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstance\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProcessInstance\"/>\n        <element name=\"ProcessInstanceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"StepNodeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"StepStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActorId": {
+      "field_label": "Actor ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "string",
+      "length": "4000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ElapsedTimeInDays": {
+      "field_label": "Elapsed Time in Days",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ElapsedTimeInHours": {
+      "field_label": "Elapsed Time in Hours",
+      "type": "double",
+      "precision": "7",
+      "scale": "2"
+    },
+    "ElapsedTimeInMinutes": {
+      "field_label": "Elapsed Time in Minutes",
+      "type": "double",
+      "precision": "8",
+      "scale": "0"
+    },
+    "Id": {
+      "field_label": "Process Instance Step ID",
+      "type": "id",
+      "length": "18"
+    },
+    "OriginalActorId": {
+      "field_label": "Original Actor ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProcessInstanceId": {
+      "field_label": "Process Instance ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StepNodeId": {
+      "field_label": "Process Node ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StepStatus": {
+      "field_label": "Step Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

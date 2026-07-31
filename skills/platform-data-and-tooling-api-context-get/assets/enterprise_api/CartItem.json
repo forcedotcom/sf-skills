@@ -1,0 +1,751 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "CartItem - Data API",
+  "description": "Represents an item in a WebCart that’s active in a store built with B2B. Cart item can be of type Product or Charge. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Non-itemized adjustments for this cart item."
+    },
+    "AdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The tax that’s calculated on the AdjustmentAmount."
+    },
+    "AssociatedItemPricing": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Specifies how a child cart item is priced relative to its parent cart item within a product bundle. This field is null for standalone products that aren't part of a bundle. Available in API version 65.0 and later.Possible values are: IncludedInBundlePrice—Indicates that the parent product’s price includes the aggregated prices of its child components. NotIncludedInBundlePrice—Indicates that the parent product’s price doesn’t include the aggregated prices of its child components."
+    },
+    "BillingFrequency": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies how often a subscription is billed. Available in API version 59.0 and later.Possible values are: Annual MilestonePlan Monthly Quarterly Semi-Annual"
+    },
+    "CartDeliveryGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the CartDeliveryGroup that’s associated with a cart item. This field is a relationship field.",
+      "relationship_name": "CartDeliveryGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "CartDeliveryGroup"
+    },
+    "CartId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the WebCart that’s associated with a cart item. This field is a relationship field.",
+      "relationship_name": "Cart",
+      "relationship_type": "Lookup",
+      "refers_to": "WebCart"
+    },
+    "ChildProductCount": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of child products associated with this cart item. If a child product is a bundle, its own ChildProductCount is included in this total. For simple products that don’t have any child products, the ChildProductCount value is zero."
+    },
+    "ConfigureDuringSale": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Specify whether a product bundle is configurable. Available in API version 65.0 and later. Possible values are: Allowed NotAllowed"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO code for the currency that’s specified on the buyer’s account. Default value is USD. Possible values are: AED—UAE Dirham AUD—Australian Dollar BRL—Brazilian Real CAD—Canadian Dollar EUR—Euro GBP—British Pound INR—Indian Rupee JPY—Japanese Yen SEK—Swedish Krona USD—U.S. Dollar"
+    },
+    "DistributedAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "A calculated field that determines the amount of a cart-wide promotional adjustment when distributed across all items in the cart. This field is for display purposes only and is valid only during checkout. This field is available in API version 52.0 and later. You receive $10 off, and there are 5 items in the cart. The distributed adjustment is (-$2)."
+    },
+    "DistributedAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "A calculated field that determines the amount of a cart-wide tax adjustment due to promotions when distributed across all items in the cart. This field is available in API version 52.0 and later. EXAMPLE: Your discount causes a cart-wide tax reduction of (-$10), and there are 5 items in the cart. The distributed tax adjustment is (-$2)."
+    },
+    "EndQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the final asset quantity when the subscription is modified or when it ends."
+    },
+    "FirstPymtPriceAferAdjustments": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The first term price for term-based subscription products, after price adjustments are applied. The total amount for a non-subscription product or a non-term based subscription product, after price adjustments are applied. This is available in API version 60.0 and later."
+    },
+    "FirstPymtTax": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The tax for the first term price for term-based subscription products. The tax amount for a non-subscription product or a non-term subscription product. This field is available in API version 60.0 and later."
+    },
+    "GrossAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The gross amount of the price adjustment on the cart item (tax inclusive). This is available in API version 55.0 and later."
+    },
+    "GrossUnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The gross amount of the unit price for a cart item (tax inclusive). This is available in API version 55.0 and later."
+    },
+    "IsShippingChargeNotApplicable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether shipping charges are applicable (true) or not (false) to the cart item. The default value is false. This field is available in API version 64.0 and later."
+    },
+    "ItemizedAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "A calculated field that determines the total amount of promotional adjustments that are specific to an item. This field is available in API version 52.0 and later. EXAMPLE: One cart item has one discount code for $10 off. Your itemized adjustment amount is (-$10) for that item."
+    },
+    "ItemizedAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "A calculated field that determines the total amount of promotion-related tax adjustments that are specific to an item. This field is available in API version 52.0 and later. EXAMPLE: One cart item has one discount code for $10 off. This reduces the tax on that item by (-$2). Your itemized adjustment tax amount is (-$2) for that item."
+    },
+    "ListPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The original price of the cart item. Typically shown with a line through it. List price is shown only when it’s higher than the negotiated price. If the list price is the same or lower, it isn’t shown to the buyer. This field is available in API version 52.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of this CartItem record. Name can be up to 255 characters."
+    },
+    "NetAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The net amount of the price adjustment made on the cart item (tax exclusive). This is available in API version 55.0 and later."
+    },
+    "NetUnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The net amount of the unit price for the cart item (tax exclusive). This is available in API version 55.0 and later."
+    },
+    "NetUnitPriceAfterAdjustments": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The net unit price for a cart item, after all tier and promotional price adjustments are applied. This field is available in API version 60.0 and later."
+    },
+    "ParentCartItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the cart item's parent CartItem. The value is empty if the item is a top-level cart item. This field is a relationship field.",
+      "relationship_name": "CartItem",
+      "relationship_type": "Lookup",
+      "refers_to": "CartItem"
+    },
+    "PerUnitWeight": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Weight per unit of this cart item, in the unit specified by WeightUnit. This field is available in API version 62.0 and later."
+    },
+    "PeriodBoundary": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The. Default value is . Possible values are: AlignToCalendar Anniversary DayOfPeriod LastDayOfPeriod"
+    },
+    "PeriodBoundaryDay": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ."
+    },
+    "PeriodBoundaryStartMonth": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The. Default value is . Possible values are: 1—January 10—October 11—November 12—December 2—February 3—March 4—April 5—May 6—June 7—July 8—August 9—September"
+    },
+    "PriceBookEntryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the price book entry for the product. This field is available in API version 60.0 and later. This field is a relationship field.",
+      "relationship_name": "PricebookEntry",
+      "relationship_type": "Lookup",
+      "refers_to": "PricebookEntry"
+    },
+    "PricingTermCount": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A calculated field that indicates the number of pricing terms in the subscription. This field is available in API version 59.0 and later."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of a product type cart item. Cart items can be of type PRODUCT or CHARGE. This field is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "ProductClass": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The product class of the cart item. Default value is Simple. Possible values are: Bundle Set Simple Variation VariationParent"
+    },
+    "ProductRelatedComponentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the cart item's ProductRelatedComponent. The ProductRelatedComponent represents a product that is included in a product bundle, a set, or a product and an add-on. The ProductRelatedComponent is empty if the item is a top-level cart item. This field is a relationship field.",
+      "relationship_name": "ProductRelatedComponent",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductRelatedComponent"
+    },
+    "ProductSellingModelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the model used to sell a product. This field is available in API version 59.0 or later. This field is a relationship field.",
+      "relationship_name": "ProductSellingModel",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductSellingModel"
+    },
+    "ProductValidationKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The product validation key of the cart item."
+    },
+    "ProductRelationshipTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the product relationship type that defines the relationship between a product bundle and its child product. Available in API version 65.0 and later. This field is a relationship field.",
+      "relationship_name": "ProductRelationshipType",
+      "relationship_type": "Lookup",
+      "refers_to": "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_productrelationshiptype.htmProductRelationshipType"
+    },
+    "ProrationPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the proration policy, which defines how prices are calculated for each time period within a subscription term. This field is available in API version 60.0 and later. This field is a relationship field.",
+      "relationship_name": "ProrationPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "Proration Policy"
+    },
+    "StartQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Indicates the initial asset quantity when the subscription starts."
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The number of a given cart item in a cart."
+    },
+    "QuantityScaleMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Determines how a child product's quantity scales when added to a cart or configured within a product bundle. Available in API version 65.0 and later. Possible values are: Constant—Represents a value that remains fixed relative to the parent bundle. Proportional—Represents a value that varies in proportion to the parent bundle’s price or quantity."
+    },
+    "SalesPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The discounted price of a cart item."
+    },
+    "SellingModelType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of the product selling model associated with a term-based subscription product. This field is available in API version 60.0 and later. Possible values are: Evergreen OneTime TermDefined The default value is OneTime."
+    },
+    "Sku": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Shelf-Keeping Unit ID of a cart item."
+    },
+    "StockCheckMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Determines how inventory is assessed for a cart item that’s part of a bundle or set. Possible values are: ChildProducts—Inventory is assessed based on the child product or products. ParentProduct—Inventory is assessed based on the parent product."
+    },
+    "SubType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the subtype of the product. Possible values are: Bonus—Bonus product. GiftWrap—Gift wrapped product. This field is available in API version 64.0 and later."
+    },
+    "SubscriptionTerm": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of terms (years or months, for example) in the subscription. This field is available in API version 59.0 and later."
+    },
+    "TaxTreatmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related tax treatment for the cart item. This field is available in API version 63.0 and later. This field is available with Subscription Management. This field is a relationship field.",
+      "relationship_name": "TaxTreatment",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxTreatment"
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The total amount of all promotional adjustments on the item, both distributed and itemized. This field is available in API version 52.0 and later."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total cost of this cart item, including taxes and adjustments."
+    },
+    "TotalFirstPymtAdjAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The total adjustment amount for the first payment of a term-based susbcription product. The TotalAdjustmentAmount for non-subscription products and non-term based subscription products. This field is available in API version 63.0 and later."
+    },
+    "TotalFirstPymtListPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The first-payment amount for a term-based subscription product, based on the product's ListPrice. This is the same value as TotalListPrice for non-subscription products or non-term based subscription products. This price is only for comparison, and not the price at which the buyer purchases a product. This field is available in API version 63.0 and later."
+    },
+    "TotalFirstPymtPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The first term price for term-based subscription products. The price of a line item for non-subscription products and non-term based subscription products. This price includes price adjustments and excludes taxes. This field is available in API version 63.0 and later."
+    },
+    "TotalLineAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Total amount for this cart item, based on sales price and quantity."
+    },
+    "TotalLineFirstPymtAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The first term price for term-based subscripiton products, calculated based on the sales price and quantity, before any price adjustments are made. This is the same value as TotalLineAmount for non-subscription products and non-term based subscription products. This field is available in API version 63.0 and later."
+    },
+    "TotalLineFirstPymtTaxAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The tax on the first payment amount, after price adjustments, for term-based subscription products. The tax on the price of the product for non-subscription products and non-term based subscription products. Taxes are also calculated on the delivery charge items. This field is a calculated field. This field is available in API version 63.0 and later."
+    },
+    "TotalLineGrossAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total gross amount of the line item (tax inclusive). This is available in API version 55.0 and later."
+    },
+    "TotalLineNetAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total net amount of the line item (tax exclusive). This is available in API version 55.0 and later."
+    },
+    "TotalLineTaxAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "Total tax amount for TotalLineAmount."
+    },
+    "TotalListPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Total amount for this cart item, based on ListPrice. We provide this value for comparison. It's not the price that the buyer is paying."
+    },
+    "TotalPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Total amount for this cart item, including adjustments but excluding taxes. Note: Although this field is Nillable, if you want to use Commerce Webstore Cart Promotions, this field is required."
+    },
+    "TotalPriceAfterAllAdjustments": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Total price after all price adjustments are applied. This field is available in API version 52.0 and later. Note: Although this field is Nillable, if you want to use Commerce Webstore Cart Promotions, this field is required."
+    },
+    "TotalPriceTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total tax amount for a cart item before promotional adjustments, including quantity-based adjustments. This field is available in API version 56.0 and later."
+    },
+    "TotalPromoAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "Total itemized and distributed adjustment amount in cart (only for promotions). This field is available in API version 52.0 and later."
+    },
+    "TotalPromoAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total itemized and distributed adjustment tax amount in cart (only for promotions). This field is available in API version 52.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total tax amount for this cart item. This value includes taxes for both TotalLineAmount and AdjustmentAmount."
+    },
+    "TotalWeight": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total weight of this cart item, in the unit specified by WeightUnit. This field is available in API version 62.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The CartItem type. Possible values are: Product Charge"
+    },
+    "UnitAdjustedPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Price per quantity unit after a tier discount or surcharge is applied. This field is available in API version 50.0 and later."
+    },
+    "UnitAdjustedPriceWithItemAdj": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Unit price, including both tier and item level discounts, for the item."
+    },
+    "UnitAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Tier discount or surcharge to apply to a quantity unit. This amount is added to the SalesPrice to get the UnitAdjustedPrice. This field is available in API version 50.0 and later."
+    },
+    "UnitItemAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Item level adjustments made to the unit price for the item."
+    },
+    "UnitPriceAfterAdjustments": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The unit price for a cart item, after tier and promotional price adjustments are applied. This field is available in API version 60.0 and later."
+    },
+    "WeightUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Unit of measurement for the weight of the cart item. This field is available in API version 62.0 and later. Possible values are: Grams Kilograms Ounces Pounds"
+    }
+  },
+  "special_access_rules": "The CartItem object is available only if the B2B Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. Unless it’s noted, associated objects are available in the same API version as this object.\n\n- **CartItemChangeEvent (API version 58.0)**: Change events are available for the object.",
+  "field_reference": {
+    "AdjustmentAmount": {
+      "field_label": "Adjustment Amount quantity based",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AdjustmentTaxAmount": {
+      "field_label": "Adjustment Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CartDeliveryGroupId": {
+      "field_label": "Cart Delivery Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CartId": {
+      "field_label": "Cart ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChildProductCount": {
+      "field_label": "Child Product Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DistributedAdjustmentAmount": {
+      "field_label": "Distributed Promotions Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DistributedAdjustmentTaxAmount": {
+      "field_label": "Distributed Promotions Tax Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "GrossAdjustmentAmount": {
+      "field_label": "Gross Adjustment Amount quantity based",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "GrossUnitPrice": {
+      "field_label": "Gross Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Cart Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsShippingChargeNotApplicable": {
+      "field_label": "Is Shipping Charge Not Applicable",
+      "type": "boolean"
+    },
+    "ItemizedAdjustmentAmount": {
+      "field_label": "Item Promotions Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ItemizedAdjustmentTaxAmount": {
+      "field_label": "Item Promotions Tax Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ListPrice": {
+      "field_label": "List Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Name": {
+      "field_label": "Cart Item Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NetAdjustmentAmount": {
+      "field_label": "Net Adjustment Amount quantity based",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "NetUnitPrice": {
+      "field_label": "Net Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ParentCartItemId": {
+      "field_label": "Cart Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PerUnitWeight": {
+      "field_label": "Weight of single cart item",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductClass": {
+      "field_label": "Product Class",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProductRelatedComponentId": {
+      "field_label": "Product Related Component ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductRelationshipTypeId": {
+      "field_label": "Product Relationship Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductValidationKey": {
+      "field_label": "Product Validation Key hash",
+      "type": "string",
+      "length": "255"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "QuoteLineItemId": {
+      "field_label": "Quote Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SalesPrice": {
+      "field_label": "Sales Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Sku": {
+      "field_label": "SKU",
+      "type": "string",
+      "length": "255"
+    },
+    "StockCheckMethod": {
+      "field_label": "Stock Check Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubType": {
+      "field_label": "SubType",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxTreatmentId": {
+      "field_label": "Tax Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "All Adjustments Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Total Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmount": {
+      "field_label": "Total Line Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineGrossAmount": {
+      "field_label": "Total Line Gross Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineNetAmount": {
+      "field_label": "Total Line Net Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineTaxAmount": {
+      "field_label": "Total Line Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalListPrice": {
+      "field_label": "Total List Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPrice": {
+      "field_label": "Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPriceAfterAllAdjustments": {
+      "field_label": "Total Adjusted Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPriceTaxAmount": {
+      "field_label": "Total Price Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPromoAdjustmentAmount": {
+      "field_label": "Item Promotions Plus Distributed Promotions Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPromoAdjustmentTaxAmount": {
+      "field_label": "Item Promotions Tax Adjustment Plus Distributed Tax Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalWeight": {
+      "field_label": "Total Weight of cart item",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UnitAdjustedPrice": {
+      "field_label": "Unit Adjusted Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitAdjustedPriceWithItemAdj": {
+      "field_label": "Unit price that includes both tier and item level discounts for this cart item",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitAdjustmentAmount": {
+      "field_label": "Unit Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitItemAdjustmentAmount": {
+      "field_label": "Item level discount on a unit level for this cart item",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "WeightUnit": {
+      "field_label": "Weight Unit",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

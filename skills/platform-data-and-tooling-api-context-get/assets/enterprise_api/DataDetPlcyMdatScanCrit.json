@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DataDetPlcyMdatScanCrit - Data API",
+  "description": "Represents inclusion and exclusion criteria that filter what DataDetect scan policy object fields are to be scanned based on metadata tags. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Criteria": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines category of inclusion or exclusion criteria applied to fields during scan policy creation. Valid values are: ComplianceCategory—Compliance acts, definitions, or regulations related to the field's data. DataSensitivity—Level of data sensitivity related to the field's data. FieldUsage—Data planned for deprecation, or intended to be hidden, related to the active and visible field's data."
+    },
+    "DataDetectPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the policy associated with the data search expression. This field is a relationship field.",
+      "relationship_name": "DataDetectPolicy",
+      "relationship_type": "Master-Detail",
+      "refers_to": "DataDetectPolicy"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the criteria."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Defines what criteria, inclusion or exclusion, is applied to a field in the policy scan object."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Value of the criteria applied to filters."
+    }
+  }
+}

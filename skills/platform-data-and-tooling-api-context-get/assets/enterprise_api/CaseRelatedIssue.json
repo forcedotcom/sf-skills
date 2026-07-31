@@ -1,0 +1,121 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "CaseRelatedIssue - Data API",
+  "description": "This object acts as a junction between a customer issue (Case) and the Incident or Problem that represents an associated service failure. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A relationship field that represents the case you're linking a Problem or Incident to.",
+      "relationship_name": "Case",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A brief description of the related case."
+    },
+    "RelatedEntityType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Shows what type of object the related entity is. Possible values are: Incident Problem"
+    },
+    "RelatedIssueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A polymorphic relationship field that represents a related Problem or Incident.",
+      "relationship_name": "RelatedIssue",
+      "relationship_type": "Lookup",
+      "refers_to": "Incident, Problem"
+    },
+    "RelationshipType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Shows how two records relate to each other. Possible values are: Root Cause Similar The default value is 'Root Cause'."
+    },
+    "UniqueKeyIndex": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "This field is unique within your organization."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CaseRelatedIssueChangeEvent (API version 59.0)**: Change events are available for the object.\n- **CaseRelatedIssueFeed**: Feed tracking is available for the object.\n- **CaseRelatedIssueHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "CaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Case Related Issue ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Case Related Issue Number",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedEntityType": {
+      "field_label": "Related Issue Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedIssueId": {
+      "field_label": "Related Issue ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelationshipType": {
+      "field_label": "Relationship Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

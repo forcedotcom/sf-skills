@@ -1,0 +1,464 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Site - Data API",
+  "description": "Represents a public website that is integrated with an org. This object is available in API version 16.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AdminId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The site administrator designated as the contact for the site. This user receives site-related communications from site visitors and from Salesforce. This is a relationship field. Relationship Name Admin Relationship Type Lookup Refers To User"
+    },
+    "AnalyticsTrackingCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The tracking code associated with your site. This code can be used by services like Google Analytics to track page request data for your site."
+    },
+    "ArchiveStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The archived status of a site. Possible values are: NotArchived TemporaritlyArchived"
+    },
+    "ArchivedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user that archived the site. Relationship Name: ArchivedBy Relationship Type: Lookup Refers To: User"
+    },
+    "ArchivedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when the site was archived."
+    },
+    "ClickjackProtectionLevel": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Sets the clickjack protection level. The options are: AllowAllFraming—Allow framing by any page (no protection) SameOriginOnly—Allow framing by the same origin only (recommended) NoFraming—Don’t allow framing by any page (most protection) This field is available in API version 30.0 and later."
+    },
+    "DailyBandwidthLimit": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The rolling 24-hour daily bandwidth limit for the sites in your organization."
+    },
+    "DailyBandwidthUsed": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The current rolling 24-hour daily bandwidth usage for the sites in your organization."
+    },
+    "DailyRequestTimeLimit": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The rolling 24-hour daily service request time limit for the sites in your organization. Service request time is calculated as the total server time in minutes required to generate pages for the site."
+    },
+    "DailyRequestTimeUsed": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The current rolling 24-hour daily service request time for the sites in your organization."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "An optional description of the site."
+    },
+    "GuestRecordDefaultOwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A user in the Salesforce org that is the default owner of records created by unauthenticated (guest) users. This is a relationship field. Relationship Name GuestRecordDefaultOwner Relationship Type Lookup Refers To User"
+    },
+    "GuestUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The site or Experience Cloud sites specific user that anonymous, unauthenticated users run as when interacting with the site. This is a relationship field. Relationship Name GuestUser Relationship Type Lookup Refers To User"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the site as it appears in the user interface."
+    },
+    "MonthlyPageViewsEntitlement": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of page views allowed for the current calendar month for the sites in your organization."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name used when referencing the site in the API."
+    },
+    "OptionsAllowGuestPaymentsApi": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether unauthenticated guest users can access the Payments API (true) or not (false). The default is false. This field is available in API version 49.0 and later."
+    },
+    "OptionsAllowGuestSupportApi": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable unauthenticated users to access the Support API."
+    },
+    "OptionsAllowHomePage": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable the standard page associated with the Home tab (/home/home.jsp)."
+    },
+    "OptionsAllowStandardAnswersPages": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable standard pages associated with an answers Experience Cloud site. If you want to use default Answers pages (such as AnswersHome), enable these pages."
+    },
+    "OptionsAllowStandardIdeasPages": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable standard pages associated with an Ideas Experience Cloud site. If you want to use default Ideas pages (such as IdeasHome), enable these pages."
+    },
+    "OptionsAllowStandardLookups": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable the standard lookup pages. These are the windows associated with lookup fields on Visualforce pages."
+    },
+    "OptionsAllowStandardPortalPages": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable authenticated users to access the standard Salesforce pages."
+    },
+    "OptionsAllowStandardSearch": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable the standard search pages. To allow public users to perform standard searches, enable these pages."
+    },
+    "OptionsBrowserXssProtection": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable the browser's cross-site scripting protection."
+    },
+    "OptionsCachePublicVfPagesInProxies": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether proxy servers cache this site’s publicly available pages only for unauthenticated guest users (true) or not (false). When this field is false, this site’s cache-enabled Visualforce pages are cached in the web browser for both authenticated and unauthenticated users. The default is true. See Configure Site Caching in Salesforce Help for more information.This field is available in API version 52.0 and later."
+    },
+    "OptionsContentSniffingProtection": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable content-sniffing protection."
+    },
+    "OptionsCookieConsent": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether only required Salesforce-supplied cookies are allowed within the site (true) or all cookies types are allowed: required, functional, and advertising (false). The default is false. This field is available in API version 52.0 and later."
+    },
+    "OptionsCspUpgradeInsecureRequests": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "This field is removed in API version 52.0 and later. In API version 51.0 and earlier, the value in the field is ignored."
+    },
+    "OptionsEnableFeeds": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option that displays the Syndication Feeds related list, where you can create and manage syndication feeds for users on your public sites. This field is visible only if you have the feature enabled for your organization."
+    },
+    "OptionsHasStoredPathPrefix": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether this Experience Cloud site has a customized urlPathPrefix (true) or instead uses the Experience Cloud site's UrlPathPrefix plus /s (false). The default is false. In other sites, this field has no effect. This field is available in API version 50.0 and later."
+    },
+    "OptionsRedirectToCustomDomain": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether requests to this site’s system-managed URLs are redirected to the HTTPS custom domain serving this site (true) or not (false). System-managed site URLs end in *.my.salesforce-sites.com or *.my.site.com. In Experience Cloud sites, the default is false. In Salesforce Sites, the default is true.If multiple custom domains serve this site and this field is set to true, requests are routed to the site’s primary custom URL only if it’s an HTTPS custom domain. Otherwise, requests are redirected to the first HTTPS custom domain associated with this site, in alphanumeric order. If no HTTPS custom domain serves this site, this option has no effect. This field is available in API version 52.0 and later."
+    },
+    "OptionsReferrerPolicyOriginWhenCrossOrigin": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "The option to enable referrer policy (origin-when-cross-origin)."
+    },
+    "OptionsRequireHttps": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "This field is removed in API version 52.0 and later. In API version 51.0 and earlier, the value in the field is ignored."
+    },
+    "SiteType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Identifies whether the site is a Visualforce (Salesforce Sites) or a Site.com site. SiteType is available in API version 21.0 and later. In API version 26.0 and later, if Experience Cloud sites are enabled for your Salesforce org, the site could also be a Network Visualforce or Network Site.com site."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status for the site. For example, Active or In Maintenance."
+    },
+    "Subdomain": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If you enabled Salesforce Sites or Digital Experiences before you enabled enhanced domains on your My Domain, this field returns this site’s previous subdomain. For example, if your domain was mycompany.force.com, then mycompany is the subdomain. If you enabled Salesforce Sites or Digital Experiences after you enabled enhanced domains, this field returns a null value."
+    },
+    "TopLevelDomain": {
+      "type": "url",
+      "properties": "Filter, Nillable",
+      "description": "The optional branded custom Web address that you registered with a third-party domain name registrar. The custom Web address acts as an alias to your Salesforce address.Beginning with API version 21.0, TopLevelDomain is no longer available. Instead, use the Domain and DomainSite objects."
+    },
+    "UrlPathPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique Salesforce URL that the public uses to access this site."
+    }
+  },
+  "usage": "Use this read-only object to query or retrieve information on your site.",
+  "associated_objects": "This object has the following associated objects. Unless noted, these associated objects are available in the same API version as this object.\n\n- **SiteFeed**: Feed tracking is available for the object.\n- **SiteHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"Site\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Admin\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"AdminId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AnalyticsTrackingCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ClickjackProtectionLevel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DailyBandwidthLimit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DailyBandwidthUsed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DailyRequestTimeLimit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DailyRequestTimeUsed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GuestRecordDefaultOwner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"GuestRecordDefaultOwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"GuestUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"GuestUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MonthlyPageViewsEntitlement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptionsAllowGuestPaymentsApi\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsAllowGuestSupportApi\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsAllowHomePage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsAllowInvitationsAPI\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsAllowStandardAnswersPages\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsAllowStandardIdeasPages\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsAllowStandardLookups\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsAllowStandardPortalPages\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsAllowStandardSearch\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsBrowserXssProtection\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsCachePublicVfPagesInProxies\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsContentSniffingProtection\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsCookieConsent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsEnableFeeds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsHasStoredPathPrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSiteConsentBannerIntegrationEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSiteConsentBannerIntegrationMigrated\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSiteDataCloudIntegrationEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSiteDataCloudIntegrationMigrated\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSiteGAIntegrationEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSiteGAIntegrationMigrated\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSiteGAIntegrationMigratedV2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSiteGRecaptchaIntegrationEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSlashSRemovedSite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsRedirectToCustomDomain\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsReferrerPolicyOriginWhenCrossOrigin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsRtlEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsUseGuestUserLanguage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SiteDomainPaths\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SiteIframeWhiteListUrls\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SiteType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subdomain\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UrlPathPrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AdminId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AnalyticsTrackingCode": {
+      "field_label": "Analytics Tracking Code",
+      "type": "string",
+      "length": "40"
+    },
+    "ArchiveStatus": {
+      "field_label": "Archived Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ArchivedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ArchivedDate": {
+      "field_label": "Archived Date",
+      "type": "datetime"
+    },
+    "ClickjackProtectionLevel": {
+      "field_label": "Clickjack Protection Level",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DailyBandwidthLimit": {
+      "field_label": "Daily Bandwidth Limit (MB)",
+      "type": "int",
+      "digits": "9"
+    },
+    "DailyBandwidthUsed": {
+      "field_label": "Daily Bandwidth Used",
+      "type": "int",
+      "digits": "9"
+    },
+    "DailyRequestTimeLimit": {
+      "field_label": "Daily Request Time Limit (min)",
+      "type": "int",
+      "digits": "9"
+    },
+    "DailyRequestTimeUsed": {
+      "field_label": "Daily Request Time Used",
+      "type": "int",
+      "digits": "9"
+    },
+    "Description": {
+      "field_label": "Site Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "GuestRecordDefaultOwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "GuestUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Site ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Site Label",
+      "type": "string",
+      "length": "255"
+    },
+    "MonthlyPageViewsEntitlement": {
+      "field_label": "Monthly Page Views Allowed",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Site Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OptionsAllowGuestPaymentsApi": {
+      "field_label": "Guest Access to the Payments API",
+      "type": "boolean"
+    },
+    "OptionsAllowGuestSupportApi": {
+      "field_label": "Guest Access to the Support API",
+      "type": "boolean"
+    },
+    "OptionsAllowHomePage": {
+      "field_label": "Enable Standard Home Page",
+      "type": "boolean"
+    },
+    "OptionsAllowInvitationsAPI": {
+      "field_label": "Allow Invitation APIs for Guest Users",
+      "type": "boolean"
+    },
+    "OptionsAllowStandardAnswersPages": {
+      "field_label": "Enable Standard Answers Pages",
+      "type": "boolean"
+    },
+    "OptionsAllowStandardIdeasPages": {
+      "field_label": "Enable Standard Ideas Pages",
+      "type": "boolean"
+    },
+    "OptionsAllowStandardLookups": {
+      "field_label": "Enable Standard Search Pages",
+      "type": "boolean"
+    },
+    "OptionsAllowStandardPortalPages": {
+      "field_label": "Allow Access to Standard Salesforce Pages",
+      "type": "boolean"
+    },
+    "OptionsAllowStandardSearch": {
+      "field_label": "Enable Standard Lookup Pages",
+      "type": "boolean"
+    },
+    "OptionsBrowserXssProtection": {
+      "field_label": "Enable Browser Cross Site Scripting Protection",
+      "type": "boolean"
+    },
+    "OptionsCachePublicVfPagesInProxies": {
+      "field_label": "Cache public Visualforce pages",
+      "type": "boolean"
+    },
+    "OptionsContentSniffingProtection": {
+      "field_label": "Enable Content Sniffing Protection",
+      "type": "boolean"
+    },
+    "OptionsCookieConsent": {
+      "field_label": "Enforce Cookie Consent",
+      "type": "boolean"
+    },
+    "OptionsEnableFeeds": {
+      "field_label": "Enable Feeds",
+      "type": "boolean"
+    },
+    "OptionsHasStoredPathPrefix": {
+      "field_label": "HasStoredPathPrefix",
+      "type": "boolean"
+    },
+    "OptionsIsSiteConsentBannerIntegrationEnabled": {
+      "field_label": "IsSiteConsentBannerIntegrationEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsSiteConsentBannerIntegrationMigrated": {
+      "field_label": "isSiteConsentBannerIntegrationMigrated",
+      "type": "boolean"
+    },
+    "OptionsIsSiteDataCloudIntegrationEnabled": {
+      "field_label": "IsSiteDataCloudIntegrationEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsSiteDataCloudIntegrationMigrated": {
+      "field_label": "isSiteDataCloudIntegrationMigrated",
+      "type": "boolean"
+    },
+    "OptionsIsSiteGAIntegrationEnabled": {
+      "field_label": "IsSiteGAIntegrationEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsSiteGAIntegrationMigrated": {
+      "field_label": "isSiteGAIntegrationMigrated",
+      "type": "boolean"
+    },
+    "OptionsIsSiteGAIntegrationMigratedV2": {
+      "field_label": "isSiteGAIntegrationMigratedV2",
+      "type": "boolean"
+    },
+    "OptionsIsSiteGRecaptchaIntegrationEnabled": {
+      "field_label": "IsSiteGRecaptchaIntegrationEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsSlashSRemovedSite": {
+      "field_label": "isSlashSRemovedSite",
+      "type": "boolean"
+    },
+    "OptionsRedirectToCustomDomain": {
+      "field_label": "Redirect to custom domain",
+      "type": "boolean"
+    },
+    "OptionsReferrerPolicyOriginWhenCrossOrigin": {
+      "field_label": "Referrer URL Protection",
+      "type": "boolean"
+    },
+    "OptionsRtlEnabled": {
+      "field_label": "RtlEnabled",
+      "type": "boolean"
+    },
+    "OptionsUseGuestUserLanguage": {
+      "field_label": "Use the guest user’s language for unauthenticated users",
+      "type": "boolean"
+    },
+    "SiteType": {
+      "field_label": "Site Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Site Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Subdomain": {
+      "field_label": "Site Subdomain Prefix",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UrlPathPrefix": {
+      "field_label": "Default Web Address",
+      "type": "string",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

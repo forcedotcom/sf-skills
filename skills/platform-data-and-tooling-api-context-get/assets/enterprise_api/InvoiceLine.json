@@ -1,0 +1,619 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "InvoiceLine - Data API",
+  "description": "Represents the amount that a buyer must pay for a product, service, or fee. Invoice lines are created based on the amount of an order line. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of adjustments made to the invoice line."
+    },
+    "AdjustmentAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of adjustment amounts, including associated taxes related to the invoice line."
+    },
+    "AdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of tax adjustments to the invoice line. This field is available in API version 55.0 and later."
+    },
+    "Balance": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The outstanding balance for an invoice line. This is equal to the invoice’s total amount with tax after deducting the payments made."
+    },
+    "BillingAddressId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Lookup field to an InvoiceAddressGroup containing the billing address for the invoice line. Assign one InvoiceAddressGroup to the invoiceLine's BillingAddressID, and another InvoiceAddressGroup to the invoiceLine's ShippingAddressId. This field is a relationship field. This field is available in API version 55.0 and later.",
+      "relationship_name": "BillingAddress",
+      "relationship_type": "Lookup",
+      "refers_to": "InvoiceAddressGroup"
+    },
+    "BillingScheduleGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "This field is a relationship field.",
+      "relationship_name": "BillingScheduleGroup",
+      "refers_to": "BillingScheduleGroup"
+    },
+    "BillingScheduleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the billing schedule for the invoice line. This field is a relationship field. This field is available in API version 55.0 and later.",
+      "relationship_name": "BillingSchedule",
+      "relationship_type": "Lookup",
+      "refers_to": "BillingSchedule"
+    },
+    "ChargeAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Sum of charges made to the invoice line."
+    },
+    "ChargeAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount on a charge invoice line, including tax. This field is available in API version 55.0 and later."
+    },
+    "ChargeTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax to be applied on a charge invoice line. This field is available in API version 55.0 and later."
+    },
+    "ConvertedNegAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount from an invoice line that is converted to credit. This field is available in API version 56.0 and later."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the invoice line."
+    },
+    "GroupReferenceEntityItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Grouping field for adjustment line items. This field is a polymorphic relationship field.",
+      "relationship_name": "GroupReferenceEntityItem",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderItem, OrderItemAdjustmentLineItem"
+    },
+    "HasMultipleItems": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this field merges items from the same billing period. The default value is false."
+    },
+    "InvoiceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The invoice that contains this invoice line. This field is a relationship field.",
+      "relationship_name": "Invoice",
+      "relationship_type": "Lookup",
+      "refers_to": "Invoice"
+    },
+    "InvoiceLineEndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "For invoice lines made from a time-based service, the end date of the billing for the service."
+    },
+    "InvoiceLineStartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "For invoice lines made from a time-based service, the first date of the billing for the service."
+    },
+    "InvoiceStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "State of the invoice line. Inherited from the invoice’s status."
+    },
+    "LegalEntityAccountingPeriodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "This field is a relationship field.",
+      "relationship_name": "LegalEntityAccountingPeriod",
+      "refers_to": "LegalEntyAccountingPeriod"
+    },
+    "LegalEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "This field is a relationship field.",
+      "relationship_name": "LegalEntity",
+      "refers_to": "LegalEntity"
+    },
+    "LineAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of the invoice line. This field is a calculated field. This field is available in API version 55.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the invoice line."
+    },
+    "NetCreditsApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total credit memo line amount applied to the invoice line. This amount is calculated by subtracting the unapplied credit memo line amount from the applied credit memo line amount. This field is a calculated field."
+    },
+    "NetPaymentsApplied": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total payment applied to the invoice line. This amount is calculated by subtracting the unapplied payment amount from the applied payment amount. This field is a calculated field."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The product that was charged or ordered to create the invoice line. This field is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Number of units of the order product that created the invoice line."
+    },
+    "ReferenceEntityItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The order item or adjustment item that created the invoice line. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceEntityItem",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderItem, OrderItemAdjustmentLineItem"
+    },
+    "ReferenceEntityItemType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of transaction that created the invoice line. Possible values are: DeliveryCharge—Charge Fee—Charge. This value is available in API version 56.0 and later. OrderProduct—Product"
+    },
+    "ReferenceEntityItemTypeCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of object that created the invoice line. Possible values are: Charge Product"
+    },
+    "RelatedLineId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The original invoice line that was adjusted or taxed. This field is a relationship field.",
+      "relationship_name": "RelatedLine",
+      "relationship_type": "Lookup",
+      "refers_to": "InvoiceLine"
+    },
+    "ShippingAddressId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the shipping address associated with the invoice line. This field is a relationship field. This field is available in API version 55.0 and later.",
+      "relationship_name": "ShippingAddress",
+      "relationship_type": "Lookup",
+      "refers_to": "InvoiceAddressGroup"
+    },
+    "TaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Total tax for the invoice line."
+    },
+    "TaxCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The code used to calculate tax rate for the invoice line."
+    },
+    "TaxDocumentNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the latest record in the external tax engine in which this invoice line item is included. This field is available in API version 55.0 and later."
+    },
+    "TaxEffectiveDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The date used to calculate the invoice line’s TaxAmount."
+    },
+    "TaxName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "User-defined name for the applied tax."
+    },
+    "TaxRate": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Percentage value used for calculating tax."
+    },
+    "TaxTransactionNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the transaction in the external tax engine in which the taxes for the line were calculated for the invoice line. This field is available in API version 55.0 and later."
+    },
+    "TaxTreatmentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The tax treatment used on this invoice line. This field is a relationship field. This field is available in API version 55.0 and later.",
+      "relationship_name": "TaxTreatment",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxTreatment"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Shows the type of transaction for the invoice line. Possible values are: Adjustment Charge Tax"
+    },
+    "UnitPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Price for one unit of the item on the invoice line."
+    }
+  },
+  "special_access_rules": "This object is available with Order Management, Subscription Management, and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Order Management, Subscription Management, and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **InvoiceLineFeed**: Feed tracking is available for the object.\n- **InvoiceLineHistory**: History is available for tracked fields of the object.\n- **InvoiceLineOwnerSharingRule**: Sharing rules are available for the object.\n- **InvoiceLineShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AdjustmentAmount": {
+      "field_label": "Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AdjustmentAmountWithTax": {
+      "field_label": "Adjustment Amount with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AdjustmentTaxAmount": {
+      "field_label": "Adjustment Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Balance": {
+      "field_label": "Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BillingAddressId": {
+      "field_label": "Invoice Address Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingScheduleGroupId": {
+      "field_label": "Billing Schedule Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingScheduleId": {
+      "field_label": "Billing Schedule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ChargeAmount": {
+      "field_label": "Charge Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ChargeAmountWithTax": {
+      "field_label": "Charge Amount with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ChargeConvertedNegAmount": {
+      "field_label": "Charge Converted Negative Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ChargeTaxAmount": {
+      "field_label": "Charge Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ConvertedNegAmount": {
+      "field_label": "Converted Negative Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CorpCurrencyCnvChargeAmt": {
+      "field_label": "Corporate Currency Converted Total Charge Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "CorpCurrencyCnvTotalTaxAmt": {
+      "field_label": "Corporate Currency Converted Total Tax Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "CorporateCurrencyCvsnDate": {
+      "field_label": "Corporate Currency Conversion Date",
+      "type": "date"
+    },
+    "CorporateCurrencyCvsnRate": {
+      "field_label": "Corporate Currency Conversion Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "10"
+    },
+    "CorporateCurrencyIsoCode": {
+      "field_label": "Corporate Currency ISO Code",
+      "type": "string",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "FuncCrcyCnvTotalTaxAmt": {
+      "field_label": "Functional Currency Converted Total Tax Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "FuncCurrencyCnvChargeAmt": {
+      "field_label": "Functional Currency Converted Charge Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "FunctionalCurrencyCvsnDate": {
+      "field_label": "Functional Currency Conversion Date",
+      "type": "date"
+    },
+    "FunctionalCurrencyCvsnRate": {
+      "field_label": "Functional Currency Conversion Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "10"
+    },
+    "FunctionalCurrencyIsoCode": {
+      "field_label": "Functional Currency ISO Code",
+      "type": "string",
+      "length": "40"
+    },
+    "GrossUnitPrice": {
+      "field_label": "Gross Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "GroupReferenceEntityItemId": {
+      "field_label": "GroupReferenceEntityItem ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "HasMultipleItems": {
+      "field_label": "Has Multiple Items",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Invoice Line ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceId": {
+      "field_label": "Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "InvoiceLineEndDate": {
+      "field_label": "Invoice Line End Date",
+      "type": "date"
+    },
+    "InvoiceLineStartDate": {
+      "field_label": "Invoice Line Start Date",
+      "type": "date"
+    },
+    "InvoiceStatus": {
+      "field_label": "Status",
+      "type": "string",
+      "length": "50"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsUsageBasedInvoiceLine": {
+      "field_label": "Usage Based Invoice Line",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LegalEntityAccountingPeriodId": {
+      "field_label": "Legal Entity Accounting Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LineAmount": {
+      "field_label": "Line Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NetCreditsApplied": {
+      "field_label": "Net Credits Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "NetPaymentsApplied": {
+      "field_label": "Net Payments Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ParentInvoiceLineId": {
+      "field_label": "Invoice Line ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ReferenceEntityItemId": {
+      "field_label": "ReferenceEntityItem ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReferenceEntityItemType": {
+      "field_label": "Reference Entity Item Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReferenceEntityItemTypeCode": {
+      "field_label": "Reference Entity Item Type Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedLineId": {
+      "field_label": "Invoice Line ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShipFromAddressId": {
+      "field_label": "Invoice Address Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShippingAddressId": {
+      "field_label": "Invoice Address Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxAmount": {
+      "field_label": "Tax Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TaxCode": {
+      "field_label": "Tax Code",
+      "type": "string",
+      "length": "255"
+    },
+    "TaxEffectiveDate": {
+      "field_label": "Tax Effective Date",
+      "type": "date"
+    },
+    "TaxName": {
+      "field_label": "Tax Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TaxProcessingStatus": {
+      "field_label": "Tax Processing Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TaxRate": {
+      "field_label": "Tax Rate",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "TaxTreatmentId": {
+      "field_label": "Tax Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UnitPrice": {
+      "field_label": "Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UsageOverageQuantity": {
+      "field_label": "Usage Overage Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UsageProductBillSchdGrpId": {
+      "field_label": "Billing Schedule Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UsageProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

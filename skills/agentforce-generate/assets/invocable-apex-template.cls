@@ -1,5 +1,5 @@
 /**
- * Invocable Apex template for Agent Script action backing logic.
+ * Invocable Apex template for Agent Script actions.
  *
  * Wire this class to an Agent Script action with:
  *     target: "apex://{{ClassName}}"

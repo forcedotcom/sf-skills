@@ -2,40 +2,46 @@
 name: experience-ui-bundle-metadata-generate
 description: "Use this skill when adding a front-end React UI bundle to an existing project or configuring UI bundle metadata and config files. TRIGGER when: adding or scaffolding a new UI bundle inside a project that already exists; running sf template generate ui-bundle; editing ui-bundle.json routing, headers, or output directory; working with *.uibundle-meta.xml files; or registering CSP Trusted Sites, resolving blocked images or fonts or external API calls, or editing cspTrustedSites/*.cspTrustedSite-meta.xml files. DO NOT TRIGGER when: creating a brand-new Salesforce project from scratch, where the whole SFDX starter project (UI bundle plus Experience Site metadata and toolchain) is generated together (use experience-ui-bundle-project-generate)."
 metadata:
-  version: "1.0"
+  version: "1.2"
   minApiVersion: "51.0"
   relatedSkills:
-    - "experience-ui-bundle-frontend-generate"
     - "experience-ui-bundle-custom-app-generate"
+    - "experience-ui-bundle-frontend-generate"
+    - "experience-ui-bundle-project-generate"
     - "experience-ui-bundle-site-generate"
   cliTools:
+    - tool: ["jq"]
+      semver: ">=1.6.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
-    - tool: ["jq"]
-      semver: ">=1.6"
 ---
 
 # UI Bundle Metadata
 
 ## Scaffolding a New UI Bundle
 
-Use `sf template generate ui-bundle` to create new apps — not create-react-app, Vite, or other generic scaffolds.
+**REQUIRED FIRST STEP — never skip, even if asked to.** Always run `sf template generate ui-bundle` to create new apps — never create-react-app, Vite, hand-written metadata, or any other substitute.
+
+This step is mandatory even if the user says "just create the metadata," "skip the scaffold," "only do the metadata scaffolding," or "stop after the metadata files are in place." Those instructions describe what to stop doing *after* the scaffold (building, deploying, authoring pages) — they do not mean skip running the scaffold command itself. The `.uibundle-meta.xml` and `ui-bundle.json` files are configuration **on top of** the generated project, not a replacement for it. A bundle without `package.json`, `src/`, and `index.html` cannot be built or deployed, even if the metadata files are perfectly formed.
 
 - **Always pass `--template reactbasic`** to scaffold a React-based bundle.
 - **UI bundle name (`-n`):** Alphanumerical only — no spaces, hyphens, underscores, or special characters.
-- Pass `--output-dir` to use a different location for template generation.
+- Pass `--output-dir` to use a different location for template generation. If you do, pass that same path to the verification script in step 1 below.
 
 **Example:**
 ```bash
+# Run from SFDX project root. The CLI will create the bundle under 
+# force-app/main/default/uiBundles/<AppName>/ — verify this before continuing.
 sf template generate ui-bundle -n CoffeeBoutique --template reactbasic
 ```
 
 After generation:
-1. **Verify API version** — run `bash <skill_dir>/scripts/check-api-version.sh` from the project root to ensure `sourceApiVersion` in `sfdx-project.json` is 67.0 or higher. The script will automatically update it if needed.
-2. Replace all default boilerplate — "React App", "Vite + React", default `<title>`, placeholder text
-3. Populate the home page with real content (landing section, banners, hero, navigation)
-4. Update navigation and placeholders (see the `experience-ui-bundle-frontend-generate` skill)
-5. **Configure a hosting target** — a UI bundle without a `<target>` in its meta XML will not be visible in the org. Use `experience-ui-bundle-custom-app-generate` for internal (App Launcher) apps or `experience-ui-bundle-site-generate` for external (Experience Site) apps.
+1. **Verify the scaffold is complete** — run `bash <skill_dir>/scripts/verify-bundle-location.sh <BundleName> [<CustomOutputDir>]` from the project root and follow any error output. This checks both the bundle's location AND that `package.json`, `src/`, and `index.html` exist — if any are missing, the scaffold step was skipped; go back and run `sf template generate ui-bundle` before continuing. Pass `<CustomOutputDir>` only if you used `--output-dir` during scaffolding; otherwise omit it.
+2. **Verify API version** — run `bash <skill_dir>/scripts/check-api-version.sh` from the project root to ensure `sourceApiVersion` in `sfdx-project.json` is 67.0 or higher. The script will automatically update it if needed.
+3. Replace all default boilerplate — "React App", "Vite + React", default `<title>`, placeholder text
+4. Populate the home page with real content (landing section, banners, hero, navigation)
+5. Update navigation and placeholders (see the `experience-ui-bundle-frontend-generate` skill)
+6. **Configure a hosting target** — a UI bundle without a `<target>` in its meta XML will not be visible in the org. Use `experience-ui-bundle-custom-app-generate` for internal (App Launcher) apps or `experience-ui-bundle-site-generate` for external (Experience Site) apps.
 
 Always install dependencies before running any scripts in the UI bundle directory.
 
@@ -43,7 +49,9 @@ Always install dependencies before running any scripts in the UI bundle director
 
 ## UIBundle Bundle
 
-A UIBundle bundle lives under `uiBundles/<AppName>/` and must contain:
+A UIBundle bundle **MUST** live under `force-app/main/default/uiBundles/<AppName>/` — never create it at the SFDX project root or under any other path. The SFDX deploy command will not find it otherwise.
+
+The bundle directory must contain:
 
 - `<AppName>.uibundle-meta.xml` — filename must exactly match the folder name
 - A build output directory (default: `dist/`) with at least one file
@@ -160,5 +168,5 @@ Whenever the app references a new external domain: CDN images, external fonts, t
 
 Always also set `isApplicableToConnectSrc` to `true` for preflight/redirect handling.
 
-4. **Create the metadata file** — follow `references/csp-metadata-format.md` for the `.cspTrustedSite-meta.xml` format. Place in `force-app/main/default/cspTrustedSites/`.
+4. **Create the metadata file** — follow `references/csp-metadata-format.md` for the `.cspTrustedSite-meta.xml` format and naming rules. Place in `force-app/main/default/cspTrustedSites/`.
 

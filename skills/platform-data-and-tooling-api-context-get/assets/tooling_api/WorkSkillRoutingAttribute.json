@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "WorkSkillRoutingAttribute - Tooling API",
+  "description": "Represents a setup object that stores metadata related to the routing assignments between object field values and skills. Field values are used to route a work item to an agent who has the skills necessary to take the work. Available in API version 46.0 and later.",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Field": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The field corresponding to the field values that the skill is mapped to. Skills-Based Routing Rules support fields of type picklist, lookup, and checkbox. For example, Case Reason, Case Type, and Escalated. To see the complete list of valid values representing supported fields, see the Tooling API WSDL."
+    },
+    "IsAdditionalSkill": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "In skills-based routing, you can set some skills to additional. After a designated timeout period, a skill marked as additional is dropped from Omni-Channel routing. The case is then routed to the best-matched agent, even if the agent doesn’t have all the skills."
+    },
+    "RelatedEntity": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of object being routed. Valid values are: Case ContactRequest Lead Order SocialPost Custom"
+    },
+    "SkillLevel": {
+      "type": "double",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "Level of the skill required. This value can range from 0 to 10."
+    },
+    "SkillPriority": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "For additional skills, specify the order in which a skill is dropped if after the Drop Additional Skills Timeout on the routing configuration, no agent with that skill is available. Skills with a lower priority rank (9 or 10) are dropped first. Skills with a higher priority rank (0 or 1) are dropped last. Skills with the same priority value are dropped as a group. You can set skill priority using skills-based routing rules or Apex code. Available in API version 49.0 and later."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The field value that is mapped to the selected skill."
+    },
+    "WorkSkillRoutingId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the WorkSkillRouting object with which this field value is associated."
+    }
+  }
+}

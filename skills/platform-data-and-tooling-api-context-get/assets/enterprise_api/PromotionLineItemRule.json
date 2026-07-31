@@ -1,0 +1,147 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "PromotionLineItemRule - Data API",
+  "description": "Lists compound conditions about a promotion. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssociatedReferenceId": {
+      "type": "Reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated reference.",
+      "relationship_name": "AssociatedReference",
+      "relationship_type": "Lookup",
+      "refers_to": "PromotionQualifier, PromotionTarget"
+    },
+    "AssociatedType": {
+      "type": "Picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies the type of object the rule is associated with. Possible values are: PromotionQualifier PromotionTarget"
+    },
+    "Name": {
+      "type": "String",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the promotion rule."
+    },
+    "OperatorType": {
+      "type": "Picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Operator type for promotion line item rule. Possible values are: EQUAL_TO GREATER_THAN GREATER_THAN_OR_EQUAL_TO LESS_THAN LESS_THAN_OR_EQUAL_TO NOT_EQUAL_TO The default value is EQUAL_TO."
+    },
+    "OwnerId": {
+      "type": "Reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Type": {
+      "type": "Picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies the type on which the rule is being applied. Possible values are: Attribute Price Product ProductCategory"
+    },
+    "TypeReferenceId": {
+      "type": "Reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the type.",
+      "relationship_name": "TypeReference",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2, ProductCategory"
+    },
+    "TypeValue": {
+      "type": "String",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Value of the type selected."
+    }
+  },
+  "field_reference": {
+    "AssociatedReferenceId": {
+      "field_label": "Associated Reference ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssociatedType": {
+      "field_label": "Associated Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Promotion Line Item Rule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Promotion Line Item Rule Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OperatorType": {
+      "field_label": "Operator Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TypeReferenceId": {
+      "field_label": "Type Reference ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TypeValue": {
+      "field_label": "Type Value",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

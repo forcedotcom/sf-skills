@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "EmbeddedServiceConfig - Tooling API",
+  "description": "Represents a setup node for creating an Embedded Service deployment. Available in API version 38.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `describeLayout()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`GET`, `POST`, `PATCH`, `DELETE`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AreGuestUsersAllowed": {
+      "type": "boolean",
+      "properties": "Defaulted on Create, Filter, Group, Sort",
+      "description": "Specifies whether a user must be logged in to access an embedded component. Available in API version 45.0 and later."
+    },
+    "AuthMethod": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Type of login method selected for this Embedded Service deployment. Valid values are: CommunitiesLogin CustomLogin Available in API version 43.0 and later."
+    },
+    "BrandingId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The developer name of the associated BrandingSet. Used only for Embedded Service Deployments of the Messaging type. Used only when DeploymentFeature is EmbeddedMessaging. Available in API version 52.0 and later. This is a relationship field. Relationship Name Branding Relationship Type Lookup Refers To BrandingSet"
+    },
+    "CustomMinimizedComponentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Removed. The custom Lightning component that’s used for the minimized state for this Embedded Chat deployment. Available in API version 38.0 to 45.0."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique name for the Embedded Service configuration setup node. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "DeploymentFeature": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Where the Embedded Service deployment is used. After the value is set, it can’t be updated. Available in API version 52.0 and later. Possible values are: EmbeddedMessaging FieldService Flows LiveAgent None"
+    },
+    "DeploymentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Set a conversation type for your embedded deployment. This field is available in version 51.0 and later. Possible values are: Mobile Web"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The unique name used for this Embedded Service deployment. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores.Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on Create, Filter, Group, Sort",
+      "description": "Specifies if the Embedded Service Deployment is enabled for use. Available in API version 52.0 and later."
+    },
+    "isTermsAndConditionsEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether Terms and Conditions are displayed. Displaying Terms and Conditions is supported if the deploymentFeature is either EmbeddedMesssaging or LiveAgent. Available in API version 59.0 and later. The default value is false."
+    },
+    "isTermsAndConditionsRequired": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether acceptance of the Terms and Conditions is required before starting a chat. Displaying Terms and Conditions is supported if the deploymentFeature is either EmbeddedMesssaging or LiveAgent. Available in API version 59.0 and later. The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Languages supported in the Embedded Service deployment. Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Name of the embedded service configuration node."
+    },
+    "Metadata": {
+      "type": "mns:EmbeddedServiceConfig",
+      "properties": "Create, Nillable, Update",
+      "description": "The Embedded Service configuration metadata.Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix."
+    },
+    "ShouldHideAuthDialog": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the prompt that the customer login again during a flow is hidden (true) or not (false). When it’s hidden, the customer is taken directly to your login page. This field is set to false by default. Available in API version 43.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EmbeddedServiceAuthMethod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CommunitiesLogin\"/>\n    <xsd:enumeration value=\"CustomLogin\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceClientVersion\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"WebV1\"/>\n    <xsd:enumeration value=\"WebV2\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:EmbeddedServiceConfig\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"EmbeddedServiceConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"areGuestUsersAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"authMethod\" minOccurs=\"0\" type=\"tns:EmbeddedServiceAuthMethod\"/>\n        <xsd:element name=\"branding\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"clientVersion\" minOccurs=\"0\" type=\"tns:EmbeddedServiceClientVersion\"/>\n        <xsd:element name=\"deploymentFeature\" type=\"tns:EmbeddedServiceDeploymentFeature\"/>\n        <xsd:element name=\"deploymentType\" type=\"tns:EmbeddedServiceDeploymentType\"/>\n        <xsd:element name=\"isEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTermsAndConditionsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTermsAndConditionsRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"shouldHideAuthDialog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"site\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceDeploymentFeature\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"EmbeddedMessaging\"/>\n    <xsd:enumeration value=\"LiveAgent\"/>\n    <xsd:enumeration value=\"Flows\"/>\n    <xsd:enumeration value=\"FieldService\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceDeploymentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Web\"/>\n    <xsd:enumeration value=\"Mobile\"/>\n    <xsd:enumeration value=\"API\"/>\n    <xsd:enumeration value=\"InternalCopilot\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

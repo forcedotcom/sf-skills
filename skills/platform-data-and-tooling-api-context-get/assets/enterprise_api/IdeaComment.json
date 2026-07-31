@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "IdeaComment - Data API",
+  "description": "Represents a comment that a user has submitted in response to an idea.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CommentBody": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Body of the submitted comment."
+    },
+    "CommunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The zone ID associated with the idea. Once you create an idea, you can’t change the zone ID associated with that idea. Note: API version 12 does not support zone ID. If you create an idea in version 12, your idea is automatically posted to the oldest zone that you have permission to access."
+    },
+    "CreatorFullPhotoUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the user’s profile photo. This field is available in API version 28.0 and later."
+    },
+    "CreatorName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the user who posted the idea or commented on the idea. This field is available in API version 28.0 and later."
+    },
+    "CreatorSmallPhotoUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the user’s thumbnail photo. This field is available in API version 28.0 and later."
+    },
+    "IdeaId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the idea on which this comment was made. This is a relationship field.",
+      "relationship_name": "Idea",
+      "relationship_type": "Lookup",
+      "refers_to": "Idea"
+    },
+    "IsHtml": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only. If this value is true, your organization has the Ideas HTML editor enabled, and the CommentBody field may contain HTML. If this value is false, the HTML editor is disabled and the CommentBody field only contains regular text."
+    },
+    "UpVotes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of up votes for the question."
+    }
+  },
+  "usage": "Use this object to track comments on ideas, which are users' text responses to ideas.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"IdeaComment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CommentBody\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CommunityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatorFullPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatorName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatorSmallPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Idea\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Idea\"/>\n        <element name=\"IdeaId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsHtml\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UpVotes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Votes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CommentBody": {
+      "field_label": "Comment Body",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "CommunityId": {
+      "field_label": "Zone ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreatorFullPhotoUrl": {
+      "field_label": "URL of Creator's Profile Photo",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatorName": {
+      "field_label": "Name of Creator",
+      "type": "string",
+      "length": "121"
+    },
+    "CreatorSmallPhotoUrl": {
+      "field_label": "URL of Creator's Thumbnail Photo",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Idea Comment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IdeaId": {
+      "field_label": "Idea ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsHtml": {
+      "field_label": "IsHtml",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UpVotes": {
+      "field_label": "Up Votes",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

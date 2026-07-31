@@ -1,0 +1,35 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerPermSetLicense - Data API",
+  "description": "Represents a Permission Set License Definition (PSLD) from a released managed package in a Partner Business Org (PBO) with the Go-To-Market app enabled. This object is available in API version 66X.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The external ID and developer name of the Permission Set License Definition (PSLD)."
+    },
+    "Id": {
+      "type": "string",
+      "properties": "Defaulted on create, Filter, Group, idLookup, Sort",
+      "description": "System field. The unique identifier for the record."
+    },
+    "PartnerPackageId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The associated package in which the PSLD is defined. This field is a relationship field.",
+      "relationship_name": "PartnerPackage",
+      "refers_to": "SfdcPartnerPackage"
+    }
+  }
+}

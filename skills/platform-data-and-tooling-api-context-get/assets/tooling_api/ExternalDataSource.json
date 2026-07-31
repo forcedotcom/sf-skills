@@ -1,0 +1,138 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ExternalDataSource - Tooling API",
+  "description": "Represents the metadata associated with an external data source. Create external data sources to manage connection details for integration with data and content that are stored outside your Salesforce org. This object is available in API version 51.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CertificateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If you specify a certificate, your Salesforce org supplies it when establishing each two-way SSL connection with the external system. The certificate is used for digital signatures, which verify that requests are coming from your Salesforce org. Note: For best performance, verify that your remote HTTPS encrypted sites have OCSP (Online Certificate Status Protocol) stapling turned on."
+    },
+    "CustomConfiguration": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A string of configuration parameters that are specific to the external data source’s type. Custom Configuration for the Salesforce Connect Cross-Org Adapter Custom Configuration for the Salesforce Connect OData 2.0 or 4.0 Adapter Custom Configuration for the Salesforce Connect Custom Adapter"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer’s internal name for the external data source used in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is automatically generated, but you can supply your own value if you create the record by using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record."
+    },
+    "Endpoint": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The URL of the external system, or if that URL is defined in a named credential, the named credential URL. Corresponds to URL in the user interface.A named credential URL contains the scheme callout:, the name of the named credential, and an optional path. For example: callout:My_Named_Credential/some_path. You can append a query string to a named credential URL. Use a question mark (?) as the separator between the named credential URL and the query string. For example: callout:My_Named_Credential/some_path?format=json."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated type in Tooling API. The full name can include a namespace prefix. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsWritable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Lets the Lightning Platform and users in this org create, update, and delete records for external objects associated with the external data source. The external object data is stored outside the org. By default, external objects are read only. Corresponds to Writable External Objects in the user interface."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the external data source. The value for this field is the language value of the org."
+    },
+    "ManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package. Possible values are: beta—Managed-Beta deleted—Managed-Proposed-Deleted deprecated—Managed-Proposed-Deprecated deprecatedEditable—SecondGen-Installed-Deprecated installed—Managed-Installed installedEditable—SecondGen-Installed-Editable released—Managed-Released unmanaged—Unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "A user-friendly name for the external data source. The label is displayed in the Salesforce user interface, such as in list views.Examples include Acme Team Marketing Site, or Acme SharePoint."
+    },
+    "Metadata": {
+      "type": "ExternalDataSource",
+      "properties": "Create, Nillable, Update",
+      "description": "Provides access to the associated type and related fields in Tooling API."
+    },
+    "NamedCredentialId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Salesforce ID of the referenced named credential for an external data source. Required for Salesforce Connect adapters for Amazon DynamoDB, Amazon Athena, GraphQL, and OData 4.01. For connecting to other external data sources, the field must be null.This is a relationship field.",
+      "relationship_name": "NamedCredential",
+      "relationship_type": "Lookup",
+      "refers_to": "NamedCredential"
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the external data source. An external data source can be in an extension namespace different than the object."
+    },
+    "OauthRefreshToken": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The OAuth refresh token. Used to obtain a new access token for an end user when a token expires."
+    },
+    "OauthScope": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Specifies the scope of permissions to request for the access token."
+    },
+    "OauthToken": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The access token issued by the external system."
+    },
+    "Password": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The password to be used by your org to access the external system. Ensure that the credentials you use have adequate privileges to access the external system, perform searches, return data, and return information about the external system’s metadata."
+    },
+    "PrincipalType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Determines whether you're using one set or multiple sets of credentials to access the external system. Possible values are: Anonymous PerUser NamedUser"
+    },
+    "Protocol": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The authentication protocol that’s required to access the external system. Possible values are: AwsSv4 Basic Custom Jwt JwtExchange NoAuthentication Oauth Password"
+    },
+    "Repository": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Used for SharePoint Online. If metadata isn’t accessible, use this field to create tables and default table fields."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "For Salesforce Connect, specifies the adapter that connects to the external system. The valid values are: AmazonAthena—Amazon Athena AmazonDynamoDB—Amazon DynamoDB GraphQl—GraphQL OData—OData 2.0 adapter OData4—OData 4.0 adapter OData401—OData 4.01 adapter SfdcOrg—cross-org adapter ApexClassId—DataSource.Provider class that defines the custom adapter created via the Apex Connector Framework For Files Connect, specifies the data source type. The valid values are: ContentHubSharepoint—SharePoint 2010 or 2013 ContentHubSharepointOffice365—SharePoint Online ContentHubSharepointOneDrive—OneDrive for Business ContentHubGDrive—Google Drive ContenHubIsotope—Isotope If Chatter is enabled, you can also specify SimpleURL to access data hosted on a web server that doesn’t require authentication. outgoingemail—A data source used for sending an email through a quick action. For Digital Lending Configurator, the valid value is: AFPPAttribute—The data source name for the Application Form Product Proposal Attribute virtual object. For the federated search external data source type, the valid value is: OpenSearch For Transaction Management in Revenue Cloud, the valid values are: ASPAttribute—The data source name for the Asset State Period Attribute virtual object. Available in API version 63.0 and later. OIAttribute—The data source name for the Order Item Attribute virtual object. Available in API version 63.0 and later. QLIAttribute—The data source name for the Quote Line Item Attribute virtual object. Available in API version 63.0 and later. For SalesAgreement in Manufacturing Cloud, the valid values are: SAPAttribute—The data source name for the SalesAgreement Product Attribute virtual object. Available in API version 60.0 and later. These values are reserved for internal use: AssetAttribute ClaimAttributeDS ClaimItemAttributeDS CryptoTrEnvChgLogSnp CtrtGrpPlnAttr CtrtGrpPlnGrpClsAttr FAAttribute FLAttribute IAItemProdtAttr Identity InsPolicyAttribute IPAAttribute IPCAttribute IPCvrBnftAttribute IPPAttribute SdbOvenPODataSource Wrapper"
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The username to be used by your org to access the external system. Ensure that the credentials you use have adequate privileges to access the external system, perform searches, return data, and return information about the external system’s metadata."
+    },
+    "Version": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AuthenticationProtocol\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"NoAuthentication\"/>\n    <xsd:enumeration value=\"Oauth\"/>\n    <xsd:enumeration value=\"Password\"/>\n    <xsd:enumeration value=\"AwsSv4\"/>\n    <xsd:enumeration value=\"Jwt\"/>\n    <xsd:enumeration value=\"JwtExchange\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"Basic\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ExternalDataSource\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:ExternalDataSource\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"ExternalDataSource\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"authProvider\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"certificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customConfiguration\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHttpHeaders\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:CustomHttpHeader\"/>\n        <xsd:element name=\"endpoint\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isWritable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthRefreshToken\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthScope\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthToken\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"password\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"principalType\" type=\"tns:ExternalPrincipalType\"/>\n        <xsd:element name=\"protocol\" type=\"tns:AuthenticationProtocol\"/>\n        <xsd:element name=\"repository\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:ExternalDataSourceType\"/>\n        <xsd:element name=\"username\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ExternalDataSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AFPPAttribute\"/>\n    <xsd:enumeration value=\"AmazonAthena\"/>\n    <xsd:enumeration value=\"AmazonDynamoDb\"/>\n    <xsd:enumeration value=\"ASPAttribute\"/>\n    <xsd:enumeration value=\"AssetAttribute\"/>\n    <xsd:enumeration value=\"CIAttribute\"/>\n    <xsd:enumeration value=\"ClaimAttributeDS\"/>\n    <xsd:enumeration value=\"ClaimItemAttributeDS\"/>\n    <xsd:enumeration value=\"contentHubItem\"/>\n    <xsd:enumeration value=\"CtrtGrpPlnAttr\"/>\n    <xsd:enumeration value=\"CtrtGrpPlnGrpClsAttr\"/>\n    <xsd:enumeration value=\"Datacloud\"/>\n    <xsd:enumeration value=\"Datajourney\"/>\n    <xsd:enumeration value=\"FAAttribute\"/>\n    <xsd:enumeration value=\"FederatedSearch\"/>\n    <xsd:enumeration value=\"FLAttribute\"/>\n    <xsd:enumeration value=\"GraphQl\"/>\n    <xsd:enumeration value=\"IAItemProdtAttr\"/>\n    <xsd:enumeration value=\"Identity\"/>\n    <xsd:enumeration value=\"InsPolicyAttribute\"/>\n    <xsd:enumeration value=\"IPAAttribute\"/>\n    <xsd:enumeration value=\"IPCAttribute\"/>\n    <xsd:enumeration value=\"IPCvrBnftAttribute\"/>\n    <xsd:enumeration value=\"IPPAttribute\"/>\n    <xsd:enumeration value=\"OData\"/>\n    <xsd:enumeration value=\"OData4\"/>\n    <xsd:enumeration value=\"OData401\"/>\n    <xsd:enumeration value=\"OIAttribute\"/>\n    <xsd:enumeration value=\"OISAttribute\"/>\n    <xsd:enumeration value=\"OpenSearch\"/>\n    <xsd:enumeration value=\"outgoingemail\"/>\n    <xsd:enumeration value=\"QLIAttribute\"/>\n    <xsd:enumeration value=\"SAPAttribute\"/>\n    <xsd:enumeration value=\"SciApi\"/>\n    <xsd:enumeration value=\"SelectableEmailAddressView\"/>\n    <xsd:enumeration value=\"SfdcOrg\"/>\n    <xsd:enumeration value=\"SimpleURL\"/>\n    <xsd:enumeration value=\"Snowflake\"/>\n    <xsd:enumeration value=\"TrailheadEditWithId\"/>\n    <xsd:enumeration value=\"usermobileconfig\"/>\n    <xsd:enumeration value=\"usrconnectionstatus\"/>\n    <xsd:enumeration value=\"Wrapper\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExternalPrincipalType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Anonymous\"/>\n    <xsd:enumeration value=\"PerUser\"/>\n    <xsd:enumeration value=\"NamedUser\"/>\n    <xsd:enumeration value=\"NamedCustomPrincipal\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

@@ -1,0 +1,170 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "BillingPeriodItem - Data API",
+  "description": "Represents one payment period for a subscription. The billing period item is used to pass billing information to an invoice line item in Subscription Management. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Price for the billing period item. Used to calculate the invoice line's Amount field."
+    },
+    "BillingPeriodEndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Used to calculate the invoice line's end date."
+    },
+    "BillingPeriodItemNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-defined number that refers to the billing period item."
+    },
+    "BillingPeriodStartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Used to calculate the invoice line's start date."
+    },
+    "BillingScheduleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Parent billing schedule of the billing period item. This field is a relationship field.",
+      "relationship_name": "BillingSchedule",
+      "relationship_type": "Lookup",
+      "refers_to": "BillingSchedule"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Contains the ISO code for any currency allowed by the org. Available only for orgs with the multicurrency feature enabled."
+    },
+    "InvoiceBatchRunId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Parent invoice batch run of the billing period item. This field is a relationship field.",
+      "relationship_name": "InvoiceBatchRun",
+      "relationship_type": "Lookup",
+      "refers_to": "InvoiceBatchRun"
+    },
+    "InvoiceLineId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field looks up to the invoice line that's generated from the billing period item. This field is populated only when a billing period item is generated via an invoice batch run. Otherwise, this field is empty. This field is a relationship field.",
+      "relationship_name": "InvoiceLine",
+      "relationship_type": "Lookup",
+      "refers_to": "InvoiceLine"
+    },
+    "InvoiceStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Status of the invoice that contains the invoice line created from the billing period item. Valid values are: Canceled—The invoice for this billing period item was canceled. Draft—The invoice has been created but hasn’t been posted. Available in API version 60.0 and later. DraftInProgress—The invoice hasn’t been created yet. When the invoice is created, the InvoiceStatus field value is changed to Draft. If the invoice generation process fails, the InvoiceStatus field value shows DraftInProgress. Available in API version 60.0 and later. Error—The invoice for this billing period item was generated in error. Pending—The invoice for this billing period item is being generated. Posted—An invoice line based on this billing period has been created and added successfully to the invoice. PostingInProgress—An invoice line based on this billing period has been created and is in the process of being added to the invoice. Available in API version 60.0 and later. Voided—An invoice line based on this billing period was voided. VoidInProgress—An invoice line based on this billing period is in the process of being voided."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Status of the billing period item. Draft billing period items aren't evaluated for invoice line creation. Valid values are: Canceled Draft Reviewed"
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BillingPeriodEndDate": {
+      "field_label": "Billing Period End Date",
+      "type": "date"
+    },
+    "BillingPeriodItemNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "BillingPeriodStartDate": {
+      "field_label": "Billing Period Start Date",
+      "type": "date"
+    },
+    "BillingScheduleGroupId": {
+      "field_label": "Billing Schedule Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingScheduleId": {
+      "field_label": "Billing Schedule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Billing Period Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceId": {
+      "field_label": "Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "InvoiceLineId": {
+      "field_label": "Invoice Line ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "InvoiceStatus": {
+      "field_label": "Invoice Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

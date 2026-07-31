@@ -1,0 +1,128 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "OpportunityLineItemSchedule - Data API",
+  "description": "Represents information about the quantity, revenue distribution, and delivery dates for a particular OpportunityLineItem.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Restricted picklist, Update",
+      "description": "Available only for organizations with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization. This field is available in version 10.0 and later."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Text description of the opportunity line item schedule. Limit: 80 characters. Label is Comments."
+    },
+    "OpportunityLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the associated OpportunityLineItem.",
+      "required": true
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The total number of units to be scheduled in a quantity schedule.",
+      "required": true
+    },
+    "Revenue": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The revenue that should be recognized, or the quantity that should be shipped, or both - depending upon the value of Type."
+    },
+    "ScheduleDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The date the associated OpportunityLineItem is to be scheduled for an event: delivery, shipping, or any other date you wish to track.",
+      "required": true
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of the schedule. Required when inserting an OpportunityLineItemSchedule. Valid values include Quantity, Revenue, or Both."
+    }
+  },
+  "usage": "OpportunityLineItemSchedule supports two types of schedules:",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Comments",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Schedule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OpportunityLineItemId": {
+      "field_label": "Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Revenue": {
+      "field_label": "Revenue",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ScheduleDate": {
+      "field_label": "Schedule Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentWorkspacePermission - Data API",
+  "description": "Represents a library permission. This object is available in API version 40.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Namefield, Sort, Update",
+      "description": "Name of the library."
+    },
+    "PermissionsAddComment": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to post comments to any content in the library and view all comments in the library. Users can edit or delete their own comments."
+    },
+    "PermissionsAddContent": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to publish new content to the library, upload new content versions, or restore archived (deleted) content. Content authors can also change any tags associated with their content and archive or delete their own content."
+    },
+    "PermissionsAddContentOBO": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to choose an author when publishing content in the library."
+    },
+    "PermissionsArchiveContent": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to archive and restore any content in the library."
+    },
+    "PermissionsChatterSharing": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to make content from this library accessible outside of the library, sharing with a record or in Chatter. From a record or from Chatter, select a file from the library and attach it to a record or a post."
+    },
+    "PermissionsDeleteContent": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to delete any content in the library. Authors can undelete their own content from the Recycle Bin."
+    },
+    "PermissionsDeliverContent": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to share content outside the org via a content delivery or public link."
+    },
+    "PermissionsFeatureContent": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to identify any content in the library as “featured.”"
+    },
+    "PermissionsManageWorkspace": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to perform any action in the library. This privilege is required to edit a library’s name and description, add or remove library members, or delete a library. Manage Library is a super permission which provides all other permission options listed except Deliver Content. Creating a library requires the Manage Salesforce CRM Content app permission or Create Libraries system permission."
+    },
+    "PermissionsModifyComments": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to edit or delete comments made to any content in the library."
+    },
+    "PermissionsOrganizeFileAndFolder": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to create, rename, and delete folders in libraries."
+    },
+    "PermissionsTagContent": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to add tags when publishing content or editing content details in the library."
+    },
+    "PermissionsViewComments": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Permission for user to view comments."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Provides the type of access a user has to a library. Valid values are: Library Administrator Author Viewer Custom"
+    }
+  },
+  "special_access_rules": "The ability to create permissions requires either the Manage Salesforce CRM Content admin perm or the Manage Content Permissions user perm.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentWorkspacePermission\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PermissionsAddComment\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAddContent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsAddContentOBO\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsArchiveContent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsChatterSharing\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDeleteContent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsDeliverContent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsFeatureContent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsManageWorkspace\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsModifyComments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsOrganizeFileAndFolder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsTagContent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PermissionsViewComments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "Id": {
+      "field_label": "Library Permission ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PermissionsAddComment": {
+      "field_label": "Add Comment",
+      "type": "boolean"
+    },
+    "PermissionsAddContent": {
+      "field_label": "Add Content",
+      "type": "boolean"
+    },
+    "PermissionsAddContentOBO": {
+      "field_label": "Add Content on Behalf of Others",
+      "type": "boolean"
+    },
+    "PermissionsArchiveContent": {
+      "field_label": "Archive Content",
+      "type": "boolean"
+    },
+    "PermissionsChatterSharing": {
+      "field_label": "Attach or Share Content",
+      "type": "boolean"
+    },
+    "PermissionsDeleteContent": {
+      "field_label": "Delete Content",
+      "type": "boolean"
+    },
+    "PermissionsDeliverContent": {
+      "field_label": "Deliver Content",
+      "type": "boolean"
+    },
+    "PermissionsFeatureContent": {
+      "field_label": "Feature Content",
+      "type": "boolean"
+    },
+    "PermissionsManageWorkspace": {
+      "field_label": "Manage Library",
+      "type": "boolean"
+    },
+    "PermissionsModifyComments": {
+      "field_label": "Modify Comments",
+      "type": "boolean"
+    },
+    "PermissionsOrganizeFileAndFolder": {
+      "field_label": "Organize File and Content Folder",
+      "type": "boolean"
+    },
+    "PermissionsTagContent": {
+      "field_label": "Tag Content",
+      "type": "boolean"
+    },
+    "PermissionsViewComments": {
+      "field_label": "View Comment",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

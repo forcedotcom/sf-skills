@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsQualityGate - Data API",
+  "description": "Defines a set of quality requirements that must be satisfied before a deployment or pipeline stage can proceed. It acts as a container for quality gate rules, enabling organizations to enforce testing and quality standards by evaluating test execution results against predefined criteria. Quality gates help ensure that only changes meeting established quality thresholds advance through the DevOps lifecycle. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Stores additional details, notes, or documentation about the quality gate."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, such as through a related record or list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Stores the name of the quality gate."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or queue that owns the quality gate record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    }
+  }
+}

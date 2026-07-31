@@ -1,0 +1,135 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "WorkItem - Data API",
+  "description": "Represents a logical unit of work, such as a user story, task, or bug, used to track the progress of metadata and configuration data changes within a DevOps Center project. A work item moves through multiple development lifecycle stages until all development work is complete and the work item is part of the release pipeline. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AssignedToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the DevOps Center user assigned to this work item. DevOps Center uses this field only to display the user’s name in the UI. This is a relationship field. This field is a relationship field.",
+      "relationship_name": "AssignedTo",
+      "refers_to": "User"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A detailed description of the work item. DevOps Center uses this field only to display the description in the UI."
+    },
+    "DevelopmentApprovedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user who approved the work item for promotion. This field is a relationship field.",
+      "relationship_name": "DevelopmentApprovedBy",
+      "refers_to": "User"
+    },
+    "DevelopmentEnvironmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the development environment where this work item was developed. This field is a relationship field.",
+      "relationship_name": "DevelopmentEnvironment",
+      "refers_to": "DevopsEnvironment"
+    },
+    "DevopsPipelineStageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the current pipeline stage associated with this work item. This field is a relationship field.",
+      "relationship_name": "DevopsPipelineStage",
+      "refers_to": "DevopsPipelineStage"
+    },
+    "DevopsProjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the DevOps Center project to which the work item belongs. This is a relationship field. This field is a polymorphic relationship field.",
+      "relationship_name": "DevopsProject",
+      "refers_to": "DevopsProject"
+    },
+    "IsDevelopmentApproved": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether a team member has approved the work item for promotion. The default value is false. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastSyncDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time the work item feature branch was last synced with the source control repository."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique identifier for the work item, typically using a WI- prefix."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of this work item. This is a relationship field. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ParentWorkItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the parent work item, if this work item is a subtask of a larger unit of work This field is a relationship field.",
+      "relationship_name": "ParentWorkItem",
+      "refers_to": "WorkItem"
+    },
+    "RebaseBranchId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the branch used for rebase operations to resolve dependencies. This field is a relationship field.",
+      "relationship_name": "RebaseBranch",
+      "refers_to": "SourceCodeRepositoryBranch"
+    },
+    "RebaseStatusId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the DevopsRequestInfo record that tracks the rebase operation status. This field is a relationship field.",
+      "relationship_name": "RebaseStatus",
+      "refers_to": "DevopsRequestInfo"
+    },
+    "ReviewRemoteReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the change request for this work item in the source control system. In GitHub, a change request is called a pull request (PR) and the ID is the PR number."
+    },
+    "SourceCodeRepositoryBranchId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the feature branch in the source control repository where changes for this work item are stored. DevOps Center initially sets this value when the work item moves to IN_PROGRESS. The value persists until the work item becomes part of a pipeline stage. This field is a relationship field.",
+      "relationship_name": "SourceCodeRepositoryBranch",
+      "refers_to": "SourceCodeRepositoryBranch"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The current state of the work item in the release cycle. The default value is NEW. Possible values are: NEW—The initial status upon creation; work hasn't yet started. IN_PROGRESS—Active development in the development environment. IN_REVIEW—Changes are committed and a pull request is created for team review. READY_TO_PROMOTE—The work item is approved and is ready for promotion to the first pipeline stage. PROMOTED—The work item is promoted to a pipeline stage. MERGE_CONFLICT—Indicates that the work item has conflicts that must be resolved before promotion. NEVERED—The work item is inactive and won’t be promoted. COMBINED—The work item was merged into another work item to resolve conflicts or dependencies. CLOSED—Work is complete, fully tested, and promoted through the entire pipeline. The default value is NEW."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A brief description or title of the work item."
+    }
+  },
+  "usage": "Use this object to track the progress of a task and the user assigned to it. You can develop and commit changes either within a connected development environment or by using your own external development tools."
+}

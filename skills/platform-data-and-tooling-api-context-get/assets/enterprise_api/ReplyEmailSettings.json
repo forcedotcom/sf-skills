@@ -1,0 +1,158 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ReplyEmailSettings - Data API",
+  "description": "Represents a reply mail management configuration, which is used to configure emails that are received by an email sending domain. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AutoReplyMessage": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The content of the reply message. This reply is sent when a message is received at the sending address."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. The name: must be 40 characters or fewer must begin with a letter can contain only underscores and alphanumeric characters can’t include spaces can’t end with an underscore can’t contain 2 consecutive underscores In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization."
+    },
+    "DomainName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The domain that the reply mail management settings apply to. This field is unique within your organization."
+    },
+    "FwdEmailAddress": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email address to forward a copy of each incoming message to. This value is honored only if the value of IsEmailForwardingEnabled is true."
+    },
+    "IsAutoReplyEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether to forward automatic replies, such as out-of-office messages, to the address specified in the FwdEmailAddress field. This value is honored only if the value of IsEmailForwardingEnabled is true. The default value is false."
+    },
+    "IsDeleteAutoRepliesEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether to delete automatic replies, such as out-of-office messages. This value is honored only if the value of IsEmailForwardingEnabled is true. The default value is false."
+    },
+    "IsEmailForwardingEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether to forward email replies to the address specified in the FwdEmailAddress field. The default value is false."
+    },
+    "IsUnsubscribeManualRequestsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether subscribers can opt out of your campaigns by replying to your email with a keyword such as unsubscribe. The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The combined language and locale ISO code, which controls the language of the ReplyEmailSettings object."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for this ReplyEmailSettings value. This value is the internal label that doesn’t get translated."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ReplyEmailSettings\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AutoReplyMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DomainName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FwdEmailAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsAutoReplyEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleteAutoRepliesEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsEmailForwardingEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsUnsubscribeManualRequestsEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Language\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UnsubscribeTerms\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AutoReplyMessage": {
+      "field_label": "Auto Reply Message Value",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "DomainName": {
+      "field_label": "Domain Name Value",
+      "type": "string",
+      "length": "255"
+    },
+    "FwdEmailAddress": {
+      "field_label": "Fwd Email Address Value",
+      "type": "string",
+      "length": "254"
+    },
+    "Id": {
+      "field_label": "Generic Reply Email Setting Result ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAutoReplyEnabled": {
+      "field_label": "AutoReply Enabled Value",
+      "type": "boolean"
+    },
+    "IsDeleteAutoRepliesEnabled": {
+      "field_label": "Delete AutoReplies Enabled Value",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEmailForwardingEnabled": {
+      "field_label": "Email Forwarding Enabled Value",
+      "type": "boolean"
+    },
+    "IsUnsubscribeManualRequestsEnabled": {
+      "field_label": "Unsubscribe Manual Requests Enabled Value",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UnsubscribeTerms": {
+      "field_label": "Unsubscribe Terms Value",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

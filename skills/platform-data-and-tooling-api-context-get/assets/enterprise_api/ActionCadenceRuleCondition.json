@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ActionCadenceRuleCondition - Data API",
+  "description": "Represents the logic for a branch step. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActionCadenceRuleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the ActionCadenceRule that this condition is associated with."
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The conditional operator for this rule. Possible values are: Equal"
+    },
+    "Resource": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The field to evaluate. Possible values are: CallDispositionCategoryUse by branch steps. EmailEngagementUsed by ListenerBranch steps."
+    },
+    "RuleConditionName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name of the rule condition. Every rule condition in a cadence must have a unique name."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The event that your cadence rule condition listens for to decide when the event is complete. Possible values for emails are: EmailOpen EmailLinkClick Possible values for calls are: CallMeaningfulConnect CallUnqualified CallLeftVoicemail CallNotInterested CallCallBackLater"
+    }
+  },
+  "usage": "Use ActionCadenceRuleContion to see all the rule conditions associated with a branch step:\n\nUse ActionCadenceRuleContion to see all the rule conditions associated with a branch\n        step:\n\nselect RuleConditionName from ActionCadenceRuleCondition where ActionCadenceStepId= <ID of a branch step>",
+  "field_reference": {
+    "ActionCadenceRuleId": {
+      "field_label": "Cadence Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Cadence Rule Condition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Operator": {
+      "field_label": "Operator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Resource": {
+      "field_label": "Resource",
+      "type": "string",
+      "length": "255"
+    },
+    "RuleConditionName": {
+      "field_label": "Cadence Rule Condition Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

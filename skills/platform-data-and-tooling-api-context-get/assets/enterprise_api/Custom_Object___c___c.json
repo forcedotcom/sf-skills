@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Custom Object __c __c - Data API",
+  "description": "Represents a custom object.",
+  "fields_columns": [
+    "description"
+  ],
+  "fields": {
+    "ConnectionReceivedId": {
+      "description": "Type: reference Properties: Filter, Nillable Description: ID of the PartnerNetworkConnection that shared this record with your organization. This field is available if you enabled Salesforce to Salesforce."
+    },
+    "ConnectionSentId": {
+      "description": "Type: reference Properties: Filter, Nillable Description: ID of the PartnerNetworkConnection that you shared this record with. This field is available if you enabled Salesforce to Salesforce. This field is supported using API versions earlier than 15.0. In all other API versions, this field’s value is null. You can use the new PartnerNetworkRecordConnection object to forward records to connections."
+    },
+    "CreatedById": {
+      "description": "Type: reference Properties: Aggregatable, Defaulted on create, Filter, Group, Sort Description: ID of the User who created this record."
+    },
+    "CreatedDate": {
+      "description": "Type: dateTime Properties: Aggregatable, Defaulted on create, Filter, Sort Description: Date and time when this record was created."
+    },
+    "CurrencyIsoCode": {
+      "description": "Type: picklist Properties: Defaulted on createFilter, Group, Restricted picklist, Sort Description: Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "Id": {
+      "description": "Type: Id Properties: Aggregatable, Defaulted on create, Filter, Group, idLookup, Sort Description: Globally unique string that identifies a record. For information on IDs, see ID Field Type."
+    },
+    "IsDeleted": {
+      "description": "Type: boolean Properties: Defaulted on create, Filter, Group, Sort Description: Indicates whether the record has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "LastActivityDate": {
+      "description": "Type: dateTime Properties: Filter, Group, Nillable, Sort Description: Value is one of the following, whichever is the most recent: Due date of the most recent event logged against the object. Due date of the most recently closed task associated with the object."
+    },
+    "LastModifiedDate": {
+      "description": "Type: dateTime Properties: Aggregatable, Defaulted on create, Filter, Sort Description: Date and time when a user last modified this record."
+    },
+    "LastModifiedById": {
+      "description": "Type: reference Properties: Aggregatable, Defaulted on create, Filter, Group, Sort Description: ID of the User who last updated this object."
+    },
+    "LastReferencedDate": {
+      "description": "Type: dateTime Properties: Aggregatable, Filter, Sort, Nillable Description: Date and time when the current user last viewed or modified this record, a record related to this record, or a list view. If this value is null, the current user has never viewed or modified a record related to this object.This field doesn’t exist on records for a custom object unless a custom object tab is created for that object. See Use LastReferencedDate and LastViewedDate fields in a SOQL query."
+    },
+    "LastViewedDate": {
+      "description": "Type: dateTime Properties: Aggregatable, Filter, Sort, Nillable Description: Date and time when the current user last viewed or modified this record. If this value is null, the current user has never viewed or modified this record.This field doesn’t exist on records for a custom object unless a custom object tab is created for that object. See Use LastReferencedDate and LastViewedDate fields in a SOQL query."
+    },
+    "Name": {
+      "description": "Type: string Properties: Aggregatable, Create, Defaulted on create, Filter, Group, idLookup, Sort, Update Description: Label is Object Name. Name of the object. Maximum size is 80 characters. When the object is created using an API update() call, and the Name field is null, Salesforce sets the value to the record ID. When the object is created using an API create() call, Salesforce sets the initial value to the record ID. You can’t set the Name field to null."
+    },
+    "OwnerId": {
+      "description": "Type: reference Properties: Aggregatable, Create, Defaulted on create, Filter, Group, Namepointing, Sort, Update Description: The ID of the user who currently owns this object. Default value is the user logged in to the API to perform the create() call."
+    },
+    "RecordTypeId": {
+      "description": "Type: reference Properties: Create, Filter, Nillable, Update Description: ID of the record type assigned to this object. Create at least one record type before this field appears for custom or standard objects."
+    },
+    "SystemModStamp": {
+      "description": "Type: dateTime Properties: Aggregatable, Defaulted on create, Filter, Sort Description: Date and time when a user or automated process such as a trigger last modified this record. In this context, trigger refers to Salesforce code that runs to implement standard functionality, and not an Apex trigger."
+    }
+  }
+}

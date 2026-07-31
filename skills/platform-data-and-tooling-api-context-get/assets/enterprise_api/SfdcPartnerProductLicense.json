@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerProductLicense - Data API",
+  "description": "Represents the mapping between a provisionable product and a package license or permission set licenses (PSL) in a Partner Business Org (PBO). This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "LicenseId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the license (package or PSL) being mapped to this product. This field is a polymorphic relationship field.",
+      "relationship_name": "License",
+      "refers_to": "SfdcPartnerPackage, SfdcPartnerPermSetLicense"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-generated name of the license, with the format: PPL-{00000000}."
+    },
+    "PartnerProvisionProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The associated provisionable product. This field is a relationship field.",
+      "relationship_name": "PartnerProvisionProduct",
+      "refers_to": "SfdcPartnerProvisionProduct"
+    },
+    "Quantity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The quantity of mapped licenses.",
+      "required": true
+    }
+  }
+}

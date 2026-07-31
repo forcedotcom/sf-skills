@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerPayout - Data API",
+  "description": "Represents an invoice payout from Stripe to a partner in a Partner Business Org (PBO). This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The net amount of all invoices, subtracting the partner net revenue (PNR) and taxes, in a 30 day period. Value is shown in cents and must be converted to dollars."
+    },
+    "ArrivalDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date that a partner can expect a payout to arrive in their designated bank account. The value factors in delays for weekends and bank holidays."
+    },
+    "BankAccountNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The last four digits of the bank account number where the payout is sent."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The ISO code of the currency for the payout."
+    },
+    "DestinationBankName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the destination bank for the payout."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The external ID for the payout record from Stripe."
+    },
+    "Id": {
+      "type": "string",
+      "properties": "Defaulted on create, Filter, Group, idLookup, Sort",
+      "description": "System field. The unique identifier for the record."
+    },
+    "PayoutType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of the payout."
+    },
+    "ReferenceToken": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The payout reference token from Stripe that appears on bank statements for reconciliation."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the payout. Possible values are: Pending In_Transit Failed"
+    }
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PaymentGatewayLog - Data API",
+  "description": "Stores information exchanged between the Salesforce payments platform and external payment gateways. Gateway logs can also record payloads from external payment entities. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for organizations with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "GatewayAuthCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Authorization approval code from the gateway."
+    },
+    "GatewayAVSCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Code sent by gateways that use an address verification system."
+    },
+    "GatewayDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time that of the gateway communication that leads to the creation of this gateway log."
+    },
+    "GatewayMessage": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Information or error messages sent from the gateway."
+    },
+    "GatewayRefNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Unique transaction ID created by the payment gateway."
+    },
+    "GatewayResultCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Gateway-specific result code. Must be mapped to a Salesforce-specific result code."
+    },
+    "GatewayResultCodeDescription": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the gateway’s result code. This field is useful for providing more information around why the gateway returned a certain result code."
+    },
+    "InteractionStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Describes the result of communication between the payments platform and a payment gateway. Possible values are: Failed Initiated NoOp Success Timeout"
+    },
+    "InteractionType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes the type of interaction with the gateway. This field is required for logs created in Salesforce. Possible values are: Authorization AuthorizationReversal Avs Capture CheckGiftCardBalance PostAuth ReferencedRefund Sale Tokenize Void"
+    },
+    "IsNotification": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "For asynchronous transactions, shows whether the gateway log belongs to the notification (yes) or the initial transaction (no). Possible values are: No Yes"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "PaymentGatewayId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Payments Platform payment gateway record used for communication with the external payment gateway. This field is a relationship field.",
+      "relationship_name": "PaymentGateway",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGateway"
+    },
+    "PaymentGatewayLogNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique ID for this payment gateway log record."
+    },
+    "ReferencedEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Foreign key with DomainSet of PaymentAuth and Payment. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferencedEntity",
+      "relationship_type": "Lookup",
+      "refers_to": "CardPaymentMethod, Payment, PaymentAuthAdjustment, PaymentAuthorization, Refund"
+    },
+    "Request": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Raw payload. No sensitive attributes are stored."
+    },
+    "Response": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Raw payload."
+    },
+    "RetryCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The retry category returned by the payment gateway for the failed payment. This field is available in API version 66.0 and later. Possible values are: CardLimit— Insufficient funds, exceeded spending limits, or other restrictions on the card. GatewayConnection— Connectivity or communication errors between systems, including upstream gateway errors. PaymentInformation— Missing or incorrect data such as incorrect card numbers, addresses, or currencies. PaymentProcessing— Payment account is invalid, closed, restricted, or the transaction was declined for reasons other than insufficient funds. Security— Security violations or issues such as fraud, risk, authentication, verification, and authorization. Unknown— Payment gateway error code isn't recognized or isn't mapped to a specific category."
+    },
+    "SfRefNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If an IdempotencyKey was passed in the API request, its value is stored here in text format."
+    },
+    "SfResultCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Salesforce-specific result code that can map to one or more gateway result codes. We recommend configuring the payment gateway adapter layer to map gateway result codes to the appropriate Salesforce result code. Possible values are: Decline: The gateway call failed. If the transaction is attempted again, it can still work. For example, the customer has insufficient funds or briefly lost their connection. Indeterminate: The gateway didn’t respond to the call. This response usually happens when Salesforce times out while waiting for a response from the gateway. PermanentFail: The gateway call failed and can’t work. Gateway calls fail permanently for one of two reasons: Hard Decline: The customer’s payment account has been closed or terminated. Fraud: The gateway recognized the payment or payment method as known fraud. RequiresReview: The customer bank requires more information before completing the payment. Success: The gateway call succeeded. SystemError: Salesforce ended the payment request before receiving a response. For example, Salesforce lost credentials or access to its server. Salesforce ends payment calls if it doesn’t receive a response from the gateway within two minutes. ValidationError: Customer payment data was incorrect, such as a misspelling in the credit card address or an incorrect CVV."
+    }
+  },
+  "special_access_rules": "To access Salesforce Payments objects with the API, your org must have one or more of these licenses: Salesforce Payments, Salesforce Order Management, B2B Commerce, or D2C Commerce. Salesforce Payments objects are available only in Lightning Experience.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"PaymentGatewayLog\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"GatewayAuthCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayAvsCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"GatewayMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayRefNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayResultCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GatewayResultCodeDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InteractionStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InteractionType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsNotification\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PaymentGateway\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PaymentGateway\"/>\n        <element name=\"PaymentGatewayId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentGatewayLogNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReferencedEntity\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ReferencedEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Request\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Response\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RetryCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RetryDecision\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SfRefNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SfResultCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "GatewayAuthCode": {
+      "field_label": "Gateway Auth Code",
+      "type": "string",
+      "length": "64"
+    },
+    "GatewayAvsCode": {
+      "field_label": "Gateway Avs Code",
+      "type": "string",
+      "length": "64"
+    },
+    "GatewayDate": {
+      "field_label": "Gateway Date",
+      "type": "datetime"
+    },
+    "GatewayMessage": {
+      "field_label": "Gateway Message",
+      "type": "string",
+      "length": "255"
+    },
+    "GatewayRefNumber": {
+      "field_label": "Gateway Reference Number",
+      "type": "string",
+      "length": "255"
+    },
+    "GatewayResultCode": {
+      "field_label": "Gateway Result Code",
+      "type": "string",
+      "length": "64"
+    },
+    "GatewayResultCodeDescription": {
+      "field_label": "Gateway Result Code Description",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Payment Gateway Log ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InteractionStatus": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "InteractionType": {
+      "field_label": "Interaction Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsNotification": {
+      "field_label": "Is Notification",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OrderPaymentSummaryId": {
+      "field_label": "Order Payment Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGatewayId": {
+      "field_label": "Payment Gateway ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGatewayLogNumber": {
+      "field_label": "Payment Gateway Log Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ReferencedEntityId": {
+      "field_label": "Referenced Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Request": {
+      "field_label": "Request",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Response": {
+      "field_label": "Response",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "RetryCategory": {
+      "field_label": "Retry Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RetryDecision": {
+      "field_label": "Retry Decision",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SfRefNumber": {
+      "field_label": "Salesforce Reference Number",
+      "type": "string",
+      "length": "255"
+    },
+    "SfResultCode": {
+      "field_label": "Salesforce Result Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

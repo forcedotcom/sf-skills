@@ -1,0 +1,158 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ReturnOrderItemAdjustment - Data API",
+  "description": "Represents a price adjustment on a return order line item. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort",
+      "description": "Amount, not including tax, of the adjustment."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the adjustment."
+    },
+    "OrderItemAdjustLineSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the order item adjustment line summary associated with the adjustment."
+    },
+    "ReturnOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the return order associated with the return order line item to which the adjustment applies. This is a relationship field.",
+      "relationship_name": "ReturnOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "ReturnOrder"
+    },
+    "ReturnOrderItemAdjustmentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "ID of the return order item adjustment."
+    },
+    "ReturnOrderLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the return order line item to which this adjustment applies. This is a relationship field.",
+      "relationship_name": "ReturnOrderLineItem",
+      "relationship_type": "Lookup",
+      "refers_to": "ReturnOrderLineItem"
+    },
+    "TotalAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of the adjustment, inclusive of tax. This amount is equal to Amount + TotalTaxAmount."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the Amount."
+    }
+  },
+  "special_access_rules": "Order Management must be enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ReturnOrderItemAdjustmentChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Adjustment",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1175"
+    },
+    "Id": {
+      "field_label": "Return Order Item Adjustment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OrderItemAdjustLineSummaryId": {
+      "field_label": "Order Product Adjustment Line Item Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReturnOrderId": {
+      "field_label": "Return Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReturnOrderItemAdjustmentNumber": {
+      "field_label": "Return Order Item Adjustment Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ReturnOrderLineItemId": {
+      "field_label": "Return Order Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAmtWithTax": {
+      "field_label": "Adjustment with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

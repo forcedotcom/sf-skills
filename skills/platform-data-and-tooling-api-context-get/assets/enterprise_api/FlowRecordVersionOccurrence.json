@@ -1,0 +1,188 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowRecordVersionOccurrence - Data API",
+  "description": "Represents an instance of a recurring flow that runs on a schedule. For example, a flow that runs weekly on Wednesdays creates an occurrence each time it runs. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DataSpaceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the data space for this occurence. This field is available in API version 65.0 and later. This field is a relationship field.",
+      "relationship_name": "DataSpace",
+      "refers_to": "DataSpace"
+    },
+    "Entries": {
+      "type": "integer",
+      "properties": "Filter, Group, Query, Retrieve, Sort",
+      "description": "The number of entries for this occurrence."
+    },
+    "Errors": {
+      "type": "integer",
+      "properties": "Filter, Group, Query, Retrieve, Sort",
+      "description": "The number of errors for this occurrence."
+    },
+    "ErrorDetail": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A description of the error. This field is available in API version 63.0 and later."
+    },
+    "Exits": {
+      "type": "integer",
+      "properties": "Filter, Group, Query, Retrieve, Sort",
+      "description": "The number of exits for this occurrence."
+    },
+    "FlowRecordId": {
+      "type": "string",
+      "properties": "Filter, Group, Query, Retrieve, Sort",
+      "description": "The ID of the associated flow record."
+    },
+    "FlowRecordVersionId": {
+      "type": "string",
+      "properties": "Filter, Group, Query, Retrieve, Sort",
+      "description": "The ID of the associated version of the flow record."
+    },
+    "ProgressStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The running status of the flow interview. Valid values are: Canceled Specifies a flow interview that was deactivated by a user. The flow doesn’t process previously added records and no additional records are added to this flow. Completed Indicates a flow interview that is complete. No additional records are eligible to be processed in this flow. Error Indicates a flow interview that has been deactivated because it encountered an error. When the error occurs, the error details are emailed to up to 5 users with the Manage Flows permission who most recently logged into Salesforce. FinishingIndicates a flow interview that was deactivated by a user, but is finishing records previously added that are eligible to run to completion. No additional records are added to this flow. InProgress Indicates a flow interview that is running or ready to run. PreparingData Indicates a flow interview that is preparing the resources it requires to run. This process can take up to 2 hours."
+    },
+    "ScheduledDate": {
+      "type": "dateTime",
+      "properties": "Filter, Group, Query, Retrieve, Sort",
+      "description": "The scheduled time and date of the occurrence."
+    },
+    "Stopped": {
+      "type": "integer",
+      "properties": "Filter, Group, Query, Retrieve, Sort",
+      "description": "The number of flows that were stopped for this occurrence."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"FlowRecordVersionOccurrence\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CompletedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Enqueued\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Entries\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ErrorDetail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Errors\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Exits\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FlowRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecord\"/>\n        <element name=\"FlowRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowRecordVersion\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecordVersion\"/>\n        <element name=\"FlowRecordVersionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProgressStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ScheduledDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CompletedDate": {
+      "field_label": "Completed Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataSpaceId": {
+      "field_label": "Data Space ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Enqueued": {
+      "field_label": "Enqueued",
+      "type": "int",
+      "digits": "9"
+    },
+    "Entries": {
+      "field_label": "Entries",
+      "type": "int",
+      "digits": "9"
+    },
+    "ErrorDetail": {
+      "field_label": "Error Details",
+      "type": "string",
+      "length": "255"
+    },
+    "Errors": {
+      "field_label": "Errors",
+      "type": "int",
+      "digits": "9"
+    },
+    "Exits": {
+      "field_label": "Exits",
+      "type": "int",
+      "digits": "9"
+    },
+    "FlowRecordId": {
+      "field_label": "Flow ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FlowRecordVersionId": {
+      "field_label": "Flow Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Flow Version Occurrence ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Flow Version Occurrence Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProgressStatus": {
+      "field_label": "Occurrence Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ScheduledDate": {
+      "field_label": "Run Date",
+      "type": "datetime"
+    },
+    "Stopped": {
+      "field_label": "Stopped",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

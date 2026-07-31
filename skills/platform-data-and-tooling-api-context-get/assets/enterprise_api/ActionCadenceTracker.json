@@ -1,0 +1,232 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionCadenceTracker - Data API",
+  "description": "Represents an active cadence target. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionCadenceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related ActionCadence.",
+      "relationship_name": "ActionCadence",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadence"
+    },
+    "CompletionDisposition": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The target’s disposition when it exited the action cadence. This field contains a value if the target’s State is Complete. Sales reps can set this value when removing a target from a cadence. This field is available in API version 51.0 and later. Possible values are: Bad Data — Some of the target’s data is incorrect or invalid. Contact Later — The target asked to be contacted at a later date. Customer Connected —The sales rep contacted the target. Customer Engaged —The target engaged with an email. Disqualified— A sales rep determined that the target isn’t qualified. Duplicate — The target has a duplicate lead, contact, or person account record. Meeting Booked— The target has booked the meeting. Meeting Requested— The target has requested for a meeting. No Response — The target didn’t reply to any outreach. Not Interested — The target stated a lack of interest. Opt Out— The target has opted out. Success — the cadence outreach was successful."
+    },
+    "CompletionReason": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The reason that the target completed the cadence. This field contains a value if the target’s State is Complete. Possible values are: AutomaticallyExited — the target completed because a global exit condition occurred. This value is available in API version 49.0 and later. AutomaticallyExitedDeletedStep AutomaticallyExitedInvalidParentStep DaisyChained — the target completed because it’s connected to another action cadence. LeadConverted — the target completed because the lead converted. ManuallyRemoved — the target completed because the sales rep removed it from the cadence. ManuallyRemovedNoAccess— reserved for future use. NoMoreSteps — the target completed the action cadence because all the action cadence steps were completed."
+    },
+    "CurrentStepId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the current ActionCadenceStepTracker.",
+      "relationship_name": "CurrentStep",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadenceStepTracker"
+    },
+    "DaisyChainIteration": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of this action cadence in a sequence of linked action cadences followed by this target. This value starts at 1 with the initial action cadence. A target can follow a sequence of up to 10 linked action cadences. Available in API version 53.0 and later."
+    },
+    "ErrorMessage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If an error occurs while this target is being completed, this field contains the error message."
+    },
+    "ExitGlobalRuleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If a global exit condition occurs, a target completes. One example of a global exit condition is an email returned because of an invalid address. If the target completed because a global exit condition occurred, this field contains the ID of the ActionCadenceRule record that evaluated as true. This field is available in API version 49.0 and later.",
+      "relationship_name": "ExitGlobalRule",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadenceRule"
+    },
+    "IsTrackerActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the action cadence target is active (true) or not (false). The default value is false. An action cadence target is active if the state is Running, Paused, Processing, or Initializing. Only active targets count against the org limit of 150,000 trackers.This field is available in API version 50.0 and later."
+    },
+    "LastCompletedStepId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the last completed ActionCadenceStepTracker.",
+      "relationship_name": "LastCompletedStep",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadenceStepTracker"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user who is assigned to complete the cadence steps for the target.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "RelatedToAttributionType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Defines when the cadence is related to an opportunity or invoice. Available in API version 51.0 and later. Possible values are: Activation—Attribute the opportunity to the cadence when the opportunity is created. Collected—Attribute the value to the cadence after payment for the invoice is collected. Collection Advancement—Attribute the value to the cadence when the invoice is out for collection. Maturation—Attribute the opportunity to the cadence only when the opportunity stage advances."
+    },
+    "RelatedToId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related opportunity if there’s one. Available in API version 51.0 and later. This is a polymorphic relationship field.",
+      "relationship_name": "RelatedTo",
+      "relationship_type": "Lookup",
+      "refers_to": "Opportunity, Invoice"
+    },
+    "ScheduledResumeDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the action cadence tracker is going to resume after it’s paused or on a wait step. Available in API version 53.0 and later."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The state of the current action cadence tracker. Possible values are: Complete Error Initializing Paused Processing—Salesforce is working on changing the state of this action cadence tracker. We recommend that you filter out steps that have this state from your dashboards. Running"
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the target that is assigned to this action cadence.",
+      "relationship_name": "Target",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead"
+    }
+  },
+  "usage": "Use ActionCadenceTracker to see what targets are currently assigned to an active action cadence.\n\nselect TargetId from ActionCadenceTracker where ActionCadenceId=<Id of the action cadence> and State= \"Running\"",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ActionCadenceTrackerChangeEvent (API version 48.0)**: Change events are available for the object.\n- **ActionCadenceTrackerOwnerSharingRule**: Sharing rules are available for the object.\n- **ActionCadenceTrackerShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ActionCadenceId": {
+      "field_label": "Cadence ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CompletionDisposition": {
+      "field_label": "Target Disposition",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CompletionReason": {
+      "field_label": "Completion Reason",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrentStepId": {
+      "field_label": "Cadence Step Tracker ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DaisyChainIteration": {
+      "field_label": "DaisyChain IterationCadence Tracker",
+      "type": "int",
+      "digits": "9"
+    },
+    "ErrorMessage": {
+      "field_label": "Error message",
+      "type": "string",
+      "length": "255"
+    },
+    "ExitGlobalRuleId": {
+      "field_label": "Cadence Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Cadence Tracker ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsTrackerActive": {
+      "field_label": "Is Cadence Tracker Active",
+      "type": "boolean"
+    },
+    "LastCompletedStepId": {
+      "field_label": "Cadence Step Tracker ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedToAttributionType": {
+      "field_label": "Opportunity Attribution Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedToId": {
+      "field_label": "Related Opportunity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScheduledResumeDateTime": {
+      "field_label": "Scheduled Resume Date Time",
+      "type": "datetime"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetId": {
+      "field_label": "Target ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ConversationChannelDefinition - Tooling API",
+  "description": "Represents a configurable definition of a conversation channel that’s implemented for Interaction Service for Bring Your Own Channel for Messaging and Bring Your Own Channel for CCaaS messaging channels. This object is available in API version 60.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CapabilitiesSupportsCustomChannelParameters": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether admins can configure custom parameters and parameter mappings for messaging channels. Custom parameters and parameter mappings are used to pass additional information at runtime to Omni-Channel flows. The default value is false. Available in API version 61.0."
+    },
+    "CapabilitiesSupportsDoubleOptInConsent": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the channel supports (true) the Double Opt-In consent level. The default value is false. If set to true, then capabilitiesSupportsExplicitConsent must also be set to true. This field is optional and isn’t supported for Bring Your Own Channel for Messaging. It's only supported for Bring Your Own Channel for CCaaS."
+    },
+    "CapabilitiesSupportsExplicitConsent": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the channel supports (true) the Explicit Opt-In consent level. This field is optional."
+    },
+    "CapabilitiesSupportsImplicitConsent": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the channel supports (true) the Implicit Opt-In consent level. This value is required and must always be set to true. The default value is false."
+    },
+    "CapabilitiesSupportsIsoCountryCode": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the channel supports (true) ISO country codes. The default value is false."
+    },
+    "CapabilitiesSupportsKeywords": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the channel supports (true) keywords. The default value is false."
+    },
+    "ConnectedAppOauthLink": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "DO NOT SET OR CHANGE THIS VALUE. This value is automatically generated. This field represents the OAuth link for the external client app (ECA) or connected app if the ConnectedAppType is Partner. This is a string identifier to the ECA or connected app containing the partner Org ID and the consumer ID minus the key prefixes."
+    },
+    "ConnectedAppType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The owner of the external client app (ECA) or connected app used to manage authentication between Salesforce Interaction Service and the Messaging or CCaaS partner’s system. Possible values are: Partner Customer The default value is Partner. If set to Partner, the partner creates the ECA or connected app and includes it in their managed package. If set to Customer, the admin creates the ECA or connected app. Available in API version 62.0."
+    },
+    "ConsentOwner": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The system the customer uses to manage consent levels. Possible values are: Partner Salesforce The default value is Salesforce. For example, if set to Salesforce, consent levels are managed by the Salesforce system. If set to Partner, consent levels are managed by the partner’s telephony or Contact Center as a Service system. For Bring Your Own Channel for Messaging, this value must be set to Salesforce."
+    },
+    "ConversationVendorInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ConversationVendorInfo.developerName used to link this record to the ConversationVendorInfo record. For example, PartnerName."
+    },
+    "customEventChnlAddrIdField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The mapping field that points to the custom field used to point to the ChannelAddressIdentifier field. This field is deprecated in API version 60.0 and will be removed in API version 61.0. Use a combination of customEventTypeField and customEventPayloadField instead."
+    },
+    "CustomEventPayloadField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The mapping field that points to the custom field used to point to the Payload field in the format <orgNamespace>__<CustomFieldName>__c. This is the API name of the custom Payload field in the custom platform event. For example, devorg__Payload__c."
+    },
+    "customEventRecipientField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The mapping field that points to the custom field used to point to the Recipient field. This field is deprecated in API version 60.0 and will be removed in API version 61.0. Use a combination of customEventTypeField and customEventPayloadField instead."
+    },
+    "CustomEventTypeField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The mapping field that points to the custom field used to point to the Platform event type (EventType) field, in the format <orgNamespace>__<CustomFieldName>__c. This is the API name of the custom EventType field in the custom platform event. For example, devorg__EventType__c."
+    },
+    "CustomIconId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For Bring Your Own Channel for Messaging and Bring Your Own Channel for CCaaS, this field represents the name of the status resource image used to identify the channel integration, such as a channel logo. For the best results, set the image size to 50px x 50px and save the image in SVG file format. This field is optional. Available in API version 61.0 and later. This field is a relationship field.",
+      "relationship_name": "CustomIcon",
+      "refers_to": "StaticResource"
+    },
+    "CustomerConnectedAppOauthLink": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "DO NOT SET OR CHANGE THIS VALUE. This value is automatically generated. This field represents the OAuth link for the external client app (ECA) or connected app created by an admin if the ConnectedAppType is Customer. Available in API version 62.0."
+    },
+    "CustomPlatformEvent": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The API name of the custom platform event created for the Interaction Service API in the format <orgNamespace>__<CustomPlatformEventName>__e. For example, devorg__TestEvent__e."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the custom metadata type object in the API in the format <Prefix>_<ConversationChannelDefinition>, where Prefix matches the prefix you gave to the name of the Interaction Service external client app or connected app. For example, Partner1_ChannelDefinition1, where Partner1 is the prefix and ChannelDefinition1 is the given name."
+    },
+    "EventCapabilitiesIsInboundAcknwOptionExposed": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the partner supports read receipts and delivery receipts for inbound messages (true) or whether the partner doesn’t support these inbound acknowledgments and the functionality is hidden from the Salesforce admin in the Messaging settings (false). The default value is false. This field is available in API version 65.0 and later. Use this field instead of IsInboundReceiptsEnabled."
+    },
+    "EventCapabilitiesIsProgressIndicatorOptExposed": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the partner supports progress indicators for AI agents (true) or whether the partner doesn’t support them and the functionality is hidden from the Salesforce admin in the Messaging settings (false). The default value is false. This field is available in API version 65.0 and later."
+    },
+    "EventCapabilitiesIsRoutingWorkResultSupported": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the Routing Work Result event is sent as a Custom Platform event (true) or not (false). The default value is false. This field is available in API version 65.0 and later. Use this field instead of IsRoutingWorkResultEnabled."
+    },
+    "EventCapabilitiesIsTypingIndicatorOptionHidden": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the partner doesn’t support typing indicators for outbound messages and the functionality is hidden from the Salesforce admin in the Messaging settings (true) or whether outbound typing indicators are supported by the partner (false). The default value is false, meaning the outbound typing indicator feature is supported by default. To disable the outbound typing indicator feature, set this value to true. This field is available in API version 65.0 and later. Use this field instead of IsTypingIndicatorDisabled."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated ConversationChannelDefinition object in Metadata API. The full name is in the format ???_??? and can include a namespace prefix. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsConferenceSupported": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the partner supports conferencing for Bring Your Own Channel (true), or not (false). With conferencing, more than two participants are allowed in a messaging session. The default is false. This field is available in API version 64.0 and later."
+    },
+    "IsInboundReceiptsEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the partner supports read receipts and delivery receipts for inbound messages (true) or whether the partner doesn’t support these inbound acknowledgements and the functionality is hidden from the Salesforce admin in the Messaging settings (false). The default value is false. Available in API versions 63.0 to 65.0. In API version 66.0 and later, this field is removed. Use EventCapabilitiesIsInboundAcknwOptionExposed instead."
+    },
+    "IsRoutingWorkResultEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the Routing Work Result event is sent as a Custom Platform event or not. The default value is false. Available in API versions 64.0 and 65.0. In API version 66.0 and later, this field is removed. Use EventCapabilitiesIsRoutingWorkResultSupported instead."
+    },
+    "IsTypingIndicatorDisabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the partner doesn’t support typing indicators for outbound messages and the functionality is hidden from the Salesforce admin in the Messaging settings (true) or whether outbound typing indicators are supported by the partner (false). The default value is false, meaning the outbound typing indicator feature is supported by default. To disable the outbound typing indicator feature, set this value to true. Available in API versions 63.0 to 65.0. In API version 66.0 and later, this field is removed. Use EventCapabilitiesIsTypingIndicatorOptionHidden instead."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta—Managed-Beta deleted—Managed-Proposed-Deleted deprecated—Managed-Proposed-Deprecated deprecatedEditable—SecondGen-Installed-Deprecated installed—Managed-Installed installedEditable—SecondGen-Installed-Editable released—Managed-Released unmanaged—Unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The UI label name for the custom metadata type object in the API. This name appears in several places in the UI, so include the partner channel name for easy identification. For example, Channel Definition 1."
+    },
+    "MaxParticipantsForCnfrOverride": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Specifies the limit for how many participants can be in a messaging conference. If set, this field overrides the platform limit for the number of participants in a conference. If not set, the limit defaults to the messaging platform limit of how many participants can be in a messaging conference at one time. This field is available in API version 64.0 and later."
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "Metadata about the standard or custom object. Details are available in the CustomObject entry in the metadata namespace in the Tooling API WSDL. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix. NamespacePrefix is null if the publisher is Salesforce."
+    },
+    "RoutingOwner": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The system the customer uses to manage routing for Bring Your Own Channel for Messaging or Bring Your Own Channel for CCaaS. Possible values are: Partner Salesforce The default value is Salesforce. For example, if set to Salesforce, routing is managed by the Salesforce system. If set to Partner, routing is managed by the partners telephony system or partner CCaaS system. For Bring Your Own Channel for Messaging, this value must be set to Salesforce."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ConsentOwner\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Salesforce\"/>\n    <xsd:enumeration value=\"Partner\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationChannelDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"connectedAppOauthLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"connectedAppType\" minOccurs=\"0\" type=\"tns:CustomChannelConnectedAppType\"/>\n        <xsd:element name=\"consentOwner\" minOccurs=\"0\" type=\"tns:ConsentOwner\"/>\n        <xsd:element name=\"conversationVendorInfo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customEventPayloadField\" type=\"xsd:string\"/>\n        <xsd:element name=\"customEventTypeField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customIcon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customPlatformEvent\" type=\"xsd:string\"/>\n        <xsd:element name=\"customerConnectedAppOauthLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isConferenceSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isInboundAcknwOptionExposed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProgressIndicatorOptExposed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isRoutingWorkResultSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTypingIndicatorOptionHidden\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"maxParticipantsForCnfrOverride\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"routingOwner\" minOccurs=\"0\" type=\"tns:RoutingOwner\"/>\n        <xsd:element name=\"supportsCustomChannelParameters\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"supportsDoubleOptInConsent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"supportsExplicitConsent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"supportsImplicitConsent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"supportsIsoCountryCode\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"supportsKeywords\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CustomChannelConnectedAppType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Partner\"/>\n    <xsd:enumeration value=\"Customer\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"RoutingOwner\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Salesforce\"/>\n    <xsd:enumeration value=\"Partner\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

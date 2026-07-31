@@ -1,0 +1,209 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowInterview - Data API",
+  "description": "Represents a flow interview. A flow interview is a running instance of a flow. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrentElement": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The flow element at which the interview is paused."
+    },
+    "CurrentFlowVersion": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only."
+    },
+    "EngineType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort",
+      "description": "The engine type used to run the flow interview."
+    },
+    "Error": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The error message that explains why the flow interview failed. This field is available in API version 62.0 and later."
+    },
+    "FlowVersionViewId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "This field is a relationship field. This field is available in API version 51.0 and later.",
+      "relationship_name": "FlowVersionView",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowVersionView"
+    },
+    "Guid": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "Globally unique identifier for the interview."
+    },
+    "InterviewLabel": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Label for the interview. This label helps users and administrators differentiate interviews from the same flow. In the user interface, this label appears in the Paused Flow Interviews component on the user’s Home tab and in the list of paused flow interviews in Setup."
+    },
+    "InterviewStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Status of the interview. Valid values are: Completed—This flow is complete. There are no more records to process. Error—This flow has one or more errors. To resolve each error, check the error code for instructions. Paused—This flow is paused. No new processes are added until the flow is resumed. Running—This flow is running or is ready to run. VersionPaused—This flow version is paused. No more records are processed until the flow is resumed. This value is available in API version 60.0 and later. This field is available in API version 50.0 and later."
+    },
+    "MasterFlowVersion": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name for the interview."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user who owns the interview. Only this user or an admin can resume the interview. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PauseLabel": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Information about why the interview was paused. This string is entered by the user who paused the flow interview. The label is Why Paused."
+    },
+    "SerializedView": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "For internal use only."
+    },
+    "WasPausedFromScreen": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Whether the flow interview was paused by a user from a flow Screen element (true ) or not (false ). This field is available in API version 46.0 and later."
+    }
+  },
+  "special_access_rules": "To delete a flow interview, you must have the “Manage Flow” user permission. All other calls require the “Run Flows” user permission or the Flow User field enabled on the user detail page. If Override default behavior and restrict access to enabled profiles or permission sets is selected for an individual flow, access to that specific flow and its interviews is given to users by profile or permission set.\n\nTo delete a flow interview, you must have the “Manage Flow” user permission. All other calls require the “Run Flows” user permission or the Flow User field enabled on the user detail page. If Override default behavior and restrict access to enabled profiles or permission sets** is selected for an individual flow, access to that specific flow and its interviews is given to users by profile or permission set.",
+  "associated_objects": "This object has these associated objects. Unless noted, these objects are available in the same API version as this object.\n\n- **FlowInterviewOwnerSharingRule**: Sharing rules are available for the object.\n- **FlowInterviewShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"FlowInterview\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CurrentElement\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DynamicDataCaptures\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EngineType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Error\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowVersionView\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowVersionView\"/>\n        <element name=\"FlowVersionViewId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Guid\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InterviewLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InterviewStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PauseLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"StageRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WasPausedFromScreen\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"WorkSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrentElement": {
+      "field_label": "Current Element",
+      "type": "string",
+      "length": "100"
+    },
+    "CurrentFlowVersion": {
+      "field_label": "Definition Version",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EngineType": {
+      "field_label": "Engine Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Error": {
+      "field_label": "Error",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "FlowVersionViewId": {
+      "field_label": "Flow Version View ID",
+      "type": "string",
+      "length": "512"
+    },
+    "Guid": {
+      "field_label": "Flow Interview Guid",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Flow Interview ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InterviewLabel": {
+      "field_label": "Interview Label",
+      "type": "string",
+      "length": "1000"
+    },
+    "InterviewStatus": {
+      "field_label": "Interview Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterFlowVersion": {
+      "field_label": "Definition Version",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PauseLabel": {
+      "field_label": "Pause Reason",
+      "type": "string",
+      "length": "1000"
+    },
+    "SerializedView": {
+      "field_label": "Serialized version of the interview",
+      "type": "textarea",
+      "length": "1000000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WasPausedFromScreen": {
+      "field_label": "Was Paused From Screen",
+      "type": "boolean"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

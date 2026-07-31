@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "OpportunityContactRoleSuggestionInsight - Data API",
+  "description": "Represents a suggestion for a new opportunity contact role. Available in API versions 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related contact record."
+    },
+    "CreatedRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the created opportunity contact role record."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The division of the suggested opportunity contact role."
+    },
+    "LastOperationUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who last performed a related operation."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it's possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related opportunity."
+    },
+    "RationaleLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The reason why this is a suggested opportunity contact role."
+    },
+    "Role": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The role of the suggested opportunity contact role."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the suggested contact. Possible values include: New Pending Added Declined"
+    }
+  },
+  "special_access_rules": "To add or decline opportunity contact role suggestions, users need a Sales Cloud Einstein license, edit access on opportunities, and read or edit access on contacts. As of the Spring ’20 release, Pardot and Sales Engagement users no longer have access to this object.",
+  "usage": "This object is read-only and isn’t supported in workflows, triggers, or process builder."
+}

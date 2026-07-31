@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "PackagePushRequest - Data API",
+  "description": "Represents the push request for upgrading a package in one or many orgs from one version to another version.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurationSeconds": {
+      "type": "int",
+      "properties": "Group, Nillable",
+      "description": "The length of time in seconds, that the push upgrade took to complete. This field is new in API version 51.0."
+    },
+    "EndTime": {
+      "type": "dateTime",
+      "properties": "Create, Nillable, Update",
+      "description": "The date and time (UTC) at which the push upgrade ended, in ISO 8601 format. This field is new in API version 51.0."
+    },
+    "PackageVersionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The non-beta, non-deprecated package version that the package is being upgraded to.",
+      "required": true
+    },
+    "ScheduledStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time (UTC) at which the push request is processed, in ISO 8601 format. Set this value to the earliest time that you want Salesforce to attempt to start the push. As a best practice, schedule pushes at off-peak hours like 1:00 AM Saturday. If you don’t specify a value, the push starts when the package push request’s Status is set to Pending. Note: Scheduled push upgrades begin as soon as resources are available on the Salesforce instance, which is either at or after the start time you specify. In certain scenarios, the push upgrade could start a few hours after the scheduled start time."
+    },
+    "StartTime": {
+      "type": "dateTime",
+      "properties": "Create, Nillable, Update",
+      "description": "The date and time (UTC) at which the push upgrade actually started, in ISO 8601 format. This field is new in API version 51.0."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The status of the push. Valid values are: Canceled Created (default) Failed In Progress Pending Succeeded Don’t specify this value when you create the push request. The default value of Created is used. Later, change the status to Pending to schedule the push upgrade."
+    }
+  },
+  "special_access_rules": "To initiate a push upgrade for a first-generation managed package, the Upload AppExchange Packages user permission is required. To initiate a push upgrade for an unlocked or second-generation managed package, the Create and Update Second-Generation Packages user permission is required. The push upgrade feature is only available to first- and second-generation managed packages that have passed AppExchange security review, and unlocked packages. To enable push upgrades for your managed package, log a support case in the Salesforce Partner Community. For unlocked packages, push upgrades are enabled by default.\n\nTo initiate a push upgrade for a first-generation managed package, the Upload AppExchange Packages user permission is required.\n\nTo initiate a push upgrade for an unlocked or second-generation managed package, the Create and Update Second-Generation Packages user permission is required.\n\nThe push upgrade feature is only available to first- and second-generation managed packages that have passed AppExchange security review, and unlocked packages. To enable push upgrades for your managed package, log a support case in the Salesforce Partner Community.\n\nFor unlocked packages, push upgrades are enabled by default.",
+  "usage": "Suppose that you want to push version 3.4.6 of your package to all orgs. You’ve already identified the orgs eligible for the upgrade by using MetadataPackageVersion. Now let’s write some code to create a push request, which holds a push job for each eligible org. This code sample uses the Web Services Connector (WSC). Or, if you’re using REST API, submit a POST request to the PackagePushRequest sObject endpoint, as in the following example. SOAP API is also supported. As your next step, create a push job for each eligible subscriber you want to upgrade using PackagePushJob. Scheduling the Push Upgrade To signal that the push upgrade is ready to be processed, change the status of the push request to Pending. If you didn’t set a ScheduledStartTime, the push upgrade starts immediately after you change the status. If you’re using REST API, submit a PATCH request to the PackagePushRequest sObject endpoint, as in the following example. SOAP API is also supported. Checking the Status of a Push Request You can also check the status of a job by querying the PackagePushJob’s Status field. Aborting a Push Request You can abort a package push request by changing its status to Canceled. You can abort a package push request only if its status is Created or Pending. If the abort succeeds, all associated push jobs are also canceled. If you try to abort when the current PackagePushRequest status is Canceled, Succeeded, Failed, or In Progress, the abort doesn’t occur, and an error message is returned.\n\nSuppose that you want to push version 3.4.6 of your package to all orgs. You’ve already identified the orgs eligible for the upgrade by using MetadataPackageVersion. Now let’s write some code to create a push request, which holds a push job for each eligible org.\n\nThis code sample uses the Web Services Connector (WSC).\n\nOr, if you’re using REST API, submit a POST request to the PackagePushRequest sObject endpoint, as in the following example. SOAP API is also supported.\n\nAs your next step, create a push job for each eligible subscriber you want to upgrade using PackagePushJob.\n\nScheduling the Push Upgrade**\n\nTo signal that the push upgrade is ready to be processed, change the status of the push request to Pending. If you didn’t set a ScheduledStartTime, the push upgrade starts immediately after you change the status.\n\nIf you’re using REST API, submit a PATCH request to the PackagePushRequest sObject endpoint, as in the following example. SOAP API is also supported.\n\nChecking the Status of a Push Request**\n\nYou can also check the status of a job by querying the PackagePushJob’s Status field.\n\nAborting a Push Request**\n\nYou can abort a package push request by changing its status to Canceled.\n\nYou can abort a package push request only if its status is Created or Pending. If the abort succeeds, all associated push jobs are also canceled. If you try to abort when the current PackagePushRequest status is Canceled, Succeeded, Failed, or In Progress, the abort doesn’t occur, and an error message is returned."
+}

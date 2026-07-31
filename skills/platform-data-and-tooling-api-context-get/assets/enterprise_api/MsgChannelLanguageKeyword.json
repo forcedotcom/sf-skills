@@ -1,0 +1,185 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "MsgChannelLanguageKeyword - Data API",
+  "description": "Represents the consent configuration for a Messaging channel. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CustomKeywords": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The keywords a Messaging end user can send to receive the Custom Response."
+    },
+    "CustomResponse": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The automated response sent when a Messaging end user sends a Custom Keyword."
+    },
+    "DoubleOptInKeywords": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The keywords a Messaging end user can send to doubly opt in to receiving messages."
+    },
+    "HelpKeywords": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The keywords a Messaging end user can send to request help during a Messaging session."
+    },
+    "HelpResponse": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The automated response sent when a Messaging end user requests help."
+    },
+    "MasterLanguage": {
+      "type": "textarea",
+      "description": "The language used for this consent configuration."
+    },
+    "MessagingChannelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the associated Messaging channel. This is a relationship field.",
+      "relationship_name": "MessagingChannel",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingChannel"
+    },
+    "MessagingChannelUsageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the associated Messaging channel usage record, which is in turn associated with a messaging channel. This is a relationship field.",
+      "relationship_name": "MessagingChannelUsage",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingChannelUsage"
+    },
+    "OptInConfirmation": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The automated response sent when a Messaging end user opts in to receiving messages."
+    },
+    "OptInKeywords": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The keywords a Messaging end user can send to explicitly opt in to receiving messages."
+    },
+    "OptOutConfirmation": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The automated response sent when a Messaging end user opts out of receiving messages."
+    },
+    "OptOutKeywords": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The keywords a Messaging end user can send to opt out of receiving messages."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"MsgChannelLanguageKeyword\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomKeywords\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustomResponse\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DoubleOptInKeywords\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HelpKeywords\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HelpResponse\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MasterLanguage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessagingChannel\" nillable=\"true\" minOccurs=\"0\" type=\"ens:MessagingChannel\"/>\n        <element name=\"MessagingChannelId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MessagingChannelUsage\" nillable=\"true\" minOccurs=\"0\" type=\"ens:MessagingChannelUsage\"/>\n        <element name=\"MessagingChannelUsageId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"OptInConfirmation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptInKeywords\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptOutConfirmation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptOutKeywords\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomKeywords": {
+      "field_label": "Custom Keywords",
+      "type": "textarea",
+      "length": "500"
+    },
+    "CustomResponse": {
+      "field_label": "Custom Response",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DoubleOptInKeywords": {
+      "field_label": "Double Opt-In Keywords",
+      "type": "textarea",
+      "length": "500"
+    },
+    "HelpKeywords": {
+      "field_label": "Help Keywords",
+      "type": "textarea",
+      "length": "500"
+    },
+    "HelpResponse": {
+      "field_label": "Help Response",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "Id": {
+      "field_label": "Messaging Channel Language Keyword ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Modified On",
+      "type": "datetime"
+    },
+    "MasterLanguage": {
+      "field_label": "Language",
+      "type": "textarea",
+      "length": "256"
+    },
+    "MessagingChannelId": {
+      "field_label": "Messaging Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MessagingChannelUsageId": {
+      "field_label": "Messaging Channel Usage ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OptInConfirmation": {
+      "field_label": "Opt-In Confirmation",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "OptInKeywords": {
+      "field_label": "Opt-In Keywords",
+      "type": "textarea",
+      "length": "500"
+    },
+    "OptOutConfirmation": {
+      "field_label": "Opt-Out Confirmation",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "OptOutKeywords": {
+      "field_label": "Opt-Out Keywords",
+      "type": "textarea",
+      "length": "500"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

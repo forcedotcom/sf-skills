@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ProblemRelatedItem - Data API",
+  "description": "Represents a junction object that relates a Problem to an Asset. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The Asset ID that’s linked to the Problem. This field is a relationship field.",
+      "relationship_name": "Asset",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "Comment": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the problem as it relates to the item."
+    },
+    "ImpactLevel": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The related item’s impact on the problem. Possible values are: High Low Medium The default value is High."
+    },
+    "ImpactType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The effect of the problem-related item on business operations. Possible values are: Business-Blocking Not Business-Blocking Partially Business-Blocking The default value is Business-Blocking."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated ID of the problem-related item."
+    },
+    "ProblemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The Problem ID that’s related to the Asset. This field is a relationship field.",
+      "relationship_name": "Problem",
+      "relationship_type": "Lookup",
+      "refers_to": "Problem"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ProblemRelatedItemChangeEvent**: Change events are available for the object.\n- **ProblemRelatedItemFeed**: Feed tracking is available for the object.\n- **ProblemRelatedItemHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Comment": {
+      "field_label": "Comment",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Problem Related Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImpactLevel": {
+      "field_label": "Impact Level",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ImpactType": {
+      "field_label": "Impact Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Problem Related Item Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ProblemId": {
+      "field_label": "Problem ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

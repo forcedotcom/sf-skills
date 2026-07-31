@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsPipelineStageTrigger - Data API",
+  "description": "Defines trigger points within a DevOps pipeline stage where automated validations, test suite executions, and quality gate evaluations can be initiated. It tracks execution history, trigger type, associated records, and the number of linked test suites and quality gates, enabling organizations to enforce testing and quality controls at specific stages of the deployment lifecycle. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "LastExecutionStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates the status of the most recent trigger execution. Possible values are: Error Failed InProgress Passed The default value is Passed."
+    },
+    "LastExecutionTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Stores the date and time when the trigger was most recently executed."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, such as through a related record or list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Stores the name of the pipeline stage trigger."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or queue that owns the pipeline stage trigger record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "QualityGateCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores the number of quality gates associated with this trigger."
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the pipeline or pipeline stage associated with this trigger.",
+      "relationship_name": "RelatedRecord",
+      "refers_to": "DevopsPipeline, DevopsPipelineStage"
+    },
+    "TestSuiteCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores the number of test suites associated with this trigger."
+    },
+    "TriggerType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies when the trigger is executed within the pipeline lifecycle. Possible values are: Post-Promote Pre-Promote Review The default value is Pre-Promote."
+    }
+  }
+}

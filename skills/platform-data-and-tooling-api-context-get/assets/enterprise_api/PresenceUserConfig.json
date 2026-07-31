@@ -1,0 +1,269 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PresenceUserConfig - Data API",
+  "description": "Represents a configuration that determines a presence user’s settings. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AcwExtensionDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum length of time, measured in seconds, an agent can spend on After Conversation Work (ACW) each time they extend the timer. You must set this field if HasAcwExtensionEnabled is set to true. Specify a value from 10 through 3600. This field is available in API version 56.0 and later."
+    },
+    "AfterConvoWorkMaxTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum length of time, measured in seconds, an agent has to complete After Conversation Work (ACW). You must set this field if HasAfterConvoWorkTimer is set to true. Specify a value from 10 through 3600.This field is available in API version 56.0 and later."
+    },
+    "Capacity": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The maximum number of work units an agent can be assigned at one time."
+    },
+    "CustomSoundId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the static resource for the custom sound selected to play for the PresenceUserConfig object.",
+      "relationship_name": "CustomSound",
+      "relationship_type": "Lookup",
+      "refers_to": "StaticResource"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization.When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "HasAcwExtensionEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If set to true, agents can extend their After Conversation Work (ACW) time. Available only if HasAfterConvoWorkTimer is set to true. If set to true, you must also set the AcwExtensionDuration and MaxExtensions fields. The default value is true.This field is available in API version 56.0 and later."
+    },
+    "HasAfterConvoWorkTimer": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If set to true, After Conversation Work (ACW) time can be configured for the channel. If set to true, you must also set the AfterConvoWorkMaxTime field. The default value is false.This field is available in API version 56.0 and later."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the presence configuration."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The label of the presence configuration."
+    },
+    "MaxExtensions": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The maximum number of times an agent can extend their After Work Conversation (ACW) time. Specify a value from 1 through 10. You must set this field if HasAcwExtensionEnabled is set to true.This field is available in API version 56.0 and later."
+    },
+    "OptionsIsAllowAnyDestinationQueueForTransferEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates that a rep can transfer a message from an enhanced Messaging channel to any queue (true) or only the selected queues (false). This field is available in API version 61.0 and later."
+    },
+    "OptionsIsAllowAnyDestinationFlowForTransferEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates that a rep can transfer a message from an enhanced Messaging channel to any flow (true) or only the selected flows (false). This field is available in API version 61.0 and later."
+    },
+    "OptionsIsAllowAnyDestinationProfileForTransferEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates that a rep can transfer a message from an enhanced Messaging channel to any profile (true) or only the selected profiles (false). This field is available in API version 61.0 and later."
+    },
+    "OptionsIsAutoAcceptEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter",
+      "description": "Indicates whether work items that are routed to agents are automatically accepted (true) or not (false). Available only if OptionsIsDeclineEnabled is set to false."
+    },
+    "OptionsIsDeclineEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter",
+      "description": "Indicates whether agents can decline work items that are routed to them (true) or not (false). Available only if OptionsIsAutoAcceptEnabled is set to false."
+    },
+    "OptionsIsDeclineReasonEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter",
+      "description": "Indicates whether agents can select a reason for declining work requests (true) or not (false). This can be selected only if decline reasons are enabled."
+    },
+    "OptionsIsDisconnectSoundEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter",
+      "description": "Indicates whether a sound is played when agents are disconnected from Omni-Channel (true) or not (false)."
+    },
+    "OptionsIsRequestSoundEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter",
+      "description": "Indicates whether a sound plays with incoming work requests (true) or not (false). Set to true by default."
+    },
+    "PresenceStatusOnDeclineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the presence status that’s automatically assigned to the agent when the agent declines a work item. Available only if OptionsIsDeclineEnabled is set to true."
+    },
+    "PresenceStatusOnPushTimeoutId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the presence status that’s automatically assigned to the agent when the agent doesn’t respond to a work item before push timeout occurs. Available in API version 36.0 and later."
+    },
+    "SoundLength": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The length of time that a sound plays when new work is assigned to an agent."
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled. As of Spring ’20 and later, only authenticated internal and external users can access this object.\n\nTo access this object, Omni-Channel must be enabled.\n\nAs of Spring ’20 and later, only authenticated internal and external users can access this object.",
+  "field_reference": {
+    "AcwExtensionDuration": {
+      "field_label": "Extension duration (seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "AfterConvoWorkMaxTime": {
+      "field_label": "Duration (seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "Capacity": {
+      "field_label": "Capacity",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomSoundId": {
+      "field_label": "Static Resource ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "HasAcwExtensionEnabled": {
+      "field_label": "Let agent extend timer",
+      "type": "boolean"
+    },
+    "HasAfterConvoWorkTimer": {
+      "field_label": "Give agents wrap-up time after conversations",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Presence Configuration ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InterruptibleCapacity": {
+      "field_label": "Interruptible Capacity",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Presence Configuration Name",
+      "type": "string",
+      "length": "80"
+    },
+    "MaxExtensions": {
+      "field_label": "Max Extensions",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OptionsIsAllowAnyDestinationFlowForTransferEnabled": {
+      "field_label": "IsAllowAnyDestinationFlowForTransferEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsAllowAnyDestinationProfileForTransferEnabled": {
+      "field_label": "IsAllowAnyDestinationProfileForTransferEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsAllowAnyDestinationQueueForTransferEnabled": {
+      "field_label": "IsAllowAnyDestinationQueueForTransferEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsAutoAcceptEnabled": {
+      "field_label": "IsAutoAcceptEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsDeclineEnabled": {
+      "field_label": "IsDeclineEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsDeclineReasonEnabled": {
+      "field_label": "IsDeclineReasonEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsDisconnectSoundEnabled": {
+      "field_label": "IsDisconnectSoundEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsRequestSoundEnabled": {
+      "field_label": "IsRequestSoundEnabled",
+      "type": "boolean"
+    },
+    "PresenceStatusOnDeclineId": {
+      "field_label": "Service Presence Status ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PresenceStatusOnPushTimeoutId": {
+      "field_label": "Service Presence Status ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SoundLength": {
+      "field_label": "Sound Length (Seconds)",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

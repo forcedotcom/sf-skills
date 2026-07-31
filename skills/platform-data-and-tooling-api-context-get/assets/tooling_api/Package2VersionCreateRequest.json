@@ -1,0 +1,105 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "Package2VersionCreateRequest - Tooling API",
+  "description": "Represents a request to create a second-generation managed package or an unlocked package version in a Dev Hub org. Available in API version 41.0 and later.",
+  "supported_soap_calls": "`create()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AsyncValidation": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "If true, a new package version is created before package validations complete. The default value is false.For more information on async validation, see Create and Update Versions of a Second-Generation Managed Package"
+    },
+    "Branch": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The branch to associate with this package version. Can be used to create a tree structure of inheritance. Upon successful creation of a Package2Version, this value is copied to the package version’s Branch field.The default value is null."
+    },
+    "CalculateCodeCoverage": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "If true, code coverage is calculated during package version creation. If false, code coverage isn’t calculated.For second-generation managed packages, a minimum 75% code coverage is required for package version promotion. This field is available in API version 47.0 and later."
+    },
+    "CalcTransitiveDependencies": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, the calculation of the package version’s indirect dependencies is enabled. A package can have multiple levels of dependencies, where pkgC depends on pkgB, and pkgB depends on pkgA, for example. By default, you list all of a package’s dependencies, including indirect (transitive) dependencies. When CalcTransitiveDependencies is set to true, you specify a package’s direct dependencies only, and the indirect dependencies are calculated for you. See Create Dependencies Between Second-Generation Managed Packages in the Second-Generation Managed Packaging Developer Guide. CalcTransitiveDependencies also enables you to generate a hierarchical graph of a package version’s dependencies. To generate the dependencies graph, run the package version displaydependencies CLI command. See package version displaydependencies in the Salesforce CLI Command Reference. The default value is false."
+    },
+    "DependencyGraphJson": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "If CalcTransitiveDependencies is set to true, DependencyGraphJson is auto-populated with information about the package’s dependencies when you create a new package version. If CalcTransitiveDependencies is false, the default value is null."
+    },
+    "InstallKey": {
+      "type": "encryptedstring",
+      "properties": "Create, Nillable",
+      "description": "Installation key for installing a key-protected package. The default is null.Used only on insert. If you query for this value, null is always returned (for security reasons). The default value is null."
+    },
+    "IsConversionRequest": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, this package version is being converted from a first-generation managed package to a second-generation managed package. The default value is false. This field is available in API version 64.0 and later."
+    },
+    "IsDevUsePkgZipRequested": {
+      "type": "boolean",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "If true, a downloadable package zip file containing package metadata is generated when a new package version is created. The default value is false."
+    },
+    "IsPasswordProtected": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether installation of this package version requires the user to provide an installation key (true) or not (false).The default value is null."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language for the package. The picklist values match the Fully Supported Languages listed in Salesforce Help. If no language is specified, the language defaults to the language of the Dev Hub user who created the package. This field is available in API version 57.0 and later."
+    },
+    "Package2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A reference to an ID for the Package2 to create a version of.The default value is null."
+    },
+    "Package2VersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A reference to an ID for the Package2Version that this request creates (starts with 05i).The default value is null."
+    },
+    "SkipValidation": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "If true, validation is skipped during package version creation. Skipping validation reduces the time it takes to create a new package version, but package versions created without validation can’t be promoted to the released state. This field is available in API version 48.0 and later.The default value is false. You can't specify both skip validation and code coverage, because code coverage is calculated during validation."
+    },
+    "SourceOrg": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the org whose shape (features, settings, limits, and licenses) information is used for creating scratch orgs used to validate metadata during creation of a second-generation managed package or unlocked package. This field is available in API version 50.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the Package2Version creation request. Valid values include: Queued Initializing Verifying Features and Settings Verifying Dependencies Verifying Metadata Finalizing PackageVersion Error Success The preceding values are listed in the order they appear during a Package2Version create request. The default value is null."
+    },
+    "Tag": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Optional tags for the package version.The default value is null."
+    },
+    "VersionInfo": {
+      "type": "base64",
+      "properties": "Create",
+      "description": "The blob that stores details about the package version. The default value is null. Note: When you query Package2VersionCreateRequest, data from VersionInfo isn’t returned."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExtlRecShrOpportunity - Data API",
+  "description": "Represents the opportunity for Partner Connect in the vendor org if you’re a partner and the partner org if you’re the vendor. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ExtlRecShrCnctId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the external record share connection. This field is a relationship field.",
+      "relationship_name": "ExtlRecShrCnct",
+      "refers_to": "ExtlRecShrCnct"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated opportunity. This field is a relationship field.",
+      "relationship_name": "Opportunity",
+      "relationship_type": "Master-detail",
+      "refers_to": "Opportunity (the master object)"
+    }
+  },
+  "special_access_rules": "To see this object, enable Partner Connect or Partner Connect for Vendors. See Set Up Partner Connect as a Partner and Set Up Partner Connect as a Vendor in Salesforce Help."
+}

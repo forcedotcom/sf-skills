@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "UserAccountTeamMember - Data API",
+  "description": "Represents a User on the default account team of another User.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Restricted picklist, Update",
+      "description": "For Account records that the user has added to his or her default account team, the level of access the account team member has. . The possible values are: Read Edit This field must be set to an access level that is higher than the organization’s default access level for accounts.",
+      "required": true
+    },
+    "CaseAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Restricted picklist, Update",
+      "description": "Level of access that the account team member has to Case records related to the account. The possible values are: None Read Edit This field must be set to an access level that is higher than the organization's default access level for cases.",
+      "required": true
+    },
+    "ContactAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Restricted picklist, Update",
+      "description": "ForContact records related to the account, the level of access that the account team member has. The possible values are: None Read Edit This field must be set to an access level that is higher than the organization's default access level for contacts. When DefaultContactAccess is set to Controlled by Parent, you can’t create or update this field.",
+      "required": true
+    },
+    "OpportunityAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Restricted picklist, Update",
+      "description": "Level of access that the team member has to Opportunity records related to the account. The possible values are: None Read Edit This field must be set to an access level that is higher than the organization’s default access level for opportunities.",
+      "required": true
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the User who owns the default account team.",
+      "required": true
+    },
+    "TeamMemberRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Role that the team member has on opportunities for which the user has added his or her default account team. The valid values are set by the organization’s administrator in the Account Team Roles picklist. Label is Team Role."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the User who is a member of the default account team. This field cannot be updated.",
+      "required": true
+    }
+  },
+  "special_access_rules": "Customer Portal and Chatter Free users can't access this object.",
+  "usage": "This object is available only in organizations that have enabled the account teams functionality, which can be done using the user interface."
+}

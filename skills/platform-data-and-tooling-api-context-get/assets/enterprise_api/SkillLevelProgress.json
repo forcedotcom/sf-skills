@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "SkillLevelProgress - Data API",
+  "description": "Represents training progress for a given user. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CompletedCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Number of modules that have been completed towards this Skill Mapping."
+    },
+    "CompletedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when this progress was completed."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of skill level progress. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ServiceResourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Service Resource that will be granted a service resource skill when the progress is complete. This is a relationship field.",
+      "relationship_name": "ServiceResource",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceResource"
+    },
+    "SkillLevelDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The corresponding skill mapping for this progress. This is a relationship field.",
+      "relationship_name": "SkillLevelDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "SkillLevelDefinition"
+    },
+    "SkillMasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The master label of the Skill associated with the associated SkillLevelDefinition."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Represents the status of the progress. Possible values are: A—Approved R—Review S—Started The default value is 'S'."
+    },
+    "TotalCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The total number of modules that need to be completed."
+    }
+  },
+  "special_access_rules": "The org must have a Workforce Engagement license and an Enablement Sites (myTrailhead) license. User must have at least one Workforce Engagement permission set assigned to them: Workforce Engagement Analyst, Workforce Engagement Planner, Workforce Engagement Agent.\n\nThe org must have a Workforce Engagement license\n         and an Enablement Sites (myTrailhead) license. User must have at least one Workforce\n         Engagement permission set assigned to them: Workforce Engagement Analyst, Workforce\n         Engagement Planner, Workforce Engagement Agent.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SkillLevelProgressOwnerSharingRule**: Sharing rules are available for the object.\n- **SkillLevelProgressShare**: Sharing is available for the object."
+}

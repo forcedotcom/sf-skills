@@ -1,0 +1,183 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "LightningPrfmEventLog - Data API",
+  "description": "Lightning Performance events track trends in Lightning Experience and Salesforce mobile app performance. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "example",
+    "possible_values"
+  ],
+  "fields": {
+    "AppName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the application that the user accessed."
+    },
+    "BrowserName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the browser that the user accessed.",
+      "example": "Chrome, Safari"
+    },
+    "BrowserVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version of the browser that the user accessed in major.minor version format. Some browsers don’t provide a minor version."
+    },
+    "ClientGeolocation": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The geolocation of the client in the form of <Country>/<State|Province>.",
+      "example": "United States/California"
+    },
+    "ClientIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API client ID."
+    },
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "ConnectionType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of connection.",
+      "possible_values": "CDMA1x CDMA EDGE EVDO0 EVDOA EVDOB GPRS HRPD HSDPA HSUPA LTE WIFI"
+    },
+    "DeviceIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier used to identify a device when tracking events. DEVICE_ID is a generated value that’s created when the mobile app is initially run after installation."
+    },
+    "DeviceModel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the device model.",
+      "example": "iPad, iPhone"
+    },
+    "DevicePlatform": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of application experience in name:experience:form format.",
+      "possible_values": "name: APP_BUILDER, CUSTOM, S1, SFX experience: BROWSER, HYBRID form: DESKTOP, PHONE, TABLET"
+    },
+    "DeviceSessionIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier of the user’s session based on page load time. When the user reloads a page, a new session is started.",
+      "example": "321a1ddfaf924803a075f1e69fc87bc06f53ccd0"
+    },
+    "Duration": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The duration in milliseconds since the page start time."
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a user’s login session. It starts with a login event and ends with either a logout event or the user session expiring.",
+      "example": "GeJCsym5eyvtEK2I"
+    },
+    "MobileSdkAppType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The mobile SDK application type.",
+      "possible_values": "HYBRID HYBRIDLOCAL HYBRIDREMOTE NATIVE REACTNATIVE"
+    },
+    "MobileSdkVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The mobile SDK application version number."
+    },
+    "OperatingSystemName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The operating system name, derived from USER_AGENT."
+    },
+    "OperatingSystemVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The operating system version, derived from USER_AGENT."
+    },
+    "PageStartTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time when the page was initially loaded, measured in milliseconds."
+    },
+    "PageUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Relative URL of the top-level Lightning Experience or Salesforce mobile app page that the user opened. The page can contain one or more Lightning components."
+    },
+    "PreviousPageUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The relative URL of the previous Lightning Experience or Salesforce mobile app page that the user opened."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID."
+    },
+    "SdkAppVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Mobile SDK application version."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The hash of the session ID to allow tracking of all events in a session."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT."
+    },
+    "UiEventIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Id of the Lightning event type."
+    },
+    "UiEventSource": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The source of the performance event."
+    },
+    "UiEventTimestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp of when event occurred."
+    },
+    "UiEventType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of performance event."
+    },
+    "UserAgent": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The client user agent string."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943"
+    },
+    "UserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The category of user license of the user accessing Salesforce services through the UI or API."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Custom Metadata Type__mdt - Data API",
+  "description": "Represents a custom metadata record. This object is available in API version 34.0 and later.",
+  "fields_columns": [
+    "description"
+  ],
+  "fields": {
+    "Custom Field__c": {
+      "description": "Type: Any Type Properties: Filter, Group, Nillable, Sort Description: A custom field on the record."
+    },
+    "DeveloperName": {
+      "description": "Type: string Properties: Defaulted on create, Filter, Group, Sort Description: The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization."
+    },
+    "isProtected": {
+      "description": "Type: boolean Properties: Defaulted on create, Filter, Group, Sort Description: When a custom metadata type’s records are released in a managed package, access to them is limited in specific ways. Code that’s in the same managed package as custom metadata records can read the records. Code that’s in the same managed package as custom metadata types can read the records that belong to that type. Code that’s in a managed package that doesn’t contain either the type or the protected record can’t read the protected records. Code that the subscriber creates and code that’s in an unmanaged package can’t read the protected records. The developer can modify protected records only with a package upgrade. The subscriber can’t read or modify protected records. The developer name of a protected record can’t be changed after release. Records that are hidden by these access rules are also unavailable to REST, SOAP, SOQL, and Setup."
+    },
+    "Label": {
+      "description": "Type: picklist Properties: Filter, Group, Nillable, Sort Description: The custom metadata record label. This label value is always the same as the MasterLabel value."
+    },
+    "Language": {
+      "description": "Type: string Properties: Filter, Group, restrictedPicklist, Sort Description: The language of the custom metadata record. This value is always the default language of the developing organization."
+    },
+    "MasterLabel": {
+      "description": "Type: string Properties: Filter, Group, Sort Description: The primary label for the custom metadata record."
+    },
+    "NamespacePrefix": {
+      "description": "Type: string Properties: Filter, Group, Nillable, Sort Description: The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation."
+    },
+    "QualifiedApiName": {
+      "description": "Type: string Properties: Filter, Group, Nillable, Sort Description: A concatenation of the namespace prefix and developer name. The format is NamespacePrefix__DeveloperName."
+    },
+    "SystemModStamp": {
+      "description": "Type: dateTime Properties: Defaulted on create, Filter, Sort Description: Date and time when a user or automated process such as a trigger last modified this record. In this context, trigger refers to Salesforce code that runs to implement standard functionality, and not an Apex trigger. This field is available In API version 56.0 and later."
+    }
+  }
+}

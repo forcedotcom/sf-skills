@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SymbolTable - Tooling API",
+  "description": "A complex type that represents all user-defined tokens in the Body of an ApexClass, ApexClassMember, or ApexTriggerMember and their associated line and column locations within the Body.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "constructors": {
+      "type": "array of Constructor",
+      "description": "Contains the position, scope, and signature of constructors for the Apex class. Apex triggers don't have constructors. Constructor includes the following fields: annotations location modifiers name references visibility (available only in API versions 33.0 and earlier; scope: Global, Public, or Private) parameters"
+    },
+    "externalReferences": {
+      "type": "array of ExternalReference",
+      "description": "Contains the name, namespace, external class, method, and variable references for the Apex class or trigger. These references can be used for symbol highlighting or code navigation. ExternalReference includes the following fields: methods name namespace references variables"
+    },
+    "innerClasses": {
+      "type": "array of SymbolTable",
+      "description": "Contains a symbol table for each inner class of the Apex class or trigger."
+    },
+    "interfaces": {
+      "type": "array of String",
+      "description": "Contains a set of strings for each interface with the namespace and name, for example: ['System.Batchable', 'MyNamespace.MyInterface']."
+    },
+    "methods": {
+      "type": "array of Method",
+      "description": "Contains the position, name, scope, signature, and return type of available Apex methods. Method includes the following fields: annotations location modifiers name references visibility (available only in API versions 33.0 and earlier; scope: Global, Public, or Private) parameters returnType"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the Apex class or trigger."
+    },
+    "namespace": {
+      "type": "string",
+      "description": "The namespace of the Apex class or trigger. Null if there is no namespace."
+    },
+    "parentClass": {
+      "type": "string",
+      "description": "Returns parents of inner classes and extending classes."
+    },
+    "properties": {
+      "type": "array of VisibilitySymbol",
+      "description": "Contains the position, name, scope, and references of properties for the Apex class or trigger. VisibilitySymbol includes the following fields: annotations location modifiers name references visibility (available only in API versions 33.0 and earlier; scope: Global, Public, or Private)"
+    },
+    "tableDeclaration": {
+      "type": "array of Symbol",
+      "description": "Contains the position, name, and references of the Apex class or trigger. Symbol includes the following fields: annotations location modifiers name references"
+    },
+    "variables": {
+      "type": "array of Symbol",
+      "description": "Contains the position, name, and references of related variables. Symbol includes the following fields: annotations location modifiers name references"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Annotation\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ApexClassMember\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:ApexClass\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"ApexClass\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:PackageVersion\"/>\n        <xsd:element name=\"status\" type=\"tns:ApexCodeUnitStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ApexTriggerMember\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:ApexTrigger\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"ApexTrigger\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:PackageVersion\"/>\n        <xsd:element name=\"status\" type=\"tns:ApexCodeUnitStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Constructor\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:VisibilitySymbol\">\n      <xsd:sequence>\n        <xsd:element name=\"parameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Parameter\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExternalConstructor\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:ExternalSymbol\">\n      <xsd:sequence>\n        <xsd:element name=\"methodDoc\" type=\"xsd:string\"/>\n        <xsd:element name=\"parameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Parameter\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExternalMethod\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:ExternalConstructor\">\n      <xsd:sequence>\n        <xsd:element name=\"argTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"isStatic\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"returnType\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ExternalReference\">\n  <xsd:sequence>\n    <xsd:element name=\"methods\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExternalMethod\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"namespace\" type=\"xsd:string\"/>\n    <xsd:element name=\"references\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Position\"/>\n    <xsd:element name=\"variables\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExternalSymbol\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExternalSymbol\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"references\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Position\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Method\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Constructor\">\n      <xsd:sequence>\n        <xsd:element name=\"returnType\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Parameter\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Position\">\n  <xsd:sequence>\n    <xsd:element name=\"column\" type=\"xsd:int\"/>\n    <xsd:element name=\"line\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Symbol\">\n  <xsd:sequence>\n    <xsd:element name=\"annotations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Annotation\"/>\n    <xsd:element name=\"location\" type=\"tns:Position\"/>\n    <xsd:element name=\"modifiers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"references\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Position\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SymbolTable\">\n  <xsd:sequence>\n    <xsd:element name=\"constructors\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Constructor\"/>\n    <xsd:element name=\"externalReferences\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExternalReference\"/>\n    <xsd:element name=\"id\" type=\"xsd:string\"/>\n    <xsd:element name=\"innerClasses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SymbolTable\"/>\n    <xsd:element name=\"interfaces\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"methods\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Method\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"namespace\" type=\"xsd:string\"/>\n    <xsd:element name=\"parentClass\" type=\"xsd:string\"/>\n    <xsd:element name=\"properties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:VisibilitySymbol\"/>\n    <xsd:element name=\"tableDeclaration\" type=\"tns:Symbol\"/>\n    <xsd:element name=\"variables\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Symbol\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"VisibilitySymbol\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Symbol\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,33 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "TwoFactorInfo - Data API",
+  "description": "Stores a user’s secret for multi-factor operations. Use this object when customizing multi-factor authentication in your organization. (Note that multi-factor authentication was formerly called two-factor authentication.) This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "SharedKey": {
+      "type": "string",
+      "properties": "Create, Group, Sort, Update",
+      "description": "This field is never read-enabled, though it is write-enabled. A request for this value always returns null. The value must be a base32-encoded string of a 20-byte secret. You can use the Apex method Auth.SessionManagement.getQrCode() to get a value to write to this field. Note: If you write a secret to this field, in API version 37.0 and later the user gets an email notification that a new identity verification method was added to the user’s account."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The multi-factor method. TOTP—The time-based one-time password."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID for the user who’s associated with the authentication secret."
+    }
+  },
+  "special_access_rules": "You need the Manage Multi-Factor Authentication in API permission to create or update this object."
+}

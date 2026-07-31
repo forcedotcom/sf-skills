@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsTestSuiteStage - Data API",
+  "description": "Represents the association between a Test Suite and a Pipeline Stage within the DevOps process. It is used to configure which test suites are executed at specific pipeline stages and optionally link quality gates that must be evaluated before progressing through the deployment pipeline. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DevopsPipelineStageTriggerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the pipeline stage trigger with which this test suite stage is associated.",
+      "relationship_name": "DevopsPipelineStageTrigger",
+      "refers_to": "DevopsPipelineStageTrigger"
+    },
+    "DevopsQualityGateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the quality gate that can be applied to validate deployment criteria for this stage.",
+      "relationship_name": "DevopsQualityGate",
+      "refers_to": "DevopsQualityGate"
+    },
+    "IsQualityGateEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the associated quality gate is enabled and enforced for this test suite stage."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique identifier (auto-number) for the DevOps Test Suite Stage record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or queue that owns this DevOps Test Suite Stage record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "TestSuiteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the DevOps Test Suite that is linked to this pipeline stage.",
+      "relationship_name": "TestSuite",
+      "refers_to": "DevopsTestSuite"
+    }
+  }
+}

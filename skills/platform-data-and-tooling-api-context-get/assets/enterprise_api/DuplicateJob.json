@@ -1,0 +1,73 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "DuplicateJob - Data API",
+  "description": "Represents an instance of a job that identifies duplicates among existing records in the system.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DuplicateJobDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The ID of the corresponding duplicate job definition."
+    },
+    "DuplicateJobStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The current status of a duplicate job. Valid values are Not Started, In Progress, Completed, Canceled, Failed, Results Deleted."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when a duplicate job was completed."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when a duplicate job was last referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when a duplicate job was last viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort, Update",
+      "description": "The name of a duplicate job."
+    },
+    "NumDuplicateRecordItems": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The total number of duplicate records identified as a result of invoking a duplicate job."
+    },
+    "NumDuplicateRecordSets": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of duplicate record sets identified as a result of invoking a duplicate job."
+    },
+    "NumRecordsScanned": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of records scanned as a result of invoking a duplicate job."
+    },
+    "ResultListViewId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "List view metadata for displaying the duplicate record sets identified as result of invoking a duplicate job."
+    },
+    "StartDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time when a duplicate job was invoked."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users with the View Setup and Configuration permission can access this object."
+}

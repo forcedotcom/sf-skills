@@ -1,0 +1,151 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "VoiceCallRecording - Data API",
+  "description": "Represents a call recording in Salesforce Voice and Sales Dialer. Call recordings for Salesforce Voice with Amazon Connect and for Salesforce Voice with Partner Telephony from Amazon Connect are stored in S3 buckets on your Amazon Web Services (AWS) account and can be accessed via AWS. Call recordings for Sales Dialer are saved as files in Salesforce.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DurationInSeconds": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The total length (in seconds) of the voice call recording. This value depends on which parameters are passed to the PATCH /telephony/v1/voiceCalls/{CALL ID} API. If the totalRecordingDuration parameter is passed, then DurationInSeconds = totalRecordingDuration. If the agentInteractionDuration and totalHoldDuration parameters are passed, then DurationInSeconds = agentInteractionDuration + totalHoldDuration. If the agentInteractionDuration, totalHoldDuration, and totalRecordingDuration parameters are passed, then DurationInSeconds = totalRecordingDuration."
+    },
+    "IntelligenceScore": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The intelligence score of the recording."
+    },
+    "IsConsented": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether the call recording was indicated as consented or not."
+    },
+    "MediaContentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related media content, a ContentDocument. The record counts toward your org’s file storage quota. This is a relationship field.",
+      "relationship_name": "MediaContent",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentDocument"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the call recording file."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the owner of the call recording. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "UploadDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time and date that the recording was uploaded."
+    },
+    "VoiceCallId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related phone call. The property nillable has been removed in API version 50.0 and later. This is a relationship field.",
+      "relationship_name": "VoiceCall",
+      "relationship_type": "Lookup",
+      "refers_to": "VoiceCall",
+      "required": true
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only your Salesforce org's internal users can access this object.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **VoiceCallRecordingChangeEvent (API version 48.0)**: Change events are available for the object.\n- **VoiceCallRecordingOwnerSharingRule**: Sharing rules are available for the object. Removed in API version 50.0 and later.\n- **VoiceCallRecordingShare**: Sharing is available for the object. Removed in API version 50.0 and later.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DurationInSeconds": {
+      "field_label": "Duration in Seconds",
+      "type": "int",
+      "digits": "8"
+    },
+    "Id": {
+      "field_label": "Voice Call Recording ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IntelligenceScore": {
+      "field_label": "Intelligence Score",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsConsented": {
+      "field_label": "Is Consented",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MediaContentId": {
+      "field_label": "Content Document ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Voice Call Recording Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UploadDateTime": {
+      "field_label": "Upload DateTime",
+      "type": "datetime"
+    },
+    "VoiceCallId": {
+      "field_label": "Voice Call ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

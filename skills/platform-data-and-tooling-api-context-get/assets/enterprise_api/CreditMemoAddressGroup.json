@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "CreditMemoAddressGroup - Data API",
+  "description": "Stores the buyer's address information, which is used to determine the amount of tax to credit to a buyer when a credit memo is issued. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Buyer’s address."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Buyer's city."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Buyer's country."
+    },
+    "CreditMemoAddressGroupNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number, such as 0000123, that represents the address group."
+    },
+    "CreditMemoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the credit memo associated with the address group. This field is a relationship field.",
+      "relationship_name": "CreditMemo",
+      "relationship_type": "Lookup",
+      "refers_to": "CreditMemo"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code associated with the credit memo. The default value is USD."
+    },
+    "GeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The accuracy rating for the geocode of the address group. An accuracy rating contains information about the location of a latitude and longitude. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this address group."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this address group."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Latitude of the buyer’s address."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Longitude of the buyer’s address."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The buyer’s postal code or ZIP code."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The buyer’s state."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The buyer’s street number and name."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CreditMemoAddressGroupHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "Address": {
+      "field_label": "Address",
+      "type": "address"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreditMemoAddressGroupNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreditMemoId": {
+      "field_label": "Credit Memo ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "GeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Credit Memo Address Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "PostalCode": {
+      "field_label": "Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "string",
+      "length": "80"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

@@ -1,0 +1,872 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OrderSummary - Data API",
+  "description": "Represents the current properties and state of an order. Corresponds to one or more order objects, consisting of an original object and any change objects applicable to it. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the account or person account associated with the OrderSummary. It represents the shopper in the storefront. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "ActiveProcessExceptionCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of active process exceptions on the OrderSummary. This field is available in API version 50.0 and later."
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Billing address associated with the OrderSummary. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Billing address city."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Billing address country."
+    },
+    "BillingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO country code for the billing address. The default value is US."
+    },
+    "BillingEmailAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email address on the billing address."
+    },
+    "BillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The accuracy of the geocode for the billing address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLongitude to specify the precise geolocation of the billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLatitude to specify the precise geolocation of the billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "BillingPhoneNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number of the billing address."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Billing address postal code."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Billing address state."
+    },
+    "BillingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ISO state or province code for the billing address."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Billing address street."
+    },
+    "BillToContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the Contact associated with the OrderSummary. It represents the shopper in the storefront when not using person accounts. If the OrderLifeCycleType field is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field. This field is available in API version 49.0 and later.",
+      "relationship_name": "BillToContact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "BusinessModel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The business model of the OrderSummary. Possible values are: B2B B2C This field is available in API version 53.0 and later."
+    },
+    "ChangeOrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only with the multicurrency feature enabled. Contains the ISO code for the currency of the original Order associated with the OrderSummary. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD. This field is available in API version 49.0 and later."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the OrderSummary. This field can be edited."
+    },
+    "EffectiveDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Date at which the order becomes effective. Label is Order Start Date. This field is available in API version 64.0 and later."
+    },
+    "ExternalReferenceIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Used internally to prevent duplicate records. This value is case-sensitive. In API version 56.0 and later, for orders ingested from B2C Commerce, this value is set to B2C realm ID + \"_\" + B2C instance ID + \"@\" + B2C Commerce catalog/domain ID + \"@\" + B2C Commerce order number. In API version 55.0, the standard B2C Commerce integration set this value to \"SFDC\" + \"@\" + nanotime + \"@\" + UUID and High Scale Orders set it to the value used in later versions. This field is available in API version 54.0 and later."
+    },
+    "GrandTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount, including adjustments and tax, of the OrderSummary."
+    },
+    "IsSuspended": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the OrderSummary is suspended. The default value is false. This field is available in API version 50.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "OperationInProgress": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Current operation. Possible values are: Cancellation None"
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. A null value can mean that this record has only been referenced (LastReferencedDate) and not viewed."
+    },
+    "OrderedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date of the original order associated with this OrderSummary. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "OrderLifeCycleType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies whether the OrderSummary is managed by Salesforce Order Management (MANAGED) or by an external system (UNMANAGED). An unmanaged OrderSummary is stored in Salesforce for reference purposes. Some Order Management APIs reject input records that are associated with unmanaged OrderSummaries. Order Management does not update financial bucket fields on some records that are associated with unmanaged OrderSummaries. A user with the EditUnmanagedOrderSummaries or B2BCommerceIntegrator permission can edit certain fields on objects related to unmanaged OrderSummaries that are normally only accessible via APIs. Possible values are: MANAGED—Managed UNMANAGED—Unmanaged This field is available in API version 49.0 and later."
+    },
+    "OrderNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the OrderSummary."
+    },
+    "OrderProductLineCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of unique products ordered on this Order Summary. This field is available in API version 52.0 and later."
+    },
+    "OriginalOrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the original order associated with this OrderSummary. Label is Original Order. This field is a relationship field.",
+      "relationship_name": "OriginalOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who currently owns this OrderSummary. Default value is the ID of the user who created the record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PoDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Purchase order date associated with this OrderSummary. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field. This field is available in API version 52.0 and later."
+    },
+    "PoNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Purchase order number associated with this OrderSummary. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field."
+    },
+    "Pricebook2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the pricebook associated with this OrderSummary. This field is available in API version 54.0 and later. This field is a relationship field.",
+      "relationship_name": "Pricebook2",
+      "relationship_type": "Lookup",
+      "refers_to": "Pricebook2"
+    },
+    "RoutingAttempts": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of attempts that have been made to route the order summary to inventory locations. This field is available in API version 51.0 and later."
+    },
+    "SalesChannelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the SalesChannel associated with this OrderSummary. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field. This field is a relationship field.",
+      "relationship_name": "SalesChannel",
+      "relationship_type": "Lookup",
+      "refers_to": "SalesChannel"
+    },
+    "SalesStoreId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the RetailStore or WebStore associated with this OrderSummary. If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field. This field is a relationship field.",
+      "relationship_name": "SalesStore",
+      "relationship_type": "Lookup",
+      "refers_to": "WebStore"
+    },
+    "SourceProcess": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes the order process that created the OrderSummary. Possible values are: Exchange The OrderSummary was created by an Exchange process OrderOnBehalf The OrderSummary was created by an Order on Behalf Of process Standard The OrderSummary was not created by an Order on Behalf Of or Exchange process This field is available in API version 57.0 and later."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Status of the order summary. Unlike the Status and Status Category fields on the order and FulfillmentOrder objects, this field is optional. We recommend that you use the same values in this picklist that you use in the Status picklist for the order object."
+    },
+    "SourceOrderSummaryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the source order summary that’s associated with this OrderSummary. This field is populated when the SourceProcess of this OrderSummary is an exchange process.",
+      "relationship_name": "SourceOrderSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderSummary"
+    },
+    "TaxLocaleType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The system used to handle tax on the original Order associated with the OrderSummary. Gross usually applies to taxes like value-added tax (VAT), and Net usually applies to taxes like sales tax. Automatic taxes use currency to determine if the tax is added on top of the price (excluded) or included in the price. Possible values are: Gross (displays most prices and taxes as combined values) Net (displays most prices and taxes as separate values) Automatic (displays most prices and taxes as combined or separate, based on the currency) If the OrderLifeCycleType field on the associated OrderSummary is set to UNMANAGED, then users with the Edit Unmanaged Order Summaries or B2B Commerce Integrator user permission can modify this field. This field is available in API version 49.0 and later."
+    },
+    "TotalAdjDeliveryAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of all OrderItemSummaries of type Delivery Charge belonging to this OrderSummary, inclusive of item-level adjustments and tax. This amount is equal to TotalAdjustedDeliveryAmount + TotalAdjustedDeliveryTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalAdjDistAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of distributed adjustments applied to OrderItemSummaries belonging to this OrderSummary. This amount is equal to TotalProductAdjDistAmount plus TotalDeliveryAdjDistAmount."
+    },
+    "TotalAdjDistAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of distributed adjustments applied to OrderItemSummaries belonging to this OrderSummary, inclusive of tax. This amount is equal to TotalAdjDistAmount plus TotalAdjDistTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalAdjDistTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAdjDistAmount."
+    },
+    "TotalAdjFeeAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of all OrderItemSummaries of type Fee belonging to this OrderSummary, inclusive of item-level adjustments and tax. This amount is equal to TotalAdjustedFeeAmount plus TotalAdjustedFeeTaxAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalAdjProductAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total amount of all OrderItemSummaries of type code Product belonging to this OrderSummary, inclusive of item-level adjustments and tax. This amount is equal to TotalAdjustedProductAmount plus TotalAdjustedProductTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalAdjustedDeliveryAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including item-level adjustments but not order-level adjustments or tax, of all OrderItemSummaries of type Delivery Charge belonging to this OrderSummary."
+    },
+    "TotalAdjustedDeliveryTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAdjustedDeliveryAmount."
+    },
+    "TotalAdjustedFeeAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including item-level adjustments but not order-level adjustments or tax, of all OrderItemSummaries of type Fee belonging to this OrderSummary. This field is available in API version 56.0 and later."
+    },
+    "TotalAdjustedFeeTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAdjustedFeeAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalAdjustedProductAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including item-level adjustments but not order-level adjustments or tax, of all OrderItemSummaries of type code Product belonging to this OrderSummary."
+    },
+    "TotalAdjustedProductTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalAdjustedProductAmount."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total, including adjustments but not tax, of all OrderItemSummaries belonging to this OrderSummary. Equal to TotalAdjustedProductAmount plus TotalAdjustedFeeAmount plus TotalAdjustedDeliveryAmount."
+    },
+    "TotalDeliveryAdjDistAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all order-level price adjustments applied to OrderItemSummaries of type Delivery Charge belonging to this OrderSummary. This value includes OrderItemAdjustmentLineSummaries that belong to OrderAdjustmentGroupSummaries of type Header."
+    },
+    "TotalDeliveryAdjDistAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all order-level price adjustments applied to OrderItemSummaries of type Delivery Charge belonging to this OrderSummary, inclusive of tax. This value includes OrderItemAdjustmentLineSummaries that belong to OrderAdjustmentGroupSummaries of type Header. It is equal to TotalDeliveryAdjDistAmount + TotalDeliveryAdjDistTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalDeliveryAdjDistTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalDeliveryAdjDistAmount."
+    },
+    "TotalDeliveryAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of the Total Line Amounts of all OrderItemSummaries of type Delivery Charge belonging to this OrderSummary, not including adjustments or tax. This field is available in API version 54.0 and later."
+    },
+    "TotalDeliveryAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all OrderItemSummaries of type Delivery Charge belonging to this OrderSummary, including tax but not including adjustments. It is equal to TotalDeliveryAmount + TotalDeliveryTaxAmount. This field is available in API version 54.0 and later."
+    },
+    "TotalDeliveryTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalDeliveryAmount. This field is available in API version 54.0 and later."
+    },
+    "TotalFeeAdjDistAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all order-level price adjustments applied to OrderItemSummaries of type Fee belonging to this OrderSummary. This value includes OrderItemAdjustmentLineSummaries that belong to OrderAdjustmentGroupSummaries of type Header. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAdjDistAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all order-level price adjustments applied to OrderItemSummaries of type Fee belonging to this OrderSummary, inclusive of tax. This value includes OrderItemAdjustmentLineSummaries that belong to OrderAdjustmentGroupSummaries of type Header. It is equal to TotalFeeAdjDistAmount + TotalFeeAdjDistTaxAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAdjDistTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalFeeAdjDistAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of the Total Line Amounts of all OrderItemSummaries of type Fee belonging to this OrderSummary, not including adjustments or tax. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all OrderItemSummaries of type Fee belonging to this OrderSummary, including tax but not including adjustments. It is equal to TotalFeeAmount + TotalFeeTaxAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalFeeTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalFeeAmount. This field is available in API version 56.0 and later."
+    },
+    "TotalProductAdjDistAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all order-level price adjustments applied to OrderItemSummaries of type code Product belonging to this OrderSummary. This value includes OrderItemAdjustmentLineSummaries that belong to OrderAdjustmentGroupSummaries of type Header."
+    },
+    "TotalProductAdjDistAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all order-level price adjustments applied to OrderItemSummaries of type code Product belonging to this OrderSummary, inclusive of tax. This value includes OrderItemAdjustmentLineSummaries that belong to OrderAdjustmentGroupSummaries of type Header. It is equal to TotalProductAdjDistAmount + TotalProductAdjDistTaxAmount. This field is available in API version 49.0 and later."
+    },
+    "TotalProductAdjDistTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalProductAdjDistAmount."
+    },
+    "TotalProductAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of the Total Line Amounts of all OrderItemSummaries of type code Product belonging to this OrderSummary, not including adjustments or tax. This field is available in API version 54.0 and later."
+    },
+    "TotalProductAmountWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total of all OrderItemSummaries of type code Product belonging to this OrderSummary, including tax but not including adjustments. It is equal to TotalProductAmount + TotalProductTaxAmount. This field is available in API version 54.0 and later."
+    },
+    "TotalProductTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tax on the TotalProductAmount. This field is available in API version 54.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total tax on all OrderItemSummaries belonging to this OrderSummary. Equal to TotalAdjustedDeliveryTaxAmount plus TotalAdjustedFeeTaxAmount plus TotalAdjustedProductTaxAmount."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderSummaryChangeEvent (API version 62.0)**: Change events are available for the object.\n- **OrderSummaryFeed**: Feed tracking is available for the object.\n- **OrderSummaryOwnerSharingRule**: Sharing rules are available for the object.\n- **OrderSummaryShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActiveProcessExceptionCount": {
+      "field_label": "Active Process Exception Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "BillToContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingAddress": {
+      "field_label": "Billing Address",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingEmailAddress": {
+      "field_label": "Billing Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingPhoneNumber": {
+      "field_label": "Billing Phone Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "BillingPostalCode": {
+      "field_label": "Zip",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingState": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Address",
+      "type": "textarea",
+      "length": "255"
+    },
+    "BusinessModel": {
+      "field_label": "Business Model",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ChangeOrderId": {
+      "field_label": "Change Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1175"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "date"
+    },
+    "ExternalCustomerIdReference": {
+      "field_label": "External Customer Id Reference",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalReferenceIdentifier": {
+      "field_label": "External Reference Identifier",
+      "type": "string",
+      "length": "80"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Order Summary ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsSuspended": {
+      "field_label": "Suspended",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OperationInProgress": {
+      "field_label": "Operation in Progress",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OrderLifeCycleType": {
+      "field_label": "Order Life Cycle Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OrderManagementBillingType": {
+      "field_label": "Order Management Billing Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OrderNumber": {
+      "field_label": "Order Summary Number",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderProductLineCount": {
+      "field_label": "Order Product Line Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "OrderedDate": {
+      "field_label": "Ordered Date",
+      "type": "datetime"
+    },
+    "OriginalOrderId": {
+      "field_label": "Original Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OriginalOrderName": {
+      "field_label": "Original Order Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PoDate": {
+      "field_label": "PO Date",
+      "type": "datetime"
+    },
+    "PoNumber": {
+      "field_label": "PO Number",
+      "type": "string",
+      "length": "80"
+    },
+    "Pricebook2Id": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RoutingAttempts": {
+      "field_label": "Routing Attempts",
+      "type": "int",
+      "digits": "9"
+    },
+    "SalesChannelId": {
+      "field_label": "Sales Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SalesStoreId": {
+      "field_label": "Sales Store ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceOrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceProcess": {
+      "field_label": "Source Process",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxLocaleType": {
+      "field_label": "Tax Locale Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TotalAdjDeliveryAmtWithTax": {
+      "field_label": "Shipping with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjDistAmount": {
+      "field_label": "Order Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjDistAmountWithTax": {
+      "field_label": "Order Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjDistTaxAmount": {
+      "field_label": "Order Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjFeeAmtWithTax": {
+      "field_label": "Fees with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjProductAmtWithTax": {
+      "field_label": "Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedDeliveryAmount": {
+      "field_label": "Shipping",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedDeliveryTaxAmount": {
+      "field_label": "Shipping Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedFeeAmount": {
+      "field_label": "Fees",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedFeeTaxAmount": {
+      "field_label": "Fees Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedProductAmount": {
+      "field_label": "Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedProductTaxAmount": {
+      "field_label": "Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Pretax Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjDistAmount": {
+      "field_label": "Order Shipping Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjDistAmtWithTax": {
+      "field_label": "Order Shipping Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjDistTaxAmount": {
+      "field_label": "Order Shipping Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAmount": {
+      "field_label": "Shipping Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAmountWithTax": {
+      "field_label": "Shipping Subtotal With Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryTaxAmount": {
+      "field_label": "Shipping Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjDistAmount": {
+      "field_label": "Order Fee Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjDistAmtWithTax": {
+      "field_label": "Order Fee Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAdjDistTaxAmount": {
+      "field_label": "Order Fee Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAmount": {
+      "field_label": "Fee Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeAmountWithTax": {
+      "field_label": "Fee Subtotal With Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalFeeTaxAmount": {
+      "field_label": "Fee Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjDistAmount": {
+      "field_label": "Order Product Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjDistAmtWithTax": {
+      "field_label": "Order Product Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjDistTaxAmount": {
+      "field_label": "Order Product Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAmount": {
+      "field_label": "Product Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAmountWithTax": {
+      "field_label": "Product Subtotal With Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductTaxAmount": {
+      "field_label": "Product Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

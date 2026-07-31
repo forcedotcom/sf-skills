@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "AnimationRule - Tooling API",
+  "description": "Represents criteria for determining when an animation is displayed to Path users. Available in API version 46.0 and later.",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AnimationFrequency": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The frequency with which an animation is displayed when a user selects the designated picklist values in a path. Valid values are: always often sometimes rarely A value of always triggers an animation every time. The values often, sometimes, and rarely trigger an animation progressively less frequently.",
+      "required": true
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The developer name for the animation rule. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the animation rule is active (true) or not (false)."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language in the user’s personal settings."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for the animation rule."
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "AnimationRule metadata from the mns namespace.Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "RecordTypeContext": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "An enum to track whether this AnimationRule applies to all record types for the associated sObject, or only to a single or main record type. Valid values are All, Custom, and Master."
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The record type selected for the sObject in which the animation is displayed."
+    },
+    "SobjectType": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The object on which the animation rule is run."
+    },
+    "TargetField": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Name of the field used to determine when to display an animation."
+    },
+    "TargetFieldChangeToValues": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Values used to determine when to display an animation. When a user selects a value in TargetField that matches a value stored in TargetFieldChangeToValues, the animation is displayed."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AnimationRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:AnimationRule\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"AnimationRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"animationFrequency\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordTypeContext\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordTypeName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sobjectType\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetField\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetFieldChangeToValues\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

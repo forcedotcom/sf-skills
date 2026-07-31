@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "ForecastingSrcRecJudgment - Data API",
+  "description": "Represents forecast managers’ judgment of whether they consider an opportunity-related deal to be certain to close. This object is available in API version 59.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The currency code of the judgment. If omitted, the default is USD."
+    },
+    "JudgmentOwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the forecast manager. This field is a relationship field.",
+      "relationship_name": "JudgmentOwner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "JudgmentValue": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Whether the deal is likely to close (IN) or not (OUT)."
+    },
+    "ReferenceObjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the opportunity-related object. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceObject",
+      "relationship_type": "Lookup",
+      "refers_to": "Opportunity"
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the territory that the judgment is on. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceObject",
+      "relationship_type": "Lookup",
+      "refers_to": "Territory2"
+    }
+  },
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Forecasting Source Record Judgment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JudgmentOwnerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "JudgmentValue": {
+      "field_label": "Judgment Value",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ReferenceObjectId": {
+      "field_label": "ReferenceObject ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

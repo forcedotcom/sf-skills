@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "OrderItemRelationship - Data API",
+  "description": "Describes a relationship between order products. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssociatedOrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The unique identifier of the associated order product. This field is a relationship field. In a bundle relationship, this order product is the bundle component.",
+      "relationship_name": "AssociatedOrderItem",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderItem"
+    },
+    "AssociatedOrderItemInventory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "A static enum that describes the associated order item inventory in the OrderItemSummaryRelationship. Possible values are: IncludedInMainInventory—The child product’s inventory is included in the main inventory. NotIncludedInMainInventory—The child product’s inventory isn’t included in the main inventory.",
+      "relationship_name": "AssociatedOrderItemInventory"
+    },
+    "AssociatedOrderItemPricing": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates how the associated order product is priced relative to the main order product. The value is informative; the system doesn’t check whether the associated order product is included in the bundle price. Possible values are: IncludedInBundlePrice—The associated order product’s cost is $0 because it’s included in the bundle’s price. NotIncludedInBundlePrice—The associated order product has a cost because it’s not included in the bundle’s price."
+    },
+    "AssociatedOrderItemRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes the position of the associated order product in the relationship. Possible values are: BundleComponent—The associated order product is part of a bundle. SetComponent—The associated order product is part of a set."
+    },
+    "AssociatedQuantScaleMethod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "How the quantity of the associated order product scales, relative to the main order product. The value is informative; the system doesn’t check whether the scaled quantities are correct. Possible values are: Constant— The associated order’s product quantity remains the same in relation to the main order product’s quantity. For example, the main order product has a quantity of one and the associated order product has a quantity of one. Proportional— The associated order’s product quantity increases or decreases based on the main order product’s quantity. For example, the main order product has a quantity of one and the associated order product has a quantity of two. In other words, there are two associated order products for every one main order product. The default value is Proportional."
+    },
+    "IsPriceInclusive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether child products are included in the root bundle price. If set to true, the price of each child product is zero. The default value is false."
+    },
+    "MainOrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The main order product’s unique identifier. This field is a relationship field. In a bundle relationship, this order product is the bundle parent.",
+      "relationship_name": "MainOrderItem",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderItem"
+    },
+    "MainOrderItemRole": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the role of the main order product in the relationship. Possible values are: Bundle— The main order product is the bundle parent. Set— The main order product is the set parent. Subscription Management doesn’t support the Set value."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the order product relationship."
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier of the related order. This field is a relationship field.",
+      "relationship_name": "Order",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "ProductRelationshipTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The unique identifier of the record that describes the relationship between the main and associated order products. This field is a relationship field.",
+      "relationship_name": "ProductRelationshipType",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductRelationshipType"
+    },
+    "RootOrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The root order item for the order item relationship. In a bundle relationship, the root order item is the root bundle. This field is a relationship field.",
+      "relationship_name": "RootOrderItem",
+      "refers_to": "OrderItem"
+    }
+  },
+  "special_access_rules": "This object is available when Subscription Management or Revenue Cloud is enabled.\n\nThis object is available when Subscription\n         Management or Revenue Cloud is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderItemRelationshipFeed**: Feed tracking is available for the object.\n- **OrderItemRelationshipHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "AssociatedOrderItemId": {
+      "field_label": "Associated Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssociatedOrderItemInventory": {
+      "field_label": "Associated Order Product Inventory",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssociatedOrderItemPricing": {
+      "field_label": "Associated Order Product Pricing",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssociatedOrderItemRole": {
+      "field_label": "Associated Order Product Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AssociatedQuantScaleMethod": {
+      "field_label": "Associated Quantity Scale Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Order Product Relationship ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsPriceInclusive": {
+      "field_label": "Is Price Inclusive",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MainOrderItemId": {
+      "field_label": "Main Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MainOrderItemRole": {
+      "field_label": "Main Order Product Role",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductRelatedComponentId": {
+      "field_label": "Product Related Component ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductRelationshipTypeId": {
+      "field_label": "Product Relationship Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RootOrderItemId": {
+      "field_label": "Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

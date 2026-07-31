@@ -1,0 +1,190 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "RecordAction - Data API",
+  "description": "Represents a relationship between a record and an action, such as a flow. Create a RecordAction for every action that you want to associate with a particular record. Available in API version 42.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionDefinition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Required in Lightning Flow for Service implementations that use version 44.0 or later of the API. The API name of the action to associate with the record; for example, the API name of a flow. Use this field rather than FlowDefinition. To distinguish a quick action from a flow with the same API name, we prepend \"QuickAction\" to the API name of every quick action.",
+      "required": true
+    },
+    "ActionType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Required in Lightning Flow for Service implementations that use version 46.0 or later of the API. The type of action. Possible values are: Flow (default) QuickAction For versions of the API prior to version 46.0, this field is set to Flow.",
+      "required": true
+    },
+    "FlowDefinition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Optional in Lightning Flow for Service implementations using version 42.0 or 43.0 of the API. An upgrade to Winter '19 or later, which uses API version 44.0 or later, copies FlowDefinition to ActionDefinition. For versions 42.0 and 43.0, this field is the API name of the flow that’s associated with the record."
+    },
+    "FlowInterviewId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Optional. The flow interview ID of the paused or completed flow. This field can’t be set in Process Builder. This is a relationship field.",
+      "relationship_name": "FlowInterview",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowInterview"
+    },
+    "IsMandatory": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Optional. Specifies whether the action is mandatory. The default value is false. Note: At runtime, we show a reminder when the user closes a mandatory flow without completing it. We don't show the reminder for quick actions."
+    },
+    "IsUiRemoveHidden": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Optional. Specifies whether the ability to remove the action is hidden in the UI. The default value is false. If true, the UI hides the ability to remove the action. However, actions can still be deleted using the API."
+    },
+    "Order": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The order of the action among all actions associated with this record.",
+      "required": true
+    },
+    "ParticipantRoleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The participant role that's associated with the record action. This field is a polymorphic relationship field and is available in API version 58.0 and later.",
+      "relationship_name": "ParticipantRole",
+      "relationship_type": "Lookup",
+      "refers_to": "ParticipantRole"
+    },
+    "Pinned": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether the action is pinned to the top or bottom of the component. If an action is pinned, users see the Remove option in the UI unless IsUiRemoveHidden is set to true. Possible values are: None (default) Top Bottom",
+      "required": true
+    },
+    "RecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Record associated with the action. In version 46.0 and above, we support most object types. To learn about supported objects, see the Lightning Flow for Service Developer’s Guide. This is a relationship field.",
+      "relationship_name": "Record",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Address, Asset, AssetRelationship, AssignedResource, AssociatedLocation, Campaign, CampaignMember, CarePreauth, CarePreauthItem, Case, ChangeRequest, CollaborationGroup, Contact, ContactRequest, Contract, CoverageBenefit, CoverageBenefitItem, EnhancedLetterhead, Incident, Lead, Location, MemberPlan, OperatingHours, Opportunity, Order, PlanBenefit, PlanBenefitItem, Problem, Pricebook2, PricebookEntry, Product2, ProductItem, ProductItemTransaction, ProductRequest, ProductRequestLineItem, ProductRequired, ProductTransfer, PurchaserPlan, PurchaserPlanAssn, RebateMemberAggregateItem, ResourceAbsence, ResourcePreference, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, ServiceResourceSkill, ServiceTerritory, ServiceTerritoryMember, Shipment, SkillRequirement, SocialPersona, SocialPost, TimeSlot, User, Visit, VoiceCall, WorkOrder, WorkOrderLineItem, WorkType, WorkTypeGroup",
+      "required": true
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The current state of the action. Possible values are: New (default) Paused Complete Started Unlinked—The action was unlinked because the flow was paused and the current record for the flow interview changed. Paused and unlinked statuses do not apply to quick actions. This field can’t be set in Process Builder.",
+      "required": true
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only authenticated internal and external users can access this object.",
+  "usage": "The RecordAction object works with the Actions & Recommendations component in Lightning Experience. Although this junction object can be used to create relationships between records and actions in Salesforce Classic, those relationships can’t be displayed in Salesforce Classic. When an action is deleted that’s referenced in an ActionDefinition or FlowDefinition, the RecordAction object is deleted. RecordAction objects are also deleted when the associated parent record is deleted, or when a flow is paused and the current record context has changed. When an action is completed, the associated RecordAction object is also deleted. Deleted RecordActions are removed from the list when the page is refreshed. For more information about the Actions & Recommendations component and how it works with RecordActions, see the Lightning Flow for Service Developer Guide.\n\nThe RecordAction object works with the Actions & Recommendations component in Lightning Experience. Although this junction object can be used to create relationships between records and actions in Salesforce Classic, those relationships can’t be displayed in Salesforce Classic.\n\nWhen an action is deleted that’s referenced in an ActionDefinition or FlowDefinition, the RecordAction object is deleted. RecordAction objects are also deleted when the associated parent record is deleted, or when a flow is paused and the current record context has changed. When an action is completed, the associated RecordAction object is also deleted.\n\nDeleted RecordActions are removed from the list when the page is refreshed.\n\nFor more information about the Actions & Recommendations component and how it works with RecordActions, see the Lightning Flow for Service Developer Guide*.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **RecordActionHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"RecordAction\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActionDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActionType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FlowDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowInterview\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowInterview\"/>\n        <element name=\"FlowInterviewId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsMandatory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsUiRemoveHidden\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Order\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Pinned\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Record\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"RecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ActionDefinition": {
+      "field_label": "Action Definition",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ActionType": {
+      "field_label": "Action Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "FlowDefinition": {
+      "field_label": "Flow Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FlowInterviewId": {
+      "field_label": "Flow Interview ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "RecordAction ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsMandatory": {
+      "field_label": "Is Mandatory",
+      "type": "boolean"
+    },
+    "IsUiRemoveHidden": {
+      "field_label": "Hide Remove Action in UI",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Order": {
+      "field_label": "Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "Pinned": {
+      "field_label": "Pinned",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecordId": {
+      "field_label": "Parent Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

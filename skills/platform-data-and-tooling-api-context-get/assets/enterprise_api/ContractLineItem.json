@@ -1,0 +1,271 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContractLineItem - Data API",
+  "description": "Represents a product covered by a service contract (customer support agreement). This object is available in API version 18.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "ID of the Asset associated with the contract line item. Must be a valid asset ID.",
+      "required": true
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the contract line item."
+    },
+    "Discount": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The discount for the product as a percentage. When updating, if you specify Discount without specifying TotalPrice, the TotalPrice will be adjusted to accommodate the new Discount value, and the UnitPrice will be held constant. If you specify both Discount and Quantity, you must also specify either TotalPrice or UnitPrice so the system can determine which one to automatically adjust."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The last day the contract line item is in effect."
+    },
+    "LastReferencedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "LineItemNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Update",
+      "description": "Automatically-generated number that identifies the contract line item."
+    },
+    "ListPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable",
+      "description": "Corresponds to the UnitPrice on the PricebookEntry that is associated with this line item, which can be in the standard pricebook or a custom pricebook. A client application can use this information to show whether the unit price (or sales price) of the line item differs from the pricebook entry list price."
+    },
+    "LocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The location associated with the contract line item. If you have access to the location entity, it doesn’t necessarily mean you can access the location id field. To access the location, you must have userHasLocation user access."
+    },
+    "ParentContractLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The line item’s parent line item, if it has one."
+    },
+    "PricebookEntryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Update",
+      "description": "ID of the associated PricebookEntry. Only exists if Product2 is enabled.",
+      "required": true
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The product related to the contract line item."
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Update",
+      "description": "Number of units of the contract line item (product) included in the associated service contract."
+    },
+    "RootContractLineItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "(Read only) The top-level line item in a contract line item hierarchy. Depending on where a line item lies in the hierarchy, its root could be the same as its parent."
+    },
+    "ServiceContractId": {
+      "type": "reference",
+      "properties": "Create, Filter",
+      "description": "ID of the ServiceContract associated with the contract line item. Must be a valid service contract ID.",
+      "required": true
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "The first day the contract line item is in effect."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Nillable",
+      "description": "Status of the contract line item."
+    },
+    "Subtotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable",
+      "description": "Contract line item's sales price multiplied by the Quantity."
+    },
+    "TotalPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable",
+      "description": "This field is available only for backward compatibility. It represents the total price of the ContractLineItem If you specify Discount and Quantity, this field or UnitPrice is required. This field is nillable, but you can't set both TotalPrice and UnitPrice to null in the same update request. To insert the TotalPrice for a contract line item via the API (given only a unit price and the quantity), calculate this field as the unit price multiplied by the quantity."
+    },
+    "UnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Update",
+      "description": "The unit price for the contract line item. In the user interface, this field’s value is calculated by dividing the total price of the contract line item by the quantity listed for that line item. Label is Sales Price. This field or TotalPrice is required. You can’t specify both. If you specify Discount and Quantity, this field or TotalPrice is required."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later. Feed tracking is available for the object.\n\nThis object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\nFeed tracking is available for the object.\n\n- **ContractLineItemChangeEvent (API version 44.0)**: Change events are available for the object.\n- **ContractLineItemFeed**: Feed tracking is available for the object.\n- **ContractLineItemHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContractLineItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Asset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"AssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ChildContractLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContractLineOutcomes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DescendantContractLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Discount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Entitlements\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LineItemNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ListPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Location\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"LocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MaintenanceAssets\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ParentContractLineItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContractLineItem\"/>\n        <element name=\"ParentContractLineItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PricebookEntry\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PricebookEntry\"/>\n        <element name=\"PricebookEntryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Product2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Product2\"/>\n        <element name=\"Product2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Quantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RootContractLineItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContractLineItem\"/>\n        <element name=\"RootContractLineItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceContract\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceContract\"/>\n        <element name=\"ServiceContractId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subtotal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TotalPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UnitPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Discount": {
+      "field_label": "Discount",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Contract Line Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LineItemNumber": {
+      "field_label": "Line Item Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ListPrice": {
+      "field_label": "List Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "LocationId": {
+      "field_label": "Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentContractLineItemId": {
+      "field_label": "Contract Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PricebookEntryId": {
+      "field_label": "Price Book Entry ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "RootContractLineItemId": {
+      "field_label": "Contract Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceContractId": {
+      "field_label": "Service Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Subtotal": {
+      "field_label": "Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalPrice": {
+      "field_label": "Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitPrice": {
+      "field_label": "Sales Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

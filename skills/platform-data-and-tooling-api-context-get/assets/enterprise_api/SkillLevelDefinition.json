@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "SkillLevelDefinition - Data API",
+  "description": "Represents a skill which can be acquired by completing enablement site (myTrailhead) modules. This object is available in API version 51.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Describes the mapping."
+    },
+    "IsAutoApproved": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether this mapping auto-approves. The default value is 'false'."
+    },
+    "LearningContent": {
+      "type": "string",
+      "properties": "Filter, Nillable",
+      "description": "The titles of the Trailhead modules associated to this mapping."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The user who owns the Skill Level Definition. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "SkillId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The skill that this mapping is for. This is a relationship field.",
+      "relationship_name": "Skill",
+      "relationship_type": "Lookup",
+      "refers_to": "Skill"
+    },
+    "SkillLevel": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The level to assign for the skill."
+    }
+  },
+  "special_access_rules": "The org must have a Workforce Engagement license and an Enablement Sites (myTrailhead) license. User must have at least one Workforce Engagement permission set assigned to them: Workforce Engagement Analyst, Workforce Engagement Planner, Workforce Engagement Agent.\n\nThe org must have a Workforce Engagement license\n         and an Enablement Sites (myTrailhead) license. User must have at least one Workforce\n         Engagement permission set assigned to them: Workforce Engagement Analyst, Workforce\n         Engagement Planner, Workforce Engagement Agent.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SkillLevelDefinitionOwnerSharingRule**: Sharing rules are available for the object.\n- **SkillLevelDefinitionShare**: Sharing is available for the object."
+}

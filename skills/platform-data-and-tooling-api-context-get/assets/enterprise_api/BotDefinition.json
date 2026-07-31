@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "BotDefinition - Data API",
+  "description": "Represents a top level object for Einstein Bots or Agentforce Agents. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AgentTemplate": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If this BotDefinition represents an agent, this field represents the name of the agent template or legacy agent template used to create it."
+    },
+    "AgentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The agent type. For example, Agentforce Service Agent (ASA) or Agentforce Employee Agent (AEA)."
+    },
+    "BotUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user ID associated with the bot definition.",
+      "relationship_name": "BotUser",
+      "refers_to": "User"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A description for the bot or agent."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for this object."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The master label of the bot."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "This field represents the configuration type of the bot. The default value is Bot. Possible values are: Bot—Default Einstein Bot configuration. ExternalCopilot— An external-facing agent. For example, Agenforce Service Agent. InternalCopilot— An internal-facing agent. For example, Agentforce (Default)."
+    }
+  },
+  "special_access_rules": "To access this object, Agents must be enabled in your org.\n\nTo access this object, Agents must be enabled in\n         your org.",
+  "field_reference": {
+    "AgentTemplate": {
+      "field_label": "Template",
+      "type": "string",
+      "length": "255"
+    },
+    "AgentType": {
+      "field_label": "Type of Agent",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BotSource": {
+      "field_label": "Type of Bot Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BotUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Bot ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Bot Definition Name",
+      "type": "string",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

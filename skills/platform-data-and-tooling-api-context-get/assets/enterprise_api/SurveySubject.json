@@ -1,0 +1,151 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "SurveySubject - Data API",
+  "description": "Represents a relationship between a survey and another object, such as an account or a case.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the SurveySubject record was last referenced by another object."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed the SurveySubject record."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the SurveySubject record."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Unique identifier of the SurveyInvitation object or SurveyResponse object that is associated with this survey-object relationship.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "SurveyInvitation, SurveyResponse"
+    },
+    "SubjectEntityType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Object that the survey is associated with. Possible values include: Account Asset Banker BranchUnit BranchUnitBusinessMember BranchUnitCustomer BusinessLicenseApplication BusinessMilestone Campaign CareProgram Case Claim ClaimParticipant Contact Employee Event Incident IndividualApplication InsurancePolicy InsurancePolicyParticipant Lead LearningItemSubmission—Available in API version 58.0 and later. LiveChatTranscript LoyaltyProgram LoyaltyProgramMember LoyaltyProgramPartner MaterialityStakeholder MessagingSession Opportunity Order PersonalLifeEvent Producer Product2 Promotion RebateProgram RetailStore ServiceAppointment ServiceResource Solution Task TransactionJournal User VideoCall Visit VoiceCall VolunteerProject WorkOrder Custom Objects"
+    },
+    "SubjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the object that’s associated with the survey."
+    },
+    "SurveyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier of the survey that’s associated with the record that’s represented by SubjectId."
+    },
+    "SurveyInvitationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier of the survey invitation that's associated with another object."
+    },
+    "SurveyResponseId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier of the survey response that's associated with another object."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SurveySubjectChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Survey Subject ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Record Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SubjectEntityType": {
+      "field_label": "Related Object",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubjectId": {
+      "field_label": "Subject ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SurveyId": {
+      "field_label": "Survey ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SurveyInvitationId": {
+      "field_label": "Survey Invitation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SurveyResponseId": {
+      "field_label": "Survey Response ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AuraDefinition - Data API",
+  "description": "Represents an Aura component definition, such as component markup, a client-side controller, or an event. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AuraDefinitionBundleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the bundle containing the definition. A bundle contains a Lightning definition and all its related resources. This is a relationship field.",
+      "relationship_name": "AuraDefinitionBundle",
+      "relationship_type": "Lookup",
+      "refers_to": "AuraDefinitionBundle"
+    },
+    "DefType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The definition type. Valid values are: APPLICATION — Lightning Aura Components app CONTROLLER — client-side controller COMPONENT — component markup EVENT — event definition HELPER — client-side helper INTERFACE — interface definition RENDERER — client-side renderer STYLE — style (CSS) resource PROVIDER — reserved for future use MODEL — deprecated, do not use TESTSUITE — reserved for future use DOCUMENTATION — documentation markup TOKENS — tokens collection DESIGN — design definition SVG — SVG graphic resource MODULE — reserved for future use"
+    },
+    "Format": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The format of the definition. Valid values are: XML for component markup JS for JavaScript code CSS for styles TEMPLATE_CSS reserved for future use SVG for an SVG graphic"
+    },
+    "Source": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "The contents of the definition. This is all the markup or code for the definition."
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only your Salesforce org's internal users can access this object.",
+  "usage": "For more information, see the Lightning Aura Components Developer Guide.",
+  "wsdl_segment": "```xml\n<complexType name=\"AuraDefinition\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AuraDefinitionBundle\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AuraDefinitionBundle\"/>\n        <element name=\"AuraDefinitionBundleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DefType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Format\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Source\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AuraDefinitionBundleId": {
+      "field_label": "Aura Component Bundle ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DefType": {
+      "field_label": "Definition Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Format": {
+      "field_label": "Format",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Lightning Component Definition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Source": {
+      "field_label": "Source",
+      "type": "textarea",
+      "length": "1000000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

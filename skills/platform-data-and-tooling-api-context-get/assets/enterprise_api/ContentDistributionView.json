@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentDistributionView - Data API",
+  "description": "Represents information about views of a shared document. This read-only object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DistributionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the content delivery that the document is part of. This is a relationship field.",
+      "relationship_name": "Distribution",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentDistribution"
+    },
+    "IsDownload": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "true if the shared document is downloaded; false if the shared document is viewed."
+    },
+    "IsInternal": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "true if the shared document is viewed by a user in the same organization; false if viewed by an external user."
+    },
+    "ParentViewId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of this instance of accessing the shared document."
+    }
+  },
+  "usage": "Use this read-only object to query information about users who are accessing shared documents.",
+  "wsdl_segment": "```xml\n<complexType name=\"ContentDistributionView\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Distribution\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentDistribution\"/>\n        <element name=\"DistributionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDownload\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsInternal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ParentViewId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "View Date",
+      "type": "datetime"
+    },
+    "DistributionId": {
+      "field_label": "Content Delivery ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Content Delivery View ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDownload": {
+      "field_label": "File Downloaded",
+      "type": "boolean"
+    },
+    "IsInternal": {
+      "field_label": "Internal View",
+      "type": "boolean"
+    },
+    "ParentViewId": {
+      "field_label": "Content Delivery View ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

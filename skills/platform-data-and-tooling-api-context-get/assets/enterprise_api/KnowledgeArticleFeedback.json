@@ -1,0 +1,127 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "KnowledgeArticleFeedback - Data API",
+  "description": "Represents information about feedback from users on Knowledge articles and details about assignment of feedback to the article owner or team to take action. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AssignedToId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The queue name or user ID of the feedback assignee, who reviews and takes action on the feedback. This field is a polymorphic relationship field.",
+      "relationship_name": "AssignedTo",
+      "refers_to": "Queue, User"
+    },
+    "FeedbackResponseId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique ID of the feedback response associated with the feedback record. This field is a relationship field.",
+      "relationship_name": "FeedbackResponse",
+      "refers_to": "SurveyResponse"
+    },
+    "FeedbackSource": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The source of feedback. Possible values are: Internal Community"
+    },
+    "FeedbackSubmitterId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user who submitted feedback. This field is a relationship field.",
+      "relationship_name": "FeedbackSubmitter",
+      "refers_to": "User"
+    },
+    "IsLiked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The answer to the Article Liked question in the feedback form. The default value is false"
+    },
+    "KnowledgeArticle": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the article associated with the feedback response."
+    },
+    "KnowledgeArticleUrl": {
+      "type": "url",
+      "properties": "Filter, Sort",
+      "description": "The URL of the article version associated with the feedback response."
+    },
+    "KnowledgeArticleVersion": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The version of the article associated with the feedback response."
+    },
+    "KnowledgeArticleVersionTitle": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The title of the article version associated with the feedback response."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the feedback record was last accessed or referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the feedback record was last viewed."
+    },
+    "LinkedArticleEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Internal entity that links a Knowledge article version and survey invitation. This field is a relationship field.",
+      "relationship_name": "LinkedArticleEntity",
+      "refers_to": "LinkedArticle"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique name automatically assigned to the Knowledge article feedback when it's created. You can't change the format or value of this field."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The user ID of the article feedback owner. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "ReviewActionTaken": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort, Nillable, Update",
+      "description": "The review action taken to address the feedback. You can configure the possible values for this picklist field."
+    },
+    "ReviewComment": {
+      "type": "textArea",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The review comment provided by the feedback assignee. This is optional. The maximum length is 1,212 characters."
+    },
+    "ReviewCompletionDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The date when the review was completed."
+    },
+    "ReviewDueDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The due date for completing the feedback review."
+    },
+    "ReviewStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Sort, Nillable, Update",
+      "description": "The review status of the feedback. You can configure the possible values for this picklist field."
+    }
+  },
+  "special_access_rules": "Knowledge must be enabled in your org. A user must have the View Articles permission enabled. Salesforce Knowledge users, unlike customer and partner users, must also be granted the Knowledge User feature license. Knowledge Article Feedback Org Preference should also be enabled.",
+  "usage": "Use this object to query, retrieve, or search for article feedback based on your access level to the articles. You can filter feedback records by Knowledge article, article version, or other criteria."
+}

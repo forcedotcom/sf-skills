@@ -1,0 +1,178 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "InvoiceAddressGroup - Data API",
+  "description": "Stores the buyer's address information. This object is available in API version 50.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Buyer's address. Compound field that summarizes the invoice address group's address component fields."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The buyer's city."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The buyer's country."
+    },
+    "GeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The accuracy rating for the geocode of the address group. The accuracy rating contains information about the location of a latitude and longitude."
+    },
+    "InvoiceAddressGroupNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number, such as DOC-000001."
+    },
+    "InvoiceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the invoice associated with the address group. This field is a relationship field.",
+      "relationship_name": "Invoice",
+      "relationship_type": "Lookup",
+      "refers_to": "Invoice"
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The buyer's latitude."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The buyer's longitude."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The buyer's postal code or ZIP code."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The buyer's state."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The buyer's street."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **InvoiceAddressGroupHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "Address": {
+      "field_label": "Address",
+      "type": "address"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "GeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Invoice Address Group ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvoiceAddressGroupNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "InvoiceId": {
+      "field_label": "Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "PostalCode": {
+      "field_label": "Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "string",
+      "length": "80"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

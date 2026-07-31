@@ -1,0 +1,77 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PresenceUserConfigProfile - Data API",
+  "description": "Represents a configuration that determines the settings that are assigned to presence users who are assigned to a specific profile. User-level configurations override profile-level configurations. This object is available in API version 32.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "PresenceUserConfigId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "If an individual user is also assigned a presence configuration through the PresenceUserConfigProfile, this configuration will override that."
+    },
+    "ProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the profile that’s associated with this presence configuration. A profile can be associated with only one presence configuration."
+    }
+  },
+  "special_access_rules": "To access this object, Omni-Channel must be enabled. As of Spring ’20 and later, only authenticated internal and external users can access this object.\n\nTo access this object, Omni-Channel must be enabled.\n\nAs of Spring ’20 and later, only authenticated internal and external users can access this object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Presence Configuration for Profile ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PresenceUserConfigId": {
+      "field_label": "Presence Configuration ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

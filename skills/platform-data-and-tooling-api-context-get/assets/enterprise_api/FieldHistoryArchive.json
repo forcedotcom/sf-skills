@@ -1,0 +1,83 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "FieldHistoryArchive - Data API",
+  "description": "Represents field history values for all objects that retain field history. FieldHistoryArchive is a big object, available only to users with the “Retain Field History” permission. This object is available in API version 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ArchiveFieldName": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The name of the field at the time the data was archived. If the field name changed, the name is sometimes not the same for all records related to a single field."
+    },
+    "ArchiveParentName": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The name of the parent object at the time the data was archived. If the object name changed, the name is sometimes not the same for all records related to a single field."
+    },
+    "ArchiveParentType": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The type of the field at the time the data was archived. If the field type changed, the type is sometimes not the same for all records related to a single field."
+    },
+    "ArchiveTimestamp": {
+      "type": "dateTime",
+      "properties": "Nillable",
+      "description": "The date and time at which the data was archived."
+    },
+    "CreatedById": {
+      "type": "reference",
+      "properties": "Nillable",
+      "description": "The user ID of the user who created the original record."
+    },
+    "CreatedDate": {
+      "type": "dateTime",
+      "properties": "Nillable, Sort",
+      "description": "The date and time at which the original record was created."
+    },
+    "Field": {
+      "type": "picklist",
+      "properties": "Restricted picklist",
+      "description": "The name of the field that was changed. If the field is deleted from the parent object, the Field field contains the field ID instead."
+    },
+    "FieldHistoryType": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist, Sort",
+      "description": "The name of the object that contains the field history. Possible values are: Account Article Asset AuthorizationFormConsent – Available in version 58.0 and later. Case CommSubscriptionConsent – Available in version 58.0 and later. Contact ContactPointConsent – Available in version 58.0 and later. ContactPointTypeConsent – Available in version 58.0 and later. Contract ContractLineItem Crisis Employee EmployeeCrisisAssessment Entitlement Individual InternalOrganizationUnit Knowledge Lead Opportunity Order OrderItem PartyConsent – Available in version 58.0 and later. Pricebook2 PricebookEntry Product2 ServiceAppointment ServiceContract Solution WorkOrder WorkOrderLineItem"
+    },
+    "HistoryId": {
+      "type": "reference",
+      "properties": "Filter, Sort",
+      "description": "The ID of the relevant history object (for example, AccountHistory). This field is available in versions 42.0 and later."
+    },
+    "Id": {
+      "type": "ID",
+      "properties": "Defaulted on create, Filter, idLookup",
+      "description": "The ID of the archived record. It’s useful to have a field’s ID for fields that you’ve deleted. (Field names aren’t retained in history when you delete fields from Salesforce.)"
+    },
+    "NewValue": {
+      "type": "anyType",
+      "properties": "Nillable",
+      "description": "The new value of the modified field."
+    },
+    "OldValue": {
+      "type": "anyType",
+      "properties": "Nillable",
+      "description": "The previous value of the modified field."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Sort",
+      "description": "The ID of the object that contains the field (the parent object)."
+    }
+  },
+  "usage": "When sorting fields, order them as follows:\n\nFieldHistoryType\n\nCreatedDate"
+}

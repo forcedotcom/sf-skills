@@ -1,0 +1,202 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowRecordElementOccurrence - Data API",
+  "description": "Represents the execution metrics for a single element within a flow version. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The ISO code for the currency associated with the flow. Possible values are: USD—U.S. Dollar The default value is USD."
+    },
+    "Entries": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times the element was initiated in all flow interviews after the flow version was executed."
+    },
+    "Errors": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of errors for the element in all flow interviews after the flow version was executed."
+    },
+    "Exits": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times the element was executed to completion in all flow interviews after the flow version was executed."
+    },
+    "FlowRecordElementId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the flow element. This field is a relationship field.",
+      "relationship_name": "FlowRecordElement",
+      "refers_to": "FlowRecordElement"
+    },
+    "FlowRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the flow. This field is a relationship field.",
+      "relationship_name": "FlowRecord",
+      "refers_to": "FlowRecord"
+    },
+    "FlowRecordVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the flow version. This field is a relationship field.",
+      "relationship_name": "FlowRecordVersion",
+      "refers_to": "FlowRecordVersion"
+    },
+    "FlowRecordVersionOccurrenceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the flow occurrence. This field is a relationship field.",
+      "relationship_name": "FlowRecordVersionOccurrence",
+      "relationship_type": "Master-detail",
+      "refers_to": "FlowRecordVersionOccurrence (the master object)"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The API name of the flow element."
+    },
+    "Stopped": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times execution of the element was stopped in all flow interviews after the flow version was executed."
+    },
+    "TotalDuration": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total time in milliseconds spent executing the element in all flow interviews."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **FlowRecordElementOccurrenceChangeEvent**: Change events are available for the object.\n- **FlowRecordElementOccurrenceFeed**: Feed tracking is available for the object.\n- **FlowRecordElementOccurrenceHistory**: History is available for tracked fields of the object.\n- **FlowRecordElementOccurrenceOwnerSharingRule**: Sharing rules are available for the object.\n- **FlowRecordElementOccurrenceShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"FlowRecordElementOccurrence\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FlowRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecord\"/>\n        <element name=\"FlowRecordElement\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecordElement\"/>\n        <element name=\"FlowRecordElementId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowRecordVersion\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecordVersion\"/>\n        <element name=\"FlowRecordVersionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowRecordVersionOccurrence\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecordVersionOccurrence\"/>\n        <element name=\"FlowRecordVersionOccurrenceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataSpaceId": {
+      "field_label": "Data Space ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Entries": {
+      "field_label": "Entries",
+      "type": "int",
+      "digits": "9"
+    },
+    "Errors": {
+      "field_label": "Errors",
+      "type": "int",
+      "digits": "9"
+    },
+    "Exits": {
+      "field_label": "Exits",
+      "type": "int",
+      "digits": "9"
+    },
+    "FlowRecordElementId": {
+      "field_label": "Flow Element ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FlowRecordId": {
+      "field_label": "Flow ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FlowRecordVersionId": {
+      "field_label": "Flow Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FlowRecordVersionOccurrenceId": {
+      "field_label": "Flow Version Occurrence ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Flow Record Element Occurrence ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Flow Record Element Occurrence Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Paused": {
+      "field_label": "Paused",
+      "type": "int",
+      "digits": "9"
+    },
+    "Retrying": {
+      "field_label": "Retrying",
+      "type": "int",
+      "digits": "9"
+    },
+    "Stopped": {
+      "field_label": "Stopped",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalDuration": {
+      "field_label": "Total Duration",
+      "type": "long",
+      "digits": "18"
+    },
+    "Waiting": {
+      "field_label": "Waiting",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

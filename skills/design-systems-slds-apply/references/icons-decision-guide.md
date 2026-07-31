@@ -18,7 +18,7 @@ SLDS provides 1,732 icons across 5 categories. Pick the right category first:
 
 ### Category Decision Tree
 
-```
+```text
 What does the icon represent?
 ├─ A UI control or indicator? → utility
 ├─ A Salesforce object or entity? → standard

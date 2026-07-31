@@ -1,0 +1,232 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "HealthCareDiagnosis - Data API",
+  "description": "Represents information related to industry-standard healthcare diagnosis codes. Before the Spring ’21 release, the Healthcare Procedure and Healthcare Diagnosis objects stored codes specifically related to procedures and diagnoses. These codes were used for prior-authorization requests and approval processes. Since the Spring’21 release, Health Cloud uses the Code Set and Code Set Bundle objects for this purpose instead.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the category for this diagnosis such as newborn, pediatric, maternity, or adult."
+    },
+    "Code": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Industry-standard diagnosis code."
+    },
+    "CodeDescription": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the diagnosis code."
+    },
+    "CodeType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of diagnosis code represented in the record such as ICD-9 or ICD-10."
+    },
+    "EffectiveDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Start date for the code."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "End date for the code."
+    },
+    "Gender": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates whether this diagnosis is for males, females, or all genders."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the diagnosis code is available for use."
+    },
+    "IsComplicationOrComorbidity": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this diagnosis is used to represent a complication or comorbidity."
+    },
+    "IsHospitalAcquiredCondition": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this diagnosis represents a condition acquired while in the hospital."
+    },
+    "IsMajorComplicationOrComorbidity": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether this diagnosis is used to represent a major complication or comorbidity."
+    },
+    "IsPresentOnAdmissionExempt": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether diagnosis code is exempt from the diagnosis present on admission requirement."
+    },
+    "IsPrimaryDiagnosis": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether diagnosis code can be used as primary diagnosis only, or can be used in any diagnosis sequence."
+    },
+    "IsUnacceptablePrincipalDxIpAdmit": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether diagnosis code is an unacceptable principal diagnosis for inpatient admission per Medicare Code Edits."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the code that displays in search and lookup fields. Salesforce recommends using the code along with the description to populate this field. For example, use <Code>: <Description> or <Code>-<Description> such as (E08.37X9 - Diabetes mellitus due to underlying condition)."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who owns this record. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **HealthCareDiagnosisChangeEvent (API version 60.0)**: Change events are available for the object.\n- **HealthCareDiagnosisHistory**: History is available for tracked fields of the object.\n- **HealthCareDiagnosisOwnerSharingRule**: Sharing rules are available for the object.\n- **HealthCareDiagnosisShare**: Sharing is available for the object.",
+  "field_reference": {
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Code": {
+      "field_label": "Code",
+      "type": "string",
+      "length": "32"
+    },
+    "CodeDescription": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "CodeType": {
+      "field_label": "Code Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "date"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Gender": {
+      "field_label": "Gender",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Healthcare Diagnosis ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsComplicationOrComorbidity": {
+      "field_label": "Complication or Comorbidity",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsHospitalAcquiredCondition": {
+      "field_label": "Hospital Acquired Condition",
+      "type": "boolean"
+    },
+    "IsMajorComplicationOrComorbidity": {
+      "field_label": "Major Complication or Comorbidity",
+      "type": "boolean"
+    },
+    "IsPresentOnAdmissionExempt": {
+      "field_label": "Present on Admission Exemption",
+      "type": "boolean"
+    },
+    "IsPrimaryDiagnosis": {
+      "field_label": "Primary Diagnosis Only",
+      "type": "boolean"
+    },
+    "IsUnacceptablePrincipalDxIpAdmit": {
+      "field_label": "Unacceptable Principal Dx IP Admit",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

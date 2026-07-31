@@ -1,0 +1,109 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SetupAuditTrail - Data API",
+  "description": "Represents changes you or other admins made in your org’s Setup area for at least the last 180 days. This object is available in API version 15.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Action": {
+      "type": "string",
+      "properties": "Filter, Sort",
+      "description": "The category of the change made in Setup. For example, a value of PermSetCreate indicates that an administrator created a permission set. The Display field contains more specific information."
+    },
+    "CreatedByContext": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The context under which the Setup change was made. For example, if Einstein uses cloud-to-cloud services to make a change in Setup, the value of this field is Einstein. This field is available in API version 48.0 and later."
+    },
+    "CreatedByIssuer": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for future use."
+    },
+    "DelegateUser": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The Login-As user who executed the action in Setup. If a Login-As user didn’t perform the action, this field is blank. This field is available in API version 35.0 and later."
+    },
+    "Display": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "The full description of changes made in Setup. For example, if the Action field has a value of PermSetCreate, the Display field has a value like “Created permission set MAD: with user license Salesforce.”"
+    },
+    "Section": {
+      "type": "string",
+      "properties": "Nillable, Sort",
+      "description": "The section in the Setup menu where the action occurred. For example, Manage Users or Company Profile."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"SetupAuditTrail\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Action\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedByContext\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedByIssuer\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DelegateUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Display\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ResponsibleNamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Section\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Action": {
+      "field_label": "Action",
+      "type": "string",
+      "length": "120"
+    },
+    "CreatedByContext": {
+      "field_label": "Created By Context",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedByIssuer": {
+      "field_label": "Created By Issuer",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DelegateUser": {
+      "field_label": "Delegate User",
+      "type": "string",
+      "length": "80"
+    },
+    "Display": {
+      "field_label": "Display",
+      "type": "string",
+      "length": "1000"
+    },
+    "Id": {
+      "field_label": "Setup Audit Trail ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ResponsibleNamespacePrefix": {
+      "field_label": "Source Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "Section": {
+      "field_label": "Section",
+      "type": "string",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

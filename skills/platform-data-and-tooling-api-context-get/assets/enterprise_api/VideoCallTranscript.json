@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "VideoCallTranscript - Data API",
+  "description": "Represents the complete transcript text and metadata of a recorded video call. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsTranscriptTruncated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the transcript is truncated (true) or not (false). The default value is false.",
+      "required": true
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The unique name for the video call transcript record."
+    },
+    "TotalDuration": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The difference between the end timestamp of the last entry and the start timestamp of the first entry in the transcript. This field helps identify the longest transcript for a given call. The unit of measurement is seconds.",
+      "required": true
+    },
+    "TranscribedLanguage": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language in which the transcript is generated. Possible values are: ar—Arabic bg—Bulgarian ca—Catalan cs—Czech da—Danish de—German el—Greek en—English es—Spanish fi—Finnish fr—French he—Hebrew hi—Hindi hr—Croatian hu—Hungarian id—Indonesian is—Icelandic it—Italian ja—Japanese ko—Korean lt—Lithuanian lv—Latvian nl—Dutch no—Norwegian pa—Punjabi pl—Polish pt—Portuguese ro—Romanian ru—Russian sk—Slovak sr—Serbian sv—Swedish th—Thai tr—Turkish uk—Ukrainian vi—Vietnamese zh—Chinese"
+    },
+    "TranscriptContent": {
+      "type": "textarea",
+      "properties": "Nillable, Sort",
+      "description": "The full content of the video call transcript in the JSON or CSV format, including all spoken sentences during the call, with timestamps and speaker information."
+    },
+    "TranscriptCreationTimestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time when the transcript was created by the transcription service.",
+      "required": true
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies how the transcript was generated. Possible values are: ai-generated— Generated using advanced AI transcription tools post-call— Generated after the call using the final recording real-time— Generated during the call, before the recording is available",
+      "required": true
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The source from where the video call originated. Possible values are: eci— Einstein Conversation Insights",
+      "required": true
+    },
+    "VideoCallId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Reference to the associated parent video call. This field is a relationship field.",
+      "relationship_name": "VideoCall",
+      "relationship_type": "Master-detail",
+      "refers_to": "VideoCall (the master object)",
+      "required": true
+    },
+    "VideoCallRecordingId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reference to the associated optional parent video call recording. This field is a relationship field.",
+      "relationship_name": "VideoCallRecording",
+      "refers_to": "VideoCallRecording"
+    },
+    "VideoCallStartTimestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The start time of the video call recording to use with the transcript for calculating relative timestamps."
+    }
+  }
+}

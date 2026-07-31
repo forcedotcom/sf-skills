@@ -1,0 +1,942 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Order - Data API",
+  "description": "Represents an order associated with a contract or an account.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Account associated with this order. Only updated when the order’s StatusCode value is Draft. This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account",
+      "required": true
+    },
+    "ActivatedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the user who activated this order. This field is a relationship field.",
+      "relationship_name": "ActivatedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ActivatedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "Date and time when the order was activated."
+    },
+    "BillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable"
+    },
+    "BillingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "City for the billing address for this order. The maximum size is 40 characters."
+    },
+    "BillingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Country for the billing address for this order. The maximum size is 80 characters."
+    },
+    "BillingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO country code for the billing address for this order."
+    },
+    "BillingEmailAddress": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Email address for this order’s billing address. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "BillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode of the address."
+    },
+    "BillingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLongitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "BillingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with BillingLatitude to specify the precise geolocation of a billing address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "BillingPhoneNumber": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Phone number for this order’s billing address. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "BillingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Postal code for the billing address for this order. The maximum size is 20 characters."
+    },
+    "BillingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "State for the billing address for this order. The maximum size is 80 characters."
+    },
+    "BillingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO state code for the order’s billing address."
+    },
+    "BillingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Street address for the billing address."
+    },
+    "BillToContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the contact that the order is billed to."
+    },
+    "CompanyAuthorizedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the user who authorized the account associated with the order. This field is a relationship field.",
+      "relationship_name": "CompanyAuthorizedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "CompanyAuthorizedDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date on which your organization authorized the order."
+    },
+    "ContractId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the contract associated with this order. Only updated when the order’s StatusCode value is Draft. This field is a relationship field.",
+      "relationship_name": "Contract",
+      "relationship_type": "Lookup",
+      "refers_to": "Contract"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code."
+    },
+    "CustomerAuthorizedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the contact who authorized the order. This field is a relationship field.",
+      "relationship_name": "CustomerAuthorizedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "CustomerAuthorizedDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Date on which the contact authorized the order."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the order."
+    },
+    "EffectiveDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Date at which the order becomes effective. Label is Order Start Date."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Date at which the order ends. Label is Order End Date."
+    },
+    "ExternalCustomerReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The external customer ID from an ecommerce channel or any other external channel. Label is External Customer ID Reference. This field is available in API version 66.0 and later."
+    },
+    "GrandTotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of TotalAmount and TotalTaxAmount. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "IsReductionOrder": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Read only. Determines whether an order is a reduction order. Label is Reduction Order."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it’s possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name for this order."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID for the opportunity that’s associated with this order."
+    },
+    "OrderedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time that the order was placed. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "OrderManagementReferenceIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The field used by Order Management to store the external reference identifier for B2C Commerce orders. On creation, the B2C Integration sets this value to B2C realm ID + \"_\" + B2C instance ID + \"@\" + B2C Commerce catalog/domain ID + \"@\" + B2C Commerce order number. Otherwise, it isn’t set. When you create an OrderSummary, if you don’t specify an ExternalReferenceIdentifier value, it’s set to this value. If this value is null, then the system generates a value for ExternalReferenceIdentifier. This value isn’t required to be unique in an organization, but the OrderSummary ExternalReferenceIdentifier is. This field is available in API version 56.0 and later."
+    },
+    "OrderNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Order number assigned to this order (not the unique, system-generated ID assigned during creation). The maximum size is 30 characters."
+    },
+    "OrderReferenceNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Order reference number assigned to this order. The maximum size is 80 characters."
+    },
+    "OriginalOrderId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Optional. ID of the original order that a reduction order is reducing, if the reduction order is reducing a single order. Label is Original Order.Editable only if isReductionOrder is true. If the reduction order is reducing more than one order, leave blank. This field is a relationship field.",
+      "relationship_name": "OriginalOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user or queue that owns this order. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User",
+      "required": true
+    },
+    "PaymentTermId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the related payment term. This field is available in API version 55.0 and later. This field is available if Subscription Management is enabled in your org. This field is a relationship field.",
+      "relationship_name": "PaymentTerm",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentTerm"
+    },
+    "PoDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Date of the purchase order."
+    },
+    "PoNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number identifying the purchase order. The maximum is 80."
+    },
+    "Pricebook2Id": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the price book associated with this order. This field is a relationship field.",
+      "relationship_name": "Pricebook2",
+      "relationship_type": "Lookup",
+      "refers_to": "Pricebook2",
+      "required": true
+    },
+    "QuoteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the quote that’s associated with this order.If you set QuoteId to null, QuoteLineItemId on all of the order’s child order products is set to null."
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the record type assigned to this order."
+    },
+    "RelatedOrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The original order that a change order was created from. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later. This field is a relationship field.",
+      "relationship_name": "RelatedOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "Order"
+    },
+    "RelatedOrderType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Specifies the related order type. Possible values are: ChangeOrder SupplementalOrder TransferOrder"
+    },
+    "SalesChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reference to a sales channel entity. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "SalesStoreId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the RetailStore or WebStore associated with this Order. This field is a polymorphic relationship field. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v46.0 and later.",
+      "relationship_name": "SalesStore",
+      "relationship_type": "Lookup",
+      "refers_to": "WebStore"
+    },
+    "ShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "Shipping address for the order."
+    },
+    "ShippingCity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "City of the shipping address. The maximum size is 40 characters."
+    },
+    "ShippingCountry": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Country of the shipping address. The maximum size is 80 characters."
+    },
+    "ShippingCountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO country code for the order’s shipping address."
+    },
+    "ShippingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode of the shipping address."
+    },
+    "ShippingLatitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLongitude to specify the precise geolocation of a shipping address. Acceptable values are numbers between –90 and 90 with up to 15 decimal places."
+    },
+    "ShippingLongitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with ShippingLatitude to specify the precise geolocation of an address. Acceptable values are numbers between –180 and 180 with up to 15 decimal places."
+    },
+    "ShippingPostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Postal code of the shipping address. The maximum size is 20 characters."
+    },
+    "ShippingState": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "State of the shipping address. The maximum size is 80 characters."
+    },
+    "ShippingStateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ISO state code for the order’s shipping address."
+    },
+    "ShippingStreet": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Street address of the shipping address. Maximum of 255 characters."
+    },
+    "ShipToContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the contact that the order is shipped to."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Picklist of values that indicate order status. Each value is associated with one of the status categories defined in StatusCode. For example, the status picklist might contain Draft, Ready for Review, and Ready for Activation values with a StatusCode of Draft."
+    },
+    "StatusCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status category for the order. Label is Status Category.Valid values are: Draft Activated Superseded—This value is applicable only to Revenue Cloud Advanced users and is available in API version 64.0 and later. To use supplemental orders, also known as in-flight amendments, create a status that’s associated with the Superseded status code. ."
+    },
+    "TaxLocaleType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of tax calculation that Salesforce uses for the order’s order items. VAT regions use gross tax, which includes tax in all sale amounts. US regions use net tax, which calculates tax separately from the initial sale amount and then adds the sale and tax amounts together in a total. Use TaxLocaleType to determine which types of tax fields to show on your order. If TaxLocaleType is null, the order shows all tax fields."
+    },
+    "TotalAdjDeliveryAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of delivery line amounts, delivery line adjustments, and tax. Order products with null Type fields aren’t included. This field is a gross tax field. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v49.0 and later."
+    },
+    "TotalAdjProductAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of product line amounts, line adjustments, and tax. Order products with null Type fields aren’t included. This field is a gross tax field. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v49.0 and later."
+    },
+    "TotalAdjustedDeliveryAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of delivery line amounts and delivery line adjustments. Order products with null Type fields aren’t included. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "TotalAdjustedDeliveryTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of delivery line tax amounts and delivery line tax adjustments. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "TotalAdjustedProductAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of product line amounts and line adjustments. Order products with null Type fields aren’t included. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "TotalAdjustedProductTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Sum of line tax amounts and line tax adjustments. Order products with null Type fields aren’t included. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "TotalAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The net total amount for the order products associated with this order. This field is available in API v48.0 and later."
+    },
+    "TotalDeliveryAdjDistAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Roll-up of the order’s delivery adjustment distributed amounts. Used only when the Order Adjustment Group has a Type value of Header. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "TotalDeliveryAdjDistAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Roll-up of the order’s delivery adjustment distributed amounts and tax. Used only when the Order Adjustment Group has a Type value of Header. This field is a gross tax field. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v49.0 and later."
+    },
+    "TotalDeliveryAdjDistTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Roll-up of the order’s delivery adjustment distributed tax amounts. Used only when the Order Adjustment Group has a Type value of Header. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "TotalProductAdjDistAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Roll-up of the order’s product adjustment distributed amounts. Order products with null Type fields aren’t included. Used only when the Order Adjustment Group has a Type value of Header. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "TotalProductAdjDistAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Roll-up of the order’s product adjustment distributed amounts. Order products with null Type fields aren’t included. Used only when the Order Adjustment Group has a Type value of Header. This field is a gross tax field. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v49.0 and later."
+    },
+    "TotalProductAdjDistTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Roll-up of the order’s product adjustment distributed tax amounts. Order products with null Type fields aren’t included. Used only when the Order Adjustment Group has a Type value of Header. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Roll-up of all taxes on the order, including delivery taxes, price adjustment taxes, and product taxes. This field is available with Salesforce Order Management, Revenue Cloud, or B2B Commerce license. This field is available in API v48.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "To show more information about your order, you can add custom values to the Type picklist. By default, the Type field doesn't perform any actions or show any values."
+    }
+  },
+  "usage": "The Status field specifies the current state of an order. Status strings represent its current state (Draft or Activated). When a client application creates an order, the Status Code must be Draft and the Status must be any value that corresponds to a Status Code of Draft. The application can then activate an order by updating it and setting the value in its Status field to an Activated state. However, the Status field is the only field you can update when activating the order. After an order is activated, your client application can change the Status back to the Draft state—but only if the order doesn’t have any child reduction order products. Your client application can delete orders when the Status is Draft but not when its Status is Activated. Client applications can use the API to create, update, delete, and query any Attachment associated with an order.\n\nThe Status field specifies the current state of an order. Status strings represent its current state (Draft or Activated).\n\nWhen a client application creates an order, the Status Code must be Draft and the Status must be any value that corresponds to a Status Code of Draft. The application can then activate an order by updating it and setting the value in its Status field to an Activated state. However, the Status field is the only field you can update when activating the order.\n\nAfter an order is activated, your client application can change the Status back to the Draft state—but only if the order doesn’t have any child reduction order products. Your client application can delete orders when the Status is Draft but not when its Status is Activated.\n\nClient applications can use the API to create, update, delete, and query any Attachment associated with an order.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderChangeEvent (API version 44.0)**: Change events are available for the object.\n- **OrderFeed (API version 29.0)**: Feed tracking is available for the object.\n- **OrderHistory**: History is available for tracked fields of the object.\n- **OrderOwnerSharingRule**: Sharing rules are available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"Order\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ActivatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BillToContact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"BillToContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"BillingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"BillingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"BillingLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"BillingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"BillingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CompanyAuthorizedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CompanyAuthorizedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CompanyAuthorizedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Contract\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contract\"/>\n        <element name=\"ContractId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomerAuthorizedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"CustomerAuthorizedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CustomerAuthorizedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DigitalSignatures\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EffectiveDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReductionOrder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OrderItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OrderNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OrderReferenceNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Orders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OriginalOrder\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Order\"/>\n        <element name=\"OriginalOrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PaymentGroups\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PoDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"PoNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Pricebook2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Pricebook2\"/>\n        <element name=\"Pricebook2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessExceptions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ShipToContact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"ShipToContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ShippingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ShippingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShippingLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShippingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShippingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StatusCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TotalAmount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivatedById": {
+      "field_label": "Activated By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivatedDate": {
+      "field_label": "Activated Date",
+      "type": "datetime"
+    },
+    "AdjustmentDistributionLogic": {
+      "field_label": "Adjustment Distribution Logic",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AppliedDiscount": {
+      "field_label": "Applied Discount",
+      "type": "percent",
+      "precision": "12",
+      "scale": "2"
+    },
+    "AppliedDiscountAmount": {
+      "field_label": "Applied Discount Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BillToContactId": {
+      "field_label": "Bill To Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingAddress": {
+      "field_label": "Billing Address",
+      "type": "address"
+    },
+    "BillingCity": {
+      "field_label": "Billing City",
+      "type": "string",
+      "length": "40"
+    },
+    "BillingCountry": {
+      "field_label": "Billing Country",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingEmailAddress": {
+      "field_label": "Billing Email Address",
+      "type": "email",
+      "length": "80"
+    },
+    "BillingGeocodeAccuracy": {
+      "field_label": "Billing Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingLatitude": {
+      "field_label": "Billing Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingLongitude": {
+      "field_label": "Billing Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "BillingPhoneNumber": {
+      "field_label": "Billing Phone Number",
+      "type": "phone",
+      "length": "40"
+    },
+    "BillingPostalCode": {
+      "field_label": "Billing Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "BillingState": {
+      "field_label": "Billing State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingStreet": {
+      "field_label": "Billing Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "CalculationStatus": {
+      "field_label": "Calculation Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CompanyAuthorizedById": {
+      "field_label": "Company Authorized By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CompanyAuthorizedDate": {
+      "field_label": "Company Authorized Date",
+      "type": "date"
+    },
+    "ContractId": {
+      "field_label": "Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CustomerAuthorizedById": {
+      "field_label": "Customer Authorized By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CustomerAuthorizedDate": {
+      "field_label": "Customer Authorized Date",
+      "type": "date"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DiscountPercent": {
+      "field_label": "Discount Percent",
+      "type": "percent",
+      "precision": "3",
+      "scale": "2"
+    },
+    "EffectiveDate": {
+      "field_label": "Order Start Date",
+      "type": "date"
+    },
+    "EndDate": {
+      "field_label": "Order End Date",
+      "type": "date"
+    },
+    "FulfillmentPlanId": {
+      "field_label": "Fulfillment Plan ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "GrandTotalAmount": {
+      "field_label": "Total with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Order ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsReductionOrder": {
+      "field_label": "Reduction Order",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastPricedDate": {
+      "field_label": "Last Priced Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Order Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OrchestrationSbmsStatus": {
+      "field_label": "Orchestration Submission Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "OrderManagementReferenceIdentifier": {
+      "field_label": "Order Management Reference Identifier",
+      "type": "string",
+      "length": "80"
+    },
+    "OrderNumber": {
+      "field_label": "Order Number",
+      "type": "string",
+      "length": "30"
+    },
+    "OrderReferenceNumber": {
+      "field_label": "Order Reference Number",
+      "type": "string",
+      "length": "80"
+    },
+    "OrderedDate": {
+      "field_label": "Ordered Date",
+      "type": "datetime"
+    },
+    "OriginalActionType": {
+      "field_label": "Original Action Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "OriginalOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentTermId": {
+      "field_label": "Payment Term ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PoDate": {
+      "field_label": "PO Date",
+      "type": "date"
+    },
+    "PoNumber": {
+      "field_label": "PO Number",
+      "type": "string",
+      "length": "80"
+    },
+    "Pricebook2Id": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteId": {
+      "field_label": "Quote ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedOrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedOrderType": {
+      "field_label": "Related Order Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SalesChannelId": {
+      "field_label": "Sales Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SalesStoreId": {
+      "field_label": "Sales Store ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SalesTransactionTypeId": {
+      "field_label": "Sales Transaction Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShipToContactId": {
+      "field_label": "Ship To Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShippingAddress": {
+      "field_label": "Shipping Address",
+      "type": "address"
+    },
+    "ShippingCity": {
+      "field_label": "Shipping City",
+      "type": "string",
+      "length": "40"
+    },
+    "ShippingCountry": {
+      "field_label": "Shipping Country",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingGeocodeAccuracy": {
+      "field_label": "Shipping Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ShippingLatitude": {
+      "field_label": "Shipping Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingLongitude": {
+      "field_label": "Shipping Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ShippingPostalCode": {
+      "field_label": "Shipping Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ShippingState": {
+      "field_label": "Shipping State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "ShippingStreet": {
+      "field_label": "Shipping Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "100"
+    },
+    "StatusCode": {
+      "field_label": "Status Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxLocaleType": {
+      "field_label": "Tax Locale Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "TotalAdjDeliveryAmtWithTax": {
+      "field_label": "Total Adjusted Delivery Amount with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjProductAmtWithTax": {
+      "field_label": "Total Adjusted Product Amount with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedDeliveryAmount": {
+      "field_label": "Total Adjusted Delivery Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedDeliveryTaxAmount": {
+      "field_label": "Total Adjusted Delivery Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedProductAmount": {
+      "field_label": "Total Adjusted Product Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustedProductTaxAmount": {
+      "field_label": "Total Adjusted Product Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmount": {
+      "field_label": "Order Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmountOverride": {
+      "field_label": "Total Amount Override",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjDistAmount": {
+      "field_label": "Total Delivery Distributed Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjDistAmtWithTax": {
+      "field_label": "Total Delivery Distributed Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalDeliveryAdjDistTaxAmount": {
+      "field_label": "Total Delivery Distributed Adjustment Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjDistAmount": {
+      "field_label": "Total Product Distributed Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjDistAmtWithTax": {
+      "field_label": "Total Product Distributed Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductAdjDistTaxAmount": {
+      "field_label": "Total Product Distributed Adjustment Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalRoundedLineAmount": {
+      "field_label": "Product Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TransactionType": {
+      "field_label": "Transaction Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Type": {
+      "field_label": "Order Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ValidationResult": {
+      "field_label": "Validation Result",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

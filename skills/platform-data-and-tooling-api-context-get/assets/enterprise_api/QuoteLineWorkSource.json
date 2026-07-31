@@ -1,0 +1,55 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "QuoteLineWorkSource - Data API",
+  "description": "Represents an association between a quote and work sources, such as assets, quote line items, order products, or work type groups. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "AssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset associated with the quote work source. This field is a relationship field.",
+      "relationship_name": "Asset",
+      "refers_to": "Asset"
+    },
+    "OrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The order product associated with the quote work source. This field is a relationship field.",
+      "relationship_name": "OrderItem",
+      "refers_to": "OrderItem"
+    },
+    "QuoteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The quote associated with the quote work source. This field is a relationship field.",
+      "relationship_name": "Quote",
+      "relationship_type": "Master-detail",
+      "refers_to": "Quote (the master object)"
+    },
+    "QuoteLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The quote associated with the quote work source. This field is a relationship field.",
+      "relationship_name": "QuoteLineItem",
+      "refers_to": "QuoteLineItem"
+    },
+    "WorkTypeGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The quote associated with the work source This field is a relationship field.",
+      "relationship_name": "WorkTypeGroup",
+      "refers_to": "WorkTypeGroup"
+    }
+  }
+}

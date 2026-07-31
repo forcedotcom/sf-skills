@@ -1,0 +1,682 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "SocialPost - Data API",
+  "description": "Represents a snapshot of a post on a social network such as a Facebook or Twitter. This object is available in API version 23.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AnalyzerScore": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Score set on the social post in Social Studio."
+    },
+    "AssignedTo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "User in Social Studio that the social post is assigned to."
+    },
+    "AttachmentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Type of the first attachment on the social post. Values are: APPLICATION AUDIO IMAGE LINK TEXT UNKNOWN VIDEO"
+    },
+    "AttachmentUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "URL for the first attachment on the social post."
+    },
+    "Classification": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Classification for the social post, such as inquiry or customer case."
+    },
+    "CommentCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of comments on the social post."
+    },
+    "Content": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Body of the social post."
+    },
+    "DeletedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the social post is deleted, ID of the person who deleted the social post. This is a relationship field.",
+      "relationship_name": "DeletedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "EngagementLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Engagement level of the social post, such as reviewed or resolved."
+    },
+    "ExternalPostId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the social post in its social network."
+    },
+    "Handle": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Handle of the person who posted the social post."
+    },
+    "HarvestDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Date and time when Social Studio collected the social post."
+    },
+    "Headline": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Headline of the social post."
+    },
+    "HiddenById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the social post is hidden, ID of the person who hid it. This is a relationship field.",
+      "relationship_name": "HiddenBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "InboundLinkCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of links on the inbound social post."
+    },
+    "IsOutbound": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the social post is outbound or not."
+    },
+    "KeywordGroupName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Radian6 field that is no longer used."
+    },
+    "Language": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Language of the social post."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date when the social post was last referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date when the social post was last viewed."
+    },
+    "LikedBy": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the managed social account in the social network that liked the social post."
+    },
+    "LikesAndVotes": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Radian6 number of likes and votes on the social post."
+    },
+    "MediaProvider": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Social network of the social post."
+    },
+    "MediaType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of social network of the social post."
+    },
+    "MessageType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Type of message. Values are: Comment—Facebook comment Direct—Twitter direct message Post—Facebook post Private—Facebook private message Reply—Twitter or Facebook reply Retweet—Twitter retweet Tweet—Twitter tweet"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the social post."
+    },
+    "Notes": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Notes added by Social Hub actions for the social post."
+    },
+    "OutboundSocialAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the social account used for outbound social posts. This is a relationship field.",
+      "relationship_name": "OutboundSocialAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "ExternalSocialAccount"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the social post. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the parent record of the social post, for example, the ID of a case. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "PersonaId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the social persona who made the post. This is a relationship field.",
+      "relationship_name": "Persona",
+      "relationship_type": "Lookup",
+      "refers_to": "SocialPersona"
+    },
+    "PostPriority": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Priority of the social post set in Social Studio."
+    },
+    "PostTags": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Comma-separated list of tags on the social post."
+    },
+    "PostUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "URL for the social post."
+    },
+    "Posted": {
+      "type": "dateTime",
+      "properties": "Create, Defaulted on create, Filter, Sort, Update",
+      "description": "Date and time when the social post was made."
+    },
+    "Provider": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Social network of the social post."
+    },
+    "R6PostId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Unique ID of the post in Social Studio."
+    },
+    "R6SourceId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the author in Social Studio."
+    },
+    "R6TopicId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID for either the topic profile or the managed account in Social Studio."
+    },
+    "Recipient": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the recipient of the social post in Social Studio."
+    },
+    "RecipientType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of the recipient of the social post, such as a person."
+    },
+    "ReplyToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Dynamically generated from replyToExternalPostId in Social Studio. This is a relationship field.",
+      "relationship_name": "ReplyTo",
+      "relationship_type": "Lookup",
+      "refers_to": "SocialPost"
+    },
+    "ResponseContextExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "External ID, such as a conversation ID, author ID, or post ID, for the item you’re responding to."
+    },
+    "ReviewScale": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Review scale for the social post."
+    },
+    "ReviewScore": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Review score for the social post."
+    },
+    "ReviewedStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Status of the social post review."
+    },
+    "Sentiment": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Sentiment of the social post. Values are: Negative Neutral Positive SomewhatNegative SomewhatPositive"
+    },
+    "Shares": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of times the social post has been shared."
+    },
+    "SourceTags": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Comma-separated list of author type tags."
+    },
+    "SpamRating": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Spam rating of the social post. Values are: NotSpam Spam"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Status of the social post. Values are: DELETED FAILED HIDDEN PENDING PENDING_APPROVAL RECALL_APPROVAL REJECTED_APPROVAL REPLIED SENT UNKNOWN"
+    },
+    "StatusMessage": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Status message for the social post."
+    },
+    "ThreadSize": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Radian6 field. No longer used."
+    },
+    "TopicProfileName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the topic profile for the social post in Social Studio."
+    },
+    "TopicType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Type of topic. Values are: Keyword Managed"
+    },
+    "TruncatedContent": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Truncated content of the social post."
+    },
+    "UniqueCommentors": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of unique people who commented on the social post."
+    },
+    "ViewCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Number of times the social post was viewed."
+    },
+    "WhoId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Polymorphic ID of a person such as a lead or a contact. This is a polymorphic relationship field.",
+      "relationship_name": "Who",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Contact, Lead"
+    }
+  },
+  "usage": "The fields on a SocialPost object don’t provide real-time data. They provide a snapshot of information from the last time Salesforce collected the post from the social network. Many of the Radian6-related fields are no longer accurate or used.\n\nThe fields on a SocialPost object don’t provide real-time data. They provide a snapshot of information from the last time Salesforce collected the post from the\n\t\t\tsocial network. Many of the Radian6-related fields are no longer accurate or used.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SocialPostChangeEvent (API version 48.0)**: Change events are available for the object.\n- **SocialPostFeed (API version 26.0)**: Feed tracking is available for the object.\n- **SocialPostHistory (API version 26.0)**: History is available for tracked fields of the object.\n- **SocialPostOwnerSharingRule**: Sharing rules are available for the object.\n- **SocialPostShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AnalyzerScore": {
+      "field_label": "Analyzer Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "3"
+    },
+    "AssignedTo": {
+      "field_label": "Assigned To",
+      "type": "string",
+      "length": "255"
+    },
+    "AttachmentType": {
+      "field_label": "Attachment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AttachmentUrl": {
+      "field_label": "Attachment URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Classification": {
+      "field_label": "Classification",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CommentCount": {
+      "field_label": "Comment Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Content": {
+      "field_label": "Message",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DeletedById": {
+      "field_label": "Deleted By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EngagementLevel": {
+      "field_label": "Engagement Level",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ExternalPostId": {
+      "field_label": "External Post Id",
+      "type": "string",
+      "length": "255"
+    },
+    "Handle": {
+      "field_label": "Social Handle",
+      "type": "string",
+      "length": "255"
+    },
+    "HarvestDate": {
+      "field_label": "Harvest Date",
+      "type": "datetime"
+    },
+    "Headline": {
+      "field_label": "Headline",
+      "type": "string",
+      "length": "255"
+    },
+    "HiddenById": {
+      "field_label": "Hidden By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Social Post ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InboundLinkCount": {
+      "field_label": "Inbound Link Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsOutbound": {
+      "field_label": "Is Outbound",
+      "type": "boolean"
+    },
+    "KeywordGroupName": {
+      "field_label": "Keyword Group Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Language": {
+      "field_label": "Language",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LikedBy": {
+      "field_label": "Liked By",
+      "type": "string",
+      "length": "255"
+    },
+    "LikesAndVotes": {
+      "field_label": "Likes and Votes",
+      "type": "int",
+      "digits": "9"
+    },
+    "MediaProvider": {
+      "field_label": "Social Studio Media Provider",
+      "type": "string",
+      "length": "255"
+    },
+    "MediaType": {
+      "field_label": "Social Studio Media Type",
+      "type": "string",
+      "length": "255"
+    },
+    "MessageType": {
+      "field_label": "Message Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Notes": {
+      "field_label": "Notes",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "OutboundSocialAccountId": {
+      "field_label": "Managed Social Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PersonaId": {
+      "field_label": "Social Persona ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PostPriority": {
+      "field_label": "Post Priority",
+      "type": "string",
+      "length": "255"
+    },
+    "PostTags": {
+      "field_label": "Post Tags",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "PostUrl": {
+      "field_label": "Post URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Posted": {
+      "field_label": "Posted Date",
+      "type": "datetime"
+    },
+    "Provider": {
+      "field_label": "Social Network",
+      "type": "picklist",
+      "length": "255"
+    },
+    "R6PostId": {
+      "field_label": "Social Studio Post Id",
+      "type": "string",
+      "length": "255"
+    },
+    "R6SourceId": {
+      "field_label": "Social Studio Source Id",
+      "type": "string",
+      "length": "255"
+    },
+    "R6TopicId": {
+      "field_label": "Social Studio Topic Id",
+      "type": "string",
+      "length": "255"
+    },
+    "Recipient": {
+      "field_label": "Recipient",
+      "type": "string",
+      "length": "255"
+    },
+    "RecipientType": {
+      "field_label": "Recipient Type",
+      "type": "string",
+      "length": "255"
+    },
+    "ReplyToId": {
+      "field_label": "In Reply To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ResponseContextExternalId": {
+      "field_label": "Response Context",
+      "type": "string",
+      "length": "255"
+    },
+    "ReviewScale": {
+      "field_label": "Review Scale",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ReviewScore": {
+      "field_label": "Review Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ReviewedStatus": {
+      "field_label": "Reviewed Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Sentiment": {
+      "field_label": "Sentiment",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Shares": {
+      "field_label": "Shares",
+      "type": "int",
+      "digits": "9"
+    },
+    "SourceTags": {
+      "field_label": "Source Tags",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "SpamRating": {
+      "field_label": "Spam Rating",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StatusMessage": {
+      "field_label": "Status Message",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ThreadSize": {
+      "field_label": "Thread Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "TopicProfileName": {
+      "field_label": "Topic Profile Name",
+      "type": "string",
+      "length": "255"
+    },
+    "TopicType": {
+      "field_label": "Topic Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "TruncatedContent": {
+      "field_label": "Message Clipping",
+      "type": "string",
+      "length": "255"
+    },
+    "UniqueCommentors": {
+      "field_label": "Unique Commentors",
+      "type": "int",
+      "digits": "9"
+    },
+    "ViewCount": {
+      "field_label": "View Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "WhoId": {
+      "field_label": "Who ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

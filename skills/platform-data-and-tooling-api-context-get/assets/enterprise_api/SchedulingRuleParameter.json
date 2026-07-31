@@ -1,0 +1,95 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SchedulingRuleParameter - Data API",
+  "description": "Represents scheduling rule parameters associated with a scheduling rule. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "SchedulingParameterKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The scheduling rule parameter name. Possible values are: ConsiderAbsence—Consider absences when determining a service resource’s availability. This type is available in API version 56.0 and later. ConsiderSTM—Consider service territory membership when determining a service resource’s availability. Service territory membership defines the resource’s working hours in a location. This type is available in API version 56.0 and later. C—Constraint Field Name L—Limit Type R—Resolution T—Time Resolution W—Work Unit"
+    },
+    "SchedulingRuleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The scheduling rule ID. This is a relationship field.",
+      "relationship_name": "SchedulingRule",
+      "relationship_type": "Lookup",
+      "refers_to": "SchedulingRule"
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The scheduling rule parameter value."
+    }
+  },
+  "special_access_rules": "The org must have the Workforce Engagement license. To view, create, edit, or delete records, the user needs to have the Workforce Engagement Planner permission set.\n\nThe org must have the Workforce Engagement\n         license. To view, create, edit, or delete records, the user needs to have the Workforce\n         Engagement Planner permission set.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"SchedulingRuleParameter\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SchedulingParameterKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SchedulingRule\" nillable=\"true\" minOccurs=\"0\" type=\"ens:SchedulingRule\"/>\n        <element name=\"SchedulingRuleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Value\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Scheduling Rule Parameter ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SchedulingParameterKey": {
+      "field_label": "Key",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SchedulingRuleId": {
+      "field_label": "Scheduling Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Value": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

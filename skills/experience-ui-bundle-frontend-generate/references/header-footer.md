@@ -2,13 +2,14 @@
 
 ### Rules
 
-1. **Edit `appLayout.tsx` only** — header and footer are layout-level concerns. Never add them to individual page files.
+1. **Edit `appLayout.tsx` for the header/footer/nav shell itself** — layout-level concerns. Never add them to individual page files.
 2. **Never modify `routes.tsx` or `app.tsx`** — the router setup must remain intact.
 3. **Create component files in `src/components/layout/`** — the designated location for layout-level components.
 4. **Use the full-height flex column pattern** — wrap layout in `min-h-screen flex flex-col` so footer stays at bottom.
 5. **Use shadcn and Tailwind** — compose from `@/components/ui`; style with Tailwind utility classes and design tokens.
 6. **Use path aliases** — import with `@/components/layout/...` and `@/components/ui`; no deep relative paths.
 7. **Preserve existing content** — if `appLayout.tsx` already has a `<NavigationMenu />` or other shell elements, keep them in place.
+8. **Renaming/rebranding the app is a two-file change, not one** — whenever the request changes the app's name/brand text (not just adding/styling a header or footer), you MUST also update `index.html`'s `<title>` at the bundle root. `appLayout.tsx` covers what's visible in the page body (header/nav brand, footer); `index.html`'s `<title>` covers the browser tab — neither substitutes for the other, and both are required. Do not stop after editing only `appLayout.tsx` for this kind of request.
 
 ### Step 1 — Create the header component (if requested)
 

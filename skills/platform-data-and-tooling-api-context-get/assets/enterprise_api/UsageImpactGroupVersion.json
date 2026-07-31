@@ -1,0 +1,166 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "UsageImpactGroupVersion - Data API",
+  "description": "Represents a collection of fields to set up the versions of Usage Impact Groups. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApprovedMeasureExtlid": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The approved Measure Category ID assigned by a regulator."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The description of the Usage Impact Group Version."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date when the validity of Usage Impact Group Version ends."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the Usage Impact Group Version is active. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the Usage Impact Group Version."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date when the validity of Usage Impact Group Version begins."
+    },
+    "TechResourceManualCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The code and version of the Technical Reference Manual which is the source for the values associated with this Usage Impact Group Version. This is necessary for regulatory reporting."
+    },
+    "UsageImpactGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Usage Impact Group object associated with the Usage Impact Group Version. This field is a relationship field.",
+      "relationship_name": "UsageImpactGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "UsageImpactGroup"
+    },
+    "Version": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The version number of the Usage Impact Group Version."
+    }
+  },
+  "special_access_rules": "This object is available only with EAndU Cloud Usage Impact Access permission set.\n\nThis object is available only with EAndU Cloud Usage\n         Impact Access permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **UsageImpactGroupVersionChangeEvent**: Change events are available for the object.\n- **UsageImpactGroupVersionFeed**: Feed tracking is available for the object.\n- **UsageImpactGroupVersionHistory**: History is available for tracked fields of the object.\n- **UsageImpactGroupVersionOwnerSharingRule**: Sharing rules are available for the object.\n- **UsageImpactGroupVersionShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ApprovedMeasureExtlid": {
+      "field_label": "Approved Measure Extl ID",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Usage Impact Group Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TechResourceManualCode": {
+      "field_label": "Tech Resource Manual Code",
+      "type": "string",
+      "length": "255"
+    },
+    "UsageImpactGroupId": {
+      "field_label": "Usage Impact Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Version": {
+      "field_label": "Version",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

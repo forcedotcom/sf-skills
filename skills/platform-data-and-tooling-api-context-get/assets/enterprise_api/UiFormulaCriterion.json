@@ -1,0 +1,116 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UiFormulaCriterion - Data API",
+  "description": "Represents a filter that helps define component visibility on a Lightning page. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "LeftHandSide": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Represents the field that the filter is based on. For example, AMOUNT."
+    },
+    "OperatorId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the filter operator. Valid values are: CONTAINS EQUAL GE—greater than or equal GT—greater than LE—less than or equal LT—less than NE—not equal This is a relationship field.",
+      "relationship_name": "Operator",
+      "relationship_type": "Lookup",
+      "refers_to": "null"
+    },
+    "ParentKeyPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the three-digit prefix of the parent ID."
+    },
+    "RightHandSide": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the value used to evaluate the component’s visibility. For example, 1000000."
+    },
+    "RuleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Represents the formula rule ID. This is a relationship field.",
+      "relationship_name": "Rule",
+      "relationship_type": "Lookup",
+      "refers_to": "UiFormulaRule"
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UiFormulaCriterion\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LeftHandSide\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OperatorId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ParentKeyPrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RightHandSide\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Rule\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UiFormulaRule\"/>\n        <element name=\"RuleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Ui Formula Criterion ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LeftHandSide": {
+      "field_label": "Left Value",
+      "type": "string",
+      "length": "255"
+    },
+    "OperatorId": {
+      "field_label": "Formula Operator ID",
+      "type": "string",
+      "length": "40"
+    },
+    "ParentKeyPrefix": {
+      "field_label": "Parent Key Prefix",
+      "type": "string",
+      "length": "3"
+    },
+    "RightHandSide": {
+      "field_label": "Right Value",
+      "type": "string",
+      "length": "255"
+    },
+    "RuleId": {
+      "field_label": "Ui Formula Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,753 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "WorkOrder - Data API",
+  "description": "Represents field service work to be performed for a customer. This object is available in API version 36.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account associated with the work order. This is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the address where the work order is completed."
+    },
+    "AssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset associated with the work order. This is a relationship field.",
+      "relationship_name": "Asset",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "AssetWarrantyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The asset warranty term associated with the work order. This field is available in API version 50.0 and above."
+    },
+    "BusinessHoursId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The business hours associated with the work order. This is a relationship field.",
+      "relationship_name": "BusinessHours",
+      "relationship_type": "Lookup",
+      "refers_to": "BusinessHours"
+    },
+    "CaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The case associated with the work order. This is a relationship field.",
+      "relationship_name": "Case",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "City": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city where the work order is completed. Maximum length is 40 characters."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The contact associated with the work order. This is a relationship field.",
+      "relationship_name": "Contact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country where the work order is completed. Maximum length is 80 characters."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization. The label in the user interface is Currency ISO Code."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The description of the work order. Try to include the steps needed to change the work order’s status to Completed."
+    },
+    "Discount": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The weighted average of the discounts on all line items in the work order. It can be any positive number up to 100."
+    },
+    "Duration": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The estimated time required to complete the work order. Specify the duration unit in the Duration Type field. If the Duration field on a Work Order is null, it adopts the duration value from the Work Type object when the work type is updated or inserted. Work order duration and work order line item duration are independent of each other. If you want work order duration to automatically show the sum of the work order line items’ duration, replace the Duration field on work orders with a custom roll-up summary field."
+    },
+    "DurationInMinutes": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The estimated duration in minutes. For internal use only."
+    },
+    "DurationType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The unit of the duration: Minutes or Hours."
+    },
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the work order is completed. This field is blank unless you set up an Apex trigger or quick action to populate it. For example, you can create a quick action that sets the EndDate to 365 days after the StartDate."
+    },
+    "EntitlementId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The entitlement associated with the work order."
+    },
+    "GeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Accuracy level of the geocode for the address. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "GrandTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The total price of the work order with tax added."
+    },
+    "IsClosed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the work order is closed (true) or open (false)."
+    },
+    "IsGeneratedFromMaintenancePlan": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "(Read Only) Indicates that the work order was generated from a maintenance plan (true), rather than manually created (false)."
+    },
+    "IsStopped": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether a milestone is paused (true) or counting down (false). This field is available only if Enable stopped time and actual elapsed time is selected on the Entitlement Settings page."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the work order was last modified. Its label in the user interface is Last Modified Date."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the work order was last viewed."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the precise geolocation of the address where the work order is completed. Acceptable values are numbers between –90 and 90 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "LineItemCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of work order line items in the work order. Its label in the user interface is Line Items."
+    },
+    "LocationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The location associated with the work order. For example, a work site. This is a relationship field.",
+      "relationship_name": "Location",
+      "relationship_type": "Lookup",
+      "refers_to": "Location"
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the precise geolocation of the address where the work order is completed. Acceptable values are numbers between –180 and 180 with up to 15 decimal places. See Compound Field Considerations and Limitations for details on geolocation compound fields."
+    },
+    "MaintenancePlanId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maintenance plan associated with the work order. When the work order is auto-generated from a maintenance plan, this field automatically lists the related plan."
+    },
+    "MaintenanceWorkRuleId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the maintenance work rule that generated this work order. This field is available in API version 50.0 and above."
+    },
+    "MilestoneStatus": {
+      "type": "string",
+      "properties": "Group, Nillable, Sort",
+      "description": "Indicates the status of a milestone. This field is visible if an entitlement process is applied to a work order."
+    },
+    "MinimumCrewSize": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The minimum crew size allowed for a crew assigned to the work order. If you’re not using the Field Service managed package, this field serves as a suggestion rather than a rule. If you are using the managed package, the scheduling optimizer counts the number of service crew members on a service crew to determine whether it fits a work order’s minimum crew size requirement."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The work order’s assigned owner. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ParentWorkOrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The work order’s parent work order, if it has one. Create a custom report to view a work order’s child work orders. This is a relationship field.",
+      "relationship_name": "ParentWorkOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "WorkOrder"
+    },
+    "PostWorkSummary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The summary of a completed work order that’s either entered manually or created by an AI agent."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal code where the work order is completed. Maximum length is 20 characters."
+    },
+    "PreWorkBriefPromptTemplate": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the activated Pre-Work Brief prompt template."
+    },
+    "Pricebook2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The price book associated with the work order. Adding a price book to the work order lets you assign different price book entries to the work order’s line items. This is only available if Product2 is enabled. This is a relationship field.",
+      "relationship_name": "Pricebook2",
+      "relationship_type": "Lookup",
+      "refers_to": "Pricebook2"
+    },
+    "Priority": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The priority of the work order. The picklist includes the following values, which can be customized: Low Medium High Critical"
+    },
+    "ProductServiceCampaignId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The product service campaign associated with the work order."
+    },
+    "ProductServiceCampaignItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The product service campaign item associated with the work order."
+    },
+    "RecommendedCrewSize": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The recommended number of people on the service crew assigned to the work order. For example, you might have a Minimum Crew Size of 2 and a Recommended Crew Size of 3."
+    },
+    "ReturnOrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The return order associated with the work order."
+    },
+    "ReturnOrderLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The return order line item associated with the work order."
+    },
+    "RootWorkOrderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "(Read only) The top-level work order in a work order hierarchy. Depending on where a work order lies in the hierarchy, its root could be the same as its parent. View a work order’s child work order in the Child Work Orders related list. This is a relationship field.",
+      "relationship_name": "RootWorkOrder",
+      "relationship_type": "Lookup",
+      "refers_to": "WorkOrder"
+    },
+    "ServiceAppointmentCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of service appointments on the work order."
+    },
+    "ServiceContractId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service contract associated with the work order."
+    },
+    "ServiceDocumentTemplate": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The template ID which sets the template for each service document for the Document Builder feature."
+    },
+    "ServiceReportLanguage": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language used for all service reports and service report previews created for the work order, its service appointments, and its work order line items and their service appointments. If the field is blank, service reports are generated in the default language in Salesforce of the person creating the report.To appear as an option in the ServiceReportLanguage field, a language must be set up in Translation Workbench or be one of Salesforce’s 18 fully supported languages. Rich text fields and service report section names aren’t translated."
+    },
+    "ServiceReportTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service report template that the work order uses. If you don’t specify a service report template on a work order, it uses the service report template listed on its work type. If the work type doesn’t list a template or no work type is specified, the work order uses the default service report template."
+    },
+    "ServiceTerritoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service territory where the work order is taking place. This is a relationship field.",
+      "relationship_name": "ServiceTerritory",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceTerritory"
+    },
+    "SlaExitDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time that the work order exits the entitlement process."
+    },
+    "SlaStartDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time that the work order enters the entitlement process. You can update or reset the time if you have “Edit” permission on work orders."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the work order goes into effect. This field is blank unless you set up an Apex trigger or quick action to populate it. For example, you can create a quick action that sets the StartDate to the date when the Status changes to In Progress."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state where the work order is completed. Maximum length is 80 characters."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The status of the work order. The picklist includes the following values, which can be customized: New—Work order was created, but there hasn’t yet been any activity. In Progress—Work has begun. On Hold—Work is paused. Completed—Work is complete. Cannot Complete—Work could not be completed. Closed—All work and associated activity is complete. Canceled—Work is canceled, typically before any work began. Changing a work order’s status does not affect the status of its work order line items or associated service appointments."
+    },
+    "StatusCategory": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The category that each Status value falls into. The Status Category field has eight default values: seven values which are identical to the default Status values, and a None value for statuses without a status category.If you create custom Status values, you must indicate which category it belongs to. For example, if you create a Waiting for Response value, you may decide that it belongs in the On Hold category. To learn which processes reference StatusCategory, see How are Status Categories Used?"
+    },
+    "StopStartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates when the milestone was paused. The label in the user interface is Stopped Since."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street number and name where the work order is completed."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The subject of the work order. Try to describe the nature and purpose of the job to be completed. For example, “Annual On-Site Well Maintenance.” Maximum length is 255 characters."
+    },
+    "Subtotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The total of the work order line items’ subtotals before discounts and taxes are applied."
+    },
+    "SuggestedMaintenanceDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The suggested date that the work order is completed. When the work order is auto-generated from a maintenance plan, this field is automatically populated based on the maintenance plan’s settings."
+    },
+    "Tax": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The total tax on the work order. You can enter a number with or without the currency symbol and use up to two decimal places. For example, in a work order whose total price is $100, enter $10 to apply a 10% tax."
+    },
+    "TotalPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read only. The total of the work order line items’ prices. This value has discounts applied but not tax."
+    },
+    "WorkOrderNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An eight-digit, auto-generated number that identifies the work order."
+    },
+    "WorkTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The work type associated with the work order. When a work type is selected, the work order automatically inherits the work type’s Duration, Duration Type, and required skills. If the Duration field for the work type is null, enter the duration value. This is a relationship field.",
+      "relationship_name": "WorkType",
+      "relationship_type": "Lookup",
+      "refers_to": "WorkType"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WorkOrderChangeEvent (API version 48.0)**: Change events are available for the object.\n- **WorkOrderFeed**: Feed tracking is available for the object.\n- **WorkOrderHistory**: History is available for tracked fields of the object.\n- **WorkOrderOwnerSharingRule**: Sharing rules are available for the object.\n- **WorkOrderShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"WorkOrder\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Address\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Asset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"AssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AssetWarranty\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AssetWarranty\"/>\n        <element name=\"AssetWarrantyId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BusinessHours\" nillable=\"true\" minOccurs=\"0\" type=\"ens:BusinessHours\"/>\n        <element name=\"BusinessHoursId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Case\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Case\"/>\n        <element name=\"CaseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ChildWorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Contact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContactRequests\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DescendantWorkOrders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DigitalSignatures\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Discount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Duration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"DurationInMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"DurationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DynamicDataCaptures\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Entitlement\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Entitlement\"/>\n        <element name=\"EntitlementId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"EntityMilestones\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Expenses\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GrandTotal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsClosed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsGeneratedFromMaintenancePlan\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsStopped\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Latitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LineItemCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Location\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Location\"/>\n        <element name=\"LocationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Longitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MaintenancePlan\" nillable=\"true\" minOccurs=\"0\" type=\"ens:MaintenancePlan\"/>\n        <element name=\"MaintenancePlanId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MaintenanceWorkRule\" nillable=\"true\" minOccurs=\"0\" type=\"ens:MaintenanceWorkRule\"/>\n        <element name=\"MaintenanceWorkRuleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MilestoneStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MinimumCrewSize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"NewWorkPlans\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NewWorkSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ParentWorkOrder\" nillable=\"true\" minOccurs=\"0\" type=\"ens:WorkOrder\"/>\n        <element name=\"ParentWorkOrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PostWorkSummary\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PreWorkBriefPromptTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Pricebook2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Pricebook2\"/>\n        <element name=\"Pricebook2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Priority\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductRequestLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductRequests\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductServiceCampaign\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProductServiceCampaign\"/>\n        <element name=\"ProductServiceCampaignId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProductServiceCampaignItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProductServiceCampaignItem\"/>\n        <element name=\"ProductServiceCampaignItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProductsConsumed\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProductsRequired\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecommendedCrewSize\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ResourcePreferences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReturnOrder\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ReturnOrder\"/>\n        <element name=\"ReturnOrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ReturnOrderLineItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ReturnOrderLineItem\"/>\n        <element name=\"ReturnOrderLineItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RootWorkOrder\" nillable=\"true\" minOccurs=\"0\" type=\"ens:WorkOrder\"/>\n        <element name=\"RootWorkOrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceAppointmentCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ServiceAppointments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceContract\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceContract\"/>\n        <element name=\"ServiceContractId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceReportLanguage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ServiceReportTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceReportLayout\"/>\n        <element name=\"ServiceReportTemplateId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceReports\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceTerritory\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceTerritory\"/>\n        <element name=\"ServiceTerritoryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SkillRequirements\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SlaExitDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SlaStartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"StartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StatusCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StopStartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subtotal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SuggestedMaintenanceDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Tax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TimeSheetEntries\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TotalPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"WorkOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkOrderNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"WorkPlans\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"WorkType\" nillable=\"true\" minOccurs=\"0\" type=\"ens:WorkType\"/>\n        <element name=\"WorkTypeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Address": {
+      "field_label": "Address",
+      "type": "address"
+    },
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssetWarrantyId": {
+      "field_label": "Asset Warranty ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BusinessHoursId": {
+      "field_label": "Business Hours ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Discount": {
+      "field_label": "Discount",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "Duration": {
+      "field_label": "Duration",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DurationInMinutes": {
+      "field_label": "Duration in Minutes",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DurationType": {
+      "field_label": "Duration Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "datetime"
+    },
+    "EntitlementId": {
+      "field_label": "Entitlement ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "GeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "GrandTotal": {
+      "field_label": "Grand Total",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Work Order ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsClosed": {
+      "field_label": "Is Closed",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsGeneratedFromMaintenancePlan": {
+      "field_label": "Generated from maintenance plan",
+      "type": "boolean"
+    },
+    "IsStopped": {
+      "field_label": "Stopped",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "LineItemCount": {
+      "field_label": "Line Items",
+      "type": "int",
+      "digits": "9"
+    },
+    "LocationId": {
+      "field_label": "Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "MaintenancePlanId": {
+      "field_label": "Maintenance Plan ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MaintenanceWorkRuleId": {
+      "field_label": "Maintenance Work Rule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MilestoneStatus": {
+      "field_label": "Milestone Status",
+      "type": "string",
+      "length": "30"
+    },
+    "MinimumCrewSize": {
+      "field_label": "Minimum Crew Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentWorkOrderId": {
+      "field_label": "Parent Work Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PostWorkSummary": {
+      "field_label": "Post-Work Summary",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "PostalCode": {
+      "field_label": "Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "PreWorkBriefPromptTemplate": {
+      "field_label": "Pre-Work Brief Prompt Template ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Pricebook2Id": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ProductServiceCampaignId": {
+      "field_label": "Product Service Campaign ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductServiceCampaignItemId": {
+      "field_label": "Product Service Campaign Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RecommendedCrewSize": {
+      "field_label": "Recommended Crew Size",
+      "type": "int",
+      "digits": "9"
+    },
+    "ReturnOrderId": {
+      "field_label": "Return Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReturnOrderLineItemId": {
+      "field_label": "Return Order Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RootWorkOrderId": {
+      "field_label": "Root Work Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceAppointmentCount": {
+      "field_label": "Service Appointment Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ServiceContractId": {
+      "field_label": "Service Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceReportLanguage": {
+      "field_label": "Service Report Language",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ServiceReportTemplateId": {
+      "field_label": "Service Report Layout ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ServiceTerritoryId": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SlaExitDate": {
+      "field_label": "Sla Policy End Time",
+      "type": "datetime"
+    },
+    "SlaStartDate": {
+      "field_label": "Sla Policy Start Time",
+      "type": "datetime"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "datetime"
+    },
+    "State": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StatusCategory": {
+      "field_label": "Status Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StopStartDate": {
+      "field_label": "Stopped Since",
+      "type": "datetime"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "string",
+      "length": "255"
+    },
+    "Subtotal": {
+      "field_label": "Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SuggestedMaintenanceDate": {
+      "field_label": "Suggested Maintenance Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Tax": {
+      "field_label": "Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPrice": {
+      "field_label": "Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "WorkOrderNumber": {
+      "field_label": "Work Order Number",
+      "type": "string",
+      "length": "255"
+    },
+    "WorkTypeId": {
+      "field_label": "Work Type ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

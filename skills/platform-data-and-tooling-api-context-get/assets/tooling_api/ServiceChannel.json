@@ -1,0 +1,92 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ServiceChannel - Tooling API",
+  "description": "Represents a channel for work items that are received from your customers. This object is available in API version 65.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AcwExtensionDuration": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum length of time, measured in seconds, an agent can spend on After Conversation Work (ACW) each time they extend the timer. You must set this field if HasAcwExtensionEnabled is set to true. Specify a value from 10 through 3600. Available only for service channels of type Messaging or Voice."
+    },
+    "AfterConvoWorkMaxTime": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum length of time, measured in seconds, an agent has to complete ACW. You must set this field if HasAfterConvoWorkTimer is set to true. Specify a value from 10 through 3600. Available only for service channels of type Messaging or Voice."
+    },
+    "CapacityModel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The method that determines when an agent's capacity for a work item is released. With the Status-Based capacity routing model, work remains assigned and applied to an agent’s capacity until the work is completed or reassigned to a different agent. In contrast, the tab-based capacity model releases an agent’s capacity when a work tab is closed in the service console. Possible values are: StatusBased TabBased"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API."
+    },
+    "DoesCheckCapOnOwnerChange": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the override the capacity check is set to on (true) or not (false). In Status-Based capacity routing model, when work is reassigned to an agent, you can choose to override the capacity check and keep the work assigned to a specific agent. This field is available in API version 65.0 and later. The default value is false."
+    },
+    "DoesCheckCapOnStatusChange": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the override the capacity check is set to on (true) or not (false). In the Status-Based capacity routing model, when work is reopened, you can choose to override the capacity check and keep the work assigned to a specific agent. This field is available in API version 65.0 and later. The default value is false."
+    },
+    "DoesMinimizeWidgetOnAccept": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the Omni-Channel widget automatically minimizes when an agent accepts work (true) or not (false). The default value is false."
+    },
+    "HasAcwExtensionEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether agents can extend their ACW (true) or not (false). Available only if HasAfterConvoWorkTimer is set to true. If set to true, you must also set the AcwExtensionDuration and MaxExtensions fields. Available only for service channels of type Messaging or Voice. The default value is false."
+    },
+    "HasAfterConvoWorkTimer": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether ACW time can be configured for the channel (true) or not (false). If set to true, you must also set the AfterConvoWorkMaxTime field. Available only for service channels of type Messaging or Voice. The default value is false."
+    },
+    "HasAutoAcceptEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether work items in a service channel open automatically in the agent’s workspace so that the agent doesn’t have to manually accept them (true) or not (false). The default value is false."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language for the service channel."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for the service channel."
+    },
+    "MaxExtensions": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The maximum number of times an agent can extend their ACW time. Specify a value from 1 through 10. You must set this field if hasAcwExtensionEnabled is set to true. Available only for service channels of type Messaging or Voice."
+    },
+    "RelatedEntity": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of object that’s associated with this service channel. This field is unique within your organization. Possible values are: Account Activity Case ChangeRequest Contact ContactRequest FlowOrchestrationWorkItem Incident Lead Opportunity Order Problem SocialPost WorkOrder"
+    }
+  },
+  "special_access_rules": "Available only if Omni-Channel is enabled in your org."
+}

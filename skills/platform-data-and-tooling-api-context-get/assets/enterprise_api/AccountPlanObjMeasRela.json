@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "AccountPlanObjMeasRela - Data API",
+  "description": "Represents a junction between an account plan objective measure and the related objects. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountPlanObjectiveMeasureId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The account plan objective measure associated with the record. This field is a relationship field.",
+      "relationship_name": "AccountPlanObjectiveMeasure",
+      "relationship_type": "Master-detail",
+      "refers_to": "AccountPlanObjectiveMeasure (the master object)"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the account plan objective measure relation record."
+    },
+    "ReferenceRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record of the object associated with the account plan objective measure. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceRecord",
+      "refers_to": "Case, FinancialDeal, Opportunity"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AccountPlanObjMeasRelaChangeEvent**: Change events are available for the object.\n- **AccountPlanObjMeasRelaHistory**: History is available for tracked fields of the object."
+}

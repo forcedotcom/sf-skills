@@ -1,0 +1,87 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "PathAssistant - Tooling API",
+  "description": "Represents a Path. Available in Tooling API version 36.0 and later.",
+  "supported_soap_calls": "`retrieve()`, `query()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the path in the API."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Group, Nillable",
+      "description": "The name of the path in the Metadata API.Query this field only if the query result contains no more than 1 record. Otherwise, an error is returned. If more than 1 record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the path is active (true) or inactive (false)."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Sort",
+      "description": "Indicates whether the record has been moved to the Recycle Bin (true) or not (false)."
+    },
+    "IsMasterRecordType": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this path is for the main record type (true) or not (false)."
+    },
+    "Language": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the path. Valid values are: Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for this path."
+    },
+    "Metadata": {
+      "type": "msn:PathAssistant",
+      "properties": "Create, Nillable, Update",
+      "description": "Path metadata from the msn namespace.Query this field only if the query result contains no more than 1 record. Otherwise, an error is returned. If more than 1 record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix. This field can’t be accessed unless the logged-in user has the “Customize Application” permission."
+    },
+    "RecordTypeId": {
+      "type": "ID",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique identifier for a record type."
+    },
+    "SobjectProcessField": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Name of the picklist field which determines the steps you can use in the path.For example, OpportunityStage in the case of opportunities or LeadStatus in the case of leads."
+    },
+    "SobjectType": {
+      "type": "string",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The object this path relates to. Valid values are: Opportunity, Lead, Quote, or the API name of a custom object."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PathAssistant\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:PathAssistant\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"PathAssistant\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entityName\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordTypeName\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

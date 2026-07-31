@@ -1,0 +1,160 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "PriceAdjustmentSchedule - Data API",
+  "description": "Represents a series of discounts offered depending on your product's configuration, quantity, and when they’re purchased in combination with other products. This object is available in API version 47.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AdjustmentMethod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The method for applying tiered pricing. Possible values are: Range—All items receive the discount of the highest tier the quantity falls in. Slab—Items receive the discount defined for the tier they fall in. The default value is Range. Term-based discounts can’t be of type Slab. This field is available in API version 51.0 and later.The Slab method functions in the same way as the Range method."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Text description of the price adjustment schedule."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the price adjustment schedule is active (true) or not (false). You can change this field’s value as often as necessary. Label is Active. The default value is False."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates whether the price adjustment schedule has been archived (true) or not (false). This field is read-only."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the price adjustment schedule. This field is read-only. Label is Price Adjustment Schedule Name.",
+      "required": true
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The Salesforce ID of the sales representative who owns the price adjustment schedule."
+    },
+    "ScheduleType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Indicates how the price adjustment is determined. This field is available when Subscription Management is enabled. This field is available in API version 55.0 and later. Possible values are: Attribute—The characteristics or properties of a product determine the price adjustment. Bundle—The price adjustment that is determined when you want to sell a group of products or services as a unit. Custom—The price adjustment that can be customized for the user's needs. Term—The length of the subscription determines the price adjustment. Available in API version 58.0 and later. Volume—The quantity purchased determines the price adjustment. The default value is Volume."
+    }
+  },
+  "special_access_rules": "This object is available when the B2B Commerce license is enabled or when Subscription Management is enabled.",
+  "usage": "When you create a PriceAdjustmentSchedule, you associate PriceAdjustmentTiers with it. A PriceAdjustmentSchedule is inactive until at least one PriceAdjustmentTier is added to it. A PriceAdjustmentSchedule comprises all related PriceAdjustmentTiers, with a maximum limit of 25 PriceAdjustmentTiers for Subscription Management. To use PriceAdjustmentSchedule, associate it with a PriceBookEntry. You can modify the PriceAdjustmentTier object, and the ScheduleType and AdjustmentMethod fields, only when a PriceAdjustmentSchedule is inactive.\n\nWhen you create a PriceAdjustmentSchedule, you associate PriceAdjustmentTiers with it. A PriceAdjustmentSchedule is inactive until at least one PriceAdjustmentTier is added to it. A PriceAdjustmentSchedule comprises all related PriceAdjustmentTiers, with a maximum limit of 25 PriceAdjustmentTiers for Subscription Management.\n\nTo use PriceAdjustmentSchedule, associate it with a PriceBookEntry.\n\nYou can modify the PriceAdjustmentTier object, and the ScheduleType and AdjustmentMethod fields, only when a PriceAdjustmentSchedule is inactive.",
+  "field_reference": {
+    "AdjustmentMethod": {
+      "field_label": "Adjustment Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ContractId": {
+      "field_label": "Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "255"
+    },
+    "EffectiveFrom": {
+      "field_label": "Effective from",
+      "type": "datetime"
+    },
+    "EffectiveTo": {
+      "field_label": "Effective to",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Price Adjustment Schedule ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Price Adjustment Schedule Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Pricebook2Id": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScheduleType": {
+      "field_label": "Schedule Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

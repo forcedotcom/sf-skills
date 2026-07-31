@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "BusinessProcessFeedback - Tooling API",
+  "description": "Represents information about the survey and the question associated with each stage in a customer lifecycle map. This object is available in API version 51.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActionName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Name of the survey used to gather feedback."
+    },
+    "ActionParam": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Name of the question used to gather feedback."
+    },
+    "ActionType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Method of collecting feedback. Possible values are: PHONE_CALL SURVEY"
+    },
+    "BusinessProcessDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Unique identifier of the stage associated with the survey and question."
+    }
+  }
+}

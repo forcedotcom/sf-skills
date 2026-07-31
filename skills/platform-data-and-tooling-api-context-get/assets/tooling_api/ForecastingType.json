@@ -1,0 +1,91 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ForecastingType - Tooling API",
+  "description": "Represents a forecast type. This object is available in API version 52.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DateType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The date type that forecast amounts are based on. Possible values are: OLIMeasureCloseDateOnly—3 OpportunityCloseDate—0 ProductDate—1 ProductDateOnly—4 ScheduleDate—2 ScheduleDateOnly—5",
+      "required": true
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the forecast type.",
+      "required": true
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the forecast type."
+    },
+    "HasProductFamily": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group",
+      "description": "Indicates whether the forecast type includes product families (true) or not (false). The default value is false.",
+      "required": true
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the forecast type."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Controlling label for this forecast type. This display value is the internal label that doesn’t get translated.",
+      "required": true
+    },
+    "Metadata": {
+      "type": "ForecastingType",
+      "properties": "Create, Nillable, Update",
+      "description": "The metadata of the forecast type."
+    },
+    "OpportunitySplitTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For a forecast type based on a split, the ID of the opportunity split type. This field is a relationship field.",
+      "relationship_name": "OpportunitySplitType",
+      "relationship_type": "Lookup",
+      "refers_to": "OpportunitySplitType"
+    },
+    "OpptyLineItemSplitTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For a forecast type based on an opportunity product split, the ID of the opportunity line item split type. This field is a relationship field. Available in API version 58.0 and later.",
+      "relationship_name": "OpptyLineItemSplitType",
+      "relationship_type": "Lookup",
+      "refers_to": "OpptyLineItemSplitType"
+    },
+    "RoleType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the role type has a ForecastingType, and if so, which ForecastingType. Possible values are: R—User role-based forecast type T Y—Territory2-based forecast type",
+      "required": true
+    },
+    "Territory2ModelId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "For a territory-based forecast type, the ID of the Territory2 model."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"amount\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"dateType\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingGroupDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"hasCustomGroup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasProductFamily\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"opportunitySplitType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"opptyLineItemSplitType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"quantity\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"roleType\" type=\"xsd:string\"/>\n        <xsd:element name=\"territory2Model\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

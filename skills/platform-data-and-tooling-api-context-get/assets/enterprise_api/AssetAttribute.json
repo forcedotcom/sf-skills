@@ -1,0 +1,125 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AssetAttribute - Data API",
+  "description": "Stores asset attributes to track and analyze asset conditions to improve their uptime. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the asset. This field is a relationship field.",
+      "relationship_name": "Asset",
+      "relationship_type": "Lookup",
+      "refers_to": "Asset"
+    },
+    "AttributeDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the attribute definition for this asset attribute. This field is a relationship field.",
+      "relationship_name": "AttributeDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "AttributeDefinition"
+    },
+    "AttributeName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name given to the asset attribute in the UI by the user."
+    },
+    "AttributePicklistValueId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the attribute picklist value if the attribute is a picklist type. This field is a relationship field.",
+      "relationship_name": "AttributePicklistValue",
+      "relationship_type": "Lookup",
+      "refers_to": "AttributePicklistValue"
+    },
+    "AttributeValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores the value of an asset attribute, for example 5-TB storage ."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An auto-generated ID of the attribute record saved in an external system (for example an HBase database). This field is reserved and used for internal purpose."
+    }
+  },
+  "special_access_rules": "Field Service must be enabled.",
+  "usage": "Add asset descriptors to the AssetAttribute object instead of creating multiple custom attributes on an asset. This helps scale to a high asset volume in the system.",
+  "wsdl_segment": "```xml\n<complexType name=\"AssetAttribute\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Asset\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Asset\"/>\n        <element name=\"AssetId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttributeDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AttributeDefinition\"/>\n        <element name=\"AttributeDefinitionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttributeName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AttributePicklistValue\" nillable=\"true\" minOccurs=\"0\" type=\"ens:AttributePicklistValue\"/>\n        <element name=\"AttributePicklistValueId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AttributeValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AttributeDefinitionId": {
+      "field_label": "Attribute Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AttributeName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "AttributePicklistValueId": {
+      "field_label": "Attribute Picklist Value ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AttributeValue": {
+      "field_label": "Value",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalId": {
+      "field_label": "External ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Asset Attribute ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

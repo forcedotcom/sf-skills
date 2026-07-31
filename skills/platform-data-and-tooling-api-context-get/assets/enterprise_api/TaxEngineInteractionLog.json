@@ -1,0 +1,254 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "TaxEngineInteractionLog - Data API",
+  "description": "A record of a communication with an external tax engine following a tax calculation request. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Optional user-defined description for providing more information about the tax engine interaction log."
+    },
+    "DocumentCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Document code of the transaction for which the tax engine integration log was captured."
+    },
+    "EffectiveDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date that the tax engine request takes effect. This date is available for reference and bookkeeping only and doesn’t have any impact on tax calculation."
+    },
+    "InteractionHttpStatusCode": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The HHTP result code of the external callout made to a third-party tax engine provider. Refer to your third-party tax engine provider’s documentation for details about the specific codes returned."
+    },
+    "InteractionType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Shows the type of request made to the tax engine. In Subscription Management Summer ‘22, only CalculateTax is supported. Possible values are: CalculateTax"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "ReferenceEntity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The record on which tax was calculated."
+    },
+    "RequestBody": {
+      "type": "base64",
+      "properties": "Nillable",
+      "description": "Contains the content of the tax calculation API request."
+    },
+    "RequestContentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Shows the type of data passed in the request. For example, application/html or text/csv."
+    },
+    "RequestLength": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The character length of text within the request body."
+    },
+    "RequestName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the request."
+    },
+    "ResponseBody": {
+      "type": "base64",
+      "properties": "Nillable",
+      "description": "Contains the content of the tax calculation API response."
+    },
+    "ResponseContentType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Shows the method used to deliver the tax calculation API response, such as application/html or text/vnd.salesforce.quip-template."
+    },
+    "ResponseLength": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The character length of text within the response body."
+    },
+    "ResponseName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the response from the tax engine."
+    },
+    "ResultCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The code describing the result of the request. Possible values are: AdapterException—The Apex adapter interface for the tax provider threw an exception. Success—The request was successful. TaxEngineError—An error occurred while processing the request. See the log for details. ValidationError—A validation error occurred. Check that the request is complete and valid."
+    },
+    "TaxEngineId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the tax engine used in the tax calculation process. This field is a relationship field.",
+      "relationship_name": "TaxEngine",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxEngine"
+    },
+    "TaxEngineInteractionLogNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A system-generated number for a log entry."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "DocumentCode": {
+      "field_label": "Document Code",
+      "type": "string",
+      "length": "64"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Tax Engine Interaction Log ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InteractionHttpStatusCode": {
+      "field_label": "Interaction HTTP Status Code Tax",
+      "type": "int",
+      "digits": "9"
+    },
+    "InteractionType": {
+      "field_label": "Interaction Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ReferenceEntity": {
+      "field_label": "Reference Entity",
+      "type": "string",
+      "length": "32"
+    },
+    "RequestBody": {
+      "field_label": "Request Body",
+      "type": "base64"
+    },
+    "RequestContentType": {
+      "field_label": "Request  Content Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RequestLength": {
+      "field_label": "Request Length",
+      "type": "int",
+      "digits": "9"
+    },
+    "RequestName": {
+      "field_label": "Request Name",
+      "type": "string",
+      "length": "40"
+    },
+    "RequestTaxTransactionType": {
+      "field_label": "Request Tax Transaction Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ResponseBody": {
+      "field_label": "Response Body",
+      "type": "base64"
+    },
+    "ResponseContentType": {
+      "field_label": "Response  Content Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ResponseLength": {
+      "field_label": "Response Length",
+      "type": "int",
+      "digits": "9"
+    },
+    "ResponseName": {
+      "field_label": "Response Name",
+      "type": "string",
+      "length": "40"
+    },
+    "ResponseTaxTransactionType": {
+      "field_label": "Response Tax Transaction Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ResultCode": {
+      "field_label": "Result Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxEngineInteractionLogNumber": {
+      "field_label": "Tax Engine Interaction Log Number",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

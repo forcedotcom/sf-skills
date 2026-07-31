@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "SalesTrxnItemRelationShape - Data API",
+  "description": "Describes the relationship between sales transaction shape items; for example, a bundle or set. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssocSalesTrxnItemShapeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the associated sales transaction shape item. This field is a relationship field. In a bundle relationship, this sales transaction shape item is the bundle component.",
+      "relationship_name": "AssocSalesTrxnItemShape",
+      "relationship_type": "Lookup",
+      "refers_to": "SalesTransactionItemShape"
+    },
+    "AssocSalesTrxnItemShapeRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes the position of the associated sales transaction shape item in the relationship. Possible values are: BundleComponent—The associated sales transaction shape item is part of a bundle. SetComponent—The associated sales transaction shape item is part of a set."
+    },
+    "AssociatedItemShapePricing": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Describes how the associated sales transaction shape item is priced, relative to the main sales transaction shape item. Possible values are: IncludedInBundlePrice— The associated sales transaction shape item’s cost is $0 because it’s included in the bundle’s price. NotIncludedInBundlePrice— The associated sales transaction shape item has a cost because it’s not included in the bundle’s price."
+    },
+    "MainSalesTrxnItemShapeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the main sales transaction shape item. This field is a relationship field. In a bundle relationship, this sales transaction shape item is the bundle parent.",
+      "relationship_name": "MainSalesTrxnItemShape",
+      "relationship_type": "Lookup",
+      "refers_to": "SalesTransactionItemShape"
+    },
+    "MainSalesTrxnItemShapeRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the position of the main sales transaction shape item in the relationship. Possible values are: AddOnComponent— The main sales transaction shape item is an add on component. Available in API version 58.0 and later. Bundle— The main sales transaction shape item is the bundle parent. Set— The main sales transaction shape item is the set parent."
+    },
+    "ProductRelationshipTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the record that describes the relationship between the main and associated sales transaction shape items. This field is a relationship field.",
+      "relationship_name": "ProductRelationshipType",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductRelationshipType"
+    },
+    "QuantityScaleMethod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "How to scale the quantity of the associated sales transaction shape item, relative to the main sales transaction shape item. The value is informative; the system doesn’t check whether the scaled quantities are correct. If this field has a non-null value, you can't edit the associated sales transaction shape item’s quantity. Possible values are: Constant—The associated sales transaction’s item quantity remains the same in relation to the main sales transaction shape item’s quantity. For example, let’s say that the main sales transaction shape item has a quantity of one and the associated sales transaction shape item has a quantity of one. If you increase the quantity of the main sales transaction shape item to two, the associated sales transaction shape item’s quantity remains at one. Proportional—The associated sales transaction’s item quantity increases or decreases based on the main sales transaction shape item’s quantity. For example, let’s say that the main sales transaction shape item has a quantity of one and the associated sales transaction shape item has a quantity of two. If you increase the quantity of the main order item to two, the associated order item’s quantity increases to four. The default value is Proportional."
+    },
+    "SalesTransactionShapeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the related sales transaction shape. This field is a relationship field.",
+      "relationship_name": "SalesTransactionShape",
+      "relationship_type": "Lookup",
+      "refers_to": "SalesTransactionShape"
+    },
+    "SalesTrxnItemRelationShapeName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort",
+      "description": "Name of the relationship of the sales transaction shape item."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management, B2B Commerce, or B2C Commerce."
+}

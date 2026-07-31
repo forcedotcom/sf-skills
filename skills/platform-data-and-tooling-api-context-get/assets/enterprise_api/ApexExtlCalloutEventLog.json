@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ApexExtlCalloutEventLog - Data API",
+  "description": "Apex Extl Callout EventLog represent external data callouts via custom adapters for Salesforce Connect. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Action": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Action performed by the callout."
+    },
+    "ExecutionTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The end-to-end Apex execution time in milliseconds."
+    },
+    "FetchTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Duration (in milliseconds) it takes to retrieve the query results from the external system."
+    },
+    "IsSuccess": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the query was successful (true) or not (false). The default value is false."
+    },
+    "Message": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Error or warning message associated with the failed call."
+    },
+    "ObjectType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of event. The value is always BulkApi2."
+    },
+    "QueryFilter": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Field expressions to filter the rows to return. Corresponds to WHERE in SOQL queries."
+    },
+    "QueryLimit": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Maximum number of rows to return for a query. Corresponds to LIMIT in SOQL queries."
+    },
+    "QueryOffset": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Number of rows to skip when paging through a result set. Corresponds to OFFSET in SOQL queries."
+    },
+    "QueryOrderBy": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Field or column to use for sorting query results, and whether to sort the results in ascending (default) or descending order. Corresponds to ORDER BY in SOQL queries."
+    },
+    "QuerySelect": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Comma-delineated list of fields being queried. Corresponds to SELECT in SOQL queries."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestIdentifier. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "RowCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of records in the result set."
+    },
+    "RowsFetched": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Number of rows fetched by the callout."
+    },
+    "Subqueries": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Number of subqueries this query has been split into."
+    },
+    "Throughput": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Number of records retrieved in one second."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "TotalTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "How long it takes (in milliseconds) to prepare and execute the query and to retrieve the query results."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

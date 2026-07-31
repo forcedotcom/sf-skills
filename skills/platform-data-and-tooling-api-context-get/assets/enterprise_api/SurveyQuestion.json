@@ -1,0 +1,202 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "SurveyQuestion - Data API",
+  "description": "Represents a question in a survey.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The API name of the SurveyQuestion. The API name must be unique within a particular version of the survey."
+    },
+    "IsDeprecated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the question was deleted from the survey."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Up to the first 250 characters of the label for the question."
+    },
+    "PageDisplayOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The order in which the page is displayed. This field is available in API version 54.0 and later."
+    },
+    "PageName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label for the page. This field is available in API version 52.0 and later."
+    },
+    "QuestionChoiceCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of choices for the question. This field is available in API version 62.0 and later."
+    },
+    "QuestionName": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The label for the question."
+    },
+    "QuestionOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The order in which the question is displayed. The label for the page. This field is available in API version 52.0 and later."
+    },
+    "QuestionType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of question. Possible values include: Boolean—This value is available in API v49.0 and later. CSAT Currency Date DateTime FreeText Image Matrix—This value is available in API v55.0 and later. MultipleChoice MultiSelectPicklist NPS Number Picklist RadioButton StackRank Rating ShortText—This value is available in API v49.0 and later. Slider Toggle"
+    },
+    "RelatedQuestionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the parent question. This field is blank when the question itself is the parent question. This field is available in API v55.0 and later, with Feedback Management - Starter and Feedback Management - Growth licenses."
+    },
+    "SubQuestionDisplayOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The order in which the question is displayed within the parent question. This field is available in API v55.0 and later, with Feedback Management - Starter and Feedback Management - Growth licenses."
+    },
+    "SurveyPageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Lookup to the SurveyPage that contains the question."
+    },
+    "SurveyVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the SurveyVersion that the question belongs to."
+    },
+    "ValidationType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The validations available for the short-text question. Possible values include: Custom - Cu Number - Nu"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **SurveyQuestionChangeEvent**: Change events are available for the object.",
+  "field_reference": {
+    "AdditionalInfo": {
+      "field_label": "Additional Info",
+      "type": "textarea",
+      "length": "65535"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Survey Question ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDeprecated": {
+      "field_label": "Is Deprecated",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PageDisplayOrder": {
+      "field_label": "Page Display Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "PageName": {
+      "field_label": "Survey Page Name",
+      "type": "string",
+      "length": "80"
+    },
+    "QuestionChoiceCount": {
+      "field_label": "Question Choice Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "QuestionName": {
+      "field_label": "Question Name",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "QuestionOrder": {
+      "field_label": "Display Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "QuestionType": {
+      "field_label": "Question Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RelatedQuestionId": {
+      "field_label": "Survey Question ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SubQuestionDisplayOrder": {
+      "field_label": "Sub Question Sequence Display Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SurveyPageId": {
+      "field_label": "Survey Page ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SurveyVersionId": {
+      "field_label": "Survey Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ValidationType": {
+      "field_label": "Validation Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

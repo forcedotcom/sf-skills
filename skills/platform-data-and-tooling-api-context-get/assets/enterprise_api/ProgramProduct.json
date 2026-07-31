@@ -1,0 +1,128 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ProgramProduct - Data API",
+  "description": "Represents a junction between Program and Product2. This will hold Product2 values related to a Program. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the ProgramProduct object."
+    },
+    "ProductId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Product2 object associated with the Program. This field is a relationship field.",
+      "relationship_name": "Product",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "ProgramId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Program parent object associated with the record. This field is a relationship field.",
+      "relationship_name": "Program",
+      "relationship_type": "Lookup",
+      "refers_to": "Program"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the status of the ProgramProduct object. Possible values are: Active Inactive Pending For Approval"
+    }
+  },
+  "special_access_rules": "This object is available only with the EAndU Cloud Program Access permission set.\n\nThis object is available only with the EAndU Cloud\n         Program Access permission set.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ProgramProductChangeEvent**: Change events are available for the object.\n- **ProgramProductFeed**: Feed tracking is available for the object.\n- **ProgramProductHistory**: History is available for tracked fields of the object.\n- **ProgramProductOwnerSharingRule**: Sharing rules are available for the object.\n- **ProgramProductShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Program Product ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductId": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProgramId": {
+      "field_label": "Program ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RequiredDocuments": {
+      "field_label": "Required Documents",
+      "type": "multipicklist",
+      "length": "4099",
+      "precision": "0"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision"
+  ]
+}

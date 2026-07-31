@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "OppSalesMethodology - Data API",
+  "description": "Represents the sales methodology record attached to an opportunity. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the opportunity's sales methodology is locked (true) or not (false). The default value is false."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a user can edit the opportunity's sales methodology. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The name of the opportunity's sales methodology."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the associated opportunity. This field is a relationship field.",
+      "relationship_name": "Opportunity",
+      "relationship_type": "Master-detail",
+      "refers_to": "Opportunity (the master object)",
+      "required": true
+    },
+    "SalesMethodologyDefId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the sales methodology definition record. This field is a relationship field.",
+      "relationship_name": "SalesMethodologyDef",
+      "refers_to": "SalesMethodologyDef",
+      "required": true
+    }
+  },
+  "special_access_rules": "To access this object turn on the userHasSalesMethodologyEnabled, OrgPreferences, SalesMethodologyPref, and PipelineInspectorUser permissions. To create, edit, or delete records, users must own the associated opportunity's parent opportunity.\n\ncrudEnabled =\n\n. This\n            object isn’t accessible via standard CRUD API calls."
+}

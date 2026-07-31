@@ -1,0 +1,124 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "UnifiedVideoCall - Data API",
+  "description": "Represents a video call that is captured or synced from the VideoCall or Task record. This object is available for reports and dashboards in the Winter ’24 release and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivityDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time of the activity in the Coordinated Universal Time (UTC) time zone."
+    },
+    "ActivitySubType": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist",
+      "description": "Provides standard subtypes to facilitate creating and searching for specific activity subtypes. Possible values are: Captured LegacyCall Streamed VoiceCall"
+    },
+    "ActivityType": {
+      "type": "picklist",
+      "properties": "Filter, Nillable, Restricted picklist",
+      "description": "The type of activity. Possible value is UnifiedVideoCall."
+    },
+    "CallDurationInSeconds": {
+      "type": "int",
+      "properties": "Filter, Nillable",
+      "description": "The duration of the video call in seconds."
+    },
+    "DetailId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the object that contains detailed activity-specific information. The object depends on the activity type. For example, the detail for a Task activity is a Task object. The detail for an Event activity is an Event object. This field is a relationship field.",
+      "relationship_name": "Detail",
+      "relationship_type": "Lookup",
+      "refers_to": "VideoCall"
+    },
+    "InternalEventKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for internal use."
+    },
+    "IsInsightAvailable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the activity has an insight associated with it. The default value is false."
+    },
+    "Snippet": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "An abbreviation of the activity body or description. This field has a maximum length of 255 characters."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "None",
+      "description": "Contains the subject of the video call."
+    }
+  },
+  "field_reference": {
+    "ActivityDateTime": {
+      "field_label": "Activity Date and Time",
+      "type": "datetime"
+    },
+    "ActivitySubType": {
+      "field_label": "Activity Subtype",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ActivityType": {
+      "field_label": "Activity Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CallDurationInSeconds": {
+      "field_label": "Call Duration",
+      "type": "int",
+      "digits": "8"
+    },
+    "DetailId": {
+      "field_label": "Video Call ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Unified Video Call ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InternalEventKey": {
+      "field_label": "Internal Event Key",
+      "type": "string",
+      "length": "255"
+    },
+    "IsInsightAvailable": {
+      "field_label": "Insight Available",
+      "type": "boolean"
+    },
+    "Snippet": {
+      "field_label": "Snippet",
+      "type": "string",
+      "length": "255"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

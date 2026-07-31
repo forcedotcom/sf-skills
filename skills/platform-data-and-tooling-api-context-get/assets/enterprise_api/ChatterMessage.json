@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "ChatterMessage - Data API",
+  "description": "Represents a message sent as part of a private conversation in Chatter. This object is available in API version 23.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Body": {
+      "type": "textarea",
+      "properties": "Update",
+      "description": "Text of the message."
+    },
+    "ConversationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the conversation that the message is associated with."
+    },
+    "SenderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the sender."
+    },
+    "SenderNetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Experience Cloud site from which the message was sent. This field is available only if digital experiences is enabled in your org.This field is available in API version 32.0 and later."
+    },
+    "SentDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "Date the message was sent."
+    }
+  },
+  "usage": "Use this object to view and delete messages sent or received via private conversations in Chatter. Users can access this object if they have the Manage Chatter Messages and Direct Messages permission. Users with the Moderate Experiences Chatter Messages permission can access this object in Experience Cloud sites they’re a member of, only if the message has been flagged as inappropriate. This object is provided to allow administrators to view and delete users’ Chatter messages, for example, for compliance purposes. Messages are hard deleted. That is, they’re removed completely without a trip to the Recycle Bin. Deleting a message that resulted from sharing a file with someone doesn’t also delete the file.\n\nUse this object to view and delete messages sent or received via private conversations in Chatter. Users can access this object if they have the Manage Chatter Messages and Direct Messages permission. Users with the Moderate Experiences Chatter Messages permission can access this object in Experience Cloud sites they’re a member of, only if the message has been flagged as inappropriate. This object is provided to allow administrators to view and delete users’ Chatter messages, for example, for compliance purposes.\n\nMessages are hard deleted. That is, they’re removed completely without a trip to the Recycle Bin.\n\nDeleting a message that resulted from sharing a file with someone doesn’t also delete the file."
+}

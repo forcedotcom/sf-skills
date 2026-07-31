@@ -1,0 +1,126 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsTestSuiteExecution - Data API",
+  "description": "Records the individual execution lifecycle, results, and metrics of a specific test suite within a DevOps pipeline stage. It tracks granular outcomes like code coverage, pass/fail rates, and links directly back to the overarching test suite group. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Coverage": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The automated code coverage percentage for example, Apex test coverage, achieved during this specific test suite execution."
+    },
+    "DevopsTestSuiteGroupExecId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "References the parent DevopsTestSuiteGroupExec record that coordinates this and other related test suite executions within the pipeline stage.",
+      "relationship_name": "DevopsTestSuiteGroupExec",
+      "refers_to": "DevopsTestSuiteGroupExec"
+    },
+    "DevopsTestSuiteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the definition of the DevopsTestSuite being executed. This field is a relationship field.",
+      "relationship_name": "DevopsTestSuite",
+      "refers_to": "DevopsTestSuite"
+    },
+    "DevopsTestSuiteStageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the specific stage configuration or environment step (DevopsTestSuiteStage) where this execution takes place. This field is a relationship field.",
+      "relationship_name": "DevopsTestSuiteStage",
+      "refers_to": "DevopsTestSuiteStage"
+    },
+    "ExecutionEndTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the test suite finished executing. This field remains null while the execution is actively InProgress."
+    },
+    "ExecutionStartTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The precise date and time when the execution of this test suite commenced."
+    },
+    "ExternalIdRef": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A unique identifier used to map or reference this test run to an external CI/CD engine, testing framework, or third-party tool execution ID."
+    },
+    "FailureCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of individual test cases or assertions that failed during this test suite run."
+    },
+    "FailureRate": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The calculated percentage of failed tests relative to the total number of tests run in this suite."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, such as through a related list or lookup context."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last explicitly viewed this record's detail page or list view."
+    },
+    "LearnMore": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A URL pointing to supplemental documentation, internal run logs, or troubleshooting guides relevant to this test suite execution."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A system-generated unique auto-number identifier assigned to the test suite execution record."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or queue that owns this specific test suite execution record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "QualityGateStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Represents the final evaluation outcome of any automated quality policies or compliance criteria established for this test suite. Possible values are: Error Failed InProgress Passed The default value is Passed."
+    },
+    "ReportUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The web link to the complete, detailed test execution report or artifacts (e.g., JUnit XML, HTML dashboard) generated by the runner."
+    },
+    "ResultDetails": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A raw block of summary text, error logs, stack traces, or console output detailing why a test failed or stalled."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The operational state of the test suite run execution process itself. Possible values are: Error Failed InProgress Passed The default value is Passed."
+    },
+    "SuccessCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The total number of individual test cases or assertions that completed successfully without errors."
+    },
+    "SuccessRate": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The calculated percentage of passing tests relative to the total number of tests run in this suite."
+    }
+  }
+}

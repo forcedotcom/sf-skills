@@ -1,0 +1,95 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "ShippingConfigSetProduct - Data API",
+  "description": "Represents a product associated with a shipping configuration. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the shipping configuration set product record."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the Product2 record that is associated with shipping configuration set record. This field is a relationship field.",
+      "relationship_name": "Product2",
+      "refers_to": "Product2"
+    },
+    "ShippingProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the shipping profile. This field is a relationship field.",
+      "relationship_name": "ShippingProfile",
+      "relationship_type": "Master-detail",
+      "refers_to": "ShippingConfigurationSet (the master object)"
+    }
+  },
+  "special_access_rules": "The ShippingConfigSetProduct object is available only if you've a B2B Commerce or D2C Commerce license and the MultipleShippingProfile org perm is enabled.\n\nThe ShippingConfigSetProduct object is available\n         only if you've a B2B Commerce or D2C Commerce license and the MultipleShippingProfile org\n         perm is enabled.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Shipping Config Set Product ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Shipping Config Set Product Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShippingProfileId": {
+      "field_label": "Shipping Configuration Set ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

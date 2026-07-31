@@ -1,0 +1,84 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SvcCatalogFulfillFlowItem - Tooling API",
+  "description": "Represents a variable in a fulfillment flow for Service Catalog that can accept input. This object is available in API version 53.0 through 56.0.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CatalogFulfillmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Id of the SvcCatalogFulfillmentFlow that this item belongs to. This is a relationship field.",
+      "relationship_name": "CatalogFulfillment",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogFulfillmentFlow"
+    },
+    "CatalogInputVariable": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The FlowVariable the fulfillment flow property represents."
+    },
+    "DisplayType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The display options available. Possible values are: Checkbox Lookup Number Picklist Text The default value is 'Lookup'."
+    },
+    "FieldDefinition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The name of a field in the object provided in ObjectLookupDomainId that specifies the value for this variable. If DisplayType is Picklist, this value must be the name of a picklist field. If DisplayType is Lookup and FieldLookupDomainId is FieldDefinition, this value must be the name of a relationship field. This value can be a field from a standard or custom object."
+    },
+    "FieldLookupDomainId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of a standard or custom object that specifies the domain of that lookup or picklist. This value is relevant only if displayType is Lookup or Picklist. This is a relationship field.",
+      "relationship_name": "FieldLookupDomain",
+      "relationship_type": "Lookup",
+      "refers_to": "EntityDefinition"
+    },
+    "IsAdditionalQuestionsInputVariable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines if this variable accepts input for all additional questions that were asked to a user. This value can only be true if the DisplayType for this item is Text. Only one item per SvcCatalogFulfillmentFlow component can set this attribute to true. The default value is 'false'."
+    },
+    "IsRequired": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines if the field is required for the related fulfillment flow to be executed. The default value is 'false'."
+    },
+    "LookupDomainFieldType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "This value specifies the fields for the object specified by ObjectLookupDomainId that are displayed in the Catalog Builder by type. This value is only relevant if DisplayType is Lookup and fieldLookupDomain is FieldDefinition."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The primary label for the fulfillment flow record."
+    },
+    "ObjectLookupDomainId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of a custom or standard object. If DisplayType is Lookup or Picklist, this value filters the available options to a specific object. This is a relationship field.",
+      "relationship_name": "ObjectLookupDomain",
+      "relationship_type": "Lookup",
+      "refers_to": "EntityDefinition"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"PropertyDisplayType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Lookup\"/>\n    <xsd:enumeration value=\"Picklist\"/>\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Checkbox\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"Queue\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SvcCatalogFulfillFlowItem\">\n  <xsd:sequence>\n    <xsd:element name=\"catalogInputVariable\" type=\"xsd:string\"/>\n    <xsd:element name=\"displayType\" minOccurs=\"0\" type=\"tns:PropertyDisplayType\"/>\n    <xsd:element name=\"fieldDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldLookupDomain\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isAdditionalQuestionsInputVariable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"lookupDomainFieldType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"objectLookupDomain\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

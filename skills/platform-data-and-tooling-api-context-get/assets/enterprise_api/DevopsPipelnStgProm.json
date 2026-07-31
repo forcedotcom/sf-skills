@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "DevopsPipelnStgProm - Data API",
+  "description": "Represents a stage promotion in DevOps Center. Stage promotion moves one or more work items to the next stage in the pipeline. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CompletionDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the stage promotion operation was completed."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "A unique name for the pipeline stage promotion record."
+    },
+    "PipelineStageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the target pipeline stage to which the work items are promoted. This field is a relationship field.",
+      "relationship_name": "PipelineStage",
+      "relationship_type": "Master-detail",
+      "refers_to": "DevopsPipelineStage (the parent object)"
+    },
+    "RequestInfoId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the associated DevopsRequestInfo record that tracks this event. This field is a relationship field.",
+      "relationship_name": "RequestInfo",
+      "refers_to": "DevopsRequestInfo"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The current state of the promotion operation. Possible values are: CANCELLED ERROR FINALIZING INTERRUPTED IN_PROGRESS NEW SUCCESS The default value is NEW."
+    }
+  },
+  "usage": "Use this object to track the execution and outcome of a stage promotion. During promotion, work item branches merge into a target stage branch and deploys the associated metadata and configuration data to the environment linked to that stage.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **DevopsPipelnStgPromChangeEvent**: Change events are available for the object.\n- **DevopsPipelnStgPromFeed**: Feed tracking is available for the object.\n- **DevopsPipelnStgPromHistory**: History is available for tracked fields of the object.\n- **DevopsPipelnStgPromOwnerSharingRule**: Sharing rules are available for the object.\n- **DevopsPipelnStgPromShare**: Sharing is available for the object."
+}

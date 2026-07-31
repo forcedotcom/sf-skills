@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "VoiceMailGreeting2Rep - Data API",
+  "description": "Represents information about the voicemail message and its associated service rep. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Whether this is the rep's default voicemail message (true) or not (false). The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the voicemail message."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "User ID of the voicemail message owner. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "OwnerType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The ownership type of the voicemail message. Possible values are: Owned Shared"
+    },
+    "RepId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the rep associated with the voicemail message. This is a relationship field.",
+      "relationship_name": "Rep",
+      "refers_to": "User"
+    },
+    "Sequence": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The order in which the voicemail message is applied for the rep."
+    },
+    "VoiceMailGreeting2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the related VoiceMailGreeting2 record. This is a relationship field.",
+      "relationship_name": "VoiceMailGreeting2",
+      "refers_to": "VoiceMailGreeting2"
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **VoiceMailGreeting2RepShare**: Sharing is available for the object."
+}

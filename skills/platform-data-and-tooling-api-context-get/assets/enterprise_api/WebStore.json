@@ -1,0 +1,445 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "WebStore - Data API",
+  "description": "Represents a B2B or D2C store. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CheckoutTimeToLive": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Amount of time in minutes that a B2B checkout stays active and doesn’t expire. If you use a Null value, your checkout never expires. If you use a 0 value, checkout is disabled. This field is available in API version 50.0 and later."
+    },
+    "CheckoutValidAfterDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A timestamp in the default server timezone (GMT). All B2B checkouts that start before this date are considered expired. A Null value means that all checkouts are valid. Example format: 2020-07-14T14:27:00.000Z. This field is available in API version 50.0 and later."
+    },
+    "Country": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Two-digit ISO code of the store's country. Purchases can be shipped only to the country assigned to the store. This field is available in API version 55.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The default value is USD. Possible values are: USD—U.S. Dollar"
+    },
+    "DefaultLanguage": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The primary supported language for your store. Possible values include: da— Danish de— German en_US— English es— Spanish en_MX— Spanish (Mexico) fi— Finnish fr— French it— Italian ja— Japanese ko— Korean nl_NL— Dutch no— Norwegian pt_BR— Portuguese (Brazil) ru— Russian sv— Swedish th— Thai zh_CN— Chinese (Simplified) zh_TW— Chinese (Traditional)"
+    },
+    "DefaultTaxLocaleType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Tax type of the store. This field is available in API version 55.0 and later. Possible values include: Gross— Prices include tax Net— Prices don't include tax"
+    },
+    "DefaultTaxPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The default tax policy for the store. This field is a relationship field. This field is available in API version 56.0 and later.",
+      "relationship_name": "DefaultTaxPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxPolicy"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the store."
+    },
+    "ExternalReference": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Identifies the instance of B2C Commerce. Format is <<SiteId>>@<<InstanceId>>. This field is available in API version 54.0 and later."
+    },
+    "GuestBuyerProfileId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the GuestBuyerProfile associated with the store. GuestBuyerProfile determines what buyer groups are part of the profile. The guest buyer groups then determine the entitlements and pricing of products for the guest buyer."
+    },
+    "GuestCartTimeToLive": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The time that a guest cart is to remain valid before it expires. The default value is 168 hours (7 days), and the maximum value is 720 hours (30 days). This field is available in API version 52.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced and not viewed directly."
+    },
+    "LocationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillible, Sort",
+      "description": "The location associated with the address."
+    },
+    "MaxValuesPerFacet": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of values that can be added to a facet."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the catalog."
+    },
+    "OptionsAutoFacetingEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If enabled (True), the most relevant search facets are automatically returned, in addition to the configured search facets, in the product search results. If disabled (False), only the configured search facets are returned. The default is False.See Add Product Search Filters (Facets).for more information. This field is available in API version 50.0 or later."
+    },
+    "OptionsCartAsyncProcessingEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether add-to-cart requests are processed asynchronously (True) or not (False). The default value is True. This field is available in API version 59.0 or later."
+    },
+    "OptionsCartCalculateEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the cart calculate extension is enabled (True) or not (False). The default value is False. This field is available in API version 59.0 or later."
+    },
+    "OptionsCartToOrderAutoCustomFieldMapping": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether custom field mapping for cart and order objects is enabled (True) or not (False). The default value is True. This field is available in API version 57.0 or later."
+    },
+    "OptionsDuplicateCartItemsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether a cart can include multiple items with the same product ID (True) or not (False). The default value is False. This field is available in API version 59.0 or later."
+    },
+    "OptionsGuestBrowsingEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether guest browsing is enabled for this store. Set the option to True to allow guest buyers access to products in the store."
+    },
+    "OptionsGuestCartEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether guest cart access is enabled for a store created with an LWR template. Set the option to True to allow guest buyers access to products in the store.This field is available in API version 58.0 and later."
+    },
+    "OptionsGuestCheckoutEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether guest checkout access is enabled for a store created with an LWR template. Set the option to True to allow guest buyers access to products in the store.This field is available in API version 58.0 and later."
+    },
+    "OptionsPreserveGuestCartEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether cart contents are preserved when a guest logs in to the store. Set the option to True to preserve guest carts.This field is available in API version 60.0 and later."
+    },
+    "OptionsSkipAdditionalEntitlementCheckForSearch": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "By default, user entitlement checks are run as part of a search index rebuild and again when product search results are returned. Skips the second check to promote faster search performance. Set the option to True to skip additional entitlement checks on a search. This field is available in API version 52.0 and later."
+    },
+    "OrderActivationStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Status of the order. This field is available in API version 55.0 and later. Possible values are: Activated Draft"
+    },
+    "OrderLifeCycleType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether order summaries are processed with Order Management features: Managed— Unmanaged— This field is available in API version 55.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates the owner of the store. This field is available in API 53.0 or later. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PaginationSize": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Dimensions of the page."
+    },
+    "PricingStrategy": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Possible values are: LowestPrice— Best Price Priority— Priority Price. The default value is LowestPrice."
+    },
+    "ProductGrouping": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Determines whether product variations are listed individually in search results or are represented by the parent product, which links to its children. Possible values are: NoGrouping—Variations are listed individually in search results. VariationParent—The parent product is returned in search results with a link to its children. The default value is VariationParent. This field is available in API version 52.0 and later."
+    },
+    "SortByPriceBookId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Indicates the price book used for the sorting rule. This field is available in API version 55.0 and later. This is a relationship field.",
+      "relationship_name": "SortByPriceBook",
+      "relationship_type": "Lookup",
+      "refers_to": "Pricebook2"
+    },
+    "StrikethroughPricebookId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the strikethrough price book."
+    },
+    "SupportedCurrencies": {
+      "type": "textarea",
+      "properties": "Create, Defaulted on create, Nillable, Update",
+      "description": "Currencies supported in the store."
+    },
+    "SupportedLanguages": {
+      "type": "textarea",
+      "properties": "Create, Defaulted on create, Nillable, Update",
+      "description": "Languages supported in the store."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Type of store that can be created. Possible values are: B2B B2C B2CE OMS The default value is B2B."
+    }
+  },
+  "special_access_rules": "You must:",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **WebStoreEvent (API version 55.0)**: Change events are available for the object.",
+  "field_reference": {
+    "CheckoutTimeToLive": {
+      "field_label": "Checkout Time To Live",
+      "type": "int",
+      "digits": "9"
+    },
+    "CheckoutValidAfterDate": {
+      "field_label": "Checkout Valid After Date",
+      "type": "datetime"
+    },
+    "Country": {
+      "field_label": "Default Ship To Country",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DefaultLanguage": {
+      "field_label": "Default Language",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DefaultTaxLocaleType": {
+      "field_label": "Tax Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DefaultTaxPolicyId": {
+      "field_label": "Tax Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "ExternalReference": {
+      "field_label": "External Reference ID",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "GuestBuyerProfileId": {
+      "field_label": "Guest Buyer Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "GuestCartTimeToLive": {
+      "field_label": "Guest Cart Time To Live",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Store ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LocationId": {
+      "field_label": "Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MaxValuesPerFacet": {
+      "field_label": "Maximum Values per Filter",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Store Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OptionsAutoFacetingEnabled": {
+      "field_label": "Autoselect the 10 Most Relevant Facets",
+      "type": "boolean"
+    },
+    "OptionsCartAsyncProcessingEnabled": {
+      "field_label": "Cart Async Processing Enabled",
+      "type": "boolean"
+    },
+    "OptionsCartCalculateEnabled": {
+      "field_label": "Cart Calculate Enabled",
+      "type": "boolean"
+    },
+    "OptionsCartToOrderAutoCustomFieldMapping": {
+      "field_label": "Automatically map custom fields from cart to order",
+      "type": "boolean"
+    },
+    "OptionsCommerceEinsteinActivitiesTracked": {
+      "field_label": "Commerce Einstein Activities Tracked",
+      "type": "boolean"
+    },
+    "OptionsCommerceEinsteinDeployed": {
+      "field_label": "Commerce Einstein Deployed",
+      "type": "boolean"
+    },
+    "OptionsDuplicateCartItemsEnabled": {
+      "field_label": "Duplicate Cart Items Enabled",
+      "type": "boolean"
+    },
+    "OptionsGuestBrowsingEnabled": {
+      "field_label": "Guest Browsing Enabled",
+      "type": "boolean"
+    },
+    "OptionsGuestCartEnabled": {
+      "field_label": "Guest Cart Enabled",
+      "type": "boolean"
+    },
+    "OptionsGuestCheckoutEnabled": {
+      "field_label": "Guest Checkout Enabled",
+      "type": "boolean"
+    },
+    "OptionsPreserveGuestCartEnabled": {
+      "field_label": "Preserve Guest Cart Enabled",
+      "type": "boolean"
+    },
+    "OptionsSkipAdditionalEntitlementCheckForSearch": {
+      "field_label": "Skip Entitlement Checks During Search",
+      "type": "boolean"
+    },
+    "OptionsSkuDetectionEnabled": {
+      "field_label": "Sku Detection Enabled",
+      "type": "boolean"
+    },
+    "OptionsSplitShipmentEnabled": {
+      "field_label": "Split Shipment Enabled",
+      "type": "boolean"
+    },
+    "OrderActivationStatus": {
+      "field_label": "Order Activation Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "OrderLifeCycleType": {
+      "field_label": "Order Life Cycle Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaginationSize": {
+      "field_label": "Results per Page",
+      "type": "int",
+      "digits": "9"
+    },
+    "PricingStrategy": {
+      "field_label": "Pricing Strategy",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProductGrouping": {
+      "field_label": "Product Variation",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SortByPricebookId": {
+      "field_label": "Price Book for Sorting ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StrikethroughPricebookId": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SupportedCurrencies": {
+      "field_label": "Supported Currencies",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "SupportedLanguages": {
+      "field_label": "Supported Languages",
+      "type": "textarea",
+      "length": "2000"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

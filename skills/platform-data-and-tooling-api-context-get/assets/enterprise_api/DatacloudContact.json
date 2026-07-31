@@ -1,0 +1,238 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "DatacloudContact - Data API",
+  "description": "The fields and properties for Data.com contact records. This object is available in API version 30.0 or later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "City": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The city where the company is located."
+    },
+    "CompanyId": {
+      "type": "string",
+      "properties": "Filter, Nillable",
+      "description": "The unique numerical identifier for the company and the Data.com company identification number or Data.com Key."
+    },
+    "CompanyName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the company."
+    },
+    "ContactId": {
+      "type": "string",
+      "properties": "Filter, Nillable",
+      "description": "The unique numeric identifier for this contact."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The standard abbreviation or name for the country where the company is located. Note: You can enter a comma-separated list of countries; however, for a country that uses a comma in its name, leave out the comma. For example, enter “Taiwan, ROC” as Taiwan ROC."
+    },
+    "Department": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist",
+      "description": "The department in the company that the contact is affiliated with. The values of this field are fixed enumerated values. Engineering Finance Human Resources IT Marketing Operations Other Sales Support"
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Filter, Nillable",
+      "description": "A business email address for the contact."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A unique system-generated numerical identifier for the contact."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Filter, Nillable",
+      "description": "The first name of the contact."
+    },
+    "IsInCrm": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group",
+      "description": "Whether the record is in Salesforce (true) or not (false)."
+    },
+    "IsInactive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Whether the record is active (false) or not (true)."
+    },
+    "IsOwned": {
+      "type": "boolean",
+      "properties": "Defaulted on create",
+      "description": "True: You own this record. False: You do not own this record."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The last name of the contact."
+    },
+    "Level": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist",
+      "description": "A human resource label that designates a person’s level in the company. The values of this field are fixed enumerated values. C-Level VP Director Manager Staff Other"
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Nillable",
+      "description": "The direct-dial telephone number for the contact."
+    },
+    "SocialHandles": {
+      "type": "string",
+      "description": "The social handles for this contact. Social handles are a normalized URL and user name for social media accounts such as, LinkedIn, Facebook, and Twitter. This field is response-only. The DatacloudSocialHandles object is a child of the DatacloudContact object."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The state where the company is located, which can also be a province or other equivalent to a state, depending on the country where the company is located."
+    },
+    "Street": {
+      "type": "string",
+      "properties": "Nillable",
+      "description": "The street address for the company where the contact works."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Title of the contact such as CEO or Vice President."
+    },
+    "UpdatedDate": {
+      "type": "dateTime",
+      "properties": "Nillable, Sort",
+      "description": "The last date and time when the information for a contact was updated."
+    },
+    "Zip": {
+      "type": "string",
+      "properties": "Filter, Nillable",
+      "description": "The postal or zip code for the address."
+    }
+  },
+  "usage": "This object searches the Data.com database for contacts with the specific criteria that you enter. Use this object to find contact records that you are interested in purchasing for your organization.\n\nDatacloudContact can’t be used in Apex test methods, because an\n\t\t\t\texternal web service call is required to access it. These calls are not allowed in\n\t\t\t\tApex test methods.",
+  "wsdl_segment": "```xml\n<complexType name=\"DatacloudContact\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CompanyId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CompanyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Department\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Email\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FirstName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsInCrm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsInactive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOwned\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Level\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UpdatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Zip\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "255"
+    },
+    "CompanyId": {
+      "field_label": "Company Id",
+      "type": "string",
+      "length": "25"
+    },
+    "CompanyName": {
+      "field_label": "Company",
+      "type": "string",
+      "length": "128"
+    },
+    "ContactId": {
+      "field_label": "Data.com Contact ID",
+      "type": "string",
+      "length": "25"
+    },
+    "Country": {
+      "field_label": "Country/Territory",
+      "type": "string",
+      "length": "50"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Department": {
+      "field_label": "Department",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Email": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "80"
+    },
+    "ExternalId": {
+      "field_label": "Data.com Contact ID",
+      "type": "string",
+      "length": "255"
+    },
+    "FirstName": {
+      "field_label": "First name",
+      "type": "string",
+      "length": "128"
+    },
+    "Id": {
+      "field_label": "System ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsInCrm": {
+      "field_label": "In CRM",
+      "type": "boolean"
+    },
+    "IsInactive": {
+      "field_label": "Inactive Status",
+      "type": "boolean"
+    },
+    "IsOwned": {
+      "field_label": "Owned",
+      "type": "boolean"
+    },
+    "LastName": {
+      "field_label": "Last name",
+      "type": "string",
+      "length": "128"
+    },
+    "Level": {
+      "field_label": "Level",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "string",
+      "length": "50"
+    },
+    "Street": {
+      "field_label": "Street Address",
+      "type": "string",
+      "length": "255"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "128"
+    },
+    "UpdatedDate": {
+      "field_label": "Updated Date",
+      "type": "datetime"
+    },
+    "Zip": {
+      "field_label": "ZIP code",
+      "type": "string",
+      "length": "32"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

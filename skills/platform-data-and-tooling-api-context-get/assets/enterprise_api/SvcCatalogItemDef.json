@@ -1,0 +1,245 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "SvcCatalogItemDef - Data API",
+  "description": "Represents a service catalog item that can be requested by a service catalog user. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The definition of the catalog item. This field is visible on the Service Catalog page."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique developer name for the catalog item."
+    },
+    "FlowName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The flow called when the user navigates to the request page for the catalog item. Available in API version 55.0 and later."
+    },
+    "FulfillmentFlowId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the fulfillment flow. Available in API version 56.0 and later. This field is a relationship field.",
+      "relationship_name": "FulfillmentFlow",
+      "relationship_type": "Lookup",
+      "refers_to": "SvcCatalogFulfillmentFlow"
+    },
+    "ImageId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The image ID used for the catalog item. This field is a relationship field.",
+      "relationship_name": "Image",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentAsset"
+    },
+    "ImageReference": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field from ImageId to expose ContentAssetId on item definitions. Available in API version 61.0 and later."
+    },
+    "InternalNotes": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A place for the Service Catalog Builder to leave internal notes about the catalog item."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Derived field from Status to indicate whether the service catalog item is active. The default value is false. Available in API version 59.0 and later."
+    },
+    "IsAvailableToAllCustomers": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Udpate",
+      "description": "Indicates whether the Service Catalog item is available to all customers. The default value is false. Available in API version 61.0 and later."
+    },
+    "IsFeatured": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether a catalog item is marked as a favorite for the org. Favorites display as a featured item on the Service Catalog home page. The default value is false."
+    },
+    "IsGuestAccessible": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the Service Catalog item can be accessed by guest users. The default value is false. Available in API version 61.0 and later."
+    },
+    "IsOutOfSync": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the fulfillment flow that the Service Catalog item is based on has been updated. Available in API version 58.0 and later. The default value is false. If value is true, try updating and saving the service catalog item again."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Supported languages for catalog items."
+    },
+    "Product": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The product associated with the Service Catalog item. The value is derived from UsageType. Available in API version 59.0 and later. Possible values are: FinancialServices ServiceCatalog—Default"
+    },
+    "ShortDescription": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The short description of the catalog item."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Allows the Service Catalog Builder to control whether the flow is displayed to users within the Service Catalog. Possible values are: Deprecated Draft—Default PendingChanges Published"
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The business type for which the Service Catalog is used. Available in API version 57.0 and later. Possible values are: CustomerService Employee—Default FinancialServices Industry"
+    }
+  },
+  "special_access_rules": "To access this object, get the Service Catalog Access permission set license, Employee Productivity Starter license, or Employee Productivity Plus add-on license.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "FlowName": {
+      "field_label": "Flow Name",
+      "type": "string",
+      "length": "255"
+    },
+    "FulfillmentFlowId": {
+      "field_label": "Service Catalog Fulfillment Flow ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Service Catalog Item Definition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImageId": {
+      "field_label": "Asset File ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ImageReference": {
+      "field_label": "Image Reference",
+      "type": "string",
+      "length": "40"
+    },
+    "InternalNotes": {
+      "field_label": "Internal Notes",
+      "type": "textarea",
+      "length": "4000"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsAvailableToAllCustomers": {
+      "field_label": "Is Available To All Customers",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsFeatured": {
+      "field_label": "Featured",
+      "type": "boolean"
+    },
+    "IsGuestAccessible": {
+      "field_label": "Is Guest Accessible",
+      "type": "boolean"
+    },
+    "IsOutOfSync": {
+      "field_label": "Out Of Sync",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "Product": {
+      "field_label": "Product Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ShortDescription": {
+      "field_label": "Short Description",
+      "type": "string",
+      "length": "255"
+    },
+    "ShouldHideEmptyAttributes": {
+      "field_label": "Should Hide Empty Attributes",
+      "type": "boolean"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

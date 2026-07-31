@@ -1,0 +1,235 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "UserProvisioningRequest - Data API",
+  "description": "Represents an individual provisioning request to create, update, or delete a single user account in a third-party service system (or another Salesforce organization). This object is available in API version 33.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AppName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The unique name of the connected app associated with the service provider."
+    },
+    "ApprovalStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the approval for the current request. If the user provisioning setup for the connected app does not have an approval process enabled, the status is Not Required. If an approval process is enabled, supported values are: Required— An approval process is enabled in the user provisioning setup for the associated connected app, but there is no response to the request yet. Not Required— An approval process is not enabled in the user provisioning setup for the associated connected app. Approved Denied"
+    },
+    "ConnectedAppId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The 18-digit application ID for the connected app. This is a relationship field.",
+      "relationship_name": "ConnectedApp",
+      "relationship_type": "Lookup",
+      "refers_to": "ConnectedApplication"
+    },
+    "ExternalUserId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The unique identifier for the user in the target system."
+    },
+    "ManagerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Salesforce ID of the user who manages the user specified in the SalesforceUserId field. If an approval process is configured for the user provisioning request. this value allows the manager to approve the request. Available in API version 34.0 and later. This is a relationship field.",
+      "relationship_name": "Manager",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The unique name for this object."
+    },
+    "Operation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The Apex method called by the trigger associated with the provisioning request (typically a change to the User object). Supported values are: Create Read Update Deactivate Activate Freeze Unfreeze Reconcile Linking For example, when the User object field isActive is set to false, the UPR object Operation field value is set to Deactivate."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Salesforce ID of the Group or User who owns this object. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ParentID": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "When a retry event is created, the failed UPR is cloned and resubmitted. This field contains a lookup to the failed UPR that was cloned to create the current record. This is a relationship field.",
+      "relationship_name": "Parent",
+      "relationship_type": "Lookup",
+      "refers_to": "UserProvisioningRequest"
+    },
+    "Retry Count": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Number of retry attempts performed on a UPR. Retry Count enables custom business logic such as “Retry 5 times then stop and notify your admin.”"
+    },
+    "SalesforceUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Salesforce ID of the user making the request. This is a relationship field.",
+      "relationship_name": "SalesforceUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ScheduleDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "When to send this request to the service provider. Note: Scheduling is not implemented yet. Currently, provisioning changes are queued immediately to be sent to the service provider."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Status of this request. Supported values are: New Requested Completed Failed Collecting Collected Analyzing Analyzed Committing Retried Manually Completed The State goes from New to Requested to Completed or Failed, unless a reconciliation process is occurring. For details about the reconciliation process State value changes, see Usage. The State goes from Failed to Retried or Manually Completed when troubleshooting UPR failures. For details about handling failures, see State Values for Managing Provisioning Failures."
+    },
+    "UserProvAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID value of the associated UserProvAccount object. This is a relationship field.",
+      "relationship_name": "UserProvAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "UserProvAccount"
+    },
+    "UserProvConfigId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID value of the associated UserProvisioningConfig object. Available in API version 34.0 and later. This is a relationship field.",
+      "relationship_name": "UserProvConfig",
+      "relationship_type": "Lookup",
+      "refers_to": "UserProvisioningConfig"
+    }
+  },
+  "usage": "The State value changes during a reconciliation process (Operation = Reconcile) to gather and compare users on the third-party system to Salesforce users. Typically, when a UPR entry is first created, it has a State value of New. When a collection process is triggered, the State transitions to Collecting until that process is finished and the State is Collected. When an analyze process is triggered, the State transitions to Analyzing until that process is finished and the State is Analyzed. If a process commits the request, the State then transitions to Committing, and the properties move from the UserProvAccountStaging object to the UserProvAccount object. When those properties are saved in the UserProvAccount object, the State transitions to Completed. However, the State does not necessarily start at New. For example, UserProvAccountStaging entries can be inserted programmatically. If a process is initiated that triggers linking these rows to accounts on the third-party service, a UPR entry could start with the Analyzing State. Also, the State cannot go backwards from an active task. For example, a successful Analyzing State must progress to Analyzed; unless the active process fails, and then the State must change to Failed. Certain State transitions cannot be made programmatically and must be triggered by Salesforce.\n\nThe State value changes during a reconciliation process (Operation = Reconcile) to gather and compare users on the third-party system to Salesforce users. Typically, when a UPR entry is first created, it has a State value of New. When a collection process is triggered, the State transitions to Collecting until that process is finished and the State is Collected. When an analyze process is triggered, the State transitions to Analyzing until that process is finished and the State is Analyzed. If a process commits the request, the State then transitions to Committing, and the properties move from the UserProvAccountStaging object to the UserProvAccount object. When those properties are saved in the UserProvAccount object, the State transitions to Completed.\n\nHowever, the State does not necessarily start at New. For example, UserProvAccountStaging entries can be inserted programmatically. If a process is initiated that triggers linking these rows to accounts on the third-party service, a UPR entry could start with the Analyzing State.\n\nAlso, the State cannot go backwards from an active task. For example, a successful Analyzing State must progress to Analyzed; unless the active process fails, and then the State must change to Failed. Certain State transitions cannot be made programmatically and must be triggered by Salesforce.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **UserProvisioningRequestOwnerSharingRule (API version 34.0)**: Sharing rules are available for the object.\n- **UserProvisioningRequestShare (API version 34.0)**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"UserProvisioningRequest\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApprovalStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ConnectedApp\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ConnectedApplication\"/>\n        <element name=\"ConnectedAppId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalUserId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Manager\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ManagerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Operation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Parent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserProvisioningRequest\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RetryCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SalesforceUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"SalesforceUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ScheduleDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserProvAccount\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserProvAccount\"/>\n        <element name=\"UserProvAccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"UserProvConfig\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserProvisioningConfig\"/>\n        <element name=\"UserProvConfigId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AppName": {
+      "field_label": "App Name",
+      "type": "string",
+      "length": "150"
+    },
+    "ApprovalStatus": {
+      "field_label": "Approval Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ConnectedAppId": {
+      "field_label": "Connected App ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalUserId": {
+      "field_label": "External User Id",
+      "type": "string",
+      "length": "150"
+    },
+    "Id": {
+      "field_label": "User Provisioning Request ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ManagerId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Operation": {
+      "field_label": "Operation",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentId": {
+      "field_label": "User Provisioning Request ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RetryCount": {
+      "field_label": "Retry Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "SalesforceUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScheduleDate": {
+      "field_label": "Scheduled Provisioning Time",
+      "type": "datetime"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserProvAccountId": {
+      "field_label": "User Provisioning Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UserProvConfigId": {
+      "field_label": "User Provisioning Configuration ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

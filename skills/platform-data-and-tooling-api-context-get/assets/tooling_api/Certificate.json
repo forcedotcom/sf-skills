@@ -1,0 +1,74 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "Certificate - Tooling API",
+  "description": "Represents a certificate used for digital signatures that verify requests are coming from your org. Certificates are used for either authenticated single sign-on with an external website or when using your org as an identity provider. This object is available in Tooling API version 37.0 and later.",
+  "supported_soap_calls": "`query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, Salesforce generates one for each record, which slows performance."
+    },
+    "ExpirationDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read only. The date that this certificate expires and is no longer usable. For self-signed certificates, if KeySize is 2048 bits, the expiration date is automatically 1 year after you create the certificate. If KeySize is 4096 bits, the expiration date is automatically 2 years after you create the certificate. For CA-signed certificates, ExpirationDate is automatically updated to the signed certificate’s expiration date when a signed certificate chain is uploaded. The date format is YYYY-MM-DD."
+    },
+    "KeySize": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Certificate keys can be either 2048 bits or 4096 bits. A certificate with 4096-bit keys lasts 2 years, and a certificate with 2048-bit keys lasts 1 year. Certificates with 2048-bit keys are faster than certificates with 4096-bit keys. If KeySize isn’t specified when you create a certificate, the key size defaults to 2048 bits."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "A user-friendly name for the certificate that appears in the Salesforce user interface, such as in Certificate and Key Management. Limit: 64 characters.",
+      "required": true
+    },
+    "OptionsIsCaSigned": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether this certificate is signed by the issuer (true) or not (false).",
+      "required": true
+    },
+    "OptionsIsEncryptedWithPE": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether this certificate is encrypted with Shield Platform Encryption."
+    },
+    "OptionsIsNewEncr": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether this certificate is encrypted with the new algorithm for certificate encryption."
+    },
+    "OptionsIsPrivateKeyExportable": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether this certificate’s private key is exportable."
+    },
+    "OptionsIsUnusable": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether this certificate is waiting for import of the signed certificate chain."
+    },
+    "OptionIsUsingKMS": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether this certificate is compatible with select BYOK key material that uses the Shield Key Management Service (true) or not (false). This field is available in API version 50.0 and later.These certificates are only compatible with Database tenant secrets as part of the Shield Platform Encryption Database Encryption feature."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Certificate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CertificateChain\" minOccurs=\"0\" type=\"xsd:base64Binary\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"DeveloperName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"ExpirationDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"KeySize\" minOccurs=\"0\" type=\"xsd:int\" nillable=\"true\"/>\n        <xsd:element name=\"MasterLabel\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsArchiveByok\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsAwsByok\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsBnRByok\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsCaSigned\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsDCByok\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsEncryptedWithPE\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsKeyExportTle\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsNewEncr\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsPrivateKeyExportable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsSystemManaged\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsUnusable\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"OptionsIsUsingKMS\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

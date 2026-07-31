@@ -1,0 +1,67 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_rest_api_http_methods",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment"
+  ],
+  "title": "PlatformEventChannelMember - Tooling API",
+  "description": "Represents an entity selected for Change Data Capture notifications on a standard or custom channel, or a platform event selected on a custom channel.",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name for the PlatformEventChannelMember object. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is automatically generated, but you can supply your own value if you create the record using the API. The developer name is in the format ChannelName_EventName. If your channel member name contains a custom channel name to make it unique, ensure to replace the double underscores in the name with one underscore. For example, the developer name of a member of the MyChannel__chn custom channel is MyChannel_chn_AccountChangeEvent. And the developer name of a member of the default standard channel is ChangeEvents_AccountChangeEvent. When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance slows down while Salesforce generates one for each record. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field. Note"
+    },
+    "EventChannel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The name of a channel. For the standard channel, the name is ChangeEvents. For a custom channel, the name is in this format: MyChannel__chn."
+    },
+    "FilterExpression": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "An expression that is used to filter the stream of events and deliver only the events that match specific criteria. The filter expression can contain one or more field-value expressions. The filter expression format is based on SOQL and supports a subset of SOQL operators and field types. For example, this filter expression delivers only events that contain the City__c field with a value of 'San Francisco'. City__c = 'San Francisco' For more information, see Filter Your Stream of Platform Events with Channels in the Platform Events Developer Guide and Filter Your Stream of Change Events with Channels in the Change Data Capture Developer Guide. Available in API version 56.0 and later."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated PlatformEventChannelMember object in Metadata API. The full name is in the format ChannelName_EventName and can include a namespace prefix. Two consecutive underscores in full names designate either a component name suffix or a namespace prefix. In all other cases, two consecutive underscores aren’t supported in full names. If your channel member name contains a custom channel name to make it unique, be sure to replace the double underscores in the name with one underscore. For example, the member name would be MyChannel_chn_AccountChangeEvent and not MyChannel__chn_AccountChangeEvent. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The language of the MasterLabel."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "Platform event channel member metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that aren’t Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix."
+    },
+    "SelectedEntity": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The change event name of an entity selected for Change Data Capture notifications. For example, for the Account standard object, the name is AccountChangeEvent, or for a custom object MyObject__c, the name is MyObject__ChangeEvent."
+    }
+  },
+  "special_access_rules": "- To retrieve or query this object, you must have the View Setup and Configuration permission.\n- To create, update, or delete this object, you must have the Customize Application permission.\n- The EventChannel and SelectedEntity fields can’t be updated.",
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PlatformEventChannelMember\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:PlatformEventChannelMember\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"PlatformEventChannelMember\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enrichedFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:EnrichedField\"/>\n        <xsd:element name=\"eventChannel\" type=\"xsd:string\"/>\n        <xsd:element name=\"filterExpression\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"selectedEntity\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "UserDevice - Data API",
+  "description": "Represents information unique to a device. Available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BrowserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The browser used for login."
+    },
+    "DeviceNativeUid": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "A unique string used to identify a mobile device."
+    },
+    "DeviceType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The device used to log in to Salesforce. The picklist options are: Desktop Tablet iPad iPhone Phone Unknown"
+    },
+    "IsVerified": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Reserved for future use."
+    },
+    "LastLoginHistoryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The most recent LoginHistory associated with the device."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "This field is system-generated and can’t be changed."
+    },
+    "PlatformType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The operating system of the device. The picklist options are: iOS Android OSX Linux Phone Windows AppleApp Blackberry Other"
+    },
+    "PlatformVersion": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version of the operating system running on the device."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The activity status of the device. The picklist options are: Approved Pending Approval Revoked"
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user."
+    },
+    "UserLastSeen": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time of the user’s last access."
+    },
+    "UserProvidedDeviceIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "An identifier for the user’s device such as the International Mobile Equipment Identity (IMEI) number or the device serial number. Note: This field isn’t automatically populated. The developer must provide values."
+    }
+  },
+  "special_access_rules": "You must have View Devices enabled to see devices."
+}

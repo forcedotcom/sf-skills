@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SecurityHealthCheckRisks - Tooling API",
+  "description": "Represents your org’s security setting values, risks, and Salesforce-recommended setting values. Only users with the \"View Setup and Configuration\" user permission can retrieve data from this object. Available in Tooling API version 37.0 and later.",
+  "supported_soap_calls": "`query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the field. Always retrieve this value before using it, as the value isn’t guaranteed to stay the same from one release to the next. To simplify queries, use this field."
+    },
+    "OrgValue": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The org’s value for the security setting."
+    },
+    "OrgValueRaw": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The org’s value for the security setting as it is stored in the database, usually without units of measure or extra text. For example, if the Minimum Password Length setting’s OrgValue is 8 characters, the OrgValueRaw is 8."
+    },
+    "RiskType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The level of risk of the org’s security setting value. Valid values are: HIGH_RISK MEDIUM_RISK MEETS_STANDARD"
+    },
+    "SecurityHealthCheckId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Health Check score record associated with this field."
+    },
+    "Setting": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the security setting. For example, Minimum password length."
+    },
+    "SettingGroup": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the security setting group in which the setting resides in the Setup tree. For example, Password Policies."
+    },
+    "SettingRiskCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The level of risk of the org’s security settings. Available in version 40.0 and later. Valid values are: HIGH_RISK MEDIUM_RISK LOW_RISK INFORMATIONAL"
+    },
+    "StandardValue": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Salesforce-recommended standard value for the security setting."
+    },
+    "StandardValueRaw": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Salesforce-recommended standard value for the security setting as it is stored in the database, usually without units of measure or extra text. For example, if the Minimum Password Length setting’s StandardValue is 8 characters, the StandardValueRaw is 8."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SecurityHealthCheckRisks\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"DurableId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"OrgValue\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"OrgValueRaw\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"RiskType\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SecurityHealthCheck\" minOccurs=\"0\" type=\"ens:SecurityHealthCheck\" nillable=\"true\"/>\n        <xsd:element name=\"SecurityHealthCheckId\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Setting\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SettingGroup\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SettingRiskCategory\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"StandardValue\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"StandardValueRaw\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

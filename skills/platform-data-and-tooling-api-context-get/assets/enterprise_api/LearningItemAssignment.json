@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "LearningItemAssignment - Data API",
+  "description": "Represents the assignment of a Learning Paths entry to users or groups or the enrollment of an Enablement program for a specific user. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssigneeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the user or group assigned to the learning item. This field is a relationship field.",
+      "relationship_name": "Assignee",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "AssignmentStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of assigning an Enablement program to a user. Possible values are: Failed InProgress Succeeded"
+    },
+    "DueDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date that the assignment is due for the user or group."
+    },
+    "EnrollmentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of enrollment for a user in an Enablement program. Possible values are: Assigned SelfEnrolled"
+    },
+    "IsOverdue": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the assigned learning item is overdue (true) or not (false). The default value is false. This field is a calculated field."
+    },
+    "LearningItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the learning item. This field is a relationship field.",
+      "relationship_name": "LearningItem",
+      "relationship_type": "Lookup",
+      "refers_to": "LearningItem"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "ID of the user who assigned the learning item. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ProgressId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of record that represents a user's progress towards completing an assigned learning item, such as a Learning Paths entry or sales program. This field is a relationship field.",
+      "relationship_name": "Progress",
+      "refers_to": "LearningItemProgress"
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The date that the learning item was assigned to the user or group."
+    }
+  },
+  "usage": "You can assign a learning item to a user programmatically by querying the program and user, and then inserting a record into LearningItemAssignment.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **LearningItemAssignmentOwnerSharingRule (API version 60.0)**: Sharing rules are available for the object.\n- **LearningItemAssignmentShare (API version 60.0)**: Sharing is available for the object."
+}

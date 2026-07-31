@@ -1,0 +1,91 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "LoginIp - Data API",
+  "description": "Represents a validated IP address. This object is available in version 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ChallengeMethod": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The challenge method used to confirm the user’s identity. Possible values include the following. Email SMS TOTP_CHOICE: The user chooses multi-factor authentication. TOTP_ONLY: The user is required to use multi-factor authentication."
+    },
+    "ChallengeSentDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the user was authenticated."
+    },
+    "IsAuthenticated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, the user has already been authenticated."
+    },
+    "SourceIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The IP address the user logged in from."
+    },
+    "UsersId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user associated with this item. This is a relationship field.",
+      "relationship_name": "Users",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "usage": "At every login, the IP address of the login request is checked against the validated IP addresses using LoginIp. A match means the login IP address is a known IP address. If there’s no match, the address is unknown, and the user is asked to confirm their identity.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"LoginIp\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ChallengeMethod\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ChallengeSentDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsAuthenticated\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SourceIp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Users\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UsersId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ChallengeMethod": {
+      "field_label": "Challenge Method",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ChallengeSentDate": {
+      "field_label": "Challenge SentDate",
+      "type": "datetime"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Login IP ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAuthenticated": {
+      "field_label": "IsAuthenticated",
+      "type": "boolean"
+    },
+    "SourceIp": {
+      "field_label": "Source IP",
+      "type": "string",
+      "length": "39"
+    },
+    "UsersId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DataDetectScanResult - Data API",
+  "description": "Represents the results of a DataDetect data policy scan. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CreatedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Time and date when an instance of PII is added to the scan result."
+    },
+    "DataDetectJobSessionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the job session associated with the scan policy. This field is a relationship field.",
+      "relationship_name": "DataDetectJobSession",
+      "relationship_type": "Lookup",
+      "refers_to": "DataDetectJobSession"
+    },
+    "FieldName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "UMD name from standard fields, or custom field ID from custom fields."
+    },
+    "NamedEntityCount": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "Number of times PII is found."
+    },
+    "NamedEntityType": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Type of PII found in the record of the scan policy object."
+    },
+    "ObjectName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "KeyPrefix of the scan policy object that contains PII."
+    },
+    "RecordIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Unique identifier for the record."
+    },
+    "SensitiveValues": {
+      "type": "text",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Stores the excerpts in the form of encrypted text."
+    }
+  }
+}

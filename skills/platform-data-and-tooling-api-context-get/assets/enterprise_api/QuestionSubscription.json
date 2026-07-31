@@ -1,0 +1,110 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "QuestionSubscription - Data API",
+  "description": "Represents a subscription for a user following a Question. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CommunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the zone associated with the Question the user is following. This field can’t be updated.",
+      "required": true
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, Sort",
+      "description": "The name of the question subscription."
+    },
+    "QuestionCreatedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Creation date of the Question which the user is following. This field can’t be updated.",
+      "required": true
+    },
+    "QuestionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the Question which the user is following. This field can’t be updated.",
+      "required": true
+    },
+    "SubscriberId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the User who is following the Question. This field can’t be updated.",
+      "required": true
+    }
+  },
+  "usage": "Things to consider when following a Question: Queries on QuestionSubscription:\n\nThings to consider when following a Question:\n\nQueries on QuestionSubscription:",
+  "field_reference": {
+    "CommunityId": {
+      "field_label": "Zone ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Question Subscription ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Question Subscription",
+      "type": "string",
+      "length": "255"
+    },
+    "QuestionCreatedDate": {
+      "field_label": "Question Created Date",
+      "type": "datetime"
+    },
+    "QuestionId": {
+      "field_label": "Question ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SubscriberId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

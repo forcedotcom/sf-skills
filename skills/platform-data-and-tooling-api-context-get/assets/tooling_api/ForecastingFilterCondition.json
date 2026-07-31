@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ForecastingFilterCondition - Tooling API",
+  "description": "Represents the custom filter condition logic for including or excluding data from opportunity forecasts. This object is available in API version 55.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer name of the forecast filter condition."
+    },
+    "FieldName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The name of the opportunity field to be filtered."
+    },
+    "ForecastingFilterId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecast filter. This is a relationship field.",
+      "relationship_name": "ForecastingFilter",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingFilter"
+    },
+    "ForecastingSourceDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the forecasting source definition. This is a relationship field.",
+      "relationship_name": "ForecastingSourceDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingSourceDefinition"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the forecast filter condition."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the forecast filter condition."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label for this object, which displays in Setup. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    },
+    "Metadata": {
+      "type": "ForecastingFilterCondition",
+      "properties": "Create, Nillable, Update",
+      "description": "The metadata of the forecast filter condition."
+    },
+    "Operation": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The operator in the filter condition. Possible values are: equals greaterOrEqual—greater than or equal to greaterThan lessOrEqual—less than or equal to lessThan notEqual—not equal to"
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The index value for the condition. This value represents the condition in the FilterLogic field on the ForecastingFilter object. For example, 1."
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The value of the filter condition. If multiple values are specified, they must be separated by a comma delimiter. Note: If you have multiple currencies enabled, and add a custom filter on a currency field as part of your forecast type definition, the corporate currency at the time the filter was created is used. If you have a single currency enabled, the absolute value is used in your filter condition."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ForecastingFilterCondition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"colName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingFilter\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingSourceDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n        <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n        <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

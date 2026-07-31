@@ -1,0 +1,1865 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "User - Data API",
+  "description": "Represents a user in your organization.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AboutMe": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Information about the user, such as areas of interest or skills. This field is available even if Chatter is disabled."
+    },
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Account associated with a Customer Portal user.This field is null for Salesforce users. This is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "Alias": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The user’s alias. For example, jsmith.",
+      "required": true
+    },
+    "BadgeText": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Experience Cloud site role, displayed on the user profile page just below the user name."
+    },
+    "BannerPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the user's banner photo. This field is available in API version 36.0 and later."
+    },
+    "CallCenterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If Salesforce CRM Call Center is enabled, represents the call center that this user is assigned to."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city associated with the user. Up to 40 characters allowed."
+    },
+    "CommunityNickname": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Unique name used to identify this user in the Experience Cloud site."
+    },
+    "CompanyName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name of the user’s company."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Contact associated with this account. The contact must have a value in the AccountId field or an error occurs. This is a relationship field.",
+      "relationship_name": "Contact",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact"
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The country associated with the user. Up to 80 characters allowed."
+    },
+    "CountryCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO country code associated with the user."
+    },
+    "CurrentStatus": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Text that describes what the user is working on. Note: If you update this field, the API automatically adds a post of type UserStatus on the user’s profile in Chatter.This field is deprecated in API version 25.0. To achieve similar behavior, post to the user directly by creating a FeedItem with the user’s ParentId."
+    },
+    "DefaultCurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The user's default currency setting for new records. For example, if a user in France sets DefaultCurrencyIsoCode to euros, then that’s their default currency.Only applicable for organizations that use multiple currencies."
+    },
+    "DefaultDivision": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "This record’s default division. Only applicable if divisions are enabled."
+    },
+    "DefaultGroupNotificationFrequency": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The default frequency for sending the user's Chatter group email notifications when the user joins groups. The valid values are: P—Email on every post D—Daily digests W—Weekly digests N—Never The default value is N. For Professional, Enterprise, Unlimited, and Developer Edition organizations that existed before API version 22.0, the default value remains D.This field is available in API version 21.0 and later.",
+      "required": true
+    },
+    "DelegatedApproverId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable,Sort, Update",
+      "description": "Id of the user who is a delegated approver for this user."
+    },
+    "Department": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The company department associated with the user."
+    },
+    "DigestFrequency": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The send frequency of the user’s Chatter personal email digest. The valid values are: D = Daily W = Weekly N = Never The default value is D.",
+      "required": true
+    },
+    "Division": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The division associated with this user, similar to Department, and unrelated to DefaultDivision."
+    },
+    "Email": {
+      "type": "email",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The user’s email address.",
+      "required": true
+    },
+    "EmailEncodingKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The email encoding for the user, such as ISO-8859-1 or UTF-8.",
+      "required": true
+    },
+    "EmailPreferencesAutoBcc": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Determines whether the user receives copies of sent emails. This option applies only if compliance BCC emails aren’t enabled."
+    },
+    "EmployeeNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s employee number."
+    },
+    "EndDay": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The time of day that the user generally stops working. Used to define the times that display in the user’s calendar. This field is available in API version 63.0 and later."
+    },
+    "Extension": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s phone extension number."
+    },
+    "Fax": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s fax number."
+    },
+    "FederationIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, idLookup, Nillable, Sort, Update",
+      "description": "Indicates the value that must be listed in the Subject element of a Security Assertion Markup Language (SAML) IDP certificate to authenticate the user for a client application using single sign-on. This value must be specified if the SAML User ID Type is Assertion contains Federation ID from the User record. Otherwise, this field can’t be edited."
+    },
+    "FirstName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s first name."
+    },
+    "ForecastEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the user is enabled for forecasts (true) or not (false). Forecast user has access to the forecasts page."
+    },
+    "FullPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the user's profile photo. This field is available even if Chatter is disabled.The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo is uploaded, the URL returned for an older photo isn’t guaranteed to return a photo. Query this field for the URL of the most recent photo. This field is available in API version 20.0 and later."
+    },
+    "GeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The level of accuracy of a location’s geographical coordinates compared with its physical address. A geocoding service typically provides this value based on the address’s latitude and longitude coordinates."
+    },
+    "HasUserVerifiedEmail": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the user's email is verified (true) or not (false). The default value is false. This field is available in API version 63.0 and later."
+    },
+    "HasUserVerifiedPhone": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the user's phone number is verified (true) or not (false). The default value is false. This field is available in API version 63.0 and later."
+    },
+    "IndividualId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the data privacy record associated with this user. This field is available if Data Protection and Privacy is enabled. This is a relationship field.",
+      "relationship_name": "Individual",
+      "relationship_type": "Lookup",
+      "refers_to": "Individual"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the user has access to log in (true) or not (false). You can modify a User's active status from the user interface or via the API."
+    },
+    "IsPartner": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the user is a partner who has access to the partner portal (true) or not (false). This field isn’t available for release 9.0 and later. Instead, use UserType with the value Partner or Power Partner."
+    },
+    "IsPortalEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether an active, external, user has access to Experience Cloud sites or portals (true) or not (false).This field is only available if one of these conditions is true: Digital experiences is enabled and you have community or portal user licenses Portals are enabled Note: Users with External Identity licenses can access Experience Cloud sites even if the flag is false."
+    },
+    "IsPortalSelfRegistered": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the user is a Customer Portal user who self-registered for your organization's Customer Portal (true) or not (false). This field isn’t available for release 9.0 and earlier."
+    },
+    "IsPrmSuperUser": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Available for partner portal users only. Indicates whether the user has super user access in the partner portal (true) or not (false). This field is available in API version 24.0 and later. Note: This field isn’t automatically enabled. Contact Salesforce to enable this field."
+    },
+    "IsProfilePhotoActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a user has a profile photo (true) or not (false). This field is available in API version 36.0 and later."
+    },
+    "JigsawImportLimitOverride": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Data.com user’s monthly addition limit. The value must be between zero and the organization’s monthly addition limit. Label is Data.com Monthly Addition Limit. This field is available in API version 27.0 and later."
+    },
+    "LanguageLocaleKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The user’s language, such as French or Chinese (Traditional). Label is Language. Note: In API version 47.0 and later, when using the DescribeSObjectResult API to return PicklistEntry values from this picklist, the active value indicates whether the language is in the user’s Displayed Languages (true) or the user’s Available Languages (false). All other languages aren’t in the returned active value array. In API version 46.0 and earlier, the PicklistEntry active values indicate whether the language is in either the user’s Displayed Languages or Available Languages lists (true) or not in either list (false).",
+      "required": true
+    },
+    "LastLoginDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort, Nillable",
+      "description": "The date and time when the user last successfully logged in. This value is updated if 60 seconds elapses since the user’s last login."
+    },
+    "LastName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The user’s last name.",
+      "required": true
+    },
+    "LastReferencedDate": {
+      "type": "datetime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "datetime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) but not viewed."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Longitude to specify the geolocation of an address. Acceptable values are numbers between –90 and 90 up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "LocaleSidKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "This field is a restricted picklist field. The value of the field affects formatting and parsing of values, especially numeric values, in the user interface. It doesn’t affect the API.The field values are named according to the language, and the country if necessary, using two-letter ISO codes. The set of names is based on the ISO standard. You can also manually set a user’s locale in the user interface, and then use that value for inserting or updating other users via the API.",
+      "required": true
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Used with Latitude to specify the geolocation of an address. Acceptable values are numbers between –180 and 180 up to 15 decimal places. For details on geolocation compound fields, see Compound Field Considerations and Limitations."
+    },
+    "Manager": {
+      "type": "picklist",
+      "properties": "Create, Filter, Restricted picklist, Update",
+      "description": "User lookup field used to select the user's manager. This field establishes a hierarchical relationship, preventing you from selecting a user that directly or indirectly reports to themselves."
+    },
+    "ManagerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Id of the user who manages this user. This is a relationship field.",
+      "relationship_name": "Manager",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "MediumBannerPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the medium-sized user profile banner photo."
+    },
+    "MiddleName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s middle name. Maximum size is 40 characters. To enable this field, contact Salesforce Customer Support."
+    },
+    "MobilePhone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s mobile device number."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Concatenation of FirstName and LastName. Limited to 203 characters, including whitespaces."
+    },
+    "NumberOfFailedLogins": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of failed UI login attempts for the user’s account. When the maximum number of failed UI login attempts is reached, the counter resets and the user’s account is locked. If there’s a successful UI login before the maximum number of failed UI login attempts is reached, the counter resets and the user’s account remains unlocked."
+    },
+    "OfflineTrialExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the user’s Connect Offline trial expires."
+    },
+    "PasswordExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the user’s password expires. This field is available in API version 63.0 and later."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s phone number."
+    },
+    "PortalRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The role of the user in the Customer Portal (either Executive, Manager, User, or PersonAcount).In API version 15.0 and earlier, if you set this field to null, the system automatically included a portal role. In API version 16.0 and above, when you set this field to null, a portal role is not automatically created. When this field is null and a ContactId is provided, the user is assigned to the User role. The Update property is available in API version 43.0 and later. The field is available if Customer Portal is enabled OR digital experiences is enabled and Experience Cloud sites have available partner portal, Customer Portal, or High-Volume Portal User licenses."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s postal or ZIP code. Label is Zip/Postal Code."
+    },
+    "ProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the user’s Profile. Use this value to cache metadata based on profile. In earlier releases, this was RoleId. If you change the user’s profile, the user’s license also changes, because every profile belongs to exactly one user license type. This is a relationship field.",
+      "relationship_name": "Profile",
+      "relationship_type": "Lookup",
+      "refers_to": "Profile",
+      "required": true
+    },
+    "ReceivesAdminInfoEmails": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the user receives email for administrators from Salesforce (true) or not (false)."
+    },
+    "ReceivesInfoEmails": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the user receives informational email from Salesforce (true) or not (false)."
+    },
+    "SenderEmail": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The email address used as the From address when the user sends emails. This address is the same value shown in Setup on the My Email Settings page."
+    },
+    "SenderName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The name used as the email sender when the user sends emails. This name is the same value shown in Setup on the My Email Settings page."
+    },
+    "Signature": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The signature text added to emails. This text is the same value shown in Setup on the My Email Settings page."
+    },
+    "SmallBannerPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for the small user profile banner photo."
+    },
+    "SmallPhotoUrl": {
+      "type": "url",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The URL for a thumbnail of the user's profile photo. This field is available even if Chatter is disabled.The URL is updated every time a photo is uploaded and reflects the most recent photo. If a newer photo is uploaded, the URL returned for an older photo isn’t guaranteed to return a photo. Query this field for the URL of the most recent photo. This field is available in API version 20.0 and later."
+    },
+    "StartDay": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The time of day that the user generally starts working. Used to define the times that display in the user’s calendar. This field is available in API version 63.0 and later."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The state associated with the User. Up to 80 characters allowed."
+    },
+    "StateCode": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ISO state code associated with the user."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The street address associated with the User."
+    },
+    "SuAccessExpirationDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The expiration date for allowing Salesforce Customer Support to log in as this user with Login As functionality. After this date, the user must grant login access to Salesforce Customer Support again. This field is available in API version 63.0 or later."
+    },
+    "Suffix": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s name suffix. Maximum size is 40 characters. To enable this field, contact Salesforce Customer Support."
+    },
+    "TimeZoneSidKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "This field is a restricted picklist field. A User time zone affects the offset used when displaying or entering times in the user interface. But the API doesn’t use a User time zone when querying or setting values.Values for this field are named using region and key city, according to ISO standards. You can also manually set one User time zone in the user interface, and then use that value for creating or updating other User records via the API.",
+      "required": true
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The user’s business title, such as Vice President."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Contains the name that a user enters to log in to the API or the user interface. The value for this field must be in the form of an email address, using all lowercase characters. It must also be unique across all organizations. If you try to create or update a User with a duplicate value for this field, the operation is rejected.Each inserted User also counts as a license. Every organization has a maximum number of licenses. If you attempt to exceed the maximum number of licenses by inserting User records, the create request is rejected.",
+      "required": true
+    },
+    "UserPermissionsCallCenterAutoLogin": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Required if Salesforce CRM Call Center is enabled. Indicates whether the user is enabled to use the auto login feature of the call center (true) or not (false).",
+      "required": true
+    },
+    "UserPermissionsChatterAnswersUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the portal user is enabled to use the Chatter Answers feature (true) or not (false). This field defaults to false when a Customer Portal user is created from the API."
+    },
+    "UserPermissionsInteractionUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user can run flows or not. Label is Flow User."
+    },
+    "UserPermissionsJigsawProspectingUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user is allocated one Data.com user license (true) or not (false). The Data.com user lets the user add Data.com contact and lead records to Salesforce in supported editions. Label is Data.com User."
+    },
+    "UserPermissionsKnowledgeUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user is enabled to use Salesforce Knowledge (true) or not (false). Label is Knowledge User."
+    },
+    "UserPermissionsLiveAgentUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user is enabled to use Chat (true) or not (false). Label is Live Agent User."
+    },
+    "UserPermissionsMarketingUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user is enabled to manage campaigns in the user interface (true) or not (false). Label is Marketing User.",
+      "required": true
+    },
+    "UserPermissionsOfflineUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user is enabled to use Offline Edition (true) or not (false). Label is Offline User.",
+      "required": true
+    },
+    "UserPermissionsSFContentUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user is allocated one Salesforce CRM Content User License (true) or not (false). Label is Salesforce CRM Content User. The Salesforce CRM Content User license grants the user access to the Salesforce CRM Content application."
+    },
+    "UserPermissionsSiteforceContributorUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user is allocated one Site.com Contributor feature license (true) or not (false). Label is Site.com Contributor User. The Site.com Contributor feature license grants the user access to the Site.com application. Users with a Contributor license can use Site.com Studio to edit site content only."
+    },
+    "UserPermissionsSiteforcePublisherUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the user is allocated one Site.com Publisher feature license (true) or not (false). Label is Site.com Publisher User. The Site.com Publisher feature license grants the user access to the Site.com application. Users with a Publisher license can build and style websites, control the layout and functionality of pages and page elements, and add and edit content."
+    },
+    "UserPermissionsSupportUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the user can use the Salesforce console."
+    },
+    "UserPermissionsWirelessUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Required if the Wireless permission is enabled. Indicates whether the user is enabled to use Wireless Edition (true) or not (false). Label is Wireless User. Note: As of November 2005, Salesforce Wireless Edition is no longer available for purchase. You can continue to use Wireless Edition through the end of your existing contract term if you are: A Professional Edition customer and purchased Wireless Edition before November 7, 2005. An Enterprise Edition customer who signed or renewed their Salesforce contract before November 7, 2005.",
+      "required": true
+    },
+    "UserPermissionsWorkDotComUserFeature": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates whether the WDC feature is enabled for the user (true) or not (false)."
+    },
+    "UserPreferencesActivityRemindersPopup": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, a reminder window automatically opens when an activity reminder is due. Corresponds to the Trigger alert when reminder comes due checkbox at the Reminders page in the personal settings in the user interface."
+    },
+    "UserPreferencesAgentGdprConsent": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, indicates that the user has consented that calls may be recorded and transcribed, and such calls, recordings and transcripts may be analyzed for quality or training purposes. When false, the user has not given that consent."
+    },
+    "UserPreferencesAllowConversationReminders": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, voice and call reminders are displayed as notification cards in Lightning Experience. Corresponds to the Show conversation reminders in Lightning Experience checkbox in the Activity Reminders page in the personal settings in the user interface.This field is available in API version 55.0 and later."
+    },
+    "UserPreferencesApexPagesDeveloperMode": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, indicates that the user has enabled developer mode for editing Visualforce pages and controllers."
+    },
+    "UserPreferencesAutoForwardCall": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the user receives Dialer calls simultaneously in their browser and on their forwarding number."
+    },
+    "UserPreferencesContentEmailAsAndWhen": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, a user with Salesforce CRM Content subscriptions receives a once-daily email summary if activity occurs on the subscribed content, libraries, tags, or authors. To receive email, the UserPreferencesContentNoEmail field must also be false. The default value is false. Note: This field is only visible when Salesforce CRM Content is enabled."
+    },
+    "UserPreferencesContentNoEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, a user with Salesforce CRM Content subscriptions receives email notifications if activity occurs on the subscribed content, libraries, tags, or authors. To receive real-time email alerts, set this field to false and set the UserPreferencesContentEmailAsAndWhen field to true. The default value is false. Note: This field is only visible when Salesforce CRM Content is enabled."
+    },
+    "UserPreferencesEnableAutoSubForFeeds": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the user automatically subscribes to feeds for any objects that the user creates. This field is available in API version 25.0 and later."
+    },
+    "UserPreferencesDisableAllFeedsEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email for all updates to Chatter feeds, based on the types of feed emails and digests the user has enabled. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableAutoSubForFeeds": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically subscribes to feeds for any objects that the user creates. This field is deprecated in API version 25.0 and later. Starting with API version 25.0, use UserPreferencesEnableAutoSubForFeeds to enable or disable auto-follow for objects a user creates."
+    },
+    "UserPreferencesDisableBookmarkEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time someone comments on a Chatter feed item after the user has bookmarked it. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableChangeCommentEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time someone comments on a change the user has made, such as an update to their profile. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableEndorsementEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the member automatically receives email every time someone endorses them for a topic."
+    },
+    "UserPreferencesDisableFileShareNotificationsForApi": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, email notifications are sent from the person who shared the file to the users that the file is shared with. This field is available in API version 25.0 and later."
+    },
+    "UserPreferencesDisableFollowersEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time someone starts following the user in Chatter. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableLaterCommentEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time someone comments on a feed item after the user has commented on the feed item. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableLikeEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time someone likes their post or comment. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableMentionsPostEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time they’re mentioned in posts. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableProfilePostEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time someone posts to the user’s profile. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableSharePostEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time their post is shared. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableFeedbackEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives emails related to WDC feedback. The user receives these emails when someone requests or offers feedback, shares feedback with the user, or reminds the user to answer a feedback request. This field isn’t visible as of API version 54.0."
+    },
+    "UserPreferencesDisCommentAfterLikeEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time someone comments on a post that the user liked. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisMentionsCommentEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time the user is mentioned in comments. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableMessageEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email for Chatter messages sent to the user. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesDisableRewardEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives emails related to WDC rewards. The user receives these emails when someone gives a reward to the user."
+    },
+    "UserPreferencesDisableWorkEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user receives emails related to WDC feedback, goals, and coaching. The user must also sign up for individual emails listed on the WDC email settings page. When true, the user doesn’t receive any emails related to WDC feedback, goals, or coaching even if they’re signed up for individual emails."
+    },
+    "UserPreferencesDisProfPostCommentEmail": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When false, the user automatically receives email every time someone comments on posts on the user’s profile. This field is available in API version 24.0 and later."
+    },
+    "UserPreferencesEnableVoiceCallRecording": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, voice call recording is enabled for the user."
+    },
+    "UserPreferencesEnableVoiceLocalPresence": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, local numbers are shown when the user calls customers with Sales Dialer."
+    },
+    "UserPreferencesEventRemindersCheckboxDefault": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, a reminder popup is automatically set on the user's events. Corresponds to the By default, set reminder on Events to... checkbox on the Reminders page in the user interface. This field is related to UserPreference and customizing activity reminders."
+    },
+    "UserPreferencesHideBiggerPhotoCallout": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, users can choose to hide the callout text below the large profile photo."
+    },
+    "UserPreferencesHideChatterOnboardingSplash": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the initial Chatter onboarding prompts don’t appear."
+    },
+    "UserPreferencesHideCSNDesktopTask": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the Chatter recommendations panel never displays the recommendation to install Chatter Desktop. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesHideCSNGetChatterMobileTask": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the Chatter recommendations panel never displays the recommendation to install Chatter Mobile. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesHideEndUserOnboardingAssistantModal": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Reserved for future use."
+    },
+    "UserPreferencesHideLightningMigrationModal": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Reserved for future use."
+    },
+    "UserPreferencesHideSecondChatterOnboardingSplash": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the secondary Chatter onboarding prompts don’t appear."
+    },
+    "UserPreferencesHideS1BrowserUI": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Controls the interface that the user sees when logging in to Salesforce from a supported mobile browser. If false, the user is automatically redirected to the Salesforce mobile web. If true, the user sees the full Salesforce site. The default value is false. Label is Salesforce User.This field is available in API version 29.0 or later."
+    },
+    "UserPreferencesHideSfxWelcomeMat": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Controls whether a user sees the Lightning Experience new user message. That message welcomes users to the new interface and provides step-by-step instructions that describe how to return to Salesforce Classic."
+    },
+    "UserPreferencesJigsawListUser": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the user is a Data.com List user so shares record additions from a pool. UserPermissionsJigsawProspectingUser must also be set to true. Label is Data.com List User. This field is available in API version 27.0 and later."
+    },
+    "UserPreferencesLightningExperiencePreferred": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, redirects the user to the Lightning Experience interface. Label is Switch to Lightning Experience. This field is available in API version 35.0 and later."
+    },
+    "UserPreferencesLiveAgentMiawSetupDeflection": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, disables the pop-up to deflect users on Chat setup nodes to the Messaging setup. The default value is false. This field is available in API version 59.0 and later."
+    },
+    "UserPreferencesNativeEmailClient": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Use this field to set a default email preference for the user’s native email client. This field is available in API version 47.0 and later. The default value is false, corresponding to the Salesforce docked email composer."
+    },
+    "UserPreferencesOptOutOfTouch": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "This field is deprecated in API version 29.0. When false, the user automatically accesses the Salesforce Touch app when logging in to Salesforce from an iPad. If true, automatic access to the Salesforce Touch app is turned off and the user’s iPad is directed to the full Salesforce site instead. The default value is false. Note: Salesforce Touch must be enabled before this field is visible."
+    },
+    "UserPreferencesOutboundBridge": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, outbound calls are made through the user’s phone."
+    },
+    "UserPreferencesPathAssistantCollapsed": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, Sales Path appears collapsed or hidden to the user. This field is available in API version 35.0 and later."
+    },
+    "UserPreferencesProcessAssistantCollapsed": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, Sales Path appears collapsed or hidden to the user. This field is available in API versions 33.0 and 34.0 only. In API versions 35.0 and later, use UserPreferencesPathAssistantCollapsed."
+    },
+    "UserPreferencesReceiveNoNotificationsAsApprover": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Controls email notifications from the approval process for approvers. If true, emails are disabled. If false, emails are enabled. The default value is false. Note: The Receive Approval Request Emails setting in the UI controls this field and the UserPreferencesReceiveNotificationsAsDelegatedApprover field. Setting: If I’m an approver or delegated approverResult: UserPreferencesReceiveNoNotificationsAsApprover = false UserPreferencesReceiveNotificationsAsDelegatedApprover = true Setting: Only if I’m an approverResult: UserPreferencesReceiveNoNotificationsAsApprover = false UserPreferencesReceiveNotificationsAsDelegatedApprover = false Setting: Only if I’m a delegated approverResult: UserPreferencesReceiveNoNotificationsAsApprover = true UserPreferencesReceiveNotificationsAsDelegatedApprover = true Setting: NeverResult: UserPreferencesReceiveNoNotificationsAsApprover = true UserPreferencesReceiveNotificationsAsDelegatedApprover = false"
+    },
+    "UserPreferencesReceiveNotificationsAsDelegatedApprover": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Controls email notifications from the approval process for delegated approvers. If true, emails are enabled. If false, emails are disabled. The default value is false. Note: The Receive Approval Request Emails setting in the UI controls this field and the UserPreferencesReceiveNoNotificationsAsApprover field. Setting: If I’m an approver or delegated approverResult: UserPreferencesReceiveNoNotificationsAsApprover = false UserPreferencesReceiveNotificationsAsDelegatedApprover = true Setting: Only if I’m an approverResult: UserPreferencesReceiveNoNotificationsAsApprover = false UserPreferencesReceiveNotificationsAsDelegatedApprover = false Setting: Only if I’m a delegated approverResult: UserPreferencesReceiveNoNotificationsAsApprover = true UserPreferencesReceiveNotificationsAsDelegatedApprover = true Setting: NeverResult: UserPreferencesReceiveNoNotificationsAsApprover = true UserPreferencesReceiveNotificationsAsDelegatedApprover = false"
+    },
+    "UserPreferencesReminderSoundOff": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, a sound automatically plays when an activity reminder is due. Corresponds to the Play a reminder sound checkbox on the Reminders page in the user interface."
+    },
+    "UserPreferencesShowCityToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the city field in the user’s contact information. City is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. City is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowCityToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses.The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowCityToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the city field in the user’s contact information. When true, city is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowCityToExternalUsers, making the user’s city visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowCountryToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the country field in the user’s contact information. Country is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. Country is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowCountryToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowCountryToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the country field in the user’s contact information. When true, country is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowCountryToExternalUsers, making the user’s country visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowEmailToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the email address field in the user’s contact information. Email address is visible only to internal members of the user’s organization when this field is false. Email address is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowEmailToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the email address field in the user’s contact information. When true, the email address is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When true, this field overrides the value false in UserPreferencesShowEmailToExternalUsers, making the user’s email address visible to guests. When false, this field returns the value #N/A. The default value is false. This field is available in API version 34.0 and later."
+    },
+    "UserPreferencesShowFaxToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the fax number field in the user’s contact information. Fax number is visible only to internal members of the user’s organization when this field is false. Fax number is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowFaxToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the fax number field in the user’s contact information. When true, the fax number field is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When true, this field overrides the value false in UserPreferencesShowFaxToExternalUsers, making the user’s fax number visible to guests. When false, this field returns the value #N/A. The default value is false. This field is available in API version 34.0 and later."
+    },
+    "UserPreferencesShowManagerToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the manager field in the user’s contact information. Manager is visible only to internal members of the user’s organization when this field is false. Manager is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowManagerToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the manager field in the user’s contact information. When true, the manager field is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When true, this field overrides the value false in UserPreferencesShowManagerToExternalUsers, making the user’s manager visible to guests. When false, this field returns the value #N/A. The default value is false. This field is available in API version 34.0 and later."
+    },
+    "UserPreferencesShowMobilePhoneToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the mobile device number field in the user’s contact information. The number is visible only to internal members of the user’s organization when this field is false. The number is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowMobilePhoneToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the mobile phone field in the user’s contact information. When true, the mobile phone field is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When true, this field overrides the value false in UserPreferencesShowMobilePhoneToExternalUsers, making the user’s mobile phone visible to guests. When false, this field returns the value #N/A. The default value is false. This field is available in API version 34.0 and later."
+    },
+    "UserPreferencesShowPostalCodeToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the postal or ZIP code field in the user’s contact information. Postal code is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. Postal code is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowPostalCodeToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses.The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowPostalCodeToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the postal or ZIP code field in the user’s contact information. When true, postal code is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowPostalCodeToExternalUsers, making the user’s postal code visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowProfilePicToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the user’s profile photo. When true, the photo is visible to guest users in an Experience Cloud site. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site.When false, this field returns the stock photo. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowStateToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the state field in the user’s contact information. State is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. State is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowStateToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowStateToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the state field in the user’s contact information. When true, state is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowStateToExternalUsers, making the user’s state visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowStreetAddressToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the street address field in the user’s contact information. The address is visible only to internal members of the user’s organization when this field is false. The address is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowStreetAddressToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the street address field in the user’s contact information. When true, the street address field is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When true, this field overrides the value false in UserPreferencesShowStreetAddressToExternalUsers, making the user’s street address visible to guests. When false, this field returns the value #N/A. The default value is false. This field is available in API version 34.0 and later."
+    },
+    "UserPreferencesShowTitleToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the business title field in the user’s contact information. Title is visible only to internal members of the user’s organization when: This field is false. When false, this field returns the value #N/A. Title is visible to external members in an Experience Cloud site when: This field is true, or This field is false but UserPreferencesShowTitleToGuestUsers is true, which overrides this field’s value. External users are users with Community, Customer Portal, or partner portal licenses.The default value is true. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowTitleToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the business title field in the user’s contact information. When true, title is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When false, this field returns the value #N/A. When true, this field overrides the value false in UserPreferencesShowTitleToExternalUsers, making the user’s title visible to external members. The default value is false. This field is available in API version 28.0 and later."
+    },
+    "UserPreferencesShowWorkPhoneToExternalUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the work phone number field in the user’s contact information. The number is visible only to internal members of the user’s organization when this field is false. The number is visible to external members in an Experience Cloud site when this field is true. External users are users with Community, Customer Portal, or partner portal licenses.When false, this field returns the value #N/A. The default value is false. This field is available in API version 26.0 and later."
+    },
+    "UserPreferencesShowWorkPhoneToGuestUsers": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Indicates the visibility of the work phone field in the user’s contact information. When true, the work phone field is visible to guest users. Guest users can access public Site.com and Salesforce sites, and public pages in Experience Cloud sites, via the Guest User license associated with each site. When true, this field overrides the value false in UserPreferencesShowWorkPhoneToExternalUsers, making the user’s work phone visible to guests. When false, this field returns the value #N/A. The default value is false. This field is available in API version 34.0 and later."
+    },
+    "UserPreferencesSortFeedByComment": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Specifies the data value used in sorting a user’s feed. When true, the feed is sorted by most recent comment activity. When false, the feed is sorted by post date."
+    },
+    "UserPreferencesSuppressEventSFXReminders": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, event reminders don’t appear. Corresponds to the Show event reminders in Lightning Experience checkbox on the Activity Reminders page in the user interface. This field is related to UserPreference and customizing activity reminders."
+    },
+    "UserPreferencesSuppressTaskSFXReminders": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, task reminders don’t appear. Corresponds to the Show task reminders in Lightning Experience. checkbox on the Activity Reminders page in the user interface. This field is related to UserPreference and customizing activity reminders."
+    },
+    "UserPreferencesTaskRemindersCheckboxDefault": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, a reminder popup is automatically set on the user's tasks. Corresponds to the By default, set reminder on Tasks to... checkbox on the Reminders page in the user interface. This field is related to UserPreference and customizing activity reminders."
+    },
+    "UserPreferencesUserDebugModePref": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "When true, the Lightning Component framework executes in debug mode for the user. Corresponds to the Debug Mode checkbox on the Advanced User Details page of personal settings in the user interface."
+    },
+    "UserRoleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the user’s UserRole. Label is Role ID. This is a relationship field.",
+      "relationship_name": "UserRole",
+      "relationship_type": "Lookup",
+      "refers_to": "UserRole"
+    },
+    "UserType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort, Restricted picklist",
+      "description": "The category of user license. Each UserType is associated with one or more UserLicense records. Each UserLicense is associated with one or more profiles. In API version 10.0 and later, valid values include: Standard: user license. This user type also includes Salesforce Platform and Salesforce Platform One user licenses. Label is Standard. PowerPartner: User whose access is limited because they’re a partner and typically access the application through a partner portal or Experience Cloud site. Label is Partner. CspLitePortal: user whose access is limited because they’re an org's customer and access the application through a Customer Portal or Experience Cloud site. Label is High Volume Portal. CustomerSuccess: user whose access is limited because they’re an org's customer and access the application through a Customer Portal. Label is Customer Portal User. PowerCustomerSuccess: user whose access is limited because they’re an org's customer and access the application through a Customer Portal. Label is Customer Portal Manager. Users with this license type can view and edit data they directly own or data owned by or shared with users below them in the Customer Portal role hierarchy. CsnOnly: user whose access to the application is limited to Chatter. This user type includes Chatter Free and Chatter moderator users. Label is Chatter Free. Guest: user whose access is limited because they’re an unauthenticated user without login credentials. Label is Guest."
+    },
+    "WirelessEmail": {
+      "type": "email",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Wireless email address associated with this user. For use with Salesforce Wireless Edition. This field is available only if the Wireless and Email permissions are enabled for your organization. As of November 2005, Salesforce Wireless Edition is no longer available for purchase. You can continue to use Wireless Edition through the end of your existing contract term if you are: A Professional Edition customer and purchased Wireless Edition before November 7, 2005. An Enterprise Edition customer who signed or renewed their Salesforce contract before November 7, 2005."
+    }
+  },
+  "special_access_rules": "But internal users belonging to the same Experience Cloud site can search for and view hidden field values in search results. The behavior depends on the number of domains associated with the lookup field. If the object can look up to more than one domain, owner.name returns a value, but other detail fields don’t. For example, Case owner can look up to the User or Queue objects. In this case, portal users can see only the value of owner.name. Other User detail fields, such as owner.email or owner.phone don’t return a value. If the object can look up to only a single domain, such as Account owner, then no detail fields return values, including owner.name.\n\nBut internal users belonging to the same Experience Cloud site can search for and view hidden field values in search results.\n\nThe behavior depends on the number of domains associated with the lookup field. If the object can look up to more than one domain, owner.name returns a value, but other detail fields don’t. For example, Case owner can look up to the User or Queue objects. In this case, portal users can see only the value of owner.name. Other User detail fields, such as owner.email or owner.phone don’t return a value.\n\nIf the object can look up to only a single domain, such as Account owner, then no detail fields return values, including owner.name.",
+  "usage": "Use this object to query information about users and to provision and modify users in your organization. Unlike other objects, the records in the User table represent actual users—not data owned by users. Any user can query or describe User records. For example, the following SOQL code finds users with a particular user role. Each portal user is associated with a portal account. A portal account can have a maximum of three portal roles (Executive, Manager, and User). You can select the default number of roles to be created from the user interface. The role hierarchy is maintained when you insert and delete portal roles, and roles are created bottom-up. Deleting the User role causes the Manager role to be renamed to User role. Deleting both the Executive and User roles causes the Manager role to be renamed to User role. Before deleting a role, you must assign users under that role to another role.\n\nUse this object to query information about users and to provision and modify users in your organization. Unlike other objects, the records in the User table represent actual users—not data owned by users. Any user can query or describe User records.\n\nFor example, the following SOQL code finds users with a particular user role.\n\nEach portal user is associated with a portal account. A portal account can have a maximum of three portal roles (Executive, Manager, and User). You can select the default number of roles to be created from the user interface. The role hierarchy is maintained when you insert and delete portal roles, and roles are created bottom-up. Deleting the User role causes the Manager role to be renamed to User role. Deleting both the Executive and User roles causes the Manager role to be renamed to User role. Before deleting a role, you must assign users under that role to another role.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **UserChangeEvent (API version 44.0)**: Change events are available for the object.\n- **UserFeed (API version 18.0)**: Feed tracking is available for the object.\n- **UserHistory (Beta) (API version 65.0)**: History is available for tracked fields of the object.\n- **UserShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"User\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AboutMe\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AcceptedEventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountCleanInfoReviewers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Address\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"Alias\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApprovalSubmissionDetails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssignedWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AuthorizationFormConsents\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BadgeText\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Badges\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BannerPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CallCenterId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CommSubscriptionConsents\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CommunityNickname\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CompanyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Contact\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Contact\"/>\n        <element name=\"ContactCleanInfoReviewers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContactRequests\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContractsSigned\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ConversationEntries\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ConversationParticipants\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeclinedEventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"DefaultGroupNotificationFrequency\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DelegatedApproverId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"DelegatedUsers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"DeliveredToShipments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Department\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DevopsActivityLogs\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"DigestFrequency\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Division\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Email\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EmailEncodingKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EmailMessageRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"EmailPreferencesAutoBcc\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"EmailPreferencesAutoBccStayInTouch\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"EmailPreferencesStayInTouchReminder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"EmployeeNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EndDay\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Extension\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExternalDataUserAuths\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Fax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FederationIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FeedSubscriptions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FirstName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ForecastEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"FullPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GivenThanks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GroupMembershipRequests\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"GroupMemberships\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"HasUserVerifiedEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasUserVerifiedPhone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Individual\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Individual\"/>\n        <element name=\"IndividualId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"InstalledMobileApps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsExtIndicatorVisible\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsProfilePhotoActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"JigsawImportLimitOverride\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LanguageLocaleKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastLoginDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastPasswordChangeDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Latitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"LeadCleanInfoReviewers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ListEmails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"LocaleSidKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Longitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ManagedUsers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Manager\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ManagerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MediumBannerPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MediumPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessagingEndUsers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MobilePhone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NumberOfFailedLogins\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"OffersRespondedByUser\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OfflinePdaTrialExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OfflineTrialExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OutOfOfficeMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OutgoingEmailRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OwnedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PasswordExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PermissionSetAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PermissionSetLicenseAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PersonRecord\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Profile\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Profile\"/>\n        <element name=\"ProfileId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ReceivedByProductTransfers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReceivesAdminInfoEmails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ReceivesInfoEmails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ReviewedWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SenderEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SenderName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ServiceResources\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SessionPermSetActivations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Signature\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SmallBannerPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SmallPhotoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StartDay\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StayInTouchNote\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StayInTouchSignature\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StayInTouchSubject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SuAccessExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SwarmMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Swarms\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TimeZoneSidKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Title\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UndecidedEventRelations\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserEntityAccessRights\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserFieldAccessRights\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserLogins\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserPermissionsCallCenterAutoLogin\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsInteractionUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsJigsawProspectingUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsKnowledgeUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsMarketingUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsOfflineUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsSFContentUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsSiteforceContributorUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsSiteforcePublisherUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsSupportUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPermissionsWorkDotComUserFeature\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserPreferencesActionLauncherEinsteinGptConsent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesActivityRemindersPopup\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesApexPagesDeveloperMode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesAssistiveActionsEnabledInActionLauncher\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesCacheDiagnostics\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesContentEmailAsAndWhen\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesContentNoEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesCreateLEXAppsWTShown\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisCommentAfterLikeEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisMentionsCommentEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisProfPostCommentEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableAllFeedsEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableBookmarkEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableChangeCommentEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableEndorsementEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableFeedbackEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableFileShareNotificationsForApi\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableFollowersEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableLaterCommentEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableLikeEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableMentionsPostEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableMessageEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableProfilePostEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableSharePostEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDisableWorkEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDismissPersonalSpaceLegalMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDismissRecordChannelsSuggestedObjects\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesDismissReuseUpdateReminderModal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesEnableAutoSubForFeeds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesEnableLwrLexPilot\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesEventRemindersCheckboxDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesExcludeMailAppAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesFavoritesShowTopFavorites\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesFavoritesWTShown\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesGlobalNavBarWTShown\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesGlobalNavGridMenuWTShown\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHasCelebrationBadge\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHasSentWarningEmail\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHasSentWarningEmail238\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHasSentWarningEmail240\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideBiggerPhotoCallout\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideCSNDesktopTask\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideCSNGetChatterMobileTask\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideChatterOnboardingSplash\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideEndUserOnboardingAssistantModal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideLightningMigrationModal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideManagedEcaMobilePubModal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideS1BrowserUI\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideSecondChatterOnboardingSplash\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesHideSfxWelcomeMat\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesJigsawListUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesLightningExperiencePreferred\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesLiveAgentMiawSetupDeflection\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesNativeEmailClient\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesNewLightningReportRunPageEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesPathAssistantCollapsed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesPreviewCustomTheme\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesPreviewLightning\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesReceiveNoNotificationsAsApprover\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesReceiveNotificationsAsDelegatedApprover\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesRecordHomeReservedWTShown\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesRecordHomeSectionCollapseWTShown\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesReminderSoundOff\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesReverseOpenActivitiesView\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesSRHOverrideActivities\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesSendListEmailThroughExternalService\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowCityToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowCityToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowCountryToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowCountryToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowEmailToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowEmailToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowFaxToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowFaxToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowForecastingChangeSignals\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowForecastingRoundedAmounts\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowManagerToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowManagerToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowMobilePhoneToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowMobilePhoneToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowPostalCodeToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowPostalCodeToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowProfilePicToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowStateToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowStateToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowStreetAddressToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowStreetAddressToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowTerritoryTimeZoneShifts\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowTitleToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowTitleToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowWorkPhoneToExternalUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesShowWorkPhoneToGuestUsers\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesSortFeedByComment\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesSuppressEventSFXReminders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesSuppressTaskSFXReminders\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesTaskRemindersCheckboxDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserPreferencesUserDebugModePref\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"UserProfileSkillChildren\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserProfileSkillUserEndorsements\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRole\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRole\"/>\n        <element name=\"UserRoleId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"UserSites\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Username\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AboutMe": {
+      "field_label": "About Me",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Address": {
+      "field_label": "Address",
+      "type": "address"
+    },
+    "Alias": {
+      "field_label": "Alias",
+      "type": "string",
+      "length": "8"
+    },
+    "BadgeText": {
+      "field_label": "User Photo badge text overlay",
+      "type": "string",
+      "length": "80"
+    },
+    "BannerPhotoUrl": {
+      "field_label": "URL for banner photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "CallCenterId": {
+      "field_label": "Call Center ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "CommunityNickname": {
+      "field_label": "Nickname",
+      "type": "string",
+      "length": "40"
+    },
+    "CompanyName": {
+      "field_label": "Company Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DefaultCurrencyIsoCode": {
+      "field_label": "Default Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DefaultGroupNotificationFrequency": {
+      "field_label": "Default Notification Frequency when Joining Groups",
+      "type": "picklist",
+      "length": "40"
+    },
+    "DelegatedApproverId": {
+      "field_label": "Delegated Approver ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Department": {
+      "field_label": "Department",
+      "type": "string",
+      "length": "80"
+    },
+    "DigestFrequency": {
+      "field_label": "Chatter Email Highlights Frequency",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Division": {
+      "field_label": "Division",
+      "type": "string",
+      "length": "80"
+    },
+    "Email": {
+      "field_label": "Email",
+      "type": "email",
+      "length": "128"
+    },
+    "EmailEncodingKey": {
+      "field_label": "Email Encoding",
+      "type": "picklist",
+      "length": "40"
+    },
+    "EmailPreferencesAutoBcc": {
+      "field_label": "AutoBcc",
+      "type": "boolean"
+    },
+    "EmailPreferencesAutoBccStayInTouch": {
+      "field_label": "AutoBccStayInTouch",
+      "type": "boolean"
+    },
+    "EmailPreferencesStayInTouchReminder": {
+      "field_label": "StayInTouchReminder",
+      "type": "boolean"
+    },
+    "EmployeeNumber": {
+      "field_label": "Employee Number",
+      "type": "string",
+      "length": "20"
+    },
+    "EndDay": {
+      "field_label": "End of Day",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Extension": {
+      "field_label": "Extension",
+      "type": "phone",
+      "length": "40"
+    },
+    "Fax": {
+      "field_label": "Fax",
+      "type": "phone",
+      "length": "40"
+    },
+    "FederationIdentifier": {
+      "field_label": "SAML Federation ID",
+      "type": "string",
+      "length": "512"
+    },
+    "FirstName": {
+      "field_label": "First Name",
+      "type": "string",
+      "length": "40"
+    },
+    "ForecastEnabled": {
+      "field_label": "Allow Forecasting",
+      "type": "boolean"
+    },
+    "FullPhotoUrl": {
+      "field_label": "Url for full-sized Photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "GeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "HasUserVerifiedEmail": {
+      "field_label": "User Verified Email",
+      "type": "boolean"
+    },
+    "HasUserVerifiedPhone": {
+      "field_label": "User Verified Mobile Number",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "User ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IndividualId": {
+      "field_label": "Individual ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Active",
+      "type": "boolean"
+    },
+    "IsExtIndicatorVisible": {
+      "field_label": "Show external indicator",
+      "type": "boolean"
+    },
+    "IsPartner": {
+      "field_label": "Is Partner",
+      "type": "boolean"
+    },
+    "IsPortalEnabled": {
+      "field_label": "Is Portal Enabled",
+      "type": "boolean"
+    },
+    "IsProfilePhotoActive": {
+      "field_label": "Has Profile Photo",
+      "type": "boolean"
+    },
+    "JigsawImportLimitOverride": {
+      "field_label": "Data.com Monthly Addition Limit",
+      "type": "int",
+      "digits": "9"
+    },
+    "LanguageLocaleKey": {
+      "field_label": "Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastLoginDate": {
+      "field_label": "Last Login",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastName": {
+      "field_label": "Last Name",
+      "type": "string",
+      "length": "80"
+    },
+    "LastPasswordChangeDate": {
+      "field_label": "Last Password Change or Reset",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "LocaleSidKey": {
+      "field_label": "Locale",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "ManagerId": {
+      "field_label": "Manager ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MediumBannerPhotoUrl": {
+      "field_label": "URL for Android banner photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "MediumPhotoUrl": {
+      "field_label": "URL for medium profile photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "MobilePhone": {
+      "field_label": "Mobile",
+      "type": "phone",
+      "length": "40"
+    },
+    "Name": {
+      "field_label": "Full Name",
+      "type": "string",
+      "length": "121"
+    },
+    "NumberOfFailedLogins": {
+      "field_label": "Failed Login Attempts",
+      "type": "int",
+      "digits": "9"
+    },
+    "OfflinePdaTrialExpirationDate": {
+      "field_label": "Sales Anywhere Trial Expiration Date",
+      "type": "datetime"
+    },
+    "OfflineTrialExpirationDate": {
+      "field_label": "Offline Edition Trial Expiration Date",
+      "type": "datetime"
+    },
+    "OutOfOfficeMessage": {
+      "field_label": "Out of office message",
+      "type": "string",
+      "length": "40"
+    },
+    "PasswordExpirationDate": {
+      "field_label": "Password Expiration Date",
+      "type": "datetime"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PortalRole": {
+      "field_label": "Portal Role Level",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PostalCode": {
+      "field_label": "Zip/Postal Code",
+      "type": "string",
+      "length": "20"
+    },
+    "ProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReceivesAdminInfoEmails": {
+      "field_label": "Admin Info Emails",
+      "type": "boolean"
+    },
+    "ReceivesInfoEmails": {
+      "field_label": "Info Emails",
+      "type": "boolean"
+    },
+    "SenderEmail": {
+      "field_label": "Email Sender Address",
+      "type": "email",
+      "length": "80"
+    },
+    "SenderName": {
+      "field_label": "Email Sender Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Signature": {
+      "field_label": "Email Signature",
+      "type": "textarea",
+      "length": "1333"
+    },
+    "SmallBannerPhotoUrl": {
+      "field_label": "URL for IOS banner photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "SmallPhotoUrl": {
+      "field_label": "Photo",
+      "type": "url",
+      "length": "1024"
+    },
+    "StartDay": {
+      "field_label": "Start of Day",
+      "type": "picklist",
+      "length": "40"
+    },
+    "State": {
+      "field_label": "State/Province",
+      "type": "string",
+      "length": "80"
+    },
+    "StayInTouchNote": {
+      "field_label": "Stay-in-Touch Email Note",
+      "type": "string",
+      "length": "512"
+    },
+    "StayInTouchSignature": {
+      "field_label": "Stay-in-Touch Email Signature",
+      "type": "textarea",
+      "length": "512"
+    },
+    "StayInTouchSubject": {
+      "field_label": "Stay-in-Touch Email Subject",
+      "type": "string",
+      "length": "80"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SuAccessExpirationDate": {
+      "field_label": "SU Access Expiration Date",
+      "type": "date"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TimeZoneSidKey": {
+      "field_label": "Time Zone",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Title": {
+      "field_label": "Title",
+      "type": "string",
+      "length": "80"
+    },
+    "UserPermissionsAvantgoUser": {
+      "field_label": "AvantGo User",
+      "type": "boolean"
+    },
+    "UserPermissionsCallCenterAutoLogin": {
+      "field_label": "Auto-login To Call Center",
+      "type": "boolean"
+    },
+    "UserPermissionsInteractionUser": {
+      "field_label": "Flow User",
+      "type": "boolean"
+    },
+    "UserPermissionsJigsawProspectingUser": {
+      "field_label": "Data.com User",
+      "type": "boolean"
+    },
+    "UserPermissionsKnowledgeUser": {
+      "field_label": "Knowledge User",
+      "type": "boolean"
+    },
+    "UserPermissionsLiveAgentUser": {
+      "field_label": "Chat User",
+      "type": "boolean"
+    },
+    "UserPermissionsMarketingUser": {
+      "field_label": "Marketing User",
+      "type": "boolean"
+    },
+    "UserPermissionsOfflineUser": {
+      "field_label": "Offline User",
+      "type": "boolean"
+    },
+    "UserPermissionsSFContentUser": {
+      "field_label": "Salesforce CRM Content User",
+      "type": "boolean"
+    },
+    "UserPermissionsSiteforceContributorUser": {
+      "field_label": "Site.com Contributor User",
+      "type": "boolean"
+    },
+    "UserPermissionsSiteforcePublisherUser": {
+      "field_label": "Site.com Publisher User",
+      "type": "boolean"
+    },
+    "UserPermissionsSupportUser": {
+      "field_label": "Service Cloud User",
+      "type": "boolean"
+    },
+    "UserPermissionsWorkDotComUserFeature": {
+      "field_label": "WDC User",
+      "type": "boolean"
+    },
+    "UserPreferencesActionLauncherEinsteinGptConsent": {
+      "field_label": "ActionLauncherEinsteinGptConsent",
+      "type": "boolean"
+    },
+    "UserPreferencesActivityRemindersPopup": {
+      "field_label": "ActivityRemindersPopup",
+      "type": "boolean"
+    },
+    "UserPreferencesAgentGdprConsent": {
+      "field_label": "AgentGdprConsent",
+      "type": "boolean"
+    },
+    "UserPreferencesAllowConversationReminders": {
+      "field_label": "AllowConversationReminders",
+      "type": "boolean"
+    },
+    "UserPreferencesApexPagesDeveloperMode": {
+      "field_label": "ApexPagesDeveloperMode",
+      "type": "boolean"
+    },
+    "UserPreferencesAssistiveActionsEnabledInActionLauncher": {
+      "field_label": "AssistiveActionsEnabledInActionLauncher",
+      "type": "boolean"
+    },
+    "UserPreferencesAutoForwardCall": {
+      "field_label": "AutoForwardCall",
+      "type": "boolean"
+    },
+    "UserPreferencesAutoLogCallAsTask": {
+      "field_label": "AutoLogCallAsTask",
+      "type": "boolean"
+    },
+    "UserPreferencesBRELookupTableWelcomeMat": {
+      "field_label": "BRELookupTableWelcomeMat",
+      "type": "boolean"
+    },
+    "UserPreferencesCacheDiagnostics": {
+      "field_label": "CacheDiagnostics",
+      "type": "boolean"
+    },
+    "UserPreferencesContentEmailAsAndWhen": {
+      "field_label": "ContentEmailAsAndWhen",
+      "type": "boolean"
+    },
+    "UserPreferencesContentNoEmail": {
+      "field_label": "ContentNoEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesCreateLEXAppsWTShown": {
+      "field_label": "CreateLEXAppsWTShown",
+      "type": "boolean"
+    },
+    "UserPreferencesDisCommentAfterLikeEmail": {
+      "field_label": "DisCommentAfterLikeEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisMentionsCommentEmail": {
+      "field_label": "DisMentionsCommentEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisProfPostCommentEmail": {
+      "field_label": "DisProfPostCommentEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableAllFeedsEmail": {
+      "field_label": "DisableAllFeedsEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableBookmarkEmail": {
+      "field_label": "DisableBookmarkEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableChangeCommentEmail": {
+      "field_label": "DisableChangeCommentEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableEndorsementEmail": {
+      "field_label": "DisableEndorsementEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableFeedbackEmail": {
+      "field_label": "DisableFeedbackEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableFileShareNotificationsForApi": {
+      "field_label": "DisableFileShareNotificationsForApi",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableFollowersEmail": {
+      "field_label": "DisableFollowersEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableLaterCommentEmail": {
+      "field_label": "DisableLaterCommentEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableLikeEmail": {
+      "field_label": "DisableLikeEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableMentionsPostEmail": {
+      "field_label": "DisableMentionsPostEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableMessageEmail": {
+      "field_label": "DisableMessageEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableProfilePostEmail": {
+      "field_label": "DisableProfilePostEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableSharePostEmail": {
+      "field_label": "DisableSharePostEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDisableWorkEmail": {
+      "field_label": "DisableWorkEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesDismissPersonalSpaceLegalMessage": {
+      "field_label": "DismissPersonalSpaceLegalMessage",
+      "type": "boolean"
+    },
+    "UserPreferencesDismissRecordChannelsSuggestedObjects": {
+      "field_label": "DismissRecordChannelsSuggestedObjects",
+      "type": "boolean"
+    },
+    "UserPreferencesDismissReuseUpdateReminderModal": {
+      "field_label": "DismissReuseUpdateReminderModal",
+      "type": "boolean"
+    },
+    "UserPreferencesEmailSummarizationGptConsent": {
+      "field_label": "EmailSummarizationGptConsent",
+      "type": "boolean"
+    },
+    "UserPreferencesEnableAutoSubForFeeds": {
+      "field_label": "EnableAutoSubForFeeds",
+      "type": "boolean"
+    },
+    "UserPreferencesEnableLwrLexPilot": {
+      "field_label": "EnableLwrLexPilot",
+      "type": "boolean"
+    },
+    "UserPreferencesEnableVoiceCallRecording": {
+      "field_label": "EnableVoiceCallRecording",
+      "type": "boolean"
+    },
+    "UserPreferencesEventRemindersCheckboxDefault": {
+      "field_label": "EventRemindersCheckboxDefault",
+      "type": "boolean"
+    },
+    "UserPreferencesExcludeMailAppAttachments": {
+      "field_label": "ExcludeMailAppAttachments",
+      "type": "boolean"
+    },
+    "UserPreferencesFavoritesShowTopFavorites": {
+      "field_label": "FavoritesShowTopFavorites",
+      "type": "boolean"
+    },
+    "UserPreferencesFavoritesWTShown": {
+      "field_label": "FavoritesWTShown",
+      "type": "boolean"
+    },
+    "UserPreferencesGenAISummarizationUserConsent": {
+      "field_label": "GenAISummarizationUserConsent",
+      "type": "boolean"
+    },
+    "UserPreferencesGlobalNavBarWTShown": {
+      "field_label": "GlobalNavBarWTShown",
+      "type": "boolean"
+    },
+    "UserPreferencesGlobalNavGridMenuWTShown": {
+      "field_label": "GlobalNavGridMenuWTShown",
+      "type": "boolean"
+    },
+    "UserPreferencesHasCelebrationBadge": {
+      "field_label": "HasCelebrationBadge",
+      "type": "boolean"
+    },
+    "UserPreferencesHasSentWarningEmail": {
+      "field_label": "HasSentWarningEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesHasSentWarningEmail238": {
+      "field_label": "HasSentWarningEmail238",
+      "type": "boolean"
+    },
+    "UserPreferencesHasSentWarningEmail240": {
+      "field_label": "HasSentWarningEmail240",
+      "type": "boolean"
+    },
+    "UserPreferencesHideBiggerPhotoCallout": {
+      "field_label": "HideBiggerPhotoCallout",
+      "type": "boolean"
+    },
+    "UserPreferencesHideBrowseProductRedirectConfirmation": {
+      "field_label": "HideBrowseProductRedirectConfirmation",
+      "type": "boolean"
+    },
+    "UserPreferencesHideCSNDesktopTask": {
+      "field_label": "HideCSNDesktopTask",
+      "type": "boolean"
+    },
+    "UserPreferencesHideCSNGetChatterMobileTask": {
+      "field_label": "HideCSNGetChatterMobileTask",
+      "type": "boolean"
+    },
+    "UserPreferencesHideChatterOnboardingSplash": {
+      "field_label": "HideChatterOnboardingSplash",
+      "type": "boolean"
+    },
+    "UserPreferencesHideEndUserOnboardingAssistantModal": {
+      "field_label": "HideEndUserOnboardingAssistantModal",
+      "type": "boolean"
+    },
+    "UserPreferencesHideLightningMigrationModal": {
+      "field_label": "HideLightningMigrationModal",
+      "type": "boolean"
+    },
+    "UserPreferencesHideManagedEcaMobilePubModal": {
+      "field_label": "HideManagedEcaMobilePubModal",
+      "type": "boolean"
+    },
+    "UserPreferencesHideOnlineSalesAppTabVisibilityRequirementsModal": {
+      "field_label": "HideOnlineSalesAppTabVisibilityRequirementsModal",
+      "type": "boolean"
+    },
+    "UserPreferencesHideOnlineSalesAppWelcomeMat": {
+      "field_label": "HideOnlineSalesAppWelcomeMat",
+      "type": "boolean"
+    },
+    "UserPreferencesHideS1BrowserUI": {
+      "field_label": "HideS1BrowserUI",
+      "type": "boolean"
+    },
+    "UserPreferencesHideSecondChatterOnboardingSplash": {
+      "field_label": "HideSecondChatterOnboardingSplash",
+      "type": "boolean"
+    },
+    "UserPreferencesHideSfxWelcomeMat": {
+      "field_label": "HideSfxWelcomeMat",
+      "type": "boolean"
+    },
+    "UserPreferencesJigsawListUser": {
+      "field_label": "JigsawListUser",
+      "type": "boolean"
+    },
+    "UserPreferencesLightningExperiencePreferred": {
+      "field_label": "LightningExperiencePreferred",
+      "type": "boolean"
+    },
+    "UserPreferencesLiveAgentMiawSetupDeflection": {
+      "field_label": "LiveAgentMiawSetupDeflection",
+      "type": "boolean"
+    },
+    "UserPreferencesNativeEmailClient": {
+      "field_label": "NativeEmailClient",
+      "type": "boolean"
+    },
+    "UserPreferencesNewLightningReportRunPageEnabled": {
+      "field_label": "NewLightningReportRunPageEnabled",
+      "type": "boolean"
+    },
+    "UserPreferencesOutboundBridge": {
+      "field_label": "OutboundBridge",
+      "type": "boolean"
+    },
+    "UserPreferencesPathAssistantCollapsed": {
+      "field_label": "PathAssistantCollapsed",
+      "type": "boolean"
+    },
+    "UserPreferencesPreviewCustomTheme": {
+      "field_label": "PreviewCustomTheme",
+      "type": "boolean"
+    },
+    "UserPreferencesPreviewLightning": {
+      "field_label": "PreviewLightning",
+      "type": "boolean"
+    },
+    "UserPreferencesReceiveNoNotificationsAsApprover": {
+      "field_label": "ReceiveNoNotificationsAsApprover",
+      "type": "boolean"
+    },
+    "UserPreferencesReceiveNotificationsAsDelegatedApprover": {
+      "field_label": "ReceiveNotificationsAsDelegatedApprover",
+      "type": "boolean"
+    },
+    "UserPreferencesRecordHomeReservedWTShown": {
+      "field_label": "RecordHomeReservedWTShown",
+      "type": "boolean"
+    },
+    "UserPreferencesRecordHomeSectionCollapseWTShown": {
+      "field_label": "RecordHomeSectionCollapseWTShown",
+      "type": "boolean"
+    },
+    "UserPreferencesReminderSoundOff": {
+      "field_label": "ReminderSoundOff",
+      "type": "boolean"
+    },
+    "UserPreferencesReverseOpenActivitiesView": {
+      "field_label": "ReverseOpenActivitiesView",
+      "type": "boolean"
+    },
+    "UserPreferencesSRHOverrideActivities": {
+      "field_label": "SRHOverrideActivities",
+      "type": "boolean"
+    },
+    "UserPreferencesSendListEmailThroughExternalService": {
+      "field_label": "SendListEmailThroughExternalService",
+      "type": "boolean"
+    },
+    "UserPreferencesShowCityToExternalUsers": {
+      "field_label": "ShowCityToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowCityToGuestUsers": {
+      "field_label": "ShowCityToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowCountryToExternalUsers": {
+      "field_label": "ShowCountryToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowCountryToGuestUsers": {
+      "field_label": "ShowCountryToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowEmailToExternalUsers": {
+      "field_label": "ShowEmailToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowEmailToGuestUsers": {
+      "field_label": "ShowEmailToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowFaxToExternalUsers": {
+      "field_label": "ShowFaxToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowFaxToGuestUsers": {
+      "field_label": "ShowFaxToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowForecastingChangeSignals": {
+      "field_label": "ShowForecastingChangeSignals",
+      "type": "boolean"
+    },
+    "UserPreferencesShowForecastingRoundedAmounts": {
+      "field_label": "ShowForecastingRoundedAmounts",
+      "type": "boolean"
+    },
+    "UserPreferencesShowManagerToExternalUsers": {
+      "field_label": "ShowManagerToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowManagerToGuestUsers": {
+      "field_label": "ShowManagerToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowMobilePhoneToExternalUsers": {
+      "field_label": "ShowMobilePhoneToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowMobilePhoneToGuestUsers": {
+      "field_label": "ShowMobilePhoneToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowPostalCodeToExternalUsers": {
+      "field_label": "ShowPostalCodeToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowPostalCodeToGuestUsers": {
+      "field_label": "ShowPostalCodeToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowProfilePicToGuestUsers": {
+      "field_label": "ShowProfilePicToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowStateToExternalUsers": {
+      "field_label": "ShowStateToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowStateToGuestUsers": {
+      "field_label": "ShowStateToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowStreetAddressToExternalUsers": {
+      "field_label": "ShowStreetAddressToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowStreetAddressToGuestUsers": {
+      "field_label": "ShowStreetAddressToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowTerritoryTimeZoneShifts": {
+      "field_label": "ShowTerritoryTimeZoneShifts",
+      "type": "boolean"
+    },
+    "UserPreferencesShowTitleToExternalUsers": {
+      "field_label": "ShowTitleToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowTitleToGuestUsers": {
+      "field_label": "ShowTitleToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowWorkPhoneToExternalUsers": {
+      "field_label": "ShowWorkPhoneToExternalUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesShowWorkPhoneToGuestUsers": {
+      "field_label": "ShowWorkPhoneToGuestUsers",
+      "type": "boolean"
+    },
+    "UserPreferencesSortFeedByComment": {
+      "field_label": "SortFeedByComment",
+      "type": "boolean"
+    },
+    "UserPreferencesSuppressEventSFXReminders": {
+      "field_label": "SuppressEventSFXReminders",
+      "type": "boolean"
+    },
+    "UserPreferencesSuppressTaskSFXReminders": {
+      "field_label": "SuppressTaskSFXReminders",
+      "type": "boolean"
+    },
+    "UserPreferencesTaskRemindersCheckboxDefault": {
+      "field_label": "TaskRemindersCheckboxDefault",
+      "type": "boolean"
+    },
+    "UserPreferencesUseSalesforceMailerForLexEmail": {
+      "field_label": "UseSalesforceMailerForLexEmail",
+      "type": "boolean"
+    },
+    "UserPreferencesUserDebugModePref": {
+      "field_label": "UserDebugModePref",
+      "type": "boolean"
+    },
+    "UserRoleId": {
+      "field_label": "Role ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "UserType": {
+      "field_label": "User Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Username": {
+      "field_label": "Username",
+      "type": "string",
+      "length": "80"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

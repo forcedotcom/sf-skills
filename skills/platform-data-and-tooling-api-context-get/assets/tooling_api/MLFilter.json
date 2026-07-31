@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "MLFilter - Tooling API",
+  "description": "Represents a data filter based on a data comparison in a machine learning (ML) application. For each comparison, there’s a left-hand element, an operator, and a right-hand element. Available in API version 50.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "FilterName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the filter."
+    },
+    "LhFilterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the left-hand filter condition. This is a relationship field."
+    },
+    "LhPredictionField": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Left-hand prediction field."
+    },
+    "LhType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the value type if a left-hand value is specified. Valid values are: Boolean Comparison Currency Date DateTime—Datetime Number String Supplier Varchar"
+    },
+    "LhUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the unit if a left-hand filter is specified. Valid values are: Days Hours Milliseconds Minutes Months Seconds Weeks Years"
+    },
+    "LhValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The left-hand value."
+    },
+    "Operation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies how to filter the data. Valid values are: Add And Between Concat Contains Divide DoesNotContain EndsWith Equals GreaterThan GreaterThanOrEqual In IsNotNull IsNull LessThan LessThanOrEqual Multiply Not NotEquals Or StartsWith Subtract"
+    },
+    "ParentDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the MLRecommendationDefinition, MLPredictionDefinition, or MLDataDefinition that this MLFilter belongs to. This is a polymorphic relationship field.",
+      "relationship_name": "ParentDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "MLDataDefinition, MLPredictionDefinition, MLRecommendationDefinition"
+    },
+    "RhFilterId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the right-hand filter condition. This is a relationship field."
+    },
+    "RhPredictionField": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Right-hand prediction field."
+    },
+    "RhType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the value type if a right-hand value is specified. Valid values are: Boolean Comparison Currency Date DateTime—Datetime Number String Supplier Varchar"
+    },
+    "RhUnit": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates the unit if a right-hand filter is specified. Valid values are: Days Hours Milliseconds Minutes Months Seconds Weeks Years"
+    },
+    "RhValue": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The right-hand value."
+    },
+    "SortOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the order of operations for evaluating the expressions. For example, if you have two conditions, this field specifies which condition is evaluated first."
+    }
+  }
+}

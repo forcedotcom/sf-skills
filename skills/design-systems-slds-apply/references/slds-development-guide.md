@@ -55,7 +55,7 @@ The **Salesforce Lightning Design System** provides:
 
 **Always follow this order when building UI:**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │ 1. Lightning Base Components (LWC only)                     │
 ├─────────────────────────────────────────────────────────────┤
@@ -176,7 +176,7 @@ export default class MyModal extends LightningModal {
 
 Not all CSS properties have styling hooks. Use this decision tree:
 
-```
+```text
 Does a styling hook exist for this property?
 ├─ YES → Use the hook with fallback: var(--slds-g-*, fallback)
 ├─ NO → Is there a utility class?

@@ -1,0 +1,152 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingTypeSource - Data API",
+  "description": "Maps a forecasting source definition to a forecast type. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The developer name of the forecasting type source. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "ForecastingSourceDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the forecasting source definition. This field is a relationship field.",
+      "relationship_name": "ForecastingSourceDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingSourceDefinition"
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the forecast type. Can be linked only to forecast types created in Summer ’21 and later. This field is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingType"
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Language of the forecasting type source."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Controlling label for this forecasting type source.",
+      "required": true
+    },
+    "ParentSourceDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "For forecast types not based on the opportunity object and not based on a custom measure, this value represents the parent ForecastingSourceDefinition of the linked ForecastingSourceDefinition. This field is a relationship field. Opportunity Product is the parent of Opportunity. Opportunity Split is the parent of Opportunity. Line Item Schedule is the parent of Opportunity Product.",
+      "relationship_name": "ParentSourceDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingSourceDefinition"
+    },
+    "RelationField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Represents the field linking the source objects of the parent ForecastingSourceDefinition to the child ForecastingSourceDefinition.Possible values are: OpportunityLineItem.OpportunityId OpportunityLineItem.Product2Id OpportunityLineItemSchedule.OpportunityLineItemId OpportunitySplit.OpportunityId"
+    },
+    "SourceGroup": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Represents a grouping of forecasting source definitions.",
+      "required": true
+    }
+  },
+  "usage": "Use this object to define a forecast type’s structure. This junction object links ForecastingSourceDefinition to ForecastingType. For an example, see ForecastingSourceDefinition.\n\nUse this object to define a forecast type’s structure. This junction object links ForecastingSourceDefinition to ForecastingType.\n\nFor an example, see ForecastingSourceDefinition.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ForecastingSourceDefinitionId": {
+      "field_label": "Forecasting Source Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Type Source ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "ParentSourceDefinitionId": {
+      "field_label": "Forecasting Source Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelationField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SourceGroup": {
+      "field_label": "Source Group",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

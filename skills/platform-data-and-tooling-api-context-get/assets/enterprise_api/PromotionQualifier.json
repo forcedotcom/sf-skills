@@ -1,0 +1,239 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "PromotionQualifier - Data API",
+  "description": "Represents the product, product category, or order that you want to target with your promotion qualifier in a B2B or D2C store. This object is available in API version 52.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApproachingDiscountThreshold": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The amount that a customer has to reach before seeing an approaching discount message. For example, if a promotion qualifier minimum is set at $150 and this field is set at $50, then a customer receives a banner notification that they're approaching the discount when they have at least $50 in their cart. This field is available in API version 64.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "ExternalQualifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A qualifying product or product category stored outside of Salesforce. This field is available in API version 56.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "MinimumAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The minimum dollar amount that a buyer must purchase to qualify for the promotion."
+    },
+    "MinimumQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The minimum quantity that a buyer must purchase to qualify for the promotion."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the promotion qualifier."
+    },
+    "PromotionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the promotion that you want to associate with your promotion qualifier. This is a relationship field.",
+      "relationship_name": "Promotion",
+      "relationship_type": "Lookup",
+      "refers_to": "Promotion"
+    },
+    "PromotionTierId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the promotion tier associated with the qualifier. Only used with tiered promotions. This is a relationship field. This field is available in API version 57.0 and later.",
+      "relationship_name": "PromotionTier",
+      "relationship_type": "Lookup",
+      "refers_to": "PromotionTier"
+    },
+    "QualifierId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the qualifier. This is a polymorphic relationship field.",
+      "relationship_name": "Qualifier",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2, ProductCategory"
+    },
+    "QualifierOperator": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Possible values are: EQUAL_TO NONE NOT_EQUAL_TO"
+    },
+    "QualifierProductCategoryName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the product category referenced in the qualifier. This field is available in API version 55.0 and later."
+    },
+    "QualifierProductName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the product referenced in the qualifier. This field is available in API version 55.0 and later."
+    },
+    "QualifierProductSku": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The stock keeping unit of the product referenced in the qualifier. This field is available in API version 55.0 and later."
+    },
+    "QualifierRuleCriteriaType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of qualifier rule criteria. Possible values are: All Any"
+    },
+    "QualifierType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of qualifier that you want to add to the promotion. Product applies the qualifier to a single product, ProductCategory to a predetermined group of products, and TransactionTotal to the entire order. Possible values are: Product ProductCategory TransactionTotal"
+    }
+  },
+  "special_access_rules": "The PromotionQualifier object is available only if the B2B Commerce or D2C Commerce license is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PromotionQualifierFeed**: Feed tracking is available for the object.\n- **PromotionQualifierHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "ApproachingDiscountThreshold": {
+      "field_label": "Approaching Discount Threshold",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Promotion Qualifier ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MinimumAmount": {
+      "field_label": "Minimum Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "MinimumQuantity": {
+      "field_label": "Minimum Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "4"
+    },
+    "Name": {
+      "field_label": "Promotion Qualifier Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PromotionId": {
+      "field_label": "Promotion ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PromotionTierId": {
+      "field_label": "Promotion Tier ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QualifierId": {
+      "field_label": "Qualifier ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QualifierOperator": {
+      "field_label": "Qualifier Operator",
+      "type": "picklist",
+      "length": "255"
+    },
+    "QualifierProductCategoryName": {
+      "field_label": "Qualifier Category Name",
+      "type": "string",
+      "length": "200"
+    },
+    "QualifierProductName": {
+      "field_label": "Qualifier Product Name",
+      "type": "string",
+      "length": "255"
+    },
+    "QualifierProductSku": {
+      "field_label": "Qualifier Product SKU",
+      "type": "string",
+      "length": "180"
+    },
+    "QualifierRuleCriteriaType": {
+      "field_label": "Qualifier Rule Criteria Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "QualifierType": {
+      "field_label": "Qualifier Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

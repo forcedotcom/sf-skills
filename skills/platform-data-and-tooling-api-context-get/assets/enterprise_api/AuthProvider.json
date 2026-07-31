@@ -1,0 +1,376 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AuthProvider - Data API",
+  "description": "Represents an authentication provider (auth provider). An auth provider lets users log in to your Salesforce org from an external service provider, such as Facebook, Google, or GitHub. This object is available in API version 27.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AppleTeam": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required when using Apple as a third-party authentication provider. A 10-character team ID, obtained from an Apple developer account. Available in API version 48.0 and later.",
+      "required": true
+    },
+    "AuthorizeUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Required when creating an OpenID Connect authentication provider. The OAuth authorization endpoint URL. Available in API version 29.0 and later. In API version 33.0 and later, for Salesforce-managed auth providers, leave the field blank to let Salesforce supply and manage the value.",
+      "required": true
+    },
+    "ConsumerKey": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The app’s key that is registered at the third-party (external) authentication provider. In API version 33.0 and later, for Salesforce-managed auth providers, leave the field blank to let Salesforce supply and manage the value."
+    },
+    "ConsumerSecret": {
+      "type": "string",
+      "properties": "Create, Nillable",
+      "description": "The consumer secret of the authentication provider that is registered at the third-party SSO provider. It’s used by the consumer for identification to Salesforce. In API version 33.0 and later, for Salesforce-managed auth providers, leave the field blank to let Salesforce supply and manage the value. You can create your own consumer secret on create(). However, after you set it, you can’t change the value."
+    },
+    "CustomMetadataTypeRecord": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required when creating a custom authentication provider plug-in. The API name of the custom authentication provider. Available in API version 36.0 and later.",
+      "required": true
+    },
+    "DefaultScopes": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "For OpenID Connect authentication providers, the scopes to send with the authorization request, if not specified when a flow starts. Available in API version 29.0 and later. In API version 33.0 and later, for Salesforce-managed auth providers, leave the field blank to let Salesforce supply and manage the value."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Used when referring to the authentication provider from a program.",
+      "required": true
+    },
+    "EcKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required when using Apple as a third-party authentication provider. Available in API version 48.0 and later.",
+      "required": true
+    },
+    "ErrorUrl": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A custom error URL for the authentication provider to use to report errors."
+    },
+    "ExecutionUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required to specify a registration handler. The username of the Salesforce admin or system user who runs the Apex handler or flow. The execution user provides the context in which the registration handler runs. For example, if the handler creates a contact, the creation can be easily traced back to the registration process. In production, use a system user. The user must have the Manage Users permission. Available in API version 27.0 and later.",
+      "required": true
+    },
+    "FlowDefaultAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "For authentication providers that use a flow registration handler, the default account that new external users are assigned to. If you include this field, Salesforce automatically uses it for the defaultAccountId variable in the Authentication Provider User Registration standard flow. A default account is required to use a flow registration handler for external users. You can specify a default account here or in the flow itself. If you use both, the default account that's configured in the flow takes precedent. Available in API version 64.0 and later."
+    },
+    "FlowDefaultProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "For authentication providers that use a flow registration handler, the default profile that new users are assigned to. If you include this field, Salesforce automatically uses it for the defaultProfileId variable in the Authentication Provider User Registration standard flow.A default profile is required to use a flow registration handler. You can specify a default profile here or in the flow itself. If you use both, the default profile that's configured in the flow takes precedent. Available in API version 64.0 and later."
+    },
+    "FriendlyName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "A user-friendly name for the authentication provider.",
+      "required": true
+    },
+    "IconUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The path to an icon to use as a button on the login page. Users click the button to log in with the associated authentication provider, such as Twitter or Facebook. Available in API version 32.0 and later."
+    },
+    "IdTokenIssuer": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The source of the authentication token in https: URI format. This field is available when configuring an OpenID Connect or Microsoft authentication provider. If provided, Salesforce validates the returned id_token value. OpenID Connect requires returning an id_token value with the access_token value. Available in API version 30.0 and later."
+    },
+    "LinkKickoffUrl": {
+      "type": "url",
+      "properties": "Nillable",
+      "description": "The URL for linking existing Salesforce users to a third-party account. This field is read-only. Available in API version 43.0 and later."
+    },
+    "LogoutUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The destination for users after they log out if they authenticated using single sign-on. The URL must be fully qualified with an http or https prefix, such as https://acme.my.salesforce.com. Available in API version 33.0 and later."
+    },
+    "OauthKickoffUrl": {
+      "type": "url",
+      "properties": "Nillable",
+      "description": "The URL for obtaining OAuth access tokens for a third party. This field is read-only. Available in API version 43.0 and later."
+    },
+    "OptionsIncludeOrgIdInId": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Used to differentiate between users with the same user ID from two sources (such as two sandboxes). If enabled (true), Salesforce stores the org ID of the third-party identity in addition to the user ID. After you enable this setting, you can’t disable it. Applies only to a Salesforce-managed auth provider. Available in API version 32.0 and later."
+    },
+    "OptionsIsPkceEnabled": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If set to true, the authentication provider uses the OAuth 2.0 Proof Key for Code Exchange (PKCE) extension, which improves the security of the provider’s authorization flow. This field applies only to these providerType values: Custom Facebook Google Microsoft OpenIdConnect Salesforce. This field is available in API version 59.0 and later."
+    },
+    "OptionsRequireMfa": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Requires multi-factor authentication (MFA) for single sign-on with this auth provider based on the MFA status of each user. For this setting to trigger MFA, you must apply MFA directly to users via one of two methods. 1) Assign the user permission Multi-Factor Authentication for User Interface Logins. 2) Enable the org setting Require multi-factor authentication (MFA) for all direct UI logins to your Salesforce org."
+    },
+    "OptionsSendAccessTokenInHeader": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "If enabled (true), the access token is sent to the UserInfoUrl in a header instead of a query string. Available in API version 30.0 and later."
+    },
+    "OptionsSendClientCredentialsInHeader": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Required when creating an OpenID Connect authentication provider. If enabled (true), the client credentials are sent in a header to the tokenUrl instead of a query string. The credentials are in the standard OpenID Connect Basic Credentials header format, which is Basic <token>, where <token> is the base64-encoded string \"clientkey:clientsecret\". Available in API version 30.0 and later.",
+      "required": true
+    },
+    "OptionsSendSecretInApis": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Determines whether the encrypted consumer secret appears in API responses. If enabled (default), the secret appears in the response. If disabled (false), responses don’t include the consumer secret. For security, you can disable the setting. However, keep in mind that: By disabling this setting, the consumer secret is excluded from API responses in all API versions. Change sets and other metadata deployments break because both the consumer key and secret are expected. To fix this problem, insert the consumer key manually during deployment. Available in API version 47.0 and later."
+    },
+    "PluginId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An existing Apex class that extends the Auth.AuthProviderPluginClass abstract class. Available in API version 39.0 and later."
+    },
+    "ProviderType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The third-party authentication provider to use. Valid values include: Apple. Available in API version 48.0 and later. Bitbucket—Provides authentication for a Bitbucket provider. Enables you to connect to Bitbucket from a Lightning Platform application. When logged in to Bitbucket, the app can makes calls to Bitbucket APIs. The Bitbucket provider isn’t available as an SSO provider, so users can’t log in to a Salesforce org using their Bitbucket login credentials. Available in API version 61.0 and higher. CommerceCloudAccountManager. Available in API version 67.0 and later. Confluence3LO. Available in API version 67.0 and later. Custom—A provider configured with a custom authentication provider plug-in. Available in API version 36.0 and later. Facebook. GitHub—Provides authentication for a GitHub provider. Used to log in users of your Lightning Platform app to GitHub using OAuth. When logged in to GitHub, your app can make calls to GitHub APIs. The GitHub provider isn’t available as an SSO provider, so users can’t log in to your Salesforce org using their GitHub login credentials. Available in API version 35.0 and later. Google. Janrain. LinkedIn. Available in API version 32.0 and later. Microsoft. Provides authentication for all services that can be accessed via Microsoft Azure Active Directory. Available in API version 55.0 and later. MicrosoftACS—Microsoft Access Control Service provides authentication for a Microsoft Office 365 service, like SharePoint Online. The MicrosoftACS provider doesn't support SSO. Available in API version 31.0 and later. MuleSoftAnypointPlatform. Available in API version 67.0 and later. OpenIdConnect. Available in API version 29.0 and later. Salesforce. Slack. Available in API version 54.0 and later. Twitter. Available in API version 32.0 and later.",
+      "required": true
+    },
+    "RegistrationHandlerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "An existing Apex class that implements the Auth.RegistrationHandler interface."
+    },
+    "SsoKickoffUrl": {
+      "type": "url",
+      "properties": "Nillable",
+      "description": "The URL for performing SSO into Salesforce from a third party by using its third-party credentials. This field is read-only. Available in API version 43.0 and later."
+    },
+    "TokenUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The OAuth token endpoint URL of an OpenID Connect authentication provider. Available in API version 29.0 and later. In API version 33.0 and later, for Salesforce-managed auth providers for sandbox use cases only, leave the field blank to let Salesforce supply and manage the value."
+    },
+    "UserInfoUrl": {
+      "type": "url",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The OpenID Connect endpoint URL of the OpenID Connect authentication provider. Available in API version 29.0 and later. In API version 33.0 and later, for Salesforce-managed auth providers, leave the field blank to let Salesforce supply and manage the value."
+    }
+  },
+  "special_access_rules": "Only users with Customize Application and Manage AuthProviders permissions can access this object.",
+  "wsdl_segment": "```xml\n<complexType name=\"AuthProvider\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppleTeam\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AuthorizeUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ConsumerKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ConsumerSecret\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomMetadataTypeRecord\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DefaultScopes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeveloperName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EcKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ErrorUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExecutionUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowDefaultAccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FlowDefaultProfileId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FriendlyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IconUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IdTokenIssuer\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LinkKickoffUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LogoutUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OauthKickoffUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OptionsIncludeOrgIdInId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsBitbucket\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsEmi\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsEmiSnapchatAds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsEmiTikTokAds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsLinkedInV2\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsMuleSoftEU\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsMuleSoftUS\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsPkceEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsSegmentIntelligence\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsIsWebDataConnector\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsRequireMfa\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsSendAccessTokenInHeader\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsSendClientCredentialsInHeader\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"OptionsSendSecretInApis\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"PluginId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProviderType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RegistrationHandlerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SsoKickoffUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TokenUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserInfoUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AppleTeam": {
+      "field_label": "Apple Team",
+      "type": "string",
+      "length": "12"
+    },
+    "AuthorizeUrl": {
+      "field_label": "Authorize Endpoint URL",
+      "type": "url",
+      "length": "1024"
+    },
+    "ConsumerKey": {
+      "field_label": "Consumer Key",
+      "type": "string",
+      "length": "256"
+    },
+    "ConsumerSecret": {
+      "field_label": "Consumer Secret",
+      "type": "string",
+      "length": "100"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomMetadataTypeRecord": {
+      "field_label": "Custom Metadata Type Record",
+      "type": "string",
+      "length": "15"
+    },
+    "DefaultScopes": {
+      "field_label": "Default Scopes",
+      "type": "string",
+      "length": "256"
+    },
+    "DeveloperName": {
+      "field_label": "URL Suffix",
+      "type": "string",
+      "length": "32"
+    },
+    "EcKey": {
+      "field_label": "Elliptic Curve Key",
+      "type": "string",
+      "length": "30"
+    },
+    "ErrorUrl": {
+      "field_label": "Custom Error URL",
+      "type": "string",
+      "length": "500"
+    },
+    "ExecutionUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FlowDefaultAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FlowDefaultProfileId": {
+      "field_label": "Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "FriendlyName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "32"
+    },
+    "IconUrl": {
+      "field_label": "Icon URL",
+      "type": "url",
+      "length": "1024"
+    },
+    "Id": {
+      "field_label": "Authentication Provider ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IdTokenIssuer": {
+      "field_label": "Token Issuer",
+      "type": "string",
+      "length": "1024"
+    },
+    "LinkKickoffUrl": {
+      "field_label": "Existing User Linking URL",
+      "type": "url",
+      "length": "255"
+    },
+    "LogoutUrl": {
+      "field_label": "Custom Logout URL",
+      "type": "url",
+      "length": "1500"
+    },
+    "OauthKickoffUrl": {
+      "field_label": "OAuth-Only Initialization URL",
+      "type": "url",
+      "length": "255"
+    },
+    "OptionsIncludeOrgIdInId": {
+      "field_label": "Include identity organization's Organization ID for third-party account linkage",
+      "type": "boolean"
+    },
+    "OptionsIsBitbucket": {
+      "field_label": "isBitbucket",
+      "type": "boolean"
+    },
+    "OptionsIsEmi": {
+      "field_label": "IsEmi",
+      "type": "boolean"
+    },
+    "OptionsIsEmiSnapchatAds": {
+      "field_label": "IsEmiSnapchatAds",
+      "type": "boolean"
+    },
+    "OptionsIsEmiTikTokAds": {
+      "field_label": "IsEmiTikTokAds",
+      "type": "boolean"
+    },
+    "OptionsIsLinkedInV2": {
+      "field_label": "IsLinkedInV2",
+      "type": "boolean"
+    },
+    "OptionsIsMuleSoftEU": {
+      "field_label": "isMuleSoftEU",
+      "type": "boolean"
+    },
+    "OptionsIsMuleSoftUS": {
+      "field_label": "isMuleSoftUS",
+      "type": "boolean"
+    },
+    "OptionsIsPkceEnabled": {
+      "field_label": "isPkceEnabled",
+      "type": "boolean"
+    },
+    "OptionsIsSegmentIntelligence": {
+      "field_label": "IsSegmentIntelligence",
+      "type": "boolean"
+    },
+    "OptionsIsWebDataConnector": {
+      "field_label": "IsWebDataConnector",
+      "type": "boolean"
+    },
+    "OptionsRequireMfa": {
+      "field_label": "requireMfa",
+      "type": "boolean"
+    },
+    "OptionsSendAccessTokenInHeader": {
+      "field_label": "Send access token in header",
+      "type": "boolean"
+    },
+    "OptionsSendClientCredentialsInHeader": {
+      "field_label": "Send client credentials in header",
+      "type": "boolean"
+    },
+    "OptionsSendSecretInApis": {
+      "field_label": "Include Consumer Secret in SOAP API Responses",
+      "type": "boolean"
+    },
+    "PluginId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProviderType": {
+      "field_label": "Provider Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RegistrationHandlerId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SsoKickoffUrl": {
+      "field_label": "Single Sign-On Initialization URL",
+      "type": "url",
+      "length": "255"
+    },
+    "TokenUrl": {
+      "field_label": "Token Endpoint URL",
+      "type": "url",
+      "length": "1024"
+    },
+    "UserInfoUrl": {
+      "field_label": "User Info Endpoint URL",
+      "type": "url",
+      "length": "1024"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

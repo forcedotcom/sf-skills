@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsTestSuite - Data API",
+  "description": "Stores and manages collections of related test definitions that can be executed together as part of a DevOps pipeline. It serves as a logical grouping mechanism for tests sourced from external test providers, enabling teams to organize, configure, and execute sets of tests within specific pipelines and environments. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DefinitionInTestProvider": {
+      "type": "url",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores the URL or reference to the test definition in the external test provider system."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Stores additional details or notes about the test definition."
+    },
+    "DevopsPipelineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the DevOps pipeline associated with the test definition.",
+      "relationship_name": "DevopsPipeline",
+      "refers_to": "DevopsPipeline"
+    },
+    "DevopsTestProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the external test provider that manages the test definition.",
+      "relationship_name": "DevopsTestProvider",
+      "refers_to": "DevopsTestProvider"
+    },
+    "EnvironmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the DevOps environment in which the test definition is applicable.",
+      "relationship_name": "Environment",
+      "refers_to": "DevopsEnvironment"
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Stores the identifier used by the external test provider to uniquely identify the test definition."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the test definition is currently active and available for use. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Stores the timestamp when the current user last viewed the record directly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Stores the name of the test definition."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Identifies the user or queue that owns the test definition record.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "SyncLogId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the synchronization log associated with the test provider sync operation.",
+      "relationship_name": "SyncLog",
+      "refers_to": "DevopsTestProviderSyncLog"
+    },
+    "TestProviderSpecificConfig": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Stores test-provider-specific configuration settings required for the test definition."
+    },
+    "UniqueKey": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Stores a unique identifier for the test definition within the organization to prevent duplicate records."
+    }
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "Question - Data API",
+  "description": "Represents a question in a zone that users can view and reply to.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "BestReplyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the reply that has been identified as the best answer to the question. Use the user interface to identify the best answer for a question."
+    },
+    "BestReplySelectedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the user who selected the best answer to the question.This field is available in API version 24.0 and later. In API version 24.0 through version 29.0, you must update this field using the UI. In API version 30.0 and later, you can update this field using the API."
+    },
+    "Body": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the question."
+    },
+    "CommunityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The zone ID associated with the question. After you create a question, you can’t change the zone ID associated with that question."
+    },
+    "CreatorFullPhotoUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the user’s profile photo from the feed. Chatter Answers must be enabled to view this field. This field is available in API version 26.0 and later."
+    },
+    "CreatorName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the user who posted the question or reply. Only the first name of internal users (agents) appears to portal users in the feed. Chatter Answers must be enabled to view this field. This field is available in API version 26.0 and later."
+    },
+    "CreatorSmallPhotoUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL of the user’s thumbnail photo from the feed. Chatter Answers must be enabled to view this field. This field is available in API version 26.0 and later."
+    },
+    "HasSingleFieldForContent": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the content of a Chatter Answers question is: Included in only one field: Title if the content is unformatted and less than 255 characters; or Body if the content is formatted or more than 255 characters (true) Included in two fields: Title and Body (false) This field also determines if content displays in one or two fields in Chatter Answers question feeds. This field is available in API version 25.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastReplyDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time the last reply (child Reply object) was posted."
+    },
+    "LastReplyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Read only. The ID of the last reply (child Reply object) posted to the question."
+    },
+    "LastViewedDate": {
+      "type": "date",
+      "properties": "Filter, Nillable, Sort, Update",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "MostReportAbusesOnReply": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The most number of user-reported abuses on a Reply associated with the question.This field is available in API version 24.0 and later."
+    },
+    "NumReplies": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of replies (child Reply object) that users have submitted for the question."
+    },
+    "NumReportAbuses": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the number of user-reported abuses on the question.This field is available in API version 24.0 and later."
+    },
+    "NumSubscriptions": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the number of users following the question.This field is available in API version 24.0 and later."
+    },
+    "Origin": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The source of the question, such as Chatter Answers.This field is available in API version 24.0 and later."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The descriptive title of the question."
+    },
+    "UpVotes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The total number of up votes for the question."
+    },
+    "VoteScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The internal score of the question, used to sort questions and articles on the Popular tab in the application user interface. The internal algorithm that determines the score gives older votes less weight than newer votes, simulating exponential decay. The score itself doesn’t display in the application user interface. Note: Unlike other fields of type double, you can't use a SOQL aggregate function with this field."
+    }
+  },
+  "special_access_rules": "This object is only available if the Answers permission and AnswersEnabled preference or PortalFeed permission and PortalFeedEnabled preference are enabled in your org.",
+  "usage": "Use this object to track questions in a zone.",
+  "field_reference": {
+    "BestReplyId": {
+      "field_label": "Best Reply ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BestReplySelectedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Body": {
+      "field_label": "Question Body",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "CommunityId": {
+      "field_label": "Zone ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreatorFullPhotoUrl": {
+      "field_label": "Url of Creator's Profile Photo",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatorName": {
+      "field_label": "Name of Creator",
+      "type": "string",
+      "length": "121"
+    },
+    "CreatorSmallPhotoUrl": {
+      "field_label": "Url of Creator's Thumbnail Photo",
+      "type": "string",
+      "length": "255"
+    },
+    "HasSingleFieldForContent": {
+      "field_label": "Has Single Field For Content",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Question ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastReplyDate": {
+      "field_label": "Last Reply Date",
+      "type": "datetime"
+    },
+    "LastReplyId": {
+      "field_label": "Last Reply ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MostReportAbusesOnReply": {
+      "field_label": "Most Report Abuses on Reply",
+      "type": "int",
+      "digits": "9"
+    },
+    "NumReplies": {
+      "field_label": "Number of Replies",
+      "type": "int",
+      "digits": "9"
+    },
+    "NumReportAbuses": {
+      "field_label": "Number of Report Abuses",
+      "type": "int",
+      "digits": "9"
+    },
+    "NumSubscriptions": {
+      "field_label": "Number of Question Subscriptions",
+      "type": "int",
+      "digits": "9"
+    },
+    "Origin": {
+      "field_label": "Question Origin",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Priority": {
+      "field_label": "Question Priority",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RecordTypeId": {
+      "field_label": "Record Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Title": {
+      "field_label": "Question Title",
+      "type": "string",
+      "length": "255"
+    },
+    "UpVotes": {
+      "field_label": "Up Votes",
+      "type": "int",
+      "digits": "9"
+    },
+    "VoteScore": {
+      "field_label": "Vote Score",
+      "type": "double",
+      "precision": "18",
+      "scale": "4"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

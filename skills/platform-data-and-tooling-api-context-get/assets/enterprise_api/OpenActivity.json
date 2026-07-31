@@ -1,0 +1,381 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OpenActivity - Data API",
+  "description": "This read-only object is displayed in a related list of open activities—future events and open tasks—related to an object. It includes activities for all contacts related to the object. OpenActivity fields for phone calls are only available if your organization uses Salesforce CRM Call Center.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the ID of the related account, which is determined as follows: The account associated with the WhatId, if it exists; or The account associated with the WhoId, if it exists; otherwise null This is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "ActivityDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates one of the following: The due date of a task The date of an event if IsAllDayEvent is set to true This field has a time stamp that is always set to midnight in the Universal Time Coordinated (UTC) time zone. The time stamp doesn’t represent the time of the activity; don’t attempt to alter it to accommodate time zone differences. Label is Date."
+    },
+    "ActivityDateTime": {
+      "type": "dateTime",
+      "properties": "Aggregate, Filter, Nillable, Sort",
+      "description": "Contains the event’s due date if the IsAllDayEvent flag is set to false. The time portion of this field is always transferred in the Coordinated Universal Time (UTC) time zone. Translate the time portion to or from a local time zone for the user or the application, as appropriate. Label is Due Date Time.The value for this field and StartDateTime must match, or one of them must be null."
+    },
+    "ActivitySubtype": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Provides standard subtypes to facilitate creating and searching for specific activity subtypes. This field isn’t updateable.Possible values are: Task Email Call Event LinkedIn —Available in API version 56.0 and later. List Email"
+    },
+    "ActivityType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents one of the following values: Call, Email, Meeting, or Other. Label is Type. These are default values, and can be changed."
+    },
+    "AlternateDetailId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of a record the activity is related to which contains more details about the activity. For example, an activity can be related to an EmailMessage record. This is a relationship field.",
+      "relationship_name": "AlternateDetail",
+      "relationship_type": "Lookup",
+      "refers_to": "EmailMessage"
+    },
+    "CallDisposition": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the result of a given call, for example, “we'll call back,” or “call unsuccessful.” Limit is 255 characters."
+    },
+    "CallDurationInSeconds": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Duration of the call in seconds."
+    },
+    "CallObject": {
+      "type": "string",
+      "properties": "Filter, Group,Nillable, Sort",
+      "description": "Name of a call center. Limit is 255 characters."
+    },
+    "CallType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of call being answered: Inbound, Internal, or Outbound."
+    },
+    "CompletedDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time the task was saved with a Closed status. This value is always null."
+    },
+    "ConnectionReceivedId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the ID of the PartnerNetworkConnection that shared this record with your organization. This field is available only if your organization has enabled Salesforce to Salesforce and only in API versions 28.0 and later."
+    },
+    "ConnectionSentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the ID of the PartnerNetworkConnection that your organization shared this record with. This field is available only if your organization has enabled Salesforce to Salesforce, and only in API versions 28.0 and later. The value is always null. You can use the PartnerNetworkRecordConnection object to forward records to connections."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Contains a description of the event or task. Limit is 32 KB."
+    },
+    "DurationInMinutes": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the duration of the event or task."
+    },
+    "EndDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Indicates the end date and time of the event or task. Available in versions 27.0 and later. This field is optional, depending on the following: If IsAllDayEvent is true, you can supply a value for either DurationInMinutes or EndDateTime. Supplying values in both fields is allowed if the values add up to the same amount of time. If both fields are null, the duration defaults to one day. If IsAllDayEvent is false, a value must be supplied for either DurationInMinutes or EndDateTime. Supplying values in both fields is allowed if the values add up to the same amount of time."
+    },
+    "IsAllDayEvent": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If the value of this field is set to true, then the activity is an event spanning a full day, and the ActivityDate defines the date of the event. If the value of this field is set to false, then the activity may be an event spanning less than a full day, or it may be a task. The default value of this field is false. Label is All-Day Event."
+    },
+    "IsClosed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a task is closed (true) or not closed (false). The default value of this field is false. This field is set indirectly by setting Status on the task—each picklist value has a corresponding IsClosed value. Label is Closed."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the activity has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "IsHighPriority": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates a high-priority task. The default value of this field is false. This field is derived from the Priority field."
+    },
+    "IsReminderSet": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether a reminder is set for an activity (true) or not (false). The default value of this field is false."
+    },
+    "IsTask": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If the value of this field is set to true, then the activity is a task; if the value is set to false, then the activity is an event. The default value of this field is false. Label is Task."
+    },
+    "IsVisibleInSelfService": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If the value of this field is set to true, then the activity can be viewed in the self-service portal. The default value of this field is false. Label is Visible in Self-Service."
+    },
+    "Location": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If the activity is an event, then this field represents the location of the event. If the activity is a task, then the value is null."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the ID of the user or group who owns the activity. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Calendar, Group, User"
+    },
+    "PrimaryAccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Contains the AccountId value from the activity record. Available in API versions 30.0 and later to organizations that use Shared Activities."
+    },
+    "PrimaryWhoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Contains the WhoId value from the activity record. Available in API versions 30.0 and later to organizations that have enabled Shared Activities."
+    },
+    "Priority": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Indicates the priority of a task, such as high, normal, or low. The default value of this field is Normal."
+    },
+    "ReminderDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents the time at which a reminder is scheduled to fire if IsReminderSet is set to true. If IsReminderSet is set to false, then either the user has deselected the reminder checkbox in the user interface or the reminder has already fired at the time indicated by the value."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Indicates the current status of a task. The default value of this field is Not Started. Each predefined status field sets a value for IsClosed. To obtain picklist values, query the TaskStatus object.Possible values are: Completed Deferred In Progress Not Started Waiting on someone else"
+    },
+    "Subject": {
+      "type": "combobox",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Contains the subject of the task or event."
+    },
+    "WhatId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The WhatId represents nonhuman objects such as accounts, opportunities, campaigns, cases, or custom objects. WhatIds are polymorphic. Polymorphic means a WhatId is equivalent to the ID of a related object. The label is Related To ID. This is a polymorphic relationship field.",
+      "relationship_name": "What",
+      "relationship_type": "Lookup",
+      "refers_to": "Account, Accreditation, AssessmentIndicatorDefinition, AssessmentTask, AssessmentTaskContentDocument, AssessmentTaskDefinition, AssessmentTaskOrder, Asset, AssetRelationship, AssignedResource, Award, BoardCertification, BusinessLicense, BusinessMilestone, BusinessProfile, Campaign, CareBarrier, CareBarrierDeterminant, CareBarrierType, CareDeterminant, CareDeterminantType, CareDiagnosis, CareInterventionType, CareMetricTarget, CareObservation, CareObservationComponent, CarePgmProvHealthcareProvider, CarePreauth, CarePreauthItem, CareProgram, CareProgramCampaign, CareProgramEligibilityRule, CareProgramEnrollee, CareProgramEnrolleeProduct, CareProgramEnrollmentCard, CareProgramGoal, CareProgramProduct, CareProgramProvider, CareProgramTeamMember, CareProviderAdverseAction, CareProviderFacilitySpecialty, CareProviderSearchableField, CareRegisteredDevice, CareRequest, CareRequestDrug, CareRequestExtension, CareRequestItem, CareSpecialty, CareSpecialtyTaxonomy, CareTaxonomy, Case, CommSubscriptionConsent, ContactEncounter, ContactEncounterParticipant, ContactRequest, Contract, CoverageBenefit, CoverageBenefitItem, CreditMemo, DelegatedAccount, DocumentChecklistItem, EnrollmentEligibilityCriteria, HealthcareFacility, HealthcareFacilityNetwork, HealthcarePayerNetwork, HealthcarePractitionerFacility, HealthcareProvider, HealthcareProviderNpi, HealthcareProviderSpecialty, HealthcareProviderTaxonomy, IdentityDocument, Image, IndividualApplication, Invoice, ListEmail, Location, MemberPlan, Opportunity, Order, OtherComponentTask, PartyConsent, PersonLifeEvent, PlanBenefit, PlanBenefitItem, ProcessException, Product2, ProductItem, ProductRequest, ProductRequestLineItem, ProductTransfer, PurchaserPlan, ReceivedDocument, ResourceAbsence, ReturnOrder, ReturnOrderLineItem, ServiceAppointment, ServiceResource, Shift, Shipment, ShipmentItem, Solution, Visit, VisitedParty, VolunteerProject, WorkOrder, WorkOrderLineItem"
+    },
+    "WhoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The WhoId represents a human such as a lead or a contact. WhoIds are polymorphic. Polymorphic means a WhoId is equivalent to a contact’s ID or a lead’s ID. The label is Name ID. If Shared Activities is enabled, the value of this field is the ID of the related lead or primary contact. If you add, update, or remove the WhoId field, you might encounter problems with triggers, workflows, and data validation rules that are associated with the record. The label is Name ID. This is a polymorphic relationship field.",
+      "relationship_name": "Who",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead"
+    }
+  },
+  "usage": "The user interface enforces sharing rules, filtering out related-list items that a user doesn’t have permission to see.\n\n- **Query activities that are related to an object**: Optionally, issue a describe call against the object whose activities you want to query, to get a suggestion of the correct SOQL query to use. Issue a SOQL relationship query with a main clause that references the object and an inner clause that references the activity history. For example:SELECT (SELECT ActivityDate, Description FROM OpenActivities) FROM Account WHERE Name Like 'XYZ%'` The user interface enforces sharing rules, filtering out related-list items that a user doesn’t have permission to see.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OpenActivity\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ActivityDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"ActivityDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ActivitySubtype\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ActivityType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AlternateDetail\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EmailMessage\"/>\n        <element name=\"AlternateDetailId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CallDisposition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CallDurationInSeconds\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CallObject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CallType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CompletedDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurationInMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"EndDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsAllDayEvent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsClosed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsHighPriority\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReminderSet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTask\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsVisibleInSelfService\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Location\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Priority\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReminderDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"StartDateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Subject\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"What\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"WhatId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Who\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"WhoId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivityDate": {
+      "field_label": "Date",
+      "type": "date"
+    },
+    "ActivityDateTime": {
+      "field_label": "Time",
+      "type": "datetime"
+    },
+    "ActivitySubtype": {
+      "field_label": "Activity Subtype",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ActivityType": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AlternateDetailId": {
+      "field_label": "Email Message ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CallDisposition": {
+      "field_label": "Call Result",
+      "type": "string",
+      "length": "255"
+    },
+    "CallDurationInSeconds": {
+      "field_label": "Call Duration",
+      "type": "int",
+      "digits": "8"
+    },
+    "CallObject": {
+      "field_label": "Call Object Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "CallType": {
+      "field_label": "Call Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CompletedDateTime": {
+      "field_label": "Completed Date/Time",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DurationInMinutes": {
+      "field_label": "Duration",
+      "type": "int",
+      "digits": "9"
+    },
+    "EndDateTime": {
+      "field_label": "End",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Activity ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAllDayEvent": {
+      "field_label": "All-Day Event",
+      "type": "boolean"
+    },
+    "IsClosed": {
+      "field_label": "Closed",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsHighPriority": {
+      "field_label": "High Priority",
+      "type": "boolean"
+    },
+    "IsReminderSet": {
+      "field_label": "Reminder Set",
+      "type": "boolean"
+    },
+    "IsTask": {
+      "field_label": "Task",
+      "type": "boolean"
+    },
+    "IsVisibleInSelfService": {
+      "field_label": "Public",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Location": {
+      "field_label": "Location",
+      "type": "string",
+      "length": "80"
+    },
+    "OwnerId": {
+      "field_label": "Assigned To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "picklist",
+      "length": "20"
+    },
+    "ReminderDateTime": {
+      "field_label": "Reminder Date/Time",
+      "type": "datetime"
+    },
+    "StartDateTime": {
+      "field_label": "Start",
+      "type": "datetime"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "combobox",
+      "length": "80"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "WhatId": {
+      "field_label": "Related To ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WhoId": {
+      "field_label": "Name ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

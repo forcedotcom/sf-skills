@@ -1,0 +1,248 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SfdcPartnerSbscrOffer - Data API",
+  "description": "Represents a partner offer as seen by the customer in their subscriber org. Synced from Partner Business Org SfdcPartnerOffer record. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "BillingFrequency": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The frequency that a customer is billed. A hardcoded value copied from the PBO. Possible values are: 1—Monthly 3—Quarterly 6—Bi-annually 12—Annually"
+    },
+    "ContractTerm": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Term duration of the contract. Max value of 12 months."
+    },
+    "CustBillingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The default billing address for the customer, used to seed the billing address into new offers. Compound field."
+    },
+    "CustBillingCity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The customer billing city."
+    },
+    "CustBillingCountry": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The customer billing country."
+    },
+    "CustBillingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Accuracy level of geocoded billing address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "CustBillingLatitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The latitude geo-coordinate for customer billing address."
+    },
+    "CustBillingLongitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The longitude geo-coordinate for customer billing address."
+    },
+    "CustBillingPostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The postal/zip code of the customer billing address."
+    },
+    "CustBillingState": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The state of the customer billing address."
+    },
+    "CustBillingStreet": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The street of the customer billing address."
+    },
+    "CustShippingAddress": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The default shipping address of the partner's customer. Compound field."
+    },
+    "CustShippingCity": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The city of the customer shipping address."
+    },
+    "CustShippingCountry": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The country of the customer shipping address."
+    },
+    "CustShippingGeocodeAccuracy": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Accuracy level of geocoded shipping address. Possible values are: Address Block City County ExtendedZip NearAddress Neighborhood State Street Unknown Zip"
+    },
+    "CustShippingLatitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The latitude geo-coordinate for customer shipping address."
+    },
+    "CustShippingLongitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The longitude geo-coordinate for customer shipping address."
+    },
+    "CustShippingPostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The postal/zip code of the customer shipping address."
+    },
+    "CustShippingState": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The state of the customer shipping address."
+    },
+    "CustShippingStreet": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The street of the customer shipping address."
+    },
+    "CustomerBillingEmailAddress": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The email address used as the billing email address for the resulting order. Recieves the invoice and a copy of the offer. Typically, this person is in the finance department."
+    },
+    "CustomerEmailAddress": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Offer recipient who can approve or reject the offer."
+    },
+    "CustomerName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the customer company."
+    },
+    "CustomerPaymentTerms": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates that the customer has 30 days from the invoice date to pay for services. Possible values are: NET 30 The default value is NET 30."
+    },
+    "CustomerPurchaseOrderNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Customer provided purchase order number, which is added to an order upon offer acceptance."
+    },
+    "ExpirationDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date the offer expires and the customer can't take further action."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Auto-generated offer number copied from the PBO.",
+      "required": true
+    },
+    "OfferType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Type of order that is created once the customer accepts the offer. Possible values are: Add-On Initial The default value is Initial."
+    },
+    "OrderPrebillDays": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the number of days before the service date that an invoice is sent to the customer."
+    },
+    "PartnerCompanyName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the partner company."
+    },
+    "PartnerOffer": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "18 character ID of the corresponding PartnerOffer record in the PBO."
+    },
+    "PartnerOrg": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "18 Character org ID where the offer originated. This field is automatically populated with the PBO ID."
+    },
+    "PaymentMethod": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The possible payment methods that customers can use to pay for their order. Possible values are: ACH The default value is ACH."
+    },
+    "RespondingUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user ID in the Subscriber Org that corresponds to the user that accepted or rejected the offer. This field is a relationship field.",
+      "relationship_name": "RespondingUser",
+      "refers_to": "User"
+    },
+    "ServiceEndDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Derived field. The date when the contract terms end. Service end date is calculated as ServiceStartDate + ContractTerm in months."
+    },
+    "ServiceStartDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date and time when the order is activated, if it is converted from an offer."
+    },
+    "ServiceTerm": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Period between Service Start date and Service End date."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the offer. Possible values are: Accepted Expired New Rejected Void Withdraw"
+    },
+    "SubTotal": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Derived field. Formula summing all offer item line item totals and the contract term. Excludes taxes."
+    },
+    "SyncToPboError": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Any error occurs during syncing."
+    },
+    "SyncToPboLastUpdate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Tracks the timestamp of the last operation performed by the sync operation."
+    },
+    "SyncToPboStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of the sync operation to the customer org. Possible values are: Not ready Ready Processing Sync Complete Error The default value is Not ready."
+    },
+    "TermsAndConditions": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The terms and conditions set forth by the partner."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"SfdcPartnerSbscrOffer\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"BillingFrequency\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ContractTerm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustBillingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"CustBillingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustBillingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustBillingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustBillingLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CustBillingLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CustBillingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustBillingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustBillingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustShippingAddress\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"CustShippingCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustShippingCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustShippingGeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustShippingLatitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CustShippingLongitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CustShippingPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustShippingState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustShippingStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustomerBillingEmailAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustomerEmailAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustomerName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustomerPaymentTerms\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CustomerPurchaseOrderNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OfferType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OrderPrebillDays\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"PartnerCompanyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PartnerOffer\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PartnerOrg\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PartnerSubscriberOfferItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PaymentMethod\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RespondingUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"RespondingUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ServiceEndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"ServiceStartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"ServiceTerm\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SubTotal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SyncToPboError\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SyncToPboLastUpdate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SyncToPboStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TermsAndConditions\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```"
+}

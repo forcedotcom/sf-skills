@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ContentFolderLink - Data API",
+  "description": "Defines the association between a library and its root folder. This object is available in API version 34.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ContentFolderId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the folder. This is a relationship field.",
+      "relationship_name": "ContentFolder",
+      "relationship_type": "Lookup",
+      "refers_to": "ContentFolder"
+    },
+    "EnableFolderStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the status of enabling folders for the library. Valid values are: C — Completed folder enablement S — Started folder enablement F — Failed folder enablement This field is available in API version 39.0 and later."
+    },
+    "ParentEntityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "Name of the entity the folder hierarchy is linked to."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"ContentFolderLink\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentFolder\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentFolder\"/>\n        <element name=\"ContentFolderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"EnableFolderStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ParentEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ContentFolderId": {
+      "field_label": "Content Folder ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EnableFolderStatus": {
+      "field_label": "Enable Folder Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Content Folder Link ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Is Deleted",
+      "type": "boolean"
+    },
+    "ParentEntityId": {
+      "field_label": "Parent Entity ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

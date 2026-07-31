@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsQualityGateRule - Data API",
+  "description": "Defines the criteria that must be evaluated as part of a quality gate assessment within the DevOps process. Each rule specifies a validation condition, such as severity, pass percentage, or essential test requirements, along with an optional threshold value. These rules are used to determine whether a quality gate passes or fails before allowing progression through the deployment pipeline. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DevopsQualityGateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "References the quality gate to which this rule belongs.",
+      "relationship_name": "DevopsQualityGate",
+      "relationship_type": "Master-detail",
+      "refers_to": "DevopsQualityGate (the parent object)"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, such as through a related record or list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "System-generated unique identifier for the quality gate rule record."
+    },
+    "Rule": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies the rule used to evaluate the quality gate. Possible values are: ESSENTIAL PASS_PERCENTAGE SEVERITY The default value is SEVERITY."
+    },
+    "Threshold": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Defines the threshold value used when evaluating the quality gate rule."
+    }
+  }
+}

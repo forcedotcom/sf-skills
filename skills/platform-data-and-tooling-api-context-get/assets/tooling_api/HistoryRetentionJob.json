@@ -1,0 +1,50 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "HistoryRetentionJob - Tooling API",
+  "description": "Represents the body of retained data from the archive, and the status of the archived data. Available in API version 29.0 or later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`",
+  "supported_rest_api_http_methods": "`GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurationSeconds": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "How many seconds the field history retention job took to complete (whether successful or not)."
+    },
+    "HistoryType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The object type that contains the field history that you retained. Valid values for standard objects are: Account Case Contact Leads Opportunity For custom objects, use the object name."
+    },
+    "NumberOfRowsRetained": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of field history rows that a field history retention job has retained."
+    },
+    "RetainOlderThanDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time before which all field history data was retained."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The start date of the field history retention job."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Provides the status of the field history retention job. By default, field history tracking copies data to the archive, leaving a duplicate of the archived data in Salesforce. You can delete data from Salesforce manually after it's archived.Status can include: CopyScheduled CopyRunning CopySucceeded CopyFailed CopyKilled NothingToArchive DeleteScheduled DeleteRunning DeleteSucceeded DeleteFailed DeleteKilled"
+    }
+  }
+}

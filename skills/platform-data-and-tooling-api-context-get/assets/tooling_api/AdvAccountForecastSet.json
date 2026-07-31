@@ -1,0 +1,148 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "AdvAccountForecastSet - Tooling API",
+  "description": "Represents an advanced account forecast set. This object is available in API version 56.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountFieldName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The field name of the account in an advanced account forecast fact record."
+    },
+    "CalculationFrequency": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The frequency at which a forecast set is recalculated automatically. Possible values are: Monthly Quarterly Weekly Yearly The default value is Monthly."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The description for AdvAccountForecastSet."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the advanced account forecast set record. The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name. This field is automatically generated, but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record."
+    },
+    "ForecastFactObjectName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The API name of the entity used as a facts table."
+    },
+    "ForecastPeriodGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The Id of the forecast period group associated with an advanced account forecast. This field is a relationship field.",
+      "relationship_name": "ForecastPeriodGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "AdvAcctForecastPeriodGroup"
+    },
+    "ForecastQuantityFieldName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The field name of the forecast quantity in an advanced account forecast fact record."
+    },
+    "ForecastRevenueFieldName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The field name of the forecast revenue in an advanced account forecast record."
+    },
+    "ForecastSetFieldName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The field name of the forecast set in an advanced account forecast record."
+    },
+    "ForecastSetName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the forecast set in an advanced account forecast record."
+    },
+    "ForecastStatusFieldName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The field name of the status in an advanced account forecast fact record."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated advanced account forecast fact record in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "GenerationDpeDefNameId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the Data Processing Engine definition that generates advanced account forecast fact records. This field is a relationship field.",
+      "relationship_name": "GenerationDpeDefName",
+      "relationship_type": "Lookup",
+      "refers_to": "BatchCalcJobDefinition"
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language for AdvAccountForecastSet."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Label for the AdvAccountForecastSet record."
+    },
+    "Metadata": {
+      "type": "complexvalue",
+      "properties": "Create, Nillable, Update",
+      "description": "The AdvAccountForecastSet’s metadata. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "PeriodFieldName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The field name of the period in an advanced account forecast fact record."
+    },
+    "RecalculateDpeDefNameId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Data Processing Engine definition used to recalculate advanced account forecast fact records. This field is a relationship field.",
+      "relationship_name": "RecalculateDpeDefName",
+      "relationship_type": "Lookup",
+      "refers_to": "BatchCalcJobDefinition"
+    },
+    "RegenerationDpeDefNameId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Data Processing Engine definition used to regenerate advanced account forecast fact records. This field is a relationship field.",
+      "relationship_name": "RegenerationDpeDefName",
+      "relationship_type": "Lookup",
+      "refers_to": "BatchCalcJobDefinition"
+    },
+    "RolloverDpeDefNameId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Data Processing Engine definition used to generate rollover advanced account forecast fact records. This field is a relationship field.",
+      "relationship_name": "RolloverDpeDefName",
+      "relationship_type": "Lookup",
+      "refers_to": "BatchCalcJobDefinition"
+    },
+    "RolloverFrequency": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The frequency of rollover of an advanced account forecast records. Possible values are: Monthly Quarterly Weekly Yearly The default value is Monthly."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies the status of an advanced account forecast set. Possible values are: Active Inactive"
+    }
+  }
+}

@@ -28,174 +28,176 @@
 # This is a COMPLETE template - customize for your use case
 
 system:
-	instructions: "You are a research assistant. Your PRIMARY GOAL is to collect the account ID before performing any research. Never proceed without a validated account ID."
-	messages:
-		welcome: "Hello! I can help you research account information. Please provide the account ID to get started."
-		error: "I encountered an issue. Let me try again."
+    instructions: "You are a research assistant. Your PRIMARY GOAL is to collect the account ID before performing any research. Never proceed without a validated account ID."
+    messages:
+        welcome: "Hello! I can help you research account information. Please provide the account ID to get started."
+        error: "I encountered an issue. Let me try again."
+
+access:
+    default_agent_user: "agent@company.salesforce.com"
 
 config:
-	agent_name: "Account_Research_Agent"
-	default_agent_user: "agent@company.salesforce.com"
-	agent_label: "Account Research Agent"
-	description: "Demonstrates critical input collection patterns for reliable slot filling"
+    developer_name: "Account_Research_Agent"
+    agent_label: "Account Research Agent"
+    description: "Demonstrates critical input collection patterns for reliable slot filling"
 
 variables:
-	# Standard linked variables (required)
-	EndUserId: linked string
-		source: @MessagingSession.MessagingEndUserId
-		description: "Messaging End User ID"
-	RoutableId: linked string
-		source: @MessagingSession.Id
-		description: "Messaging Session ID"
-	ContactId: linked string
-		source: @MessagingEndUser.ContactId
-		description: "Contact ID"
+    # Standard linked variables (required)
+    EndUserId: linked string
+        source: @MessagingSession.MessagingEndUserId
+        description: "Messaging End User ID"
+    RoutableId: linked string
+        source: @MessagingSession.Id
+        description: "Messaging Session ID"
+    ContactId: linked string
+        source: @MessagingEndUser.ContactId
+        description: "Contact ID"
 
-	# ★ CRITICAL INPUT - The value that MUST be collected before proceeding
-	account_id: mutable string = ""
-		description: "The Salesforce Account ID (18-char, starts with 001) - MUST be collected and validated before any research"
+    # ★ CRITICAL INPUT - The value that MUST be collected before proceeding
+    account_id: mutable string = ""
+        description: "The Salesforce Account ID (18-char, starts with 001) - MUST be collected and validated before any research"
 
-	# ★ VALIDATION STATE - Track whether input has been validated
-	account_id_validated: mutable boolean = False
-		description: "Whether account_id has been validated as a real Salesforce ID"
+    # ★ VALIDATION STATE - Track whether input has been validated
+    account_id_validated: mutable boolean = False
+        description: "Whether account_id has been validated as a real Salesforce ID"
 
-	# ★ COLLECTION ATTEMPTS - Track retries to prevent infinite loops
-	collection_attempts: mutable number = 0
-		description: "Number of times we've tried to collect account_id"
+    # ★ COLLECTION ATTEMPTS - Track retries to prevent infinite loops
+    collection_attempts: mutable number = 0
+        description: "Number of times we've tried to collect account_id"
 
-	# Research results
-	account_name: mutable string = ""
-		description: "Name of the account (from lookup)"
-	research_summary: mutable string = ""
-		description: "Research summary for the account"
+    # Research results
+    account_name: mutable string = ""
+        description: "Name of the account (from lookup)"
+    research_summary: mutable string = ""
+        description: "Research summary for the account"
 
 language:
-	default_locale: "en_US"
-	additional_locales: ""
-	all_additional_locales: False
+    default_locale: "en_US"
+    additional_locales: ""
+    all_additional_locales: False
 
 # ★ ENTRY POINT: Input Collection Subagent
 # This subagent's ONLY job is to collect and validate the critical input
 start_agent input_collector:
-	label: "Input Collector"
-	description: "Collects and validates the account ID before allowing research"
+    label: "Input Collector"
+    description: "Collects and validates the account ID before allowing research"
 
-	actions:
-		# ★ PATTERN 2: Variable Setter Action
-		# Dedicated action that captures, validates, and stores the input
-		capture_account_id:
-			description: "Captures and validates the Salesforce Account ID from user input"
-			inputs:
-				account_id: string
-					description: "The 18-character Salesforce Account ID provided by the user (format: starts with '001')"
-					is_required: True
-			outputs:
-				validated_account_id: string
-					description: "The validated account ID (empty if invalid)"
-				is_valid: boolean
-					description: "True if the account ID is valid and exists"
-				account_name: string
-					description: "Name of the account if found"
-				error_message: string
-					description: "Error message if validation failed"
-			target: "flow://Validate_Account_Id"
-			require_user_confirmation: False
-			include_in_progress_indicator: True
-			progress_indicator_message: "Validating account ID..."
+    actions:
+        # ★ PATTERN 2: Variable Setter Action
+        # Dedicated action that captures, validates, and stores the input
+        capture_account_id:
+            description: "Captures and validates the Salesforce Account ID from user input"
+            inputs:
+                account_id: string
+                    description: "The 18-character Salesforce Account ID provided by the user (format: starts with '001')"
+                    is_required: True
+            outputs:
+                validated_account_id: string
+                    description: "The validated account ID (empty if invalid)"
+                is_valid: boolean
+                    description: "True if the account ID is valid and exists"
+                account_name: string
+                    description: "Name of the account if found"
+                error_message: string
+                    description: "Error message if validation failed"
+            target: "flow://Validate_Account_Id"
+            require_user_confirmation: False
+            include_in_progress_indicator: True
+            progress_indicator_message: "Validating account ID..."
 
-	reasoning:
-		# ★ PATTERN 1: First-Interaction Collection
-		# Tell the LLM its PRIMARY GOAL is to collect the input
-		instructions: ->
-			| YOUR PRIMARY GOAL: Collect the account ID from the user.
-			|
-			| CURRENT STATE:
-			if @variables.account_id == "":
-				| ⚠️ Account ID NOT YET COLLECTED
-				| ASK the user for their Salesforce Account ID.
-				| The ID should be 18 characters and start with "001".
-				|
-				| Example prompt: "Please provide the Account ID you'd like me to research."
+    reasoning:
+        # ★ PATTERN 1: First-Interaction Collection
+        # Tell the LLM its PRIMARY GOAL is to collect the input
+        instructions: ->
+            | YOUR PRIMARY GOAL: Collect the account ID from the user.
+            |
+            | CURRENT STATE:
+            if @variables.account_id == "":
+                | ⚠️ Account ID NOT YET COLLECTED
+                | ASK the user for their Salesforce Account ID.
+                | The ID should be 18 characters and start with "001".
+                |
+                | Example prompt: "Please provide the Account ID you'd like me to research."
 
-			if @variables.account_id != "" and @variables.account_id_validated == False:
-				| 🔄 Account ID received: {!@variables.account_id}
-				| Attempting validation...
-				|
-				| Use {!@actions.capture_account_id} to validate this ID.
+            if @variables.account_id != "" and @variables.account_id_validated == False:
+                | 🔄 Account ID received: {!@variables.account_id}
+                | Attempting validation...
+                |
+                | Use {!@actions.capture_account_id} to validate this ID.
 
-			if @variables.account_id_validated == True:
-				| ✅ Account ID validated: {!@variables.account_id}
-				| Account Name: {!@variables.account_name}
-				|
-				| Transition to research subagent to begin analysis.
+            if @variables.account_id_validated == True:
+                | ✅ Account ID validated: {!@variables.account_id}
+                | Account Name: {!@variables.account_name}
+                |
+                | Continue to the research workflow.
 
-			if @variables.collection_attempts > 2 and @variables.account_id_validated == False:
-				| ❌ Multiple validation failures.
-				| Ask the user to verify their Account ID is correct.
-				| Suggest they check Salesforce for the correct ID format.
+            if @variables.collection_attempts > 2 and @variables.account_id_validated == False:
+                | ❌ Multiple validation failures.
+                | Ask the user to verify their Account ID is correct.
+                | Suggest they check Salesforce for the correct ID format.
 
-		actions:
-			# ★ PATTERN 3: Single-Use Pattern
-			# Action becomes unavailable once account_id is successfully captured
-			validate_id: @actions.capture_account_id
-				with account_id=...
-				set @variables.account_id = @outputs.validated_account_id
-				set @variables.account_id_validated = @outputs.is_valid
-				set @variables.account_name = @outputs.account_name
-				set @variables.collection_attempts = @variables.collection_attempts + 1
-				# ★ SINGLE-USE: Unavailable once validated
-				available when @variables.account_id_validated == False
+        actions:
+            # ★ PATTERN 3: Single-Use Pattern
+            # Action becomes unavailable once account_id is successfully captured
+            validate_id: @actions.capture_account_id
+                with account_id=...
+                set @variables.account_id = @outputs.validated_account_id
+                set @variables.account_id_validated = @outputs.is_valid
+                set @variables.account_name = @outputs.account_name
+                set @variables.collection_attempts = @variables.collection_attempts + 1
+                # ★ SINGLE-USE: Unavailable once validated
+                available when @variables.account_id_validated == False
 
-			# ★ PATTERN 4: Null Guard Pattern
-			# Transition ONLY available when input is validated
-			go_research: @utils.transition to @subagent.research
-				available when @variables.account_id_validated == True
+            # ★ PATTERN 4: Null Guard Pattern
+            # Transition ONLY available when input is validated
+            go_research: @utils.transition to @subagent.research
+                available when @variables.account_id_validated == True
 
 # ★ RESEARCH SUBAGENT: Only accessible after input is validated
 subagent research:
-	label: "Account Research"
-	description: "Performs research on the validated account"
+    label: "Account Research"
+    description: "Performs research on the validated account"
 
-	actions:
-		# Research action that USES the validated account_id
-		research_account:
-			description: "Performs detailed research on the account"
-			inputs:
-				account_id: string
-					description: "The validated account ID"
-					is_required: True
-			outputs:
-				research_summary: string
-					description: "Summary of research findings"
-				signal_summary: string
-					description: "Key signals detected"
-			target: "flow://Research_Account"
-			include_in_progress_indicator: True
-			progress_indicator_message: "Researching account..."
+    actions:
+        # Research action that USES the validated account_id
+        research_account:
+            description: "Performs detailed research on the account"
+            inputs:
+                account_id: string
+                    description: "The validated account ID"
+                    is_required: True
+            outputs:
+                research_summary: string
+                    description: "Summary of research findings"
+                signal_summary: string
+                    description: "Key signals detected"
+            target: "flow://Research_Account"
+            include_in_progress_indicator: True
+            progress_indicator_message: "Researching account..."
 
-	reasoning:
-		instructions: ->
-			| Researching account: {!@variables.account_name} ({!@variables.account_id})
-			|
-			if @variables.research_summary == "":
-				| Use {!@actions.research_account} to analyze this account.
-			if @variables.research_summary != "":
-				| Research complete!
-				| {!@variables.research_summary}
+    reasoning:
+        instructions: ->
+            | Researching account: {!@variables.account_name} ({!@variables.account_id})
+            |
+            if @variables.research_summary == "":
+                | Use {!@actions.research_account} to analyze this account.
+            if @variables.research_summary != "":
+                | Research complete!
+                | {!@variables.research_summary}
 
-		actions:
-			# ★ PATTERN 4: Null Guard - Uses variable binding, NOT slot filling
-			# This ensures the validated ID is used, not LLM re-extraction
-			do_research: @actions.research_account
-				with account_id=@variables.account_id
-				set @variables.research_summary = @outputs.research_summary
-				# ★ GUARD: Only available if we have validated ID (defensive)
-				available when @variables.account_id_validated == True
-				available when @variables.research_summary == ""
+        actions:
+            # ★ PATTERN 4: Null Guard - Uses variable binding, NOT slot filling
+            # This ensures the validated ID is used, not LLM re-extraction
+            do_research: @actions.research_account
+                with account_id=@variables.account_id
+                set @variables.research_summary = @outputs.research_summary
+                # ★ GUARD: Only available if we have validated ID (defensive)
+                available when @variables.account_id_validated == True
+                available when @variables.research_summary == ""
 
-			# Return to collector for new account
-			new_account: @utils.transition to @subagent.input_collector
-				available when @variables.research_summary != ""
+            # Return to collector for new account
+            new_account: @utils.transition to @subagent.input_collector
+                available when @variables.research_summary != ""
 
 # ═══════════════════════════════════════════════════════════════════════════
 # ★ INSIGHTS: Critical Input Collection

@@ -1,0 +1,69 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "SfdcPartnerTenantPackage - Data API",
+  "description": "Represents a package installed in a tenant org and tracked in a Partner Business Org (PBO). This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "InstalledDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the package was initially installed."
+    },
+    "LastInstalledDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the package was last installed."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated name of the tenant package, in the format: PTP-{00000000}."
+    },
+    "PartnerPackageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the package that is installed in the tenant org. This field is a relationship field.",
+      "relationship_name": "PartnerPackage",
+      "refers_to": "SfdcPartnerPackage"
+    },
+    "PartnerPackageVersion": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ackage version that is installed in the tenant org. This field is a relationship field.",
+      "relationship_name": "SfdcPartnerTenantPackageVersions",
+      "refers_to": "SfdcPartnerPackageVersion"
+    },
+    "PartnerTenantId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the Salesforce org that installed the package. This field is a relationship field.",
+      "relationship_name": "PartnerTenant",
+      "refers_to": "SfdcPartnerTenant"
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The install status of the package in the tenant org. Possible values are: i—Installed u—Uninstalled"
+    }
+  }
+}

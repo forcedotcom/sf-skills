@@ -1,0 +1,189 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "AssetRateCardEntry - Data API",
+  "description": "Stores the negotiated rate card entries that are associated with an asset in Revenue Cloud. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the asset rate card entry record. This field is a relationship field.",
+      "relationship_name": "Asset",
+      "relationship_type": "Master-detail",
+      "refers_to": "Asset (the master object)"
+    },
+    "BindingObjectFormula": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The formula that returns the ID of the associated binding object, if specified. If binding object isn't added, the formula returns the asset ID of the asset related to this asset rate card entry. This field is read-only. Available in API version 65.0 and later."
+    },
+    "BindingObjectId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the binding object associated with the asset rate card entry. Available in API version 65.0 and later. This field is a relationship field.",
+      "relationship_name": "BindingObject",
+      "refers_to": "Asset"
+    },
+    "BindingObjectRateOrder": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The order that determines the applicable binding object rate when multiple rates are defined for an Anchor binding object within a effective period. Available in API version 65.0 and later."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The ID of the binding object associated with the asset rate card entry. Possible values are: AED - UAE Dirham AUD - Australian Dollar BRL - Brazilian Real CAD - Canadian Dollar EUR - Euro GBP - British Pound INR - Indian Rupee JPY - Japanese Yen SEK - Swedish Krona USD - U.S. Dollar The default value is USD. Available in API version 65.0 and later."
+    },
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date when the rate card's time period becomes inactive. The rate card becomes inactive at 11:59:00 PM on the end date."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number assigned to the asset rate card entry. Read-only."
+    },
+    "NegotiatedRate": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The base negotiated rate used to charge overage consumption."
+    },
+    "RateCardEntryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the rate card entry record containing the catalog rates that's associated with the asset rate card entry. This field is a relationship field.",
+      "relationship_name": "RateCardEntry",
+      "refers_to": "RateCardEntry"
+    },
+    "RateCardId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the rate card record that's associated with the asset rate card entry. This field is a relationship field.",
+      "relationship_name": "RateCard",
+      "refers_to": "RateCard"
+    },
+    "RateUnitOfMeasureId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the unit of measure record that's associated with the asset rate card entry. This field is a relationship field.",
+      "relationship_name": "RateUnitOfMeasure",
+      "refers_to": "UnitOfMeasure"
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date when the rate card's time period becomes active. The rate card becomes active at 12:00:00 AM on the start date."
+    },
+    "UsageResourceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the usage resource record that's associated with the asset rate card entry. This field is a relationship field.",
+      "relationship_name": "UsageResource",
+      "refers_to": "UsageResource"
+    }
+  },
+  "special_access_rules": "This object is available in orgs where Revenue Cloud is enabled.",
+  "field_reference": {
+    "AssetId": {
+      "field_label": "Asset ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Asset Rate Card Entry ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NegotiatedRate": {
+      "field_label": "Negotiated Rate",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "RateCardEntryId": {
+      "field_label": "Rate Card Entry ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RateCardId": {
+      "field_label": "Rate Card ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RateUnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "datetime"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UsageResourceId": {
+      "field_label": "Usage Resource ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

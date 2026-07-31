@@ -1,0 +1,146 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingFact - Data API",
+  "description": "This object is read-only and links a ForecastingItem with its opportunities, such as opportunities that share the same owner or forecast category and have a closing date within the period of the forecasting item. Available in API versions 26 and greater.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ForecastCategoryName": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "A forecast category is the category within the sales cycle to which an opportunity is assigned based on its opportunity stage. The standard forecast categories are Pipeline, Best Case, Commit, Omitted (not included in forecasts), and Closed. Salesforce admins can customize the forecast category names."
+    },
+    "ForecastedObjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Contains the Split ID of the forecasted OpportunitySplit object if the forecast data source is opportunity splits or the OpportunityLineItem ID of the forecasted opportunity if the data source is product families. If the data source is product families and the opportunity has no line item, this field is null. If the forecast data source is opportunities, this field is null. This field is available in API version 29 and later. Read-only."
+    },
+    "ForecastedSubObjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Possible values: If the forecast data source is OpportunityLineItemSplit, and the opportunity has line items and line item splits, then this field contains the ID of the forecasted OpportunityLineItemSplit object. If the forecast data source is OpportunityLineItemSplit, and the opportunity has line items but no line item splits, this field contains the ID of the forecasted OpportunitySplit object. If the forecast data source is OpportunityLineItemSchedule, this field contains the OpportunityLineItemSchedule ID of the forecasted opportunity. If the forecast data source is OpportunityLineItemSplit and the opportunity has no line item, this field is null. If the forecast data source is OpportunityLineItemSchedule and the opportunity has no line item, this field is null. This field is available in API version 58.0 and later. Read-only. This field is a polymorphic relationship field.",
+      "relationship_name": "null",
+      "relationship_type": "Lookup",
+      "refers_to": "OpportunityLineItem, OpportunityLineItemSplit"
+    },
+    "ForecastingItemId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the ForecastingItem."
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related ForecastingType."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The opportunity ID."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the opportunity owner."
+    },
+    "PeriodId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Period ID for the forecast."
+    },
+    "TargetValue": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Target value of the forecast amount."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the territory to forecast on. Available in API version 43 and later."
+    }
+  },
+  "special_access_rules": "As of Spring ’20 and later, only standard users with the View All Forecasts or Allow Forecasting permission or delegated forecast manager status can access this object.",
+  "usage": "Use this object to get information about opportunities linked to forecasting items.\n\nBeginning with API version 30.0, organizations can have more than one forecasting type\n    enabled. The\n\nForecastingQuota\n\nForecastingAdjustment\n\nForecastingOwnerAdjustment\n\nForecastingItem\n\nForecastingFact\n\nobjects can all have records with different\n\nForecastingTypeId\n\nvalues. Use the ForecastingType object to determine the\n    ID for each forecast type and then filter\n\nForecastingQuota\n\nForecastingAdjustment\n\nForecastingItem\n\nForecastingFact\n\nrecords as\n    necessary.",
+  "field_reference": {
+    "ForecastCategoryName": {
+      "field_label": "Forecast Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ForecastedObjectId": {
+      "field_label": "ForecastedObject ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastedSubObjectId": {
+      "field_label": "ForecastedSubObject ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingItemId": {
+      "field_label": "Forecasting Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Forecasting Fact ID",
+      "type": "id",
+      "length": "18"
+    },
+    "OpportunityId": {
+      "field_label": "Opportunity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PeriodId": {
+      "field_label": "Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetValue": {
+      "field_label": "Target Value",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "TaskRelation - Data API",
+  "description": "Represents the relationship between a task and a lead, contacts, and other objects related to the task. If Shared Activities is enabled, this object doesn’t support triggers, workflow, or data validation rules. This object is available in API version 24.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the Account ID of the relation. For information on IDs, see ID Field Type."
+    },
+    "IsWhat": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the relation is an Account, Opportunity, Campaign, Case, other standard object, or a custom object. Value is false if RelationId is a contact or lead and true otherwise."
+    },
+    "RelationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Indicates the WhatId or WhoId in the relationship. For more information, see Task. For information on IDs, see ID Field Type."
+    },
+    "TaskId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "Represents the ID of the associated Task.For information on IDs, see ID Field Type."
+    }
+  },
+  "usage": "- **See contacts associated with a task**: public void queryWhosOfTaskSample() { String soqlQuery = \"SELECT Id, Subject, (SELECT RelationId, Relation.Name, IsWhat from TaskRelations WHERE isWhat = false) FROM Task WHERE Id = '00T x0000005OKEN'\"; QueryResult qResult = null; try { qResult = connection.query(soqlQuery); TaskRelation relation1 = (TaskRelation)qResult.getRecords()[0].getTaskRelations().getRecords()[0]; }catch (ConnectionException ce) { ce.printStackTrace(); } }`",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **TaskRelationChangeEvent (API version 44.0)**: Change events are available for the object.",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Task Relation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsWhat": {
+      "field_label": "Is What",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RelationId": {
+      "field_label": "Relation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaskId": {
+      "field_label": "Task ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

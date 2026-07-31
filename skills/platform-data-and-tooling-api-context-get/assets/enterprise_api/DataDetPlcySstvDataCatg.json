@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DataDetPlcySstvDataCatg - Data API",
+  "description": "Represents the sensitive data categories that the DataDetect scan policy is required to scan. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DataCategory": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Sensitive data category associated with the scan policy."
+    },
+    "DataDetectPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the scan policy associated with the sensitive data category. This field is a relationship field.",
+      "relationship_name": "DataDetectPolicy",
+      "relationship_type": "Master-Detail",
+      "refers_to": "DataDetectPolicy"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the sensitive data category."
+    }
+  }
+}

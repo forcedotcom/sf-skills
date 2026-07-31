@@ -1,0 +1,254 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "Problem - Data API",
+  "description": "Problems represent the root cause data of one or more incidents. This object contains all the details of a problem, documenting the history of the problem from detection to closure. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of problem. Administrators set field values."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the problem. This field can store up to 32 KB of data, but only the first 255 characters appear in reports."
+    },
+    "Impact": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The problem's impact. Possible values are: High Low Medium The default value is 'High'."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time (in UTC) when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time (in UTC) when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view. (LastReferencedDate) but not viewed it."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "This is a polymorphic relationship field that represents the user or group assigned to resolve the problem.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ParentProblemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of a problem above one or more related problems in a problem hierarchy. This is a relationship field.",
+      "relationship_name": "ParentProblem",
+      "relationship_type": "Lookup",
+      "refers_to": "Problem"
+    },
+    "Priority": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The impact and urgency of the problem. Possible values are: Critical High Low Moderate The default value is 'Critical'."
+    },
+    "PriorityOverrideReason": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The reason why the priority should be changed or edited."
+    },
+    "ProblemNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The unique, system-generated problem number."
+    },
+    "ResolutionDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time (in UTC) when the problem was resolved."
+    },
+    "ResolutionSummary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the steps needed to resolve the incident."
+    },
+    "ResolvedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user who resolved the problem. This is a relationship field.",
+      "relationship_name": "ResolvedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "RootCauseSummary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A description of the problem resolution or root cause. This field can store up to 32 KB of data, but only the first 255 characters display in reports."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Any custom or granular stages customers wants to track. This will be a dependent picklist. Possible values are: Closed Fix in Progress Known Error New Open Pending Change Resolved Root Cause Analysis Work In Progress The default value is 'New'."
+    },
+    "StatusCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of the problem. Possible values are: Closed FixInProgress KnownError New Open PendingChange Resolved RootCauseAnalysis WorkInProgress The default value is 'New'."
+    },
+    "SubCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of problem. One level deeper than Category. Administrators set field values."
+    },
+    "Subject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A brief description of the problem."
+    },
+    "Urgency": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "A measure of how long a resolution can be delayed until an incident, problem, or change has a significant business impact. Possible values are: High Low Medium The default value is 'High'."
+    }
+  },
+  "field_reference": {
+    "Category": {
+      "field_label": "Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created On",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Id": {
+      "field_label": "Problem ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Impact": {
+      "field_label": "Impact",
+      "type": "picklist",
+      "length": "40"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified On",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentProblemId": {
+      "field_label": "Parent Problem ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PriorityOverrideReason": {
+      "field_label": "Priority Override Reason",
+      "type": "string",
+      "length": "255"
+    },
+    "ProblemNumber": {
+      "field_label": "Problem Number",
+      "type": "string",
+      "length": "255"
+    },
+    "ResolutionDateTime": {
+      "field_label": "Resolution Date",
+      "type": "datetime"
+    },
+    "ResolutionSummary": {
+      "field_label": "Resolution Summary",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "ResolvedById": {
+      "field_label": "Resolved By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RootCauseSummary": {
+      "field_label": "Root Cause Summary",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "StatusCode": {
+      "field_label": "Status Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubCategory": {
+      "field_label": "Subcategory",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Subject": {
+      "field_label": "Subject",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Urgency": {
+      "field_label": "Urgency",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

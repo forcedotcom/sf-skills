@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "EmailInsight - Data API",
+  "description": "Represents an insight generated from an email interaction. EmailInsights acts as a central place to store various types of insights related to email messages. The insights stored include status, type, and time of generation. Only certain types of insights can be created based on a pre-configured list of insight types. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "EmailMessageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the email message the insight is generated for. This field is a relationship field.",
+      "relationship_name": "EmailMessage",
+      "refers_to": "EmailMessage",
+      "required": true
+    },
+    "GeneratedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date and time when the insight was generated in the legacy system.",
+      "required": true
+    },
+    "InsightTypeDescription": {
+      "type": "textarea",
+      "properties": "None",
+      "description": "Description of the insight type.",
+      "required": true
+    },
+    "InsightTypeIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the insight type based on which the insight is generated.",
+      "required": true
+    },
+    "InsightTypeLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The display name of the insight type.",
+      "required": true
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email insight record is locked or not. The default value is false."
+    },
+    "LegacyInsightIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The unique ID of the insight that was generated and stored in the legacy system.",
+      "required": true
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the email insight record can be edited or not. The default value is false."
+    },
+    "RowVersion": {
+      "type": "string",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "A system-generated, read-only field that tracks the version of a record. Each time a record is created or updated, the RowVersion value increments, providing a mechanism to detect changes and manage concurrency."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the insight record. Possible values are: Active Completed Deprecated Dismissed The default value is Active.",
+      "required": true
+    }
+  },
+  "special_access_rules": "EmailStream permission must be enabled. EmailStreamPref and SyncEmailToCoreActivity Org prefs must be enabled. To be able to see SyncEmailToCoreActivity preference, EACLegacyEmailSyncAWS Org permission, AnalyticsActivity, UnifiedActivities, and ActivityMetrics must be disabled. In addition, license to Standard Einstein Activity Capture and turning on Einstein Activity Capture and EmailInsights provisions the required permissions and preferences.\n\nEmailStream permission must be enabled.\n\nEmailStreamPref and SyncEmailToCoreActivity Org prefs must be enabled.\n\nTo be able to see SyncEmailToCoreActivity preference, EACLegacyEmailSyncAWS Org permission, AnalyticsActivity, UnifiedActivities, and ActivityMetrics must be disabled. In addition, license to Standard Einstein Activity Capture and turning on Einstein Activity Capture and EmailInsights provisions the required permissions and preferences."
+}

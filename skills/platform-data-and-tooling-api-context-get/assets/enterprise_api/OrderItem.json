@@ -1,0 +1,1005 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OrderItem - Data API",
+  "description": "Represents an order product that your organization sells.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to",
+    "commerce_or_revenue_cloud_orders",
+    "default_value"
+  ],
+  "fields": {
+    "AdjustedLineAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Line amount following line adjustments, excluding tax. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "AdjustedLineAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Line amount following line adjustments, including tax. This field is a gross tax field. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v49.0 and later."
+    },
+    "AggregatedQuantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The quantity of a order item's grouped transaction lines or the products that have been sold and converted to assets. This field is available in API version 64.0 and later."
+    },
+    "AvailableQuantity": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of an order product that is available to be reduced. Value must be greater than or equal to 0. An order product is reducible only if AvailableQuantity is greater than 0. Value is always 0 if the order product’s parent order is a reduction order."
+    },
+    "BatchIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Identifies a product bundle in a transaction processing batch to ensure that order items from the same bundles are processed together. This field is available in API version 64.0 and later."
+    },
+    "BillingFrequency2": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The time period that indicates how often the order item is billed. This field is available in API version 55.0 and later. This field is available with Subscription Management. Possible values are: Annual Monthly"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for the currency of the original Order associated with the OrderItem. Possible values are: DKK—Danish Krone EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD. This field is available in API version 49.0 and later."
+    },
+    "DeliveryEstimationReference": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Unique reference ID for the delivery estimation."
+    },
+    "DeliveryEstimationTimeZone": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Time zone in which the estimated delivery times are based."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Text description of this object. For Commerce stores, during checkout, this field is populated with the value of a product name. The product name is copied from the CartItem.Name field of a cart item that corresponds to the OrderItem."
+    },
+    "DoesAutomaticallyRenew": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates that the order item is set to automatically renew (true) or not (false). This field is available in API version 64.0 and later."
+    },
+    "EarliestEstimatedDeliveryDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Earliest estimated date for the item to be delivered."
+    },
+    "EarliestEstimatedDeliveryTime": {
+      "type": "timeOnly",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Earliest estimated time of the day for the item to be delivered."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Optional. Last day the order product is available."
+    },
+    "EndDateTime": {
+      "type": "datetime",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The end date and time of the order item, derived from the End Date and End Time fields in the time zone specified in the Start and End Time Zone field. If the time zone isn't specified, the default is Coordinated Universal Time (UTC). Label is End Date Time. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "EndTime": {
+      "type": "timeOnly",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The end time of the order item. Label is End Time. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "GrossUnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Unit price including tax. This field is a VAT field that includes tax. Salesforce populates it on order creation only when Order.TaxLocaleType has a value of Gross."
+    },
+    "IsOrderItemLocked": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the order item and its children are locked (true) or not (false). Locked order items and their children cannot be modified, added, or deleted. This field is available in API version 63.0 and later."
+    },
+    "LastEstimatedDeliveryDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Latest estimated date for the item to be delivered."
+    },
+    "LastEstimatedDeliveryTime": {
+      "type": "timeOnly",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Latest estimated time of the day for the item to be delivered."
+    },
+    "LineNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The number used to organize lines on the order. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "ListPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "List price for the order product. Inherited value from the associated PriceBookEntry upon order product creation."
+    },
+    "ListPriceTotal": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The ListPrice times the Quantity. This field is a calculated field.This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "NetUnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The unit price after all price adjustments are applied. This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "OrderActionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related order action. The order action indicates the type of order; for example, a new sale or a cancellation.This field is available in API version 55.0 and later. This field is available with Subscription Management. This field is a relationship field.",
+      "relationship_name": "OrderAction",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderAction"
+    },
+    "OrderDeliveryGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The delivery group for the order product. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later. This field is a relationship field.",
+      "relationship_name": "OrderDeliveryGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderDeliveryGroup"
+    },
+    "OrderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the order that this order product is a child of. This field is a relationship field.",
+      "relationship_name": "Order",
+      "relationship_type": "Lookup",
+      "refers_to": "Order",
+      "required": true
+    },
+    "OrderItemNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Automatically generated number that identifies the order product."
+    },
+    "OriginalOrderItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Required if isReductionOrder on the parent order is true. ID of the original order product being reduced. This field is a relationship field.",
+      "relationship_name": "OriginalOrderItem",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderItem",
+      "required": true
+    },
+    "PeriodBoundary": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The period boundary helps determine the start and end date of the billing periods.This field is available in API version 55.0 and later. This field is available with Subscription Management and Revenue Cloud. Possible values are: AlignToCalendar—the period starts on the first day of the term unit; for example, the first day of the month. Anniversary—The start date determines the boundary. For example, if a monthly subscription starts on September 13, the subscription starts on the 13th day of each month. DayOfPeriod—the period starts on the day indicated by PeriodBoundaryDay. LastDayOfPeriod—the period starts on the last day of the pricing term unit; for example, the last day of the month. Keep these considerations in mind for amendment, renewal, and cancellations of assets in Revenue Cloud. The value of the PeriodBoundary field is copied from the AssetActionSource (initial sale), by default. For termed selling models where the PeriodBoundary value is Anniversary, the value of the PeriodBoundary field is automatically converted to DayOfPeriod. Start date adjustment operation on an asset preserves the original value without conversion."
+    },
+    "PeriodBoundaryDay": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required when PeriodBoundary is DayOfPeriod. Indicates the day of the week or month that marks the period boundary. Must be an integer from 1 through 31.This field is available in API version 55.0 and later. This field is available with Subscription Management and Revenue Cloud. Keep these considerations in mind for amendment, renewal, and cancellations of assets in Revenue Cloud. The value of the PeriodBoundary field is copied from the AssetActionSource (initial sale), by default. When PeriodBoundary field value is converted from Anniversary to DayOfPeriod for termed selling models, the value of the PeriodBoundaryDay field is automatically populated with the day value from AssetActionSource.StartDate. Start date adjustment operation on an asset preserves the original value without conversion.",
+      "required": true
+    },
+    "PeriodBoundaryStartMonth": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Nillable, Sort, Update",
+      "description": "The field is populated based on input in the StartDate, PeriodBoundary, and PeriodBoundaryDay when BillingFrequency2 is Annual or by manual user entry. Possible values are: 1-January 2-February 3-March 4-April 5-May 6-June 7-July 8-August 9-September 10-October 11-November 12-December Keep these considerations in mind for amendment, renewal, and cancellations of assets in Revenue Cloud. The value of the PeriodBoundary field is copied from the AssetActionSource (initial sale), by default. For termed selling models where PeriodBoundary field value is Anniversary and PricingTermUnit field value is ANNUAL, SEMI_ANNUAL, or QUARTERLY, the value of the PeriodBoundaryStartMonth field is automatically recalculated by using AssetActionSource.StartDate.month. Start date adjustment operation on an asset preserves the original value without conversion."
+    },
+    "PricebookEntryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the associated PricebookEntry. Specify this field when creating OrderItem records. It can’t be changed in an update. If you have a B2B Commerce, B2B Commerce Starter, B2B Commerce Growth, or B2B Commerce Plus license, Salesforce users can create orders without price books and order items without price book entries. This field is a relationship field.",
+      "relationship_name": "PricebookEntry",
+      "relationship_type": "Lookup",
+      "refers_to": "PricebookEntry",
+      "required": true
+    },
+    "PriceRevisionPolicyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The price uplift policy associated with this order item. This field is a relationship field.",
+      "relationship_name": "PriceRevisionPolicy",
+      "refers_to": "PriceRevisionPolicy"
+    },
+    "PricingTermCount": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "A calculated field indicating the number of pricing terms in the subscription. This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "PricingTransactionType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the type of pricing transaction. For example, a new sale, a cancellation, an amendment, or a renewal. Possible values: AmendmentAtLastNegotiatedPrice—Calculate the price of the amended order item by using the same price book and price adjustments as the new sale item. For example, an order item that is amended by using a pricing transaction type of AmendmentAtLastNegotiatedPrice is priced by using the same price book information and price adjustments as the new sale item. The amended order item has the same price as the new sale order item. AmendmentStartingFromListPrice—Calculate the price of the amended order item by using current price book information, disregarding any pricing information or adjustments that were applied to the new sale item. Typically, an amended order item has a different price than the new sale transaction item. Cancellation—Calculate the price of the canceled transaction. For example, a 1-year subscription purchased on January 1, is canceled on July 31. The price of the canceled products and services from August 1 through Dec 31 is calculated. NewSale—The price of a new transaction is calculated. RenewalAtLastNegotiatedPrice—Calculate the price of the order item by using the same price book and price adjustments as the new sale item. For example, an order item that is renewed by using a pricing transaction type of RenewalAtLastNegotiatedPrice is priced by using the same price book information and price adjustments as the new sale item. The renewal order item has the same price as the new sale order item. RenewalAtListPrice—Calculate the price of the order item by using current price book information, disregarding any pricing information or adjustments that were applied to the new sale item. Typically, a renewal order item has a different price than the new sale order item. This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "ProFormaBillingPeriodAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The initial amount for the billing period. The final amount for the billing period can include subsequent amendments, discounts, or charges. This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "Product2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the Product2 associated with this OrderItem. This field is a relationship field.",
+      "relationship_name": "Product2",
+      "relationship_type": "Lookup",
+      "refers_to": "Product2"
+    },
+    "ProductSellingModelId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related product selling model. The product selling model defines one method by which a product is sold; for example, as a one-time sale, an evergreen subscription, or a termed subscription.This field is available in API version 55.0 and later. This field is available with Subscription Management. This field is a relationship field.",
+      "relationship_name": "ProductSellingModel",
+      "relationship_type": "Lookup",
+      "refers_to": "ProductSellingModel"
+    },
+    "ProrationPolicyId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the related proration policy. The proration policy defines how the price is calculated for each subscription period. For example, whether partial periods are allowed, and how the remainder amounts are handled.This field is available in API version 55.0 and later. This field is available with Subscription Management. This field is a relationship field.",
+      "relationship_name": "ProrationPolicy",
+      "relationship_type": "Lookup",
+      "refers_to": "ProrationPolicy"
+    },
+    "Quantity": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Number of units of this order product.",
+      "required": true
+    },
+    "QuoteLineItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the associated quote line item.If this field is specified, the quote line item’s QuoteId must match the QuoteId for the order product’s parent order.",
+      "required": true
+    },
+    "ReferencePrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The original or reference price of the order product. This field is available in API version 63.0 and later."
+    },
+    "RelatedChangeIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The identifier used to group all related order items in the same change order. This field is available in API version 63.0 and later."
+    },
+    "RelatedOrderItemID": {
+      "type": "reference",
+      "properties": "Create, Filter, Sort, Group",
+      "description": "Required for change orders, shows the original order product. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later.",
+      "required": true
+    },
+    "RoundedLineAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The rounded line amount, before tax and adjustments. Currency with decimal values of 0.5 and higher round to the next-highest whole unit of currency. The formula to calculate the rounded line amount is: IF(TotalLineAmount != NULL, TotalLineAmount, Quantity * UnitPrice) This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "RoundedLineAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The rounded line amount, including tax. Currency with decimal values of 0.5 and higher round to the next-highest whole unit of currency. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v49.0 and later."
+    },
+    "SegmentType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The duration type of the segment. You can use this field from Revenue Cloud only when the Ramp Deals for Groups in Quotes and Orders setting is turned on. Valid values are: Custom—Available in API version 65.0 and later. Prorated—Available in API version 67.0 and later. Trial—Available in API version 67.0 and later. Yearly—Available in API version 65.0 and later. The default value is Yearly."
+    },
+    "ServiceDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Start date for the order product. Label is Start Date."
+    },
+    "ServiceDateTime": {
+      "type": "datetime",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service date and time of the order item, which is derived from the Service Date and Service Time fields in the time zone specified in the Service and End Time Zone field. If the time zone isn't specified, the default is Coordinated Universal Time (UTC). Label is Service Time. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "ServiceEndTimeZone": {
+      "type": "timeOnly",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the time zone for the order item's service and end dates, times, and datetimes. Label is Service and End Time Zone. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "ServiceTime": {
+      "type": "timeOnly",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The service time of the order item. Label is Service Time. This field is available in Revenue Cloud in API version 65.0 and later."
+    },
+    "StartingPriceTotal": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The starting unit price times the quantity.This field is available in API version 55.0 and later. This field is available with Subscription Management."
+    },
+    "StartingUnitPriceSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Indicates whether the starting unit price was entered manually or calculated. This field is available in API version 55.0 and later. This field is available with Subscription Management. Possible values are: Manual System"
+    },
+    "SupplementalChangeType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the order item change type in the supplemental order. Possible values are: Add Amend Cancel No Change This field is available in API version 64.0 and later."
+    },
+    "TaxTreatmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the related tax treatment. This field is available in API version 55.0 and later. This field is available with Subscription Management. This field is a relationship field.",
+      "relationship_name": "TaxTreatment",
+      "relationship_type": "Lookup",
+      "refers_to": "TaxTreatment"
+    },
+    "TotalAdjustedLineTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Sum of line tax amount and line adjustment tax amounts. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Roll up of the order product’s price adjustments. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalAdjustmentAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Roll up of the order product’s price adjustments, including tax. This field is a gross tax field. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v49.0 and later."
+    },
+    "TotalAdjustmentDistAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Roll up of all adjustments on the order. Used only if the OrderAdjustmentGroup has a Type value of Header. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalAdjustmentDistTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Roll up of all adjustment tax amounts on the order. Used only if the OrderAdjustmentGroup has a Type value of Header. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalAdjustmentDistAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Roll up of all adjustment tax amounts on the order, including tax. Used only if the OrderAdjustmentGroup has a Type value of Header. This field is a gross tax field. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v49.0 and later."
+    },
+    "TotalAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Sum of the order product’s tax adjustments. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Equals TotalPrice + TotalTaxAmount for the order item. This field is a gross tax field. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v49.0 and later."
+    },
+    "TotalLineAdjustmentAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The sum of line-level adjustments for the order product. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalLineAdjustmentAmtWithTax": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The sum of line-level adjustments for the order product, including tax. This field is a gross tax field. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v49.0 and later."
+    },
+    "TotalLineAdjustmentTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Total tax amount for adjustments made to the order product. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalLineAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The line amount of the order product, before price adjustments, inclusive of quantity, and pricing term count for subscription. The decimal places for this value must match the decimal places for the currency being used. For example, if the currency is the US dollar, the decimal place for TotalLineAmount must be 2. If the currency is the Japanese yen, the decimal place for TotalLineAmount must be 0. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalLineTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Total tax amount for this order product, excluding tax on adjustments. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TotalPrice": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Total price for this order product. The calculations for this field’s value are different if Commerce Orders are enabled.",
+      "commerce_or_revenue_cloud_orders": "If TotalLineAmount is null, then TotalPrice = (ROUND(UnitPrice * Quantity) + TotalAdjustmentAmount. The ROUND(UnitPrice * Quantity) is stored in the RoundedLineAmount field. Otherwise, TotalPrice = ROUND(TotalLineAmount) + TotalAdjustmentAmount. The ROUND(TotalLineAmount)is also stored in the RoundedLineAmount field.",
+      "default_value": "TotalPrice = (UnitPrice * Quantity)"
+    },
+    "TotalTaxAmount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "Sum of the order product’s tax and any adjustments. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Describes what the order item represents. Each value is associated with one type code, shown here in parentheses. Possible values are: Delivery Charge (Charge) — A charge, such as a delivery fee. Fee (Charge) — A charge, such as a return fee. This value is available in API v56.0 and later. Order Product (Product) — An item that can be ordered. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "TypeCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The category associated with the type. A type code can be associated with one or more types. Possible values are: Charge Product This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+    },
+    "UnitPrice": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Unit price for the order product."
+    },
+    "UnitPriceUplift": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The percentage increase of the order item's unit price."
+    }
+  },
+  "special_access_rules": "The user must have Edit permission on Order records to create or update order products on an order. The user must have Edit permission on Order records to delete an order product.",
+  "usage": "An order can have associated order product records only if the order has a price book associated with it. An order product must correspond to a product that is listed in the order’s price book. Orders with associated OrderItem records are affected. When OrderItem records are directly deleted, they aren’t sent to the recycle bin and can’t be undeleted. The getDeleted() call shows deleted OrderItem records until they’re purged, which is usually within the same day or the next day.\n\nAn order can have associated order product records only if the order has a price book associated with it. An order product must correspond to a product that is listed in the order’s price book.\n\nOrders with associated OrderItem records are affected. When OrderItem records are directly deleted, they aren’t sent to the recycle bin and can’t be undeleted. The getDeleted() call shows deleted OrderItem records until they’re purged, which is usually within the same day or the next day.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderItemChangeEvent (API version 44.0)**: Change events are available for the object.\n- **OrderItemFeed (API version 29.0)**: Feed tracking is available for the object.\n- **OrderItemHistory**: History is available for tracked fields of the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OrderItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetActionSourceReferences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AvailableQuantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ChildOrderItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ListPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Order\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Order\"/>\n        <element name=\"OrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"OrderItemNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OriginalOrderItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OrderItem\"/>\n        <element name=\"OriginalOrderItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PricebookEntry\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PricebookEntry\"/>\n        <element name=\"PricebookEntryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessExceptions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Product2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Product2\"/>\n        <element name=\"Product2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Quantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ReturnOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UnitPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AdjustedLineAmount": {
+      "field_label": "Adjusted Product Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AdjustedLineAmtWithTax": {
+      "field_label": "Adjusted Product Subtotal with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AggregatedQuantity": {
+      "field_label": "Aggregated Quantity",
+      "type": "double",
+      "precision": "16",
+      "scale": "2"
+    },
+    "AvailableQuantity": {
+      "field_label": "Available Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "BatchIdentifier": {
+      "field_label": "Batch Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "BillingFrequency2": {
+      "field_label": "Billing Frequency",
+      "type": "picklist",
+      "length": "40"
+    },
+    "BillingReference2": {
+      "field_label": "Billing Reference",
+      "type": "string",
+      "length": "80"
+    },
+    "BillingTreatmentId": {
+      "field_label": "Billing Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BindingInstanceTargetId": {
+      "field_label": "BindingInstanceTarget ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConstraintEngineNodeStatus__c": {
+      "field_label": "ConstraintEngineNodeStatus",
+      "type": "textarea",
+      "length": "5000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CustomProductName": {
+      "field_label": "Custom Product Name",
+      "type": "string",
+      "length": "80"
+    },
+    "Description": {
+      "field_label": "Line Description",
+      "type": "string",
+      "length": "255"
+    },
+    "Discount": {
+      "field_label": "Discount (Percentage)",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "DiscountAmount": {
+      "field_label": "Discount (Amount)",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "DoesAutomaticallyRenew": {
+      "field_label": "Automatically Renew",
+      "type": "boolean"
+    },
+    "EffectiveGrantDate": {
+      "field_label": "Effective Grant Date",
+      "type": "date"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "EndDateTime": {
+      "field_label": "End Date Time",
+      "type": "datetime"
+    },
+    "EndQuantity": {
+      "field_label": "End Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "EndTime": {
+      "field_label": "End Time",
+      "type": "time"
+    },
+    "GrossUnitPrice": {
+      "field_label": "Gross Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Id": {
+      "field_label": "Order Product ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsOrderItemLocked": {
+      "field_label": "Is Order Product Locked",
+      "type": "boolean"
+    },
+    "IsPrimarySegment": {
+      "field_label": "Is Primary Segment",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LineNumber": {
+      "field_label": "Line Number",
+      "type": "int",
+      "digits": "9"
+    },
+    "ListPrice": {
+      "field_label": "List Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Margin": {
+      "field_label": "Margin",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "MarginAmount": {
+      "field_label": "Margin Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "NetTotalPrice": {
+      "field_label": "Net Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "NetUnitPrice": {
+      "field_label": "Net Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "OrderActionId": {
+      "field_label": "Order Action ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderDeliveryGroupId": {
+      "field_label": "Order Delivery Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderId": {
+      "field_label": "Order ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemGroupId": {
+      "field_label": "Order Product Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderItemNumber": {
+      "field_label": "Order Product Number",
+      "type": "string",
+      "length": "30"
+    },
+    "OrderItemRecipientId": {
+      "field_label": "Order Product Recipient ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OriginalOrderItemId": {
+      "field_label": "Original Order Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentOrderItemId": {
+      "field_label": "Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PartnerDiscountPercent": {
+      "field_label": "Partner Discount Percent",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "PartnerUnitPrice": {
+      "field_label": "Partner Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "PeriodBoundary": {
+      "field_label": "Period Boundary",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PeriodBoundaryDay": {
+      "field_label": "Period Boundary Day",
+      "type": "int",
+      "digits": "9"
+    },
+    "PeriodBoundaryStartMonth": {
+      "field_label": "Period Boundary Start Month",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PriceRevisionPolicyId": {
+      "field_label": "Price Revision Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PriceWaterfallIdentifier": {
+      "field_label": "Price Waterfall Identifier",
+      "type": "string",
+      "length": "80"
+    },
+    "PricebookEntryId": {
+      "field_label": "Price Book Entry ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PricingTermCount": {
+      "field_label": "Pricing Term Count",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Product2Id": {
+      "field_label": "Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProductSellingModelId": {
+      "field_label": "Product Selling Model ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProrationPolicyId": {
+      "field_label": "Proration Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Quantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "QuantityUnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QuoteLineItemId": {
+      "field_label": "Quote Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RampIdentifier": {
+      "field_label": "Ramp Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "ReferencePrice": {
+      "field_label": "Reference Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "RelatedChangeIdentifier": {
+      "field_label": "Related Change Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "RelatedOrderItemId": {
+      "field_label": "Order Product ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReplacementGroupId": {
+      "field_label": "Order Product Group ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ReservedAtLocationId": {
+      "field_label": "Reserved at Location ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RevenueCloudPackagingFlag": {
+      "field_label": "Revenue Cloud Packaging Flag",
+      "type": "string",
+      "length": "80"
+    },
+    "RoundedLineAmount": {
+      "field_label": "Product Subtotal (Rounded)",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SegmentIdentifier": {
+      "field_label": "Segment Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "SegmentName": {
+      "field_label": "Segment Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SegmentType": {
+      "field_label": "Segment Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ServiceDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "ServiceDateTime": {
+      "field_label": "Start Date Time",
+      "type": "datetime"
+    },
+    "ServiceEndTimeZone": {
+      "field_label": "Start and End Time Zone",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ServiceTime": {
+      "field_label": "Start Time",
+      "type": "time"
+    },
+    "StartQuantity": {
+      "field_label": "Start Quantity",
+      "type": "double",
+      "precision": "12",
+      "scale": "2"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubscriptionTerm": {
+      "field_label": "Subscription Term",
+      "type": "int",
+      "digits": "9"
+    },
+    "SupplementalChangeType": {
+      "field_label": "Supplemental Change Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxTreatmentId": {
+      "field_label": "Tax Treatment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TotalAdjustedLineTaxAmount": {
+      "field_label": "Adjusted Product Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustment": {
+      "field_label": "Total Adjustment",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "TotalAdjustmentAmount": {
+      "field_label": "Total Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentAmtWithTax": {
+      "field_label": "Total Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentDistAmount": {
+      "field_label": "Distributed Order Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentDistAmtWithTax": {
+      "field_label": "Distributed Order Adjustments with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentDistTaxAmount": {
+      "field_label": "Distributed Order Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAdjustmentTaxAmount": {
+      "field_label": "Total Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalAmtWithTax": {
+      "field_label": "Total Amount with Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalCost": {
+      "field_label": "Total Cost",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAdjustmentAmount": {
+      "field_label": "Product Adjustments",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAdjustmentTaxAmount": {
+      "field_label": "Product Adjustments Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineAmount": {
+      "field_label": "Product Subtotal",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalLineTaxAmount": {
+      "field_label": "Product Subtotal Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalMargin": {
+      "field_label": "Total Margin",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "TotalMarginAmount": {
+      "field_label": "Total Margin Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalPrice": {
+      "field_label": "Total Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalTaxAmount": {
+      "field_label": "Total Tax",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "100"
+    },
+    "TypeCode": {
+      "field_label": "Type Code",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UnitCost": {
+      "field_label": "Unit Cost",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitPrice": {
+      "field_label": "Unit Price",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "UnitPriceUplift": {
+      "field_label": "Unit Price Uplift",
+      "type": "percent",
+      "precision": "5",
+      "scale": "2"
+    },
+    "ValidationResult": {
+      "field_label": "Validation Result",
+      "type": "picklist",
+      "length": "40"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

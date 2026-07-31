@@ -1,0 +1,259 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ExternalSocialAccount - Data API",
+  "description": "Represents a managed social media account on a social network such as Facebook or Twitter. This object is available in API version 29.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AuthorizedBy": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the Radian6 user who added the social account to Radian6."
+    },
+    "DataSourceId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Radian6 data source for the social account."
+    },
+    "DefaultResponseAccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the managed social account to use by default when responding. This is a relationship field.",
+      "relationship_name": "DefaultResponseAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "ExternalSocialAccount"
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the record in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is automatically generated but you can supply your own value if you create the record using the API. Note: When creating large sets of data, always specify a unique DeveloperName for each record. If no DeveloperName is specified, performance may slow while Salesforce generates one for each record. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "ExternalAccountId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the social account on the social network."
+    },
+    "ExternalPictureURL": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL to the picture of the social account on the social network."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the social account is active or not."
+    },
+    "IsAuthenticated": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the social account is authenticated or not."
+    },
+    "IsCaseCreationEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether case creation for the social account is enabled or not."
+    },
+    "IsDataSourceActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the data source is active or not."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies the language of the social account."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Master label for the social account. This display value is the internal label and does not get translated."
+    },
+    "ProfileUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "URL for the profile."
+    },
+    "Provider": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Social network, such as Facebook or Twitter, of the social account."
+    },
+    "ProviderUserId": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "User ID for the social network of the social account."
+    },
+    "RuleId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Radian6 rule for the account."
+    },
+    "SocialPropertyId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the Radian6 social property for the account."
+    },
+    "TopicId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the topic for the social account."
+    },
+    "UniqueName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique name for the social account."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Username for the social account."
+    }
+  },
+  "usage": "Although available, many of the Radian6-related fields are no longer accurate or used. We recommend using in .\n\nAlthough available, many of the Radian6-related fields are no\n\t\t\tlonger accurate or used. We recommend using\n\nSocial\n\t\t\t\tEngagement Resources\n\nConnect REST API Developer\n\t\t\tGuide",
+  "field_reference": {
+    "AuthorizedBy": {
+      "field_label": "Authorized by",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataSourceId": {
+      "field_label": "Data Source Id",
+      "type": "string",
+      "length": "255"
+    },
+    "DefaultResponseAccountId": {
+      "field_label": "Managed Social Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ExternalAccountId": {
+      "field_label": "External Account Id",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalPictureURL": {
+      "field_label": "Provider External Picture URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Managed Social Account ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active Account",
+      "type": "boolean"
+    },
+    "IsAuthenticated": {
+      "field_label": "Is Account Authenticated",
+      "type": "boolean"
+    },
+    "IsCaseCreationEnabled": {
+      "field_label": "Is Case Creation Enabled",
+      "type": "boolean"
+    },
+    "IsDataSourceActive": {
+      "field_label": "Active Data Source",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "80"
+    },
+    "ProfileUrl": {
+      "field_label": "Profile URL",
+      "type": "url",
+      "length": "255"
+    },
+    "Provider": {
+      "field_label": "Social Network",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProviderUserId": {
+      "field_label": "Provider User Id",
+      "type": "string",
+      "length": "255"
+    },
+    "RuleId": {
+      "field_label": "Rule Id",
+      "type": "string",
+      "length": "255"
+    },
+    "SocialPropertyId": {
+      "field_label": "Social Property Id",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TopicId": {
+      "field_label": "Topic Profile Id",
+      "type": "string",
+      "length": "255"
+    },
+    "UniqueName": {
+      "field_label": "Unique Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Username": {
+      "field_label": "Username",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

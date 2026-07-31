@@ -1,0 +1,144 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "QuickActionDefinition - Tooling API",
+  "description": "Represents the definition of a quick action.",
+  "supported_soap_calls": "`upsert()`, `create()`, `delete()`, `query()`, `retrieve()`, `update()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionSubtype": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The subtype of the action. Valid values are: Action ScreenAction This field is available in API version 50.0 and later. This field is available only for Lightning web component quick actions."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The description of the action."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the action in the API. This field corresponds to the Name field in the user interface. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+    },
+    "EntityDefinitionId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the object associated with the quick action.",
+      "relationship_name": "EntityDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "EntityDefinition"
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated metadata object in Metadata API. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "Height": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The height of the action, in pixels. This field is set only when the quick action has a custom icon."
+    },
+    "IconId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the action icon. This field is set only when the quick action has a custom icon.",
+      "relationship_name": "Icon",
+      "relationship_type": "Lookup",
+      "refers_to": "StaticResource"
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The action label that corresponds to the Label field in the user interface."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the action. Valid values are: Chinese (Simplified): zh_CN Chinese (Traditional): zh_TW Danish: da Dutch: nl_NL English: en_US Finnish: fi French: fr German: de Italian: it Japanese: ja Korean: ko Norwegian: no Portuguese (Brazil): pt_BR Russian: ru Spanish: es Spanish (Mexico): es_MX Spanish (Mexico) defaults to Spanish for customer-defined translations. Swedish: sv Thai: th The Salesforce user interface is fully translated to Thai, but Help is in English."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The action label."
+    },
+    "Metadata": {
+      "type": "QuickAction",
+      "properties": "Create, Nillable, Update",
+      "description": "The metadata for the quick action. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the action."
+    },
+    "OptionsCreateFeedItem": {
+      "type": "boolean",
+      "properties": "Filter,",
+      "description": "Indicates whether successful completion of the action creates a feed item (true) or not (false). Applies only to Create Record, Update Record, and Log a Call quick action types. Available in API version 36.0 and later."
+    },
+    "SobjectType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The associated object’s API name. For example, FeedItem."
+    },
+    "StandardLabel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The standard label for the action. Valid values are: AddRecord AddMember ChangeDueDate ChangePriority ChangeStatus CreateNew CreateNewRecordType (For example, a label with something like “Create New Idea”) Defer EditDescription EnrollInProgram (Available in API versions 46.0 and later only if the org has Health Cloud enabled) Escalate EscalateToRecord Forward (Available in API version 42.0 and later) LogACall LogANote ModifyAppointment (Available in API version 47.0 and later) New (A new record) NewChild (A new child record) NewChildRecordType NewRecordType (For example, a label with something like “New Idea”) OfferFeedback PatientDetails (Available in API version 57.0 and later if the org has Health Cloud enabled) PerformCount (Available in API version 63.0 and later.) Quick (A quick record) QuickRecordType RelocateAsset (Available in API version 63.0 and later) ReplaceAsset (Available in API version 63.0 and later) Reply (Available in API version 42.0 and later) ReplyAll (Available in API version 42.0 and later) RequestFeedback SendEmail (This value is available in API version 31.0 and later.) Update"
+    },
+    "SuccessMessage": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The message that displays to the user upon successful completion of the action. Available in API version 36.0 and later."
+    },
+    "TargetField": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The API name of the parent object for the record created by this quick action. For example, CollaborationGroup."
+    },
+    "TargetRecordTypeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the target record type.",
+      "relationship_name": "TargetRecordType",
+      "relationship_type": "Lookup",
+      "refers_to": "RecordType"
+    },
+    "TargetSobjectType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The API name of the type of object record this action creates. For example, OpportunityLineItem."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of action. Valid values are: Canvas Create Flow (This value is available as a Beta in API version 41.0 and later.) LightningComponent (This value is available in API version 38.0 and later.) LogACall Post SendEmail SocialPost Update VisualforcePage"
+    },
+    "Width": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The width of the action, in pixels. This field is set only when the quick action has a custom icon."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"QuickActionDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:QuickAction\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"QuickAction\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionSubtype\" minOccurs=\"0\" type=\"tns:ActionSubtype\"/>\n        <xsd:element name=\"canvas\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"flowDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lightningComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lightningWebComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"optionsCreateFeedItem\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"quickActionLayout\" minOccurs=\"0\" type=\"mns:QuickActionLayout\"/>\n        <xsd:element name=\"standardLabel\" minOccurs=\"0\" type=\"tns:QuickActionLabel\"/>\n        <xsd:element name=\"successMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetParentField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetRecordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:QuickActionType\"/>\n        <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

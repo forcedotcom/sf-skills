@@ -1,0 +1,278 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "WebLink - Data API",
+  "description": "Represents a custom link to a URL or Scontrol.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Availability": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Description of the custom link. Limit is 1,000 characters."
+    },
+    "DisplayType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Type of display: button, link, or mass-action button."
+    },
+    "EncodingKey": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Encoding of parameters on the URL link.",
+      "required": true
+    },
+    "HasMenubar": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the popup window shows a menu bar (true) or not (false)."
+    },
+    "HasScrollbars": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the popup window shows scroll bars (true) or not (false)."
+    },
+    "HasToolbar": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the popup window shows browser toolbars (true) or not (false). Toolbars normally contain navigation buttons like Back, Forward, and Print."
+    },
+    "Height": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Height of the popup in pixels."
+    },
+    "IsProtected": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the object is protected (true) or not (false). Protected components that have been installed in other organizations can’t be linked to or referenced by components created in the subscriber organization. A developer can easily delete a protected component contained in a managed package in a future release of the package without worrying about failing installations. However, once a component is marked as unprotected and is released globally, the developer can’t delete it."
+    },
+    "IsResizable": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether users are allowed to resize the popup window (true) or not (false)."
+    },
+    "LinkType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Type of link (S-control or URL).",
+      "required": true
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Master label for the link. Limit is 240 characters. This display value is the internal label that is not translated."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name to display on page.",
+      "required": true
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix that is associated with this object. Each Developer Edition org that creates a managed package has a unique namespace prefix. Limit: 15 characters. You can refer to a component in a managed package by using the namespacePrefix__componentName notation. The namespace prefix can have one of the following values. In Developer Edition orgs, NamespacePrefix is set to the namespace prefix of the org for all objects that support it, unless an object is in an installed managed package. In that case, the object has the namespace prefix of the installed managed package. This field’s value is the namespace prefix of the Developer Edition org of the package developer. In orgs that are not Developer Edition orgs, NamespacePrefix is set only for objects that are part of an installed managed package. All other objects have no namespace prefix. This field can’t be accessed unless the logged-in user has the Customize Application permission."
+    },
+    "OpenType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "How the custom link opens when clicked in a browser—NewWindow, Sidebar, or NoSidebar.",
+      "required": true
+    },
+    "PageOrSobjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "For standard objects, the name of the page on which to display the custom link. For custom objects, the name of the object.",
+      "required": true
+    },
+    "Position": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Location on the screen where the popup should open—TopLeft, FullScreen, or None."
+    },
+    "RequireRowSelection": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the custom link requires a row selection (true) or not (false)."
+    },
+    "ScontrolId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the custom s-control object (Scontrol) to link to. Can include fields as tokens within the custom s-control object. Label is Custom S-Control ID."
+    },
+    "ShowsLocation": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the popup window shows the browser’s address bar containing the URL (true) or not (false)."
+    },
+    "ShowsStatus": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Show the status bar at the bottom of the browser."
+    },
+    "Url": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "URL of the page to link to. Can include fields as tokens within the URL. Limit: 1,024 KB.",
+      "required": true
+    },
+    "Width": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Width of the popup in pixels."
+    }
+  },
+  "usage": "Custom links can include fields as tokens within the URL or custom s-control.\n\nUse this object to programmatically manage custom links, which allow client applications to\n    integrate data with external URLs, an organization’s intranet, or other back-end office\n    systems. A custom link can point to:\n\nAn external URL, such as\n\nwww.google.com\n\nor your company's\n      intranet.\n\nA custom s-control, such as a Java applet or Active-X control.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"WebLink\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DisplayType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EncodingKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HasMenubar\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasScrollbars\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasToolbar\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Height\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"IsProtected\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsResizable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LinkType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MasterLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OpenType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PageOrSobjectType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Position\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RequireRowSelection\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ScontrolId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ShowsLocation\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ShowsStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Url\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Width\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "DisplayType": {
+      "field_label": "Display Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "EncodingKey": {
+      "field_label": "Link Encoding",
+      "type": "picklist",
+      "length": "40"
+    },
+    "HasMenubar": {
+      "field_label": "Show Menu Bar",
+      "type": "boolean"
+    },
+    "HasScrollbars": {
+      "field_label": "Show Scrollbars",
+      "type": "boolean"
+    },
+    "HasToolbar": {
+      "field_label": "Show Toolbars",
+      "type": "boolean"
+    },
+    "Height": {
+      "field_label": "Height (in pixels)",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Custom Button or Link ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsProtected": {
+      "field_label": "Protected Component",
+      "type": "boolean"
+    },
+    "IsResizable": {
+      "field_label": "Resizeable",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LinkType": {
+      "field_label": "Content Source",
+      "type": "picklist",
+      "length": "40"
+    },
+    "MasterLabel": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "240"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "240"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "OpenType": {
+      "field_label": "Behavior",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PageOrSobjectType": {
+      "field_label": "Page or sObject Type Name",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Position": {
+      "field_label": "Window Position",
+      "type": "picklist",
+      "length": "40"
+    },
+    "RequireRowSelection": {
+      "field_label": "Require Row Selection",
+      "type": "boolean"
+    },
+    "ScontrolId": {
+      "field_label": "Custom S-Control ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShowsLocation": {
+      "field_label": "Show Address Bar",
+      "type": "boolean"
+    },
+    "ShowsStatus": {
+      "field_label": "Show Status Bar",
+      "type": "boolean"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Url": {
+      "field_label": "URL",
+      "type": "textarea",
+      "length": "1048576"
+    },
+    "Width": {
+      "field_label": "Width (in pixels)",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

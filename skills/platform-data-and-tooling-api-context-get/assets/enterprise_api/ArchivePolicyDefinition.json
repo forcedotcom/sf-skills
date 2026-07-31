@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ArchivePolicyDefinition - Data API",
+  "description": "Represents a data lifecycle policy. Each record defines the scope, frequency, and rules that govern automated archiving or purging of records from a root entity, such as Contact or Lead. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DataProtectionThreshold": {
+      "type": "int",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "Specifies a retention buffer, in days, during which recently updated or sensitive records must not be archived or deleted. Enforces data protection compliance."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Update",
+      "description": "The purpose or scope of the policy."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name of the object in the API. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object's name in a managed package and the changes are reflected in a subscriber's org."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the policy is active and eligible for execution. Only active policies can run through scheduled or manual processes. The default value is false."
+    },
+    "IsSoftDeleted": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the policy has been soft deleted. Soft deleted policies are marked for deletion but not removed permanently. The default value is false."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for this policy. This display value is the internal label that doesn't get translated."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name assigned to the policy."
+    },
+    "Query": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "A complete SOQL or custom query that defines the set of records to archive or purge based on the policy rules. Determines which records are eligible for processing. The field type changed from string to textarea in API version 67.0."
+    },
+    "QueryLimit": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The maximum number of root records this policy can process in a single run. Use to throttle execution for scalability and control."
+    },
+    "RootEntityName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The API name of the Salesforce object targeted by the policy. Determines which object's records are queried and processed."
+    },
+    "RunFrequency": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies how often the policy is executed—manually or on a regular interval. Enables automation for recurring data lifecycle operations.Valid values are: None—This option is specifically for manual policy runs. Daily Monthly Weekly"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Process type that the policy executes.Valid values are: Archive Import Purge"
+    }
+  },
+  "special_access_rules": "Create, Update, and Delete operations are restricted to the Archive Admin profile. All other profiles have Read-Only access."
+}

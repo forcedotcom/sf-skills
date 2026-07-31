@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "SiteDetail - Data API",
+  "description": "Represents the details of a Salesforce site or Experience Cloud site. Available in API Version 38.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Site object."
+    },
+    "IsRegistrationEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the site allows users to sign up."
+    },
+    "SecureUrl": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL of the website."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"SiteDetail\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsRegistrationEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SecureUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "DurableId": {
+      "field_label": "Site ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Site Detail ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsRegistrationEnabled": {
+      "field_label": "Self-Registration Enabled",
+      "type": "boolean"
+    },
+    "SecureUrl": {
+      "field_label": "Secure URL",
+      "type": "url",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

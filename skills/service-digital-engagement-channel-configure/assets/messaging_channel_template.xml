@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MessagingChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Automated Responses (optional, repeat per response) -->
+    <!--
+    <automatedResponses>
+        <autoResponseContentType>TextResponse</autoResponseContentType>
+        <language>en_US</language>
+        <response>{RESPONSE_TEXT}</response>
+        <type>{OptOutConfirmation|HelpResponse}</type>
+    </automatedResponses>
+    -->
+
+    <!-- Standard Parameters (optional, repeat per parameter) -->
+    <!-- actionParameterMappings is optional — include when using Flow routing to map to flow input variables -->
+    <!--
+    <standardParameters>
+        <actionParameterMappings>
+            <actionParameterName>{FLOW_INPUT_VARIABLE_NAME}</actionParameterName>
+        </actionParameterMappings>
+        <parameterType>FirstName</parameterType>
+    </standardParameters>
+    <standardParameters>
+        <parameterType>LastName</parameterType>
+    </standardParameters>
+    <standardParameters>
+        <parameterType>Email</parameterType>
+    </standardParameters>
+    <standardParameters>
+        <parameterType>Subject</parameterType>
+    </standardParameters>
+    -->
+
+    <!-- Custom Parameters (optional, repeat per parameter) -->
+    <!-- actionParameterMappings is optional — include when using Flow routing to map to flow input variables -->
+    <!--
+    <customParameters>
+        <actionParameterMappings>
+            <actionParameterName>{FLOW_INPUT_VARIABLE_NAME}</actionParameterName>
+        </actionParameterMappings>
+        <externalParameterName>city</externalParameterName>
+        <masterLabel>City</masterLabel>
+        <maxLength>50</maxLength>
+        <name>city</name>
+        <parameterDataType>String</parameterDataType>
+    </customParameters>
+    -->
+
+    <!-- Embedded Configuration -->
+    <embeddedConfig>
+        <allowedFileTypes>{COMMA_SEPARATED_EXTENSIONS}</allowedFileTypes>
+        <anonymousUserJwtExpirationTime>{JWT_EXPIRATION_MINUTES}</anonymousUserJwtExpirationTime>
+        <authMode>{UnAuth|Auth}</authMode>
+        <chatAbandonmentTimeout>{MINUTES}</chatAbandonmentTimeout>
+        <isAbandonedChatsEnabled>{true|false}</isAbandonedChatsEnabled>
+        <isAttachmentUploadEnabled>{true|false}</isAttachmentUploadEnabled>
+        <isEstimatedWaitTimeEnabled>{true|false}</isEstimatedWaitTimeEnabled>
+        <isFallbackMessageEnabled>{true|false}</isFallbackMessageEnabled>
+        <isFileAttachmentExtUnrestricted>{true|false}</isFileAttachmentExtUnrestricted>
+        <isSaveTranscriptEnabled>{true|false}</isSaveTranscriptEnabled>
+        <maxFileSize>{SIZE_IN_MB}</maxFileSize>
+    </embeddedConfig>
+
+    <!-- Session Settings -->
+    <endUserIdleTimeOut>{IDLE_TIMEOUT_MINUTES}</endUserIdleTimeOut>
+    <isEstimatedWaitTimeEnabled>{true|false}</isEstimatedWaitTimeEnabled>
+    <isQueuePositionEnabled>{true|false}</isQueuePositionEnabled>
+    <isSynchronousChatEnabled>{true|false}</isSynchronousChatEnabled>
+    <isVoiceModeEnabled>{true|false}</isVoiceModeEnabled>
+    <masterLabel>{CHANNEL_LABEL}</masterLabel>
+    <messagingChannelType>EmbeddedMessaging</messagingChannelType>
+
+    <!-- Messaging Keywords -->
+    <messagingKeywords>
+        <keyword>cancel</keyword>
+        <keyword>end</keyword>
+        <keyword>quit</keyword>
+        <keyword>stop</keyword>
+        <keyword>stopall</keyword>
+        <keyword>unsubscribe</keyword>
+        <keywordType>OptOut</keywordType>
+        <language>en_US</language>
+    </messagingKeywords>
+    <messagingKeywords>
+        <keyword>help</keyword>
+        <keywordType>Help</keywordType>
+        <language>en_US</language>
+    </messagingKeywords>
+
+    <!-- Routing: Queue-based -->
+    <!-- <sessionHandlerQueue>{QUEUE_NAME}</sessionHandlerQueue> -->
+    <!-- <sessionHandlerType>Queue</sessionHandlerType> -->
+
+    <!-- Routing: Flow-based (requires a fallback queue) -->
+    <!-- <sessionHandlerFlow>{FLOW_API_NAME}</sessionHandlerFlow> -->
+    <!-- <sessionHandlerQueue>{FALLBACK_QUEUE_NAME}</sessionHandlerQueue> -->
+    <!-- <sessionHandlerType>Flow</sessionHandlerType> -->
+
+    <!-- Routing: Agentforce Service Agent (requires a fallback queue) -->
+    <!-- <sessionHandlerAsa>{ASA_BOT_NAME}</sessionHandlerAsa> -->
+    <!-- <sessionHandlerQueue>{FALLBACK_QUEUE_NAME}</sessionHandlerQueue> -->
+    <!-- <sessionHandlerType>AgentforceServiceAgent</sessionHandlerType> -->
+</MessagingChannel>

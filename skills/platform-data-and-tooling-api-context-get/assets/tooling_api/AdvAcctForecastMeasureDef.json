@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "AdvAcctForecastMeasureDef - Tooling API",
+  "description": "Represents information about the measures to be displayed in the advanced account forecasts grid for the forecast set. This object is available in API version 57.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AdvAccountForecastSetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The forecast set associated with the advanced account forecast metric. This can also reference the SalesAgreementSettings. This field is a relationship field.",
+      "relationship_name": "AdvAccountForecastSet",
+      "relationship_type": "Lookup",
+      "refers_to": "AdvAccountForecastSet"
+    },
+    "AdvAcctForecastMeasureDefName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the advanced account forecast measure definition."
+    },
+    "AggregationType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of aggregation used for calculating advanced account forecast values. Possible values are: AVERAGE—Average MAXIMUM—Maximum MINIMUM—Minimum SUM—Sum The default value is SUM."
+    },
+    "ComputationMethod": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The method used for calculating advanced account forecast values. Possible values are: CUSTOM—Custom DATA_PROCESSING_ENGINE_DEFINITION—Data Processing Engine definition FORMULA—Formula The default value is DATA_PROCESSING_ENGINE_DEFINITION."
+    },
+    "ForecastDataMeasureName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Field of the facts object used for this measure."
+    },
+    "ForecastMeasureName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The name for the measure to show on UI."
+    },
+    "ForecastMeasureType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies the measure type used for the generated advanced forecast values. Possible values are: QUANTITY—Quantity REVENUE—Revenue The default value is QUANTITY."
+    },
+    "IsAdjustmentTracked": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the adjustments made to the advanced account forecast values for this metric are tracked. The default value is false."
+    }
+  }
+}

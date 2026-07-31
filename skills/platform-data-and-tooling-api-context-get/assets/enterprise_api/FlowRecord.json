@@ -1,0 +1,469 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowRecord - Data API",
+  "description": "Represents the details of a flow. This object is available in API version 58.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActivationId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the marketing segment activation. This field is available in API version 64.0 and later. This field is a relationship field.",
+      "relationship_name": "Activation",
+      "relationship_type": "Lookup",
+      "refers_to": "MarketSegmentActivation"
+    },
+    "ActiveVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the active flow version. This field is available in API version 61.0 and later. This field is a relationship field.",
+      "relationship_name": "ActiveVersion",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowRecordVersion"
+    },
+    "ApiVersion": {
+      "type": "double",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The API version of the flow record. This field is available in API version 61.0 and later."
+    },
+    "AreMetricsLoggedToDataCloud": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this flow’s metrics are logged in Data Cloud. The default value is false. This field is available in API version 63.0 and later."
+    },
+    "AssociatedRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the record the flow is associated with. This field is a polymorphic relationship field.",
+      "relationship_name": "AssociatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "Campaign"
+    },
+    "Builder": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the tool that created this flow. Valid values are: Cloud Flow Designer Flow Builder Swing Designer This field is available in API version 61.0 and later."
+    },
+    "CapacityCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The category that determines the usage limits of the flow. Possible values are: Marketing Cloud Flow"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The description of the flow."
+    },
+    "ElementEntries": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times the last flow occurrence activated an element. This field is available in API version 67.0 and later."
+    },
+    "ElementErrors": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times the last flow occurrence activated an element which caused an error. This field is available in API version 67.0 and later."
+    },
+    "ErrorCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The error code if the flow element run encountered an error. Valid values are: ACTIVATING_USER_ACCOUNT_DEACTIVATED—We can't run this flow because the user who activated it has a deactivated user record. ACTIVATING_USER_LOST_PERMISSIONS—We can't run this flow because the user that activated it no longer has permission to it. CANNOT_PUBLISH_SEGMENT—We can't run this flow because we can't publish the segment it's using. Contact Salesforce Customer Support and ask for help with the error ID. CANNOT_QUERY_SEGMENT_MEMBER_DATA—We can't run this flow because we can't query the segment membership data it's using. Contact Salesforce Customer Support and ask for help with the error ID. CANNOT_RUN_ACTIVATION_TRIGGERED_FLOW—Something went wrong with your automation. Contact Salesforce Customer Support and ask for help with the error ID. CANNOT_REFRESH_DATA_STREAM—We can't run this flow because we can't refresh your data stream metadata. Contact Salesforce Customer Support and ask for help with the error ID. CANNOT_REFRESH_IDENTITY_RES_DATA—We can't run this flow because we can't refresh your identity resolution data. Contact Salesforce Customer Support and ask for help with the error ID. CANNOT_REFRESH_IDENTITY_RES_METADATA—We can't run this flow because we can't refresh your identity resolution metadata. Contact Salesforce Customer Support and ask for help with the error ID. CANNOT_UPDATE_DATASTREAM_METADATA—We can't run this flow because we can't update your DataStream metadata. Contact Salesforce Customer Support and ask for help with the error ID. CREATE_EXPERIMENT_ERROR—We can't run this flow because an error occurred while executing the Path Experiment element. To try again, save and activate a new version of the flow. DATA_ACTION_STATUS_ERROR—We can’t run this flow because we couldn’t create the data action. To try again, save and activate a new version of the flow. FLOW_FAILED_TO_START—This flow failed to start. Contact Salesforce Customer Support and ask for help with the error ID. This field is available in API version 59.0 and later."
+    },
+    "ErrorDetails": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The error ID. This field is available in API version 59.0 and later."
+    },
+    "FlowCategory": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of a category. Sharing rules assign permissions to view and edit flows by category and subcategory. This field is available in API version 60.0 and later."
+    },
+    "FlowDefinition": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the flow definition."
+    },
+    "FlowSubcategory": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of a subcategory. Sharing rules assign permissions to view and edit flows by category and subcategory. This field is available in API version 60.0 and later."
+    },
+    "FlowType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The label of a flow type. FlowType consolidates ProcessType and TriggerType into one field. FlowType is used with permissions, so admins can control access to each flow type. Valid values are: Action Cadence Step Screen Flow—Launches from a cadence step. This type of flow collects or displays information and requires user interaction. Action Plan Autolaunched Flow—Launches an action plan task from an action plan when conditions in the associated action plan template process are met. This type of flow runs in the background without user interaction. Activity-Object Matching No Trigger Flow—Launches when Einstein Activity Capture detects and captures a new activity, such as an email. This type of flow runs in the background without user interaction. Requires Sync Email as Salesforce Activity to be enabled. Activation-Triggered Autolaunched Flow—Launches when an activation is published. This type of flow runs in the background without user interaction. Admin Automation Event-Triggered Flow—Launches when invoked by Apex, processes, REST API, and more. This type of flow runs in the background without user interaction. Autolaunched Approval Orchestration—Launches when invoked by Apex, REST API, custom buttons, or custom links. An approval orchestration lets you create a multi-step, multi-user approval process. Autolaunched No Trigger Flow—Launches when invoked by processes or code such as Apex and REST API. This type of flow runs in the background without user interaction. Autolaunched No Trigger Orchestration—Launches when invoked by Apex, REST API, custom buttons, or custom links. An orchestration lets you create a multi-step, multi-user process. Automation Event-Triggered Autolaunched Flow—Launches when invoked by Apex, processes, REST API, and more. This type of flow runs in the background without user interaction. Automation Event-Triggered Flow—Launches when a user performs an automation event, like subscribing to SMS messages. This type of flow runs in the background without user interaction. Automation Event-Triggered Flow v0—Deprecated. Launches when a user performs an automation event, like subscribing to SMS messages. This type of flow runs in the background without user interaction. Campaign Member—Launches when scheduled to perform actions on or send messages to individuals from the selected campaign member. This value is available in API version 67.0 and later. Cart Async Autolaunched Flow—Launches when invoked by a cart change, such as an Add to Cart. This type of flow runs in the background without user interaction. Checkout Screen Flow—Create a screen flow that implements a Commerce Cloud checkout process. This type of flow collects or displays information and requires user interaction. CMS Workflow Orchestration Autolaunched—Launches when invoked from the Workflows component in a CMS workspace. This type of orchestration lets you create a multi-step, multi-user process to create, edit, organize, and manage digital content from a centralized location. Contact Request Screen Flow—Launches when invoked by a customer, allowing them to enter contact details into a self-service form. This type of flow collects or displays information and requires user interaction. Customer Lifecycle Record-Triggered After Save Flow—Launches after a customer lifecycle map is saved and changes records related to the triggering record. This type of flow runs in the background without user interaction. Data Cloud Data Change Flow—Launches when a record from a Data Cloud data model object or a calculated insight object is changed and meets the specified conditions. This type of flow runs in the background without user interaction. Data Graph-Triggered Autolaunched Flow—Launches when invoked by Apex, processes, REST API, and more. This type of flow runs in the background without user interaction. Data Graph-Triggered Flow—Launches when invoked by Apex, processes, REST API, and more. This type of flow runs in the background without user interaction. Data Graph-Triggered Flow v0—Deprecated. Launches when invoked by Apex, processes, REST API, and more. This type of flow runs in the background without user interaction. Digital Form Screen Flow—Launches from app extensions. This type of flow collects or displays information and requires user interaction. Discovery Framework Data Capture Screen Flow (Beta)—Launches when invoked by a user on a mobile device and presents assessment questions from Discovery Framework. This type of flow collects or displays information and requires user interaction. Employee Service Catalog Item Screen Flow—Launches when invoked by a user and allows them to browse and order items from the Employee Service Catalog. This type of flow collects or displays information and requires user interaction. Enterprise Scale External System Change-Triggered Flow—Launches when invoked by MuleSoft. This value is available in API version 67.0 and later. Evaluation Autolaunched Flow—Launches when invoked by an orchestration to evaluate custom criteria for a stage or step. To indicate that the criteria are met, set the output variable isOrchestrationConditionMet to true. This type of flow runs in the background without user interaction. External System Change-Triggered Flow—Launches when an event is received from an external system. This type of flow runs in the background without user interaction. Event-Driven Flow—Launches when an event is received. This type of flow runs in the background without user interaction. Field Service Mobile Screen Flow—Launches when invoked by a user in the Field Service mobile app. This type of flow collects or displays information and requires user interaction. Field Service Web Screen Flow—Launches from the Field Service app and lets users schedule, modify, or cancel an appointment in a web browser. This type of flow requires user interaction. Form-Triggered Autolaunched Flow—Launches when a web visitor submits a marketing form. This type of flow runs in the background without user interaction. Form-Triggered Flow—Launches when a web visitor submits a marketing form. This type of flow runs in the background without user interaction. Form-Triggered Flow v0—Deprecated. Launches when a web visitor submits a marketing form. This type of flow runs in the background without user interaction. Identity User Registration Flow—Launches when a user logs in via a single sign-on process that uses the authentication provider framework. After the third-party identity provider authenticates the user, the flow creates a user or updates an existing user. This type of flow runs in the background without user interaction. Indicator Result Screen Flow—Launches a screen flow when initiated by a user to calculate and create indicator results for a selected indicator performance period. Individual-Object Linking Screen Flow—Launches when invoked by an agent to link a record like a case or messaging session to a contact, lead, person account, or employee. This type of flow collects or displays information and requires user interaction. List—Launches when scheduled to perform actions on or send messages to individuals from the selected list. This value is available in API version 67.0 and later. Login Screen Flow—Launches when a user tries to log in to Salesforce. This type of flow extends Salesforce's default authentication process by sending users with certain profiles through a flow when they log in and requires user interaction. Loyalty Management Autolaunched Flow—Launches when invoked by a loyalty program process, and contains Assignment, Decision, and Action elements. The Action element in this type of flow supports Apex and quick actions. This type of flow runs in the background without user interaction. Managed Content Autolaunched Flow—Launches when invoked by the ManagedContentRelease translator. This type of flow runs in the background without user interaction. Mortgage Lending Screen Flow—Launches when invoked by a user and allows them to provide Financial Service Cloud mortgage application details. This type of flow requires user interaction. Platform Event Triggered Flow—Launches when a platform event occurs. This type of flow runs in the background without user interaction. Process Builder Autolaunched Process—Launched when invoked from a Process Builder process. This type of flow runs in the background without user interaction. Process Builder Custom Event Process—A process created in Process Builder that launches when a custom event message is received. This type of process runs in the background without user interaction. Process Builder Workflow—Launches when a record is created or updated. This type of process runs in the background without user interaction. Prompt Template Capability-Triggered Flow—Launches from a prompt template. This type of flow adds prompt instructions to the associated prompt template and runs in the background without user interaction. Recommendation Strategy Autolaunched Flow—Build a personalized list of recommendations. When a recommendation is selected, it launches its assigned flow. Used by Einstein Next Best Action. Show recommendations in Lightning App Builder with the Einstein Next Best Action component and in Experience Builder with the Suggested Actions component. Record-Triggered After Save Flow—Launches after a record is created or updated and has been saved. This type of flow can make changes only to records related to the triggering record and runs in the background without user interaction. Record-Triggered After Save Approval Orchestration—Launches when a record is created or updated. An approval orchestration lets you create a multi-step, multi-user approval process. Record-Triggered After Save Orchestration—Launches when a record is created or updated. An orchestration lets you create a multi-step, multi-user process. This type of flow runs in the background without user interaction. Record-Triggered Before Delete Flow—Launches when a record is deleted. This type of flow runs in the background without user interaction. Record-Triggered Before Save Flow—Launches after a record is created or updated, but hasn't been saved. This type of flow can make changes only to the triggering record and runs in the background without user interaction. Record Query—Launches when scheduled to perform actions on or send messages to individuals from the queried customer relationship management record. This value is available in API version 67.0 and later. Routing Autolaunched Flow—Launches when a customer initiates a chat, voice, or messaging conversation and routes the work item to a queue, skill, agent, or bot. This type of flow runs in the background without user interaction. Schedule-Triggered Flow—Launches at a specified time and frequency for each record that meets the flow criteria. This type of flow runs in the background without user interaction. Scheduler Appointments Screen Flow—Launches when invoked by a user and lets them schedule appointments in Salesforce Scheduler. This type of flow collects or displays information and requires user interaction. Screen Flow—Launches from Lightning pages, Experience Cloud sites, quick actions and more. This type of flow collects or displays information and requires user interaction. Segment-Triggered Autolaunched Flow—Launches when activated or when scheduled for qualified Data Cloud segment members. This type of flow runs in the background without user interaction. Segment-Triggered Flow—Launches when activated or when scheduled for qualified Data Cloud segment members. This type of flow runs in the background without user interaction. Segment-Triggered Flow v0—Deprecated. Launches when activated or when scheduled for qualified Data Cloud segment members. This type of flow runs in the background without user interaction. Stage Management Evaluation Autolaunched Flow—Launches when invoked by a stage transition in Stage Management to evaluate custom criteria for a stage or step. To indicate that the criteria are met, set the output variable isCriteriaMet to True. Survey Enrich Autolaunched Flow—Launches in the context of a survey response and can't execute without a corresponding survey. Use it to conditionally map a response to a record, create records, or send notifications. This type of flow runs in the background without user interaction. Survey Screen Flow—Launches when invoked by an internal or external survey participant. This type of flow saves participant feedback as survey response records and requires user interaction. Transaction Security Autolaunched Flow—Used by Condition Builder to declaratively build customized security policies to protect data. This type of flow runs in the background without user interaction. User Provisioning Screen Flow—Launches when invoked by a user and allows them to create a user account and link it to a third-party service or app. This type of flow requires user interaction. This field is available in API version 60.0 and later."
+    },
+    "Health": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The value of ElementErrors divided by ElementEntries multiplied by 100. This field is available in API version 67.0 and later."
+    },
+    "Id": {
+      "type": "text",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the flow."
+    },
+    "IsLightningAppEnabled": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this flow’s flow type has been enabled in Lightning Experience apps. The default value is false. This field is available in API version 61.0 and later."
+    },
+    "IsOverridable": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the flow record version is overridable. The default value is false. This field is available in API version 61.0 and later."
+    },
+    "IsPaused": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the segment-triggered flow is paused (true) or not (false). When the value is true, no additional records are processed until the flow is resumed. The default value is false. This field is available in API version 60.0 and later."
+    },
+    "IsTemplate": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the flow record version is a template. Template flow record versions are automatically shared with all users in your Salesforce org. The default value is false. This field is available in API version 61.0 and later."
+    },
+    "LogsEnabledFlowVersion": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version number of the flow that enabled persistent logging. This field is available in API version 66.0 and later."
+    },
+    "Manageable State": {
+      "type": "boolean",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the flow record that is contained in a package. Valid values are: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged This field is available in API version 60.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The label of the flow."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix associated with the flow record. This field is available in API version 61.0 and later."
+    },
+    "OverriddenById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the flow that’s overriding the current flow. This field is available in API version 61.0 and later. This field is a relationship field.",
+      "relationship_name": "OverriddenBy",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowRecord"
+    },
+    "OverriddenFlowId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the flow that the current flow is overriding. This field is available in API version 61.0 and later. This field is a relationship field.",
+      "relationship_name": "OverriddenFlow",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowRecord"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "The ID of the user who owns the flow. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "ProgressStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The progress status of the flow. Valid values are: Canceled— Indicates a flow that has been deactivated by a user who doesn’t process previously added records. No additional records are added to this flow. Completed— Indicates a flow that is complete. No additional records are eligible to be processed in this flow. Draft—Indicates a flow that is under construction and isn’t active yet. This status can be invalid because it needs additional information before it can be activated by the user. Error—Indicates a flow that has been deactivated because it encountered an error. When the error occurs, the error details are emailed to up to 5 users with the Manage Flows permission who most recently logged into Salesforce. Finishing— Indicates a flow that has been deactivated by a user, but is finishing previously added records that are eligible to run to completion. No additional records are added to this flow. InProgress— Indicates a flow that is running or ready to run. PreparingData— Indicates a flow that is preparing the necessary data to run. This process can take up to 2 hours. Scheduled— Indicates a flow scheduled to start on the date and time selected by the user. UnderReview—Indicates a flow that is under review before it is activated. This value is available in API version 64.0 and later."
+    },
+    "ScheduledStartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the flow is scheduled to start."
+    },
+    "SegmentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the segment used in the flow. This field is a relationship field.",
+      "relationship_name": "Segment",
+      "relationship_type": "Lookup",
+      "refers_to": "MarketSegment"
+    },
+    "SourceTemplateId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the template from which the current flow was created. This field is available in API version 61.0 and later. This field is a relationship field.",
+      "relationship_name": "SourceTemplate",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowRecord"
+    },
+    "TriggerObjectOrEventLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label of the object or platform event that triggers this flow. This field is available in API version 61.0 and later."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The trigger type of the flow. Specifies what causes the flow to run. Valid values are: Activation—The flow starts when an activation is published. This type of flow runs in the background without user interaction. This value is available in API version 64.0 and later. AdminAutomationEvent—The flow starts when an automation event is received. This type of flow runs in the background without user interaction. This value is available in API version 64.0 and later. Automation Event—The flow starts when an automation event such as an SMS subscription occurs. This value is available in API version 62.0 and later. CampaignMember—The flow starts at the scheduled time of a campaign member. This value is available in API version 67.0 and later. Capability—The flow starts when the specified capability that the flow integrates with is invoked. This value is available in API version 60.0 and later. DataCloudDataChange—The flow starts when data model object (DMO) or calculated insight object (CIO) conditions are met. This value is available in API version 59.0 and later. DataGraphDataChange—The flow starts when conditions are met in the specified data graph field. This value is available in API version 63.0 and later. EnterpriseScaleExternalSystemChange—The flow starts when triggered by MuleSoft. This value is available in API version 67.0 and later. EventDrivenJourney—Reserved for internal use. ExternalSystemChange—The flow starts when an external system change event is received. This value is available in API version 61.0 and later. FormSubmissionEvent—The flow runs when a user submits data via a webform. In Flow Builder, this value corresponds to Form. This value is available in API version 60.0 and later. List—The flow starts at the scheduled time of a list. This value is available in API version 67.0 and later. PlatformEvent—The flow starts when a platform event message is received. This value is available in API version 49.0 and later. RecordAfterSave—The flow starts after a record is saved. This value is available in API version 49.0 and later. RecordBeforeDelete—Deleting a record triggers an autolaunched flow before the record is deleted from the database. This value is available in API version 50.0 and later. RecordBeforeSave—Creating and/or updating a record triggers an autolaunched flow to make additional updates to that record before it's saved to the database. This value is available in API version 48.0 and later. RecordQuery—The flow starts at the scheduled time of a queried customer relationship management record. This value is available in API version 67.0 and later. Scheduled—The flow starts at the scheduled time. This value is available in API version 47.0 and later. Segment—The flow runs at the scheduled time of a segment."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **FlowRecordChangeEvent (API version 62.0)**: Change events are available for the object.\n- **FlowRecordOwnerSharingRule**: Sharing rules are available for the object.\n- **FlowRecordShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"FlowRecord\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ActiveVersion\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecordVersion\"/>\n        <element name=\"ActiveVersionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ApiName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ApiVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"AreMetricsLoggedToDataCloud\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"AssociatedRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"AssociatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Builder\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CapacityCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ElementEntries\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ElementErrors\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ErrorCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ErrorDetails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowDefinition\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowRecordVersionElementOccurrences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowRecordVersionOccurrences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowRecordVersions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowSubcategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Flows\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Health\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"InstalledPackageName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsCitizenEnabled\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOverridable\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPaused\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"List\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"ListId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LogsEnabledFlowVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ManageableState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OverriddenBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecord\"/>\n        <element name=\"OverriddenById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"OverriddenFlow\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecord\"/>\n        <element name=\"OverriddenFlowId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProgressStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ScheduledStartDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SourceTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowRecord\"/>\n        <element name=\"SourceTemplateId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"StartSource\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TriggerObjectOrEventLabel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ActivationId": {
+      "field_label": "Segment Activation ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActiveVersionId": {
+      "field_label": "Flow Version ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ApiName": {
+      "field_label": "API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ApiVersion": {
+      "field_label": "API Version",
+      "type": "int",
+      "digits": "9"
+    },
+    "AreMetricsLoggedToDataCloud": {
+      "field_label": "Log Metrics to Data Cloud",
+      "type": "boolean"
+    },
+    "AssociatedRecordId": {
+      "field_label": "Associated Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Builder": {
+      "field_label": "Built with",
+      "type": "string",
+      "length": "255"
+    },
+    "CapacityCategory": {
+      "field_label": "Capacity Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataSpaceId": {
+      "field_label": "Data Space ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "65535"
+    },
+    "ElementEntries": {
+      "field_label": "Element Runs",
+      "type": "int",
+      "digits": "9"
+    },
+    "ElementErrors": {
+      "field_label": "Element Errors",
+      "type": "int",
+      "digits": "9"
+    },
+    "ErrorCode": {
+      "field_label": "Error Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ErrorDetails": {
+      "field_label": "Error Details",
+      "type": "string",
+      "length": "255"
+    },
+    "FlowCategory": {
+      "field_label": "Category",
+      "type": "string",
+      "length": "255"
+    },
+    "FlowDefinition": {
+      "field_label": "Flow Definition",
+      "type": "string",
+      "length": "15"
+    },
+    "FlowLabel": {
+      "field_label": "Flow Label",
+      "type": "string",
+      "length": "255"
+    },
+    "FlowSubcategory": {
+      "field_label": "Subcategory",
+      "type": "string",
+      "length": "255"
+    },
+    "FlowType": {
+      "field_label": "Flow Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Health": {
+      "field_label": "Element Error Rate",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Flow ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InstalledPackageName": {
+      "field_label": "Package Name",
+      "type": "string",
+      "length": "255"
+    },
+    "IsCitizenEnabled": {
+      "field_label": "Enabled for Non-Admins",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsOverridable": {
+      "field_label": "Overridable",
+      "type": "boolean"
+    },
+    "IsPaused": {
+      "field_label": "Paused",
+      "type": "boolean"
+    },
+    "IsTemplate": {
+      "field_label": "Template",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "ListId": {
+      "field_label": "List ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LogsEnabledFlowVersion": {
+      "field_label": "Flow Version with Logs Enabled",
+      "type": "int",
+      "digits": "9"
+    },
+    "ManageableState": {
+      "field_label": "Package State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Flow Label",
+      "type": "string",
+      "length": "255"
+    },
+    "NamespacePrefix": {
+      "field_label": "Flow Namespace",
+      "type": "string",
+      "length": "40"
+    },
+    "OverriddenById": {
+      "field_label": "Flow ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OverriddenFlowId": {
+      "field_label": "Flow ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProgressStatus": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ScheduledStartDate": {
+      "field_label": "Scheduled Start Date",
+      "type": "datetime"
+    },
+    "SegmentId": {
+      "field_label": "Segment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SourceTemplateId": {
+      "field_label": "Flow ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "StartSource": {
+      "field_label": "Start Trigger",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TriggerObjectOrEventLabel": {
+      "field_label": "Triggering Object or Platform Event Label",
+      "type": "string",
+      "length": "255"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

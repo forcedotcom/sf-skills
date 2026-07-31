@@ -1,0 +1,156 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "AccountPlan - Data API",
+  "description": "Represents customer information with measurable objectives and executable steps to proactively manage and grow customer relationships. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountChallenges": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The key obstacles to the growth of the account."
+    },
+    "AccountCmptvWeaknesses": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The shortcomings that hinder the account’s ability to outperform competitors in the market."
+    },
+    "AccountCompetitiveStrengths": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The abilities of the account to outperform their competitors in the market."
+    },
+    "AccountCompetitors": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The businesses or companies that offer similar products or services and compete for the same target market as the account."
+    },
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Account record. This field is a relationship field.",
+      "relationship_name": "Account",
+      "refers_to": "Account"
+    },
+    "AccountIndustryTrends": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The shifts in the pattern of the industry that are specific to the account."
+    },
+    "AccountInternalRiskRating": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The rating that’s assigned to assess the risk level of the account. To access this field, you must have an FSC Sales or a Financial Services Cloud Extension license."
+    },
+    "AccountPrfmIndicators": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The key performance indicators used by the account to measure the success and effectiveness of a product or service."
+    },
+    "AccountStrategicPriorities": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The key priorities of the account."
+    },
+    "AccountVision": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The long-term value statement of the account."
+    },
+    "CallingStrategy": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "How frequently the relationship team meets with the account. To access this field, you must have an FSC Sales or a Financial Services Cloud Extension license."
+    },
+    "CallingStrategyNotes": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The outline of the format and organization of account meetings. To access this field, you must have an FSC Sales or a Financial Services Cloud Extension license."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The end date of the account plan."
+    },
+    "FlexCard": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Omnistudio FlexCard. To access this field, you must have an FSC Sales or a Financial Services Cloud Extension license."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly. For example, accessed through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate isn’t null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the account plan."
+    },
+    "Notes": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The notes or observations for the account plan."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The owner of the account plan. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "RelationshipOpportunities": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The list of sales or potential deal opportunities in the relationship with the account."
+    },
+    "RelationshipStrengths": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The strengths in the relationship with the account."
+    },
+    "RelationshipSummary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A concise overview of the relationship dynamics with the account. To access this field, you must have an FSC Sales or a Financial Services Cloud Extension license."
+    },
+    "RelationshipThreats": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The possible concerns in the relationship with the account."
+    },
+    "RelationshipWeaknesses": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The shortcomings in the relationship with the account."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The start date of the account plan."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the status of the account plan. Possible values are: Active Inactive Not Started The default value is Not Started."
+    }
+  },
+  "special_access_rules": "This object is available if sales account plans are turned on.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AccountPlanChangeEvent**: Change events are available for the object.\n- **AccountPlanHistory**: History is available for tracked fields of the object.\n- **AccountPlanOwnerSharingRule**: Sharing rules are available for the object.\n- **AccountPlanShare**: Sharing is available for the object."
+}

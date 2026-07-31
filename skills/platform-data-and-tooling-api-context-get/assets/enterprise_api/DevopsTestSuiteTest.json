@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "DevopsTestSuiteTest - Data API",
+  "description": "Represents the association between a DevOps Test Suite and an individual DevOps Test, enabling tests to be organized, managed, and synchronized within a test suite. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "DevopsTestId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the DevOps Test associated with this test suite entry.",
+      "relationship_name": "DevopsTest",
+      "refers_to": "DevopsTest"
+    },
+    "DevopsTestSuiteId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "References the parent DevOps Test Suite that contains this test.",
+      "relationship_name": "DevopsTestSuite",
+      "relationship_type": "Master-detail",
+      "refers_to": "DevopsTestSuite (the master object)"
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the test is currently active within the test suite."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, and LastReferenceDate is not null, the user accessed this record or list view indirectly."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The system-generated unique identifier for the record."
+    },
+    "SyncLogId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "References the synchronization log associated with this test suite entry.",
+      "relationship_name": "SyncLog",
+      "refers_to": "DevopsTestProviderSyncLog"
+    },
+    "UniqueKey": {
+      "type": "textarea",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "Stores a unique identifier used to uniquely distinguish this record within the organization."
+    }
+  }
+}

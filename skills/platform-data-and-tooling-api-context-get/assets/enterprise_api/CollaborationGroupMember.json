@@ -1,0 +1,123 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CollaborationGroupMember - Data API",
+  "description": "Represents a member of a Chatter group. This object is available in API version 19.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CollaborationGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated CollaborationGroup. This is a relationship field.",
+      "relationship_name": "CollaborationGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "CollaborationGroup"
+    },
+    "CollaborationRole": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The role of a group member. Group owners and managers can change roles for members of their groups. The valid values are: Standard—Indicates that a user is a group member. Members can post and comment in the group. Admin—Indicates that a user is a group manager. Managers can post and comment, change member roles, edit group settings, add and remove members, delete posts and comments, and edit the group information field. Note: To change the group owner, use the OwnerId field on the CollaborationGroup object."
+    },
+    "LastFeedAccessDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time when a group member last accessed the group’s feed. The value is only updated when a member explicitly consumes the group’s feed, not when the member sees group posts in other feeds, like the profile feed."
+    },
+    "MemberId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the group member. This is a relationship field.",
+      "relationship_name": "Member",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "NotificationFrequency": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The frequency at which Salesforce sends Chatter group email digests to this member. Can only be set by the member or users with the “Modify All Data” permission. The valid values are: D—Daily W—Weekly N—Never P—On every post The default value is specified by the member in their Chatter email settings. In communities, the Email on every post option is disabled once more than 10,000 members choose this setting for the group. All members who had this option selected are automatically switched to Daily digests.",
+      "required": true
+    }
+  },
+  "usage": "Use this object to view, create, and delete Chatter group members. You must be a group owner or manager to create members for private Chatter groups.",
+  "wsdl_segment": "```xml\n<complexType name=\"CollaborationGroupMember\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CollaborationGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CollaborationGroup\"/>\n        <element name=\"CollaborationGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CollaborationRole\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastFeedAccessDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Member\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"MemberId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"NotificationFrequency\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CollaborationGroupId": {
+      "field_label": "CollaborationGroup ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CollaborationRole": {
+      "field_label": "Group Member Role",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Group Member Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActivityShared": {
+      "field_label": "Email and Meeting Sharing",
+      "type": "boolean"
+    },
+    "LastFeedAccessDate": {
+      "field_label": "Last Feed Access Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MemberId": {
+      "field_label": "Member ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NetworkId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "NotificationFrequency": {
+      "field_label": "Notification Frequency",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

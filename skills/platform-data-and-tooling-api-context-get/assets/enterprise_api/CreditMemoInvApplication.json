@@ -1,0 +1,238 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "CreditMemoInvApplication - Data API",
+  "description": "Represents an amount applied from a credit memo to an invoice. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Filter, Sort",
+      "description": "The amount of the credit memo that was applied to or unapplied from the invoice."
+    },
+    "AppliedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the credit memo was applied. If the credit memo invoice application's type is Unapplied, this value is inherited from the Applied date of the credit memo referenced in the AssociatedLineId."
+    },
+    "AssociatedLineId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "For a credit memo invoice application that represents an unapplied credit memo, this field shows the original credit memo invoice application. This field is a relationship field.",
+      "relationship_name": "AssociatedLine",
+      "relationship_type": "Lookup",
+      "refers_to": "CreditMemoInvApplication"
+    },
+    "CreditMemoBalance": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The balance of a credit memo after a credit memo is applied or unapplied. This field is a snapshot of the credit memo's balance after the action. It isn't updated after further changes to the credit memo balance."
+    },
+    "CreditMemoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The credit memo that was applied or unapplied. This field is a relationship field.",
+      "relationship_name": "CreditMemo",
+      "relationship_type": "Lookup",
+      "refers_to": "CreditMemo"
+    },
+    "CreditMemoInvoiceNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Number of the invoice to which a credit memo is applied."
+    },
+    "Date": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date when the credit memo amount was applied to the invoice."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the credit applied to an invoice."
+    },
+    "EffectiveDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The effective date of the application or unapplication of credit. Users can provide this value when applying or unapplying the credit memo. This field is optional and provided only for reporting purposes. It doesn't affect the credit memo invoice application's other fields."
+    },
+    "HasBeenUnapplied": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Shows whether this credit memo application has been unapplied from the target invoice. Possible values are: NA No Yes"
+    },
+    "ImpactAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The net adjustment to the invoice's balance after a credit memo is applied or unapplied. If a credit memo was applied, this value is the negative version of the credit memo invoice application's Amount. If a credit memo was unapplied, this value is the positive version of the credit memo invoice application's Amount. This field is a calculated field."
+    },
+    "InvoiceBalance": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The balance of the credit memo after a credit memo is applied or unapplied. This field is a snapshot of the credit memo's balance after the action. It isn't updated after further changes to the credit memo balance."
+    },
+    "InvoiceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the invoice to which credit is applied. This field is a relationship field.",
+      "relationship_name": "Invoice",
+      "relationship_type": "Lookup",
+      "refers_to": "Invoice"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the credit memo line application was generated because of an apply action (application) or an unapply action (unapplication). Possible values are: Applied Unapplied"
+    },
+    "UnappliedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when this application was unapplied from the target invoice."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CreditMemoInvApplicationFeed**: Feed tracking is available for the object.\n- **CreditMemoInvApplicationHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AppliedDate": {
+      "field_label": "Applied Date",
+      "type": "datetime"
+    },
+    "AssociatedLineId": {
+      "field_label": "Credit Memo Invoice Application ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CreditMemoBalance": {
+      "field_label": "Credit Memo Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreditMemoId": {
+      "field_label": "Credit Memo ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreditMemoInvoiceNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Date": {
+      "field_label": "Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "EffectiveDate": {
+      "field_label": "Effective Date",
+      "type": "datetime"
+    },
+    "HasBeenUnapplied": {
+      "field_label": "Has Been Unapplied",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Credit Memo Invoice Application ID",
+      "type": "id",
+      "length": "18"
+    },
+    "ImpactAmount": {
+      "field_label": "Impact Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "InvoiceBalance": {
+      "field_label": "Invoice Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "InvoiceId": {
+      "field_label": "Invoice ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LegalEntityAccountingPeriodId": {
+      "field_label": "Legal Entity Accounting Period ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UnappliedDate": {
+      "field_label": "Unapplied Date",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

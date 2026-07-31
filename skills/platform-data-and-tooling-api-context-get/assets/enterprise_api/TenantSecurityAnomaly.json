@@ -1,0 +1,88 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityAnomaly - Data API",
+  "description": "Stores detected anomalies. This object is available in API version 64.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the individual detail record. This field is unique across all tenants."
+    },
+    "EventDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time when the anomaly was reported. For example, 2020-01-20T19:12:26.965Z. The most granular setting is milliseconds."
+    },
+    "EventDetails": {
+      "type": "textarea",
+      "properties": "Create",
+      "description": "JSON text that contains the details for the unsubscribe all event, such as the timestamp for when the event happened."
+    },
+    "EventIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The unique ID of the event, which is shared with the corresponding storage object."
+    },
+    "EventName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the event, which is Api Anomaly."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the type of metric counted. This field is unique within your organization."
+    },
+    "MetricsType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of feature collected by this metric."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the feature for which data is being collected."
+    },
+    "Score": {
+      "type": "double",
+      "properties": "Filter, idLookup, Nillable, Sort",
+      "description": "A number from 0 through 100 that represents the anomaly score for the API execution or export tracked by this event. The anomaly score shows how the current API activity differs from the user’s typical activity. A low score indicates that the user’s current API activity is similar to the usual activity, and a high score indicates that it’s different."
+    },
+    "Summary": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A text summary of the API anomaly that caused this event."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant where the feature was applied."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the connected tenant where the feature was enabled or disabled."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The origin user’s unique ID."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The origin username in the format of user@company.com at the time that the event was created."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **TenantSecurityFeatureChangeEvent**: Change events are available for the object.\n- **TenantSecurityFeatureFeed**: Feed tracking is available for the object.\n- **TenantSecurityFeatureHistory**: History is available for tracked fields of the object.\n- **TenantSecurityFeatureOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityFeatureShare**: Sharing is available for the object."
+}

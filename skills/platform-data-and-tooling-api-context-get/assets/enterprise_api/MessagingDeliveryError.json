@@ -1,0 +1,196 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "MessagingDeliveryError - Data API",
+  "description": "Represents a log of triggered outbound failures to verify when a triggered outbound has failed. This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CreatedById": {
+      "type": "reference",
+      "properties": "Defaulted on createFilter, Group, Sort",
+      "description": "ID of the user who created the error."
+    },
+    "CreatedDate": {
+      "type": "dateTime",
+      "properties": "Defaulted on create, Filter, Sort",
+      "description": "Date the error was created."
+    },
+    "DestinationPhoneNumber": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The recipient of the phone call."
+    },
+    "FailureReason": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The provided reason for why the message failed."
+    },
+    "FlowEntity": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The entity that triggered the flow to send the message."
+    },
+    "FullMessage": {
+      "type": "textarea",
+      "description": "Plain error text."
+    },
+    "Id": {
+      "type": "id",
+      "properties": "Defaulted on create, Filter, Group, idLookup, Sort",
+      "description": "Identifier of the error."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the error has been deleted."
+    },
+    "LastModifiedById": {
+      "type": "reference",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The ID of the user who last modified the error log."
+    },
+    "LastModifiedDate": {
+      "type": "dateTime",
+      "properties": "Defaulted on create, Filter, Sort",
+      "description": "Date when the Messaging error log was last modified."
+    },
+    "MessagingChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the MessagingChannel. This is a relationship field.",
+      "relationship_name": "MessagingChannel",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingChannel"
+    },
+    "MessagingEndUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Identifier for the Messaging user. This is a relationship field.",
+      "relationship_name": "MessagingEndUser",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingEndUser"
+    },
+    "MessagingTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the Messaging template used. This is a relationship field.",
+      "relationship_name": "MessagingTemplate",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingTemplate"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Namefield, Sort",
+      "description": "Name of the error. Maximum length is 80 characters."
+    },
+    "SystemModstamp": {
+      "type": "dateTime",
+      "properties": "Defaulted on create, Filter, Sort",
+      "description": "System modification time for the Messaging delivery error log."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The kind of event that occurred. Possible values include: Error (Default) Warning"
+    }
+  },
+  "field_reference": {
+    "CorrelationIdentifier": {
+      "field_label": "Correlation Identifier",
+      "type": "string",
+      "length": "36"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Date",
+      "type": "datetime"
+    },
+    "DestinationPhoneNumber": {
+      "field_label": "Recipient Phone",
+      "type": "string",
+      "length": "64"
+    },
+    "FailureReason": {
+      "field_label": "Error",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "FlowEntity": {
+      "field_label": "Source Record ID",
+      "type": "string",
+      "length": "18"
+    },
+    "FullMessage": {
+      "field_label": "Message",
+      "type": "textarea",
+      "length": "65536"
+    },
+    "Id": {
+      "field_label": "Messaging Delivery Error ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MessagingChannelId": {
+      "field_label": "Messaging Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MessagingEndUserId": {
+      "field_label": "Messaging User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MessagingTemplateId": {
+      "field_label": "Messaging Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Messaging Delivery Error Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

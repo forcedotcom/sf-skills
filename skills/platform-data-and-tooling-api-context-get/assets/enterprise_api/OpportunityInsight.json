@@ -1,0 +1,110 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "OpportunityInsight - Data API",
+  "description": "Represents an individual insight (deal prediction, follow-up reminder, or key moment) related to an opportunity record.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActualHeardWithinDays": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of days it has been since a prospect has responded for insights of type Prospect has not responded and No communication."
+    },
+    "CloseDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The close date of the related opportunity for insights of type Opportunity is overdue and Opportunity is unlikely to close in time."
+    },
+    "CompetitorName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field has been deprecated as of API version 45.0."
+    },
+    "ContactName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is not in use as of API version 46.0."
+    },
+    "ContactTitle": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is not in use as of API version 46.0."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization."
+    },
+    "Division": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The division of the related record."
+    },
+    "ExpectedHeardWithinDays": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The expected number of days it takes to hear back from a prospect for insights of type Prospect has not responded and No communication."
+    },
+    "LastHeard": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date when the related prospect was last heard from for insights of type Prospect has not responded."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last interacted with this record, directly or indirectly."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it's possible that the user only accessed this record or list view (LastReferencedDate), but not viewed it."
+    },
+    "OpportunityId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related opportunity record."
+    },
+    "Rationale": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "The explanation for an insight, providing more background information and details that are specific to the org."
+    },
+    "Reason": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The reason why a specific insight type is appearing. Relevant to the following insights: Opportunity is unlikely to close in time Opportunity slowing Opportunity boosting Time-consuming opportunity"
+    },
+    "TaskDue": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date that a task associated with the related opportunity record is due."
+    },
+    "Title": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "The title of the insight."
+    },
+    "TrendType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The trend type of the insight. Possible values include: Negative Positive Informational"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of insight. Possible values include: Opportunity is unlikely to close in time Prospect has not responded Opportunity slowing Opportunity boosting Time-consuming opportunity No communication Re-engaged opportunity Opportunity has an overdue task Opportunity is overdue Opportunity has no open activity Unusual opportunity amount"
+    }
+  },
+  "special_access_rules": "To see an insight related to a specific opportunity, users need a Sales Cloud Einstein license and access to the opportunity record. As of the Spring ’20 release, Pardot and Sales Engagement users no longer have access to this object.",
+  "usage": "This object is read-only and isn’t supported in workflows, triggers, or process builder."
+}

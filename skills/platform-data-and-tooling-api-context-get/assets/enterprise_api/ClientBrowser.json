@@ -1,0 +1,82 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ClientBrowser - Data API",
+  "description": "Represents a cookie added to the browser upon login, and also includes information about the browser application where the cookie was inserted. This object is available in version 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "FullUserAgent": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Detailed information about the client (browser). For example, Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1"
+    },
+    "LastUpdate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents the last time the cookie was changed."
+    },
+    "ProxyInfo": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The browser’s current proxy information."
+    },
+    "UsersId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user associated with this item. This is a relationship field.",
+      "relationship_name": "Users",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    }
+  },
+  "usage": "At every login, the device the login request is from is checked against the known devices using ClientBrowser. A match means a cookie was found on the browser that matches an entry in the ClientBrowser table, so the device is known. No match means that no matching cookie was found, so the device is unknown, and the user is asked to confirm their identity.",
+  "wsdl_segment": "```xml\n<complexType name=\"ClientBrowser\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FullUserAgent\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastUpdate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ProxyInfo\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Users\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"UsersId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FullUserAgent": {
+      "field_label": "Full User Agent",
+      "type": "string",
+      "length": "1024"
+    },
+    "Id": {
+      "field_label": "Client Browser ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastUpdate": {
+      "field_label": "Last Update",
+      "type": "datetime"
+    },
+    "ProxyInfo": {
+      "field_label": "Proxy Info",
+      "type": "string",
+      "length": "1024"
+    },
+    "UsersId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

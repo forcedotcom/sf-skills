@@ -1,0 +1,136 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "TabDefinition - Data API",
+  "description": "Represents a custom tab. Returns only the tabs that the current user has access to. This object is available in API version 43.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Unique identifier for the tab. Always retrieve this value before using it, because the value isn’t guaranteed to stay the same from one release to the next. Simplify queries by using this field instead of making multiple queries."
+    },
+    "IsAvailableInAloha": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the tab is available in Salesforce Classic."
+    },
+    "IsAvailableInDesktop": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the tab is available on desktop."
+    },
+    "IsAvailableInLightning": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the tab is available in Lightning Experience."
+    },
+    "IsAvailableInMobile": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the tab is available in the Salesforce mobile app."
+    },
+    "IsCustom": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the tab is a custom tab created by admins in the org."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The localized label corresponding to the MasterLabel field in the Tooling API object."
+    },
+    "MobileUrl": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL that can be used to launch this tab in the Salesforce mobile app."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The developer name of the tab."
+    },
+    "SobjectName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the sObject corresponding to the tab."
+    },
+    "Url": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL that can be used to launch this tab on desktop."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n<complexType name=\"TabDefinition\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AppTabs\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Colors\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Icons\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsAvailableInAloha\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsAvailableInDesktop\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsAvailableInLightning\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsAvailableInMobile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsCustom\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MobileUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SobjectName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Url\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "DurableId": {
+      "field_label": "Tab Definition Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Tab Definition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAvailableInAloha": {
+      "field_label": "Is Available In Aloha",
+      "type": "boolean"
+    },
+    "IsAvailableInDesktop": {
+      "field_label": "Is Available In Desktop",
+      "type": "boolean"
+    },
+    "IsAvailableInLightning": {
+      "field_label": "Is Available In Lightning",
+      "type": "boolean"
+    },
+    "IsAvailableInMobile": {
+      "field_label": "Is Available In Mobile",
+      "type": "boolean"
+    },
+    "IsCustom": {
+      "field_label": "Is Custom",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Label",
+      "type": "string",
+      "length": "255"
+    },
+    "MobileUrl": {
+      "field_label": "Mobile URL",
+      "type": "string",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SobjectName": {
+      "field_label": "sObject Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Url": {
+      "field_label": "URL",
+      "type": "string",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

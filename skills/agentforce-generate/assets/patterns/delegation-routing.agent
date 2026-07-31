@@ -18,11 +18,67 @@
 #   TRANSITION: "Go to this subagent and stay there"
 #
 # ★ Implementation Note:
-#   If delegation syntax doesn't work in your deployment method,
-#   use the bidirectional-routing.agent pattern which manually
-#   tracks return context via variables.
+#   If delegation syntax does not work in your deployment method, use explicit
+#   transitions. For a fixed caller, transition directly back without state.
 #
-# This is a PARTIAL template - integrate into a complete agent file
+# This is a COMPLETE template - customize metadata and task instructions.
+
+system:
+    instructions: |
+        You coordinate general and specialist help. Delegate a bounded
+        consultation when its result is needed in the current task. Use a
+        transition only when the user's work should continue in another
+        request handler.
+    messages:
+        welcome: "Hello! How can I help?"
+        error: "I couldn't complete that request."
+
+access:
+    default_agent_user: "agent@company.salesforce.com"
+
+config:
+    developer_name: "Delegation_Routing_Agent"
+    agent_label: "Delegation and Transition"
+    description: "Demonstrates returning delegation and one-way transitions"
+
+language:
+    default_locale: "en_US"
+
+start_agent main_hub:
+    label: "Main Help"
+    description: "Coordinates general requests and bounded expert consultations"
+
+    reasoning:
+        instructions: ->
+            | Answer general questions directly. For a bounded expert question,
+              delegate to the specialist and use the returned answer. For an
+              order request, transition to order help.
+        actions:
+            consult_expert: @subagent.specialist
+                description: "Consult a specialist, receive the result, and continue the current task"
+            go_orders: @utils.transition to @subagent.orders
+                description: "Move permanently to order help"
+
+subagent specialist:
+    label: "Specialist"
+    description: "Answers bounded expert questions delegated by the main help task"
+
+    reasoning:
+        instructions: ->
+            | Provide a focused answer to the delegated expert question. Do not
+              broaden the task or route elsewhere.
+
+subagent orders:
+    label: "Order Help"
+    description: "Handles order questions after a one-way transition"
+
+    reasoning:
+        instructions: ->
+            | Help with the user's order question. If the user changes intent,
+              return to general request handling.
+        actions:
+            back_to_main: @utils.transition to @subagent.main_hub
+                description: "Return after the user changes intent"
 
 # ═══════════════════════════════════════════════════════════════
 # PATTERN 1: Subagent Delegation (can return)
@@ -55,24 +111,19 @@
 # User continues in that subagent until another transition occurs.
 
 # ═══════════════════════════════════════════════════════════════
-# PATTERN 3: Manual Bidirectional (fallback pattern)
+# PATTERN 3: Explicit Fixed Return (fallback pattern)
 # ═══════════════════════════════════════════════════════════════
 
-# If delegation doesn't work, use variables to track return:
-# See: bidirectional-routing.agent for full implementation
-
-variables:
-	return_subagent: mutable string = ""
-		description: "Subagent to return to after specialist"
-	specialist_result: mutable string = ""
-		description: "Result from specialist consultation"
-
-# Before going to specialist, store return address:
-# set @variables.return_subagent = "main_hub"
+# If delegation is unavailable and the caller is fixed:
+#
+# # In the caller:
 # go_specialist: @utils.transition to @subagent.specialist
-
-# In specialist, transition back when done:
+#
+# # In the specialist:
 # return_home: @utils.transition to @subagent.main_hub
+#
+# Store a dynamic return address only when one specialist serves multiple
+# callers and deterministic logic reads, clears, and resets that address.
 
 # ═══════════════════════════════════════════════════════════════
 # COMPARISON TABLE

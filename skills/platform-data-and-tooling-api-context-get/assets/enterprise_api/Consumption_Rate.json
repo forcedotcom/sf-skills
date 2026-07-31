@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "Consumption Rate - Data API",
+  "description": "Consumption rates describe the billing rate for a range of usage within a consumption schedule. All consumption schedules require at least one consumption rate in order to rate usage on a usage product. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ConsumptionScheduleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The consumption schedule that contains the consumption rate. This is a relationship field.",
+      "relationship_name": "ConsumptionSchedule",
+      "relationship_type": "Lookup",
+      "refers_to": "ConsumptionSchedule"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Possible values are: AUD—Australian Dollar CAD—Canadian Dollar GBP—British Pound JPY—Japanese Yen USD—U.S. Dollar"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Description of the consumption rate."
+    },
+    "LowerBound": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The lowest quantity of usage for the consumption rate."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Default name of this record. Label is Product Name.",
+      "required": true
+    },
+    "Price": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The price for usage that falls within the consumption rate’s bounds."
+    },
+    "PricingMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "How Salesforce applies the consumption rate’s price to the total quantity of usage within a usage summary. Possible values are: FlatFee—Salesforce applies the rate’s price to the entire quantity of usage. PerUnit—Salesforce applies the rate’s price to each individual quantity of usage within the usage summary."
+    },
+    "ProcessingOrder": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The order for processing the usage rate across multiple rates. Consumption rates are evaluated beginning with the lowest processing order."
+    },
+    "UpperBound": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The highest quantity of usage for the consumption rate."
+    }
+  }
+}

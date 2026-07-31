@@ -1,0 +1,149 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionPlanTemplateVersion - Data API",
+  "description": "Represents the version of an action plan template. This object is available in API version 44.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActionPlanTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Group",
+      "description": "The ID of the action plan template this version represents."
+    },
+    "ActivationDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort,",
+      "description": "The date and time at which this version became active."
+    },
+    "InactivationDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date and time at which this version became inactive."
+    },
+    "IsLocked": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this action plan template version is locked or not. The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort, , Sort",
+      "description": "The most recent date on which a user referenced this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent date on which a user viewed this record."
+    },
+    "MayEdit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this action plan template version can be edited. The default value is false."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update,",
+      "description": "The name of this version item."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The action plan template version’s state. Possible values are: Draft Final – Published Obsolete ReadOnly"
+    },
+    "Version": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort",
+      "description": "The index number of this action plan template version."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **ActionPlanTemplateVersionChangeEvent**: Change events are available for the object.\n- **ActionPlanTemplateVersionFeed**: Feed tracking is available for the object.\n- **ActionPlanTemplateVersionHistory**: History is available for tracked fields of the object.\n- **ActionPlanTemplateVersionOwnerSharingRule**: Sharing rules are available for the object.\n- **ActionPlanTemplateVersionShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ActionPlanTemplateId": {
+      "field_label": "Action Plan Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivationDateTime": {
+      "field_label": "Activation Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Action Plan Template Version ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InactivationDateTime": {
+      "field_label": "Inactivation Date",
+      "type": "datetime"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Version Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Version": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

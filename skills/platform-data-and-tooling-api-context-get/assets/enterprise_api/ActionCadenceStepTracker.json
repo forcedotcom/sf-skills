@@ -1,0 +1,272 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ActionCadenceStepTracker - Data API",
+  "description": "Represents a step in an active cadence for a specific cadence target. This object is available in API version 48.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ActionCadenceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the ActionCadence that is related to the ActionCadenceStep. This field is a relationship field.",
+      "relationship_name": "ActionCadence",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadence"
+    },
+    "ActionCadenceName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the related ActionCadence object."
+    },
+    "ActionCadenceStepId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ActionCadenceStepTracker is the runtime version of an ActionCadenceStep. This field contains the ID of the related ActionCadenceStep. This field is a relationship field.",
+      "relationship_name": "ActionCadenceStep",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadenceStep"
+    },
+    "ActionCadenceTrackerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related ActionCadenceTracker. This field is a relationship field.",
+      "relationship_name": "ActionCadenceTracker",
+      "relationship_type": "Lookup",
+      "refers_to": "ActionCadenceTracker"
+    },
+    "ActionTakenDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time that the action described in this step was taken."
+    },
+    "BranchIterationCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times a target has entered a specific branch within the cadence. This field is available in API version 62.0 and later."
+    },
+    "Channel": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The communication medium used for this step in an active cadence. This field is available in API version 62.0 and later. Possible values are: Email"
+    },
+    "CompletedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user ID of the sales rep who completed this step. A step can be assigned to several users before it’s completed. This field is available in API version 50.0 and later. This field is a relationship field.",
+      "relationship_name": "CompletedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "CompletionDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date this step completed. A step is completed either when the action is taken, or the step is skipped."
+    },
+    "CompletionReason": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The reason that this step completed: Possible values are: AutomaticallyCompleted — The sales rep successfully completed this step and moved to the next one. Salesforce automatically marks this step as completed. AutomaticallyExited — The step exited because a global exit condition occurred. This value is available in API version 49.0 and later. ManuallyCompleted — The sales rep manually marked this step as completed. ManuallySkipped — The sales rep skipped this step."
+    },
+    "DueDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Some steps have a due date to indicate when they must be completed. If this step has been assigned a due date, this field contains the date and time it is due."
+    },
+    "ErrorCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Possible values are: AUTO_EMAIL_DAILY_LIMIT_REACHED AUTO_EMAIL_ORG_SETTING_OFF AUTO_LIST_MQ_MAX_RETRIES_FAILED BCC_NOT_ALLOWED_IF_BCC_COMPLIANCE_ENABLED EAC_GLOBAL_DATA_SOURCE_ERROR—EAC data source error EMAIL_ORG_SETTING_OFF EXCHANGE_MAX_MAILBOX_SIZE—Max Exchange mailbox size reached EXCHANGE_SEND_AS_DENIED FETCH_EMAIL_THREAD_FAILED FIX_WITH_RECONNECT—Data connection failed FROM_ADDRESS_FIELD_IS_ENCRYPTED—FromAddress field is encrypted GOOGLE_MAIL_SERVICE_NOT_ENABLED—Gmail service not enabled INVALID_DRAFT—Invalid email draft INVALID_FROM_ADDRESS INVALID_TARGET_EMAIL INVALID_TEMPLATE_ID INVALID_USER_EMAIL MAIL_PROVIDER_RATE_LIMIT_REACHED—Email provider rate limit reached MALFORMED_QUERY MAX_OUT_EMAIL_THREAD_RETRY MAX_OUT_LLMG_RETRY NON_EMAIL_UNKNOWN_ERROR—Unknown error NO_ACTIVE_ASDR_AGENT NO_ATTACHMENT_ACCESS NO_CONTENT_VERSION_ACCESS NO_LIST_EMAIL_PERMISSION NO_TARGET_ACCESS NO_TOS_SIQ ORG_WIDE_AUTO_EMAIL_LIMIT_REACHED ORG_WIDE_DAILY_EMAIL_LIMIT_REACHED OTHER_REQ_FIELD_MISSING—Other required field missing PARDOT_MERGE_FIELD_RENDERING_ERROR POST_SEND_EXCEPTION RETRIES_MAX_EXCEEDED—Maximum retries exceeded RETRY_LATER SCHEDULED_EMAIL_FAILED—Unknown error SENDER_MAILBOX_NOT_FOUND SHARE_LIMIT_EXCEEDED TARGET_DO_NOT_CONTACT_ON—Target has Do Not Contact on TARGET_EMAIL_BOUNCED TARGET_EMAIL_EMPTY TARGET_HAS_INVALID_ID TARGET_HAS_OPT_OUT_EMAIL TEMPLATE_DELETED TEMPLATE_EMPTY—Email subject or body missing TEMPLATE_HAS_INVALID_MERGE_FIELD TEMPLATE_IS_INACTIVE TEMPLATE_MERGE_FIELD_RENDERING_ERROR TEMPLATE_NOT_PUBLIC—No access to template TEMPLATE_TOO_LARGE UNKNOWN—Email unknown error USER_HAS_LOST_HVS_ACCESS USER_IS_INACTIVE"
+    },
+    "GoToStepIterationCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times the action cadence step tracker was created for the same step in a cadence. Available in API version 58.0 and later."
+    },
+    "IsActionTaken": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "true if the sales rep completed an action during this step, such as making a phone call, otherwise false. The default value is false. This field is a calculated field."
+    },
+    "ScheduledStartDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the step starts. Available in API version 58.0 and later."
+    },
+    "SecondsOverdue": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If this step has a due date that has passed, this field contains the number of seconds that has elapsed since the due date. Once a sales rep takes action on the cadence step, the value of this field is the number of seconds elapsed between the due date and the time the action was taken. This field is a calculated field."
+    },
+    "State": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The current state of this step. Possible values are: Possible values are: Active — The current step that the sales rep is performing. There can only be one active step for a given target. Cancelled — The sales rep canceled the step. Salesforce doesn’t run any canceled steps. Completed — This step is finished. Either the work in the step completed, or the step was skipped. Error — An error occurred while executing this step. InProgress — The sales rep has started the step, but it isn’t yet completed. Paused —The sales rep paused the step. Queued — Used for automated email steps. The email step has started but the email is waiting in the queue to be sent. Scheduled — Used for email steps. An email can be scheduled to be sent later."
+    },
+    "StepTitle": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the related step."
+    },
+    "StepType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of step to execute. Possible values are: AutoSendAnEmail Branch Copilot CreateTask DaisyChain LinkedInConnection LinkedInMail ListenerBranch MakeACall PlatformScreenFlow Root SendAMessage SendAnEmail SubRoot Terminal Wait"
+    },
+    "TargetId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the prospect that is assigned to this cadence. This field is a polymorphic relationship field.",
+      "relationship_name": "Target",
+      "relationship_type": "Lookup",
+      "refers_to": "Contact, Lead"
+    },
+    "WasEverPaused": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the sales rep had ever paused this step (true), or not (false). This field is available in API version 50.0 and later."
+    }
+  },
+  "usage": "List all the steps that this prospect has completed in a given cadence:\n\nselect StepTitle from ActionCadenceStepTracker where TargetID = <target ID>\n\nand ActionCadenceId=<action cadence id> and StepType=\"Completed\"",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ActionCadenceStepTrackerChangeEvent (API version 48.0)**: Change events are available for the object.",
+  "field_reference": {
+    "ActionCadenceId": {
+      "field_label": "Cadence ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActionCadenceName": {
+      "field_label": "Cadence Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ActionCadenceStepId": {
+      "field_label": "Cadence Step ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActionCadenceTrackerId": {
+      "field_label": "Cadence Tracker ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActionTakenDateTime": {
+      "field_label": "Action Taken Date Time",
+      "type": "datetime"
+    },
+    "CompletedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CompletionDate": {
+      "field_label": "Completion Date",
+      "type": "datetime"
+    },
+    "CompletionReason": {
+      "field_label": "Completion Reason",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DueDateTime": {
+      "field_label": "Due Date Time",
+      "type": "datetime"
+    },
+    "ErrorCode": {
+      "field_label": "Error Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "GoToStepIterationCount": {
+      "field_label": "Step Iteration Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Cadence Step Tracker ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActionTaken": {
+      "field_label": "Is Action Taken",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ScheduledStartDateTime": {
+      "field_label": "Scheduled Start Date Time",
+      "type": "datetime"
+    },
+    "SecondsOverdue": {
+      "field_label": "Seconds Overdue",
+      "type": "int",
+      "digits": "9"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StepTitle": {
+      "field_label": "Cadence Step Title",
+      "type": "string",
+      "length": "255"
+    },
+    "StepType": {
+      "field_label": "Cadence Step Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetId": {
+      "field_label": "Target ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WasEverPaused": {
+      "field_label": "Was Ever Paused",
+      "type": "boolean"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

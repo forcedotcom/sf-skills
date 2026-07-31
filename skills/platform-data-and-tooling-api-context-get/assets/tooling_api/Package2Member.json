@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "Package2Member - Tooling API",
+  "description": "Represents a component in a second-generation managed package in a subscriber’s org. Created when the subscriber installs the package. Available in API version 41.0 and later.",
+  "supported_soap_calls": "`describeSObjects()`, `query()`, `retrieve()`",
+  "supported_rest_api_http_methods": "`Query`, `GET`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CurrentPackageVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the current SubscriberPackageVersion."
+    },
+    "MaxPackageVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Indicates the last package version that a metadata component was contained in. It's set if the object is left in the subscriber org after upgrade. For example, if the package developer removes an Apex class, that class and its Package2Member are hard deleted. However, to avoid data loss, we don't delete schema objects."
+    },
+    "MinPackageVersionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the first SubscriberPackageVersion that contained this Package2Member. Starts with 04t."
+    },
+    "SubjectId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort, Unique",
+      "description": "The ID of the component that this Package2Member is referencing.This value is case-sensitive and must be unique."
+    },
+    "SubjectKeyPrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The key prefix for the component that this Package2Member is referencing—for example, 01W for an ActionEmail component or 01Q for a WorkflowRule component."
+    },
+    "SubjectManageableState": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The manageability state of this Package2Member. References ManageableStateEnum.Valid values include: beta—Not applicable. (Used only for first-generation packages.) deleted—Not applicable. (Used only for first-generation packages.) deprecated—Installed as part of a second-generation managed package, and later deprecated from the package. deprecatedEditable—Installed as part of an unlocked package, and later deprecated from the package. installed—Installed as part of a second-generation managed package. installedEditable—Installed as part of an unlocked package. For components in unlocked packages, an admin can make modifications, but all changes are overwritten by the next upgrade. released—Not applicable. (Used only for first-generation packages.) unmanaged—Not applicable. (Used only for first-generation packages.)"
+    },
+    "SubscriberPackageId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID that identifies this package across all Salesforce instances (starts with 033)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ID\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:length value=\"18\"/>\n    <xsd:pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Package2Member\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"CreatedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"CreatedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"CurrentPackageVersion\" minOccurs=\"0\" type=\"ens:SubscriberPackageVersion\" nillable=\"true\"/>\n        <xsd:element name=\"CurrentPackageVersionId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"IsDeleted\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedBy\" minOccurs=\"0\" type=\"ens:User\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedById\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"LastModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n        <xsd:element name=\"MaxPackageVersion\" minOccurs=\"0\" type=\"ens:SubscriberPackageVersion\" nillable=\"true\"/>\n        <xsd:element name=\"MaxPackageVersionId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"MinPackageVersion\" minOccurs=\"0\" type=\"ens:SubscriberPackageVersion\" nillable=\"true\"/>\n        <xsd:element name=\"MinPackageVersionId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"Subject\" minOccurs=\"0\" type=\"ens:sObject\" nillable=\"true\"/>\n        <xsd:element name=\"SubjectId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"SubjectKeyPrefix\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SubjectManageableState\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"SubscriberPackage\" minOccurs=\"0\" type=\"ens:SubscriberPackage\" nillable=\"true\"/>\n        <xsd:element name=\"SubscriberPackageId\" minOccurs=\"0\" type=\"tns:ID\" nillable=\"true\"/>\n        <xsd:element name=\"SystemModstamp\" minOccurs=\"0\" type=\"xsd:dateTime\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

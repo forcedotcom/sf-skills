@@ -1,0 +1,163 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ProcessInstanceNode - Data API",
+  "description": "Represents a step in an instance of an approval process. Compare to ProcessNode, which describes the step in a process definition. Use this object to retrieve approval history.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CompletedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The completion date and time of this step in the approval process. The ElapsedTimeDay, ElapsedTimeHours, and ElapsedTimeMinutes field values are calculated using CompletedDate."
+    },
+    "ElapsedTimeInDays": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in days since this step was started."
+    },
+    "ElapsedTimeInHours": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in hours since this step was started."
+    },
+    "ElapsedTimeInMinutes": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time in minutes since this step was started."
+    },
+    "LastActorId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The last actor that approved or rejected this step. This is a relationship field.",
+      "relationship_name": "LastActor",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "NodeStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The status of this approval instance, for example Started, Pending, or Approved."
+    },
+    "ProcessInstanceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The approval process this step is part of. This is a relationship field.",
+      "relationship_name": "ProcessInstance",
+      "relationship_type": "Lookup",
+      "refers_to": "ProcessInstance"
+    },
+    "ProcessNodeId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The identifier for this step. This is a relationship field.",
+      "relationship_name": "ProcessNode",
+      "relationship_type": "Lookup",
+      "refers_to": "ProcessNode"
+    },
+    "ProcessNodeName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of this step.The contents of this field can be publicly viewed."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"ProcessInstanceNode\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CompletedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ElapsedTimeInDays\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ElapsedTimeInHours\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ElapsedTimeInMinutes\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastActor\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastActorId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"NodeStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ProcessInstance\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProcessInstance\"/>\n        <element name=\"ProcessInstanceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessNode\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ProcessNode\"/>\n        <element name=\"ProcessNodeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessNodeName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "CompletedDate": {
+      "field_label": "Completed Date",
+      "type": "datetime"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ElapsedTimeInDays": {
+      "field_label": "Elapsed Time in Days",
+      "type": "double",
+      "precision": "7",
+      "scale": "3"
+    },
+    "ElapsedTimeInHours": {
+      "field_label": "Elapsed Time in Hours",
+      "type": "double",
+      "precision": "7",
+      "scale": "2"
+    },
+    "ElapsedTimeInMinutes": {
+      "field_label": "Elapsed Time in Minutes",
+      "type": "double",
+      "precision": "8",
+      "scale": "0"
+    },
+    "Id": {
+      "field_label": "Process Instance Node ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastActorId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NodeStatus": {
+      "field_label": "Node Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProcessInstanceId": {
+      "field_label": "Process Instance ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProcessNodeId": {
+      "field_label": "Process Node ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProcessNodeName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

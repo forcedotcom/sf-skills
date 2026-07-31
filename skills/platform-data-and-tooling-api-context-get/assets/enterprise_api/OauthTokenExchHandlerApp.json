@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "OauthTokenExchHandlerApp - Data API",
+  "description": "Represents the enablement settings for a specific Salesforce connected app or external client app that’s enabled for the token exchange handler. A handler can be enabled for multiple apps. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApexExecutionUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who runs the Apex token exchange handler. We recommend that you use an integration user. This field is a relationship field.",
+      "relationship_name": "ApexExecutionUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ConnectedApplicationId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The connected app that’s being used to integrate with Salesforce. This field is a relationship field.",
+      "relationship_name": "ConnectedApplication",
+      "relationship_type": "Lookup",
+      "refers_to": "ConnectedApplication"
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the token exchange handler is the default handler for this app. During the token exchange flow, in the token request, you can optionally include a token_handler parameter with the name of a specific handler’s Apex class. If you don’t include this parameter, Salesforce defaults to the default handler. The default value is false."
+    },
+    "OauthTokenExchangeHandlerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The OauthTokenExchangeHandler with which these enablement settings are associated. This field is a relationship field.",
+      "relationship_name": "OauthTokenExchangeHandler",
+      "relationship_type": "Lookup",
+      "refers_to": "OauthTokenExchangeHandler"
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OauthTokenExchHandlerApp\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApexExecutionUser\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"ApexExecutionUserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ConnectedApplication\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ConnectedApplication\"/>\n        <element name=\"ConnectedApplicationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalClientApplication\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ExternalClientApplication\"/>\n        <element name=\"ExternalClientApplicationId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDefault\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"OauthTokenExchangeHandler\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OauthTokenExchangeHandler\"/>\n        <element name=\"OauthTokenExchangeHandlerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "ApexExecutionUserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ConnectedApplicationId": {
+      "field_label": "Connected App ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExternalClientApplicationId": {
+      "field_label": "External Client Application ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Oauth Token Exchange Handler App ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDefault": {
+      "field_label": "Default",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "OauthTokenExchangeHandlerId": {
+      "field_label": "Oauth Token Exchange Handler ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

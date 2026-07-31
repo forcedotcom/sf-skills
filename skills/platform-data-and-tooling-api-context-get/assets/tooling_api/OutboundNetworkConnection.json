@@ -1,0 +1,79 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "OutboundNetworkConnection - Tooling API",
+  "description": "Represents a private connection between a Salesforce org and a third-party data service. The connection is outbound because the callouts are going out of Salesforce.Available in API version 49.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeObject()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `PATCH`, `POST`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ConnectionType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Specifies the cloud provider of the connection. The only valid value is AwsPrivateLink."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A description of the connection. Maximum of 255 characters."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The developer’s internal name for the outbound network connection used in the API."
+    },
+    "FullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the associated type in Metadata API.Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "isActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Specifies whether the connection is active (true) or not(false). The default value is false.",
+      "required": true
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The language of the connection. The value for this field is the language value of the org."
+    },
+    "ManageableState": {
+      "type": "ManageableState enumerated list",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates the manageable state of the specified component that is contained in a package: beta deleted deprecated deprecatedEditable installed installedEditable released unmanaged"
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The internal label for the connection."
+    },
+    "Metadata": {
+      "type": "mns:OutboundNetworkConnection",
+      "properties": "Create, Nillable, Update",
+      "description": "Provides access to the associated type and related fields in Metadata API."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace of the connection. An outbound network connection can be in an extension namespace different than the object."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted Picklist, Sort",
+      "description": "Connection status. The connection is initially Unprovisioned and moves through the other states automatically after an admin performs a provision, sync, or teardown action. The valid values are: Unprovisioned Allocating PendingAcceptance PendingActivation RejectedRemotely DeletedRemotely TeardownInProgress Ready",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ExternalConnectionStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unprovisioned\"/>\n    <xsd:enumeration value=\"Allocating\"/>\n    <xsd:enumeration value=\"PendingAcceptance\"/>\n    <xsd:enumeration value=\"PendingActivation\"/>\n    <xsd:enumeration value=\"RejectedRemotely\"/>\n    <xsd:enumeration value=\"DeletedRemotely\"/>\n    <xsd:enumeration value=\"TeardownInProgress\"/>\n    <xsd:enumeration value=\"Ready\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExternalConnectionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AwsPrivateLink\"/>\n    <xsd:enumeration value=\"DataCloudPrivateConnection\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"OutboundNetworkConnection\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence>\n        <xsd:element name=\"FullName\" minOccurs=\"0\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"Metadata\" minOccurs=\"0\" type=\"mns:OutboundNetworkConnection\" nillable=\"true\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n\n\n<xsd:complexType name=\"OutboundNetworkConnection\">\n  <xsd:complexContent>\n    <xsd:extension base=\"mns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"connectionType\" type=\"tns:ExternalConnectionType\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"outboundNetworkConnProperties\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"mns:OutboundNetworkConnProperty\"/>\n        <xsd:element name=\"status\" type=\"tns:ExternalConnectionStatus\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

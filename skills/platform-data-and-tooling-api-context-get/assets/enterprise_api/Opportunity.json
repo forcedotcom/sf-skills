@@ -1,0 +1,611 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "Opportunity - Data API",
+  "description": "Represents an opportunity, which is a sale or pending deal.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the account associated with this opportunity. This is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "ActivityMetricId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When Einstein Activity Capture with Activity Metrics is enabled, the ID of the related activity metric. This field is a relationship field.",
+      "relationship_name": "ActivityMetric",
+      "refers_to": "ActivityMetric"
+    },
+    "ActivityMetricRollupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When Einstein Activity Capture with Activity Metrics is enabled, the ID of the related activity metric rollup. This field is a relationship field.",
+      "relationship_name": "ActivityMetricRollup",
+      "refers_to": "ActivityMetricRollup"
+    },
+    "AgeInDays": {
+      "type": "int",
+      "properties": "Aggregate, Filter, Group, Nillable, Sort",
+      "description": "The number of days since the opportunity was created, calculated by the current date minus the created_date field. This field is available in API version 52.0 and later if you enabled Pipeline Inspection."
+    },
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Estimated total sale amount. For opportunities with products, the amount is the sum of the related products. Any attempt to update this field, if the record has products, will be ignored. The update call will not be rejected, and other fields will be updated as specified, but the Amount will be unchanged."
+    },
+    "CampaignId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of a related Campaign. This field is defined only for those organizations that have the campaign feature Campaigns enabled. The User must have read access rights to the cross-referenced Campaign object in order to create or update that campaign into this field on the opportunity. This is a relationship field.",
+      "relationship_name": "Campaign",
+      "relationship_type": "Lookup",
+      "refers_to": "Campaign"
+    },
+    "CloseDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Date when the opportunity is expected to close.",
+      "required": true
+    },
+    "ConnectionReceivedId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the PartnerNetworkConnection that shared this record with your organization. This field is available if you enabled Salesforce to Salesforce."
+    },
+    "ConnectionSentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the PartnerNetworkConnection that you shared this record with. This field is available if you enabled Salesforce to Salesforce. This field is supported using API versions earlier than 15.0. In all other API versions, this field’s value is null. You can use the new PartnerNetworkRecordConnection object to forward records to connections."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the contact associated with this opportunity, set as the primary contact. Read-only field that is derived from the opportunity contact role, which is created at the same time the opportunity is created. This field can only be populated when it’s created, and can’t be updated. To update the value in this field, change the IsPrimary flag on the OpportunityContactRole associated with this opportunity. Available in API version 46.0 and later."
+    },
+    "ContractId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the contract that’s associated with this opportunity. This is a relationship field.",
+      "relationship_name": "Contract",
+      "relationship_type": "Lookup",
+      "refers_to": "Contract"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for organizations with the multicurrency feature enabled. Contains the ISO code for any currency allowed by the organization. If the organization has multicurrency and a Pricebook2 is specified on the opportunity (that is, the Pricebook2Id field is not blank), then the currency value of this field must match the currency of the PricebookEntry records that are associated with any opportunity line items it has."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Text description of the opportunity. Limit: 32,000 characters."
+    },
+    "ExpectedRevenue": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Read-only field that is equal to the product of the opportunity Amount field and the Probability. You can’t directly set this field, but you can indirectly set it by setting the Amount or Probability fields."
+    },
+    "ExportStatus": {
+      "type": "picklist",
+      "properties": "Filter, Restricted picklist, Sort",
+      "description": "Derived field for the record map for Partner Connect. The export status of this opportunity to the partner’s connected org. To see this field, enable Partner Connect and add the Export Vendor Records to an Authorized Partner Org user permission to the cosell export user. See Set Up Partner Connect as a Vendor in Salesforce Help. Available in API version 62.0 and later."
+    },
+    "Fiscal": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "If fiscal years are not enabled, the name of the fiscal quarter or period in which the opportunity CloseDate falls. Use YYYY Q format, for example, '2006 1' for first quarter of 2006."
+    },
+    "FiscalQuarter": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the fiscal quarter. Valid values are 1, 2, 3, or 4."
+    },
+    "FiscalYear": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents the fiscal year, for example, 2006."
+    },
+    "ForecastCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Restricted picklist field. It is implied, but not directly controlled, by the StageName field. You can override this field to a different value than is implied by the StageName value. The values of this field are fixed enumerated values. The field labels are localized to the language of the user performing the operation, if localized versions of those labels are available for that language in the user interface.In API version 12.0 and later, the value of this field is automatically set based on the value of the ForecastCategoryName and can’t be updated any other way. The field properties Create, Defaulted on create, Nillable, and Update are not available in version 12.0. Possible values are: BestCase Closed Forecast MostLikely Omitted Pipeline"
+    },
+    "ForecastCategoryName": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The name of the forecast category. It is implied, but not directly controlled, by the StageName field. You can override this field to a different value than is implied by the StageName value. Available in API version 12.0 and later. Possible values are: Best Case Closed Commit Most Likely Omitted Pipeline"
+    },
+    "HasOpenActivity": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group,",
+      "description": "Indicates whether an opportunity has an open event or task (true) or not (false). Available in API version 35.0 and later."
+    },
+    "HasOpportunityLineItem": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only field that indicates whether the opportunity has associated line items. A value of true means that Opportunity line items have been created for the opportunity. An opportunity can have opportunity line items only if the opportunity has a price book. The opportunity line items must correspond to PricebookEntry objects that are listed in the opportunity Pricebook2. However, you can insert opportunity line items on an opportunity that does not have an associated Pricebook2. For the first opportunity line item that you insert on an opportunity without a Pricebook2, the API automatically sets the Pricebook2Id field, if the opportunity line item corresponds to a PricebookEntry in an active Pricebook2 that has a CurrencyIsoCode field that matches the CurrencyIsoCode field of the opportunity. If the Pricebook2 is not active or the CurrencyIsoCode fields do not match, then the API returns an error. You can’t update the Pricebook2Id or PricebookId fields if opportunity line items exist on the Opportunity. You must delete the line items before attempting to update the PricebookId field."
+    },
+    "HasOverdueTask": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group,",
+      "description": "Indicates whether an opportunity has an overdue task (true) or not (false). Available in API version 35.0 and later."
+    },
+    "IqScore": {
+      "type": "int",
+      "properties": "Aggregate, Filter, Group, Nillable, Sort",
+      "description": "The likelihood, measured on a scale of 1 to 99, that an opportunity will be won. Einstein Opportunity Scoring must be enabled. Available in API version 41.0 and later. Label is Opportunity Score."
+    },
+    "IsClosed": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Directly controlled by StageName. You can query and filter on this field, but you can’t directly set it in a create, upsert, or update request. It can only be set via StageName. Label is Closed."
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "IsExcludedFromTerritory2Filter": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Used for Filter-Based Opportunity Territory Assignment (Pilot in Spring ’15 / API version 33). Indicates whether the opportunity is excluded (True) or included (False) each time the APEX filter is executed."
+    },
+    "IsPriorityRecord": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Group",
+      "description": "Shows whether the user has marked the opportunity as important (True) or not (False). The default value is false. Available in API version 53.0 and later."
+    },
+    "IsPrivate": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "If true, only the opportunity owner, users above that role in the hierarchy, and admins can view the opportunity or query it via the API. When you mark opportunities as private, opportunity teams, opportunity splits, and sharing are removed. Label is Private. The default value is False."
+    },
+    "IsSplit": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Read-only field that indicates whether credit for the opportunity is split between opportunity team members. Label is IsSplit. This field is available in versions 14.0 and later for organizations that enabled Opportunity Splits during the pilot period. This field should not be used. However, it’s documented for the benefit of pilot customers who find references to IsSplit in code."
+    },
+    "IsWon": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Directly controlled by StageName. You can query and filter on this field, but you can’t directly set the value. It can only be set via StageName. Label is Won."
+    },
+    "LastActivityDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Value is one of the following, whichever is the most recent: Due date of the most recent event logged against the record. Due date of the most recently closed task associated with the record."
+    },
+    "LastActivityInDays": {
+      "type": "int",
+      "properties": "Aggregate, Filter, Group, Nillable, Sort",
+      "description": "The number of days since the last completed event or task for the record, calculated by the current date minus the last_activity field. If the last_activity field is null, this field is null. This field is available in API version 52.0 and later if you enabled Pipeline Inspection."
+    },
+    "LastAmountChangedHistoryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the OpportunityHistory record that contains information about when the opportunity Amount field was last updated in Winter ’21 or later. Information includes the date and time of the change and the user who made the change. Available in API version 50.0 and later. This is a relationship field.",
+      "relationship_name": "LastAmountChangedHistory",
+      "relationship_type": "Lookup",
+      "refers_to": "OpportunityHistory"
+    },
+    "LastCloseDateChangedHistoryId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the OpportunityHistory record that contains information about when the opportunity Close Date field was last updated in Winter ’21 or later. Information includes the date and time of the change and the user who made the change. Available in API version 50.0 and later. This is a relationship field.",
+      "relationship_name": "LastCloseDateChangedHistory",
+      "relationship_type": "Lookup",
+      "refers_to": "OpportunityHistory"
+    },
+    "LastReferencedDate": {
+      "type": "datetime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastStageChangeDate": {
+      "type": "datetime",
+      "properties": "Aggregate, Filter, Nillable, Sort",
+      "description": "The date of the last change made to the Stage field on this opportunity record. This field is available in API version 52.0 and later."
+    },
+    "LastStageChangeInDays": {
+      "type": "int",
+      "properties": "Aggregate, Filter, Group, Nillable, Sort",
+      "description": "The number of days since the last change was made to the Stage field on the opportunity record, calculated by the current date minus the last_stage_change_date field. If the last_stage_change_date is null, then this field contains the value for AgeInDays. This field is available in API version 52.0 and later if you enabled Pipeline Inspection."
+    },
+    "LastViewedDate": {
+      "type": "datetime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, the user might have only accessed this record or list view (LastReferencedDate) but not viewed it."
+    },
+    "LeadSource": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Source of this opportunity, such as Advertisement or Trade Show."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "A name for this opportunity. Limit: 120 characters.",
+      "required": true
+    },
+    "NextStep": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of next task in closing opportunity. Limit: 255 characters."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the User who has been assigned to work this opportunity.If you update this field, the previous owner's access becomes Read Only or the access specified in your organization-wide default for opportunities, whichever is greater. If you have set up opportunity teams in your organization, updating this field has different consequences depending on your version of the API: For API version 12.0 and later, sharing records are kept, as they are for all objects. (All previous opportunity team members are kept on the opportunity team.) For API version before 12.0, sharing records are deleted. (All previous opportunity team members are removed from the opportunity team.) For API version 16.0 and later, users must have the Transfer Record permission in order to update (transfer) account ownership using this field. This is a relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "PartnerAccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the partner account for the partner user that owns this opportunity. Available if Partner Relationship Management is enabled or if digital experiences is enabled and you have partner portal licenses. If you are uploading opportunities using API version 15.0 or earlier, and one of the opportunities in the batch has a partner user as the owner, the Partner Account field on all opportunities in the batch is set to that partner user’s account regardless of whether the partner user is the owner. In version 16.0, the Partner Account field is set to the appropriate account for the partner user that owns the opportunity. If the owner of the opportunity is not a partner user, this field remains empty."
+    },
+    "Pricebook2Id": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of a related Pricebook2 object. The Pricebook2Id field indicates which Pricebook2 applies to this opportunity. The Pricebook2Id field is defined only for those organizations that have products enabled as a feature. You can specify values for only one field (Pricebook2Id or PricebookId)—not both fields. For this reason, both fields are declared nillable. This is a relationship field.",
+      "relationship_name": "Pricebook2",
+      "relationship_type": "Lookup",
+      "refers_to": "Pricebook2"
+    },
+    "PricebookId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Update",
+      "description": "Unavailable as of version 3.0. As of version 8.0, the Pricebook object is no longer available. Use the Pricebook2Id field instead, specifying the ID of the Pricebook2 record."
+    },
+    "Probability": {
+      "type": "percent",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "Percentage of estimated confidence in closing the opportunity. It is implied, but not directly controlled, by the StageName field. You can override this field to a different value than what is implied by the StageName. If you're changing the Probability field through the API using a partner WSDL call, or an Apex before trigger, and the value may have several decimal places, we recommend rounding the value to a whole number. For example, the following Apex in a before trigger uses the round method to change the field value: o.probability = o.probability.round();"
+    },
+    "PushCount": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of times an opportunity’s close date has been pushed out by one calendar month. For example, moving a close date from April to May counts as one push, but moving from April 1 to April 30 doesn't count. The total is not decreased when the close date is moved in. Available in API version 53.0 and later."
+    },
+    "RecordTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "ID of the record type assigned to this object."
+    },
+    "StageName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Current stage of this record. The StageName field controls several other fields on an opportunity. Each of the fields can be directly set or implied by changing the StageName field. In addition, the StageName field is a picklist, so it has additional members in the returned describeSObjectResult to indicate how it affects the other fields. To obtain the stage name values in the picklist, query the OpportunityStage object. If the StageName is updated, then the ForecastCategoryName, IsClosed, IsWon, and Probability are automatically updated based on the stage-category mapping.",
+      "required": true
+    },
+    "SyncedQuoteID": {
+      "type": "reference",
+      "properties": "Create, Filter, Nillable, Update",
+      "description": "Read only in an Apex trigger. The ID of the Quote that syncs with the opportunity. Setting this field lets you start and stop syncing between the opportunity and a quote. The ID has to be for a quote that is a child of the opportunity."
+    },
+    "Territory2Id": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the territory that is assigned to the opportunity. Available only if Enterprise Territory Management has been enabled for your organization. Users who have full access to an opportunity’s account can assign any territory from the active model to the opportunity. Users who do not can assign only a territory that is also assigned to the opportunity’s account. The same restriction applies to territory assignments made via Apex in system mode."
+    },
+    "TotalOpportunityQuantity": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Number of items included in this opportunity. Used in quantity-based forecasting."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of opportunity. For example, Existing Business or New Business. Label is Opportunity Type."
+    }
+  },
+  "usage": "Use the Opportunity object to manage information about a sale or pending deal. You can also sync this object with a child Quote. To update an Opportunity, your client application needs Edit permission on opportunities. You can create, update, delete, and query Attachment records associated with an opportunity via the API. To split credit for an opportunity among multiple opportunity team members, use the OpportunitySplit object.",
+  "associated_objects": "This object has these associated objects. Unless noted, they are available in the same API version as this object.\n\n- **OpportunityChangeEvent (API version 44.0)**: Change events are available for the object.\n- **OpportunityFeed (API version 18.0)**: Feed tracking is available for the object.\n- **OpportunityHistory**: History is available for tracked fields of the object.\n- **OpportunityOwnerSharingRule**: Sharing rules are available for the object.\n- **OpportunityShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"Opportunity\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AccountPartners\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ActivityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Amount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Attachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Campaign\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Campaign\"/>\n        <element name=\"CampaignId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CloseDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContactId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContactRequests\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CurrentGenerators__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeliveryInstallationStatus__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Emails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Events\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ExpectedRevenue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Fiscal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FiscalQuarter\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FiscalYear\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ForecastCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ForecastCategoryName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HasOpenActivity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasOpportunityLineItem\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"HasOverdueTask\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsClosed\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPrivate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsWon\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastActivityDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"LastAmountChangedHistory\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OpportunityHistory\"/>\n        <element name=\"LastAmountChangedHistoryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastCloseDateChangedHistory\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OpportunityHistory\"/>\n        <element name=\"LastCloseDateChangedHistoryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastStageChangeDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LeadSource\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ListEmails\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"LookedUpFromActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"MainCompetitors__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"MessagingSessions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NextStep\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Notes\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"NotesAndAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpenActivities\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpportunityCompetitors\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpportunityContactRoles\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpportunityHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpportunityLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpportunityPartnersFrom\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OpportunityRelatedDeleteLogs\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"OrderNumber__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Orders\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ParentRecords\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Partners\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Pricebook2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Pricebook2\"/>\n        <element name=\"Pricebook2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Probability\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"PushCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"RecordActionHistories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordActions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RecordAssociatedGroups\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceAppointments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"StageName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SwarmMembers\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Swarms\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Tasks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TopicAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TotalOpportunityQuantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"TrackingNumber__c\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserDefinedLabelAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivityMetricId": {
+      "field_label": "Activity Metric ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ActivityMetricRollupId": {
+      "field_label": "Activity Metric Rollup ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AgeInDays": {
+      "field_label": "Age",
+      "type": "int",
+      "digits": "9"
+    },
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CampaignId": {
+      "field_label": "Campaign ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CloseDate": {
+      "field_label": "Close Date",
+      "type": "date"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContractId": {
+      "field_label": "Contract ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Opportunity Currency",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CurrentGenerators__c": {
+      "field_label": "Current Generator(s)",
+      "type": "string",
+      "length": "100"
+    },
+    "DeliveryInstallationStatus__c": {
+      "field_label": "Delivery/Installation Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "ExpectedRevenue": {
+      "field_label": "Expected Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Fiscal": {
+      "field_label": "Fiscal Period",
+      "type": "string",
+      "length": "6"
+    },
+    "FiscalQuarter": {
+      "field_label": "Fiscal Quarter",
+      "type": "int",
+      "digits": "8"
+    },
+    "FiscalYear": {
+      "field_label": "Fiscal Year",
+      "type": "int",
+      "digits": "8"
+    },
+    "ForecastCategory": {
+      "field_label": "Forecast Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ForecastCategoryName": {
+      "field_label": "Forecast Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "HasOpenActivity": {
+      "field_label": "Has Open Activity",
+      "type": "boolean"
+    },
+    "HasOpportunityLineItem": {
+      "field_label": "Has Line Item",
+      "type": "boolean"
+    },
+    "HasOverdueTask": {
+      "field_label": "Has Overdue Task",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Opportunity ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsClosed": {
+      "field_label": "Closed",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsExcludedFromTerritory2Filter": {
+      "field_label": "Exclude from the territory assignment filter logic",
+      "type": "boolean"
+    },
+    "IsPriorityRecord": {
+      "field_label": "Important",
+      "type": "boolean"
+    },
+    "IsPrivate": {
+      "field_label": "Private",
+      "type": "boolean"
+    },
+    "IsWon": {
+      "field_label": "Won",
+      "type": "boolean"
+    },
+    "LastActivityDate": {
+      "field_label": "Last Activity",
+      "type": "date"
+    },
+    "LastActivityInDays": {
+      "field_label": "Recent Activity",
+      "type": "int",
+      "digits": "9"
+    },
+    "LastAmountChangedHistoryId": {
+      "field_label": "Opportunity History ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastCloseDateChangedHistoryId": {
+      "field_label": "Opportunity History ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastStageChangeDate": {
+      "field_label": "Last Stage Change Date",
+      "type": "datetime"
+    },
+    "LastStageChangeInDays": {
+      "field_label": "Days In Stage",
+      "type": "int",
+      "digits": "9"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LeadSource": {
+      "field_label": "Lead Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "MainCompetitors__c": {
+      "field_label": "Main Competitor(s)",
+      "type": "string",
+      "length": "100"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "120"
+    },
+    "NextStep": {
+      "field_label": "Next Step",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderNumber__c": {
+      "field_label": "Order Number",
+      "type": "string",
+      "length": "8"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Pricebook2Id": {
+      "field_label": "Price Book ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Probability": {
+      "field_label": "Probability (%)",
+      "type": "percent",
+      "precision": "3",
+      "scale": "0"
+    },
+    "PushCount": {
+      "field_label": "Push Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ReferralCode": {
+      "field_label": "Referral Code",
+      "type": "string",
+      "length": "255"
+    },
+    "StageName": {
+      "field_label": "Stage",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SyncedQuoteId": {
+      "field_label": "Quote ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Territory2Id": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "TotalOpportunityQuantity": {
+      "field_label": "Quantity",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TrackingNumber__c": {
+      "field_label": "Tracking Number",
+      "type": "string",
+      "length": "12"
+    },
+    "Type": {
+      "field_label": "Opportunity Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits",
+    "precision",
+    "scale"
+  ]
+}

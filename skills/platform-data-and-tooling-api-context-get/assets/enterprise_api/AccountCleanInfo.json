@@ -1,0 +1,1046 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "AccountCleanInfo - Data API",
+  "description": "Stores the metadata Data.com Clean uses to determine an account record’s clean status. AccountCleanInfo helps you automate the cleaning or related processing of account records. This object is removed in API version 67.0",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique, system-generated ID assigned when the account record was created."
+    },
+    "AccountSite": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Information about the account’s location, such as single location, headquarters, or branch."
+    },
+    "Address": {
+      "type": "address",
+      "properties": "Filter, Nillable",
+      "description": "The compound form of the address. Read-only. See Address Compound Fields for details on compound address fields."
+    },
+    "AnnualRevenue": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Estimated annual revenue of the account."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of the account."
+    },
+    "CleanedByJob": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account record was cleaned by a Data.com Clean job (true) or not (false)."
+    },
+    "CleanedByUser": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account record was cleaned by a Salesforce user (true) or not (false)."
+    },
+    "CompanyName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the company."
+    },
+    "CompanyStatusDataDotCom": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The status of the company per Data.com. Values are: Company is In Business per Data.com or Company is Out of Business per Data.com."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of the account."
+    },
+    "DandBCompanyDunsNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The D-U-N-S Number on the D&B Company record (if any) that is linked to the account."
+    },
+    "DataDotComId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID Data.com maintains for the company."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "A description of the account."
+    },
+    "DunsNumber": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The Data Universal Numbering System (D-U-N-S) number is a unique, nine-digit number assigned to every business location in the Dun & Bradstreet database that has a unique, separate, and distinct operation. D-U-N-S numbers are used by industries and organizations around the world as a global standard for business identification and tracking."
+    },
+    "DunsRightMatchConfidence": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The account’s DUNSRight confidence code."
+    },
+    "DunsRightMatchGrade": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The account’s DUNSRight match grade."
+    },
+    "Fax": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The account’s fax number."
+    },
+    "Industry": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The industry the account belongs to."
+    },
+    "IsDifferentAccountSite": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s AccountSite field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentAnnualRevenue": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s AnnualRevenue field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentCity": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s City field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentCompanyName": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s AccountName field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentCountry": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Country field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentCountryCode": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Country Code field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentDandBCompanyDunsNumber": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s DandBCompanyID field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentDescription": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Description field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentDunsNumber": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s DunsNumber field value is different from the D-U-N-S Number on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentFax": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Fax field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentIndustry": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Industry field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentNaicsCode": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s NaicsCode field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentNaicsDescription": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s NaicsDescription field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentNumberOfEmployees": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s NumberOf Employees field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentOwnership": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Ownership field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentPhone": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Phone field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentPostalCode": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s PostalCode field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentSic": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Sic field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentSicDescription": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s SicDescription field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentState": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s State field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentStateCode": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s State Code field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentStreet": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s State field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentTickerSymbol": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s TickerSymbol field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentTradestyle": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Tradestyle field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentWebsite": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s Website field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsDifferentYearStarted": {
+      "type": "boolean",
+      "properties": "Filter",
+      "description": "Indicates whether the account’s YearStarted field value is different from the corresponding value on its matched Data.com record (true) or not (false)."
+    },
+    "IsFlaggedWrongAccountSite": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s AccountSite field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongAddress": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Address field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongAnnualRevenue": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s AnnualRevenue field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongCompanyName": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s CompanyName field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongDescription": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Description field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongDunsNumber": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s DunsNumber field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongFax": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Fax field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongIndustry": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Industry field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongNaicsCode": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s NaicsCode field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongNaicsDescription": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s NaicsDescription field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongNumberOfEmployees": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s NumberOfEmployees field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongOwnership": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Ownership field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongPhone": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Phone field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongSic": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Sic field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongSicDescription": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s SicDescription field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongTickerSymbol": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s TickerSymbol field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongTradestyle": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Tradestyle field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongWebsite": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Website field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsFlaggedWrongYearStarted": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s YearStarted field value is flagged as wrong to Data.com (true) or not (false)."
+    },
+    "IsInactive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the account has been reported to Data.com as Inactive (true) or not (false)."
+    },
+    "IsReviewedAccountSite": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s AccountSite field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedAddress": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Address field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedAnnualRevenue": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s AnnualRevenue field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedCompanyName": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s CompanyName field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedDandBCompanyDunsNumber": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s DandBCompanyID field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedDescription": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Description field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedDunsNumber": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s DunsNumber field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedFax": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Fax field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedIndustry": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Industry field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedNaicsCode": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s NaicsCode field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedNaicsDescription": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s NaicsDescription field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedNumberOfEmployees": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s NumberOfEmployees field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedOwnership": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Ownership field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedPhone": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Phone field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedSic": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Sic field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedSicDescription": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s SicDescription field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedTickerSymbol": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s TickerSymbol field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedTradestyle": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Tradestyle field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedWebsite": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s Website field value is in a Reviewed state (true) or not (false)."
+    },
+    "IsReviewedYearStarted": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Indicates whether the account’s YearStarted field value is in a Reviewed state (true) or not (false)."
+    },
+    "LastMatchedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Sort",
+      "description": "The date the account record was last matched and linked to a Data.com record."
+    },
+    "LastStatusChangedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of who or what last changed the record’s Clean Status field value: a Salesforce user or a Clean job."
+    },
+    "LastStatusChangedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date on which the record’s Clean Status field value was last changed."
+    },
+    "Latitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used with Longitude to specify the precise geolocation of a billing address. Data not currently provided."
+    },
+    "Longitude": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Used with Latitude to specify the precise geolocation of a billing address. Data not currently provided."
+    },
+    "NaicsCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The six-digit North American Industry Classification System (NAICS) code is the standard used by business and government to classify business establishments into industries, according to their economic activity for the purpose of collecting, analyzing, and publishing statistical data related to the U.S. business economy."
+    },
+    "NaicsDescription": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A brief description of an organization’s line of business, based on its NAICS code."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, Sort, Update",
+      "description": "Field label is Account Clean Info Name. The name of the account. Maximum size is 255 characters."
+    },
+    "NumberOfEmployees": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The number of employees working at the account."
+    },
+    "Ownership": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Ownership type for the account, for example Private, Public, or Subsidiary."
+    },
+    "Phone": {
+      "type": "phone",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The phone number for the account."
+    },
+    "PostalCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of the account."
+    },
+    "Sic": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Standard Industrial Classification code of the company’s main business categorization, for example, 57340 for Electronics."
+    },
+    "SicDescription": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A brief description of an organization’s line of business, based on its SIC code."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of the account."
+    },
+    "Street": {
+      "type": "textarea",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Details for the billing address of the account."
+    },
+    "TickerSymbol": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The stock market symbol for the account."
+    },
+    "Tradestyle": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A name, different from its legal name, that an organization can use for conducting business. Similar to “Doing business as” (DBA)."
+    },
+    "Website": {
+      "type": "url",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The website of the account."
+    },
+    "YearStarted": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The year the company was established or the year when current ownership or management assumed control of the company."
+    }
+  },
+  "usage": "Administrators can modify a limited set of AccountCleanInfo fields from the Account Clean Info page. Developers can create triggers that read the Account Clean Info fields to help automate the cleaning or related processing of account records. For example, you might create a trigger that reads the Clean Status field on the Account object. If an account record’s Clean Status field value is Different but the record has no Billing Street value, the trigger could update the record’s status to Not Compared.\n\nAdministrators can modify a limited set of AccountCleanInfo fields from the Account Clean Info page.\n\nDevelopers can create triggers that read the Account Clean Info fields to help automate the cleaning or related processing of account records. For example, you might create a trigger that reads the Clean Status field on the Account object. If an account record’s Clean Status field value is Different but the record has no Billing Street value, the trigger could update the record’s status to Not Compared.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AccountCleanInfoChangeEvent (API version 62.0)**: Change events are available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"AccountCleanInfo\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Account\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Account\"/>\n        <element name=\"AccountId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"AccountSite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Address\" nillable=\"true\" minOccurs=\"0\" type=\"tns:address\"/>\n        <element name=\"AnnualRevenue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"City\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CleanedByJob\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"CleanedByUser\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"CompanyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CompanyStatusDataDotCom\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Country\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DandBCompanyDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DataDotComId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DunsRightMatchConfidence\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"DunsRightMatchGrade\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Fax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GeocodeAccuracy\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Industry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentAccountSite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentAnnualRevenue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentCity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentCompanyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentCountry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentCountryCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentDandBCompanyDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentFax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentIndustry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentNaicsCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentNaicsDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentNumberOfEmployees\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentOwnership\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentPhone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentPostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentSic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentSicDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentState\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentStateCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentStreet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentTickerSymbol\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentTradestyle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentWebsite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDifferentYearStarted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongAccountSite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongAnnualRevenue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongCompanyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongFax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongIndustry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongNaicsCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongNaicsDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongNumberOfEmployees\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongOwnership\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongPhone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongSic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongSicDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongTickerSymbol\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongTradestyle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongWebsite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsFlaggedWrongYearStarted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsInactive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedAccountSite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedAddress\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedAnnualRevenue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedCompanyName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedDandBCompanyDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedDunsNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedFax\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedIndustry\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedNaicsCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedNaicsDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedNumberOfEmployees\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedOwnership\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedPhone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedSic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedSicDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedTickerSymbol\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedTradestyle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedWebsite\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsReviewedYearStarted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastMatchedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastStatusChangedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastStatusChangedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastStatusChangedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Latitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Longitude\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"NaicsCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NaicsDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"NumberOfEmployees\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Ownership\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Phone\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"PostalCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Sic\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SicDescription\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"State\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Street\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TickerSymbol\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Tradestyle\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n        <element name=\"Website\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"YearStarted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"address\">\n  <complexContent>\n    <extension base=\"tns:location\">\n      <sequence>\n        <element name=\"city\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"country\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"countryCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"geocodeAccuracy\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"postalCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"state\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"stateCode\" type=\"xsd:string\" nillable=\"true\"/>\n        <element name=\"street\" type=\"xsd:string\" nillable=\"true\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<complexType name=\"location\">\n  <sequence>\n    <element name=\"latitude\" type=\"xsd:double\" nillable=\"true\"/>\n    <element name=\"longitude\" type=\"xsd:double\" nillable=\"true\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AccountSite": {
+      "field_label": "Account Site",
+      "type": "string",
+      "length": "80"
+    },
+    "Address": {
+      "field_label": "Address",
+      "type": "address"
+    },
+    "AnnualRevenue": {
+      "field_label": "Annual Revenue",
+      "type": "currency",
+      "precision": "18",
+      "scale": "0"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "40"
+    },
+    "CleanedByJob": {
+      "field_label": "Cleaned by Job",
+      "type": "boolean"
+    },
+    "CleanedByUser": {
+      "field_label": "Cleaned by User",
+      "type": "boolean"
+    },
+    "CompanyName": {
+      "field_label": "Company Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CompanyStatusDataDotCom": {
+      "field_label": "Company Status per Data.com",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "80"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DandBCompanyDunsNumber": {
+      "field_label": "D&B Company D-U-N-S Number",
+      "type": "string",
+      "length": "9"
+    },
+    "DataDotComId": {
+      "field_label": "Data.com ID",
+      "type": "string",
+      "length": "20"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "DunsNumber": {
+      "field_label": "D-U-N-S Number",
+      "type": "string",
+      "length": "9"
+    },
+    "DunsRightMatchConfidence": {
+      "field_label": "DUNSRight™ Match Confidence",
+      "type": "int",
+      "digits": "9"
+    },
+    "DunsRightMatchGrade": {
+      "field_label": "DUNSRight™ Match Grade",
+      "type": "string",
+      "length": "255"
+    },
+    "Fax": {
+      "field_label": "Fax",
+      "type": "phone",
+      "length": "40"
+    },
+    "GeocodeAccuracy": {
+      "field_label": "Geocode Accuracy",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Account Clean Info ID",
+      "type": "id",
+      "length": "18"
+    },
+    "Industry": {
+      "field_label": "Industry",
+      "type": "picklist",
+      "length": "40"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsDifferentAccountSite": {
+      "field_label": "Account Site is Different",
+      "type": "boolean"
+    },
+    "IsDifferentAnnualRevenue": {
+      "field_label": "Annual Revenue is Different",
+      "type": "boolean"
+    },
+    "IsDifferentCity": {
+      "field_label": "City is Different",
+      "type": "boolean"
+    },
+    "IsDifferentCompanyName": {
+      "field_label": "Company Name is Different",
+      "type": "boolean"
+    },
+    "IsDifferentCountry": {
+      "field_label": "Country is Different",
+      "type": "boolean"
+    },
+    "IsDifferentCountryCode": {
+      "field_label": "Country Code is Different",
+      "type": "boolean"
+    },
+    "IsDifferentDandBCompanyDunsNumber": {
+      "field_label": "D&B Company D-U-N-S Number is Different",
+      "type": "boolean"
+    },
+    "IsDifferentDescription": {
+      "field_label": "Description is Different",
+      "type": "boolean"
+    },
+    "IsDifferentDunsNumber": {
+      "field_label": "D-U-N-S Number is Different",
+      "type": "boolean"
+    },
+    "IsDifferentFax": {
+      "field_label": "Fax is Different",
+      "type": "boolean"
+    },
+    "IsDifferentIndustry": {
+      "field_label": "Industry is Different",
+      "type": "boolean"
+    },
+    "IsDifferentNaicsCode": {
+      "field_label": "NAICS Code is Different",
+      "type": "boolean"
+    },
+    "IsDifferentNaicsDescription": {
+      "field_label": "NAICS Description is Different",
+      "type": "boolean"
+    },
+    "IsDifferentNumberOfEmployees": {
+      "field_label": "Number of Employees is Different",
+      "type": "boolean"
+    },
+    "IsDifferentOwnership": {
+      "field_label": "Ownership is Different",
+      "type": "boolean"
+    },
+    "IsDifferentPhone": {
+      "field_label": "Phone is Different",
+      "type": "boolean"
+    },
+    "IsDifferentPostalCode": {
+      "field_label": "ZIP is Different",
+      "type": "boolean"
+    },
+    "IsDifferentSic": {
+      "field_label": "SIC Code is Different",
+      "type": "boolean"
+    },
+    "IsDifferentSicDescription": {
+      "field_label": "SIC Description is Different",
+      "type": "boolean"
+    },
+    "IsDifferentState": {
+      "field_label": "State is Different",
+      "type": "boolean"
+    },
+    "IsDifferentStateCode": {
+      "field_label": "State Code is Different",
+      "type": "boolean"
+    },
+    "IsDifferentStreet": {
+      "field_label": "Street is Different",
+      "type": "boolean"
+    },
+    "IsDifferentTickerSymbol": {
+      "field_label": "Ticker Symbol is Different",
+      "type": "boolean"
+    },
+    "IsDifferentTradestyle": {
+      "field_label": "Tradestyle is Different",
+      "type": "boolean"
+    },
+    "IsDifferentWebsite": {
+      "field_label": "Website is Different",
+      "type": "boolean"
+    },
+    "IsDifferentYearStarted": {
+      "field_label": "Year Started is Different",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongAccountSite": {
+      "field_label": "Account Site is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongAddress": {
+      "field_label": "Address is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongAnnualRevenue": {
+      "field_label": "Annual Revenue is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongCompanyName": {
+      "field_label": "Company Name is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongDescription": {
+      "field_label": "Description is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongDunsNumber": {
+      "field_label": "D-U-N-S Number is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongFax": {
+      "field_label": "Fax is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongIndustry": {
+      "field_label": "Industry is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongNaicsCode": {
+      "field_label": "NAICS Code is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongNaicsDescription": {
+      "field_label": "NAICS Description is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongNumberOfEmployees": {
+      "field_label": "Number of Employees is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongOwnership": {
+      "field_label": "Ownership is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongPhone": {
+      "field_label": "Phone is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongSic": {
+      "field_label": "SIC Code is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongSicDescription": {
+      "field_label": "SIC Description is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongTickerSymbol": {
+      "field_label": "Ticker Symbol is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongTradestyle": {
+      "field_label": "Tradestyle is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongWebsite": {
+      "field_label": "Website is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsFlaggedWrongYearStarted": {
+      "field_label": "Year Started is Flagged Wrong",
+      "type": "boolean"
+    },
+    "IsInactive": {
+      "field_label": "Company Status in Salesforce",
+      "type": "boolean"
+    },
+    "IsReviewedAccountSite": {
+      "field_label": "Account Site is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedAddress": {
+      "field_label": "Address is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedAnnualRevenue": {
+      "field_label": "Annual Revenue is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedCompanyName": {
+      "field_label": "Company Name is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedDandBCompanyDunsNumber": {
+      "field_label": "D&B Company D-U-N-S Number is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedDescription": {
+      "field_label": "Description is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedDunsNumber": {
+      "field_label": "D-U-N-S Number is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedFax": {
+      "field_label": "Fax is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedIndustry": {
+      "field_label": "Industry is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedNaicsCode": {
+      "field_label": "NAICS Code is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedNaicsDescription": {
+      "field_label": "NAICS Description is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedNumberOfEmployees": {
+      "field_label": "Number of Employees is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedOwnership": {
+      "field_label": "Ownership is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedPhone": {
+      "field_label": "Phone is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedSic": {
+      "field_label": "SIC Code is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedSicDescription": {
+      "field_label": "SIC Description is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedTickerSymbol": {
+      "field_label": "Ticker Symbol is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedTradestyle": {
+      "field_label": "Tradestyle is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedWebsite": {
+      "field_label": "Website is Reviewed",
+      "type": "boolean"
+    },
+    "IsReviewedYearStarted": {
+      "field_label": "Year Started is Reviewed",
+      "type": "boolean"
+    },
+    "LastMatchedDate": {
+      "field_label": "Last Matched Date",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastStatusChangedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastStatusChangedDate": {
+      "field_label": "Last Status Changed Date",
+      "type": "datetime"
+    },
+    "Latitude": {
+      "field_label": "Latitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "Longitude": {
+      "field_label": "Longitude",
+      "type": "double",
+      "precision": "18",
+      "scale": "15"
+    },
+    "NaicsCode": {
+      "field_label": "NAICS Code",
+      "type": "string",
+      "length": "8"
+    },
+    "NaicsDescription": {
+      "field_label": "NAICS Description",
+      "type": "string",
+      "length": "120"
+    },
+    "Name": {
+      "field_label": "Account Clean Info Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NumberOfEmployees": {
+      "field_label": "Number of Employees",
+      "type": "int",
+      "digits": "8"
+    },
+    "Ownership": {
+      "field_label": "Ownership",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Phone": {
+      "field_label": "Phone",
+      "type": "phone",
+      "length": "40"
+    },
+    "PostalCode": {
+      "field_label": "Zip",
+      "type": "string",
+      "length": "20"
+    },
+    "Sic": {
+      "field_label": "SIC Code",
+      "type": "string",
+      "length": "20"
+    },
+    "SicDescription": {
+      "field_label": "SIC Description",
+      "type": "string",
+      "length": "80"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "string",
+      "length": "80"
+    },
+    "Street": {
+      "field_label": "Street",
+      "type": "textarea",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TickerSymbol": {
+      "field_label": "Ticker Symbol",
+      "type": "string",
+      "length": "20"
+    },
+    "Tradestyle": {
+      "field_label": "Tradestyle",
+      "type": "string",
+      "length": "255"
+    },
+    "Website": {
+      "field_label": "Website",
+      "type": "url",
+      "length": "255"
+    },
+    "YearStarted": {
+      "field_label": "Year Started",
+      "type": "string",
+      "length": "12"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

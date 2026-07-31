@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage"
+  ],
+  "title": "Blocked Redirect Event Type - Data API",
+  "description": "Blocked redirect events capture information about blocked redirections from Salesforce to untrusted and malformed URLs. The Blocked Redirect event type is available in the EventLogFile object in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "description",
+    "example"
+  ],
+  "fields": {
+    "BLOCKED_URI": {
+      "type": "String",
+      "description": "The full string of the target for the redirection.",
+      "example": "https://www.example.com/shop.htm"
+    },
+    "BLOCKED_URI_DOMAIN": {
+      "type": "String",
+      "description": "If BLOCKED_URI is a URL, the domain for that URL. To allow future redirections to the BLOCKED_URI, BLOCKED_URI_DOMAIN is the value to add to RedirectWhitelistUrl.",
+      "example": "www.example.com"
+    },
+    "EVENT_TYPE": {
+      "type": "String",
+      "description": "The type of event. The value is always BlockedRedirect."
+    },
+    "MALFORMED_URL": {
+      "type": "Boolean",
+      "description": "Indicates whether this redirection was blocked because the target URL failed a syntax check (1) or not (0). Here are examples of malformed URLs. https://www.example.com/$t61'3 https://malformed^url.example.com"
+    },
+    "ORIGIN": {
+      "type": "String",
+      "description": "The origin that caused the request to the BLOCKED_URI. For example, if a form on an Experience Cloud Visualforce site page redirects a user to an untrusted URL via the saveURL parameter, ORIGIN contains the base URL of that site."
+    },
+    "REFERRER": {
+      "type": "String",
+      "description": "The absolute or partial address from which the request to the BLOCKED_URI came. The Referrer-Policy HTTP Header of the request determines how much of the URL is shared."
+    },
+    "REMOTE_ADDRESS": {
+      "type": "String",
+      "description": "Remote IP address of the client making the request."
+    },
+    "REQUEST_ID": {
+      "type": "String",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID.",
+      "example": "0000000062_0000x8Lz-"
+    },
+    "TIMESTAMP": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in GMT.",
+      "example": "20220715233322.670"
+    },
+    "TIMESTAMP_DERIVED": {
+      "type": "DateTime",
+      "description": "The access time of Salesforce services in ISO8601-compatible format (YYYY-MM-DDTHH:MM:SS.sssZ). The time zone is always GMT.",
+      "example": "2022-07-27T11:32:59.555Z."
+    }
+  },
+  "usage": "Only one blocked redirect log file is available at a time. When the daily incremental event log file is generated during the daily background process, the new file replaces the existing file. If the log file doesn’t exist, either the log generation process hasn’t run yet or there’s no redirection data to report for that 24-hour window. The log file is generated only when at least one redirection occurred for the day. To collect blocked redirect logs for multiple days, schedule a daily query of the Blocked Redirect event type via REST API. For example, you can configure a cron job in Unix or a scheduled task in Windows to run the query.\n\nOnly one blocked redirect log file is available at a time. When the daily incremental event log file is generated during the daily background process, the new file replaces the existing file.\n\nIf the log file doesn’t exist, either the log generation process hasn’t run yet or there’s no redirection data to report for that 24-hour window. The log file is generated only when at least one redirection occurred for the day.\n\nTo collect blocked redirect logs for multiple days, schedule a daily query of the Blocked Redirect event type via REST API. For example, you can configure a cron job in Unix or a scheduled task in Windows to run the query."
+}

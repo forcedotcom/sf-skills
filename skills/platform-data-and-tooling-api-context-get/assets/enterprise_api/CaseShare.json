@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CaseShare - Data API",
+  "description": "Represents a sharing entry on a Case.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CaseAccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Level of access that the User or Group has to the Case. The possible values are: Read Edit All This value isn’t valid for creating or deleting records. This field must be set to an access level that is higher than the organization’s default access level for cases."
+    },
+    "CaseId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the Case associated with this sharing entry. This field can't be updated. This is a relationship field.",
+      "relationship_name": "Case",
+      "relationship_type": "Lookup",
+      "refers_to": "Case"
+    },
+    "IsDeleted": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter",
+      "description": "Indicates whether the object has been moved to the Recycle Bin (true) or not (false). Label is Deleted."
+    },
+    "RowCause": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Reason that this sharing entry exists. If you’re creating a sharing entry, the only permitted value is Manual. If no value is specified, the field defaults to Manual. All other RowCause values are read-only. After the sharing entry is created, this field can’t be edited. Valid values include: Manual—The User or Group has access because a user with “All” access manually shared the Case with them. Owner—The User is the owner of the Case. ImplicitChild—The User or Group has access to the Case on the Account associated with this Case. After faster account sharing recalculation is enabled for your org, sharing entries with this value aren’t returned in queries. Instead of storing implicit child shares, record access is determined dynamically. RelatedPortalUser—The portal user is the contact on the Case. Rule—The User or Group has access via a Case sharing rule. GuestRule—The User or Group has access via a Case guest user sharing rule. Team—The User or Group has team access. LpuImplicit—The User has access to records owned by high-volume Experience Cloud site users via a share group. ARImplicit—The User, who belongs to a partner or customer account, has access to the Case via an account relationship data sharing rule."
+    },
+    "UserOrGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the User or Group that has been given access to the Case. This field can't be updated. This is a polymorphic relationship field.",
+      "relationship_name": "UserOrGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    }
+  },
+  "special_access_rules": "As of Summer ’20 and later, only users with access to the Case object can access this object.",
+  "usage": "This object allows you to determine which users and groups can view and edit Case records owned by other users. If you attempt to create a record that matches an existing record, request updates any modified fields and returns the existing record.",
+  "wsdl_segment": "```xml\n<complexType name=\"CaseShare\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Case\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Case\"/>\n        <element name=\"CaseAccessLevel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CaseId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"RowCause\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserOrGroup\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"UserOrGroupId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CaseAccessLevel": {
+      "field_label": "Case Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CaseId": {
+      "field_label": "Case ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Case Share ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "RowCause": {
+      "field_label": "Row Cause",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UserOrGroupId": {
+      "field_label": "User/Group ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

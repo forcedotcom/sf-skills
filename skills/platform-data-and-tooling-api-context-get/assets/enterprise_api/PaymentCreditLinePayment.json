@@ -1,0 +1,207 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentCreditLinePayment - Data API",
+  "description": "A payment credit line payment. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "Amount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort",
+      "description": "Amount to apply to or unapply from the payment to the credit. This is a required field."
+    },
+    "AppliedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date payment was applied. Can be the current date or a provided date."
+    },
+    "AssociatedAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the customer account. This field is a relationship field.",
+      "relationship_name": "AssociatedAccount",
+      "refers_to": "Account"
+    },
+    "AssociatedLineId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the associated line. This field is a relationship field.",
+      "relationship_name": "AssociatedLine",
+      "refers_to": "PaymentCreditLinePayment"
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Contains the ISO code for any currency allowed by the organization. Possible values are: EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description regarding the payment credit."
+    },
+    "HasBeenUnapplied": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the refund line record with type Applied has been unapplied. Not applicable for a refund line record with type Unapplied. This is a required field."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp for when the current user last viewed this record. If this value is null, it’s possible that this record was referenced (LastReferencedDate) and not viewed."
+    },
+    "PaymentCreditId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the payment credit. This field is a relationship field. This is a required field.",
+      "relationship_name": "PaymentCredit",
+      "refers_to": "PaymentCredit"
+    },
+    "PaymentCreditLine PaymentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Number of the payment credit line payment. This field is automatically generated. Example: PCLP-{000000000}."
+    },
+    "PaymentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the applied payment credit. This field is a relationship field.",
+      "relationship_name": "Payment",
+      "relationship_type": "Master-detail",
+      "refers_to": "Payment (the master object)"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Payment credit type. This is a required field. Possible values are: Applied Unapplied"
+    },
+    "UnappliedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date payment was unapplied. Can be the current date or a provided date."
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce or D2C Commerce license is enabled. Users require the PaymentCredit and PaymentPlatform permission sets.\n\nThis object is only available in Salesforce Order\n         Management orgs or if the B2B Commerce or D2C Commerce license is enabled. Users require\n         the PaymentCredit and PaymentPlatform permission sets.",
+  "field_reference": {
+    "Amount": {
+      "field_label": "Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AppliedDate": {
+      "field_label": "Applied Date",
+      "type": "datetime"
+    },
+    "AssociatedAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "AssociatedLineId": {
+      "field_label": "Payment Credit Line Payment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "HasBeenUnapplied": {
+      "field_label": "Has Been Unapplied",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Payment Credit Line Payment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "PaymentCreditId": {
+      "field_label": "Payment Credit ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentCreditLinePaymentNumber": {
+      "field_label": "Payment Credit Line Payment Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentId": {
+      "field_label": "Payment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UnappliedDate": {
+      "field_label": "Unapplied Date",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

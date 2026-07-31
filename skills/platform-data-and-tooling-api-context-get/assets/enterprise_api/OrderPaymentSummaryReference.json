@@ -1,0 +1,185 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "OrderPaymentSummaryReference - Data API",
+  "description": "OrderPaymentSummaryReference is a junction object that allows an order payment summary to be shared with another order summary. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AuthorizationAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that has been authorized."
+    },
+    "CapturedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that has been captured."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Available only for orgs with the multicurrency feature enabled. Contains the ISO code for the currency of the OrderSummary associated with the OrderPaymentSummary. Order Management APIs and actions that create an OrderPaymentSummary for an OrderSummary set this value. The default value is USD. Possible values are: EUR—Euro USD—U.S. Dollar The default value is USD."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when the current user last viewed a record related to this record. This field is available in API version 49.0 and later."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Timestamp when the current user last viewed this record. A null value can mean that this record was only referenced (LastReferencedDate) and not viewed. This field is available in API version 49.0 and later."
+    },
+    "Method": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the OrderPaymentSummary."
+    },
+    "OrderPaymentSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the OrderPaymentSummary shared with the OrderSummary (exchange order). This field is a relationship field.",
+      "relationship_name": "OrderPaymentSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderPaymentSummary"
+    },
+    "OrderSummaryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the OrderSummary (exchange order) that the OrderPaymentSummary is shared with. This field is a relationship field.",
+      "relationship_name": "OrderSummary",
+      "relationship_type": "Lookup",
+      "refers_to": "OrderSummary"
+    },
+    "RefundedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of the OrderPaymentSummary that was refunded."
+    },
+    "ReservedBalanceAmount": {
+      "type": "currency",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "Reserved balance amount for the exchange order for the order payment summary relationship."
+    },
+    "ReservedBalanceTotalAmount": {
+      "type": "currency",
+      "properties": "Create, Defaulted on create, Filter, Nillable, Sort, Update",
+      "description": "Summary of all the ReservedBalanceAmount for all the order payment summary references."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Type of reference between the OrderSummary and the OrderPaymentSummary. Possible values are: Shared"
+    }
+  },
+  "special_access_rules": "This object is only available in Salesforce Order Management orgs or if the B2B Commerce or D2C Commerce license is enabled.",
+  "field_reference": {
+    "AuthorizationAmount": {
+      "field_label": "Authorized",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CapturedAmount": {
+      "field_label": "Captured",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Order Payment Summary Reference ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Method": {
+      "field_label": "Method",
+      "type": "string",
+      "length": "255"
+    },
+    "OrderPaymentSummaryId": {
+      "field_label": "Order Payment Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "OrderSummaryId": {
+      "field_label": "Order Summary ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RefundedAmount": {
+      "field_label": "Refunded",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ReservedBalanceAmount": {
+      "field_label": "Reserved Balance",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

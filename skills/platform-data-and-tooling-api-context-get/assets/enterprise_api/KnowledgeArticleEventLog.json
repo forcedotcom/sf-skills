@@ -1,0 +1,88 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "KnowledgeArticleEventLog - Data API",
+  "description": "Knowledge Article View event logs contain user activity with your knowledge base. This object is available in API version 61.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ArticleIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The id of the article. For example: 00Dxx0000001gEb."
+    },
+    "ArticleStatus": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The status of the article. Possible values are: D—Draft O—Online A—Archived"
+    },
+    "ArticleVersion": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The article version number. For example: 2."
+    },
+    "ArticleVersionIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the article version. For example: ka0R00000005rt6."
+    },
+    "Context": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Context of the request."
+    },
+    "IsLargeLanguageModel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Whether the article was written with an LLM."
+    },
+    "IsLastVersion": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "True if it is the last version of the article. The default value is false."
+    },
+    "Language": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ISO code of the language. For example: en_US/"
+    },
+    "ObjectType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The object requested. For example: Knowledge__kav."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestIdentifier. For example: 3nWgxWbDKWWDIk0FKfF5DV."
+    },
+    "SessionIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Session ID of the request. For example: gV7pCSW2vGaaJNFi3GSpuPIjNbKVbSxRvx34LJsIvuc=."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
+    },
+    "UserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "User type of the request. Possible values are: A—App C—Customer Portal P—Partner Portal G—Guest"
+    }
+  },
+  "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."
+}

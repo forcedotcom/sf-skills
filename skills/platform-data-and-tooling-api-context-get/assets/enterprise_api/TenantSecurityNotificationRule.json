@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityNotificationRule - Data API",
+  "description": "Stores an alert configured in the Security Center Alerts feature to notify recipients of changes made to security settings. For more information, see Create Alerts for Security Changes. This object is available to Security Center subscribers in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "MetricsType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The type of data being collected."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the metric for which data is being collected."
+    },
+    "NotificationRuleIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The ID of the alert that was triggered. This field is unique within your organization."
+    },
+    "NotificationType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The type of notification used for the alert. The options are: Email In-App"
+    },
+    "Operator": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The operator for the change that triggered the alert. For example, greater than."
+    },
+    "RecipientEmails": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The email addresses for the recipients of the alert details."
+    },
+    "RuleName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the custom alert that triggered the notification. This field is unique within your organization."
+    },
+    "Status": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The status of the alert setting. The options are: Active Draft Inactive"
+    },
+    "Threshold": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The threshold value that triggered the alert."
+    },
+    "TriggerType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The type of trigger used for the alert. The values are: Always On Change"
+    },
+    "Version": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The version number of the custom alert."
+    }
+  },
+  "special_access_rules": "This object is read/write.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityNotificationRuleChangeEvent**: Change events are available for the object.\n- **TenantSecurityNotificationRuleFeed**: Feed tracking is available for the object.\n- **TenantSecurityNotificationRuleHistory**: History is available for tracked fields of the object.\n- **TenantSecurityNotificationRuleOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityNotificationRuleShare**: Sharing is available for the object."
+}

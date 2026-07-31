@@ -6,7 +6,7 @@ Data Model Object (DMO) schemas, field mappings, query patterns, and data qualit
 
 ## Data Hierarchy
 
-```
+```text
 AiAgentSession (1)
 +-- AiAgentSessionParticipant (N)       -- agent planner IDs and user IDs linked to this session
 +-- AiAgentInteraction (N)              -- one per conversational turn
@@ -142,7 +142,7 @@ Only populated when the agent uses knowledge retrieval actions. May have 0 rows 
 A safety/compliance step that measures whether the agent's response followed its instructions:
 - `step.name` is typically `InstructionAdherence`
 - `step.output` is a Python-style dict string (not JSON). Actual format:
-  ```
+  ```text
   {'name': 'InstructionAdherence', 'value': 'HIGH', 'explanation': 'This response adheres to the assigned instructions.'}
   ```
   Check for adherence by searching for `'value': 'LOW'` in the output string.

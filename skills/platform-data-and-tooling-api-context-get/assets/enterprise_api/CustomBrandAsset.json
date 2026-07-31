@@ -1,0 +1,104 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "CustomBrandAsset - Data API",
+  "description": "Represents a branding element in a custom branding scheme. For example, a color, logo image, header image, or footer text. A CustomBrandAsset can apply to an Experience Cloud site or to an org using the Salesforce mobile app. This object is available in API version 28.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssetCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Values include: MotifZeronaryColor—The background color for the header. Label is Zeronary motif color.If this CustomBrandAsset is for a network, this is the header color for the network. If it is for an org, this is the header color when users access the Salesforce mobile app. MotifPrimaryColor—The color used for the active tab. Label is Primary motif color.Not used for the Salesforce mobile app branding. MotifSecondaryColor—The color used for the top borders of lists and tables. Label is Secondary motif color.Not used for the Salesforce mobile app branding. MotifTertiaryColor—The background color for section headers on edit and detail pages. Label is Tertiary motif color.Not used for the Salesforce mobile app branding. MotifQuaternaryColor—If this CustomBrandAsset is for a network, this is the background color for network pages. If it is for an org, this is the background color on a splash page. Label is Quaternary motif color. MotifZeronaryComplementColor—Font color used with zeronaryColor. Label is Zeronary motif colors complement color. MotifPrimaryComplementColor—Font color used with primaryColor. Label is Primary motif colors complement color.Not used for the Salesforce mobile app branding. MotifTertiaryComplementColor—Font color used with tertiaryColor. Label is Tertiary motif colors complement color.Not used for the Salesforce mobile app branding. MotifQuaternaryComplementColor—Font color used with quaternaryColor. Label is Quaternary motif colors complement color.Not used for the Salesforce mobile app branding. PageHeader—An image that appears on the header of the pages. Can be an .html, .gif, .jpg, or .png file. Label is Page Header.Not used for the Salesforce mobile app branding. PageFooter—An image that appears on the footer of the pages. Must be an .html file. Label is Page Footer.Not used for the Salesforce mobile app branding. LoginFooterText—The text that appears in the footer of the login page. Label is Footer text displayed on the login page.Not used for the Salesforce mobile app branding. LoginLogoImageId—The logo that appears on the login page for external users. In the Salesforce mobile app, this logo also appears on the Experience Cloud site splash page. Label is Logo image displayed on the login page. LargeLogoImageId—Only used for the Salesforce mobile app. The logo that appears on the splash page when you start the Salesforce mobile app. Label is Large logo image. SmallLogoImageId—Only used for the Salesforce mobile app. The logo that appears on the publisher in the Salesforce mobile app. Label is Small logo image. StaticLogoImageURL—The logo that appears on the login page for external users. Label is Static logo image url. LoginQuaternaryColor—The background color that appears on the Experience Cloud site login page for external users. Label is Login background color. LoginRightFrameUrl—The URL to the contents that appears on right side of the Experience Cloud site login page for external users. Label is Login right frame url. LogoAssetId—Navigation tile menu item images. Label is Logo asset image. LoginPrimaryColor—The background color of the login button. Label is Login primary color. LoginBackgroundImageUrl—The path to the image URL that appears as the background on the Experience Cloud site’s login page. Label is Background image url. LargeLogoAssetId—Navigational topic images. Label is Large logo asset image. MediumLogoAssetId—Featured topic images. Label is Medium logo asset image."
+    },
+    "AssetSourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the document uploaded to the Documents folder if the value of AssetCategory is: PageHeader PageFooter LoginLogoImageId LargeLogoImageId SmallLogoImageId ID of the content asset if the value of the AssetCategory is: LogoAssetId LargeLogoAssetId MediumLogoAssetId"
+    },
+    "CustomBrandId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "ID of the associated CustomBrand. This is a relationship field.",
+      "relationship_name": "CustomBrand",
+      "relationship_type": "Lookup",
+      "refers_to": "CustomBrand"
+    },
+    "ForeignKeyAssetId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "This field was removed in API version 41.0, and is available in earlier versions for backward compatibility only. Use AssetSourceId instead. ID of the document used if the value of AssetCategory is PageHeader, PageFooter, or LoginLogoImageId."
+    },
+    "TextAsset": {
+      "type": "string",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Text used if the AssetCategory is LoginFooterText."
+    }
+  },
+  "special_access_rules": "This object is available only when your org has digital experiences enabled.",
+  "usage": "Use this object to add basic branding elements—color scheme, header or footer images, login page logo, or footer text—to the branding scheme (CustomBrand) for your Experience Cloud site. You must have Create and Manage Experiences to customize site branding. If you’re using digital experiences in the Salesforce mobile app, the loading page shows the logo.\n\nUse this object to add basic branding elements—color scheme, header or footer images, login page logo, or footer text—to the branding scheme (CustomBrand) for your Experience Cloud site. You must have Create and Manage Experiences to customize site branding.\n\nIf you’re using digital experiences in the Salesforce mobile app, the loading page shows the logo.",
+  "wsdl_segment": "```xml\n<complexType name=\"CustomBrandAsset\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AssetCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"AssetSourceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomBrand\" nillable=\"true\" minOccurs=\"0\" type=\"ens:CustomBrand\"/>\n        <element name=\"CustomBrandId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TextAsset\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "AssetCategory": {
+      "field_label": "Asset Category",
+      "type": "picklist",
+      "length": "40"
+    },
+    "AssetSourceId": {
+      "field_label": "Asset source ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomBrandId": {
+      "field_label": "Custom Brand ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Custom Brand Asset ID",
+      "type": "id",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Modified Date",
+      "type": "datetime"
+    },
+    "TextAsset": {
+      "field_label": "Text Asset",
+      "type": "string",
+      "length": "333"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

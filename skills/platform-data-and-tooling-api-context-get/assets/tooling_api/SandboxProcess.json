@@ -1,0 +1,151 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "SandboxProcess - Tooling API",
+  "description": "Represents the sandbox copy process for a SandboxInfo record.",
+  "supported_soap_calls": "`query()`, `retrieve()`, `update()`",
+  "supported_rest_api_http_methods": "`GET`, `PATCH`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to",
+    "restrictions"
+  ],
+  "fields": {
+    "ActivatedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A reference to the ID of the user who requested sandbox activation.",
+      "relationship_name": "ActivatedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ActivatedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents when the sandbox was activated during a refresh."
+    },
+    "ActivationUserGroupId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the ID of the group consisting of users who can access the sandbox. The user who created the sandbox is added to the group by default. Available in API version 60.0 and later. This field is a relationship field.",
+      "relationship_name": "ActivationUserGroup",
+      "relationship_type": "Lookup",
+      "refers_to": "Group"
+    },
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A reference to the ID of an Apex class to run after each copy of the sandbox. Running this class allows you to perform DML operations on the sandbox to prepare it for use. The class must extend the System.SandboxPostCopy interface. Available in API version 36.0 and later.",
+      "relationship_name": "ApexClass",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass"
+    },
+    "AutoActivate": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Represents whether the sandbox refresh is configured to activate immediately upon completion."
+    },
+    "CopyArchivedActivities": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "If true, archived activity data is copied to the sandbox.",
+      "restrictions": "This field is visible only if your organization has purchased an option to copy archived activities for sandbox. To obtain this option, contact Salesforce Customer Support."
+    },
+    "CopyChatter": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Represents whether archived Chatter data is copied to the sandbox."
+    },
+    "CopyProgress": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Represents how much of a copy has been completed. Available for Developer, Developer Pro, and Full sandboxes. Not available for Full or Partial sandboxes created from sandbox templates."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "A description of the sandbox, which helps you distinguish it from other sandboxes."
+    },
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents when the sandbox copy process finished."
+    },
+    "Features": {
+      "type": "textarea",
+      "properties": "Nillable, Update",
+      "description": "The list of add-on features to apply after the sandbox is created or refreshed. Currently there’s one valid value: ['SandboxStorage']: Increases the data storage available for Developer sandboxes from 200 MB to 400 MB and Developer Pro sandboxes from 1 GB to 2 GB. You can’t use this feature with Partial Copy or Full sandboxes."
+    },
+    "HistoryDays": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Represents the number of days of object history to be copied in the sandbox. Valid values: -1, which means all available days 0 10 20 30 60 90 120 150 180"
+    },
+    "LicenseType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The sandbox license type. Valid values: ADVANCED_DEV ADVANCED_FULL DEVELOPER DEVELOPER_PRO PARTIAL FULL FULL_PLUS"
+    },
+    "RefreshAction": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Editing this field activates or discards a sandbox refresh. Valid values: ACTIVATE DISCARD",
+      "restrictions": "If all the following are true, you can activate or discard a sandbox refresh by editing the value in this field. This record is the latest SandboxProcess record. The associated sandbox has been refreshed. This record’s Status is Pending Activation."
+    },
+    "SandboxInfoId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A reference to the ID of the SandboxInfo being processed (create or refresh).",
+      "relationship_name": "SandboxInfo",
+      "relationship_type": "Lookup",
+      "refers_to": "SandboxInfo"
+    },
+    "SandboxName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the sandbox."
+    },
+    "SandboxOrganization": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the org created by the copy process. This field is available in API version 37.0 and later."
+    },
+    "SourceId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the ID of the SandboxInfo that this sandbox is a clone of. This field is used only when cloning a sandbox. When this field is used, LicenseType must be null. Your source sandbox must be an existing, completed sandbox, that belongs to the same production org as the sandbox you’re creating or refreshing. Your SourceId value can’t be the same SandboxInfo that you’re updating. Available in API version 37.0 and later.",
+      "relationship_name": "Source",
+      "relationship_type": "Lookup",
+      "refers_to": "SandboxInfo"
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Represents when the sandbox copy process started."
+    },
+    "Status": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Current state of the sandbox copy process. If running a SOQL query, use the values in parentheses. Possible values include: Activating Activation Confirmed (5) Deactivation Confirmed (6) Deactivation Finished (7) Activation Processing (8) Completed (1) Deleted (D) Deleting (E) Discarding (F) Locked (B) Locking (L) Pending (0) Pending Activation (4) Processing (2) Sampling (X) Stopped (G) Suspended (S)"
+    },
+    "TemplateId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A reference to the ID of the PartitionLevelScheme that represents the sandbox template associated with the sandbox for this process. A sandbox template selects which objects to copy in a sandbox.To use the TemplateId field, you must have the ManageSandboxes user permission.",
+      "relationship_name": "Template",
+      "relationship_type": "Lookup",
+      "refers_to": "PartitionLevelScheme"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SandboxProcess\">\n  <xsd:complexContent>\n    <xsd:extension base=\"ens:sObject\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

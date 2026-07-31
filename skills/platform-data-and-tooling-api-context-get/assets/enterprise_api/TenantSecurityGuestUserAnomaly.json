@@ -1,0 +1,110 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityGuestUserAnomaly - Data API",
+  "description": "Represents metric details for guest user anomaly events detected by Threat Detection. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The unique identifier for this detail record."
+    },
+    "EventDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The time when the anomaly was reported. For example, 2020-01-20T19:12:26.965Z. The most granular setting is milliseconds."
+    },
+    "EventIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The unique ID of the event, which is shared with the corresponding storage object."
+    },
+    "EventName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The name of the event."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the type of metric counted. This field is unique within your organization."
+    },
+    "MetricsType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of data collected."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the metric for the data collected."
+    },
+    "RequestedObjects": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The objects requested by the customers."
+    },
+    "Score": {
+      "type": "double",
+      "properties": "Create, Filter, idLookup, Nillable, Sort, Update",
+      "description": "Specifies how significantly the guest user behavior deviates from the other guest users. It is formatted as a number between 0 and 1."
+    },
+    "SoqlCommands": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "SOQL commands run by the guest user."
+    },
+    "Summary": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A text summary of the anomaly that caused this event."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The ID of the tenant that was targeted in the event."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The name of the tenant that was targeted in the event."
+    },
+    "TotalControllerEvents": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of times controllers were triggered."
+    },
+    "UserAgent": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "User Agent for this event."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The origin user’s unique ID."
+    },
+    "UserType": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Type of user of this event. For example, a guest user."
+    },
+    "Username": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The origin username in the format of user@company.com at the time the event was created."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **TenantSecurityGuestUserAnomalyChangeEvent**: Change events are available for the object.\n- **TenantSecurityGuestUserAnomalyFeed**: Feed tracking is available for the object.\n- **TenantSecurityGuestUserAnomalyHistory**: History is available for tracked fields of the object.\n- **TenantSecurityGuestUserAnomalyOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityGuestUserAnomalyShare**: Sharing is available for the object."
+}

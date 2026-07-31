@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "EmployeeCrisisAssessment - Data API",
+  "description": "Represents a crisis assessment of an Employee. This object is available in API version 48.0 and later. In API version 49.0 and later, this object supports reports, criteria-based sharing rules, and history tracking, plus you can exclude individual fields from custom page layouts.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Assessment": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The employee’s COVID-19 status at the time of the assessment. Possible values are: COVID-19 Immune or Recovered COVID-19 No Symptoms COVID-19 Symptoms or Exposed COVID-19 Test Negative COVID-19 Test Positive Declined"
+    },
+    "AssessmentDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date of the assessment. Required"
+    },
+    "AssessmentNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The assessment record number."
+    },
+    "CrisisId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The Crisis that this assessment is associated with."
+    },
+    "EmployeeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The Employee that this assessment is associated with.",
+      "required": true
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who currently owns this record. Default value is the user logged in to the API to perform the create operation."
+    },
+    "SourceAssessment": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The record in the source system that drove this assessment."
+    },
+    "SourceSystem": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The source system that drove this assessment."
+    }
+  },
+  "special_access_rules": "To access this object, you must be assigned a Workplace Command Center permission set license and the Provides access to Workplace Command Center features system permission.",
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **EmployeeCrisisAssessmentHistory (API version 49.0)**: History is available for tracked fields of the object.\n- **EmployeeCrisisAssessmentOwnerSharingRule**: Sharing rules are available for the object.\n- **EmployeeCrisisAssessmentShare (API version 49.0)**: Sharing is available for the object."
+}

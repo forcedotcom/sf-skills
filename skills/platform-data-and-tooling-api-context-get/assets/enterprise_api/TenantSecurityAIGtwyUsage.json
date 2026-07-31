@@ -1,0 +1,103 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "TenantSecurityAIGtwyUsage - Data API",
+  "description": "Stores Einstein generative AI gateway usage data. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Cloud": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "Cost cloud ID."
+    },
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the individual detail record. This field is unique across all tenants."
+    },
+    "Feature": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The AI feature for which the gateway request was made."
+    },
+    "MaskedPrompt": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Masked prompt or input text."
+    },
+    "MaskedResponse": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The generated response from the LLM. If masking is enabled, this may contain placeholder text."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the type of metric that was counted. This field is unique within your organization."
+    },
+    "MetricsType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The type of data collected."
+    },
+    "Model": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the model to which the request was sent."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the metric for which data is being collected."
+    },
+    "ObjectName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "Name of the Salesforce object is referenced in the prompt."
+    },
+    "Prompt": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The hydrated version of prompt text before data masking is applied. The actual prompt sent to the LLM will mask sensitive data if data masking is enabled."
+    },
+    "PromptTemplateDevName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The ID of the prompt template."
+    },
+    "PromptTemplateVersionNo": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The version of the prompt template."
+    },
+    "PromptTokens": {
+      "type": "int",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The number of tokens used in the prompt."
+    },
+    "Response": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The generated response after unmasking."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant of this AI gateway usage event."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the tenant of this AI gateway usage event."
+    }
+  },
+  "special_access_rules": "This object is available for Security Center subscribers. This object is read-only."
+}

@@ -1,0 +1,248 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowOrchestrationWorkItem - Data API",
+  "description": "Represents a work item associated with a run-time instance of an interactive step in a run-time instance of an orchestration. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssigneeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the user, group, or queue assigned to the orchestration work item. This field is a polymorphic relationship field.",
+      "relationship_name": "Assignee",
+      "relationship_type": "Lookup",
+      "refers_to": "Group (Type = Regular), Group (Type = Queue), User"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The description of the orchestration work item."
+    },
+    "ElapsedTimeSinceAsgntInSec": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When status is Assigned, the number of seconds that have passed since the work item was last assigned. When status is Completed, this value is null. This field is available in API version 63.0 and later."
+    },
+    "ElapsedTimeSinceCreationInSec": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "When status is Assigned, the number of seconds that have passed since the work item was created. When status is Completed, this value is null. This field is available in API version 63.0 and later."
+    },
+    "FlowType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The flow type of the orchestration that created the orchestration work item. Valid values are: ApprovalOrchAutolnch—Autolaunched Flow Approval Process ApprovalOrchRecTrigAftSave—Record-Triggered After Save Flow Approval Process ExtSysChgFlowAppvl—External System Change-Triggered Flow Approval Process ExtSysChgOrch—External System Change-Triggered Orchestration OrchAutolnch—Autolaunched No Trigger Orchestration OrchRecTrigAftSave—Record-Triggered After Save Orchestration This field is available in API version 62.0 and later."
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The label of the orchestration work item."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent time a user viewed a record related to the orchestration work item. This field is available in API version 55.0 and later."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The most recent time a user viewed the orchestration work item. This field is available in API version 55.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The API name of the orchestration work item."
+    },
+    "OrchestrationName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of the orchestration associated with the orchestration work item. This field is avavilable in API version 56.0 and later."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "When the assignee is an internal user: the ID of the internal user When the assignee is a credentialed Experience Cloud site visitor: the ID of the credentialed Experience Cloud site visitor When the assignee is a group or queue: the ID of the automated process user This field is available in API version 56.0 and later.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group (Type = Regular), Group (Type = Queue), User"
+    },
+    "ParentWorkItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the parent orchestration work item. When multiple group members receive child work items, this field links each child to its parent. This field is available in API version 67.0 and later.",
+      "relationship_name": "ParentWorkItem",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowOrchestrationWorkItem"
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the context record, such as an account, case, or expense, that the orchestration work item is related to. An assigned user completes the associated orchestration work item on the page for this record. This field is a polymorphic relationship field.",
+      "relationship_name": "RelatedRecord",
+      "relationship_type": "Lookup",
+      "refers_to": "All objects except AccountContactRelation, AccountTeamMember, ActiveScratchOrg, ActivityMetric, ActivityMetricRollup,CampaignMember, CartCheckoutSession, CartDeliveryGroup, CartDeliveryGroupMethod, ChatterActivity,CollaborationGroupMember, ContentDesignKit, ContentDesignKitVersion, ConversationBroadcastEntry,ConversationReason, ConversationReasonExcerpt, ConversationReasonGroup, CustomPersonDataTemplate,ElectronicMediaGroup, EngagementScore, Event, FeedItem, FlowOrchestrationWorkItem, FtestDelPlatform1,FtestDelPlatform2, FtestFormulaFieldRefSql,HighScaleSample, HighScaleSampleItem, LegalEntity, LocationWaitlist, LocationWaitlistedParty,LocWaitlistMsgTemplate, ManagedContentVersion, MessagingEndUser, MessagingSession, MLModel,MLModelFactor, MLModelFactorComponent, NetworkMember, NetworkMemberChunk, OpportunityContactRole,OpportunityLineItem, OpportunityScore, OpportunityTeamMember, OrgSnapshot, PaymentTermItem,RequestsForAccessSIQ, ScoreIntelligence, ScratchOrgInfo, SharingRecordCollection, SharingRecordCollectionItem,SharingRecordCollectionMember, StreamActivityAccess, Survey, SurveyMessagingChannel, SurveyPage,SurveyQuestionChoice, SurveyVersion, Task, TenantSecurityAlertRuleSelectedTenant, TenantSecurityApiAnomaly,TenantSecurityConnectedApp, TenantSecurityCredentialStuffing, TenantSecurityHealthCheckBaselineTrend,TenantSecurityHealthCheckDetail, TenantSecurityHealthCheckTrend, TenantSecurityLogin, TenantSecurityMetricDetail,TenantSecurityMetricDetailLink, TenantSecurityMobilePolicyTrend, TenantSecurityMonitorMetric,TenantSecurityNotification, TenantSecurityNotificationRule, TenantSecurityPackage, TenantSecurityPolicy,TenantSecurityPolicyChangeLog, TenantSecurityPolicyDeployment, TenantSecurityPolicySelectedTenant,TenantSecurityReportAnomaly, TenantSecuritySessionHijacking, TenantSecurityTenantChangeLog,TenantSecurityTenantInfo, TenantSecurityTrustedIpRangeTrend, TenantSecurityUserActivity, TenantSecurityUserPerm,TenantSecurityWebsite, TopicAssignment, UserExternalCredential, VoiceCall"
+    },
+    "ScreenFlow": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The screen flow associated with the orchestration work item. Possible values are screen flows in the org."
+    },
+    "ScreenFlowInputs": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The input parameters required by the screen flow."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the work item. Valid values are: Assigned Completed"
+    },
+    "StepInstanceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the flow orchestration step associated with the orchestration work item. This field is a relationship field.",
+      "relationship_name": "StepInstance",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowOrchestrationStepInstance"
+    }
+  },
+  "special_access_rules": "An assignee can see all work item records assigned to them. If sharing rules are defined for FlowOrchestrationWorkItem, they determine access to specific orchestration work item records for users other than the assignee. Or the user must have the View All Data permission.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **FlowOrchestrationWorkItemFeed**: Feed tracking is available for the object.\n- **FlowOrchestrationWorkItemHistory**: History is available for tracked fields of the object.\n- **FlowOrchestrationWorkItemOwnerSharingRule**: Sharing rules are available for the object.\n- **FlowOrchestrationWorkItemShare**: Sharing is available for the object.",
+  "wsdl_segment": "```xml\n<complexType name=\"FlowOrchestrationWorkItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Assignee\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"AssigneeId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ElapsedTimeSinceAsgntInSec\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"ElapsedTimeSinceCreationInSec\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:long\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ParentWorkItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowOrchestrationWorkItem\"/>\n        <element name=\"ParentWorkItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RelatedRecord\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"RelatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ScreenFlow\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ScreenFlowInputs\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"StepInstance\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowOrchestrationStepInstance\"/>\n        <element name=\"StepInstanceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserDefinedLabelAssignments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "AssigneeId": {
+      "field_label": "Assignee ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "ElapsedTimeSinceAsgntInSec": {
+      "field_label": "Time Since Assignment",
+      "type": "long",
+      "digits": "18"
+    },
+    "ElapsedTimeSinceCreationInSec": {
+      "field_label": "Time Since Creation",
+      "type": "long",
+      "digits": "18"
+    },
+    "FlowType": {
+      "field_label": "Flow Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Orchestration Work Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Step",
+      "type": "string",
+      "length": "80"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OrchestrationName": {
+      "field_label": "Orchestration Developer Name",
+      "type": "string",
+      "length": "80"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParentWorkItemId": {
+      "field_label": "Orchestration Work Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "Context Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScreenFlow": {
+      "field_label": "Screen Flow ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ScreenFlowInputs": {
+      "field_label": "Screen Flow Inputs",
+      "type": "textarea",
+      "length": "32768"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StepInstanceId": {
+      "field_label": "Orchestration Step Run ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

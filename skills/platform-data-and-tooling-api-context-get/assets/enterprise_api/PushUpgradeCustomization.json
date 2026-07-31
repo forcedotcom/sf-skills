@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "PushUpgradeCustomization - Data API",
+  "description": "Customized push upgrades allow a package subscriber to block push upgrades to their org. Package developers control which subscribers can opt into customized push upgrades. Each push upgrade customization maps to a specific package and to a specific subscriber org. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CustomUpgradeType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The type of push upgrade customization. Possible values are: BlockedBySubscriber—Blocked By Subscriber None The default value is None."
+    },
+    "ExpirationDays": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of days that a subscriber is allowed to block push upgrades. Enter -1 to set customized push upgrades to never expire. The default value is null."
+    },
+    "HasRestrictionEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the subscriber org has blocked push upgrades. The default value is false."
+    },
+    "IsCustomUpgradeAllowed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the package developer has allowed a subscriber to opt into customized push upgrades. The default value is false."
+    },
+    "IsRestrictionOverridden": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether customized push upgrades have been overridden by Salesforce Customer Support for the subscriber org. The default value is false."
+    },
+    "PushUpgradeBlockInitiatedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date that IsCustomUpgradeAllowed was set to true."
+    }
+  }
+}

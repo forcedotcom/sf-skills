@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "AccountPlanObjMeasCalcCond - Data API",
+  "description": "Represents a field and value combination for filtering records to include in the calculation of a sales account plan objective measure’s current value. This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountPlanObjMeasCalcDefId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The account plan objective measure calculation definition where this criteria is used. This field is a relationship field.",
+      "relationship_name": "AccountPlanObjMeasCalcDef",
+      "relationship_type": "Master-detail",
+      "refers_to": "AccountPlanObjMeasCalcDef"
+    },
+    "FieldName": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A field on the calculation definition’s TargetObject that you want to filter by. Fields on the Campaign, Case, Contact, or Opportunity objects are supported."
+    },
+    "Operation": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The logical operator for matching records with the specified field value. Possible values are: Contains Equals GreaterOrEqual GreaterThan LessOrEqual LessThan NotContain NotEqual StartsWith"
+    },
+    "Value": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value to match for the specified field."
+    }
+  },
+  "special_access_rules": "This object is available if sales account plans are turned on.",
+  "usage": "Let’s say that a calculation definition tracks the currency amount on Closed Won opportunities. The calculation definition’s TargetObject is Opportunity, and the condition further specifies these values."
+}

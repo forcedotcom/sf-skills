@@ -1,0 +1,137 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "MessagingChannelUsage - Data API",
+  "description": "Represents the status of an enhanced Messaging channel or of an application in a Unified Messaging channel. This object is available in API version 60.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ConsentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The level of customer consent required for your business to message a customer on this channel. Customers can opt out at any time. Possible values are: Implicit Opt-In: By sending an initial message to your business, the customer agrees to receive messages. Explicit Opt-In: The customer uses keywords to actively opt into receiving messages. Double Opt-In: The customer uses keywords to opt in twice to receiving messages."
+    },
+    "DeploymentStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the connected channel or application. If the DeploymentStatus is Active, messages can be sent or received (if permitted). Possible values are: New—Admin selected the Marketing or Service application in Unified Messaging Setup, or created a new enhanced WhatsApp, Facebook Messenger, Apple Messages for Business, or LINE channel on the Messaging Settings page in Setup. Provisioning—Admin clicked Connect on an application in Unified Messaging Setup, or Activate on an enhanced Messaging channel. Active—Provisioning was successful and the channel can be used to message with customers via the connected application or channel. Error—Provisioning or deprovisioning wasn’t successful. The admin can retry. Deprovisioning—Admin clicked Disconnect on an application in Unified Messaging Setup, or Deactivate on an enhanced Messaging channel. Disabled—Deprovisioning was successful and the channel or application can no longer be used to message with customers."
+    },
+    "DeploymentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Indicates whether the record is related to Service Cloud or Marketing Cloud. Possible values are: Conversation—Relating to Service Cloud. MessagingEngagement—Relating to Marketing Cloud. MJ—Relating to Marketing Cloud. J stands for Journey Builder."
+    },
+    "DisabledTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The time the MessagingChannelUsage record entered the Disabled state after an admin clicked Disconnect or Deactivate on the application or channel. When the record is disabled, all inbound and outbound messages aren’t sent via the connected application. Any sessions with a status other than Ended or Error are automatically ended within 48 hours unless the MessagingChannelUsage record is reenabled."
+    },
+    "ErrorReason": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If an error occurs during connection, activation, disconnection, or deactivation of a MessagingChannelUsage record, the ErrorReason provides more information about what went wrong. For example, if an associated Service Cloud application for a Unified Messaging channel is missing a fallback queue or consent keywords, the connection attempt fails with an ErrorReason of ProvisioningError. Possible values are: DeprovisioningError InternalError InvalidSelection ProvisioningError"
+    },
+    "MessagingChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The enhanced Messaging channel or Unified Messaging channel that the MessagingChannelUsage record is associated with. A MessagingChannel can be associated with up to three MessagingChannelUsage records. This field is a relationship field.",
+      "relationship_name": "MessagingChannel",
+      "relationship_type": "Lookup",
+      "refers_to": "MessagingChannel"
+    },
+    "RoutingOverride": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Applicable only to MessagingChannelUsage records with a deployment type of MJ (Marketing Cloud). RoutingOverride indicates how messages are delivered in a unified channel where both the Service and Marketing applications are connected. Possible values are: MJKeywordsOnly—If a messaging user sends a marketing keyword that is defined in Journey Builder, Journey Builder handles the message delivery and response. If a messaging user sends a non-keyword message, Omni-Channel handles the message delivery and response. NonSessionMessages—If a messaging user is engaged in an active Service Cloud messaging session, Service Cloud handles message delivery and response. If the user isn’t engaged in an active session, Journey Builder handles message delivery and response. Regardless of the RoutingOverride value, outbound messages are always handled by Service Cloud if the messaging user is engaged in an active Service Cloud messaging session. A session is considered active if its status isn't Ended or Error."
+    }
+  },
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"MessagingChannelUsage\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ConsentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DeploymentStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DeploymentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DisabledTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ErrorDetails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ErrorReason\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MessagingChannel\" nillable=\"true\" minOccurs=\"0\" type=\"ens:MessagingChannel\"/>\n        <element name=\"MessagingChannelId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"MessagingChannelUsages\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"RoutingOverride\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ConsentType": {
+      "field_label": "Consent Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeploymentStatus": {
+      "field_label": "Deployment Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DeploymentType": {
+      "field_label": "Deployment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DisabledTime": {
+      "field_label": "Disabled Time",
+      "type": "datetime"
+    },
+    "ErrorDetails": {
+      "field_label": "Error Details",
+      "type": "string",
+      "length": "40"
+    },
+    "ErrorReason": {
+      "field_label": "Error Reason",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Messaging Channel Usage ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Modified On",
+      "type": "datetime"
+    },
+    "MessagingChannelId": {
+      "field_label": "Messaging Channel ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RoutingOverride": {
+      "field_label": "Routing Override",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "WorkDemographic - Data API",
+  "description": "Represents the field values used to specify slices in the workload forecasting and capacity planning. This object is available in API version 49.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Channel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The channel value."
+    },
+    "CustomWorkType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Custom dimension value that the user can define other than the channel, region, and skill dimensions."
+    },
+    "GroupIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The group or queue associated to a slice when creating an Omni-based workload."
+    },
+    "JobProfileId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The foreign key to the JobProfile object. This is a relationship field.",
+      "relationship_name": "JobProfile",
+      "relationship_type": "Lookup",
+      "refers_to": "JobProfile"
+    },
+    "Region": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The region value."
+    },
+    "ServiceChannelId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The foreign key to the ServiceChannel object. This is a relationship field.",
+      "relationship_name": "ServiceChannel",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceChannel"
+    },
+    "ServiceTerritoryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The foreign key to the ServiceTerritory object. This is a relationship field.",
+      "relationship_name": "ServiceTerritory",
+      "relationship_type": "Lookup",
+      "refers_to": "ServiceTerritory"
+    },
+    "SkillSet": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The skill value."
+    }
+  },
+  "special_access_rules": "The org must have the Workforce Engagement license. To view, create, edit, or delete records, the user must have the Workforce Engagement Analyst permission set.\n\nThe org must have the Workforce Engagement\n         license. To view, create, edit, or delete records, the user must have the Workforce\n         Engagement Analyst permission set."
+}

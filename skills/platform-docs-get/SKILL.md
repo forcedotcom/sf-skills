@@ -2,11 +2,10 @@
 name: platform-docs-get
 description: "Official Salesforce documentation retrieval skill. Use when you need authoritative Salesforce docs from developer.salesforce.com, help.salesforce.com, architect.salesforce.com, admin.salesforce.com, or lightningdesignsystem.com, especially when pages are JS-heavy, shell-rendered, or hard to extract with naive fetching. Use to ground answers in official Salesforce sources instead of third-party blogs or summaries. TRIGGER when: user asks for official Salesforce documentation, Apex or API reference, LWC docs, Agentforce docs, setup or help articles, or any doc from a Salesforce-owned domain. DO NOT TRIGGER when: user is asking for a code change, deployment task, or anything not requiring documentation retrieval — use the appropriate sf-* skill instead."
 metadata:
-  version: "1.1"
-  relatedSkills: ["platform-soql-query"]
+  version: "1.2"
   cliTools:
     - tool: ["python3"]
-      semver: ">=3.8.0"
+      semver: ">=3.10.0"
 ---
 
 # platform-docs-get
@@ -30,7 +29,7 @@ Before fetching, identify:
 - The exact concept, identifier, class, method, or feature name being requested
 - The likely doc family (developer docs, help articles, design system, architect/admin)
 
-No additional setup is required to use the retrieval playbook in this skill. The optional extraction scripts require `playwright` — see `requirements.txt`.
+No additional setup is required to use the retrieval playbook in this skill. The optional extraction scripts require `playwright` — see `scripts/requirements.txt`.
 
 ## Official Sources Only
 
@@ -209,4 +208,4 @@ If evidence is weak, say so plainly rather than forcing an answer.
 | `scripts/extract_salesforce_doc.py` | Use to fetch any official Salesforce doc URL; automatically routes `help.salesforce.com` into the dedicated Help extractor and supports browser-rendered extraction for all Salesforce-owned doc hosts |
 | `scripts/extract_help_salesforce.py` | Use directly when targeting `help.salesforce.com` `articleView` URLs; use when the wrapper is not appropriate |
 | `scripts/runtime_bootstrap.py` | Imported by the extraction scripts to resolve the isolated platform-docs-get Python runtime and Playwright browser path; not called directly |
-| `requirements.txt` | Lists Python dependencies (`playwright`, `playwright-stealth`) needed to run the extraction scripts |
+| `scripts/requirements.txt` | Lists Python dependencies (`playwright`, `playwright-stealth`) needed to run the extraction scripts |

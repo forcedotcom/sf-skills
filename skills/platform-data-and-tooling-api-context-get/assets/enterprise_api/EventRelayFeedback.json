@@ -1,0 +1,166 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "EventRelayFeedback - Data API",
+  "description": "Represents execution state information about an event relay from Salesforce to Amazon EventBridge for platform events and change data capture events. Query this object to get information such as the event relay status and any error message. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ErrorCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The error code of the last error that occurred during the relay of event messages. For a list of possible error codes and messages, see Error Codes."
+    },
+    "ErrorIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The identifier of an unexpected system error that occurred during the relay of event messages."
+    },
+    "ErrorMessage": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The error message of the last error that occurred during the relay of event messages. For a list of possible error codes and messages, see Error Codes."
+    },
+    "ErrorTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time in the UTC time zone when the last error occurred during the relay of event messages."
+    },
+    "EventRelayConfigId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the event relay configuration that this feedback record is collecting the execution information of. This field is a relationship field.",
+      "relationship_name": "EventRelayConfig",
+      "relationship_type": "Lookup",
+      "refers_to": "EventRelayConfig"
+    },
+    "EventRelayNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The number that identifies the EventRelayFeedback record. This field is of type Auto Number."
+    },
+    "LastRelayedEventTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time in the UTC time zone when the last event was relayed to Amazon EventBridge."
+    },
+    "RemoteResource": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the partner event source associated with the event relay. It is in the format aws.partner/salesforce.com/orgID/channelID. For example: aws.partner/salesforce.com/00DRM000000Fxts2AC/0YLRM0000004Dfg4AE."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the event relay. Possible values are: ERROR— The event relay encountered an error while running or during a state change that the administrator initiates. During the ERROR state, no events are relayed to Amazon EventBridge. The system attempts periodically to recover from the error. If it succeeds, the Status field value changes to RUNNING or to the new state that the administrator selected. The event relay attempts to resume sending events from the event bus from where it left off. In rare occasions, if it can't resume after the last relayed event, it uses the error recovery option in the relayOption field of EventRelayConfig to determine where to resume from. DELETED—Reserved for future use. PAUSED— An administrator paused the event relay. No events are relayed to Amazon EventBridge during this status. When an administrator resumes the event relay, events are relayed from the last position in the event bus, as long as they're within the retention window. RUNNING— The event relay is running and actively relaying events from Salesforce to Amazon EventBridge. STOPPED—The event relay is stopped and no events are relayed to Amazon EventBridge. Some state information stored in EventRelayFeedback fields is deleted, such as LastRelayedEventTime and error fields. When the event relay is resumed, only new events are relayed. The default value is STOPPED."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Reserved for future use."
+    }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"EventRelayFeedback\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ErrorCode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ErrorIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ErrorMessage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ErrorTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"EventRelayConfig\" nillable=\"true\" minOccurs=\"0\" type=\"ens:EventRelayConfig\"/>\n        <element name=\"EventRelayConfigId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"EventRelayNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastRelayedEventTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"RemoteResource\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UsageType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "ErrorCode": {
+      "field_label": "Error Code",
+      "type": "string",
+      "length": "128"
+    },
+    "ErrorIdentifier": {
+      "field_label": "Error Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "ErrorMessage": {
+      "field_label": "Error Message",
+      "type": "textarea",
+      "length": "1024"
+    },
+    "ErrorTime": {
+      "field_label": "Error Time",
+      "type": "datetime"
+    },
+    "EventRelayConfigId": {
+      "field_label": "Event Relay Config ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EventRelayNumber": {
+      "field_label": "Event Relay Feedback Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Event Relay Feedback ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastRelayedEventTime": {
+      "field_label": "Last Relayed Event Timestamp",
+      "type": "datetime"
+    },
+    "RemoteResource": {
+      "field_label": "Remote Resource",
+      "type": "string",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Current Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UsageType": {
+      "field_label": "Event Relay Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

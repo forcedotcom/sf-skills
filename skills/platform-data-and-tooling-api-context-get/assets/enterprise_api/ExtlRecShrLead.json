@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExtlRecShrLead - Data API",
+  "description": "Represents the Lead record of a vendor org if you’re a partner. If you’re a vendor for Partner Connect, this object represents a partner org. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "ExtlRecShrCnctId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the external record share connection. This field is a relationship field.",
+      "relationship_name": "ExtlRecShrCnct",
+      "refers_to": "ExtlRecShrCnct"
+    },
+    "LeadId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the partner lead. This field is a relationship field.",
+      "relationship_name": "Lead",
+      "relationship_type": "Master-detail",
+      "refers_to": "Lead (the master object)"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "For internal use only."
+    }
+  },
+  "special_access_rules": "To see this object, enable Partner Connect or Partner Connect for Vendors. See Set Up Partner Connect as a Partner and Set Up Partner Connect as a Vendor in Salesforce Help."
+}

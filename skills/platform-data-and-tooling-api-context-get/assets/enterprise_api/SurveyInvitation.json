@@ -1,0 +1,240 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "SurveyInvitation - Data API",
+  "description": "Represents the invitation sent to a participant to complete the survey.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "CommunityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the Experience Cloud site that you want to send the survey to."
+    },
+    "ContactId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the contact who received the invitation. This field is available in API v49.0 and later."
+    },
+    "EmailBrandingId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the survey email branding object that’s associated with this invitation."
+    },
+    "InvitationLink": {
+      "type": "url",
+      "properties": "Group, Nillable",
+      "description": "The URL to the survey that is sent to participants. To query on this field, you need access to the associated Survey record."
+    },
+    "InviteExpiryDateTime": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time that the survey invitation expires."
+    },
+    "IsDefault": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Determines whether this is the default survey invitation to use when the survey is sent to participants."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this survey invitation."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this survey invitation."
+    },
+    "LeadId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the lead who received the invitation. This field is available in API v49.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the survey invitation that appears in the UI."
+    },
+    "OptionsAllowGuestUserResponse": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Determines whether participants who don’t have a Salesforce account can complete the survey."
+    },
+    "OptionsAllowParticipantAccessTheirResponse": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Determines whether participants can access a copy of their responses after they complete the survey."
+    },
+    "OptionsCollectAnonymousResponse": {
+      "type": "boolean",
+      "properties": "Create, Filter, Update",
+      "description": "Determines whether participants can complete the survey anonymously."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the user who created the survey invitation."
+    },
+    "ParticipantId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the participant if the participant is a Salesforce contact, user, or lead."
+    },
+    "ResponseStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of a participant’s response to the survey that’s associated with the survey invitation. Possible values include: NotStarted — For an invitation with a ParticipantID, it means that the recipient hasn’t opened the survey. For an invitation without the ParticipantID, it means that none of the recipients have opened the survey. Started — For an invitation with a ParticipantID, it means that the recipient opened the survey. For an invitation without the ParticipantID, it means that the survey has been opened by at least one recipient. Paused — For an invitation with a ParticipantID, it means that the recipient has paused the survey. For an invitation without the ParticipantID, it means that the survey has been paused by any one of the recipients. Paused isn't available for invitations in which either OptionsAllowParticipantAccessTheirResponse or OptionsCollectAnonymousResponse is true. PartiallyCompleted— For an invitation with a ParticipantID field, it means that the recipient has partially completed the survey. For an invitation without the ParticipantID field, it means that at least one recipient has partially completed the survey. Available in API version 63.0 and later. Completed — For an invitation with a ParticipantID, it means that the recipient has submitted the survey. For an invitation without the ParticipantID, it means that the invitation has been submitted by at least one recipient."
+    },
+    "SurveyId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the survey that’s sent in the invitation."
+    },
+    "UUID": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique user ID that's added to a survey invitation generated for a contact, lead,or user."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the user who received the invitation. This field is available in API v49.0 and later."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **SurveyInvitationChangeEvent (API version 62.0)**: Change events are available for the object.\n- **SurveyInvitationOwnerSharingRule**: Sharing rules are available for the object.\n- **SurveyInvitationShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CommunityId": {
+      "field_label": "Network ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ContactId": {
+      "field_label": "Contact ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "EmailBrandingId": {
+      "field_label": "Survey Email Branding ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Survey Invitation ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InvitationLink": {
+      "field_label": "Invitation Link",
+      "type": "url",
+      "length": "255"
+    },
+    "InviteExpiryDateTime": {
+      "field_label": "Invitation Expires On",
+      "type": "datetime"
+    },
+    "IsDefault": {
+      "field_label": "Is Default",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LeadId": {
+      "field_label": "Lead ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OptionsAllowGuestUserResponse": {
+      "field_label": "Let Guests Respond",
+      "type": "boolean"
+    },
+    "OptionsAllowParticipantAccessTheirResponse": {
+      "field_label": "Can See Their Response",
+      "type": "boolean"
+    },
+    "OptionsCollectAnonymousResponse": {
+      "field_label": "Can Respond Anonymously",
+      "type": "boolean"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ParticipantId": {
+      "field_label": "Participant ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ResponseStatus": {
+      "field_label": "Response Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SurveyId": {
+      "field_label": "Survey ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UUID": {
+      "field_label": "UUID",
+      "type": "string",
+      "length": "36"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

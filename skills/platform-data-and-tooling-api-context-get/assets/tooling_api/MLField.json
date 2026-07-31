@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "supported_rest_api_http_methods",
+    "fields"
+  ],
+  "title": "MLField - Tooling API",
+  "description": "Represents a field in a modeling data definition. A modeling data definition specifies the data used to create a model for a machine learning (ML) application. Available from API version 50.0 or later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "supported_rest_api_http_methods": "`DELETE`, `GET`, `HEAD`, `PATCH`, `POST`, `Query`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Entity": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Nillable, Sort, Update",
+      "description": "The object that contains the MLField. Valid values include all Salesforce objects except the Internal, Interface, Virtual, and InDevelopment custom objects."
+    },
+    "Field": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Nillable, Sort, Update",
+      "description": "The name of the MLField. Valid values include all Salesforce objects except the Internal, Interface, Virtual, and InDevelopment custom objects."
+    },
+    "ParentDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the MLrecommendationDefinition or MLPredictionDefinition that this MLField belongs to. This is a polymorphic relationship field.",
+      "relationship_name": "ParentDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "MLDataDefinition, MLRecommendationDefinition"
+    },
+    "RelatedFieldId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reserved for future use. This is a relationship field."
+    },
+    "RelationType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Reserved for future use."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Nillable, Sort, Update",
+      "description": "Indicates how the field is used in a prediction. Valid values are: Excluded Expression Included Join NegativeExpression PositiveExpression Prediction Pushback Related ScoringExpression SegmentExpression SourceDate TrainingExpression"
+    }
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FeedComment - Data API",
+  "description": "Represents a comment added to a feed by a user. This object is available in API version 18.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "CommentBody": {
+      "type": "textarea",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The text in the comment."
+    },
+    "CommentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of comment: ContentComment—an uploaded file on a comment TextComment—a direct text entry on a comment Before API version 24.0, a text entry was required on a comment. As of version 24.0, a text entry is optional if the CommentType is ContentComment."
+    },
+    "FeedItemId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the feed item containing the comment."
+    },
+    "HasEntityLinks": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the feed CommentBody includes at least one link to a record. Note: This field is available starting in API version 43.0."
+    },
+    "InsertedById": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the user who added this item to the feed. For example, if an application migrates posts and comments from another application into a feed, the InsertedBy value is set to the ID of the context user. This is a relationship field.",
+      "relationship_name": "InsertedBy",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "IsRichText": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the feed CommentBody contains rich text. If you post a rich text feed comment using SOAP API, set IsRichText to true and escape HTML entities from the body. Otherwise, the comment is rendered as plain text. Rich text supports the following HTML tags: <p> Tip: Though the <br> tag isn’t supported, you can use <p>&nbsp;</p> to create lines. <a> <b> <code> <i> <u> <s> <ul> <ol> <li> <img>The <img> tag is accessible only through the API and must reference files in Salesforce similar to this example: <img src=\"sfdc://069B0000000omjh\"></img> Note: This attribute is available as of API version 38.0. In API version 38.0 and later, the system replaces special characters in rich text with escaped HTML. In API version 37.0 and prior, all rich text appears as a plain-text representation."
+    },
+    "IsVerified": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Determines whether a comment on a question is marked as Company Verified.This field is available in API version 41.0 and later."
+    },
+    "LastEditById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the user who last edited the feed comment."
+    },
+    "LastEditDate": {
+      "type": "datetime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date the feed comment was last edited."
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of a record associated with the feed comment. For example, if you are commenting on a change to a field on Account, ParentId is set to the account ID."
+    },
+    "RelatedRecordId": {
+      "type": "reference",
+      "properties": "Create, Group, Nillable, Sort",
+      "description": "ID of the ContentVersion record associated with a ContentComment. This field is null for all comments except ContentComment.For example, set this field to an existing ContentVersion ID and set the CommentType to ContentComment."
+    },
+    "Revision": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The number of times the comment was revised."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether this feed comment is published and visible to all who can access the parent feed item. To change a comment’s status, the comment’s parent feed item must be in a published state. This field is available in API version 38.0 and later. Possible values are: Published—The comment is visible to all who can access the parent feed item. PendingReview—The comment is visible to its author. Users see the parent feed item and have View All Data or Can Approve Feed Post and Comment permission also see the comment. The author can delete the comment as can users who see the comment and have Can Approve Feed Post and Comment or Modify All Data permission. If the parent feed item is published, the author can edit the comment. Users who see the comment and have Can Approve Feed Post and Comment or Modify All Data permission can also edit the comment. Users with Can Approve Feed Post and Comment or Modify All Data permission can change comment status from Published to PendingReview and from PendingReview to Published.Some actions are blocked when a feed comment is pending review: Select as Best—When a feed comment that is marked as best answer becomes unpublished, it’s removed as the best answer. If the comment is published, its best answer status is not restored. Like and unlike Isolated—The comment is visible only to admins. After an item is isolated, the author no longer has view or edit access. The admin user can edit, view, and delete isolated feed comments."
+    },
+    "SystemModstamp": {
+      "type": "datetime",
+      "properties": "Defaulted on create, Filter",
+      "description": "Date and time when a user or automated process (such as a trigger) last modified this record. In this context, \"trigger\" refers to Salesforce code that runs to implement standard functionality, and not an Apex trigger. SystemModstamp is a read-only system field, available in FeedComment as of API version 37.0."
+    },
+    "ThreadChildrenCount": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The count of comments associated with this parent feed object. The feed object can be either a Feed Item or a Feed Comment. The count shows how many comments are directly subordinate to the parent. This field is available on the object when Allow discussion threads is selected in the Administration Workspace. This field is available in API version 44.0 and later."
+    },
+    "ThreadLastUpdatedDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "The date and time the thread on this comment was last updated. This field is available on the object when Allow discussion threads is selected in the Administration Workspace. This field is available in API version 44.0 and later."
+    },
+    "ThreadLevel": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The identifier that shows the level of this Feed Comment in a thread. By default, there are a maximum of three levels in a thread. The ThreadLevel value shows in which of the three levels this comment falls. This field is available on the object when Allow discussion threads is selected in the Administration Workspace. This field is available in API version 44.0 and later."
+    },
+    "ThreadParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The identifier of the feed item that is the parent of this comment. This field is available on the object when Allow discussion threads is selected in the Administration Workspace. This field is available in API version 44.0 and later. This is a relationship field.",
+      "relationship_name": "ThreadParent",
+      "relationship_type": "Lookup",
+      "refers_to": "FeedComment"
+    }
+  },
+  "special_access_rules": "Note the following when working with feed comments. Only users with this permission can delete items in unlisted groups.\n\nNote the following when working with feed comments.\n\nOnly users with this permission can delete items in unlisted groups.",
+  "usage": "As of API version 23.0 and later, if you have View All Data permission, you can query FeedComment records directly without an ID filter. If you don’t have View All Data permission, you can’t query FeedComment records directly, with or without an ID filter.\n\nAs of API version 23.0 and later, if you have View All Data permission, you can query\n              FeedComment records directly without an ID filter. If you don’t have View All\n              Data permission, you can’t query FeedComment records directly, with or without\n              an ID filter.\n\nFor example, the following query returns general information about a\n              feed:\n\nSELECT ID, CreatedDate, CreatedById, CreatedBy.FirstName,\n\nCreatedBy.LastName, ParentId, Parent.Name, Body\n\nFROM FeedItem\n\nWHERE CreatedDate > LAST_MONTH\n\nORDER BY CreatedDate DESC, Id DESC\n\nYou can search for text in comments using SOSL. For example, the following Java class\n              uses\n\nto find the string\n              “foo” in any field of a\n              record:\n\nsearchSample\n\nSearchResult\n\n\"find {foo} in all fields \"\n\n\"returning feedcomment(Id, FeedItemId, CommentBody)\"\n\n// Put the results into an array of SearchRecords\n\nSearchRecord\n\ngetSearchRecords\n\n// Check the length of the returned array of records to see\n\n// if the search found anything\n\n\" comments: \"\n\n// Display each comment\n\nSearchRecord\n\nFeedComment\n\nFeedComment\n\ngetCommentBody\n\n\"No records were found for the search.\"\n\nConnectionException\n\nprintStackTrace\n\nIf you use an Apex trigger to modify the\n\nof a FeedComment\n            object, all mentions hyperlinks are converted to plain text. The mentioned users don't\n            get email notifications.\n\nThis object is hard deleted. It isn’t sent to the Recycle Bin.",
+  "wsdl_segment": "```xml\n<complexType name=\"FeedComment\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CommentBody\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CommentType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"FeedRevisions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FeedThreadedComments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"HasEntityLinks\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"InsertedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"InsertedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsRichText\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsVerified\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastEditById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastEditDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"RelatedRecordId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Revision\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ThreadChildrenCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ThreadLastUpdatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ThreadLevel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ThreadParent\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FeedComment\"/>\n        <element name=\"ThreadParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CommentBody": {
+      "field_label": "Comment Body",
+      "type": "textarea",
+      "length": "10000"
+    },
+    "CommentType": {
+      "field_label": "Comment Type",
+      "type": "picklist",
+      "length": "40"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "FeedItemId": {
+      "field_label": "Feed Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "HasEntityLinks": {
+      "field_label": "Has entity links",
+      "type": "boolean"
+    },
+    "Id": {
+      "field_label": "Feed Comment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InsertedById": {
+      "field_label": "InsertedBy ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRichText": {
+      "field_label": "Is Rich Text",
+      "type": "boolean"
+    },
+    "IsVerified": {
+      "field_label": "Is a Verified Comment",
+      "type": "boolean"
+    },
+    "LastEditById": {
+      "field_label": "Last Edit By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastEditDate": {
+      "field_label": "Last Edit Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RelatedRecordId": {
+      "field_label": "Related Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Revision": {
+      "field_label": "Revision",
+      "type": "int",
+      "digits": "9"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "ThreadChildrenCount": {
+      "field_label": "Thread Children Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ThreadLastUpdatedDate": {
+      "field_label": "Thread Last Updated Date",
+      "type": "datetime"
+    },
+    "ThreadLevel": {
+      "field_label": "Thread Level",
+      "type": "int",
+      "digits": "9"
+    },
+    "ThreadParentId": {
+      "field_label": "Feed Comment ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

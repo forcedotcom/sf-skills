@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "CalculationMatrix - Data API",
+  "description": "Matches input values to a table row and returns the row's output values. The label for this object is Decision Matrix. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "DecisionMatrixDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The decision matrix definition record associated with this calculation matrix. This field is a polymorphic relationship field.",
+      "relationship_name": "DecisionMatrixDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "DecisionMatrixDefinition, DecisionTable"
+    },
+    "DecisionMatrixType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the type of lookup table. Possible values are: DecisionMatrix DecisionTable The default value is DecisionMatrix."
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "A text description of the Decision Matrix."
+    },
+    "GroupKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A key for grouping matrix rows in different versions, such as geographic region or product code."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it's possible the user only accessed this record or list view (LastReferencedDate) but didn't view it."
+    },
+    "MigrationStatus": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The status of migrating the data from the Calculation Matrix object to the Decision Matrix Definition object."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The Decision Matrix name."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user who currently owns this matrix. Default value is the user logged in to the API to perform the create action. This is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "SubGroupKey": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A subkey for grouping matrix rows in different versions, such as geographic region or product code. For example, if the GroupKey is Country, the SubGroupKey can be State or Province."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The Decision Matrix type. A Standard Decision Matrix has no special features. A Grouped Decision Matrix groups rows by one or two keys (GroupKey and SubGroupKey) such as geographic region or product code. Possible values are: Grouped Standard"
+    },
+    "UniqueName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The unique identifier of the record, which is sourced from the value in the Name field of CalculationMatrix (decision matrix). For example, if the name of the calculation matrix is sample matrix, its UniqueName would be sample_matrix."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "A decision matrix’s usage type. Available in API version 59.0 and later. Possible value is: Bre-Default When Business Rules Engine is enabled on your Salesforce org, the default value is Bre. Other usage types may be available to you depending on your industry solution and permission sets."
+    }
+  },
+  "special_access_rules": "Access to Decision Matrices requires Omnistudio licenses.",
+  "usage": "Expression Sets, OmniScripts, and Integration Procedures can call Decision Matrices.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DecisionMatrixDefinitionId": {
+      "field_label": "Decision Matrix Definition ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DecisionMatrixType": {
+      "field_label": "Decision Matrix Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "32768"
+    },
+    "GroupKey": {
+      "field_label": "Group Key",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Decision Matrix ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MigrationStatus": {
+      "field_label": "Migration Status",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Namespace": {
+      "field_label": "Namespace",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SubGroupKey": {
+      "field_label": "Sub Group Key",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UniqueName": {
+      "field_label": "Unique Name",
+      "type": "string",
+      "length": "80"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

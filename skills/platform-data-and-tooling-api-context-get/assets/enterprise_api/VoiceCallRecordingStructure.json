@@ -1,0 +1,73 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VoiceCallRecordingStructure - Data API",
+  "description": "Represents the structure of a voice call recording, which includes voice call participants, speaking order, start offset, and end offset. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ListenRatio": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The ratio of the time the speaker spent listening versus talking on the call.",
+      "required": true
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the voice call recording."
+    },
+    "ParticipantSpeakingOrder": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The sequence in which participants first spoke during the call. Only the initial speaking turn of each participant is captured.",
+      "required": true
+    },
+    "TalkRatio": {
+      "type": "double",
+      "properties": "Filter, Sort",
+      "description": "The ratio of the time that the speaker spent talking versus listening on the call.",
+      "required": true
+    },
+    "TalkSegment": {
+      "type": "textarea",
+      "properties": "None",
+      "description": "The transcript of specific segments that the participant was speaking."
+    },
+    "VoiceCallId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated VoiceCall. This field is a relationship field.",
+      "relationship_name": "VoiceCall",
+      "relationship_type": "Master-detail",
+      "refers_to": "VoiceCall (the master object)",
+      "required": true
+    },
+    "VoiceCallParticipantId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the associated VoiceCallParticipant. This field is a relationship field.",
+      "relationship_name": "VoiceCallParticipant",
+      "refers_to": "ConversationParticipant"
+    },
+    "VoiceCallRecordingId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the associated VoiceCallRecording. This field is a relationship field.",
+      "relationship_name": "VoiceCallRecording",
+      "refers_to": "VoiceCallRecording",
+      "required": true
+    }
+  },
+  "special_access_rules": "Einstein Conversation Insight must be enabled and the user requires the Conversation Insights for Sales permission set."
+}

@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityHealthCheckDetail - Data API",
+  "description": "Stores the details of Health Check scores for a connected tenant. The Health Check detail page in Security Center displays scores and settings for all your tenants in one place. Use this object to get settings and risks per tenant on a selected date. This object is available to Security Center subscribers in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "HealthCheckSettingIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The ID of the Health Check setting. This field is unique within your org."
+    },
+    "HealthCheckTrendKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the Health Check trend related to the Health Check detail records."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the tenant that was scored."
+    },
+    "OrgValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The org’s value for the security setting."
+    },
+    "RiskType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The level of risk of the org’s security setting value. Possible values are: HIGH_RISK MEDIUM_RISK MEETS_STANDARD"
+    },
+    "Setting": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the security setting. For example, Minimum Password Length."
+    },
+    "SettingGroup": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The name of the security setting group in Setup that this setting is in. For example, Password Policies."
+    },
+    "SettingRiskCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The level of risk of the org’s security settings. Possible values are: HIGH_RISK INFORMATIONAL LOW_RISK MEDIUM_RISK"
+    },
+    "StandardValue": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The recommended standard value for the security setting."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the tenant that was scored."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityHealthCheckDetailChangeEvent**: Change events are available for the object.\n- **TenantSecurityHealthCheckDetailFeed**: Feed tracking is available for the object.\n- **TenantSecurityHealthCheckDetailHistory**: History is available for tracked fields of the object.\n- **TenantSecurityHealthCheckDetailOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityHealthCheckDetailShare**: Sharing is available for the object."
+}

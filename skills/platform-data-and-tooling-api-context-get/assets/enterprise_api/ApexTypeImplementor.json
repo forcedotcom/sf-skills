@@ -1,0 +1,121 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "ApexTypeImplementor - Data API",
+  "description": "Represents Apex classes that directly or indirectly implement an interface. Using a SOQL query, this object gets information about public or global classes and only global classes for installed managed packages. This object is available in API version 54.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApexClassId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The foreign key to the outer class that contains the Apex class implementing the interface. This is a relationship field.",
+      "relationship_name": "ApexClass",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass"
+    },
+    "ClassName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "Apex class name that implements the interface. For an inner class that implements the interface, the outer class and inner name separated by a period."
+    },
+    "ClassNamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix of the class that implements the interface."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A unique identifier for the interface and implementor."
+    },
+    "InterfaceApexClassId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The foreign key to the outer class that contains the Apex class defining the interface. Null for built-in system interfaces, such as System.Batchable. This is a relationship field.",
+      "relationship_name": "InterfaceApexClass",
+      "relationship_type": "Lookup",
+      "refers_to": "ApexClass"
+    },
+    "InterfaceName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The interface name for which Apex class implementation is retrieved. For an inner interface, the outer Apex class name and the inner interface name separated by a period."
+    },
+    "InterfaceNamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The namespace prefix of the class that defines the interface."
+    },
+    "IsConcrete": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the implementing class is abstract (false) or not (true)."
+    }
+  },
+  "usage": "If a package is installed but not yet compiled because Compile on Deploy is disabled, ApexTypeImplementor returns no values until compilation is complete. In environments like sandboxes where Compile on Deploy can be disabled, you must perform a manual compilation to get complete results. For example, say a managed package contains a global interface named RoundingStrategy and a global class named HalfDown that implements RoundingStrategy. If a subscriber org has an interface that’s also named RoundingStrategy, then the query [SELECT ApexClass.Id FROM ApexTypeImplementor WHERE InterfaceName = 'RoundingStrategy'], if performed in the subscriber org, can return the ID of HalfDown instead of an implementor in the subscriber org. To avoid this issue, perform a query that specifies a InterfaceNamespacePrefix: [SELECT ApexClass.Id FROM ApexTypeImplementor WHERE InterfaceName = 'RoundingStrategy' AND InterfaceNamespacePrefix = 'PackageNamespace'].\n\nIf a package is installed but not yet compiled because Compile on Deploy is disabled, ApexTypeImplementor returns no values until compilation is complete. In environments like sandboxes where Compile on Deploy can be disabled, you must perform a manual compilation to get complete results.\n\nFor example, say a managed package contains a global interface named RoundingStrategy and a global class named HalfDown that implements RoundingStrategy. If a subscriber org has an interface that’s also named RoundingStrategy, then the query [SELECT ApexClass.Id FROM ApexTypeImplementor WHERE InterfaceName = 'RoundingStrategy'], if performed in the subscriber org, can return the ID of HalfDown instead of an implementor in the subscriber org. To avoid this issue, perform a query that specifies a InterfaceNamespacePrefix: [SELECT ApexClass.Id FROM ApexTypeImplementor WHERE InterfaceName = 'RoundingStrategy' AND InterfaceNamespacePrefix = 'PackageNamespace'].",
+  "wsdl_segment": "```xml\n<complexType name=\"ApexTypeImplementor\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApexClass\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"ApexClassId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ClassName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ClassNamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InterfaceApexClass\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ApexClass\"/>\n        <element name=\"InterfaceApexClassId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"InterfaceName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"InterfaceNamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsConcrete\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
+  "field_reference": {
+    "ApexClassId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ClassName": {
+      "field_label": "Class Name",
+      "type": "string",
+      "length": "81"
+    },
+    "ClassNamespacePrefix": {
+      "field_label": "Class Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "DurableId": {
+      "field_label": "Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Apex Type Implementor ID",
+      "type": "id",
+      "length": "18"
+    },
+    "InterfaceApexClassId": {
+      "field_label": "Class ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "InterfaceName": {
+      "field_label": "Interface Name",
+      "type": "string",
+      "length": "81"
+    },
+    "InterfaceNamespacePrefix": {
+      "field_label": "Interface Namespace Prefix",
+      "type": "string",
+      "length": "15"
+    },
+    "IsConcrete": {
+      "field_label": "Is Concrete",
+      "type": "boolean"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

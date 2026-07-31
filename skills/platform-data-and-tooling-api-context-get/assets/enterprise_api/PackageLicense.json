@@ -1,0 +1,115 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "PackageLicense - Data API",
+  "description": "Represents a license for an installed managed package. This object is available in API version 31.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AllowedLicenses": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of users allowed to use the package."
+    },
+    "ExpirationDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the package license expires."
+    },
+    "IsAvailableForIntegrations": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Reserved for future use."
+    },
+    "IsProvisioned": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Reserved for internal use."
+    },
+    "NamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The namespace prefix associated with the package."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the license. Possible values are: Active, Expired, Free, and Trial."
+    },
+    "UsedLicenses": {
+      "type": "int",
+      "properties": "Filter, Group, Sort",
+      "description": "The number of users who have a license to the package."
+    }
+  },
+  "special_access_rules": "Customer Portal users can't access this object.",
+  "usage": "Use this object to determine the number of licenses allowed and in use for a managed package installed in your organization.\n\nThe following example demonstrates the use of the API to manage licenses for\n        a package. The example defines an Apex class that does the following.\n\nRetrieves the PackageLicense record for the specified package (identified by its\n            namespace prefix).\n\nDefines a function that returns a list of all users with the specified profile.\n\nCreates a UserPackageLicense record for each user with that profile, which has the\n            effect of assigning a license for the package to all users with that profile.\n\nReturns an error message if the number of users exceeds the number of available\n            licenses.\n\nAssignPackageLicense\n\nPACKAGE_NAMESPACE_PREFIX\n\n'00exx000000jz1SAAQ'\n\nexceptionText\n\nAssignPackageLicense\n\nexceptionText\n\n'Initialized'\n\ngetUsersWithProfile\n\n'SELECT Id FROM User WHERE ProfileId = :PROFILE_ID'\n\nmatchingUsers\n\nmatchingUsers\n\nmatchingUsers\n\nassignLicenseByProfile\n\n//find the PackageLicense Id\n\nPackageLicense\n\nNamespacePrefix\n\nAllowedLicenses\n\nUsedLicenses\n\nExpirationDate\n\nPackageLicense\n\nNamespacePrefix\n\nPACKAGE_NAMESPACE_PREFIX\n\n'PackageLicense cannot be null.'\n\nusersToAssignLicenses\n\ngetUsersWithProfile\n\nUserPackageLicense\n\nUserPackageLicense\n\n//create a new UserPackageLicense record for each user with the specified profile\n\nusersToAssignLicenses\n\nUserPackageLicense\n\nUserPackageLicense\n\nPackageLicenseId\n\nusersToAssignLicenses\n\n//bulk insert\n\nDmlException\n\n// process exception here\n\ngetDmlMessage\n\ngetDmlStatusCode\n\ngetDmlMessage\n\n'LICENSE_LIMIT_EXCEEDED'\n\nexceptionText\n\n'You tried to assign more licenses than available. '\n\n' You tried to create '\n\n' licenses but only have '\n\nAllowedLicenses\n\nUsedLicenses\n\n' licenses free.'\n\nexceptionText",
+  "wsdl_segment": "```xml\n<complexType name=\"PackageLicense\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AllowedLicenses\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExpirationDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsAvailableForIntegrations\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsProvisioned\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"NamespacePrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UsedLicenses\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AllowedLicenses": {
+      "field_label": "Allowed Licenses",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "ExpirationDate": {
+      "field_label": "Expiration Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Package License ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAvailableForIntegrations": {
+      "field_label": "Enabled for Platform Integrations",
+      "type": "boolean"
+    },
+    "IsProvisioned": {
+      "field_label": "Is Provisioned",
+      "type": "boolean"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "NamespacePrefix": {
+      "field_label": "Namespace Prefix",
+      "type": "string",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UsedLicenses": {
+      "field_label": "Used Licenses",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "digits",
+    "length"
+  ]
+}

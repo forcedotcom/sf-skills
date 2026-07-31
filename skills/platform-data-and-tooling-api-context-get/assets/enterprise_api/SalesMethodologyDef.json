@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "SalesMethodologyDef - Data API",
+  "description": "Represents the template of criteria for a sales methodology. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Category": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "Methodology categorization allows each object to add one methodology per record type and category. For example, an Opportunity with the Big Deal record type can have one Sales methodology and another Scorecard methodology. Possible values are: Sales Scorecard",
+      "required": true
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Details about the sales methodology and its purpose."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the sales methodology. The name: must be 40 characters or fewer must begin with a letter can contain only underscores and alphanumeric characters can't include spaces can't end with an underscore can't contain 2 consecutive underscores In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object's name in a managed package and the changes are reflected in a subscriber's organization."
+    },
+    "IsActive": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates if the sales methodology is active (true) or not (false). The default value is false.",
+      "required": true
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The combined language and locale ISO code, which controls the language of the sales methodology."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The label for the sales methodology. This display value is the internal label that doesn't get translated."
+    },
+    "ObjectType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "For internal use only. Required. The type of object for which the sales methodology works. Possible values are: Opportunity Voice"
+    },
+    "StandardPromptTemplate": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The standard prompt that can generate the criteria for the sales methodology when Agentforce is enabled."
+    }
+  },
+  "special_access_rules": "To access this object turn on the userHasSalesMethodologyEnabled, OrgPreferences, SalesMethodologyPref, and PipelineInspectorUser permissions. To read records, users must have the userHasSalesMethodologyEnabled permission. To create, edit, or delete records, users must have the CustomizeApplication user permission."
+}

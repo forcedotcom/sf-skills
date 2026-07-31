@@ -46,7 +46,7 @@ subagent check_order:
 
 If `@variables.order_id` is `"1001"` and the `fetch_order` action returns `status = "shipped"`, the runtime resolves to this prompt:
 
-```
+```text
 Your order status is shipped.
 You can modify it using the update_order action.
 ```
@@ -59,7 +59,7 @@ This split is critical: **deterministic logic controls WHAT the agent knows (via
 
 ## 2. File Structure and Block Ordering
 
-An Agent Script file (`.agent` extension) contains eight top-level blocks in this mandatory order:
+An Agent Script file (`.agent` extension) contains eight top-level blocks. The recommended order when generating new agents is:
 
 ```agentscript
 system:
@@ -80,6 +80,9 @@ knowledge:
 language:
     ...
 
+modality voice:
+    ...
+
 start_agent agent_router:
     ...
 
@@ -89,7 +92,9 @@ subagent my_subagent:
 
 **Required blocks:** `system`, `config`, `start_agent`, and at least one `subagent`.
 
-**Optional blocks:** `variables`, `connections`, `knowledge`, `language`. Omit them if not needed.
+**Optional blocks:** `variables`, `connections`, `knowledge`, `language`, `modality voice`. Omit them if not needed.
+
+**Note:** The compiler does not enforce top-level block ordering. Use the order above when generating new files, but do not reorder existing files that use a different order — they are equally valid.
 
 **Within `start_agent` and `subagent` blocks**, the internal ordering is:
 
@@ -115,9 +120,18 @@ subagent my_subagent:
 
 Example: `check_order_status` is valid. `check_order__status` is invalid (consecutive underscores).
 
-**Indentation:** Use 4 spaces per indent level. NEVER use tabs. Mixing spaces and tabs breaks the parser. All lines at the same nesting level must use the same indentation.
+**Indentation:** Generate new files with 4 spaces per structural level. Four spaces
+is the formatter default and repository convention, not a grammar minimum: the
+language accepts any deeper space indentation relative to the parent. Spaces are
+the specification's standard; tabs are not portable because their behavior is
+implementation-defined. Never mix structural tabs and spaces in one file. When
+making a surgical edit to a consistently tab-indented legacy file, either preserve
+that style and validate against the target runtime or normalize all structural
+indentation as a separate change. Never partially normalize a file or blanket-
+replace tabs inside template content. Lines at the same nesting level must use the
+same indentation width.
 
-Each nesting level adds 4 spaces. The hierarchy follows the block structure — subagent → reasoning → instructions → logic/prompt:
+Each nesting level adds one indent. The hierarchy follows the block structure — subagent → reasoning → instructions → logic/prompt:
 
 ```agentscript
 subagent process_order:
@@ -224,23 +238,30 @@ The `instructions` field is required and contains text directives sent to the LL
 
 Both `welcome` and `error` messages are required.
 
-**Config block** contains agent metadata:
+**Access and config blocks** contain runtime identity and agent metadata:
 
 ```agentscript
+access:
+    default_agent_user: "agent@example.com"
+
 config:
     developer_name: "Customer_Service_Agent"
     agent_label: "Customer Service"
     description: "Handles customer inquiries"
     agent_type: "AgentforceServiceAgent"
-    default_agent_user: "agent@example.com"
 ```
+
+The `access:` form is covered by this repository's pinned
+[AgentScript toolchain floor](../../../tests/agentscript-toolchain.json).
+Public npm packages and target-org compilers can lag; validate against the
+deployment org before release.
 
 **Required fields:**
 - `developer_name` (NOT `agent_name`) — unique identifier following naming rules. Must exactly match the AiAuthoringBundle directory name (e.g., if the directory is `aiAuthoringBundles/Travel_Advisor/`, then `developer_name` must be `"Travel_Advisor"`). A mismatch causes deploy failures.
 - `agent_type` — `"AgentforceServiceAgent"` or `"AgentforceEmployeeAgent"`. Determines deployment context and whether `default_agent_user` is required:
   - `"AgentforceServiceAgent"` — customer-facing, deployed via messaging channels. **Requires `default_agent_user`** with Einstein Agent license.
   - `"AgentforceEmployeeAgent"` — internal employee-facing. Agent Script files with this agent type MUST NOT include:
-    - `default_agent_user`
+    - `access.default_agent_user`
     - MessagingSession linked variables (`EndUserId`, `RoutableId`, `ContactId`, `EndUserLanguage`)
     - Escalation subagent with `@utils.escalate`
     - `connection messaging:` block
@@ -249,9 +270,10 @@ config:
 
   ```agentscript
   # WRONG — employee agent with service-agent constructs
+  access:
+      default_agent_user: "agent@org.ext"    # PROHIBITED — causes "Internal Error"
   config:
       agent_type: "AgentforceEmployeeAgent"
-      default_agent_user: "agent@org.ext"    # PROHIBITED — causes "Internal Error"
   variables:
       EndUserId: linked string               # SERVICE ONLY — no messaging session
           source: @MessagingSession.MessagingEndUserId
@@ -261,11 +283,11 @@ config:
   # RIGHT — clean employee agent config
   config:
       agent_type: "AgentforceEmployeeAgent"
-      # No default_agent_user, no MessagingSession vars, no connection block
+      # No access block, MessagingSession vars, or connection block
   ```
 
 **Conditionally required fields:**
-- `default_agent_user` — **required for `AgentforceServiceAgent`, prohibited for `AgentforceEmployeeAgent`**. This is the Salesforce username of the Einstein Agent User that runs agent actions on behalf of the customer. The user must exist in the target org, be active, and have the Einstein Agent license assigned.
+- `access.default_agent_user` — **required for `AgentforceServiceAgent`, normally omitted for `AgentforceEmployeeAgent`**. This is the Salesforce username of the Einstein Agent User that runs agent actions on behalf of the customer. The user must exist in the target org, be active, and have the Einstein Agent license assigned.
 
   **⚠️ CRITICAL: Setting `default_agent_user` on an `AgentforceEmployeeAgent` causes publish and preview to fail with an unhelpful "unknown error" or "Internal Error, try again later" message.** The error gives no indication that `default_agent_user` is the cause. If you encounter this error on an employee agent, check whether `default_agent_user` is set and remove it.
 
@@ -391,7 +413,11 @@ subagent order_lookup:
 
 **Description is required** — the LLM uses this to understand when the subagent is relevant.
 
-**Subagent-level system override** (optional) — override global system instructions for this subagent only:
+**Subagent-level system override** (optional) — replaces global system
+instructions for this subagent and does not merge with them. Omit the override
+when global instructions should remain intact. If an override is necessary,
+repeat every durable identity, safety, and scope invariant the subagent must
+retain:
 
 ```agentscript
 subagent product_specialist:
@@ -437,6 +463,19 @@ Directive blocks use the arrow syntax (`->`) for logic but no LLM reasoning. The
 ## 8. Reasoning Instructions
 
 Reasoning instructions combine deterministic logic and prompt text. The runtime resolves deterministic parts first, then sends the resulting prompt to the LLM for reasoning.
+
+The resolved prompt is rebuilt on every reasoning iteration, including after a
+tool call updates variables. Keep it short and task-local: current objective,
+relevant state, action guidance, exclusions, and stop conditions. Keep persona,
+tone, disclosure, safety, and broad scope rules in the effective system layer.
+Treat effective system and reasoning text as cumulative unless the target
+runtime's public, versioned contract guarantees different precedence, so the
+two surfaces must agree. In particular, do not combine an unconditional global
+instruction to answer or help with instructions that require routing,
+verification, refusal, or escalation without answering. Do not rely on
+structured active-subagent identity or direct variable-store access unless the
+runtime explicitly provides it; state the concrete operating task. See
+[Instruction Resolution](instruction-resolution.md#scope-response-duties-by-branch).
 
 **Arrow syntax (`->`) for logic blocks**:
 
@@ -499,42 +538,43 @@ instructions: ->
     | This starts a new logical line.
 ```
 
-**If/Else (no "else if", no nested if)**:
+### Conditional Control Flow Syntax
+
+Use `if / else if / else` for one mutually exclusive chain:
 
 ```agentscript
-# ✅ CORRECT — simple if/else
-if @variables.status == "pending":
-    run @actions.notify_pending
-else:
-    run @actions.notify_complete
-
-# ❌ WRONG — else if not supported
+# Supported multi-branch chain
 if @variables.count < 5:
     run @actions.small
 else if @variables.count < 10:
     run @actions.medium
-
-# ❌ WRONG — nested if inside else is also invalid
-if @variables.status == "pending":
-    run @actions.queue_pending
 else:
-    if @variables.status == "closed":
-        run @actions.archive
+    run @actions.large
+
+# Invalid legacy spelling
+if @variables.count < 5:
+    run @actions.small
+elif @variables.count < 10:
+    run @actions.medium
 ```
 
-For multi-branch logic, use compound conditions (`if A and B:`) or flatten to sequential `if` statements.
+`else if` is supported and may repeat before the optional final `else`. `elif`
+is not an AgentScript keyword and produces a syntax error.
 
-**Inline action invocation (`run @actions.X`)**:
+This conditional form is covered by the repository's pinned
+[AgentScript toolchain floor](../../../tests/agentscript-toolchain.json).
+Run target-org validation before release because org compilers can lag the
+open-source toolchain.
 
-```agentscript
-run @actions.check_inventory
-    with product_id = @variables.selected_product
-    set @variables.stock_level = @outputs.available_quantity
-```
+Do not place an `if` inside another conditional body. Agentforce lint rejects
+user-written nested conditionals with the `unsupported-nested-if` error. The
+compiler also warns for nested `if/else` because its condition slot is shared.
+Flatten the logic with an `else if` chain, compound conditions, or sequential
+top-level `if` statements. Sequential top-level conditions execute
+independently, so make their predicates mutually exclusive when only one branch
+should run.
 
-The `run` command executes the action deterministically — the runtime runs it before the LLM reasons. Use `with` to pass inputs (bound to variables or literal values). Use `set` to capture outputs into variables.
-
-**Post-action directives** (only for `@actions`, not `@utils`):
+A direct post-action `if` in a `run @actions.*` body is also supported:
 
 ```agentscript
 run @actions.process_order
@@ -546,7 +586,19 @@ run @actions.process_order
         transition to @subagent.error_handling
 ```
 
-After an action completes, you can check outputs and transition.
+**Inline action invocation (`run @actions.X`)**:
+
+```agentscript
+run @actions.check_inventory
+    with product_id = @variables.selected_product
+    set @variables.stock_level = @outputs.available_quantity
+```
+
+The `run` command executes the action deterministically — the runtime runs it before the LLM reasons. Use `with` to pass inputs (bound to variables or literal values). Use `set` to capture outputs into variables.
+
+**Post-action directives** work only for `@actions`, not `@utils`. After an
+action completes, you can check outputs and transition as shown in the
+conditional syntax section above.
 
 **Scope lifecycle — `@inputs` and `@outputs` are ephemeral:**
 - `@inputs`: only in `with` directives during invocation. NOT in `set`/`if` after execution.
@@ -716,7 +768,7 @@ actions:
 - `is_displayable` (boolean) — controls whether output is shown to the customer
 - `complex_data_type_name` — required for complex data types like SObject references (e.g., `"lightning__recordInfoType"`), Apex inner classes, and custom Lightning types. Not needed for simple types like `date`, `integer`, or `datetime` — use the simple type directly.
 
-**Parameter names must exactly match the backing logic interface — including case.** Read the target class before writing the action definition.
+**Parameter names must exactly match the action implementation interface — including case.** Read the target class before writing the action definition.
 
 Given this Apex class:
 
@@ -912,7 +964,7 @@ reasoning:
             with budget = ...
 ```
 
-The LLM extracts values from the conversation and populates the specified variables.
+The LLM extracts values from the conversation and populates the specified variables. **`setVariables` ends the turn after capturing** — instructions do not re-evaluate in the same turn. For "capture X then immediately act on X" patterns, use planner slot-fill directly on the action (`with param = ...`) instead.
 
 **`@subagent.X`** — delegation to another subagent with return:
 

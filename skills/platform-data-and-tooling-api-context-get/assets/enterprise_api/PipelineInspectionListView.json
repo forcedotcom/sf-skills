@@ -1,0 +1,174 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "PipelineInspectionListView - Data API",
+  "description": "Represents a pipeline view, an intelligence view, or a saved filter. A pipeline view shows a set of opportunity records, based on specific criteria. An intelligence view shows a set of account, lead, or contact records, based on specific criteria. This object is available in API version 53.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ChangePeriodLiteralType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The date literal associated with the pipeline changes metrics group, used for filtering by a custom time period. Possible values are: CUSTOM_DATE FOUR_WEEKS_AGO ONE_MONTH_AGO ONE_WEEK_AGO START_OF_THE_PERIOD THIS_MONTH THIS_WEEK THREE_MONTHS_AGO THREE_WEEKS_AGO TWO_MONTHS_AGO TWO_WEEKS_AGO"
+    },
+    "ChangePeriodStartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The start date used when filtering by a custom time period for pipeline changes metrics and forecast category metrics groups."
+    },
+    "DateLiteralType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The date literal associated with the pipeline and intelligence views, used for filtering by the close date, created date, or activity date. Possible values are: Accounts Contacts & Leads Opportunities ALL_TIME * * * * CUSTOM_DATE DATE_NONE * LAST_180_DAYS * LAST_365_DAYS * LAST_90_DAYS * LAST_MONTH NEXT_FISCAL_QUARTER NEXT_MONTH NEXT_WEEK THIS_FISCAL_QUARTER THIS_MONTH THIS_WEEK * Available in API version 60.0 and later. ** Available on the \"My Important\" list views."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The end date used when filtering by a custom time period for close dates."
+    },
+    "IsSystemManaged": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the system is managing changes to visibility and deletion of a pipeline view (true) or not (false). The default value is false."
+    },
+    "ListViewId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the associated ListView record. This field is unique within your organization. This is a relationship field.",
+      "relationship_name": "ListView",
+      "relationship_type": "Lookup",
+      "refers_to": "ListView"
+    },
+    "MarketSegments": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The customer segments selected in the Prospecting Center view. This field is available in API version 61.0 and later."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The start date used when filtering by a custom time period for close dates."
+    },
+    "SummaryField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The opportunity field specified in a pipeline view to summarize pipeline inspection metrics. Possible values are standard field names or custom field IDs for custom currency and number fields. Amount ExpectedRevenue TotalOpportunityQuantity custom_field_ID This field is available in API version 56.0 and later."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the user whose records you want to see by default in the list view. This field is a relationship field. This field is available in API version 58.0 and later.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
+    "ViewType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The corresponding API name for the pipeline or intelligence view type. Possible values are: MY_ACCOUNTS–Available in API version 60.0 and later. MY_AGENTFORCE_SDR_CONTACTS–Available in API version 64.0 and later. MY_AGENTFORCE_SDR_LEADS–Available in API version 63.0 and later. MY_CONTACTS MY_IMPORTANT_ACCOUNTS–Available in API version 60.0 and later. MY_IMPORTANT_CONTACTS MY_IMPORTANT_LEADS MY_IMPORTANT_OPPORTUNITIES MY_LEADS MY_PIPELINE MY_PROSPECTING_CENTER_ACCOUNTS–Available in API version 61.0 and later."
+    }
+  },
+  "special_access_rules": "To access this object, enable the Pipeline Inspection user permission and the Pipeline Inspection setting. To create and modify list views, users must have the Create and Customize List Views permission. To create and modify public list views, users must have the Manage Public List Views permission.\n\nTo access this object, enable the Pipeline\n         Inspection user permission and the Pipeline Inspection setting. To create and modify list\n         views, users must have the Create and Customize List Views permission. To create and modify\n         public list views, users must have the Manage Public List Views permission.",
+  "usage": "Use this object to retrieve the metadata for a pipeline inspection view.",
+  "field_reference": {
+    "ChangePeriodLiteralType": {
+      "field_label": "Change Period Literal Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ChangePeriodStartDate": {
+      "field_label": "Change Period Start Date",
+      "type": "date"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DateLiteralType": {
+      "field_label": "Date Literal Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "Id": {
+      "field_label": "Pipeline Inspection List View ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsSystemManaged": {
+      "field_label": "System Managed",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ListViewId": {
+      "field_label": "List View ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "MarketSegments": {
+      "field_label": "Market Segments",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "SummaryField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "UserId": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ViewType": {
+      "field_label": "View Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

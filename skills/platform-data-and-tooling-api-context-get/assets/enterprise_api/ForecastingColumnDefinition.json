@@ -1,0 +1,137 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "field_reference"
+  ],
+  "title": "ForecastingColumnDefinition - Data API",
+  "description": "Represents a custom calculated column or a custom reference data column in a forecast type. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to",
+    "example"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The developer (API) name of the custom calculated column or custom reference data column."
+    },
+    "ForecastingTypeId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the forecast type. This field is a relationship field.",
+      "relationship_name": "ForecastingType",
+      "relationship_type": "Lookup",
+      "refers_to": "ForecastingType"
+    },
+    "Formula": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Required for custom calculated columns. The formula for the custom calculated column. Use API column names in your formula (such as ForecastAmount0), not column header names (such as Closed or Closed Only). For details on API column names, operators, and functions to use in formulas, see ForecastingColumnDefinition Formula Field Details.",
+      "example": "The following formula calculates the gap to quota: ForecastingQuotaAmount - ForecastAmount0",
+      "required": true
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The language of the custom calculated column or custom reference data column."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The label for this object, which displays in Setup and in the column header on the forecasts page. The label is in the default language locale for the organization. If there’s no default language locale, the label is in en_US."
+    },
+    "ReferenceField": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Required for custom reference data columns. The number or currency custom field from the ForecastingCustomData object. For example, ForecastingCustomData.Realized_Revenue__c. Data from this field appears in a column in the forecasts summary. This field is available in API version 58.0 and later.",
+      "required": true
+    },
+    "ResultField": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The field name to represent the custom calculated column or custom reference data column result. Possible values are: Custom Calculated Column Result CalculatedAmount0 or CalculatedQuantity0 CalculatedAmount1 or CalculatedQuantity1 CalculatedAmount2 or CalculatedQuantity2 CalculatedAmount3 or CalculatedQuantity3 CalculatedAmount4 or CalculatedQuantity4 If the formula’s result is null or invalid, “-” is the value. For example, if the formula divided by 0. If you want to show “-” for 0 or negative values in your forecast, use the IF function in your formula to detect 0 or negative numbers. Custom Reference Data Column Result Use the appropriate field based on whether your column output is of Currency or Number type. ExtensionCurrency0 or ExtensionNumber0 ExtensionCurrency1 or ExtensionNumber1 ExtensionCurrency2 or ExtensionNumber2 ExtensionCurrency3 or ExtensionNumber3 ExtensionCurrency4 or ExtensionNumber4"
+    }
+  },
+  "usage": "Each forecast type can include any combination of custom calculated columns and reference data columns, as long as they don’t exceed five in number. For example, a forecast type can have two custom calculated columns and three custom reference data columns. Custom calculated columns can’t be adjusted and aren’t included in rollups. In the UI, custom calculated columns can’t indicate changes in the last 7 days. If you have at least one custom calculated column in an active or inactive forecast type, you can’t do the following until you’ve removed the column.\n\nEach forecast type can include any combination of custom calculated columns and reference data columns, as long as they don’t exceed five in number. For example, a forecast type can have two custom calculated columns and three custom reference data columns.\n\nCustom calculated columns can’t be adjusted and aren’t included in rollups. In the UI, custom calculated columns can’t indicate changes in the last 7 days.\n\nIf you have at least one custom calculated column in an active or inactive forecast type, you can’t do the following until you’ve removed the column.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DeveloperName": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ForecastingTypeId": {
+      "field_label": "Forecasting Type ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Formula": {
+      "field_label": "Formula for calculated column",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Forecasting Column Definition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "Language": {
+      "field_label": "Master Language",
+      "type": "picklist",
+      "length": "40"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MasterLabel": {
+      "field_label": "Calculated column header label displayed in forecasting grid UI",
+      "type": "string",
+      "length": "80"
+    },
+    "ReferenceField": {
+      "field_label": "Custom Field Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ResultField": {
+      "field_label": "Field containing the value of the formula result",
+      "type": "string",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

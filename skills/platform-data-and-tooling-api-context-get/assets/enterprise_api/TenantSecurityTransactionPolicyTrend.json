@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "TenantSecurityTransactionPolicyTrend - Data API",
+  "description": "Stores changes to the count of Transaction Security Policies for a connected tenant within Security Center. This object is available for Security Center subscribers in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "Action": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "Stores information on a change to the policy. Available options include: ADDED REMOVED UPDATED"
+    },
+    "ActionBy": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the person who made this change."
+    },
+    "ActionConfig": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Contains a JSON description for how a user is alerted to an action on the policy. For example: In-app Email"
+    },
+    "ActionDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "When this change was made."
+    },
+    "DetailIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "Unique identifier for this detail record."
+    },
+    "EventName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the event of the corresponding Transaction Security Policy."
+    },
+    "MetricIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the corresponding TenantSecurityMonitorMetric."
+    },
+    "MetricsType": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The type of metric for the data collected."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the metric for the data collected."
+    },
+    "Tenant": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The ID of the tenant (org) that this record is for."
+    },
+    "TenantName": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The name of the tenant (org) that this record is for."
+    },
+    "TransactionPolicyState": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The state of the transaction security policy. The possible states are ENABLED or DISABLED."
+    },
+    "TransactionPolicyType": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "The type of policy configured. The available types are standard policy or a custom Apex policy."
+    }
+  },
+  "special_access_rules": "This object is read-only.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, it’s available in the same API versions as this object. Otherwise, it’s available in the specified API version and later.\n\n- **TenantSecurityPolicyChangeEvent**: Change events are available for the object.\n- **TenantSecurityPolicyFeed**: Feed tracking is available for the object.\n- **TenantSecurityPolicyHistory**: History is available for tracked fields of the object.\n- **TenantSecurityPolicyOwnerSharingRule**: Sharing rules are available for the object.\n- **TenantSecurityPolicyShare**: Sharing is available for the object."
+}

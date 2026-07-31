@@ -1,0 +1,283 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "TaxRate - Data API",
+  "description": "Represents a tax rate for a tax code and country. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApplicationBasis": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies whether the tax rate is applied on the net or gross amount. Possible values are: Gross Net The default value is Gross."
+    },
+    "City": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The city to which the tax rate applies."
+    },
+    "Country": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The country name that’s derived from the GeoCountry field value. This field is a calculated field."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The currency ISO code that’s applicable to the tax rate. Possible values are: AUD—Australian Dollar EUR—Euro GBP—British Pound USD—U.S. Dollar The default value is USD."
+    },
+    "EndDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date until when the tax rate is valid."
+    },
+    "FlatTaxAmount": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The flat tax amount that’s applied to the transaction."
+    },
+    "GeoCountryId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the GeoCountry for which the tax rate applies. You can define only one tax rate per GeoCountry and tax code combination. This field is a relationship field.",
+      "relationship_name": "GeoCountry",
+      "relationship_type": "Lookup",
+      "refers_to": "GeoCountry"
+    },
+    "GeoStateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "The ID of the GeoState for which the tax rate applies. This field is a relationship field.",
+      "relationship_name": "GeoState",
+      "refers_to": "GeoState"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record, a record related to this record, or a list view."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record or list view. If this value is null, it's possible the user accessed data in this record or list view but didn't viewed it directly."
+    },
+    "LegalEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The legal entity to which the tax rate applies. This field is a relationship field.",
+      "relationship_name": "LegalEntity",
+      "refers_to": "LegalEntity"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The unique ID of the tax rate."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The TaxRate record owner. By default, the record owner is the user who created the record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "Priority": {
+      "type": "int",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Sort, Update",
+      "description": "Reserved for future use."
+    },
+    "ProductCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The code of the product for which the tax rate applies."
+    },
+    "Rate": {
+      "type": "double",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The tax percentage rate that will be applied to orders."
+    },
+    "RateUsageType": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Specifies whether the tax rate is created for Commerce or Revenue Cloud. Possible values are: Commerce RevCloud—Revenue Cloud The default value is Commerce."
+    },
+    "StartDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The date from when the tax rate is valid."
+    },
+    "State": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The state name that’s derived from the GeoState field value. This field is a calculated field."
+    },
+    "TaxCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The code used to calculate the tax rate for the invoice line."
+    },
+    "ZipCode": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The postal or ZIP code to which the tax rate applies."
+    }
+  },
+  "special_access_rules": "The TaxRate object is available if B2B Commerce or D2C Commerce is enabled.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **TaxRateChangeEvent**: Change events are available for the object.\n- **TaxRateFeed**: Feed tracking is available for the object.\n- **TaxRateHistory**: History is available for tracked fields of the object.\n- **TaxRateOwnerSharingRule**: Sharing rules are available for the object.\n- **TaxRateShare**: Sharing is available for the object.",
+  "field_reference": {
+    "ApplicationBasis": {
+      "field_label": "Application Basis",
+      "type": "picklist",
+      "length": "255"
+    },
+    "City": {
+      "field_label": "City",
+      "type": "string",
+      "length": "255"
+    },
+    "Country": {
+      "field_label": "Country",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "date"
+    },
+    "FlatTaxAmount": {
+      "field_label": "Flat Tax Amount",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "GeoCountryId": {
+      "field_label": "Geo Country ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "GeoStateId": {
+      "field_label": "Geo State ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Tax Rate ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LegalEntityId": {
+      "field_label": "Legal Entity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "ProductCode": {
+      "field_label": "Product Code",
+      "type": "string",
+      "length": "80"
+    },
+    "Rate": {
+      "field_label": "Tax Rate %",
+      "type": "double",
+      "precision": "9",
+      "scale": "6"
+    },
+    "RateUsageType": {
+      "field_label": "Rate Application",
+      "type": "picklist",
+      "length": "255"
+    },
+    "StartDate": {
+      "field_label": "Start Date",
+      "type": "date"
+    },
+    "State": {
+      "field_label": "State",
+      "type": "string",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TaxCode": {
+      "field_label": "Tax Code",
+      "type": "string",
+      "length": "80"
+    },
+    "ZipCode": {
+      "field_label": "Zip Code",
+      "type": "string",
+      "length": "20"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
+}

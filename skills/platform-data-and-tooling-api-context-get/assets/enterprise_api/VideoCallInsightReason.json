@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VideoCallInsightReason - Data API",
+  "description": "Represents the video call insight reason that contains the insight keyword, insight moments associated with a keyword, and the number of keyword occurrences. This object is available in API version 66.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "Name": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Sort",
+      "description": "The name of the insight reason.",
+      "required": true
+    },
+    "OccurrenceInfo": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The metadata associated with the insight reason."
+    },
+    "OccurrenceSnippet": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The specific excerpt from the video call transcript that helped generate the insight. Reserved for future use."
+    },
+    "SpeakerParticipantId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the associated VideoCallParticipant record. This field is a relationship field.",
+      "relationship_name": "SpeakerParticipant",
+      "refers_to": "VideoCallParticipant"
+    },
+    "VideoCallInsightId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "ID of the VideoCallInsight record associated with a video call. Each record represents the call insight of a specific recording or transcript within a call. This field is a relationship field.",
+      "relationship_name": "VideoCallInsight",
+      "relationship_type": "Master-detail",
+      "refers_to": "VideoCallInsight (the master object)",
+      "required": true
+    }
+  },
+  "special_access_rules": "Einstein Conversation Insight must be enabled and the user requires the Conversation Insights for Sales permission set."
+}

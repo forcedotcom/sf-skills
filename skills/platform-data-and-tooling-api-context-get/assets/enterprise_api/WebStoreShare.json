@@ -1,0 +1,90 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "WebStoreShare - Data API",
+  "description": "Represents a sharing entry on a B2B or D2C store. This object is available in API version 45.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AccessLevel": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "A value that represents the type of sharing allowed. Possible values are: All—Owner Edit—Read/Write Read—Read Only"
+    },
+    "ParentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the parent folder for the record. This field is a relationship field.",
+      "relationship_name": "Parent",
+      "refers_to": "WebStore"
+    },
+    "RowCause": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Reason that this sharing entry exists. If you’re creating a sharing entry, the only permitted value is Manual. If no value is specified, the field defaults to Manual. All other RowCause values are read-only. After the sharing entry is created, this field can’t be edited. Possible values are: ALMAssignmentSharing—Actionable List Member Sharing Rule CompliantDataSharing—Compliant Data Sharing GuestParentImplicit—Associated guest user sharing GuestPersonImplicit—Associated Guest User Sharing GuestRule—Guest User Sharing Rule ImplicitChild—Account Sharing ImplicitParent—Associated record owner or sharing ImplicitPerson—Person Contact LearningAssignment—Learning Assignment Share LearningAssignmentImplicit—Learning Assignment Implicit Share LearningItemAssignment—Learning Item Assignment Share Manual—Manual Sharing MfgTargetShare—Manufacturing Target Sharing Rule ObligationAssigneeShare—Obligation Assignee Share Owner Rule—Sharing Rule SharingRecordCollection—Record Collection SurveyShare—Survey Sharing Rule Team—Sales Team Territory—Territory Assignment Rule Territory2AssociationManual—Territory Manual Territory2Forecast—Territory assignment for forecasting and reporting Territory2SplitsForecast—Territory Splits Share TerritoryManual—Territory Manual TerritoryRule—Territory Sharing Rule"
+    },
+    "UserOrGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the User or Group that has been given access to the User. This field can’t be updated. This field is a polymorphic relationship field.",
+      "relationship_name": "UserOrGroup",
+      "refers_to": "Group, User"
+    }
+  },
+  "special_access_rules": "Your Salesforce admin can manage this object using standard Salesforce sharing rules and CRUD access for the WebStore.",
+  "field_reference": {
+    "AccessLevel": {
+      "field_label": "Custom Object Access",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Custom Object Share ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ParentId": {
+      "field_label": "Parent ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RowCause": {
+      "field_label": "Row Cause",
+      "type": "picklist",
+      "length": "40"
+    },
+    "UserOrGroupId": {
+      "field_label": "User/Group ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

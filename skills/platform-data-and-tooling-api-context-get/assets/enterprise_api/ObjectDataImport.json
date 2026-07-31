@@ -1,0 +1,147 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ObjectDataImport - Data API",
+  "description": "Represents the data import status of one or more object records. This object is available in API version 57.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time (in UTC) when the data import finished."
+    },
+    "FileName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Optional. If the data import was from a comma-delimited file (CSV), the name of the file. The maximum length is 120 characters."
+    },
+    "ObjectDataImportNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "An auto-generated number identifying the data import."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the user who owns the data import status record. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PrimaryObject": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The name of the primary object being imported. For example, Lead. This value is usually provided programmatically. The maximum length is 120 characters."
+    },
+    "Result": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The JSON response of the data object import result, including error messages."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The processing status of the data object import. Possible values are: Completed In Progress"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Filter, Group, Restricted picklist, Sort",
+      "description": "The type of data import, such as from a comma-delimited file or through a connector. Possible values are: CSV Async CSV Sync External Record Import—A record imported or updated by Partner Connect between a partner and vendor system. To see this field, enable Partner Connect. See Set Up Partner Connect as a Partner in Salesforce Help. Available in API version 62.0 and later. One time Connector"
+    }
+  },
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ObjectDataImportChangeEvent**: Sharing rules are available for the object.\n- **ObjectDataImportOwnerSharingRule**: Sharing rules are available for the object.\n- **ObjectDataImportShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EndDate": {
+      "field_label": "End Date",
+      "type": "datetime"
+    },
+    "FileName": {
+      "field_label": "File Name",
+      "type": "string",
+      "length": "120"
+    },
+    "Id": {
+      "field_label": "Object Data Import ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ObjectDataImportNumber": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PrimaryObject": {
+      "field_label": "Primary Object",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Result": {
+      "field_label": "Result",
+      "type": "textarea",
+      "length": "131072"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

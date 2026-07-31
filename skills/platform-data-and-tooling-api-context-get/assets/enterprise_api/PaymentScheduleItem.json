@@ -1,0 +1,291 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "field_reference"
+  ],
+  "title": "PaymentScheduleItem - Data API",
+  "description": "A payment schedule contains one or more payment schedule items, where each item represents one payment to be processed. Each of a schedule’s items can have different payment configuration fields, such as payment methods, payment dates, and payment accounts. When a payment scheduler launches a payment run, the run evaluates active payment schedule items, and picks them up for payment processing if they align with the scheduler’s payment criteria. This object is available in API version 55.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Comments": {
+      "type": "textarea",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "Optional user-defined comments."
+    },
+    "CurrencyIsoCode": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Three-letter ISO 4217 currency code associated with the payment schedule item record."
+    },
+    "LastPaymentGatewayLogId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The most recent payment gateway log created following a payment gateway request to make a payment based on the payment schedule item. This is a relationship field.",
+      "relationship_name": "LastPaymentGatewayLog",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentGatewayLog"
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed a record related to this record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp for when the current user last viewed this record. If this value is null, this record might only have been referenced (LastReferencedDate) and not viewed."
+    },
+    "PaymentAccountId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The account assigned to payments made from the payment schedule item. When a payment schedule item is created, its PaymentAccountId inherits the payment schedule’s DefaultPaymentAccountId. However, you can provide a new PaymentAccountId at any time. If you change the PaymentAccountId, only payments made after the change use the new account. This is a relationship field.",
+      "relationship_name": "PaymentAccount",
+      "relationship_type": "Lookup",
+      "refers_to": "Account"
+    },
+    "PaymentBatchRunId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The payment batch run that evaluated the payment schedule item for payment processing. This is a relationship field.",
+      "relationship_name": "PaymentBatchRun",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentBatchRun"
+    },
+    "PaymentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The payment that a payment run created for the payment schedule item after picking up the parent payment schedule. This field is unique within your organization This is a relationship field.",
+      "relationship_name": "Payment",
+      "relationship_type": "Lookup",
+      "refers_to": "Payment"
+    },
+    "PaymentMethodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The payment method assigned to payments created from the payment schedule item. When a payment schedule item is created, its PaymentMethodId inherits the payment schedule’s DefaultPaymentMethodId. However, you can provide a new PaymentMethodId at any time. If you change the PaymentMethodId, only payments made after the change use the new account.",
+      "relationship_name": "PaymentMethod",
+      "relationship_type": "Lookup",
+      "refers_to": "CardPaymentMethod, DigitalWallet"
+    },
+    "PaymentProcessingMessage": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Shows information about whether the payment creation process has completed."
+    },
+    "PaymentsReceived": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The payment received from the borrower for the payment schedule item."
+    },
+    "PaymentRunMatchingValue": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value used to match a payment schedule item to a payment run based on the payment run’s matching criteria."
+    },
+    "PaymentScheduleId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The parent payment schedule for the payment schedule item. This is a relationship field.",
+      "relationship_name": "PaymentSchedule",
+      "relationship_type": "Lookup",
+      "refers_to": "PaymentSchedule"
+    },
+    "PaymentScheduleItemNumber": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "User-defined reference number for the payment schedule item."
+    },
+    "PaymentSource": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The feature that caused a payment to be created from the payment schedule item. Possible values are: PaymentRun"
+    },
+    "ProcessedAmount": {
+      "type": "currency",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of the payment schedule item that has been processed for payment and converted to a payment record."
+    },
+    "RequestedAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The initial amount of the payment schedule item upon creation."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The status of the payment schedule item. Possible values are: Applied: The payment schedule item has been successfully applied. Apply Failed: The payment run encountered an error when attempting to process the payment schedule item for payment. For more information, review the payment run’s revenue transaction error log. Approval PendingThe payment schedule item is waiting for approval before it can be processed by payment runs.Available in API version 65.0 and later with Financial Services and Automotive Cloud. Canceled: The payment schedule item can’t be picked up by payment runs for processing. When a user or process changes the item’s status to Canceled, the item’s CanceledAmount becomes RequestedAmount – ProcessedAmount. Deferred PaymentThe payment schedule item has been postponed and will be processed at a later date.Available in API version 65.0 and later with Financial Services and Automotive Cloud. Payment Waived OffThe payment schedule item has been canceled, and the payment will not be processed.Available in API version 65.0 and later with Financial Services and Automotive Cloud."
+    },
+    "TargetPaymentProcessingDate": {
+      "type": "date",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The date after picking up a payment schedule item that the payment run makes a payment request to the payment gateway."
+    },
+    "UsageType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies the usage type for the record. Possible value is: CollectionPlan Available in API version 62.0 and later with Financial Services and Automotive Cloud."
+    }
+  },
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "field_reference": {
+    "AppliedAmount": {
+      "field_label": "Credited Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Comments": {
+      "field_label": "Comments",
+      "type": "textarea",
+      "length": "1000"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Id": {
+      "field_label": "Payment Schedule Item ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastPaymentGatewayLogId": {
+      "field_label": "Payment Gateway Log ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "PaymentAccountId": {
+      "field_label": "Payment Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentBatchRunId": {
+      "field_label": "Payment Batch Run ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentGatewayRespStatus": {
+      "field_label": "Payment Gateway Response Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PaymentId": {
+      "field_label": "Payment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentMethodId": {
+      "field_label": "Payment Method ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentProcessingMessage": {
+      "field_label": "Payment Processing Message",
+      "type": "string",
+      "length": "1000"
+    },
+    "PaymentRunMatchingValue": {
+      "field_label": "Payment Run Matching Value",
+      "type": "picklist",
+      "length": "40"
+    },
+    "PaymentScheduleId": {
+      "field_label": "Payment Schedule ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentScheduleItemNumber": {
+      "field_label": "Payment Schedule Item Number",
+      "type": "string",
+      "length": "255"
+    },
+    "PaymentSource": {
+      "field_label": "Payment Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PaymentsReceived": {
+      "field_label": "Payments Received",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "ProcessedAmount": {
+      "field_label": "Processed Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "RequestedAmount": {
+      "field_label": "Requested Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TargetPaymentProcessingDate": {
+      "field_label": "Target Payment Processing Date",
+      "type": "date"
+    },
+    "UsageType": {
+      "field_label": "Usage Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length"
+  ]
+}

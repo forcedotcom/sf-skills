@@ -1,0 +1,285 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage",
+    "field_reference"
+  ],
+  "title": "DataKitDeploymentLog - Data API",
+  "description": "Represents the log details of a data kit component deployment. This object is available in API version 61.0 or later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "BundleName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the data stream bundle if a data stream is deployed from a data kit."
+    },
+    "ComponentName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the component that’s deployed from a data kit."
+    },
+    "ComponentTemplateId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the data kit template from which the component is deployed. This field is a polymorphic relationship field.",
+      "relationship_name": "ComponentTemplate",
+      "refers_to": "DataSourceBundle"
+    },
+    "ComponentType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of the component for which the deployment is tracked in the log details. Possible values are: MktCalculatedInsight MktDataLakeObject MktDataModelObject MktDataStream MktDataTransform Possible values available in API version 63.0 and later are: ActivationTarget DataAction DataActionTarget DataGraph DataSemanticSearch EngagementSignal ExtDataShare IdentityResolution MarketSegment MarketSegmentActivation MktDataConnection MktMLModel PersonalizationObjective PersonalizationRecommender Possible values available in API version 64.0 and later are: IrRelatedListEnrichment MktCalculatedInsight MktDataLakeObject MktDataStream MktDataTransform PersonalizationPoint PersonalizationSchema Possible values available in API version 66.0 and later are: CopyFieldEnrichment SemanticModel"
+    },
+    "DataKitName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the data kit being deployed."
+    },
+    "DataPackageKitDefinition": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "ID of the data kit being deployed. Available in API version 63.0 and later. Possible values are: 1dk.Collections 1dk.SalesNextGenForecastingDatakit 1dk.Test_Fbdk 1dk.sf_mktg_ae__Marketing_Account_Engagement_CRM_Data"
+    },
+    "DataSpaceName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Name of the data space the components are deployed to."
+    },
+    "DeployJob": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The deployment job ID."
+    },
+    "DeploymentAction": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Deployment action of the data kit components. Possible values are: Deploy Undeploy"
+    },
+    "DeploymentError": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Contains the error details if the data kit deployment fails."
+    },
+    "DeploymentStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Deployment status of the data kit components. Possible values are: Failed Started Successful"
+    },
+    "FileBasedComponentTemplate": {
+      "type": "string",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "ID of the file-based component template that corresponds to the deployment log entry. Available in API version 63.0 and later."
+    },
+    "FlowInterviewIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Identifier of the flow interview if the deployment was triggered using a flow."
+    },
+    "JobIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Identifier of the data kit component deployment job. Available in API version 66.0 and later."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed the deployment log file."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this deployment log."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
+      "description": "The name of the deployment log."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "The ID of the user that owns the deployment. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "PublisherOrgComponentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the component in the publisher org. This field is a polymorphic relationship field.",
+      "relationship_name": "PublisherOrgComponent",
+      "refers_to": "MktCalculatedInsight, MktDataTransform"
+    },
+    "SubscriberOrgComponentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID of the component in the subscriber org in which the components of a data kit are deployed. This field is a polymorphic relationship field.",
+      "relationship_name": "SubscriberOrgComponent",
+      "refers_to": "ActivationTarget, DataGraph, DataStream, ExtDataShare, IdentityResolution, MarketSegment, MarketSegmentActivation, MktCalculatedInsight, MktDataTransform"
+    },
+    "TemplateVersion": {
+      "type": "double",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The version of the template from which the deployment was done."
+    }
+  },
+  "special_access_rules": "Users that have access to Data Cloud.",
+  "usage": "Use the DataKitDeploymentLog object to track the deployment of a data kit component.",
+  "field_reference": {
+    "BundleName": {
+      "field_label": "Bundle Name",
+      "type": "string",
+      "length": "100"
+    },
+    "ComponentName": {
+      "field_label": "Component Name",
+      "type": "string",
+      "length": "100"
+    },
+    "ComponentTemplateId": {
+      "field_label": "Component Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ComponentType": {
+      "field_label": "Component Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataKitName": {
+      "field_label": "Data Kit Name",
+      "type": "string",
+      "length": "100"
+    },
+    "DataPackageKitDefinition": {
+      "field_label": "Data Package Kit Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DataSpaceName": {
+      "field_label": "Data Space Name",
+      "type": "string",
+      "length": "100"
+    },
+    "DeployJob": {
+      "field_label": "Deploy Job",
+      "type": "string",
+      "length": "80"
+    },
+    "DeploymentAction": {
+      "field_label": "Deployment Action",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DeploymentError": {
+      "field_label": "Deployment Error",
+      "type": "textarea",
+      "length": "128000"
+    },
+    "DeploymentStatus": {
+      "field_label": "Deployment Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "FileBasedComponentTemplate": {
+      "field_label": "Component Template Name",
+      "type": "string",
+      "length": "100"
+    },
+    "FlowInterviewIdentifier": {
+      "field_label": "Flow Interview Identifier",
+      "type": "string",
+      "length": "80"
+    },
+    "Id": {
+      "field_label": "Data Kit Deployment Log ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JobIdentifier": {
+      "field_label": "Job Identifier",
+      "type": "string",
+      "length": "80"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PublisherOrgComponentId": {
+      "field_label": "Publisher Org Component ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SubscriberOrgComponentId": {
+      "field_label": "Subscriber Org Component ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TemplateVersion": {
+      "field_label": "Template Version",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects"
+  ],
+  "title": "EnablementProgram - Data API",
+  "description": "Represents an Enablement program, which includes exercises and measurable milestones to help users such as sales reps achieve specific outcomes related to your company’s revenue goals. This object is available in API version 56.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Update",
+      "description": "A summary of the program’s goals and content that’s visible to users."
+    },
+    "DoesAllowSelfEnrollment": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether users can self-enroll in programs that are shared with them (true) or take only assigned programs (false). The default value is false."
+    },
+    "EnablementProgramDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The representation for the program in Metadata API. This field is a relationship field. Available in API version 61.0 and later.",
+      "relationship_name": "EnablementProgramDefinition",
+      "relationship_type": "Lookup",
+      "refers_to": "EnablementProgramDefinition"
+    },
+    "IsOutcomeBased": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the program includes a final, measurable outcome (true) or not (false). The default value is false."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last accessed this record indirectly, for example, through a list view or related record."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The timestamp when the current user last viewed this record. If this value is null, maybe the user accessed this record (LastReferencedDate) but not viewed it yet."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The name of the program that’s visible to users. For example, AE Onboarding, Event Prep, or New Product Launch."
+    },
+    "NetworkId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the supported Experience Cloud site where a partner program is available. For site requirements, see Considerations for Partner Enablement Programs. Available in API version 60.0 and later.",
+      "relationship_name": "Network",
+      "relationship_type": "Lookup",
+      "refers_to": "Network"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "ID of the owner of the program. This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "relationship_type": "Lookup",
+      "refers_to": "Group, User"
+    },
+    "PublishedDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date that the program is published."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The status of the program. Only a published program is available for an Enablement admin to assign to users or share with users so they can self-enroll. Possible values are: Archived Draft Published"
+    },
+    "TotalAssigned": {
+      "type": "int",
+      "properties": "Nillable",
+      "description": "The number of assignments in this program. For example, if the program is assigned to 3 users, then TotalAssigned=3."
+    },
+    "TotalBehind": {
+      "type": "int",
+      "properties": "Nillable",
+      "description": "The number of assignments that are behind in this program. For example, if the program is assigned to 3 users, and 2 users are behind on their assignments, then TotalBehind=2"
+    },
+    "TotalCompleted": {
+      "type": "int",
+      "properties": "Nillable",
+      "description": "The number of completed assignments in this program. For example, if the program is assigned to 3 users, and 1 user has completed the program, then TotalCompleted=1."
+    },
+    "TotalDays": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Total days of the program. This value is derived from the latest day of all items in the program, including exercises, milestones, and the outcome. This field is a calculated field. For example, a program has Task A on day 1 and Task B on day 2. Since Task B has the latest days of all tasks, then TotalDays=2."
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "The type of the program. Possible values are: Enablement—A sales program in Lightning Experience. PtnrEnablement—A partner program in a supported Experience Cloud site. Available in API version 60.0 and later. EmployeeServiceEnablement—An employee enablement program in Employee Portal. Available in API version 63.0 and later."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **EnablementProgramOwnerSharingRule (API version 60.0)**: Sharing rules are available for the object.\n- **EnablementProgramShare (API version 60.0)**: Sharing is available for the object."
+}

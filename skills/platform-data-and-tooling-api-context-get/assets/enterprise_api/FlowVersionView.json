@@ -1,0 +1,195 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "wsdl_segment",
+    "field_reference"
+  ],
+  "title": "FlowVersionView - Data API",
+  "description": "Represents the version of a flow definition. This object is available in API version 46.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ApiVersion": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The API version for the flow definition. Every flow version has an API version specified at creation.This field is available in API version 50.0 and later."
+    },
+    "ApiVersionRuntime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The API version for running the flow. This value determines which versioned run-time behavior improvements are adopted by the flow version.If not specified when the flow or flow version is created, the latest available API version is used as the API version for running the flow. When an existing flow is saved as a new flow or flow version, the existing flow’s run-time API version is used in the new flow or flow version. This field is available in API version 50.0 and later."
+    },
+    "AreMetricsLoggedToDataCloud": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether this flow’s metrics are logged in Data Cloud. The default value is false. This field is available in API version 63.0 and later."
+    },
+    "CapabilityType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The capability that integrates with the flow. An example value is PromptTemplateType://SalesEmail."
+    },
+    "CapacityCategory": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The category that determines the usage limits of the flow. Possible values are: Marketing Cloud Flow"
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Flow version information, specified by the org’s admin."
+    },
+    "DurableId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the flow version."
+    },
+    "FlowDefinitionViewId": {
+      "type": "string",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The ID of the flow definition. This field s a relationship field.",
+      "relationship_name": "FlowDefinitionView",
+      "relationship_type": "Lookup",
+      "refers_to": "FlowDefinitionView"
+    },
+    "IsSwingFlow": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the flow is built with Desktop Flow Designer. This field is available in API version 49.0 and later. Default: false"
+    },
+    "IsTemplate": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "Indicates whether the process or flow is a template. When installed from managed packages, processes and flows can’t be viewed or cloned by subscribers because of intellectual property (IP) protection. But when those processes and flows are templates, subscribers can open them in a builder, clone them, and customize the clones. Available in API version 46.0 and later.Default: false"
+    },
+    "Label": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The label of the flow version."
+    },
+    "ProcessType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of the flow. Valid values are: ActionableEventManagementFlow—A flow that triggers an actionable event orchestration process in the background and automatically executes different types of actions based on the event type. This value is available in API version 62.0 and later. ActionCadenceAutolaunchedFlow—A flow executed when a user completes a cadence step. This value is available in API version 56.0 and later. ActionCadenceStepFlow—A screen flow used as a cadence step. This value is available in API version 56.0 and later. ActivityObjectMatchingFlow—A flow that launches when Einstein Activity Capture detects and captures a new activity, such as an email. This type of flow runs in the background without user interaction. This value is available with Sync Email as Salesforce Activity in API version 64.0 and later. Appointments—A flow for Lightning Scheduler. This value is available in API version 44.0 and later. ActivityObjectMatchingFlow—A flow that launches when Einstein Activity Capture detects and captures a new activity, such as an email. This type of flow runs in the background without user interaction. This value is available with Sync Email as Salesforce Activity in API version 63.0 and later. ApprovalWorkflow—An orchestration for approvals. This value is available in API version 62.0 and later. AutoLaunchedFlow—A flow that doesn’t require user interaction. CheckoutFlow—A flow used in Lightning B2B Commerce to create a checkout in a store. This value is available in API version 48.0 and later. ContactRequestFlow—A flow that lets customers request that customer support get back to them. This flow is used to create contact request records. This value is available in API version 45.0 and later. CustomerLifecycle—A Salesforce Surveys flow that lets you associate survey questions with different stages in customer lifecycles. This value is available in API version 49.0 and later and only when the Customer Lifecycle Designer license is enabled. CustomEvent—A process that is invoked when it receives a platform event message. In the UI, it’s an event process. This value is available in API version 41.0 and later. DataCaptureFlow—A flow that configures the Form tab on Work Order Overview or the related list for a service appointment or a work order line item. This value is available in API version 62.0 and later. DcvrFrameworkDataCaptureFlow—A screen flow that presents assessment questions from Discovery Framework. Launches when invoked by a user on a mobile device. This type of flow collects or displays information, requires user interaction, and works offline or online. This value is available in API version 62.0 and later. FieldServiceMobile—A flow for the Field Service mobile app. This value is available in API version 39.0 and later. FieldServiceWeb—A flow for embedded Appointment Booking. Its UI label is Field Service Embedded Flow. This value is available in API version 41.0 and later. Flow—A flow that requires user interaction because it contains one or more screens or local actions, choices, or dynamic choices. In the UI and Salesforce Help, it’s a screen flow. Screen flows can be launched from the UI, such as with a flow action, Lightning page, or web tab. FSCLending—A flow for Financial Services Cloud Mortgage. This value is available in API version 46.0 and later. IdentityUserRegistrationFlow—A flow to handle user registration and updates for single sign-on with the authentication provider framework. Available in API version 64.0 and later. IndicatorResultFlow—A flow for Outcome Management that calculates and creates indicator results for a selected indicator performance period. This value is available with the Outcome Management license in API version 60.0 and later. IndividualObjectLinkingFlow—A screen flow that helps search for contacts, leads, person accounts, and employees and links them to support interactions. This value is available in API version 58.0 and later. InvocableProcess—A process that can be invoked by another process or the Invocable Actions resource in REST API. This value is available in API version 38.0 and later. LoyaltyManagementFlow—A flow for the Loyalty Management app and can be invoked by loyalty program processes. This value is available in API version 54.0 and later. PromptFlow—A flow for Prompt Builder. Pass data between Prompt Builder and the flow. This value is available in API version 60.0 and later. RoutingFlow—A flow for Salesforce Omni-Channel routing and other business logic. This value is available in API version 52.0 and later. StageManagementEvaluationFlow—A flow for evaluating custom criteria for a stage or step in Stage Management. This value is available in API version 63.0 and later. Survey—A flow for Salesforce Surveys. From the UI, this type of flow is created in Survey Builder. This value is available in API version 42.0 and later. SurveyEnrich—A Salesforce Surveys flow that uses the Survey Data Mapper. From the UI, this type of flow is created in the Survey Builder and requires an associated survey flow type. This value is available in API version 49.0 or later and only when the Customer Lifecycle Designer license is enabled. Workflow—A process that is invoked when a record is created or edited. In the UI and Salesforce Help, it’s a record change process. These values are reserved for future use. ActionCadenceFlow ActionPlan ActivitySmartMatchingFlow AppProcess CartAsyncFlow DigitalForm Journey JourneyBuilderIntegration LoginFlow ManagedContentFlow OrchestrationFlow RecommendationStrategy SalesEntryExperienceFlow TransactionSecurityFlow UserProvisioningFlow This value has significant impact on validation when saving the flow and on the flow’s runtime behavior. Don’t change this value unless you understand the flow properties of the specified type."
+    },
+    "RunInMode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The mode that the flow runs in. Valid values are: DefaultMode — The flow version runs in system or user context, depending on how the flow is launched. SystemModeWithSharing — The flow version always runs in system mode with sharing. The flow respects org-wide default settings, role hierarchies, sharing rules, manual sharing, teams, and territories. But it doesn’t respect object permissions, field-level access, or other permissions of the running user."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The flow’s status. Active Draft Obsolete InvalidDraft UnderReview"
+    },
+    "VersionNumber": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The flow’s version number."
+    }
+  },
+  "usage": "Use this object to query information about flow versions. A query must be filtered by DurableId or FlowDefinitionViewId to get results.",
+  "wsdl_segment": "```xml\n<complexType name=\"FlowVersionView\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApiVersion\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ApiVersionRuntime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"AreMetricsLoggedToDataCloud\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"CapabilityType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CapacityCategory\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DurableId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowDefinitionView\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FlowDefinitionView\"/>\n        <element name=\"FlowDefinitionViewId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowTestResults\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsSwingFlow\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"Label\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ProcessType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"RunInMode\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Variables\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"VersionNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "ApiVersion": {
+      "field_label": "API Version",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ApiVersionRuntime": {
+      "field_label": "API Version Runtime",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "AreMetricsLoggedToDataCloud": {
+      "field_label": "Log Metrics to Data Cloud",
+      "type": "boolean"
+    },
+    "CapabilityType": {
+      "field_label": "Capability Type",
+      "type": "string",
+      "length": "255"
+    },
+    "CapacityCategory": {
+      "field_label": "Capacity Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Description": {
+      "field_label": "Version Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DurableId": {
+      "field_label": "Durable ID",
+      "type": "string",
+      "length": "255"
+    },
+    "FlowDefinitionViewId": {
+      "field_label": "Flow Definition View ID",
+      "type": "string",
+      "length": "512"
+    },
+    "Id": {
+      "field_label": "Flow Version View ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsSwingFlow": {
+      "field_label": "Is Swing Flow",
+      "type": "boolean"
+    },
+    "IsTemplate": {
+      "field_label": "Is Template",
+      "type": "boolean"
+    },
+    "Label": {
+      "field_label": "Version Label",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "ProcessType": {
+      "field_label": "Process Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "RunInMode": {
+      "field_label": "Run in Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Status": {
+      "field_label": "Version Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "VersionNumber": {
+      "field_label": "Version Number",
+      "type": "int",
+      "digits": "9"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
+}

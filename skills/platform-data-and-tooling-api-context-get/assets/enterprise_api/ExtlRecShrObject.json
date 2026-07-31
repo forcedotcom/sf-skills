@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ExtlRecShrObject - Data API",
+  "description": "Represents a shared object for Partner Connect. This object is available in API version 62.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DefaultRecordOwnerId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the shared record owner. The owner can be a user or a queue, represented by a Group ID. This field is a polymorphic relationship field.",
+      "relationship_name": "DefaultRecordOwner",
+      "refers_to": "Group, User"
+    },
+    "ExtlObjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Object type in the external org or system that is part of the object field mapping. Possible values are: ExtlRecShrLead ExtlRecShrOpportunity Lead Opportunity"
+    },
+    "ExtlRecShrCnctId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the external record share connection. This field is a relationship field.",
+      "relationship_name": "ExtlRecShrCnct",
+      "refers_to": "ExtlRecShrCnct"
+    },
+    "FieldMapStatus": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Exporter’s status of the field mapping. Possible values are: ActiveMapping Selected SystemOverride"
+    },
+    "InternalObjectType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort",
+      "description": "Object type in your org or system used to group field selections and field mappings. Possible values are: ExtlRecShrLead ExtlRecShrOpportunity Lead Opportunity"
+    }
+  },
+  "special_access_rules": "To see this object, enable Partner Connect or Partner Connect for Vendors. See Set Up Partner Connect as a Partner and Set Up Partner Connect as a Vendor in Salesforce Help."
+}

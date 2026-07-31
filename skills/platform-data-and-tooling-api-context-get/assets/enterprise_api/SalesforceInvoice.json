@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "SalesforceInvoice - Data API",
+  "description": "Read-only virtual object used in the Your Account App. Represents information about your organization’s invoices with Salesforce.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Balance": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The outstanding balance for this invoice. Equal to the invoice’s total amount with tax, ignoring payments and adjustments."
+    },
+    "DueDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The customer must pay the invoice by the due date. Unpaid invoices past the due date can be sent to collections."
+    },
+    "ExternalId": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "External reference ID set by Salesforce."
+    },
+    "InvoiceCurrency": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Currency associated with this invoice."
+    },
+    "InvoiceDate": {
+      "type": "date",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date that the invoice was posted. Used with payment terms to determine the invoice’s DueDate. For example, an invoice with an InvoiceDate of April 1 and Net 30 payment terms would have a DueDate of May 1."
+    },
+    "InvoiceNumber": {
+      "type": "string",
+      "properties": "Filter, Group, idLookup, Nillable, Sort",
+      "description": "System-created ID for this invoice."
+    },
+    "SalesforceContractId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Salesforce Contract ID This field is a relationship field.",
+      "relationship_name": "SalesforceContract",
+      "relationship_type": "Lookup",
+      "refers_to": "SalesforceContract"
+    },
+    "SalesforceInvoiceStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The state of the invoice. Possible values are: DueSoon— Paid PastDue— Pending"
+    },
+    "TotalAmount": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The sum TotalAmount of the invoice items."
+    }
+  },
+  "usage": "Used by Your Account to manage invoices for your organization’s Salesforce contract. Read-only.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later."
+}
