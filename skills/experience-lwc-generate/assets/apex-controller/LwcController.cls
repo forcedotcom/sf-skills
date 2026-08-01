@@ -37,7 +37,7 @@ public with sharing class LwcController {
                 SELECT Id, Name, Industry, AnnualRevenue, Phone, CreatedDate
                 FROM Account
                 WHERE Name LIKE :searchKey
-                WITH SECURITY_ENFORCED
+                WITH USER_MODE
                 ORDER BY Name
                 LIMIT :recordLimit
             ];
@@ -57,7 +57,7 @@ public with sharing class LwcController {
                        (SELECT Id, FirstName, LastName, Email FROM Contacts LIMIT 5)
                 FROM Account
                 WHERE Id = :accountId
-                WITH SECURITY_ENFORCED
+                WITH USER_MODE
                 LIMIT 1
             ];
 
@@ -146,7 +146,7 @@ public with sharing class LwcController {
             List<Account> existing = [
                 SELECT Id FROM Account
                 WHERE Id = :accountId
-                WITH SECURITY_ENFORCED
+                WITH USER_MODE
                 LIMIT 1
             ];
 
@@ -201,7 +201,7 @@ public with sharing class LwcController {
             List<Account> accountsToDelete = [
                 SELECT Id FROM Account
                 WHERE Id IN :recordIds
-                WITH SECURITY_ENFORCED
+                WITH USER_MODE
             ];
 
             if (accountsToDelete.size() != recordIds.size()) {
@@ -280,14 +280,14 @@ public with sharing class LwcController {
             // Build dynamic query
             String query = 'SELECT Id, Name, Industry, AnnualRevenue, Phone, CreatedDate ' +
                           'FROM Account ' +
-                          'WITH SECURITY_ENFORCED ' +
+                          'WITH USER_MODE ' +
                           'ORDER BY ' + sortField + ' ' + sortDir + ' NULLS LAST ' +
                           'LIMIT :recordLimit OFFSET :recordOffset';
 
             List<Account> records = Database.query(query);
 
             // Get total count
-            Integer totalCount = [SELECT COUNT() FROM Account WITH SECURITY_ENFORCED];
+            Integer totalCount = [SELECT COUNT() FROM Account WITH USER_MODE];
 
             return new PagedResult(records, totalCount);
         } catch (Exception e) {
