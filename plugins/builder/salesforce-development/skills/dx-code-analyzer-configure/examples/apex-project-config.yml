@@ -1,0 +1,41 @@
+# Code Analyzer Configuration — Apex-focused Project
+#
+# This file contains ONLY overrides. Code Analyzer's built-in defaults
+# handle everything else. Only add entries here that intentionally
+# change behavior for your project.
+#
+# Usage:
+#   Place at project root as code-analyzer.yml
+#   Validate: sf code-analyzer config --config-file code-analyzer.yml
+
+# Exclude non-project files (these would otherwise be scanned)
+ignores:
+  files:
+    - "**/node_modules/**"
+    - "**/.sfdx/**"
+    - "**/.sf/**"
+    - "**/staticresources/**"
+
+# Engine tuning — only override what differs from defaults
+engines:
+  # SFGE: increase heap for projects with 200+ Apex classes
+  # (built-in default is dynamic/1g, too small for large projects)
+  sfge:
+    java_max_heap_size: "4g"
+
+# Rule overrides — promote security, demote noise
+rules:
+  pmd:
+    # Promote security rules to Critical (default is High)
+    ApexCRUDViolation:
+      severity: 1
+    ApexSOQLInjection:
+      severity: 1
+    ApexSharingViolations:
+      severity: 1
+    # Demote noisy rules (default is Moderate)
+    ApexDoc:
+      severity: 5
+    # Disable rules that conflict with project conventions
+    AvoidGlobalModifier:
+      disabled: true

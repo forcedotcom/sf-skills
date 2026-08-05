@@ -1,0 +1,496 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExpressionSetDefinition - Metadata API",
+  "description": "Represents an expression set definition.",
+  "file_information": ".expressionSetDefinition",
+  "directory_location": "expressionSetDefinition",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of an expression set definition."
+    },
+    "executionMode": {
+      "type": "ExpsSetExecutionMode (enumeration of type string)",
+      "description": "Specifies the execution mode for the expression set definition.Valid values are: Cloud Local"
+    },
+    "executionScale": {
+      "type": "ExpsSetExecutionScale (enumeration of type string)",
+      "description": "Specifies the scale of the inputs that an expression set processes. The scale determines where the expression set is executed. Valid values are: High Low Available in API version 61.0 and later."
+    },
+    "interfaceSourceType": {
+      "type": "ExpsSetInterfaceSourceType (enumeration of type string)",
+      "description": "The interface source type designed by the consuming cloud that's making a customized expression set builder available to its users. Valid values are: Bre Constraint (Available in API version 62.0 and later). DiscoveryProcedure (Available in API version 61.0 and later). EventOrchestration (Available in API version 61.0 and later). GpaCalculationProcedure (Available in API version 67.0 and later). IntelligentDecisionStudio (Available in API version 67.0 and later). ItServiceManagement (Available in API version 65.0 and later). PricingProcedure QualificationProcedure RatingDiscoveryProcedure (Available in API version 61.0 and later). RatingProcedure (Available in API version 67.0 and later). Sample Available in API version 59.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "The UI label of an expression set definition."
+    },
+    "processType": {
+      "type": "ExpsSetProcessType (enumeration of type string)",
+      "description": "The process type that uses the expression set rule. Valid values are: Bre GpaCalculation InsuranceClaimProcessing—Available in API version 65.0 and later. ItServiceManagement—Available in API version 65.0 and later. PlanCostCalculation RatingDiscovery StudentInformationSystem—Available in API version 65.0 and later. StudentSuccess When Business Rules Engine is enabled for a Salesforce instance, the default value is Bre. Other process types are available to you depending on your industry solution and permission sets."
+    },
+    "resourceInitializationType": {
+      "type": "ResourceInitializationType (enumeration of type string)",
+      "description": "Indicates whether the initial value of expression set variables and context tags is null or a default value. Valid values are: Default Off Available in API version 64.0 and later."
+    },
+    "template": {
+      "type": "boolean",
+      "description": "Defines whether an expression set is a template or not."
+    },
+    "type": {
+      "type": "ExpsSetType (enumeration of type string)",
+      "description": "The type of the expression set definition.Valid values are: Custom Standard"
+    },
+    "usageSubType": {
+      "type": "ExpsSetUsageSubType (enumeration of type string)",
+      "description": "The subtype of the industry that's using the expression set definition. If no value is specified, the field defaults to null."
+    },
+    "versions": {
+      "type": "ExpressionSetDefinitionVersion[]",
+      "description": "Represents an array of expression set version definitions in an expression set.This array must contain at least one version."
+    }
+  },
+  "sub_types": {
+    "ExpressionSetDefinitionVersion": {
+      "decimalScale": {
+        "type": "integer",
+        "description": "Number of decimal places to be used in the results of calculation steps that involve context variables."
+      },
+      "description": {
+        "type": "string",
+        "description": "Describes the version of an expression set definition."
+      },
+      "endDate": {
+        "type": "dateTime",
+        "description": "The date until which the expression set definition is available for use."
+      },
+      "expressionSetDefinition": {
+        "type": "string",
+        "description": "The full name of an expression set definition."
+      },
+      "interfaceSourceType": {
+        "type": "ExpsSetInterfaceSourceType (enumeration of type string)",
+        "description": "The interface source type designed by the consuming cloud that's making a customized expression set builder available to its users. Valid values are: Bre Constraint DiscoveryProcedure EventOrchestration GpaCalculationProcedure IntelligentDecisionStudio ItServiceManagement PricingProcedure QualificationProcedure RatingDiscoveryProcedure RatingProcedure Sample Available in API version 67.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "The UI label of an expression set definition."
+      },
+      "processType": {
+        "type": "ExpsSetProcessType (enumeration of type string)",
+        "description": "The process type that uses the expression set rule. Available in API version 67.0 and later."
+      },
+      "rank": {
+        "type": "int",
+        "description": "The rank of the Expression Set Definition Version. When more than one enabled version matches an expression set call, and the start date time to end date time spans overlap, the version with the highest rank is chosen. Available in API version 62.0 and later."
+      },
+      "shouldShowExplExternally": {
+        "type": "boolean",
+        "description": "Indicates whether the decision explanation is exposed to external users (true) or not (false). The default value is false. Available in API version 56.0 and later."
+      },
+      "startDate": {
+        "type": "dateTime",
+        "required": true,
+        "description": "The date from when the expression set definition is available for use."
+      },
+      "status": {
+        "type": "ExpsSetStatus (enumeration of type string)",
+        "required": true,
+        "description": "The status of an expression set definition. Valid values are: Active Draft Inactive InvalidDraft Obsolete"
+      },
+      "steps": {
+        "type": "ExpressionSetStep[]",
+        "description": "Represents an array of steps created in an expression set version."
+      },
+      "uiTier": {
+        "type": "boolean",
+        "description": "Indicates whether the API call originated from the design time builder or a package. Note: This field is for internal use only."
+      },
+      "variables": {
+        "type": "ExpressionSetVariable[]",
+        "description": "Represents an array of variables in an expression set version."
+      },
+      "versionNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The version number of an expression set definition."
+      }
+    },
+    "ExpressionSetStep": {
+      "actionType": {
+        "type": "BusinessKnowledgeModel (enumeration of type string)",
+        "description": "Specifies the type of action this step executes.Valid values are: AiAcceleratorSubscriberChurnPrediction ApexAction ApexListAction (Available in API version 64.0 and later.) AssetDiscovery AssignBadgeToMember AssignParameterValues AssignmentElement AssignmentRuleCustomQueue (Available in API version 65.0 and later.) AssignmentRuleCustomUser (Available in API version 65.0 and later.) AteprlRecordCreator (Available in API version 65.0 and later.) AttributeAdjustmentMatrix AttributeDiscount AutomatedClaimsProcessingValidation BaseRate BindingObjectRateAdjustmentResolution (Available in API version 64.0 and later.) BindingObjectRateCardEntryResolution (Available in API version 64.0 and later.) BreAggregator BreAggregatorAssignment BreakdownLineMapping (Available in API version 64.0 and later.) BundleDiscount CalculateQuantity (Available in API version 64.0 and later.) ChangeMemberTier CheckMemberBadgeAssignment CommercePricing (Available in API version 62.0 and later.) CommitmentAdjustment (Available in API version 65.0 and later.) ComplianceCheck ComplianceControlLog (Available in API version 62.0 and later.) Constraint (Available in API version 64.0 and later.) CreditPoints Crud DebitPoints DerivedPricing DiscountDistributionService DiscoverySettings (Available in API version 64.0 and later.) DynamicRulesExecutor (Available in API version 65.0 and later.) EvaluateCategoryDisqualification (Available in API version 62.0 and later.) EvaluateCategoryQualification (Available in API version 62.0 and later.) EvaluateDisqualification EvaluateQualification FormulaBasedPricing FormulaBasedRating (Available in API version 62.0 and later.) GetCustomerPromotionAttrValue (Available in API version 64.0 and later.) GetMemberAttributesValues GetMemberPartnerLinkageStatus GetMemberPointBalance GetMemberPromotions GetMemberTier GetOutputsFromDecisionMatrix GetOutputsFromDecisionTable GetUserData GroupingAndAggregatePricing GroupingAndAggregateRating (Available in API version 62.0 and later.) IncreaseUsageForCumulativePromotion IntegrationOrchestration InterNodeDataCopy IssueExtendedReward (Available in API version 64.0 and later.) IssueVoucher ListGroup ListGroupCalculation ListPrice ManualDiscount ManualRatingDiscount (Available in API version 62.0 and later.) MapProduct MinimumPrice (Available in API version 62.0 and later.) MultiRecipientProductQualification (Available in API version 64.0 and later.) NegotiatedBaseRate (Available in API version 64.0 and later.) NegotiatedRateCardEntryResolution (Available in API version 64.0 and later.) NegotiatedTierAdjustment (Available in API version 64.0 and later.) NegotiatedVolumeAdjustment (Available in API version 64.0 and later.) PredictiveAI PriceAdjustmentMatrix PriceGuidance (Available in API version 64.0 and later.) PriceRevision (Available in API version 65.0 and later.) PricingPropagation (Available in API version 65.0 and later.) PricingSettings PromotionExecution (Available in API version 65.0 and later.) PromotionsDiscount Proration RateAdjustmentByAttributeResolution (Available in API version 62.0 and later.) RateAdjustmentByTierResolution (Available in API version 62.0 and later.) RateAdjustmentMatrix (Available in API version 62.0 and later.) RateAssignment (Available in API version 62.0 and later.) RateCardEntryResolution (Available in API version 62.0 and later.) RateCardResolution (Available in API version 62.0 and later.) RatingAttributeDiscount RatingBreakdownLineMapping (Available in API version 65.0 and later.) RatingRoundingValues (Available in API version 62.0 and later.) RatingSetting RatingTierDiscount RatingVolumeDiscount RecordAction RecordAlert RedeemVoucher RoundingValues RuleFetch RunFlow RunProgramProcess SampleBusinessElementWithContext SampleCustomElementWithExpressionAndListFilter SampleDynamicCustomElement SampleJavaBasedTaxCalculatorCustomElement SampleTaxCalculatorCustomElement SendMail StopPricing StopRating (Available in API version 62.0 and later.) SubscriptionPricing TermGpaCalculation (Available in API version 64.0 and later.) TermGpaReporting (Available in API version 64.0 and later.) TestCustomElement UpdateCurrentValueForMemberAttribute UpdateCustomerPromotionAttrValue (Available in API version 64.0 and later.) UpdatePointBalance UpdateUsageForCumulativePromotion UpsertRecord (Available in API version 64.0 and later.) VolumeDiscount VolumeTierDiscount"
+      },
+      "advancedCondition": {
+        "type": "ExpressionSetAdvancedCondition",
+        "description": "Represents an advanced condition step."
+      },
+      "aggregation": {
+        "type": "ExpressionSetAggregation",
+        "description": "Represents an aggregation step."
+      },
+      "assignment": {
+        "type": "ExpressionSetAssignment",
+        "description": "Represents an assignment step."
+      },
+      "conditionExpression": {
+        "type": "ExpressionSetConditionExpression",
+        "description": "Represents a condition step."
+      },
+      "customElement": {
+        "type": "ExpressionSetCustomElement",
+        "description": "Represents a custom element step that contains the input and output mappings. Available in API version 56.0 and later."
+      },
+      "decisionTable": {
+        "type": "ExpressionSetDecisionTable",
+        "description": "Represents a decision matrix or decision table step."
+      },
+      "description": {
+        "type": "string",
+        "description": "Describes an expression set definition version step."
+      },
+      "failedExplainerTemplate": {
+        "type": "string",
+        "description": "The explainability message template that’s used when the result type of a condition step in an expression set is Failed."
+      },
+      "failedMessageTokenMappings": {
+        "type": "ExplainabilityMessageTemplateTokenMapping (enumeration of type string)",
+        "description": "List of the token resource mappings of the failed explainability message template. Valid values are: expressionSetMessageToken resourceReference Available in API version 59.0 and later."
+      },
+      "hasNestedExplainability": {
+        "type": "boolean",
+        "description": "Indicates whether the step has nested explainability (true ) or not (false ). Available in API version 67.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "The UI label of an expression set definition version step."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The full name of an expression set definition version step."
+      },
+      "noResultExplainerTemplate": {
+        "type": "string",
+        "description": "The explainability message template that’s used when the result type of a condition step in an expression set is No Result. Available in API version 59.0 and later."
+      },
+      "noResultMessageTokenMappings": {
+        "type": "ExplainabilityMessageTemplateTokenMapping (enumeration of type string)",
+        "description": "List of the token resource mappings of the no result explainability message template. Valid values are: expressionSetMessageToken resourceReference Available in API version 59.0 and later."
+      },
+      "parentStep": {
+        "type": "string",
+        "description": "The name of the parent step in an expression set definition version that’s associated with a step."
+      },
+      "passedExplainerTemplate": {
+        "type": "string",
+        "description": "The explainability message template that’s used when the result type of a condition step in an expression set is Passed."
+      },
+      "passedMessageTokenMappings": {
+        "type": "ExplainabilityMessageTemplateTokenMapping (enumeration of type string)",
+        "description": "List of the token resource mappings of the passed explainability message template. Valid values are: expressionSetMessageToken resourceReference Available in API version 59.0 and later."
+      },
+      "resultIncluded": {
+        "type": "boolean",
+        "description": "Indicates whether the step output must be included in the expression result (true) or not (false)."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The sequence number of a step in an expression set definition version."
+      },
+      "shouldExposExecPathMsgOnly": {
+        "type": "boolean",
+        "description": "Indicates whether the message in the explainability message template is exposed for only the branch path that was run."
+      },
+      "shouldExposeConditionDetails": {
+        "type": "boolean",
+        "description": "Indicates whether the details of the condition are shown in the decision explanation."
+      },
+      "shouldShowExplExternally": {
+        "type": "boolean",
+        "description": "Indicates whether the decision explanations are shown to external users."
+      },
+      "stepType": {
+        "type": "ExpsSetStepType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the type of step in an expression set definition version. Valid values are: AdvancedCondition AdvancedListFilter (Available in API version 67.0 and later). Branch BusinessKnowledgeModel Condition DefaultPath ListFilter (Available in API version 67.0 and later). ListGroup (Available in API version 67.0 and later). SubExpression"
+      },
+      "subExpression": {
+        "type": "ExpressionSetSubExpression",
+        "description": "Represents a sub expression step."
+      }
+    },
+    "ExpressionSetAdvancedCondition": {
+      "conditionLogic": {
+        "type": "string",
+        "required": true,
+        "description": "The condition that’s defined for an advanced condition."
+      },
+      "criteria": {
+        "type": "ExpressionSetConditionCriteria []",
+        "description": "Represents an array of criteria defined in the advanced condition."
+      },
+      "errorMessage": {
+        "type": "string",
+        "description": "An error message for a failed advanced condition."
+      },
+      "resultParameter": {
+        "type": "string",
+        "description": "An expression set definition version variable associated with the result of a step."
+      },
+      "successMessage": {
+        "type": "string",
+        "description": "A success message for a successful advanced condition."
+      }
+    },
+    "ExpressionSetConditionCriteria": {
+      "operator": {
+        "type": "ExpsSetConditionOperator (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the operator for evaluating an expression. Valid values are: Contains DoesNotContain Equals GreaterThan GreaterThanOrEquals IsNull IsNotNull LessThan LessThanOrEquals NoEquals"
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The position of the condition in a step that contains multiple conditions."
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The expression set definition version variable associated with the result of a condition criterion."
+      },
+      "value": {
+        "type": "string",
+        "description": "Specifies the condition of a criterion."
+      },
+      "valueType": {
+        "type": "ExpsSetValueType (enumeration of type string)",
+        "description": "Specifies the type of value. Valid values are: Formula Literal Lookup Parameter Picklist"
+      }
+    },
+    "ExpressionSetAggregation": {
+      "aggregatedParameter": {
+        "type": "string",
+        "required": true,
+        "description": "The expression set definition version variable associated with the result of a condition criterion."
+      },
+      "aggregateFunction": {
+        "type": "ExpsSetAggregationFunction (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the aggregation function used in a step. Valid values are: Avg Max Min Sum"
+      },
+      "expression": {
+        "type": "string",
+        "required": true,
+        "description": "Specifies the expression of an aggregation."
+      }
+    },
+    "ExpressionSetAssignment": {
+      "aggregatedParameter": {
+        "type": "string",
+        "required": true,
+        "description": "The expression set definition version variable associated with a step detail."
+      },
+      "expression": {
+        "type": "string",
+        "required": true,
+        "description": "The expression that’s defined for a step."
+      }
+    },
+    "ExpressionSetConditionExpression": {
+      "errorMessage": {
+        "type": "string",
+        "description": "An error message for a failed condition."
+      },
+      "expression": {
+        "type": "string",
+        "required": true,
+        "description": "The expression that’s defined for a step."
+      },
+      "resultParameter": {
+        "type": "string",
+        "description": "The expression set definition version variable associated with the result of a step."
+      },
+      "successMessage": {
+        "type": "string",
+        "description": "A success message for a successful condition."
+      }
+    },
+    "ExpressionSetCustomElement": {
+      "parameters": {
+        "type": "ExpressionSetElementParameter[]",
+        "description": "Represents the list of parameters in the custom element."
+      }
+    },
+    "ExpressionSetElementParameter": {
+      "input": {
+        "type": "boolean",
+        "required": true,
+        "description": "Indicates whether the custom element parameter is input (true) or not (false). The default value is true."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the custom element parameter."
+      },
+      "output": {
+        "type": "boolean",
+        "required": true,
+        "description": "Indicates whether the custom element parameter is output (true) or not (false). The default value is true."
+      },
+      "type": {
+        "type": "ExpsSetValueType (enumeration of type string)",
+        "description": "The type of custom element parameter.Values are: Formula Literal Lookup Parameter PickList The default value is Parameter."
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the expression set variable."
+      }
+    },
+    "ExpressionSetDecisionTable": {
+      "decisionTableName": {
+        "type": "string",
+        "required": true,
+        "description": "The decision matrix or decision table name used in a step."
+      },
+      "mappings": {
+        "type": "ExpressionSetElementParameter[]",
+        "description": "The mapping information between various parameters in an ExpressionSetDecisionTable. Available in API version 59.0 and later."
+      },
+      "type": {
+        "type": "string",
+        "required": true,
+        "description": "The type in a step. It can be a decision table or decision matrix."
+      }
+    },
+    "ExpressionSetSubExpression": {
+      "expressionSet": {
+        "type": "string",
+        "required": true,
+        "description": "The sub expression name used in a step."
+      },
+      "mappings": {
+        "type": "ExpressionSetElementParameter[]",
+        "description": "The mapping information between various parameters in an ExpressionSetDecisionTable. Available in API version 61.0 and later."
+      }
+    },
+    "ExpressionSetVariable": {
+      "collection": {
+        "type": "boolean",
+        "description": "Indicates whether a variable stores a collection of values (true) or not (false)."
+      },
+      "dataType": {
+        "type": "ExpsSetDataType (enumeration of type string)",
+        "required": true,
+        "description": "The data type of an expression set variable. Valid values are: ActionOutput Boolean Currency Date DateTime DecisionMatrix DecisionTable Numeric Percent Sobject SubExpression Text"
+      },
+      "decimalPlaces": {
+        "type": "int",
+        "description": "The decimal digits in the currency, number, or percent data type for an expression set variable."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the variable used in an expression set."
+      },
+      "fields": {
+        "type": "ExpressionSetVariableField []",
+        "description": "Represents an array of fields in an object that's used as a variable in an expression set."
+      },
+      "input": {
+        "type": "boolean",
+        "description": "Indicates whether an expression set variable is used as an input (true) in an expression or not (false)."
+      },
+      "lookupName": {
+        "type": "string",
+        "description": "The API name of a decision matrix, a decision table, or a sub expression."
+      },
+      "lookupType": {
+        "type": "ExpsSetVariableLookupType (enumeration of type string)",
+        "description": "The type of the lookup used in an expression set definition. Valid values are: DecisionMatrix DecisionTable SubExpression"
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The full name of the variable used in an expression set definition."
+      },
+      "objectName": {
+        "type": "string",
+        "description": "The name of the sObject."
+      },
+      "output": {
+        "type": "boolean",
+        "description": "Indicates whether an expression set variable is used as an output in an expression(true) or not (false)."
+      },
+      "resultStep": {
+        "type": "string",
+        "description": "The step that produces the expression set variable."
+      },
+      "type": {
+        "type": "ExpsSetVariableType (enumeration of type string)",
+        "required": true,
+        "description": "The type of variable in an expression set definition. Valid values are: Constant ContextDynamicAttributeTag (Available in API version 62.0 and later.) ExecutableContextDefinitionTag (Available in API version 62.0 and later.) Formula Variable"
+      },
+      "value": {
+        "type": "string",
+        "description": "Represents a constant value or a formula. Note: It stores the default value of a variable."
+      }
+    },
+    "ExpressionSetVariableField": {
+      "dataType": {
+        "type": "ExpsSetDataType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the type of data stored in an expression set variable. Valid values are: ActionOutput Boolean Currency Date DateTime DecisionMatrix DecisionTable Numeric Percent Sobject SubExpression Text"
+      },
+      "decimalPlaces": {
+        "type": "int",
+        "description": "The decimal digits in the currency, number, or percent data type for an expression set variable."
+      },
+      "fields": {
+        "type": "ExpressionSetVariableField []",
+        "description": "Represents an array of fields in an object that's used as a variable in an expression set."
+      },
+      "lookupName": {
+        "type": "string",
+        "description": "The API name of a decision matrix, a decision table, or a sub expression."
+      },
+      "lookupType": {
+        "type": "ExpsSetVariableLookupType (enumeration of type string)",
+        "required": true,
+        "description": "The type of lookup used in an expression set definition. Valid values are: DecisionMatrix DecisionTable SubExpression"
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The full name of the field used in an expression set variable."
+      },
+      "objectName": {
+        "type": "string",
+        "description": "The name of the sObject."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExpressionSetDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExpressionSetDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>ExpSetWithAllSteps</label>\n    <processType>Bre</processType>\n    <template>false</template>\n    <description></description>\n    <interfaceSourceType>Sample</interfaceSourceType>\n    <executionScale>Low</executionScale>\n    <versions>\n        <fullName>ExpSetWithAllSteps_V1</fullName>\n        <expressionSetDefinition>ExpSetWithAllSteps</expressionSetDefinition>\n        <label>ExpSetWithAllSteps V1</label>\n        <shouldShowExplExternally>false</shouldShowExplExternally>\n        <startDate>2022-08-09T22:04:56.000Z</startDate>\n        <endDate>2023-08-09T22:04:56.000Z</endDate>\n        <status>Draft</status>\n        <uiTier>false</uiTier>\n        <rank>1</rank>\n        <description>ExpSetWithAllSteps_V1</description>\n        <steps>\n            <description>Aggregate</description>\n            <actionType>BreAggregator</actionType>\n            <aggregation>\n                <aggergatedParameter>result</aggergatedParameter>\n                <aggregateFunction>Avg</aggregateFunction>\n                <expression>AVG ( result )</expression>\n            </aggregation>\n            <label>Aggregate</label>\n            <name>Aggregate</name>\n            <resultIncluded>true</resultIncluded>\n            <sequenceNumber>5</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>BusinessKnowledgeModel</stepType>\n        </steps>\n        <steps>\n            <label>Branch</label>\n            <name>Branch</name>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>4</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>Branch</stepType>\n        </steps>\n        <steps>\n            <actionType>AssignParameterValues</actionType>\n            <assignment>\n                <assignedParameter>b</assignedParameter>\n                <expression>SUM ( a , 10 )</expression>\n            </assignment>\n            <label>Calculation</label>\n            <name>Calculation</name>\n            <resultIncluded>true</resultIncluded>\n            <sequenceNumber>1</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>BusinessKnowledgeModel</stepType>\n        </steps>\n        <steps>\n            <actionType>AssignParameterValues</actionType>\n            <assignment>\n                <assignedParameter>result</assignedParameter>\n                <expression>b * 100</expression>\n            </assignment>\n            <label>Calculation</label>\n            <name>Calculation10</name>\n            <parentStep>DefaultLane</parentStep>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>1</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>BusinessKnowledgeModel</stepType>\n        </steps>\n        <steps>\n            <actionType>AssignParameterValues</actionType>\n            <assignment>\n                <assignedParameter>result</assignedParameter>\n                <expression>b * 1</expression>\n            </assignment>\n            <label>Calculation</label>\n            <name>Calculation3</name>\n            <parentStep>Condition</parentStep>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>1</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>BusinessKnowledgeModel</stepType>\n        </steps>\n        <steps>\n            <actionType>AssignParameterValues</actionType>\n            <assignment>\n                <assignedParameter>result</assignedParameter>\n                <expression>SUM ( b , 10 )</expression>\n            </assignment>\n            <label>Calculation</label>\n            <name>Calculation5</name>\n            <parentStep>Condition4</parentStep>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>1</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>BusinessKnowledgeModel</stepType>\n        </steps>\n        <steps>\n            <actionType>AssignParameterValues</actionType>\n            <assignment>\n                <assignedParameter>result</assignedParameter>\n                <expression>b * 10</expression>\n            </assignment>\n            <label>Calculation</label>\n            <name>Calculation8</name>\n            <parentStep>Condition7</parentStep>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>1</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>BusinessKnowledgeModel</stepType>\n        </steps>\n        <steps>\n            <conditionExpression>\n                <successMessage>success</successMessage>\n                <errorMessage>error</errorMessage>\n                <expression>IS10 == b</expression>\n                <resultParameter>condition_output__1</resultParameter>\n            </conditionExpression>\n            <label>Condition</label>\n            <name>Condition</name>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>2</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>Condition</stepType>\n        </steps>\n        <steps>\n            <advancedCondition>\n                <successMessage>success</successMessage>\n                <errorMessage>error</errorMessage>\n                <conditionLogic>1</conditionLogic>\n                <criteria>\n                    <operator>Equals</operator>\n                    <sequenceNumber>1</sequenceNumber>\n                    <sourceFieldName>condition_output__1</sourceFieldName>\n                    <value>true</value>\n                    <valueType>Literal</valueType>\n                </criteria>\n                <resultParameter>condition_output__3</resultParameter>\n            </advancedCondition>\n            <label>Condition</label>\n            <name>Condition4</name>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>3</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>AdvancedCondition</stepType>\n        </steps>\n        <steps>\n            <conditionExpression>\n                <expression>IS10 == b</expression>\n                <resultParameter>condition_output__2</resultParameter>\n            </conditionExpression>\n            <label>Condition</label>\n            <name>Condition7</name>\n            <parentStep>Branch</parentStep>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>1</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>Condition</stepType>\n        </steps>\n        <steps>\n            <label>Default Lane</label>\n            <name>DefaultLane</name>\n            <parentStep>Branch</parentStep>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>2</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>false</shouldShowExplExternally>\n            <stepType>DefaultPath</stepType>\n        </steps>\n        <steps>\n            <actionType>AssignParameterValues</actionType>\n            <assignment>\n                <assignedParameter>a</assignedParameter>\n                <expression>3</expression>\n            </assignment>\n            <failedExplainerTemplate>CalculationFailure</failedExplainerTemplate>\n            <failedMessageTokenMappings>\n                <expressionSetMessageToken>y2</expressionSetMessageToken>\n                <resourceReference>a</resourceReference>\n            </failedMessageTokenMappings>\n            <label>CalculationStepWithTokensAndMappings</label>\n            <name>CalculationStepWithTokensAndMappings</name>\n            <passedExplainerTemplate>CalculationSuccess</passedExplainerTemplate>\n            <passedMessageTokenMappings>\n                <expressionSetMessageToken>y1</expressionSetMessageToken>\n                <resourceReference>a</resourceReference>\n            </passedMessageTokenMappings>\n            <resultIncluded>false</resultIncluded>\n            <sequenceNumber>1</sequenceNumber>\n            <shouldExposExecPathMsgOnly>true</shouldExposExecPathMsgOnly>\n            <shouldExposeConditionDetails>false</shouldExposeConditionDetails>\n            <shouldShowExplExternally>true</shouldShowExplExternally>\n            <stepType>BusinessKnowledgeModel</stepType>\n        </steps>\n        <variables>\n            <collection>false</collection>\n            <dataType>Boolean</dataType>\n            <description>condition_output__3</description>\n            <input>false</input>\n            <name>condition_output__3</name>\n            <output>false</output>\n            <resultStep>Condition4</resultStep>\n            <type>Variable</type>\n            <value>False</value>\n        </variables>\n        <variables>\n            <collection>false</collection>\n            <dataType>Numeric</dataType>\n            <decimalPlaces>2</decimalPlaces>\n            <description>a</description>\n            <input>true</input>\n            <name>a</name>\n            <output>false</output>\n            <type>Variable</type>\n            <value>10</value>\n        </variables>\n        <variables>\n            <collection>false</collection>\n            <dataType>Boolean</dataType>\n            <description>condition_output__1</description>\n            <input>false</input>\n            <name>condition_output__1</name>\n            <output>false</output>\n            <resultStep>Condition</resultStep>\n            <type>Variable</type>\n            <value>False</value>\n        </variables>\n        <variables>\n            <collection>false</collection>\n            <dataType>Boolean</dataType>\n            <description>condition_output__2</description>\n            <input>false</input>\n            <name>condition_output__2</name>\n            <output>false</output>\n            <resultStep>Condition7</resultStep>\n            <type>Variable</type>\n            <value>False</value>\n        </variables>\n        <variables>\n            <collection>false</collection>\n            <dataType>Numeric</dataType>\n            <decimalPlaces>2</decimalPlaces>\n            <description>IS10</description>\n            <input>false</input>\n            <name>IS10</name>\n            <output>false</output>\n            <type>Constant</type>\n            <value>10</value>\n        </variables>\n        <variables>\n            <collection>false</collection>\n            <dataType>Numeric</dataType>\n            <decimalPlaces>2</decimalPlaces>\n            <description>b</description>\n            <input>false</input>\n            <name>b</name>\n            <output>true</output>\n            <type>Variable</type>\n        </variables>\n        <variables>\n            <collection>false</collection>\n            <dataType>Numeric</dataType>\n            <decimalPlaces>2</decimalPlaces>\n            <description>result</description>\n            <input>false</input>\n            <name>result</name>\n            <output>true</output>\n            <type>Variable</type>\n        </variables>\n        <versionNumber>1</versionNumber>\n    </versions>\n</ExpressionSetDefinition>"
+    }
+  ]
+}

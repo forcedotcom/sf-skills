@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UiPreviewMessageTabDef - Metadata API",
+  "description": "Represents the registration of a custom Marketing Cloud Preview and Test modal tab, created using custom Lightning web components. You can register and show multiple tabs in the Preview and Test experience.",
+  "file_information": ".uiPreviewMessageTabDef",
+  "directory_location": "uiPreviewMessageTabDef",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "isActive": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the tab is enabled and is customer controlled (true) or not (false)."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Indicates whether the configuration is protected (true) or not (false)."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "Label for the tab."
+    },
+    "lightningComponentDef": {
+      "type": "string",
+      "required": true,
+      "description": "The customer-created Lightning web component that displays in the Preview and Test tabs."
+    },
+    "supportedChannel": {
+      "type": "SupportedChannel (enumeration of type string)",
+      "required": true,
+      "description": "A string indicating the type of channel.Values are: Email Sms WhatsApp"
+    },
+    "tabName": {
+      "type": "string",
+      "required": true,
+      "description": "The case-sensitive, user-defined label displayed as the name of the tab. Maximum length is 255 characters."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SupportedChannel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Email\"/>\n    <xsd:enumeration value=\"Sms\"/>\n    <xsd:enumeration value=\"WhatsApp\"/>\n    <xsd:enumeration value=\"Rcs\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"UiPreviewMessageTabDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"lightningComponentDef\" type=\"xsd:string\"/>\n        <xsd:element name=\"supportedChannel\" type=\"tns:SupportedChannel\"/>\n        <xsd:element name=\"tabName\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example is a custom Lightning web component’s HTML file.",
+      "code": "<template>\n    <div>A custom tab</div>\n    <div>Preview data</div>\n    <div>{previewData}</div>\n</template>"
+    },
+    {
+      "description": "Here’s the component’s JavaScript file.",
+      "code": "import { LightningElement, api } from \"lwc\";\n\nexport default class CustomTab extends LightningElement {\n    @api previewData;\n}"
+    },
+    {
+      "description": "Here’s the component’s configuration file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>63.0</apiVersion>\n    <isExposed>true</isExposed>\n    <capabilities>\n        <capability>lightning__dynamicComponent</capability>\n    </capabilities>\n</LightningComponentBundle>"
+    },
+    {
+      "description": "This example package.xml references the component’s definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<UiPreviewMessageTabDef xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <isActive>true</isActive>\n    <label>TestUiPreviewMessageTab</label>\n    <lightningComponentDef>customTab</lightningComponentDef>\n    <supportedChannel>Email</supportedChannel>\n    <tabName>My Tab</tabName>\n    <isProtected>false</isProtected>\n</UiPreviewMessageTabDef>"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BusinessProcessGroup - Metadata API",
+  "description": "Represents the surveys used to track customers’ experiences across different stages in their lifecycle. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".businessProcessGroup",
+  "directory_location": "businessProcessGroups",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "businessProcessDefinitions": {
+      "type": "BusinessProcessDefinition[]",
+      "description": "A list that defines stages in a customer lifecycle map."
+    },
+    "customerSatisfactionMetric": {
+      "type": "SurveyQuestionType(enumeration of type string)",
+      "description": "Types of questions that can be associated with stages in a customer lifecycle map. Valid values are: Attachment Boolean CSAT Currency Date DateTime FreeText Image NPS Matrix MultiChoice MultiSelectPicklist NPS Number Picklist Rating ShortText Slider StackRank Toggle",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the customer lifecycle map."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the customer lifecycle map.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "BusinessProcessDefinition": {
+      "businessProcessFeedbacks": {
+        "type": "BusinessProcessFeedback[]",
+        "description": "A list of stages in a customer lifecycle map."
+      },
+      "description": {
+        "type": "string",
+        "description": "A description of a stage in the customer lifecycle map."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "The API name of a stage in the customer lifecycle map. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field.",
+        "required": true
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "The name of a stage in the customer lifecycle map.",
+        "required": true
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "description": "The position of a stage in the customer lifecycle map.",
+        "required": true
+      }
+    },
+    "BusinessProcessFeedback": {
+      "actionName": {
+        "type": "string",
+        "description": "The name of the survey used to collect feedback",
+        "required": true
+      },
+      "actionParam": {
+        "type": "string",
+        "description": "The name of the survey question used to collect feedback.",
+        "required": true
+      },
+      "actionType": {
+        "type": "ExpFeedbackCollType(enumeration of type string)",
+        "description": "The mode of feedback collection. Valid values are: PHONE_CALL SURVEY",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"BusinessProcessDefinition\">\n  <xsd:sequence>\n    <xsd:element name=\"businessProcessFeedbacks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BusinessProcessFeedback\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"sequenceNumber\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BusinessProcessFeedback\">\n  <xsd:sequence>\n    <xsd:element name=\"actionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionParam\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionType\" type=\"tns:ExpFeedbackCollType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BusinessProcessGroup\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"businessProcessDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BusinessProcessDefinition\"/>\n        <xsd:element name=\"customerSatisfactionMetric\" type=\"tns:SurveyQuestionType\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ExpFeedbackCollType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SURVEY\"/>\n    <xsd:enumeration value=\"PHONE_CALL\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SurveyQuestionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"MultiChoice\"/>\n    <xsd:enumeration value=\"RadioButton\"/>\n    <xsd:enumeration value=\"FreeText\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"Rating\"/>\n    <xsd:enumeration value=\"CSAT\"/>\n    <xsd:enumeration value=\"Slider\"/>\n    <xsd:enumeration value=\"Picklist\"/>\n    <xsd:enumeration value=\"NPS\"/>\n    <xsd:enumeration value=\"StackRank\"/>\n    <xsd:enumeration value=\"Currency\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n    <xsd:enumeration value=\"Toggle\"/>\n    <xsd:enumeration value=\"MultiSelectPicklist\"/>\n    <xsd:enumeration value=\"Image\"/>\n    <xsd:enumeration value=\"Boolean\"/>\n    <xsd:enumeration value=\"ShortText\"/>\n    <xsd:enumeration value=\"Attachment\"/>\n    <xsd:enumeration value=\"Matrix\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a BusinessProcessGroup component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BusinessProcessGroup xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <businessProcessDefinitions>\n        <developerName>Customer_Onboarding</developerName>\n        <masterLabel>Customer Onboarding</masterLabel>\n        <description>A stage in a customer's lifecycle.</description>\n        <sequenceNumber>0</sequenceNumber>\n        <businessProcessFeedbacks>\n            <actionType>Survey</actionType>\n            <actionName>New Customer CSAT</actionName>\n            <actionParam>How would you rate our service?</actionParam>\n        </businessProcessFeedbacks>\n    </businessProcessDefinitions>\n    <customerSatisfactionMetric>NPS</customerSatisfactionMetric>\n    <masterLabel>Customer Lifecycle</masterLabel>\n    <description>This map tracks the feedback provided by customers' at different stages during their lifecycle.</description>\n</BusinessProcessGroup>"
+    }
+  ]
+}

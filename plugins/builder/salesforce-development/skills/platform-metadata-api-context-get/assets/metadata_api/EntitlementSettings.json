@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EntitlementSettings - Metadata API",
+  "description": "Represents an organization’s entitlement settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "assetLookupLimitedToActiveEntitlementsOnAccount": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements-related lookup filters on cases return only the assets related to the active entitlements on the case’s account (true) or not (false)."
+    },
+    "assetLookupLimitedToActiveEntitlementsOnContact": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements-related lookup filters on cases return only the assets related to the active entitlements on the case’s contact (true) or not (false)."
+    },
+    "assetLookupLimitedToSameAccount": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements-related lookup filters on cases return only the assets related to the case’s account (true) or not (false)."
+    },
+    "assetLookupLimitedToSameContact": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements-related lookup filters on cases return only the assets related to the case’s contact (true) or not (false)."
+    },
+    "enableEntitlements": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements are enabled (true) or not (false)."
+    },
+    "enableEntitlementVersioning": {
+      "type": "boolean",
+      "description": "Indicates whether entitlement versioning is enabled (true) or not (false). This field is available in API version 28.0 and later."
+    },
+    "enableMilestoneFeedItem": {
+      "type": "boolean",
+      "description": "When set to true, indicates whether to post to the feed and the record owner’s profile page when a milestone is completed or violated. When set to false, indicates that no post occurs when a milestone is completed or violated. This field is available in API version 47.0 and later."
+    },
+    "enableMilestoneStoppedTime": {
+      "type": "boolean",
+      "description": "Indicates whether to show the Stopped Time and Actual Elapsed Time fields on an entitlement milestone (true) or not (false). This field is available in API version 47.0 and later."
+    },
+    "entitlementLookupLimitedToActiveStatus": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements-related lookup filters on cases return only active entitlements (true) or not (false)."
+    },
+    "entitlementLookupLimitedToSameAccount": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements-related lookup filters on cases return only the entitlements related to the case’s account (true) or not (false)."
+    },
+    "entitlementLookupLimitedToSameAsset": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements-related lookup filters on cases return only the entitlements related to the case’s asset (true) or not (false)."
+    },
+    "entitlementLookupLimitedToSameContact": {
+      "type": "boolean",
+      "description": "Indicates whether entitlements-related lookup filters on cases return only the entitlements related to the case’s contact (true) or not (false)."
+    },
+    "ignoreMilestoneBusinessHours": {
+      "type": "boolean",
+      "description": "Indicates whether to show the time remaining on an event milestone in actual hours (true) or business hours (false). This field is available in API version 47.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EntitlementSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"assetLookupLimitedToActiveEntitlementsOnAccount\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"assetLookupLimitedToActiveEntitlementsOnContact\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"assetLookupLimitedToSameAccount\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"assetLookupLimitedToSameContact\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEntitlementVersioning\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEntitlements\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMilestoneFeedItem\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMilestoneStoppedTime\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entitlementLookupLimitedToActiveStatus\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entitlementLookupLimitedToSameAccount\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entitlementLookupLimitedToSameAsset\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entitlementLookupLimitedToSameContact\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"ignoreMilestoneBusinessHours\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample entitlements settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EntitlementSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">   \n    <assetLookupLimitedToActiveEntitlementsOnAccount>\n        false\n    </assetLookupLimitedToActiveEntitlementsOnAccount>   \n    <assetLookupLimitedToActiveEntitlementsOnContact>\n        false\n    </assetLookupLimitedToActiveEntitlementsOnContact>   \n    <assetLookupLimitedToSameAccount>\n        false\n    </assetLookupLimitedToSameAccount>   \n    <assetLookupLimitedToSameContact>\n        false\n    </assetLookupLimitedToSameContact>   \n    <enableEntitlements>\n        true\n    </enableEntitlements>    \n    <entitlementLookupLimitedToActiveStatus>\n        false\n    </entitlementLookupLimitedToActiveStatus>   \n    <entitlementLookupLimitedToSameAccount>\n        false\n    </entitlementLookupLimitedToSameAccount>   \n    <entitlementLookupLimitedToSameAsset>\n        false\n    </entitlementLookupLimitedToSameAsset>   \n    <entitlementLookupLimitedToSameContact>\n        false\n    </entitlementLookupLimitedToSameContact>\n</EntitlementSettings>"
+    }
+  ]
+}

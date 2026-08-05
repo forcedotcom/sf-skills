@@ -1,0 +1,85 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types"
+  ],
+  "title": "ObjectSourceTargetMap - Metadata API",
+  "description": "Contains the object-level mappings between the source and the target objects. The source and target objects can be an MktDataLakeObject or an MktDataModelObject. For example, an Email source object can be mapped to the ContactPointEmail object.",
+  "file_information": ".objectSourceTargetMap",
+  "directory_location": "objectSourceTargetMaps",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "creationType": {
+      "type": "DefinitionCreationType (enumeration of type string)",
+      "description": "Describes whether this object was added by the user or as part of a standard taxonomy. Valid values are: ADG Activation_Audience Bridge Calculated_Insight CG_Audience (Available in API version 62.0 and later) Chunk Curated Custom Derived Directory_Table External Ml_Prediction Segment_Membership Semantic Standard System Transform Vector_Embedding"
+    },
+    "fieldSourceTargetMaps": {
+      "type": "FieldSourceTargetMap[]",
+      "description": "Contains the field-level mappings associated with this object mapping."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The UI name for the target map.",
+      "required": true
+    },
+    "sequenceNbr": {
+      "type": "int",
+      "description": "Use this field to display multiple mappings between the same two objects, for a consistent customer experience when presenting the mappings."
+    },
+    "sourceObjectName": {
+      "type": "string",
+      "description": "Name of the source object that’s mapped, such as Email, or SfmcEnt1_Subscriber.",
+      "required": true
+    },
+    "targetObjectName": {
+      "type": "string",
+      "description": "Name of the target object that’s mapped, such as ContactPointEmail or Individual.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "FieldSourceTargetMap": {
+      "creationType": {
+        "type": "DefinitionCreationType (enumeration of type string)",
+        "description": "Describes whether this object was added by the user or as part of a standard taxonomy. Values are: ADG Activation_Audience Bridge Calculated_Insight Chunk Curated Custom Derived Directory_Table External Ml_Prediction Segment_Membership Semantic Standard System Transform Vector_Embedding"
+      },
+      "filterApplied": {
+        "type": "boolean",
+        "description": "Specifies whether the field-level mapping is an event type filter (true) or not (false)."
+      },
+      "filterOperationType": {
+        "type": "string",
+        "description": "If the field-level mapping is an event type filter, specifies the filtering operator. Value is: Equal"
+      },
+      "filterValue": {
+        "type": "string",
+        "description": "If the field-level mapping is an event type filter, specifies the object that contains the event type field."
+      },
+      "isSourceFormula": {
+        "type": "boolean",
+        "description": "Specifies whether the source field is a formula (true) or not (false). If true, you must include the sourceFormula value."
+      },
+      "sourceField": {
+        "type": "string",
+        "description": "The source object field that’s mapped, such as EmailAddr or SfmcEnt1_Subscriber.FName.",
+        "required": true
+      },
+      "sourceFormula": {
+        "type": "string",
+        "description": "A formula, such as concatenation, date function, or constant value."
+      },
+      "targetField": {
+        "type": "string",
+        "description": "The target object field that’s mapped, such as SfmcEnt1_Email.EmailAddr or Individual.FirstName.",
+        "required": true
+      }
+    }
+  }
+}

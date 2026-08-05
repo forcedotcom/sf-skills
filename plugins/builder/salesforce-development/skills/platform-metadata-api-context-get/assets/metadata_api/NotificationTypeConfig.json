@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "NotificationTypeConfig - Metadata API",
+  "description": "Represents the metadata associated with org-level notification settings for standard and custom notification types. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".config",
+  "directory_location": "notificationTypeConfig",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "notificationTypeSettings": {
+      "type": "NotificationTypeSettings[]",
+      "description": "An array of delivery settings for an org’s notification types."
+    }
+  },
+  "sub_types": {
+    "NotificationTypeSettings": {
+      "notificationType": {
+        "type": "string",
+        "description": "Specifies a notification type’s API name. For standard notification types, this is the predefined API name of the standard notification type. For custom notification types, this is the API name of the custom notification type. If a custom notification type was installed with a managed package, it includes the namespace prefix. Retrieve NotificationTypeConfig to see the API names of the notification types available in your org.",
+        "required": true
+      },
+      "appSettings": {
+        "type": "AppSettings[]",
+        "description": "An array of settings for the connected apps supported for a notification type."
+      },
+      "notificationChannels": {
+        "type": "NotificationChannels",
+        "description": "Defines the delivery channels for a notification type."
+      }
+    },
+    "AppSettings": {
+      "connectedAppName": {
+        "type": "string",
+        "description": "Specifies the API name of a connected app. If a connected app was installed with a managed package, it includes the namespace prefix. Retrieve NotificationTypeConfig to see the API names of the connected apps supported for a notification type.",
+        "required": true
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether a connected app is enabled (true) or not (false) for the notification type."
+      }
+    },
+    "NotificationChannels": {
+      "desktopEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether desktop notifications are enabled (true) or not (false)."
+      },
+      "mobileEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether mobile notifications are enabled (true) or not (false)."
+      },
+      "slackEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether Slack notifications are enabled (true) or not (false)."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AppSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"connectedAppName\" type=\"xsd:string\"/>\n    <xsd:element name=\"enabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NotificationChannels\">\n  <xsd:sequence>\n    <xsd:element name=\"desktopEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"mobileEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"slackEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"NotificationTypeConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"notificationTypeSettings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NotificationTypeSettings\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"NotificationTypeSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"appSettings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AppSettings\"/>\n    <xsd:element name=\"notificationChannels\" minOccurs=\"0\" type=\"tns:NotificationChannels\"/>\n    <xsd:element name=\"notificationType\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a NotificationTypeConfig component.",
+      "code": "<NotificationTypeConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <notificationTypeSettings>\n        <notificationType>chatter_mention</notificationType>\n        <notificationChannels>\n            <desktopEnabled>false</desktopEnabled>\n            <mobileEnabled>true</mobileEnabled>\n        </notificationChannels>\n        <appSettings>\n            <connectedAppName>Datawatch</connectedAppName>\n            <enabled>false</enabled>\n        </appSettings>\n            <appSettings>\n            <connectedAppName>package2__ConnectedApp2</connectedAppName>\n            <enabled>true</enabled>\n        </appSettings>\n    </notificationTypeSettings>\n   <notificationTypeSettings>\n        <notificationType>namespace__Custom_Notification</notificationType>\n        <notificationChannels>\n            <desktopEnabled>true</desktopEnabled>\n            <mobileEnabled>true</mobileEnabled>\n        </notificationChannels>\n        <appSettings>\n            <connectedAppName>namespace__Connected_App</connectedAppName>\n            <enabled>false</enabled>\n        </appSettings>\n        <appSettings>\n            <connectedAppName>namespace2__ConnectedApp2</connectedAppName>\n            <enabled>true</enabled>\n        </appSettings>\n    </notificationTypeSettings>\n</NotificationTypeConfig>"
+    }
+  ]
+}

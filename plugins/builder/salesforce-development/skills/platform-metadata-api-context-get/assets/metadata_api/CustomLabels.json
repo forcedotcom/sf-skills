@@ -1,0 +1,69 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomLabels - Metadata API",
+  "description": "The CustomLabels metadata type allows you to create custom labels that can be localized for use in different languages, countries, and currencies.",
+  "file_information": "Master custom label values are stored in the CustomLabels.labels file. Translations for custom labels can be retrieved through Translations in Metadata API. Translations are stored in files under the translations folder with the name format of localeCode.translation, where localeCode is the locale code of the translation language. The supported locale codes are listed in Language.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "fullName": {
+      "type": "string",
+      "description": "The name of the custom label bundle. Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call.",
+      "required": true
+    },
+    "labels": {
+      "type": "CustomLabel[]",
+      "description": "A list of custom labels."
+    }
+  },
+  "sub_types": {
+    "CustomLabel": {
+      "categories": {
+        "type": "string",
+        "description": "A comma-separated list of categories for the label. This field can be used in filter criteria when creating custom label list views. Maximum of 255 characters."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The name of the custom label. Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call.",
+        "required": true
+      },
+      "language": {
+        "type": "string",
+        "description": "The language of the translated custom label.",
+        "required": true
+      },
+      "protected": {
+        "type": "boolean",
+        "description": "Indicates whether this component is protected (true) or not (false). Protected components can’t be linked to or referenced by components created in the installing organization.",
+        "required": true
+      },
+      "shortDescription": {
+        "type": "string",
+        "description": "An easily recognizable term to identify this custom label. This description is used in merge fields.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "The translated custom label. Maximum of 1000 characters.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomLabel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"categories\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"language\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shortDescription\" type=\"xsd:string\"/>\n        <xsd:element name=\"value\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CustomLabels\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"labels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomLabel\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample XML definition of a custom label component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomLabels xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <labels>\n        <fullName>quoteManual</fullName>\n        <value>This is a manual quote.</value>\n        <language>en_US</language>\n        <protected>false</protected>\n        <shortDescription>Manual Quote</shortDescription>\n    </labels>\n    <labels>\n        <fullName>quoteAuto</fullName>\n        <value>This is an automatically generated quote.</value>\n        <language>en_US</language>\n        <protected>false</protected>\n        <shortDescription>Automatic Quote</shortDescription>\n    </labels>\n</CustomLabels>"
+    }
+  ]
+}

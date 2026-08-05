@@ -1,0 +1,123 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ServiceChannel - Metadata API",
+  "description": "Represents a channel of work items that are received from your organization—for example, cases, chats, or leads.",
+  "file_information": ".serviceChannel",
+  "directory_location": "serviceChannels",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "acwExtensionDuration": {
+      "type": "int",
+      "description": "The maximum length of time, measured in seconds, an agent can spend on After Conversation Work (ACW) each time they extend the timer. You must set this field if hasAcwExtensionEnabled is set to true. Specify a value from 10 through 3600. Available only for service channels of type Messaging or Voice."
+    },
+    "afterConvoMaxTime": {
+      "type": "int",
+      "description": "The maximum length of time, measured in seconds, an agent has to complete After Conversation Work (ACW). You must set this field if hasAfterConvoWorkTimer is set to true. Specify a value from 10 through 3600. Available only for service channels of type Messaging or Voice. For service channels of type Voice, this field is available in API version 52.0 and later. For service channels of type Messaging, this field is available in API version 56.0 and later."
+    },
+    "capacityModel": {
+      "type": "picklist",
+      "description": "The method that determines when an agent's capacity for a work item is released. With the status-based capacity routing model, work remains assigned and applied to an agent’s capacity until the work is completed or reassigned to a different agent. In contrast, the tab-based capacity routing model releases an agent’s capacity when a work tab is closed in the service console. This field is available in API version 65.0 and later. Values are: STATUS_BASED TAB_BASED"
+    },
+    "doesCheckCapOnOwnerChange": {
+      "type": "boolean",
+      "description": "Indicates whether the override for capacity check is on (true) or not (false). If it is on, when work is reassigned to another agent it overrides it and keeps the work assigned to the specific agent. The default value is false.This field is available in API version 65.0 and later."
+    },
+    "doesCheckCapOnStatusChange": {
+      "type": "boolean",
+      "description": "Indicates whether the override for capacity check is on (true) or not (false). If it is on, when work is reopened it is re-assigned to a specific agent. The default value is false. This field is available in API version 65.0 and later."
+    },
+    "doesMinimizeWidgetOnAccept": {
+      "type": "boolean",
+      "description": "Automatically minimizes the Omni-Channel widget when an agent accepts work. This field is available in API version 48.0 and later."
+    },
+    "hasAcwExtensionEnabled": {
+      "type": "boolean",
+      "description": "If set to true, agents can extend their After Conversation Work (ACW) time. Available only if hasAfterConvoWorkTimer is set to true. If set to true, you must also set the acwExtensionDuration and maxExtensions fields. The default value is false. Available only for service channels of type Messaging or Voice. This field is available in API version 56.0 and later."
+    },
+    "hasAfterConvoWorkTimer": {
+      "type": "boolean",
+      "description": "If set to true, After Conversation Work (ACW) time can be configured for the channel. If set to true, you must also set the afterConvoWorkMaxTime field. The default value is false. Available only for service channels of type Messaging or Voice. For service channels of type Voice, this field is available in API version 52.0 and later. For service channels of type messaging, this field is available in API version 56.0 and later."
+    },
+    "hasAutoAcceptEnabled": {
+      "type": "boolean",
+      "description": "Work items in a service channel open automatically in the agent’s workspace so that the agent doesn’t have to manually accept them."
+    },
+    "interactionComponent": {
+      "type": "string",
+      "description": "The custom console component to open in the footer when an agent accepts a work item from this service channel."
+    },
+    "isInterruptible": {
+      "type": "boolean",
+      "description": "Indicates whether a work item consumes interruptible or primary capacity. The default value is false. Available in API version 57.0 and later when the Interruptible Capacity feature is enabled."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label of the service channel.",
+      "required": true
+    },
+    "maxExtensions": {
+      "type": "picklist",
+      "description": "The maximum number of times an agent can extend their After Work Conversation (ACW) time. Specify a value from 1 through 10. You must set this field if hasAcwExtensionEnabled is set to true. Available only for service channels of type Messaging or Voice. This field is available in API version 56.0 and later."
+    },
+    "relatedEntityType": {
+      "type": "string",
+      "description": "The type of object that’s associated with this service channel.",
+      "required": true
+    },
+    "secondaryRoutingPriorityField": {
+      "type": "string",
+      "description": "The name of the standard field or the ID of the custom field that is used for secondary routing priority. This field is available in API version 47.0 and later."
+    },
+    "serviceChannelStatusFieldMappings": {
+      "type": "ServiceChannelFieldPriority",
+      "description": "Represents the value to indicate completed and in-progress work item status in the Status-Based Capacity routing model. This field is available in API version 65.0 and later."
+    },
+    "serviceChannelFieldPriorities": {
+      "type": "ServiceChannelFieldPriority[]",
+      "description": "A set of mappings between secondary routing priority field values and priorities. This field is available in API version 47.0 and later.",
+      "required": true
+    },
+    "statusField": {
+      "type": "picklist",
+      "description": "The field that you use to track work status in the Status-Based capacity routing model. Use ServiceChannelStatusField to specify the values that indicate completed and in-progress work-item status. This field is available in API version 65.0 and later."
+    }
+  },
+  "sub_types": {
+    "ServiceChannelFieldPriority": {
+      "priority": {
+        "type": "int",
+        "description": "The priority number assigned to the mapped field value.",
+        "required": true
+      },
+      "type": {
+        "type": "picklist",
+        "description": "The work item status assigned to the mapped field value. Possible types are IN_PROGRESS, PAUSED, COMPLETED.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "The value of the secondaryRoutingPriorityField field defined in the parent ServiceChannel.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"CapacityModel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TAB_BASED\"/>\n    <xsd:enumeration value=\"STATUS_BASED\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ServiceChannel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"acwExtensionDuration\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"afterConvoWorkMaxTime\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"capacityModel\" minOccurs=\"0\" type=\"tns:CapacityModel\"/>\n        <xsd:element name=\"doesCheckCapOnOwnerChange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesCheckCapOnStatusChange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesMinimizeWidgetOnAccept\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasAcwExtensionEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasAfterConvoWorkTimer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasAutoAcceptEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"interactionComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isInterruptible\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"maxExtensions\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relatedEntityType\" type=\"xsd:string\"/>\n        <xsd:element name=\"secondaryRoutingPriorityField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"serviceChannelFieldPriorities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ServiceChannelFieldPriority\"/>\n        <xsd:element name=\"serviceChannelStatusFieldMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ServiceChannelStatusFieldMapping\"/>\n        <xsd:element name=\"statusField\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ServiceChannelFieldPriority\">\n  <xsd:sequence>\n    <xsd:element name=\"priority\" type=\"xsd:int\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ServiceChannelStatusFieldMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"type\" type=\"tns:StatusFieldMappingType\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"StatusFieldMappingType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"IN_PROGRESS\"/>\n    <xsd:enumeration value=\"PAUSED\"/>\n    <xsd:enumeration value=\"COMPLETED\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ServiceChannel component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ServiceChannel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <doesMinimizeWidgetOnAccept>true</doesMinimizeWidgetOnAccept>\n    <interactionComponent>ConsoleComponent</interactionComponent>\n    <label>Case</label>\n    <relatedEntityType>Case</relatedEntityType>\n    <secondaryRoutingPriorityField>Status</secondaryRoutingPriorityField>\n    <serviceChannelFieldPriorities>\n        <priority>1</priority>\n        <value>Escalated</value>\n    </serviceChannelFieldPriorities>\n    <serviceChannelFieldPriorities>\n        <priority>2</priority>\n        <value>On Hold</value>\n    </serviceChannelFieldPriorities>\n</ServiceChannel>"
+    }
+  ]
+}

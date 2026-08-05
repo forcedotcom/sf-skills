@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EventDelivery - Metadata API",
+  "description": "Represents how an event instance maps to a target payload. Removed in API version 46.0. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".delivery",
+  "directory_location": "eventDeliveries",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "eventParameters": {
+      "type": "EventParameterMap[]",
+      "description": "An array of parameters to deliver in addition to the published event’s data."
+    },
+    "eventSubscription": {
+      "type": "string",
+      "description": "The ID of the subscription to deliver the data to.",
+      "required": true
+    },
+    "referenceData": {
+      "type": "string",
+      "description": "User-defined non-unique identifier."
+    },
+    "type": {
+      "type": "EventDeliveryType (enumeration of type string)",
+      "description": "Determines what action occurs when the event is delivered to the listeners on behalf of the subscribers. Valid values are: StartFlow—When the event occurs, it’s delivered to a flow of type CustomEvent. Those flows are built through Process Builder. ResumeFlow—Reserved for future use.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "EventParameterMap": {
+      "parameterName": {
+        "type": "string",
+        "description": "The parameter name."
+      },
+      "parameterValue": {
+        "type": "string",
+        "description": "The parameter value."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an event delivery file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EventDelivery xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <eventParameters>\n      <parameterName>FlowVersionName</parameterName>\n      <parameterValue>My_Event_Based_Process-1</parameterValue>\n   </eventParameters>\n   <eventSubscription>MySubscription</eventSubscription>\n   <referenceData>My_Event_Based_Process_1</referenceData>\n   <type>StartFlow</type>\n</EventDelivery>"
+    }
+  ]
+}

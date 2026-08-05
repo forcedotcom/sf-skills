@@ -1,0 +1,55 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ReferencedDashboard - Metadata API",
+  "description": "Represents the ReferencedDashboard object in CRM Analytics. A referenced dashboard stores information about an externally referenced dashboard.",
+  "file_information": ".refdash",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "description": "The internal name of the Analytics app.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The dashboard description that appears in the user interface."
+    },
+    "embedUrl": {
+      "type": "string",
+      "description": "The URL to the referenced dashboard.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The dashboard name that appears in the user interface.",
+      "required": true
+    },
+    "templateAssetSourceName": {
+      "type": "string",
+      "description": "Links the dashboard to the template used to create it. Null for assets not created from a template."
+    },
+    "visibility": {
+      "type": "string",
+      "description": "The visibility of the dashboard. Valid values are: ALL and LIMITED."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReferencedDashboard\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"embedUrl\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateAssetSourceName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"visibility\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveDashboard component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ReferencedDashboard xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <application>my_app</application>\n    <masterLabel>ReferencedDashboard1</masterLabel>\n    <description>My Tableau Dashboard</description>\n    <embedUrl>https://public.tableau.com/views/Superstore_24/Overview</embedUrl>\n    <visibility>ALL</visibility>\n</ReferencedDashboard>"
+    }
+  ]
+}

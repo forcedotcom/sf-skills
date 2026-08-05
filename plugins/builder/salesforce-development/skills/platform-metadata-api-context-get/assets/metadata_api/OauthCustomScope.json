@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OauthCustomScope - Metadata API",
+  "description": "Represents a permission defining the protected data that a connected app can access from an external entity when Salesforce is the OAuth authorization provider. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".oauthcustomscope",
+  "directory_location": "oauthcustomscopes",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "assignedTo": {
+      "type": "OauthCustomScopeApp (enumeration of type string)",
+      "description": "Represents the name of the connected app to which the custom scope is assigned. Available in API version 49.0 and later. If the connected app is part of a package, include the package’s namespace prefix with the connected app’s name. Use the following format: <namespace_prefix>__<connected_app>. Use two underscores (_) between the namespace prefix and connected app’s name."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the permission provided to the connected app by the scope. The custom scope’s description must be unique, can only include alphanumeric characters, and can be up to 60 characters long. You can enter a custom label in place of a description. An advantage of using a custom label is that you can maintain reusable text in a single location and translate the text into multiple languages. See Custom Labels. Note: The description formatting requirements that apply to custom scopes also apply to custom labels.",
+      "required": true
+    },
+    "developerName": {
+      "type": "string",
+      "description": "Use when referring to the OAuth custom scope from a program.",
+      "required": true
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Indicates whether this component is protected () or not (false). Protected components cannot be linked to or referenced by components created in the installing org.",
+      "required": true
+    },
+    "isPublic": {
+      "type": "boolean",
+      "description": "Indicates whether the object is included in the connected app’s OpenID Connect discovery endpoint. The default setting is false. For more information, see OpenID Connect Discovery Endpoint."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The primary label for the custom scope record. This label must be unique and begin with a letter. It can include only alphanumeric characters and underscores. It can’t contain spaces.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OauthCustomScope\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"assignedTo\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OauthCustomScopeApp\"/>\n        <xsd:element name=\"description\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isPublic\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"OauthCustomScopeApp\">\n  <xsd:sequence>\n    <xsd:element name=\"connectedApp\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an OAuthCustomScope component. In this example, basicScope is the name of custom scope entity being retrieved.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OauthCustomScope xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <assignedTo>\n        <connectedApp>MyOrgNamespace__TestApp</connectedApp>\n    </assignedTo>\n    <description>Example of a basic custom scope</description>\n    <developerName>basicScope</developerName>\n    <masterLabel>basicScope</masterLabel>\n    <isProtected>false</isProtected>\n    <isPublic>true</isPublic>\n</OauthCustomScope>"
+    }
+  ]
+}

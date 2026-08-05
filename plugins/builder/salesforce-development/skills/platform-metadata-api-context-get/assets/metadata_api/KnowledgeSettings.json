@@ -1,0 +1,280 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "KnowledgeSettings - Metadata API",
+  "description": "Represents the metadata used to manage settings for Salesforce Knowledge.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "answers": {
+      "type": "KnowledgeAnswerSettings",
+      "description": "Represents the metadata used to manage settings for Salesforce Knowledge and Answers."
+    },
+    "cases": {
+      "type": "KnowledgeCaseSettings",
+      "description": "Represents the metadata used to manage settings for Salesforce Knowledge and Cases."
+    },
+    "defaultLanguage": {
+      "type": "string",
+      "description": "The default language for Salesforce Knowledge. Use the abbreviation for the language, for example, en_US for United States English.",
+      "required": true
+    },
+    "enableChatterQuestionKBDeflection": {
+      "type": "boolean",
+      "description": "Indicates whether tracking for case deflection via Chatter is enabled (true) or not (false)."
+    },
+    "enableCreateEditOnArticlesTab": {
+      "type": "boolean",
+      "description": "Indicates whether users can create and edit articles on the articles tab (true) or not (false)."
+    },
+    "enableExternalMediaContent": {
+      "type": "boolean",
+      "description": "Indicates whether connecting to external media is enabled (true) or not (false)."
+    },
+    "enableKbStandardSharing": {
+      "type": "boolean",
+      "description": "Indicates whether standard Salesforce sharing is enabled (true) or not (false)."
+    },
+    "enableKnowledge": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce Knowledge is enabled (true) or not (false). This field is false by default."
+    },
+    "enableKnowledgeAgentContribution": {
+      "type": "boolean",
+      "description": "Indicates whether a user can create an article from a case (true) or not (false). (Classic only)"
+    },
+    "enableKnowledgeArticleTextHighlights": {
+      "type": "boolean",
+      "description": "Indicates whether text snippet highlights in Salesforce Knowledge search results are enabled (true) or not (false). This field is true by default. Available in API version 47.0 and later."
+    },
+    "enableKnowledgeAnswersPromotion": {
+      "type": "boolean",
+      "description": "Indicates whether a user can create an article from a reply (true) or not (false). (Classic Only)"
+    },
+    "enableKnowledgeCaseRL": {
+      "type": "boolean",
+      "description": "Indicates whether creating a list of cases linked to an article is enabled (true) or not (false). (Classic Only)"
+    },
+    "enableKnowledgeKeywordAutoComplete": {
+      "type": "boolean",
+      "description": "Indicates whether auto-complete for keywords is enabled (true) or not (false) when searching Salesforce Knowledge. This field is true by default. Available in API version 47.0 and later."
+    },
+    "enableKnowledgeTitleAutoComplete": {
+      "type": "boolean",
+      "description": "Indicates whether auto-complete for article titles is enabled (true) or not (false) when searching Salesforce Knowledge. This field is true by default. Available in API version 47.0 and later."
+    },
+    "enableLightningKbAutoLoadRichTextField": {
+      "type": "boolean",
+      "description": "Indicates whether rich text fields are enabled for editing when an article loads in Lightning Knowledge (true) or not (false). This field is false by default. Available in API version 47.0 and later."
+    },
+    "enableLightningKnowledge": {
+      "type": "boolean",
+      "description": "Indicates whether Lightning Knowledge is enabled (true) or not (false)."
+    },
+    "languages": {
+      "type": "KnowledgeLanguageSettings",
+      "description": "A list of languages enabled for Salesforce Knowledge."
+    },
+    "showArticleSummariesCustomerPortal": {
+      "type": "boolean",
+      "description": "Indicates whether article summaries appear in the Customer Portal (true) or not (false)."
+    },
+    "showArticleSummariesInternalApp": {
+      "type": "boolean",
+      "description": "Indicates whether article summaries appear in the internal knowledge base (true) or not (false)."
+    },
+    "showArticleSummariesPartnerPortal": {
+      "type": "boolean",
+      "description": "Indicates whether article summaries appear in the partner portal (true) or not (false)."
+    },
+    "showValidationStatusField": {
+      "type": "boolean",
+      "description": "Indicates whether validation status appears on articles (true) or not (false)."
+    },
+    "suggestedArticles": {
+      "type": "KnowledgeSuggestedArticlesSettings",
+      "description": "Represents the metadata used to manage settings for the case fields used to suggest articles for cases. Available in API version 37.0 and later."
+    },
+    "votingEnabled": {
+      "type": "boolean",
+      "description": "When true, enables users to vote for a product or feature that uses Vote, such as Articles in Knowledge. Available in API version 50.0 and later."
+    }
+  },
+  "sub_types": {
+    "KnowledgeAnswerSettings": {
+      "assignTo": {
+        "type": "string",
+        "description": "Specifies the username an article is assigned to from Answers."
+      },
+      "defaultArticleType": {
+        "type": "string",
+        "description": "The default article type for articles created from Answers. Uses the API name of the article type."
+      },
+      "enableArticleCreation": {
+        "type": "boolean",
+        "description": "Indicates whether users can create articles from Answers (true) or not (false)."
+      }
+    },
+    "KnowledgeCaseSettings": {
+      "articlePDFCreationProfile": {
+        "type": "string",
+        "description": "The profile used to create a PDF of an article from Cases."
+      },
+      "articlePublicSharingSites": {
+        "type": "KnowledgeSitesSettings",
+        "description": "Represents the metadata used to manage settings for Salesforce Knowledge and Sites."
+      },
+      "articlePublicSharingCommunities": {
+        "type": "KnowledgeSitesSettings",
+        "description": "Represents the metadata used to manage settings for Salesforce Knowledge and Experience Cloud sites."
+      },
+      "articlePublicSharingSitesChatterAnswers": {
+        "type": "KnowledgeSitesSettings",
+        "description": "Represents the metadata used to manage settings for Salesforce Knowledge and Sites with Chatter Answers."
+      },
+      "assignTo": {
+        "type": "string",
+        "description": "Specifies the username an article is assigned to from Cases."
+      },
+      "customizationClass": {
+        "type": "string",
+        "description": "Specifies the Apex class used for customization."
+      },
+      "defaultContributionArticleType": {
+        "type": "string",
+        "description": "The default article type for articles created from Cases."
+      },
+      "editor": {
+        "type": "KnowledgeCaseEditor (enumeration of type string)",
+        "description": "Indicates the rich text editor type. Valid values are: simple standard"
+      },
+      "enableArticleCreation": {
+        "type": "boolean",
+        "description": "Indicates whether users can create articles from Cases (true) or not (false). Controls whether other fields on KnowledgeCaseSettings can be set."
+      },
+      "enableArticlePublicSharingSites": {
+        "type": "boolean",
+        "description": "Indicates whether articles can be shared via a public site (URL) from Cases (true) or not (false)."
+      },
+      "enableCaseDataCategoryMapping": {
+        "type": "boolean",
+        "description": "Indicates whether Case Data Category mapping is enabled (true) or not (false)."
+      },
+      "useProfileForPDFCreation": {
+        "type": "boolean",
+        "description": "Indicates whether a profile is used to create a PDF of an article from Cases (true) or not (false)."
+      }
+    },
+    "KnowledgeSitesSettings": {
+      "site": {
+        "type": "string[]",
+        "description": "Specifies the site used for Salesforce Knowledge and Sites."
+      }
+    },
+    "KnowledgeLanguageSettings": {
+      "language": {
+        "type": "KnowledgeLanguage[]",
+        "description": "Represents the metadata used to manage settings for the languages enabled for Salesforce Knowledge."
+      }
+    },
+    "KnowledgeLanguage": {
+      "active": {
+        "type": "boolean",
+        "description": "Indicates whether the language is enabled (true) or not (false)."
+      },
+      "defaultAssignee": {
+        "type": "string",
+        "description": "The default assignee for articles in the language."
+      },
+      "defaultAssigneeType": {
+        "type": "KnowledgeLanguageLookupValueType (enumeration of type string)",
+        "description": "Indicates the default assignee type. Valid values are: User Queue"
+      },
+      "defaultReviewer": {
+        "type": "string",
+        "description": "The default reviewer for articles in the language."
+      },
+      "defaultReviewerType": {
+        "type": "KnowledgeLanguageLookupValueType (enumeration of type string)",
+        "description": "Indicates the default reviewer type. Valid values are: User Queue"
+      },
+      "name": {
+        "type": "string",
+        "description": "The code for the language name, for example: English is en. See “What languages does Salesforce support?” in the Salesforce Help for a list of supported languages and their codes."
+      }
+    },
+    "KnowledgeSuggestedArticlesSettings": {
+      "caseFields": {
+        "type": "KnowledgeCaseFieldsSettings",
+        "description": "Represents a list of the case fields used to suggest articles for the case."
+      },
+      "useSuggestedArticlesForCase": {
+        "type": "boolean",
+        "description": "Indicates whether case content is used to suggest articles for cases (true) or not (false)."
+      },
+      "workOrderFields": {
+        "type": "KnowledgeWorkOrderFieldsSettings",
+        "description": "Represents a list of the work order fields used to suggest articles for the work order."
+      },
+      "workOrderLineItemFields": {
+        "type": "KnowledgeWorkOrderLineItemFieldsSettings",
+        "description": "Represents a list of the work order line item fields used to suggest articles for the work order line item."
+      }
+    },
+    "KnowledgeCaseFieldsSettings": {
+      "field": {
+        "type": "KnowledgeCaseField[]",
+        "description": "Specifies the names of the case fields used to suggest articles for the case."
+      }
+    },
+    "KnowledgeCaseField": {
+      "name": {
+        "type": "string",
+        "description": "Specifies the name of the case field used to suggest articles for the case."
+      }
+    },
+    "KnowledgeWorkOrderFieldsSettings": {
+      "field": {
+        "type": "KnowledgeWorkOrderField[]",
+        "description": "Specifies the names of the work order fields used to suggest articles for the work order."
+      }
+    },
+    "KnowledgeWorkOrderField": {
+      "name": {
+        "type": "string",
+        "description": "Specifies the name of the work order field used to suggest articles for the work order."
+      }
+    },
+    "KnowledgeWorkOrderLineItemFieldsSettings": {
+      "field": {
+        "type": "KnowledgeWorkOrderLineItemField[]",
+        "description": "Specifies the names of the work order line item fields used to suggest articles for the work order line item."
+      }
+    },
+    "KnowledgeWorkOrderLineItemField": {
+      "name": {
+        "type": "string",
+        "description": "Specifies the name of the work order line item field used to suggest articles for the work order line item."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"KnowledgeAnswerSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"assignTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"defaultArticleType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"enableArticleCreation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"KnowledgeCaseEditor\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"simple\"/>\n    <xsd:enumeration value=\"standard\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"KnowledgeCaseField\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeCaseFieldsSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:KnowledgeCaseField\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeCaseSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"articlePDFCreationProfile\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"articlePublicSharingCommunities\" minOccurs=\"0\" type=\"tns:KnowledgeCommunitiesSettings\"/>\n    <xsd:element name=\"articlePublicSharingSites\" minOccurs=\"0\" type=\"tns:KnowledgeSitesSettings\"/>\n    <xsd:element name=\"articlePublicSharingSitesChatterAnswers\" minOccurs=\"0\" type=\"tns:KnowledgeSitesSettings\"/>\n    <xsd:element name=\"assignTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"customizationClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"defaultContributionArticleType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"editor\" minOccurs=\"0\" type=\"tns:KnowledgeCaseEditor\"/>\n    <xsd:element name=\"enableArticleCreation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableArticlePublicSharingSites\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableCaseDataCategoryMapping\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"useProfileForPDFCreation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeCommunitiesSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"community\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeLanguage\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"defaultAssignee\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"defaultAssigneeType\" minOccurs=\"0\" type=\"tns:KnowledgeLanguageLookupValueType\"/>\n    <xsd:element name=\"defaultReviewer\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"defaultReviewerType\" minOccurs=\"0\" type=\"tns:KnowledgeLanguageLookupValueType\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"KnowledgeLanguageLookupValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"Queue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"KnowledgeLanguageSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"language\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:KnowledgeLanguage\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"answers\" minOccurs=\"0\" type=\"tns:KnowledgeAnswerSettings\"/>\n        <xsd:element name=\"cases\" minOccurs=\"0\" type=\"tns:KnowledgeCaseSettings\"/>\n        <xsd:element name=\"defaultLanguage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableChatterQuestionKBDeflection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCreateEditOnArticlesTab\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableExternalMediaContent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKbStandardSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKnowledge\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKnowledgeAgentContribution\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKnowledgeAnswersPromotion\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKnowledgeArticleTextHighlights\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKnowledgeCaseRL\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKnowledgeKeywordAutoComplete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableKnowledgeTitleAutoComplete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLightningKbAutoLoadRichTextField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLightningKnowledge\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"languages\" minOccurs=\"0\" type=\"tns:KnowledgeLanguageSettings\"/>\n        <xsd:element name=\"showArticleSummariesCustomerPortal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showArticleSummariesInternalApp\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showArticleSummariesPartnerPortal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showValidationStatusField\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"suggestedArticles\" minOccurs=\"0\" type=\"tns:KnowledgeSuggestedArticlesSettings\"/>\n        <xsd:element name=\"votingEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeSitesSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"site\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeSuggestedArticlesSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"caseFields\" minOccurs=\"0\" type=\"tns:KnowledgeCaseFieldsSettings\"/>\n    <xsd:element name=\"useSuggestedArticlesForCase\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"workOrderFields\" minOccurs=\"0\" type=\"tns:KnowledgeWorkOrderFieldsSettings\"/>\n    <xsd:element name=\"workOrderLineItemFields\" minOccurs=\"0\" type=\"tns:KnowledgeWorkOrderLineItemFieldsSettings\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeWorkOrderField\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeWorkOrderFieldsSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:KnowledgeWorkOrderField\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeWorkOrderLineItemField\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"KnowledgeWorkOrderLineItemFieldsSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:KnowledgeWorkOrderLineItemField\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample Knowledge settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<KnowledgeSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <answers>\n        <enableArticleCreation>false</enableArticleCreation>\n    </answers>\n    <cases>\n        <articlePDFCreationProfile>partner portal knowledge profile</articlePDFCreationProfile>\n        <articlePublicSharingSites>\n            <site>KnowledgeSite</site>\n            <site>PKB2Site</site>\n            <site>ChatterAnswersSite</site>\n        </articlePublicSharingSites>\n        <articlePublicSharingSitesChatterAnswers>\n            <site>ChatterAnswersSite</site>\n        </articlePublicSharingSitesChatterAnswers>\n        <assignTo>testall@kb.org</assignTo>\n        <defaultContributionArticleType>Support</defaultContributionArticleType>\n        <editor>simple</editor>\n        <enableArticleCreation>true</enableArticleCreation>\n        <enableArticlePublicSharingSites>true</enableArticlePublicSharingSites>\n        <useProfileForPDFCreation>true</useProfileForPDFCreation>\n    </cases>\n    <defaultLanguage>ja</defaultLanguage>\n    <enableCreateEditOnArticlesTab>true</enableCreateEditOnArticlesTab>\n    <enableExternalMediaContent>true</enableExternalMediaContent>\n    <enableKnowledge>true</enableKnowledge>\n    <showArticleSummariesCustomerPortal>true</showArticleSummariesCustomerPortal>\n    <showArticleSummariesInternalApp>true</showArticleSummariesInternalApp>\n    <showArticleSummariesPartnerPortal>true</showArticleSummariesPartnerPortal>\n    <showValidationStatusField>true</showValidationStatusField>\n    <suggestedArticles>\n      <caseFields>\n         <field>\n            <name>Subject</name>\n         </field>\n         <field>\n            <name>SuppliedEmail</name>\n         </field>\n      </caseFields>\n      <useSuggestedArticlesForCase>true</useSuggestedArticlesForCase>\n    </suggestedArticles>\n</KnowledgeSettings>"
+    }
+  ]
+}

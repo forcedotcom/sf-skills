@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RelationshipGraphDefinition - Metadata API",
+  "description": "Represents a definition of a graph that you can configure in your organization to traverse object hierarchies and record details, giving you a glimpse of how your business works.",
+  "file_information": ".relationshipGraphDefinition",
+  "directory_location": "relationshipGraphDefinitions",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "isActive": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the relationship graph is available for use (true) or not (false). The default value is true. Note: This field is read-only in API version 55.0."
+    },
+    "isTemplate": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether you can configure this relationship graph as a template (true or not false). The default value is false. In the UI, this field is Set as Template."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for RelationshipGraphDefinition, which is defined when the RelationshipGraphDefinition is created. In the UI, this field is Label."
+    },
+    "relationshipGraphDefVersions": {
+      "type": "RelationshipGraphDefVersion[]",
+      "description": "Represents a list of graph versions associated with the relationship graph definition."
+    }
+  },
+  "sub_types": {
+    "RelationshipGraphDefVersion": {
+      "graphDefinition": {
+        "type": "string",
+        "required": true,
+        "description": "Specifies a set of properties required to create a relationship graph, such as parent node, child relationships, filter and sort fields, and graph UI elements."
+      },
+      "graphType": {
+        "type": "string",
+        "required": true,
+        "description": "Specifies the type of graph. In API version 55.0, only HorizontalHierarchy graph type is supported."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelationshipGraphDefVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"graphDefinition\" type=\"xsd:string\"/>\n    <xsd:element name=\"graphType\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RelationshipGraphDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTemplate\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationshipGraphDefVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RelationshipGraphDefVersion\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a RelationshipGraphDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RelationshipGraphDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <isActive>false</isActive>\n     <isTemplate>true</isTemplate>\n     <masterLabel>Account Graph</masterLabel>\n     <relationshipGraphDefVersions>\n         <graphDefinition>{\n   \"graph\" : {\n     \"rootNode\" : {\n       \"object\" : {\n         \"entity\" : \"Account\"\n       },\n       \"configurationType\" : \"Primary\",\n       \"sortFields\" : [ {\n         \"field\" : {\n           \"field\" : \"LastModifiedDate\",\n           \"whichEntity\" : \"TARGET\"\n         },\n         \"order\" : \"DESC\"\n       } ],\n       \"nodeUiConfig\" : {\n         \"fieldsToDisplay\" : [ ],\n         \"showFieldLabels\" : true,\n         \"actions\" : { }\n       },\n       \"childRelationships\" : [ {\n         \"OneToMany\" : {\n           \"targetObjectNode\" : {\n             \"object\" : {\n               \"entity\" : \"Contact\"\n             },\n             \"configurationType\" :\"Custom\",\n             \"sortFields\" : [ {\n               \"field\" : {\n                 \"field\" : \"LastModifiedDate\",\n                 \"whichEntity\" : \"TARGET\"\n               },\n               \"order\" : \"DESC\"\n             } ],\n             \"nodeUiConfig\" : {\n               \"fieldsToDisplay\" : [ {\n                 \"field\" : \"Name\",\n                 \"whichEntity\" : \"TARGET\"\n               }, {\n                 \"field\" : \"Phone\",\n                 \"whichEntity\" :\"TARGET\"\n               } ],\n               \"showFieldLabels\" : true,\n               \"actions\" : {\n                 \"containerActions\" : [ {\n                   \"action\" : \"New\"\n                 } ],\n                 \"recordActions\" : [ {\n                   \"action\" : \"Edit\"\n                 }, {\n                   \"action\" : \"Delete\"\n                 } ]\n               }\n             },\n             \"childRelationships\" : [ ]\n           },\n           \"relationshipUiConfig\" : { },\n           \"filter\" : {\n             \"filterCriteria\" : [ {\n               \"field\" : {\n                 \"field\" : \"Name\",\n                 \"whichEntity\" : \"TARGET\"\n               },\n               \"operator\" : \"eq\",\n               \"value\" : \"Salesforce\"\n             } ],\n             \"booleanFilter\" : \"1\"\n           },\n           \"targetObjectField\" : {\n             \"field\" : \"AccountId\",\n             \"whichEntity\" : \"TARGET\"\n           }\n         }\n       } ]\n     },\n     \"globalUiConfig\" : {\n       \"borderColor\" : \"Green2\",\n       \"borderThickness\" : \"2px\";,\n       \"colorShading\" : \"Black\",\n       \"fieldLayout\" : \"Vertically Stacked\",\n       \"recordContainerExpansion\" : true,\n       \"recordExpansion\" : true\n     }\n   }\n }</graphDefinition>\n         <graphType>HorizontalHierarchy</graphType>\n     </relationshipGraphDefVersions>\n</RelationshipGraphDefinition>"
+    }
+  ]
+}

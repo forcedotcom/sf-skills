@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DgtAssetMgmtPrvdLghtCpnt - Metadata API",
+  "description": "Represents the Lightning web component configurations for external content providers, such as digital asset management (DAM) systems. This metadata type enables the integration of external content systems with Salesforce CMS using custom Lightning web components.",
+  "file_information": ".dgtAssetMgmtPrvdLghtCpnt",
+  "directory_location": "dgtAssetMgmtPrvdLghtCpnts",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "dgtAssetMgmtProvider": {
+      "type": "string",
+      "required": true,
+      "description": "References the external content provider, represented by the DgtAssetMgmtProvider type, that this Lightning web component configuration supports."
+    },
+    "lightningComponentBundle": {
+      "type": "string",
+      "description": "References the Lightning web component, represented by the LightningComponentBundle type, that implements the user interface for the external content provider in Salesforce CMS. The LightningComponentBundle must be deployed and available before you reference it."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Specifies the display name of the Lightning web component configuration as it appears in the UI."
+    },
+    "type": {
+      "type": "DgtAssetMgmtPrvdLghtCpntType (enumeration of type string)",
+      "required": true,
+      "description": "Specifies the type of external content provider Lightning web component that’s being configured. Possible values are: DIGITAL_ASSET_MANAGER: Represents a component that provides full management capabilities for external content providers, including browsing, searching, and selecting. NONE: Represents an undefined or default provider type. Indicates that no specific provider type is assigned."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DgtAssetMgmtPrvdLghtCpnt\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"dgtAssetMgmtProvider\" type=\"xsd:string\"/>\n        <xsd:element name=\"lightningComponentBundle\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:DgtAssetMgmtPrvdLghtCpntType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"DgtAssetMgmtPrvdLghtCpntType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"NONE\"/>\n    <xsd:enumeration value=\"DIGITAL_ASSET_MANAGER\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DgtAssetMgmtPrvdLghtCpnt component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DgtAssetMgmtPrvdLghtCpnt xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <dgtAssetMgmtProvider>External Content Provider</dgtAssetMgmtProvider>\n    <lightningComponentBundle>myLightningComponentBundle</lightningComponentBundle>\n    <masterLabel>myComponent</masterLabel>\n    <type>DIGITAL_ASSET_MANAGER</type>\n</DgtAssetMgmtPrvdLghtCpnt>"
+    }
+  ]
+}

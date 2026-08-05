@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CurrencySettings - Metadata API",
+  "description": "Represents an organization’s currency settings, including supporting multiple currencies and currency effective dates. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCurrencyEffectiveDates": {
+      "type": "boolean",
+      "description": "Indicates whether effective dated currency is enabled (true) or not (false). This field has a default value of false. To enable this preference, enableMultiCurrency must be set to true"
+    },
+    "enableCurrencySymbolWithMultiCurrency": {
+      "type": "boolean",
+      "description": "Indicates whether the currency symbol (true) or ISO code (false) displays in multi-currency orgs. This field has a default value of false. This field has no effect if enableMultiCurrency is set to false."
+    },
+    "enableMultiCurrency": {
+      "type": "boolean",
+      "description": "Indicates whether multiple currencies are enabled (true) or not (false). This field has a default value of false. Note: After set to true, this field can’t be set to false. See Considerations for Enabling Multiple Currencies for more information."
+    },
+    "isMultiCurrencyActivationAllowed": {
+      "type": "boolean",
+      "description": "Deprecated in API version 49.0 and later. Regardless of the value in this field, a Salesforce admin can activate multiple currencies. In API version 48.0 and earlier, if Customizable Forecasting was enabled, this field indicated whether Salesforce Customer Support could activate multiple currencies (true) or the feature couldn't be activated (false). This field is only visible if multiple currencies are disabled. It has a default of false to provide an extra layer of protection against accidentally enabling multiple currencies when Customizable Forecasting was enabled. In API version 48.0 and earlier, customers with Customizable Forecasting enabled in their orgs had to contact Salesforce Customer Support to activate multiple currencies. Customers set this field to true when Salesforce Customer Support requested that they do so to validate their request to activate multiple currencies. Note: Customizable Forecasting was retired in Summer ’20. Users can’t access the Customizable Forecasting feature and its underlying data via the user interface or API. To predict sales revenue and quantities from your opportunity pipeline, use Salesforce Forecasting."
+    },
+    "isParenCurrencyConvDisabled": {
+      "type": "boolean",
+      "description": "Indicates whether parenthetical currency conversion is disabled (true) or enabled (false). This field has a default value of true. When this field is set to false, Salesforce displays converted currency amounts to users whose personal currency differs from the currency of the record they’re viewing."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CurrencySettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCurrencyEffectiveDates\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCurrencySymbolWithMultiCurrency\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMultiCurrency\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isMultiCurrencyActivationAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isParenCurrencyConvDisabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CurrencySettings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CurrencySettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableCurrencyEffectiveDates>false</enableCurrencyEffectiveDates>\n    <enableCurrencySymbolWithMultiCurrency>false</enableCurrencySymbolWithMultiCurrency>\n    <enableMultiCurrency>false</enableMultiCurrency>\n    <isMultiCurrencyActivationAllowed>false</isMultiCurrencyActivationAllowed>\n    <isParenCurrencyConvDisabled>false</isParenCurrencyConvDisabled>\n</CurrencySettings>"
+    }
+  ]
+}

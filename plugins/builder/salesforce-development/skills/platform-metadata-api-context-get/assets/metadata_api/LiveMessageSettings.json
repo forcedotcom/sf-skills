@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LiveMessageSettings - Metadata API",
+  "description": "Represents an org’s LiveMessage settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCheckCEUserPerm": {
+      "type": "boolean",
+      "description": "Gives access to ConversationEntry objects only to users with the Access Conversation Entries user permission enabled (true) or to all users (false) in an org. For orgs created before API version 50.0, the default value is false. For orgs created on or after API version 50.0, the default value is true."
+    },
+    "enableLiveMessage": {
+      "type": "boolean",
+      "description": "Turns LiveMessage on (true) or off (false) in an org. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LiveMessageSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCheckCEUserPerm\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLiveMessage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a liveMessageSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LiveMessageSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <enableLiveMessage>true</enableLiveMessage>\n</LiveMessageSettings>"
+    }
+  ]
+}

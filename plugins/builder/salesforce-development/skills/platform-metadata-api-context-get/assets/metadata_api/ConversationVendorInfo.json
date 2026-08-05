@@ -1,0 +1,148 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ConversationVendorInfo - Metadata API",
+  "description": "Represents the connection between the partner vendor system and the Service Cloud feature. For example, for Service Cloud Voice, this type contains information about the partner telephony system or Contact Center as a Service (CCaaS) system. For Bring Your Own Channel for Messaging or Bring Your Own Channel for CCaaS, this type contains information about the partner messaging system or CCaaS system.",
+  "file_information": ".ConversationVendorInformation",
+  "directory_location": "ConversationVendorInformation",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "agentSSOSupported": {
+      "type": "boolean",
+      "description": "If set to true, agents can single sign-on (SSO) into their contact center using Salesforce as the identity provider (IdP). Behind the scenes, Salesforce is used as the SAML IdP in the Single Sign-On external client app for the contact center. If set to false, an IdP other than Salesforce is used or an IdP isn’t used at all. The default value is false. If this value is set to false and you want to use Salesforce as the IdP for your contact center, set this value and the namedCredentialSupported value to true and configure the service_cloud_voice.PartnerSSO interface in your Apex integration class. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "awsAccountKey": {
+      "type": "string",
+      "description": "The 12-digit AWS subaccount ID that’s automatically provisioned for you when Service Cloud Voice was turned on. Available in API version 55.0 and later. Applies to the following implementation: Service Cloud Voice with Amazon Connect"
+    },
+    "awsRootEmail": {
+      "type": "string",
+      "description": "The email address used by Salesforce to create the root user for the provisioned AWS subaccount when Service Cloud Voice was turned on. Available in API version 55.0 and later. Applies to the following implementation: Service Cloud Voice with Amazon Connect"
+    },
+    "awsTenantVersion": {
+      "type": "double",
+      "description": "The version number of the SVCTenantStack AWS CloudFormation stack that’s deployed. The stack is deployed in AWS region \"us-east-1\". Available in API version 55.0 and later. Applies to the following implementation: Service Cloud Voice with Amazon Connect"
+    },
+    "bridgeComponent": {
+      "type": "string",
+      "description": "The Lightning component used to communicate between the telephony or messaging system and other Lightning components. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "clientAuthMode": {
+      "type": "ClientAuthMode (enumeration of type string)",
+      "description": "The client authentication mode. Values are: Custom Mixed SSO Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect"
+    },
+    "connectorUrl": {
+      "type": "string",
+      "description": "The URL that hosts your Service Cloud Voice or Bring Your Own Channel for CCaaS connector. This value could be a Visualforce page or a public URL. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "customConfig": {
+      "type": "string",
+      "description": "The foreign key to the CustomEntityDefinition, which contains partner-specific custom settings. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "customIcon": {
+      "type": "string",
+      "description": "ID of the static resource used to identify the contact center integration, such as a Contact Center as a Service (CCaaS) provider logo. The static resource must be in SVG format. This field is optional. Available in API version 62.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Bring Your Own Channel for CCaaS"
+    },
+    "customLoginUrl": {
+      "type": "string",
+      "description": "The URL that hosts your telephony system or CCaaS system login page. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "developerName": {
+      "type": "string",
+      "description": "The unique name of the type in the API."
+    },
+    "einsteinConversationInsightsSupported": {
+      "type": "boolean",
+      "description": "If set to true, Einstein Conversation Insights is turned on. The default value is false. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect"
+    },
+    "integrationClass": {
+      "type": "string",
+      "description": "The foreign key to the partner Apex class implementing supported interfaces. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "integrationClassName": {
+      "type": "string",
+      "description": "Deprecated in API version 53.0. Don't set this field. Instead, use integrationClass. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect"
+    },
+    "intelligenceSupported": {
+      "type": "boolean",
+      "description": "If set to true, Salesforce ingests real-time signals sent from a partner telephony system. If set to false, Salesforce won't ingest real-time intelligence signals from a partner telephony system. The default value is false. Available in API version 59.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony"
+    },
+    "isTaxCompliant": {
+      "type": "boolean",
+      "description": "Indicates whether the Amazon tax settings for the AWS subaccount provisioned for Service Cloud Voice have been confirmed (true). The default value is false. Available in API version 55.0 and later.Applies to the following implementation: Service Cloud Voice with Amazon Connect"
+    },
+    "keyProvisioningSupported": {
+      "type": "boolean",
+      "description": "If set to true, key provisioning and renewal are automated. The default value is false. Available in API version 54.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect"
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The partner vendor's display name as it appears in the UI. This name appears in several places in the UI, so include the partner vendor name for easy identification. For Service Cloud Voice, this label also represents the telephony provider name in the contact center record. For Service Cloud Voice with Amazon Connect, this field is always set to Service Cloud Voice."
+    },
+    "namedCredential": {
+      "type": "string",
+      "description": "A sample-named credential that can be used for Apex callouts to the partner system. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "namedCredentialSupported": {
+      "type": "boolean",
+      "description": "A sample-named credential that can be used for Apex callouts to the partner system. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "partnerContactCenterListSupported": {
+      "type": "boolean",
+      "description": "If set to true, enables the customer to select one contact center from a list of multiple contact centers to connect with Salesforce. The default value is false. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "partnerPhoneNumbersSupported": {
+      "type": "boolean",
+      "description": "If set to true, displays a list of phone numbers used to create contact center channels. The default value is false. Available in API version 54.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect"
+    },
+    "partnerTransferDestinationsSupported": {
+      "type": "boolean",
+      "description": "If set to true, allows Salesforce to fetch contact center queues so that Salesforce and contact center queues can be mapped. The default value is false. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "queueManagementSupported": {
+      "type": "boolean",
+      "description": "If set to true, support queue management. The default value is false. Available in API version 56.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "serverAuthMode": {
+      "type": "ServerAuthMode (enumeration of type string)",
+      "description": "Deprecated in API 53.0. Server authentication mode. Set this value to None. Values are: None OAuth Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect"
+    },
+    "telephonySettingsComponent": {
+      "type": "string",
+      "description": "The name of the Lightning Web Component (LWC) that is used to display additional agent settings in the Omni-Channel widget. This value is in the format mynamespace:componentName, where mynamespace is the namespace associated with the Service Cloud Voice package that was created, and componentName is the FQDN of the Lightning component. Available in API version 54.0 and later. Applies to the following implementation: Service Cloud Voice with Partner Telephony"
+    },
+    "unifiedRoutingSupported": {
+      "type": "boolean",
+      "description": "Indicates whether unified routing is supported (true) or not supported (false) for voice calls in voice channels. The default value is false. Once this value is set to true, it can’t be changed to false. Available in API version 63.0 and later. Applies to the following implementation: Service Cloud Voice with Partner Telephony"
+    },
+    "universalCallRecordingAccessSupported": {
+      "type": "boolean",
+      "description": "If set to true, Universal Call Recording Access is turned on. The default value is false. If this value is set to false and you want to turn on Universal Call Recording, set this value to true and configure the service_cloud_voice.RecordingMediaProvider interface in your Apex integration class. Available in API version 54.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect"
+    },
+    "userSyncingSupported": {
+      "type": "boolean",
+      "description": "If set to true, supports automated user syncing whenever a user is added to or removed from a contact center. The default value is false. Available in API version 53.0 and later. Applies to the following implementations: Service Cloud Voice with Partner Telephony Service Cloud Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
+    },
+    "vendorType": {
+      "type": "ConversationVendorType (enumeration of type string)",
+      "description": "The Service Cloud feature the partner vendor supports.Possible values are: Amazon_Connect — For Service Cloud Voice with Amazon Connect. BringYourOwnChannelPartner — For Bring Your Own Channel for Messaging. Available in API version 60.0 and later. BringYourOwnContactCenter — For Bring Your Own Channel for Contact Center as a Service (CCaaS). Available in API version 60.0 and later. ServiceCloudVoicePartner — For Service Cloud Voice with Partner Telephony or Service Cloud Voice with Partner Telephony from Amazon Connect. Available in API version 53.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ClientAuthMode\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SSO\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"Mixed\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationVendorInfo\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"agentSSOSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"awsAccountKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"awsRootEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"awsTenantVersion\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"bridgeComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"clientAuthMode\" minOccurs=\"0\" type=\"tns:ClientAuthMode\"/>\n        <xsd:element name=\"connectorUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customConfig\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customIcon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customLoginUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"einsteinConversationInsightsSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"integrationClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"integrationClassName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"intelligenceSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTaxCompliant\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"keyProvisioningSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"multiVendorConfigSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"namedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredentialSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"partnerContactCenterListSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"partnerPhoneNumbersSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"partnerTransferDestinationsSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"queueManagementSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"serverAuthMode\" minOccurs=\"0\" type=\"tns:ServerAuthMode\"/>\n        <xsd:element name=\"telephonySettingsComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"unifiedRoutingSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"universalCallRecordingAccessSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"userSyncingSupported\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"vendorType\" minOccurs=\"0\" type=\"tns:ConversationVendorType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationVendorType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ServiceCloudVoicePartner\"/>\n    <xsd:enumeration value=\"Amazon_Connect\"/>\n    <xsd:enumeration value=\"BringYourOwnChannelPartner\"/>\n    <xsd:enumeration value=\"BringYourOwnContactCenter\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ServerAuthMode\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"OAuth\"/>\n    <xsd:enumeration value=\"None\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ConversationVendorInfo component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ConversationVendorInfo xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <einsteinConversationInsightsSupported>true</einsteinConversationInsightsSupported>\n    <partnerContactCenterListSupported>true</partnerContactCenterListSupported>\n    <namedCredentialSupported>true</namedCredentialSupported>\n    <partnerTransferDestinationsSupported>true</partnerTransferDestinationsSupported>\n    <agentSSOSupported>true</agentSSOSupported>\n    <keyProvisioningSupported>true</keyProvisioningSupported>\n    <universalCallRecordingAccessSupported>true</universalCallRecordingAccessSupported>\n    <partnerPhoneNumbersSupported>true</partnerPhoneNumbersSupported>\n    <queueManagementSupported>true</queueManagementSupported>\n    <clientAuthMode>SSO</clientAuthMode>\n    <connectorUrl>https://exampleconnectorurl.com</connectorUrl>\n    <customConfig>exampleCustomConfig__c</customConfig>\n    <customLoginUrl>testurl</customLoginUrl>\n    <integrationClass>ExampleIntegrationImpl</integrationClass>\n    <masterLabel>Example Partner Name</masterLabel>\n    <developerName>exampledevname</developerName>\n    <namedCredential>exampleNamedCredential</namedCredential>\n    <userSyncingSupported>true</userSyncingSupported>\n    <vendorType>BringYourOwnContactCenter</vendorType>\n</ConversationVendorInfo>"
+    }
+  ]
+}

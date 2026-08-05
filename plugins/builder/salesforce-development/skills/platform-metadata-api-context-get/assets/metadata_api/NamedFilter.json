@@ -1,0 +1,89 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "NamedFilter - Metadata API",
+  "description": "Represents the metadata associated with a lookup filter. This metadata type is used to create, update, or delete lookup filter definitions. This component has been removed as of API version 30.0 and is only available in previous API versions. The metadata associated with a lookup filter is now represented by the lookupFilter field in the CustomField component.",
+  "file_information": "Lookup filters are defined as part of the custom object or standard object definition. See CustomObject for more information.\n\nNote: Retrieving a component of this metadata type in a project makes the component appear in any Profile and PermissionSet components that are retrieved in the same package.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the lookup filter is active.",
+      "required": true
+    },
+    "booleanFilter": {
+      "type": "string",
+      "description": "Specifies advanced filter conditions."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of what this filter does."
+    },
+    "errorMessage": {
+      "type": "string",
+      "description": "The error message that appears if the lookup filter fails."
+    },
+    "field": {
+      "type": "string",
+      "description": "The fullName of the custom or standard field associated with the lookup filter. You can associate one relationship field with each lookup filter, and vice versa. Note: You can’t update a field associated with a lookup filter.",
+      "required": true
+    },
+    "filterItems": {
+      "type": "FilterItems[]",
+      "description": "The set of filter conditions.",
+      "required": true
+    },
+    "infoMessage": {
+      "type": "string",
+      "description": "The information message displayed on the page. Use to describe things the user might not understand, such as why certain items are excluded in the lookup filter."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call. This value can’t be null."
+    },
+    "isOptional": {
+      "type": "boolean",
+      "description": "Indicates whether the lookup filter is optional.",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the lookup filter. If you create this field in the user interface, a name is automatically assigned. If you create this field through Metadata API, you must include the name field.",
+      "required": true
+    },
+    "sourceObject": {
+      "type": "string",
+      "description": "The object that contains the lookup field that uses this lookup filter. Set this field if the lookup filter references fields on the source object."
+    }
+  },
+  "sub_types": {
+    "FilterItems": {
+      "field": {
+        "type": "string",
+        "description": "Represents the field specified in the filter."
+      },
+      "operation": {
+        "type": "FilterOperation (enumeration of type string)",
+        "description": "Represents the filter operation for this filter item. Valid values are enumerated in FilterOperation."
+      },
+      "value": {
+        "type": "string",
+        "description": "Represents the value of the filter item being operated upon, for example, if the filter is my_number_field__c > 1, the value of value is 1."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n....\n    <namedfilters>\n        <fullName>nf_Acc</fullName>\n        <active>true</active>\n        <booleanFilter>1 OR 2</booleanFilter>\n        <field>Account.lk__c</field>\n        <filterItems>\n            <field>Account.Phone</field>\n            <operation>notEqual</operation>\n            <value>x</value>\n        </filterItems>\n        <filterItems>\n            <field>Account.Fax</field>\n            <operation>notEqual</operation>\n            <value>y</value>\n        </filterItems>\n        <name>Acc</name>\n        <sourceObject>Account</sourceObject>\n    </namedfilters>\n....\n</CustomObject>"
+    }
+  ]
+}

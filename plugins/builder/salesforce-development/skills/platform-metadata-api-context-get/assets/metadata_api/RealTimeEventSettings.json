@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RealTimeEventSettings - Metadata API",
+  "description": "Represents the list of Real-Time Event entities that you want to enable or disable. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "realTimeEvents": {
+      "type": "RealTimeEvent[]",
+      "description": "Represents the list of Real-Time Event entities that you want to enable or disable."
+    }
+  },
+  "sub_types": {
+    "RealTimeEvent": {
+      "entityName": {
+        "type": "string",
+        "description": "The storage or streaming entity name that you want to modify. For example: ApiEvent or ApiEventStream."
+      },
+      "isEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether you want the storage or streaming capability to be enabled (true) or disabled (false)."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RealTimeEvent\">\n  <xsd:sequence>\n    <xsd:element name=\"entityName\" type=\"xsd:string\"/>\n    <xsd:element name=\"isEnabled\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RealTimeEventSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"realTimeEvents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RealTimeEvent\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example RealTimeEvent.settings metadata file:",
+      "code": "<?xml version=“1.0” encoding=“UTF-8\"?>\n<RealTimeEventSettings xmlns=“http://soap.sforce.com/2006/04/metadata”/>\n  <realTimeEvents>\n    <entityName>ApiEventStream</entityName>\n    <isEnabled>true</isEnabled>\n  </realTimeEvents>\n  <realTimeEvents>\n    <entityName>ApiEvent</entityName>\n    <isEnabled>true</isEnabled>\n  </realTimeEvents>\n</RealTimeEventSettings>"
+    }
+  ]
+}

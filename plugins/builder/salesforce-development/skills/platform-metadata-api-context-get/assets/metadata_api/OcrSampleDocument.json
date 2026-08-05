@@ -1,0 +1,158 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OcrSampleDocument - Metadata API",
+  "description": "Represents the details of a sample document or a document type that's used as a reference while extracting and mapping information from a customer form. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".ocrSampleDocument",
+  "directory_location": "ocrSampleDocuments",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "applicationType": {
+      "type": "OcrApplicationType (enumeration of type string)",
+      "description": "The type of application using the OCR sample document. Possible values are: EinsteinDocumentReader Industries"
+    },
+    "contentAsset": {
+      "type": "string",
+      "description": "The ID of the OCR sample document asset. This field is null if the OcrSampleDocument is an abstract document representing the DocumentType."
+    },
+    "documentHeight": {
+      "type": "double",
+      "description": "The normalized height of the OCR sample document page. This field is null if the OcrSampleDocument is an abstract document representing the DocumentType."
+    },
+    "documentType": {
+      "type": "string",
+      "description": "The type of the OCR sample document.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the OCR sample document.",
+      "required": true
+    },
+    "ocrSampleDocumentFields": {
+      "type": "OcrSampleDocumentField[]",
+      "description": "The details of the field in a form whose value is extracted and mapped to a Salesforce object field."
+    },
+    "ocrSampleDocumentPages": {
+      "type": "OcrSampleDocumentPage[]",
+      "description": "A collection of fields that define a page in the OCR sample document."
+    }
+  },
+  "sub_types": {
+    "OcrSampleDocumentField": {
+      "cellColumnNumber": {
+        "type": "int",
+        "description": "The column number in the item with the cell storing this field’s value. Available in API version 56.0 and later."
+      },
+      "cellColumnSpanValue": {
+        "type": "int",
+        "description": "The number of columns that span the cell storing this field’s value. Available in API version 56.0 and later."
+      },
+      "cellRowNumber": {
+        "type": "int",
+        "description": "The row number in the item with the cell storing this field’s value. Available in API version 56.0 and later."
+      },
+      "cellRowSpanValue": {
+        "type": "int",
+        "description": "The number of rows that span the cell storing this field’s value. Available in API version 56.0 and later."
+      },
+      "fieldLabelMaxX": {
+        "type": "double",
+        "description": "A normalized coordinate representing the right edge of the bounding box of the key."
+      },
+      "fieldLabelMaxY": {
+        "type": "double",
+        "description": "A normalized coordinate representing the bottom edge of the bounding box of the key."
+      },
+      "fieldLabelMinX": {
+        "type": "double",
+        "description": "A normalized coordinate representing the left edge of the bounding box of the key."
+      },
+      "fieldLabelMinY": {
+        "type": "double",
+        "description": "A normalized coordinate representing the top edge of the bounding box of the key."
+      },
+      "fieldValueName": {
+        "type": "string",
+        "description": "Name of the referred field value. Available in API version 56.0 and later."
+      },
+      "isAutoExtractedValue": {
+        "type": "boolean",
+        "description": "Indicates whether the key is automatically extracted (true) or not (false). Available in API version 57.0 and later. This field helps to distinguish auto-extracted keys from manual ones."
+      },
+      "keyContent": {
+        "type": "string",
+        "description": "The content in a particular area of the form, representing the field that is extracted by OCR."
+      },
+      "ocrSampleDocument": {
+        "type": "string",
+        "description": "The associated OCR sample document used as a reference while extracting and mapping information from a customer form.",
+        "required": true
+      },
+      "ocrSampleDocumentPage": {
+        "type": "string",
+        "description": "A reference to a page of the OCR sample document that contains the key. This field is null if the OcrSampleDocument is an abstract document representing the DocumentType."
+      },
+      "ocrSampleDocumentPageItem": {
+        "type": "OcrTemplate",
+        "description": "A reference to the item on the sample document page containing this field's value. Available in API version 56.0 and later."
+      }
+    },
+    "OcrSampleDocumentPage": {
+      "ocrSampleDocument": {
+        "type": "string",
+        "description": "The associated OCR sample document used as a reference while extracting and mapping information from a customer form.",
+        "required": true
+      },
+      "ocrSampleDocumentPageItems": {
+        "type": "OcrSampleDocument",
+        "description": "The collection of page items with the associated OCR sample document page. Available in API version 56.0 and later."
+      },
+      "pageHeight": {
+        "type": "double",
+        "description": "The normalized height of the OCR sample document page."
+      },
+      "pageNumber": {
+        "type": "integer",
+        "description": "The page number of the page in the associated OCR sample document.",
+        "required": true
+      }
+    },
+    "OcrSampleDocumentPageItem": {
+      "hasHeader": {
+        "type": "boolean",
+        "description": "Indicates whether the OCR sample document page item has a header (true) or not (false). The default value is false. Available in API version 56.0 and later."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "description": "The sequence number of the item on an OCR sample document page with multiple items. Available in API version 56.0 and later.",
+        "required": true
+      },
+      "title": {
+        "type": "string",
+        "description": "The title of the OCR sample document page item. Available in API version 56.0 and later."
+      },
+      "type": {
+        "type": "ItemType (enumeration of type string)",
+        "description": "Specifies the type of OCR sample document page item. Available in API version 56.0 and later. Valid value is TABLE.",
+        "required": true
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a OcrSampleDocument component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OcrSampleDocument xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <contentAsset>asset_01jpeg</contentAsset>\n   <documentHeight>1.24</documentHeight>\n   <documentType>Form</documentType>\n   <masterLabel>Form</masterLabel>\n   <ocrSampleDocumentFields>\n   ...<cellColumnNumber>1</cellColumnNumber>\n      <cellColumnSpanValue>1</cellColumnSpanValue>\n      <cellRowNumber>1</cellRowNumber>\n      <cellRowSpanValue>1</cellRowSpanValue>\n      <fieldLabelMaxX>0.5975854</fieldLabelMaxX>\n      <fieldLabelMaxY>0.46625894</fieldLabelMaxY>\n      <fieldLabelMinX>0.5065626</fieldLabelMinX>\n      <fieldLabelMinY>0.39605626</fieldLabelMinY>\n      <keyContent>Last Name</keyContent>\n     <ocrSampleDocument>image240</ocrSampleDocument>\n     <ocrSampleDocumentPage>1</ocrSampleDocumentPage>\n     <ocrSampleDocumentPageItem>\n         <hasHeader>false</hasHeader>\n         <sequenceNumber>1</sequenceNumber>\n         <title>Table1</title>\n         <type>TABLE</type>\n     </ocrSampleDocumentPageItem>\n   </ocrSampleDocumentFields>\n   <ocrSampleDocumentPages>\n      <ocrSampleDocument>Form</ocrSampleDocument>\n      <pageHeight>1.0</pageHeight>\n      <pageNumber>1</pageNumber>\n   </ocrSampleDocumentPages>\n   <ocrSampleDocumentPages>\n      <ocrSampleDocument>Form</ocrSampleDocument>\n      <pageNumber>2</pageNumber>\n   </ocrSampleDocumentPages>\n</OcrSampleDocument>"
+    }
+  ]
+}

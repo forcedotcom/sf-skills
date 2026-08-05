@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "TimeSheetTemplate - Metadata API",
+  "description": "Represents a template for creating time sheets in Field Service. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".timeSheetTemplate",
+  "directory_location": "timeSheetTemplates",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the time sheet template is active (true) or not (false).",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The time sheet template's description."
+    },
+    "frequency": {
+      "type": "TimeSheetFrequency (enumeration of type string)",
+      "description": "Defines the frequency of the time sheet creation period. One of the following values: Daily Weekly EveryTwoWeeks TwiceAMonth Monthly",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the time sheet template.",
+      "required": true
+    },
+    "startDate": {
+      "type": "date",
+      "description": "The date when the time sheet takes effect.",
+      "required": true
+    },
+    "timeSheetTemplateAssignments": {
+      "type": "TimeSheetTemplateAssignment",
+      "description": "A list of profiles that the template is assigned to."
+    },
+    "workWeekEndDay": {
+      "type": "DaysOfWeek (enumeration of type string)",
+      "description": "The end day of the template's work week. One of the following values: Monday Tuesday Wednesday Thursday Friday Saturday Sunday",
+      "required": true
+    },
+    "workWeekStartDay": {
+      "type": "DaysOfWeek (enumeration of type string)",
+      "description": "The start day of the template's work week. One of the following values: Monday Tuesday Wednesday Thursday Friday Saturday Sunday",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "TimeSheetTemplateAssignment": {
+      "assignedTo": {
+        "type": "string",
+        "description": "The IDs of the user profiles that a time sheet template is assigned to."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"DaysOfWeek\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sunday\"/>\n    <xsd:enumeration value=\"Monday\"/>\n    <xsd:enumeration value=\"Tuesday\"/>\n    <xsd:enumeration value=\"Wednesday\"/>\n    <xsd:enumeration value=\"Thursday\"/>\n    <xsd:enumeration value=\"Friday\"/>\n    <xsd:enumeration value=\"Saturday\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"TimeSheetFrequency\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Daily\"/>\n    <xsd:enumeration value=\"Weekly\"/>\n    <xsd:enumeration value=\"EveryTwoWeeks\"/>\n    <xsd:enumeration value=\"TwiceAMonth\"/>\n    <xsd:enumeration value=\"Monthly\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"TimeSheetTemplate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"frequency\" type=\"tns:TimeSheetFrequency\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"startDate\" type=\"xsd:date\"/>\n        <xsd:element name=\"timeSheetTemplateAssignments\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:TimeSheetTemplateAssignment\"/>\n        <xsd:element name=\"workWeekEndDay\" type=\"tns:DaysOfWeek\"/>\n        <xsd:element name=\"workWeekStartDay\" type=\"tns:DaysOfWeek\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"TimeSheetTemplateAssignment\">\n  <xsd:sequence>\n    <xsd:element name=\"assignedTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a TimeSheetTemplate file.",
+      "code": "<?xml version=“1.0” encoding=“UTF-8\"?>\n<TimeSheetTemplate xmlns=“http://soap.sforce.com/2006/04/metadata“>\n   <active>true</active>\n   <description>Time Sheet Template description</description>\n   <frequency>Daily</frequency>\n   <masterLabel>label</masterLabel>\n   <startDate>2018-10-18</startDate>\n   <timeSheetTemplateAssignments>\n       <assignedTo>admin</assignedTo>\n   </timeSheetTemplateAssignments>\n   <timeSheetTemplateAssignments>\n       <assignedTo>standard</assignedTo>\n   </timeSheetTemplateAssignments>\n   <workWeekEndDay>Tuesday</workWeekEndDay>\n   <workWeekStartDay>Monday</workWeekStartDay>\n</TimeSheetTemplate>"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "QueueRoutingConfig - Metadata API",
+  "description": "Represents the settings that determine how work items are routed to agents.",
+  "file_information": ".queueRoutingConfig",
+  "directory_location": "queueRoutingConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "capacityPercentage": {
+      "type": "double",
+      "description": "The percentage of an agent’s capacity for work items that’s consumed by a specific type of work item from this service channel. Voice calls must have a capacity percentage of 100. If an agent receives a voice call, the agent won’t receive new work items until the call ends, because at that point the agent’s capacity will have reached 100%."
+    },
+    "capacityType": {
+      "type": "CapacityType",
+      "description": "The setting applies for PSRs ( PendingServiceRouting ) that are created and managed by the system. When set to INHERITED, the value of the Interruptible check box or value set on the Service Channel applies. When set to INTERRUPTIBLE, the generated PSR has the isInterruptible flag set to true. When set to NOT INTERRUPTIBLE, the generated PSR has the isInterruptible flag set to false. When not set, its behavior is equivalent to INHERITED."
+    },
+    "capacityWeight": {
+      "type": "double",
+      "description": "The amount of an agent’s capacity for work items that’s consumed by a work item from this service channel. For example, if an agent has a capacity of 6, and cases are assigned a capacity weight of 2, an agent can be assigned up to 3 cases before the agent is at capacity and can’t receive new work items. Voice calls must use the entire capacity weight."
+    },
+    "dropAdditionalSkillsTimeout": {
+      "type": "int",
+      "description": "The number of seconds to elapse before additional skills are dropped from Omni-Channel routing. In skills-based routing, you can set some skills to Additional Skill. After the timeout elapses, a skill marked as Additional Skill is dropped from Omni-Channel routing and the case is routed to the best-matched agent, even if the agent doesn’t have all the skills. If CustomRequestedDateTime is set in the PendingServiceRouting object, DropAdditionalSkillsTimeout uses CustomRequestedDateTime as the start time. If CustomRequestedDateTime + DropAdditionalSkillsTimeout has already passed, Omni-Channel immediately drops the additional skills after the pending service request is created."
+    },
+    "isAttributeBased": {
+      "type": "boolean",
+      "description": "Indicates whether this routing configuration is used with skills-based routing rules (true) or not (false)."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label of the presence status.",
+      "required": true
+    },
+    "PausedCapacityPercentage": {
+      "type": "double",
+      "description": "The percentage of a rep’s capacity that’s consumed when this work item is paused. The paused capacity feature is available with status-based capacity and Enhanced Omni-Channel only. Available in API version 64.0 and later."
+    },
+    "PausedCapacityWeight": {
+      "type": "double",
+      "description": "The amount of a rep’s capacity that’s consumed when this work item is paused. The paused capacity feature is available with status-based capacity and Enhanced Omni-Channel only. Available in API version 64.0 and later."
+    },
+    "pushTimeout": {
+      "type": "int",
+      "description": "The number of seconds set for push timeout. 0 is returned when push timeout isn’t enabled."
+    },
+    "queueOverflowAssignee": {
+      "type": "string",
+      "description": "The ID of the queue that’s set as the Overflow Assignee."
+    },
+    "QueueRoutingConfigSkill": {
+      "type": "QueueRoutingConfigSkill[]",
+      "description": "Default skills associated with the routing configuration. Work is routed using a combination of rules and default skills."
+    },
+    "routingModel": {
+      "type": "RoutingModel (enumeration of type string)",
+      "description": "The routing type that determines how work items are routed (pushed) to agents. Possible values are: LEAST_ACTIVE MOST_AVAILABLE EXTERNAL_ROUTING",
+      "required": true
+    },
+    "routingPriority": {
+      "type": "int",
+      "description": "The priority in which work items from the service channels that are related to this routing configuration are routed to agents. Work items from routing configurations that have lower priority values (for example, 0) are routed to agents first.",
+      "required": true
+    },
+    "userOverflowAssignee": {
+      "type": "string",
+      "description": "The ID of the user that’s set as the Overflow Assignee."
+    }
+  },
+  "sub_types": {
+    "QueueRoutingConfigSkill": {
+      "skill": {
+        "type": "string",
+        "description": "Skill used to route a work item."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"CapacityType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"INHERITED\"/>\n    <xsd:enumeration value=\"INTERRUPTIBLE\"/>\n    <xsd:enumeration value=\"NOT_INTERRUPTIBLE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QueueRoutingConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"capacityPercentage\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"capacityType\" minOccurs=\"0\" type=\"tns:CapacityType\"/>\n        <xsd:element name=\"capacityWeight\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"dropAdditionalSkillsTimeout\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"isAttributeBased\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"pausedCapacityPercentage\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"pausedCapacityWeight\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"pushTimeout\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"queueOverflowAssignee\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"routingModel\" type=\"tns:RoutingModel\"/>\n        <xsd:element name=\"routingPriority\" type=\"xsd:int\"/>\n        <xsd:element name=\"skills\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:QueueRoutingConfigSkill\"/>\n        <xsd:element name=\"userOverflowAssignee\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"QueueRoutingConfigSkill\">\n  <xsd:sequence>\n    <xsd:element name=\"skill\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"RoutingModel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"LEAST_ACTIVE\"/>\n    <xsd:enumeration value=\"MOST_AVAILABLE\"/>\n    <xsd:enumeration value=\"EXTERNAL_ROUTING\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a QueueRoutingConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<QueueRoutingConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <capacityWeight>1.0</capacityWeight>\n  <label>Case Routing</label>\n  <pushTimeout>120</pushTimeout> \n  <queueOverflowAssignee>queueOverflow</queueOverflowAssignee>\n  <routingModel>LEAST_ACTIVE</routingModel>\n  <routingPriority>1</routingPriority>\n  <capacityType>INHERITED</capacityType>\n  <pausedCapacityWeight>0.25</pausedCapacityWeight>\n</QueueRoutingConfig>"
+    }
+  ]
+}

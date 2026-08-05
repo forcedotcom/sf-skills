@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LiveAgentSettings - Metadata API",
+  "description": "Represents an organization’s Chat settings, such as whether Chat is enabled. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableChatFindOrCreateEnable": {
+      "type": "boolean",
+      "description": "Indicates whether the findOrCreate method of the Chat API is enabled for agents (true) or not (false). Available in API version 53.0 and later."
+    },
+    "enableLiveAgent": {
+      "type": "boolean",
+      "description": "Indicates whether Chat is enabled (true) or not (false)."
+    },
+    "enableQuickTextEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Quick Text is enabled (true) or not (false)."
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Indicates the priority level of a Chat."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LiveAgentSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableChatFindOrCreateEnable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLiveAgent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableQuickTextEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample Chat settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LiveAgentSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableLiveAgent>true</enableLiveAgent>\n</LiveAgentSettings>"
+    }
+  ]
+}

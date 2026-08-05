@@ -1,0 +1,146 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types"
+  ],
+  "title": "MLDataDefinition - Metadata API",
+  "description": "Represents a modeling data definition, which specifies the data used to create a model. Such data can include filters, fields to include, fields to exclude, and so on. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".mlDataDefinition",
+  "directory_location": "mlDataDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "developerName": {
+      "type": "string",
+      "description": "Represents the name of the data definition. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field.",
+      "required": true
+    },
+    "entityDeveloperName": {
+      "type": "string",
+      "description": "The developer name of the object from which the model data is retrieved. After the MLDataDefinition entity is created, entityDeveloperName can’t be updated.",
+      "required": true
+    },
+    "excludedFields": {
+      "type": "string[]",
+      "description": "Fields that are excluded from the model."
+    },
+    "includedFields": {
+      "type": "string[]",
+      "description": "Fields that are included in the model."
+    },
+    "joinFields": {
+      "type": "MLField[]",
+      "description": "Reserved for future use."
+    },
+    "parentDefinitionDevName": {
+      "type": "string",
+      "description": "Reserved for future use."
+    },
+    "scoringFilter": {
+      "type": "MLFilter",
+      "description": "Specifies records to which the prediction scores are written."
+    },
+    "segmentFilter": {
+      "type": "MLFilter",
+      "description": "This field further filters data used in training and scoring when segmentFilter is combined with both scoringFilter and trainingFilter. For example, select all records in a specific region."
+    },
+    "trainingFilter": {
+      "type": "MLFilter",
+      "description": "Specifies the records that make up the training set."
+    },
+    "type": {
+      "type": "MLDataDefinitionType (enumeration of type string)",
+      "description": "Valid values are: Candidate Interaction Prediction Recipient After the model is created, type can’t be updated.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "MLField": {
+      "entity": {
+        "type": "string",
+        "description": "The object that contains the field.",
+        "required": true
+      },
+      "field": {
+        "type": "string",
+        "description": "The name of the field.",
+        "required": true
+      },
+      "relatedField": {
+        "type": "MLField",
+        "description": "Reserved for future use."
+      },
+      "relationType": {
+        "type": "MLRelationType (enumeration of type string)",
+        "description": "Reserved for future use. Valid values are: Full Inner Leftinner Leftouter"
+      },
+      "type": {
+        "type": "MLFieldType (enumeration of type string)",
+        "description": "How the field is used in a prediction. Valid values are: Excluded Expression Included Join Prediction Pushback Related SourceDate",
+        "required": true
+      }
+    },
+    "MLFilter": {
+      "filterName": {
+        "type": "string",
+        "description": "Name of the filter.",
+        "required": true
+      },
+      "lhFilter": {
+        "type": "MLFilter",
+        "description": "Left-hand filter condition."
+      },
+      "lhPredictionField": {
+        "type": "string",
+        "description": "Left-hand prediction field."
+      },
+      "lhType": {
+        "type": "AIValueType (enumeration of type string)",
+        "description": "The value type if a left-hand value is specified. Valid values are: Boolean Comparison Currency Date DateTime Number String Supplier Varchar"
+      },
+      "lhUnit": {
+        "type": "AIFilterUnit (enumeration of type string)",
+        "description": "The unit if a left-hand filter is specified. Valid values are: Milliseconds Seconds Minutes Hours Days Weeks Months Years"
+      },
+      "lhValue": {
+        "type": "string",
+        "description": "The left-hand value."
+      },
+      "operation": {
+        "type": "AIFilterOperation (enumeration of type string)",
+        "description": "Valid values are: And Or Not LessThan LessThanOrEqual GreaterThan GreaterThanOrEqual Equals NotEquals Add Subtract Multiply Divide IsNull IsNotNull StartsWith EndsWith Contains Concat DoesNotContain Between In",
+        "required": true
+      },
+      "rhFilter": {
+        "type": "MLFilter",
+        "description": "Right-hand filter condition."
+      },
+      "rhPredictionField": {
+        "type": "string",
+        "description": "Right-hand prediction field."
+      },
+      "rhType": {
+        "type": "AIValueType (enumeration of type string)",
+        "description": "The value type if a right-hand value is specified. Valid values are: Boolean Comparison Currency Date DateTime Number String Supplier Varchar"
+      },
+      "rhUnit": {
+        "type": "AIFilterUnit (enumeration of type string)",
+        "description": "The unit if a right-hand filter is specified. Valid values are: Milliseconds Seconds Minutes Hours Days Weeks Months Years"
+      },
+      "rhValue": {
+        "type": "string",
+        "description": "The right-hand value."
+      },
+      "sortOrder": {
+        "type": "int",
+        "description": "Specifies the order of operations for evaluating the expressions. For example, if you have two conditions, this field specifies which condition is evaluated first."
+      }
+    }
+  }
+}

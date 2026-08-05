@@ -1,0 +1,160 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DuplicateRule - Metadata API",
+  "description": "Represents a rule that specifies how duplicate records in an object are detected. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".duplicateRule",
+  "directory_location": "duplicateRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "actionOnInsert": {
+      "type": "DupeActionType (enumeration of type string)",
+      "description": "Determines what the duplicate rule does when users or the DuplicateRule API try to insert a record that is a duplicate. Valid values are: Allow For users, if operationsOnInsert is set to alert, the UI displays the value of alertText in a dialog. The dialog prompts users to continue or cancel. If the user chooses to continue, the insertion proceeds. If the user chooses to cancel, the record isn’t inserted.The DuplicateRule API returns an error code and a message. To complete the insertion, the code must set the allowSave field in DuplicateRuleHeader to true and reissue the request. If operationsOnInsertisn’t set to alert, the UI inserts the record without issuing an alert. The API inserts the record and doesn’t return an error code. Block For users, the UI displays an error message and prevents them from inserting the new record. The DuplicateRule API returns an error and doesn’t insert the record.",
+      "required": true
+    },
+    "actionOnUpdate": {
+      "type": "DupeActionType (enumeration of type string)",
+      "description": "Determines what the duplicate rule does when users or the DuplicateRule API try to update a record, and the result is a duplicate. Valid values are: Allow For users, if operationsOnUpdate is set to alert, the UI displays the value of alertText in a dialog. The dialog prompts users to continue or cancel. If the user chooses to continue, the update proceeds. If the user chooses to cancel, the record isn’t updated.The DuplicateRule API returns a message. To complete the update, the code must set the allowSave field in DuplicateRuleHeader to true and reissue the request. If operationsOnUpdateisn’t set to alert, the UI updates the record without issuing an alert. The API updates the record and doesn’t return an error code. Block For users, the UI displays an error message and prevents them from continuing. The DuplicateRule API returns an error.",
+      "required": true
+    },
+    "alertText": {
+      "type": "string",
+      "description": "Text that’s sent when the duplicate rule is triggered. The text is only sent if isActive is true. In the UI, the text displays as a message. The DuplicateRule API returns the message in its response. You can set a value for alertText only when you have actionOnInsert or actionOnUpdate (or both) set to Allow. Otherwise, you receive a validation error when you add or update this component."
+    },
+    "description": {
+      "type": "string",
+      "description": "Text that describes the duplicate rule. The value is customer-supplied, but isn’t visible in the UI.",
+      "required": true
+    },
+    "duplicateRuleFilter": {
+      "type": "DuplicateRuleFilter",
+      "description": "Criteria that define how to find records to consider when looking for duplicates. For example, use duplicateRuleFilter to exclude records from the match when looking for duplicates.",
+      "required": true
+    },
+    "duplicateRuleMatchRules": {
+      "type": "DuplicateRuleMatchRule[]",
+      "description": "One or more MatchingRule components for the DuplicateRule. A MatchingRule controls what constitutes a match between records.",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "If true, the DuplicateRule detects duplicate records. Otherwise, the rule has no effect.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for this DuplicateRule. This value is the internal label for the rule.",
+      "required": true
+    },
+    "operationsOnInsert": {
+      "type": "string[]",
+      "description": "Controls the action to take when actionOnInsert is set to Allow and the duplicate rule is triggered. Either one or both of these values can be set in the array: alert If set, the action specified in actionOnInsert occurs; otherwise, the insert proceeds. report If set, the insert operation is added to the report of duplicates.",
+      "required": true
+    },
+    "operationsOnUpdate": {
+      "type": "string[]",
+      "description": "Controls the action to take when actionOnUpdate is set to Allow and the duplicate rule is triggered. Either one or both of these values can be set in the array: alert If set, the action specified in actionOnUpdate occurs; otherwise, the update proceeds. report If set, the update operation is added to the report of duplicates.",
+      "required": true
+    },
+    "securityOption": {
+      "type": "DupeSecurityOptionType (enumeration of type string)",
+      "description": "Determines how record sharing rules affect duplicate management. Valid values are: EnforceSharingRules Sharing rules affect duplicate management. If a duplicate rule is triggered because an insert or update duplicates an existing record, but the running user doesn’t have sharing access to that record, the insert or update proceeds. The sharing rule doesn’t prevent the user from creating or updating the record because the record is hidden from the user. No message is issued. BypassSharingRules Sharing rules don’t affect duplicate management. If a duplicate rule is triggered because an insert or update duplicates an existing record, sharing rules are ignored, but other access restrictions apply.",
+      "required": true
+    },
+    "sortOrder": {
+      "type": "int",
+      "description": "Determines the order in which duplicate rules are applied.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "DuplicateRuleMatchRule": {
+      "matchRuleSObjectType": {
+        "type": "string",
+        "description": "The name of the target object of the matching rule. For example, if you define a duplicate rule for Contact records, and you want to match with Lead records, the value of matchRuleSObjectType is Lead.",
+        "required": true
+      },
+      "matchingRule": {
+        "type": "string",
+        "description": "Value that corresponds to the value of developerName in the MatchingRule for this duplicate rule.",
+        "required": true
+      },
+      "objectMapping": {
+        "type": "ObjectMapping",
+        "description": "Foreign key to an ObjectMapping that maps fields from the duplicate rule’s object to fields in the target object specified by matchRuleSObjectType.",
+        "required": true
+      }
+    },
+    "DuplicateRuleFilter": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "A string of boolean operators that establishes the filter logic for the filter items specified in duplicateRuleFilterItems.",
+        "required": true
+      },
+      "duplicateRuleFilterItems": {
+        "type": "DuplicateRuleFilterItem[]",
+        "description": "A list of DuplicateRuleFilterItem components.",
+        "required": true
+      }
+    },
+    "DuplicateRuleFilterItem": {
+      "sortOrder": {
+        "type": "int",
+        "description": "The order of this item in the duplicate rule filter.",
+        "required": true
+      },
+      "table": {
+        "type": "string",
+        "description": "The object that has the field specified in the field field of DuplicateRuleFilterItem. See the documentation for FilterItem for the definition of field.",
+        "required": true
+      }
+    },
+    "ObjectMapping": {
+      "inputObject": {
+        "type": "string",
+        "description": "The input object for the duplicate rule. The DuplicateRule is associated with this object. For example, if you define a duplicate rule for Contact records, and you want to match with Lead records, the value of inputObject is Contact.",
+        "required": true
+      },
+      "mappingFields": {
+        "type": "ObjectMappingField[]",
+        "description": "The mapping of source object fields to target object fields for the duplicate rule.",
+        "required": true
+      },
+      "outputObject": {
+        "type": "string",
+        "description": "The output object for the duplicate rule. This value is the same as the value of the matchRuleSObjectType field in DuplicateRuleMatchRule. Any duplicate rules that this object has are ignored when the DuplicateRule API uses the ObjectMapping.",
+        "required": true
+      }
+    },
+    "ObjectMappingField": {
+      "inputField": {
+        "type": "string",
+        "description": "Field in the object specified by the inputObject field in ObjectMapping. This field is mapped to the field in outputField, which is assumed to be a field in the object specified by the outputObject field in ObjectMapping.",
+        "required": true
+      },
+      "outputField": {
+        "type": "string",
+        "description": "Field in the object specified by the outputObject field in ObjectMapping. The field is mapped to the field name in inputField, which is assumed to be a field in the object specified by the inputObject in ObjectMapping.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"DupeActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Allow\"/>\n    <xsd:enumeration value=\"Block\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DupeSecurityOptionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"EnforceSharingRules\"/>\n    <xsd:enumeration value=\"BypassSharingRules\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DuplicateRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOnInsert\" type=\"tns:DupeActionType\"/>\n        <xsd:element name=\"actionOnUpdate\" type=\"tns:DupeActionType\"/>\n        <xsd:element name=\"alertText\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"description\" type=\"xsd:string\" nillable=\"true\"/>\n        <xsd:element name=\"duplicateRuleFilter\" type=\"tns:DuplicateRuleFilter\" nillable=\"true\"/>\n        <xsd:element name=\"duplicateRuleMatchRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DuplicateRuleMatchRule\" nillable=\"true\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"operationsOnInsert\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"operationsOnUpdate\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"securityOption\" type=\"tns:DupeSecurityOptionType\"/>\n        <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DuplicateRuleFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"booleanFilter\" type=\"xsd:string\" nillable=\"true\"/>\n    <xsd:element name=\"duplicateRuleFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DuplicateRuleFilterItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DuplicateRuleFilterItem\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:FilterItem\">\n      <xsd:sequence>\n        <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n        <xsd:element name=\"table\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DuplicateRuleMatchRule\">\n  <xsd:sequence>\n    <xsd:element name=\"matchRuleSObjectType\" type=\"xsd:string\"/>\n    <xsd:element name=\"matchingRule\" type=\"xsd:string\"/>\n    <xsd:element name=\"objectMapping\" type=\"tns:ObjectMapping\" nillable=\"true\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ObjectMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"inputObject\" type=\"xsd:string\"/>\n    <xsd:element name=\"mappingFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ObjectMappingField\"/>\n    <xsd:element name=\"outputObject\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ObjectMappingField\">\n  <xsd:sequence>\n    <xsd:element name=\"inputField\" type=\"xsd:string\"/>\n    <xsd:element name=\"outputField\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DuplicateRule component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DuplicateRule xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <actionOnInsert>Allow</actionOnInsert>\n    <actionOnUpdate>Allow</actionOnUpdate>\n    <alertText>You are creating a duplicate record. Use an existing record instead.</alertText>\n    <description>Detects a contact that duplicates a Lead</description>\n    <duplicateRuleFilter>\n        <booleanFilter xsi:nil=\"true\"/>\n        <duplicateRuleFilterItems>\n            <field>Username</field>\n            <operation>equals</operation>\n            <value>user@example.com</value>\n            <sortOrder>1</sortOrder>\n            <table>User</table>\n        </duplicateRuleFilterItems>\n    </duplicateRuleFilter>\n    <duplicateRuleMatchRules>\n        <matchRuleSObjectType>Lead</matchRuleSObjectType>\n        <matchingRule>ContactToLeadDuplicate_matching_rule</matchingRule>\n        <objectMapping>\n            <inputObject>Contact</inputObject>\n            <mappingFields>\n                <inputField>FirstName</inputField>\n                <outputField>FirstName</outputField>\n            </mappingFields>\n            <mappingFields>\n                <inputField>LastName</inputField>\n                <outputField>LastName</outputField>\n            </mappingFields>\n            <outputObject>Lead</outputObject>\n        </objectMapping>\n    </duplicateRuleMatchRules>\n    <isActive>true</isActive>\n    <masterLabel>ContactToLeadDuplicate</masterLabel>\n    <operationsOnInsert>Alert</operationsOnInsert>\n    <operationsOnInsert>Report</operationsOnInsert>\n    <operationsOnUpdate>Alert</operationsOnUpdate>\n    <operationsOnUpdate>Report</operationsOnUpdate>\n    <securityOption>EnforceSharingRules</securityOption>\n    <sortOrder>1</sortOrder>\n</DuplicateRule>"
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MyDomainSettings - Metadata API",
+  "description": "Represents your org’s My Domain settings. With My Domain, you can include your company name in your URLs, for example, https://yourcompanyname.my.salesforce.com. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "areLegacyRedirectsMaintained": {
+      "type": "boolean",
+      "description": "Salesforce checks this field when this org is upgraded to Summer ’25. If areLegacyRedirectsMaintained is false, Salesforce disables enableLegacyRedirections during the upgrade. If true, no change is made to enableLegacyRedirections during the upgrade. The default is false. This field has no impact after this org is on Summer ’25. Available in API version 63.0 and later."
+    },
+    "areLgcyRdirMaintainedWntr26": {
+      "type": "boolean",
+      "description": "Salesforce checks this field when this org is upgraded to Winter ’26. If areLgcyRdirMaintainedWntr26 is false, Salesforce disables enableLegacyRedirections during the upgrade. If true, no change is made to enableLegacyRedirections during the upgrade. The default is false. This field has no impact after this org is on Winter ’26. Available in API version 64.0 and later."
+    },
+    "canOnlyLoginWithMyDomainUrl": {
+      "type": "boolean",
+      "description": "If true, users must use the org's My Domain login URL to log in. If false (default), users can also log in using the org’s instance Salesforce URL, https://InstanceName.salesforce.com, and through the login URL https://login.salesforce.com. Admins can log in to a sandbox via the Log In action on the Sandboxes Setup page only when canOnlyLoginWithMyDomainUrl is false in the sandbox."
+    },
+    "doesApiLoginRequireOrgDomain": {
+      "type": "boolean",
+      "description": "If true, users must use the org’s My Domain login URL to access the Salesforce API. If false (default), users can also access the Salesforce API using the generic Salesforce page, https://InstanceName.salesforce.com and through the login URL https://login.salesforce.com."
+    },
+    "doesWarnOnForceComRedirect": {
+      "type": "boolean",
+      "description": "Indicates whether users who visit a previous *.force.com site URL for this org see a message with the current URL during redirections (true) or not (false). The default is false. This field is applicable only when Your org has a previous *.force.com URL associated with an Experience Cloud site or Salesforce Site. redirectForceComSitesUrls is true This field is available in API version 59.0 and later."
+    },
+    "doesWarnOnRedirect": {
+      "type": "boolean",
+      "description": "Indicates whether users who visit a previous My Domain URL see a message with the current URL during redirections (true) or not (false). The default is false. This field is applicable only when Your org has a previous My Domain. For example, after an admin deploys a change to the My Domain. The previous My Domain hasn’t been removed via the Routing options on the My Domain Setup page. If the previous My Domain is removed, calls to URLs associated with that My Domain aren’t redirected. redirectPriorMyDomain is true. This field is available in API version 59.0 and later."
+    },
+    "domainPartition": {
+      "type": "OrgDomainShard (enumeration of type string)",
+      "description": "The partition for this org. When none, partitioned domains aren’t enabled. Otherwise, My Domain hostnames include the partition value. For example, the format of a My Domain login hostname for a Developer Edition org with partitioned domains is MyDomainName.develop.my.salesforce.com. This field is read-only in the API. Possible values are: demo—Used in demo orgs. Available in API version 60.0 and later. develop—Used in Developer Edition orgs. Also used in patch orgs where partitioned domains were deployed before Winter ’24. free—Reserved for internal use. none—Indicates that this org doesn’t use partitioned domains. patch—Used in patch orgs. Available in API version 59.0 and later. sandbox—Used in sandboxes with enhanced domains. These orgs are always partitioned. scratch—Used in scratch orgs. sfdctest—Reserved for internal use. trailblaze—Used in Trailblazer Playgrounds. Partitioned domains require enhanced domains. Production orgs always have a value of none, and only the sandbox partition is available in Government Cloud—Defense orgs. Qualifying new orgs are partitioned by default and get the corresponding domainPartition value. You can’t disable this feature in those orgs. Available in API version 55.0 and later."
+    },
+    "edgeRoutingMethod": {
+      "type": "edgeRoutingOption (enumeration of type string)",
+      "description": "If useEdge is true, the routing method for traffic for requests to this org. If useEdge is false, this field has no effect. The default is global. Possible values are: global—Route requests to the Salesforce Edge Network location closest to the origin of the request. This method provides the best performance and security. regional—Route requests to Salesforce locations only in the country where your org is located. This routing method is only available in orgs on a Hyperforce instance in Japan. This routing method can result in increased round-trip time for requests, especially for users located outside of your country. This field is read-only in the API. Update this setting on the My Domain Setup page. Available in API version 65.0 and later."
+    },
+    "enableCrossDomainPreviewCookies": {
+      "type": "boolean",
+      "description": "If isFirstPartyCookieUseRequired is true, indicates whether cross-domain cookies are allowed on the Experience Builder preview domain (true) or not (false). If isFirstPartyCookieUseRequired is false, this field has no effect. Available in API version 62.0 and later."
+    },
+    "enableEdgeDuringRollout": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce Edge Network is enabled in this org during the scheduled rollout. If true, Salesforce notifies admins by email before Salesforce Edge Network is enabled. If false, the Edge enablement is deferred. The default value is true. If useEdge is true, this field has no effect. Available in API version 58.0 and later."
+    },
+    "enableExtendedRedirections": {
+      "type": "boolean",
+      "description": "If Salesforce configured temporary extended redirections for select legacy hostnames for this org, indicates whether calls to those hostnames are redirected (true) or not (false). The default is true. If extended redirections aren’t configured for this org, this field has no effect. Available in API version 62.0 and later."
+    },
+    "enableLegacyRedirections": {
+      "type": "boolean",
+      "description": "If redirectPriorMyDomain is true, indicates whether legacy hostnames for this org are redirected (true) or not (false). If any of these conditions are true, this field has no effect. No legacy (non-enhanced) hostnames exist for the org redirectPriorMyDomain is false Salesforce stopped legacy redirections for this org For more information about the end of legacy hostname redirections, see Prepare for the End of Redirections for Non-Enhanced Domains in Salesforce Help. Available in API version 62.0 and later."
+    },
+    "enableNativeBrowserForAuthOnAndroid": {
+      "type": "boolean",
+      "description": "If true, use the native browser for authentication of Android mobile apps. Default is false."
+    },
+    "enableNativeBrowserForAuthOnIos": {
+      "type": "boolean",
+      "description": "If true, use the native browser for authentication of iOS mobile apps. Default is false."
+    },
+    "instancedUrlRedirectHandling": {
+      "type": "OrgDomainRedirectOption (enumeration of type string)",
+      "description": "Indicates how user visits to this org’s instanced URL are handled. Possible values are: Redirect—Redirect users to the equivalent page on this org’s My Domain hostnames. WarnOnRedirect—Display a brief warning message to users as they are redirected to the equivalent page on this org’s My Domain hostnames. NoRedirect—Require users to use your My Domain hostnames when they view this org’s pages. Visits to this page’s instanced URL aren’t redirected. For example, when a user visits https://InstanceName.lightning.force.com/lightning/page/home, this setting determines whether they’re redirected to https://MyDomainName.lightning.force.com/lightning/page/home. The value of this field has no effect on user’s ability to log in via the org’s instanced URL. To control that behavior, use canOnlyLoginWithMyDomainUrl. Available in API version 59.0 and later."
+    },
+    "isFirstPartyCookieUseRequired": {
+      "type": "boolean",
+      "description": "Indicates whether the SameSite=None attribute is removed from Salesforce cookies (true) or not (false). In Salesforce orgs created in Summer ’24 and later, the default is true. In all other orgs, the default is false. Service Cloud Voice with Amazon Connect and Service Cloud Voice with Partner Telephony from Amazon Connect aren’t compatible with this setting. If you use those features, set isFirstPartyCookieUseRequired to false. Learn more. Available in API version 61.0 and later."
+    },
+    "isIcorInstApiTrafficBlocked": {
+      "type": "boolean",
+      "description": "This field is reserved for future use. The default is false. Available in API version 64.0 and later."
+    },
+    "logRedirections": {
+      "type": "boolean",
+      "description": "If true, Salesforce produces a log for the Hostname Redirects event type when daily event logs are generated. The default is false. The Hostname Redirects event is free for all customers with a 24-hour data retention period. When logRedirections is true, this event is available in the API but not in the Event Monitoring Analytics app. You can also download the latest Hostname Redirects event log file through a button on the My Domain page. Available in API version 56.0 and later."
+    },
+    "myDomainName": {
+      "type": "string",
+      "description": "The subdomain name used in My Domain URLs for this org, such as MyDomainName.my.salesforce.com and MyDomainName.lightning.force.com. This field is read-only in the API. You can change your org’s My Domain name from the My Domain Setup page. Available in API version 51.0 and later."
+    },
+    "myDomainSuffix": {
+      "type": "OrgDomainProdSuffix (enumeration of type string)",
+      "description": "The domain suffix for this org’s My Domain login URL. This field is read-only in the API. Possible values are: CloudforceLimited—cloudforce.com DatabaseLimited—database.com MySalesforce—my.salesforce.com with enhanced domains MySalesforceLimited—my.salesforce.com without enhanced domains OrgLevelCertificate—my-salesforce.com OrgLevelCertificateLimited—legacy version of my-salesforce.com that’s noncompliant with browser settings that block third-party cookies Restricted1—Reserved for future use. Restricted2—Reserved for future use. Available in API version 51.0 and later."
+    },
+    "onboardCustomerSpecificSuffix": {
+      "type": "boolean",
+      "description": "This field is reserved for future use. The default is false. Available in API version 63.0 and later."
+    },
+    "redirectForceComSitesUrls": {
+      "type": "boolean",
+      "description": "If true, calls to URLs ending in.force.com that serve your Experience Cloud sites and Salesforce Sites are redirected to the corresponding current My Domain site URL. If false, these calls aren’t redirected and the user gets a file not found (404) error. The default is true. This field is only applicable when Enhanced domains are enabled. Your org has a previous *.force.com URL associated with an Experience Cloud site or Salesforce Site. Available in API version 55.0 and later."
+    },
+    "redirectPriorMyDomain": {
+      "type": "boolean",
+      "description": "If true, calls to URLs associated with your previous My Domain name are redirected to the corresponding URL associated with your current My Domain. If false, these calls aren’t redirected. When you deploy a new My Domain, this setting resets to its default, true. This field is only applicable when Your org has a previous My Domain. For example, after an admin deploys a change to the My Domain. The previous My Domain hasn’t been removed via the Routing options on the My Domain Setup page. If the previous My Domain is removed, calls to URLs associated with that My Domain aren’t redirected. Available in API version 54.0 and later."
+    },
+    "use3rdPartyCookieBlockingCompatibleHostnames": {
+      "type": "boolean",
+      "description": "Indicates whether the org’s instance name is included in Visualforce URLs when third-party cookies are blocked (true) or not (false). This field has a default value of true. Setting this field true prevents potential issues loading Visualforce pages with stabilized URLs. Only applicable when DatabaseLimiteduseStabilizedMyDomainHostnames is set to true and myDomainSuffix is set to Available in API version 51.0 and later."
+    },
+    "useEdge": {
+      "type": "boolean",
+      "description": "Indicates whether this org’s qualifying My Domain URLs are routed through Salesforce Edge Network (true) or not (false). This field has a default value of true. This field is read-only in the API. If your org can use Salesforce Edge Network, you can enable this setting from the My Domain Setup page. After this field is set to true from Setup, it can't be set to false. Available in API version 51.0 and later."
+    },
+    "useEnhancedDomainsInSandbox": {
+      "type": "boolean",
+      "description": "This field corresponds to the previous My Domain setting, Use enhanced domains by default in new and refreshed sandboxes, that was removed in Summer ’23. Previously, in API versions 55.0 to 57.0, if enhanced domains weren’t enabled, this field indicated whether new and refreshed sandboxes created from this org used enhanced domains by default (true) or not (false), and the default value was true. As of API version 58.0, this field’s value is always true, regardless of the value that you set. Changing its value has no effect on Salesforce, even if it reads false."
+    },
+    "useStabilizedMyDomainHostnames": {
+      "type": "boolean",
+      "description": "Indicates whether the instance name is hidden in My Domain URLs for Visualforce, Experience Builder, Site.com Studio, and content files (true) or not (false). This field has a default value of true. For example, MyDomainName--PackageName.na44.visual.force.com becomes MyDomainName--PackageName.visualforce.com when this field is set to true. Only applicable when DatabaseLimitedmyDomainSuffix is set to"
+    },
+    "useStabilizedSandboxMyDomainHostnames": {
+      "type": "boolean",
+      "description": "This field corresponds to the Stabilize the Hostname for My Domain URLs in Sandboxes release update, which was enforced in Summer ’20. When true, the instance name is hidden in My Domain URLs for sandboxes orgs. For example, MyDomainName--test.cs5.my.salesforce.com became MyDomainName--test.my.salesforce.com. As of API version 49.0, this field's value is always true, regardless of the value that you set. Changing its value has no effect on Salesforce, even if it reads false. This change applies retroactively back to API version 47.0, when this field was first introduced. Previously, in API version 47.0 to 49.0, this field indicated whether the instance name was hidden in My Domain URLs for sandboxes orgs (true) or not (false), and the field's default value was false. Now, in all API versions, this field's value is always true, even if it reads false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EdgeRoutingOption\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"global\"/>\n    <xsd:enumeration value=\"regional\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MyDomainSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"areLegacyRedirectsMaintained\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"areLgcyRdirMaintainedWntr26\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canOnlyLoginWithMyDomainUrl\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesApiLoginRequireOrgDomain\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesWarnOnForceComRedirect\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesWarnOnRedirect\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"domainPartition\" minOccurs=\"0\" type=\"tns:OrgDomainShard\"/>\n        <xsd:element name=\"edgeRoutingMethod\" minOccurs=\"0\" type=\"tns:EdgeRoutingOption\"/>\n        <xsd:element name=\"enableCrossDomainPreviewCookies\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEdgeDuringRollout\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableExtendedRedirections\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLegacyRedirections\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNativeBrowserForAuthOnAndroid\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNativeBrowserForAuthOnIos\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableShareBrowserSessionAndroidForAuth\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableShareBrowserSessionIOSForAuth\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"instancedUrlRedirectHandling\" minOccurs=\"0\" type=\"tns:OrgDomainRedirectOption\"/>\n        <xsd:element name=\"isFirstPartyCookieUseRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isIcorInstApiTrafficBlocked\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isInstancedApiTrafficBlocked\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"logRedirections\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"myDomainName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"myDomainSuffix\" minOccurs=\"0\" type=\"tns:OrgDomainProdSuffix\"/>\n        <xsd:element name=\"onboardCustomerSpecificSuffix\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"redirectForceComSiteUrls\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"redirectPriorMyDomain\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"use3rdPartyCookieBlockingCompatibleHostnames\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useEdge\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useEnhancedDomainsInSandbox\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useStabilizedMyDomainHostnames\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useStabilizedSandboxMyDomainHostnames\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"OrgDomainProdSuffix\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"MySalesforceLimited\"/>\n    <xsd:enumeration value=\"DatabaseLimited\"/>\n    <xsd:enumeration value=\"CloudforceLimited\"/>\n    <xsd:enumeration value=\"OrgLevelCertificateLimited\"/>\n    <xsd:enumeration value=\"Restricted1\"/>\n    <xsd:enumeration value=\"MySalesforce\"/>\n    <xsd:enumeration value=\"Restricted2\"/>\n    <xsd:enumeration value=\"OrgLevelCertificate\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"OrgDomainRedirectOption\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Redirect\"/>\n    <xsd:enumeration value=\"WarnOnRedirect\"/>\n    <xsd:enumeration value=\"NoRedirect\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"OrgDomainShard\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"none\"/>\n    <xsd:enumeration value=\"sandbox\"/>\n    <xsd:enumeration value=\"develop\"/>\n    <xsd:enumeration value=\"patch\"/>\n    <xsd:enumeration value=\"trailblaze\"/>\n    <xsd:enumeration value=\"scratch\"/>\n    <xsd:enumeration value=\"demo\"/>\n    <xsd:enumeration value=\"free\"/>\n    <xsd:enumeration value=\"sfdctest\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MyDomainSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MyDomainSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <areLegacyRedirectsMaintained>false</areLegacyRedirectsMaintained>\n    <areLgcyRdirMaintainedWntr26>false</areLgcyRdirMaintainedWntr26>\n    <canOnlyLoginWithMyDomainUrl>false</canOnlyLoginWithMyDomainUrl>\n    <doesApiLoginRequireOrgDomain>false</doesApiLoginRequireOrgDomain>\n    <doesWarnOnForceComRedirect>false</doesWarnOnForceComRedirect>\n    <doesWarnOnRedirect>true</doesWarnOnRedirect>\n    <domainPartition>none</domainPartition>\n    <edgeRoutingMethod>global</edgeRoutingMethod>\n    <enableCrossDomainPreviewCookies>true</enableCrossDomainPreviewCookies>\n    <enableEdgeDuringRollout>true</enableEdgeDuringRollout>\n    <enableExtendedRedirections>false</enableExtendedRedirections>\n    <enableLegacyRedirections>false</enableLegacyRedirections>\n    <enableNativeBrowserForAuthOnAndroid>false</enableNativeBrowserForAuthOnAndroid>\n    <enableNativeBrowserForAuthOnIos>false</enableNativeBrowserForAuthOnIos>\n    <instancedUrlRedirectHandling>false</instancedUrlRedirectHandling>\n    <isFirstPartyCookieUseRequired>true</isFirstPartyCookieUseRequired>\n    <isIcorInstApiTrafficBlocked>true</isIcorInstApiTrafficBlocked>\n    <logRedirections>true</logRedirections>\n    <myDomainName>mycompany</myDomainName>\n    <myDomainSuffix>MySalesforce</myDomainSuffix>\n    <onboardCustomerSpecificSuffix>false</onboardCustomerSpecificSuffix>\n    <redirectForceComSitesUrls>true</redirectForceComSitesUrls>\n    <redirectPriorMyDomain>true</redirectPriorMyDomain>\n    <use3rdPartyCookieBlockingCompatibleHostnames>true</use3rdPartyCookieBlockingCompatibleHostnames>\n    <useEdge>true</useEdge>\n    <useEnhancedDomainsInSandbox>true</useEnhancedDomainsInSandbox>\n    <useStabilizedMyDomainHostnames>true</useStabilizedMyDomainHostnames>\n    <useStabilizedSandboxMyDomainHostnames>true</useStabilizedSandboxMyDomainHostnames>\n</MyDomainSettings>"
+    }
+  ]
+}

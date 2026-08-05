@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SharingSet - Metadata API",
+  "description": "Represents a sharing set. A sharing set defines an access mapping that grants portal or community users access to objects that are associated with their accounts or contacts.",
+  "file_information": ".sharingSet",
+  "directory_location": "sharingSets",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "accessMappings": {
+      "type": "AccessMapping[]",
+      "description": "A list of access mappings on a sharing set."
+    },
+    "description": {
+      "type": "string",
+      "description": "The sharing set description. Limit: 255 characters."
+    },
+    "name": {
+      "type": "string",
+      "description": "The unique identifier for API access. Corresponds to Sharing Set Name on the user interface.",
+      "required": true
+    },
+    "profiles": {
+      "type": "string[]",
+      "description": "The profiles of users that are granted access to the target objects. Profiles must be associated with a license that can use sharing sets. See Special Access Rules for more information."
+    }
+  },
+  "sub_types": {
+    "AccessMapping": {
+      "accessLevel": {
+        "type": "string",
+        "description": "The target object access level granted to the portal user. Valid values are: Read Edit",
+        "required": true
+      },
+      "objectField": {
+        "type": "string",
+        "description": "A lookup to the target object, which supports standard or custom fields, or an ID. For accounts or cases associated with entitlements, use Entitlement.Account or Entitlement.Case.",
+        "required": true
+      },
+      "object": {
+        "type": "string",
+        "description": "The target object to which the portal user is gaining access, and refers to one of the following: Account Campaign Contact Case Custom Objects (for example, ObjA__c) Opportunity Order ServiceContract User WorkOrder Portal users gain access to all order entitlements and order items under an account to which they have access.",
+        "required": true
+      },
+      "userField": {
+        "type": "string",
+        "description": "The user’s lookup to an account, contact, or a standard or custom field derived from an account or contact. Either the user or the user’s manager can be used in the lookup. Valid values are: Account Account.Field Contact Contact.Field Contact.RelatedAccount Manager.Account Manager.Contact Field refers to a standard or custom field based on an account or contact.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccessMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"accessLevel\" type=\"xsd:string\"/>\n    <xsd:element name=\"object\" type=\"xsd:string\"/>\n    <xsd:element name=\"objectField\" type=\"xsd:string\"/>\n    <xsd:element name=\"userField\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SharingSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AccessMapping\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"profiles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SharingSet component that grants users access to all contacts whose ReportsTo fields match the users’ contacts.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SharingSet xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <accessMappings>\n    <accessLevel>Read</accessLevel>\n    <objectField>ReportsTo</objectField>\n    <object>Contact</object>\n    <userField>Contact</userField>\n  </accessMappings>\n  <description>User Access Mapping</description>\n  <name>User</name>\n  <profiles>customer community user</profiles>\n</SharingSet>"
+    },
+    {
+      "description": "The following is an example of a SharingSet component that grants users access to all cases that are related to an entitlement, which is associated with the user’s account.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SharingSet xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <name>Case</name>\n   <accessMappings>\n    <accessLevel>Edit</accessLevel>\n    <objectField>Entitlement.Account</objectField>\n    <object>Case</object>\n    <userField>Account</userField>\n  </accessMappings>\n</SharingSet>"
+    },
+    {
+      "description": "The following is an example of a SharingSet component with a list of access mappings.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SharingSet xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <description>This is a basic sharing set with several access mappings.</description>\n  <name>Basic</name>\n  <profiles>customer community user</profiles>\n  <accessMappings>\n    <accessLevel>Read</accessLevel>\n    <objectField>Id</objectField>\n    <object>Account</object>\n    <userField>Account</userField>\n  </accessMappings>\n  <accessMappings>\n    <accessLevel>Edit</accessLevel>\n    <objectField>Account</objectField>\n    <object>Contact</object>\n    <userField>Account</userField>\n  </accessMappings>\n  <accessMappings>\n    <accessLevel>Edit</accessLevel>\n    <objectField>Contact</objectField>\n    <object>Case</object>\n    <userField>Contact</userField>\n  </accessMappings>\n  <accessMappings>\n    <accessLevel>Read</accessLevel>\n    <objectField>AccountLookup__c</objectField>\n    <object>HVPUAccessible__c</object>\n    <userField>Account</userField>\n  </accessMappings>\n</SharingSet>"
+    }
+  ]
+}

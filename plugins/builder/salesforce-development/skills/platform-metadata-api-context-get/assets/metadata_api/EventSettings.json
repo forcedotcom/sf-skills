@@ -1,0 +1,76 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EventSettings - Metadata API",
+  "description": "Represents an org's platform event settings for Event Monitoring.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "bypassMeteringBlock": {
+      "type": "boolean",
+      "description": "Determines the behavior of metering service protection for Transaction Security policies. When true, metering occurs but doesn't block the user operation that triggered the policy. When false and a policy can't be handled within three seconds, metering occurs and the user's action is blocked. Default value is false."
+    },
+    "enableDeleteMonitoringData": {
+      "type": "boolean",
+      "description": "Allows (true) or disallows (false) users to delete event log files and LoginEvent data. Users require the Delete Event Monitoring Records user permission, which is available when this setting is enabled. Default value is false."
+    },
+    "enableDynamicStreamingChannel": {
+      "type": "boolean",
+      "description": "Enables (true) or disables (false) the dynamic creation of a streaming channel when you subscribe to generic streaming. Default value is false."
+    },
+    "enableEventLogGeneration": {
+      "type": "boolean",
+      "description": "Enables (true) or disables (false) the generation of event monitoring log files. Default value is false."
+    },
+    "enableEventLogWaveIntegration": {
+      "type": "boolean",
+      "description": "Enables (true) or disables (false) the integration of event monitoring log files and Analytics apps. Analytics apps help you visualize your user’s activity. Default value is false."
+    },
+    "enableLightningLoggerEvents": {
+      "type": "boolean",
+      "description": "Enables (true) or disables (false) the generation of Lightning Logger events. Lightning Logger events track information about custom Lightning web components. Default value is false. Requires Salesforce Shield or Salesforce Event Monitoring add-on subscriptions."
+    },
+    "enableLoginForensics": {
+      "type": "boolean",
+      "description": "Enables (true) or disables (false) the Login Forensics feature. Login Forensics helps you track and audit your org's user login activity. Default value is false. Available in API versions 47.0–49.0. Tip: In versions 50.0 and later, enable LoginEvent on the Event Manager Setup page."
+    },
+    "enableStreamingApi": {
+      "type": "boolean",
+      "description": "Enables (true) or disables (false) Streaming API in the org. Default value is true."
+    },
+    "enableTerminateOldestSession": {
+      "type": "boolean",
+      "description": "Determines the behavior of legacy transaction security policies that trigger an end-session action during an API-based login (a login that doesn’t come through the UI.) An end-session action occurs when a user exceeds the maximum number of allowed Salesforce sessions. When true, and a user triggers an end-session action, Salesforce terminates the user’s oldest session until the user is in compliance. When set to false, Salesforce blocks the most recent user’s attempt to log in and doesn’t allow a new user session. Default value is false. Available in API versions 47.0–49.0. Note: As of Summer '20, Legacy Transaction Security is a retired feature in all Salesforce orgs."
+    },
+    "enableTransactionSecurityPolicies": {
+      "type": "boolean",
+      "description": "Enables (true) or disables (false) the ability to create and use transaction security policies in the Salesforce UI. Default value is false."
+    },
+    "enableApexLimitEvents": {
+      "type": "boolean",
+      "description": "The Apex Limit Events (Pilot) feature is discontinued. Don’t use this field."
+    },
+    "eventLogRetentionDuration": {
+      "type": "integer",
+      "description": "Specifies the number of days (between 30 and 365) that your event log file data is retained for. If this value is not set, your event log file data is retained for your org's default retention period."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EventSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"bypassMeteringBlock\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableApexLimitEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDeleteMonitoringData\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDynamicStreamingChannel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEventLogGeneration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEventLogWaveIntegration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLightningLoggerEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLoginForensics\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableStreamingApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTransactionSecurityPolicies\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"eventLogRetentionDuration\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EventSettings.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EventSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableDeleteMonitoringData>true</enableDeleteMonitoringData>\n    <enableDynamicStreamingChannel>false</enableDynamicStreamingChannel>\n    <enableEventLogWaveIntegration>true</enableEventLogWaveIntegration>\n    <enableStreamingApi>true</enableStreamingApi>\n    <enableTransactionSecurityPolicies>true</enableTransactionSecurityPolicies>\n</EventSettings>"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DgtAssetMgmtProvider - Metadata API",
+  "description": "Represents external content providers, such as digital asset management (DAM) systems, that integrate with Salesforce CMS. When combined with the DgtAssetMgmtPrvdLghtCpnt type, this metadata type enables organizations to configure external content systems as content providers within the Salesforce platform.",
+  "file_information": ".dgtAssetMgmtProvider",
+  "directory_location": "dgtAssetMgmtProviders",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "icon": {
+      "type": "string",
+      "description": "Stores a reference to the icon resource (typically a Lightning icon or custom image) that visually represents the external content provider in the user interface."
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "description": "Specifies the display label for the external content provider that users see when they select or view the provider."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Specifies the primary identifier for the provider in metadata contexts and localization."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DgtAssetMgmtProvider\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"icon\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DgtAssetMgmtProvider component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DgtAssetMgmtProvider xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <icon>My icon</icon>\n    <label>My text</label>\n    <masterLabel>My text</masterLabel>\n</DgtAssetMgmtProvider>"
+    }
+  ]
+}

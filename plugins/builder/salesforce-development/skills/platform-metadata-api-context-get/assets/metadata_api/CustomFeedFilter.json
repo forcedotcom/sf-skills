@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomFeedFilter - Metadata API",
+  "description": "Represents a custom feed filter that limits the feed view to feeds from the Cases object. The custom feed filter shows only feed items that satisfy the criteria specified in the CustomFeedFilter definition. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".feedFilter",
+  "directory_location": "feedFilters",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "criteria": {
+      "type": "FeedFilterCriterion []",
+      "description": "The criterion that defines which feed items are shown when the filter is applied. The feed filter displays all feed items that satisfy the criteria."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the custom feed filter. For example, specify what feed items that filter shows."
+    },
+    "label": {
+      "type": "string",
+      "description": "The API label of the custom feed filter.",
+      "required": true
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value. It currently has no impact."
+    }
+  },
+  "sub_types": {
+    "FeedFilterCriterion": {
+      "feedItemType": {
+        "type": "FeedItemType (enumeration of type string)",
+        "description": "The type of feed items that the filter shows. The feed item type can be one of the following values: AttachArticleEvent CallLogPost CanvasPost CaseCommentPost ChangeStatusPost ChatTranscriptPost ContentPost CreateRecordEvent EmailMessageEvent LinkPost MilestoneEvent QuestionPost PollPost ReplyPost SocialPost TextPost",
+        "required": true
+      },
+      "feedItemVisibility": {
+        "type": "FeedItemVisibility (enumeration of type string)",
+        "description": "The visibility of feed items that the filter shows. For example, you can show only poll posts that are visible internally. Valid values are: AllUsers InternalUsers"
+      },
+      "relatedSObjectType": {
+        "type": "string",
+        "description": "The API name of the object that the feed item refers to. This field is typically used with the CreateRecordEvent feed item type. For example, a feed filter can show CreateRecordEvent feed items for the Cases object."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomFeedFilter\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"criteria\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FeedFilterCriterion\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"FeedFilterCriterion\">\n  <xsd:sequence>\n    <xsd:element name=\"feedItemType\" type=\"tns:FeedItemType\"/>\n    <xsd:element name=\"feedItemVisibility\" minOccurs=\"0\" type=\"tns:FeedItemVisibility\"/>\n    <xsd:element name=\"relatedSObjectType\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FeedItemType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TrackedChange\"/>\n    <xsd:enumeration value=\"UserStatus\"/>\n    <xsd:enumeration value=\"TextPost\"/>\n    <xsd:enumeration value=\"AdvancedTextPost\"/>\n    <xsd:enumeration value=\"LinkPost\"/>\n    <xsd:enumeration value=\"ContentPost\"/>\n    <xsd:enumeration value=\"PollPost\"/>\n    <xsd:enumeration value=\"RypplePost\"/>\n    <xsd:enumeration value=\"ProfileSkillPost\"/>\n    <xsd:enumeration value=\"DashboardComponentSnapshot\"/>\n    <xsd:enumeration value=\"ApprovalPost\"/>\n    <xsd:enumeration value=\"CaseCommentPost\"/>\n    <xsd:enumeration value=\"ReplyPost\"/>\n    <xsd:enumeration value=\"EmailMessageEvent\"/>\n    <xsd:enumeration value=\"CallLogPost\"/>\n    <xsd:enumeration value=\"ChangeStatusPost\"/>\n    <xsd:enumeration value=\"AttachArticleEvent\"/>\n    <xsd:enumeration value=\"MilestoneEvent\"/>\n    <xsd:enumeration value=\"ActivityEvent\"/>\n    <xsd:enumeration value=\"ChatTranscriptPost\"/>\n    <xsd:enumeration value=\"CollaborationGroupCreated\"/>\n    <xsd:enumeration value=\"CollaborationGroupUnarchived\"/>\n    <xsd:enumeration value=\"SocialPost\"/>\n    <xsd:enumeration value=\"QuestionPost\"/>\n    <xsd:enumeration value=\"FacebookPost\"/>\n    <xsd:enumeration value=\"BasicTemplateFeedItem\"/>\n    <xsd:enumeration value=\"CreateRecordEvent\"/>\n    <xsd:enumeration value=\"CanvasPost\"/>\n    <xsd:enumeration value=\"AnnouncementPost\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FeedItemVisibility\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AllUsers\"/>\n    <xsd:enumeration value=\"InternalUsers\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CustomFeedFilter component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomFeedFilter xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <criteria>\n        <feedItemType>CreateRecordEvent</feedItemType>\n        <relatedSObjectType>MyCO01__c</relatedSObjectType>\n    </criteria>\n    <criteria>\n        <feedItemType>CreateRecordEvent</feedItemType>\n        <relatedSObjectType>Case</relatedSObjectType>\n    </criteria>\n    <criteria>\n        <feedItemType>PollPost</feedItemType>\n        <feedItemVisibility>InternalUsers</feedItemVisibility>\n    </criteria>\n    <label>Sample Custom Feed Filter</label>\n</CustomFeedFilter>"
+    }
+  ]
+}

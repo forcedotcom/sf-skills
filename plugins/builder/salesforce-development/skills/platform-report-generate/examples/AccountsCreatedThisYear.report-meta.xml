@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Accounts Created This Year</name>
+    <reportType>AccountList</reportType>
+    <format>Summary</format>
+    <scope>organization</scope>
+    <description>Shows accounts created in the current fiscal year, grouped by industry. Demonstrates a filtered report with timeFrameFilter, row-level filter, and date-based scoping on a non-Opportunity report type.</description>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <columns>
+        <field>ACCOUNT_NAME</field>
+    </columns>
+    <columns>
+        <field>INDUSTRY</field>
+    </columns>
+    <columns>
+        <field>TYPE</field>
+    </columns>
+    <columns>
+        <field>ANNUAL_REVENUE</field>
+        <aggregateTypes>Sum</aggregateTypes>
+        <aggregateTypes>Average</aggregateTypes>
+    </columns>
+    <columns>
+        <field>CREATED_DATE</field>
+    </columns>
+    <columns>
+        <field>OWNER_FULL_NAME</field>
+    </columns>
+    <groupingsDown>
+        <field>INDUSTRY</field>
+        <dateGranularity>None</dateGranularity>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <filter>
+        <criteriaItems>
+            <column>TYPE</column>
+            <isUnlocked>true</isUnlocked>
+            <operator>notEqual</operator>
+            <value>Analyst,Press</value>
+        </criteriaItems>
+    </filter>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CURY</interval>
+    </timeFrameFilter>
+</Report>

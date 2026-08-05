@@ -1,0 +1,119 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OauthTokenExchangeHandler - Metadata API",
+  "description": "Represents a token exchange handler. The token exchange handler also consists of an Apex class. During the OAuth 2.0 token exchange flow, the token exchange handler is used to validate tokens from an external identity provider and to map users to Salesforce.",
+  "file_information": ".oauthtokenexchangehandler",
+  "directory_location": "oauthtokenexchangehandlers",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "required": true,
+      "description": "A description for your token exchange handler."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The API name for the handler."
+    },
+    "enablements": {
+      "type": "OauthTokenExchHandlerApp[]",
+      "description": "The enablement settings for the token exchange handler, including the execution user who runs the Apex class, the connected apps or external client apps for which it’s enabled, and whether or not it’s the default handler."
+    },
+    "isAccessTokenSupported": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the handler supports OAuth 2.0 access tokens from the identity provider, including opaque access tokens and JSON Web Token (JWT)-based access tokens."
+    },
+    "isContactCreationAllowed": {
+      "type": "boolean",
+      "description": "For internal use only."
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the handler is enabled. To complete enablement, add an enablements field that specifies the enablement settings."
+    },
+    "isIdTokenSupported": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the handler supports OpenID Connect ID tokens from the identity provider."
+    },
+    "isJwtSupported": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the handler supports tokens from the identity provider that are in JWT format, such as JWT-based access tokens."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Indicates whether the handler can be linked to or referenced by components created in a subscriber org. See Protected Components in Managed Packages."
+    },
+    "isRefreshTokenSupported": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the handler supports OAuth 2.0 refresh tokens from the identity provider."
+    },
+    "isSaml2Supported": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the handler supports SAML 2.0 assertions from the identity provider."
+    },
+    "isUserCreationAllowed": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the handler can set up new users. During the token exchange flow, the Apex handler maps users from the identity provider to Salesforce. If the isUserCreationAllowed field is true, the canCreateUser boolean in the getUserForTokenSubject method is true, and the user doesn’t exist in Salesforce, the handler sets up a new User object, which Salesforce automatically inserts to finish creating the user."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label of the token exchange handler record."
+    },
+    "tokenHandlerApex": {
+      "type": "string",
+      "required": true,
+      "description": "The Apex class associated with the token exchange handler. The class contains methods to validate the token and map users to Salesforce. It must extend the Oauth2TokenExchangeHandler Apex class."
+    }
+  },
+  "sub_types": {
+    "OauthTokenExchHandlerApp": {
+      "apexExecutionUser": {
+        "type": "string",
+        "required": true,
+        "description": "A user who runs the Apex token exchange handler. We recommend that you use an integration user."
+      },
+      "connectedApp": {
+        "type": "string",
+        "description": "The API name of the connected app that’s being used to integrate with Salesforce."
+      },
+      "externalClientApp": {
+        "type": "string",
+        "description": "The API name of the external client app that’s being used to integrate with Salesforce."
+      },
+      "isDefault": {
+        "type": "boolean",
+        "required": true,
+        "description": "Indicates whether the token exchange handler is the default handler for this app. During the token exchange flow, in the token request, you can optionally include a token_handler parameter with the name of a specific handler’s Apex class. If you don’t include this parameter, Salesforce defaults to the default handler."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OauthTokenExchHandlerApp\">\n  <xsd:sequence>\n    <xsd:element name=\"apexExecutionUser\" type=\"xsd:string\"/>\n    <xsd:element name=\"connectedApp\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"externalClientApp\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isDefault\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OauthTokenExchangeHandler\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"enablements\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OauthTokenExchHandlerApp\"/>\n        <xsd:element name=\"isAccessTokenSupported\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isContactCreationAllowed\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isIdTokenSupported\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isJwtSupported\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isRefreshTokenSupported\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSaml2Supported\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isUserCreationAllowed\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"tokenHandlerApex\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an OauthTokenExchangeHandler component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OauthTokenExchangeHandler xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <developerName>MyTokenExchangeHandler</developerName>\n    <description>My token exchange handler</description>\n    <isAccessTokenSupported>true</isAccessTokenSupported>\n    <isEnabled>true</isEnabled>\n    <isIdTokenSupported>false</isIdTokenSupported>\n    <isJwtSupported>true</isJwtSupported>\n    <isProtected>false</isProtected>\n    <isRefreshTokenSupported>false</isRefreshTokenSupported>\n    <isSaml2Supported>false</isSaml2Supported>\n    <isUserCreationAllowed>true</isUserCreationAllowed>\n    <masterLabel>MyTokenExchangeHandler</masterLabel>\n    <tokenHandlerApex>MyOauthTokenExchangeHandler</tokenHandlerApex>\n    <enablements>\n        <apexExecutionUser>integrationuser@mycompany.com</apexExecutionUser>\n        <connectedApp>TokenExchangeApp1</conectedApp>\n        <isDefault>true</isDefault>\n    </enablements>\n</OauthTokenExchangeHandler>"
+    }
+  ]
+}

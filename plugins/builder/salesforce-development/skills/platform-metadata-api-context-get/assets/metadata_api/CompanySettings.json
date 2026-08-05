@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CompanySettings - Metadata API",
+  "description": "Represents global settings that affect multiple features in your organization. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCustomFiscalYear": {
+      "type": "boolean",
+      "description": "If a custom fiscal period is set up, this field is used to determine whether the custom fiscal period is used for forecasts. If true, the custom fiscal period is used. If false (default), standard periods are used. Available in API version 47.0 and later."
+    },
+    "fiscalYear": {
+      "type": "FiscalYearSetting",
+      "description": "The organization’s fiscal year setting based on year and start month. Not available if Custom Fiscal Year or Forecasts (Classic) is enabled. When changing fiscal year settings, quotas and adjustments can be purged. For example changing your start month results in purging this data."
+    }
+  },
+  "sub_types": {
+    "FiscalYearSetting": {
+      "fiscalYearNameBasedOn": {
+        "type": "string",
+        "description": "This field is used to determine the fiscal year name. Valid values are endingMonth or startingMonth. For example, if your fiscal year starts in April 2012 and ends in March 2013, and this value is: endingMonth, then 2013 is used for the fiscal year name. startingMonth, then 2012 is used for the fiscal year name."
+      },
+      "startMonth": {
+        "type": "string",
+        "description": "The month on which the fiscal year is based."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CompanySettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCustomFiscalYear\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"fiscalYear\" minOccurs=\"0\" type=\"tns:FiscalYearSettings\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"FiscalYearSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"fiscalYearNameBasedOn\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"startMonth\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample XML definition of a fiscal year setting is shown below. Note that this example is supported in API version 27.0 and later.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CompanySettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fiscalYear>\n        <fiscalYearNameBasedOn>endingMonth</fiscalYearNameBasedOn>\n        <startMonth>January</startMonth>\n    </fiscalYear>\n</CompanySettings>"
+    }
+  ]
+}

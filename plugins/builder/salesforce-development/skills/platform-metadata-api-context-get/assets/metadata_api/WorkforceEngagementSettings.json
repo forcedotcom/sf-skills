@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WorkforceEngagementSettings - Metadata API",
+  "description": "Represents settings for Workforce Engagement Management.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableMachineLearningForecasting": {
+      "type": "boolean",
+      "description": "Indicates whether machine learning-based forecasting is used (true) or not used (false)."
+    },
+    "enableWorkforceEngagement": {
+      "type": "boolean",
+      "description": "Indicates whether Workforce Engagement is enabled (true) or not enabled (false)."
+    },
+    "enableWorkforceEngagementConfiguration": {
+      "type": "boolean",
+      "description": "Indicates whether the Workforce Engagement Configuration App is installed or enabled (true) or not (false). If true, it grants access to the Lightning App as well as the app's Job Profile Mapping tab. It also defaults the standard and custom profile tab settings to On. If false, it removes access to the app and tab but doesn’t delete the app metadata. This field is available in API version 53.0 and later."
+    },
+    "enableHistoricalAdherence": {
+      "type": "boolean",
+      "description": "Indicates whether historical adherence is enabled (true) or not enabled (false). This field is available in API version 54.0 and later."
+    },
+    "enableIndividualAdherence": {
+      "type": "boolean",
+      "description": "Indicates whether individual adherence is enabled (true) or not enabled (false). This field is available in API version 54.0 and later."
+    },
+    "enableIntradayManagement": {
+      "type": "boolean",
+      "description": "Indicates whether the intraday management dashboard is enabled (true) or not enabled (false). This field is available in API version 55.0 and later."
+    },
+    "enableRealTimeAdherence": {
+      "type": "boolean",
+      "description": "Indicates whether real-time adherence is enabled (true) or not enabled (false). To use real-time adherence, you must also enable Omni-Channel. This field is available in API version 55.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"WorkforceEngagementSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableHistoricalAdherence\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIndividualAdherence\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIntradayManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMachineLearningForecasting\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRealTimeAdherence\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableWorkforceEngagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableWorkforceEngagementConfiguration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WorkforceEngagement.settings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WorkforceEngagementSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <enableMachineLearningForecasting>true</enableMachineLearningForecasting>\n   <enableWorkforceEngagement>true</enableWorkforceEngagement>\n   <enableWorkforceEngagementConfiguration>true</enableWorkforceEngagementConfiguration>\n   <enableHistoricalAdherence>true</enableHistoricalAdherence>\n   <enableenableIndividualAdherence>true</enableIndividualAdherence>\n   <enableIntradayManagement>true</enableIntradayManagement>\n   <enableRealTimeAdherence>true</enableRealTimeAdherence>\n</WorkforceEngagementSettings>"
+    }
+  ]
+}

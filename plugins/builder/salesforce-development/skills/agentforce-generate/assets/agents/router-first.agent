@@ -1,0 +1,126 @@
+# Router-First Architecture Template
+#
+# Use a central router when distinct request types need different objectives,
+# instructions, actions, authority, or escalation behavior. Do not persist
+# ordinary user inputs merely to keep a request handler focused; each action
+# uses slot filling from the current turn and surviving conversation history.
+
+system:
+    messages:
+        welcome: "Welcome! I can help with orders, returns, or general support."
+        error: "I apologize, something went wrong. Let me try again."
+    instructions: |
+        You are a customer service agent for an e-commerce company. During
+        request classification, choose exactly one matching request handler
+        without answering the underlying request. In order and return handlers,
+        use the available read actions for external facts. In general support,
+        answer the question or transfer to a human when needed.
+
+access:
+    default_agent_user: "agent@yourorg.com"
+
+config:
+    developer_name: "Router_First_Agent"
+    agent_label: "Customer Service Agent"
+    description: "Routes orders, returns, and support requests to distinct handlers"
+
+language:
+    default_locale: "en_US"
+
+start_agent agent_router:
+    label: "Request Router"
+    description: "Routes the user's latest request without answering it"
+
+    reasoning:
+        instructions: ->
+            | Route only the user's latest request:
+            | - order status or tracking: order help;
+            | - return eligibility or an existing return: return help;
+            | - general questions: support.
+            | Do not answer the underlying request in this router.
+        actions:
+            check_order: @utils.transition to @subagent.orders
+                description: "Handle order status or tracking"
+            handle_return: @utils.transition to @subagent.returns
+                description: "Handle return eligibility or an existing return"
+            general_help: @utils.transition to @subagent.support
+                description: "Handle a general support question"
+
+subagent orders:
+    label: "Order Help"
+    description: "Handles order status and tracking inquiries"
+
+    actions:
+        get_order_status:
+            description: "Look up the current status of a specific order rather than answer a general shipping-policy question"
+            inputs:
+                order_id: string
+                    description: "Order number supplied by the customer"
+                    is_required: True
+            outputs:
+                status: string
+                    description: "Current order status"
+            target: "flow://Get_Order_Status"
+
+    reasoning:
+        instructions: ->
+            | Help with the user's latest order status or tracking request. Ask
+              for an order number only when it is absent from the current turn
+              and surviving conversation history. Report only action-returned
+              status as an external fact.
+            | If the user changes intent, use the matching transition.
+        actions:
+            lookup_order: @actions.get_order_status
+                description: "Look up a concrete order using the latest order number in the conversation"
+                with order_id=...
+            to_returns: @utils.transition to @subagent.returns
+                description: "Handle a changed request about returns"
+            reclassify: @utils.transition to @subagent.agent_router
+                description: "Reclassify any other changed intent"
+
+subagent returns:
+    label: "Return Help"
+    description: "Explains return eligibility and looks up existing return status"
+
+    actions:
+        get_return_status:
+            description: "Look up an already-created return; this does not create a return or issue money"
+            inputs:
+                return_id: string
+                    description: "Existing return identifier supplied by the customer"
+                    is_required: True
+            outputs:
+                status: string
+                    description: "Current return status"
+            target: "flow://Get_Return_Status"
+
+    reasoning:
+        instructions: ->
+            | Explain return eligibility and policy, or look up an existing
+              return when the user provides a return identifier. This template
+              intentionally does not create returns or issue refunds; those
+              consequential actions require machine-checkable authorization,
+              exact targets, confirmation, idempotency, and failure handling.
+            | If the user changes intent, return to request routing.
+        actions:
+            lookup_return: @actions.get_return_status
+                description: "Look up an existing return using the latest return identifier in the conversation"
+                with return_id=...
+            reclassify: @utils.transition to @subagent.agent_router
+                description: "Reclassify a changed intent"
+
+subagent support:
+    label: "General Support"
+    description: "Handles general support questions that need no order or return action"
+
+    reasoning:
+        instructions: ->
+            | Answer the user's latest general support question. If the request
+              requires order or return handling, route to the matching handler.
+        actions:
+            go_orders: @utils.transition to @subagent.orders
+                description: "Handle a changed request about an order"
+            go_returns: @utils.transition to @subagent.returns
+                description: "Handle a changed request about a return"
+            escalate: @utils.escalate
+                description: "Transfer to a human when the user explicitly requests one or the issue cannot be handled safely"

@@ -1,0 +1,849 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BatchCalcJobDefinition - Metadata API",
+  "description": "Represents a Data Processing Engine definition.",
+  "file_information": ".batchCalcJobDefinition",
+  "directory_location": "batchCalcJobDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "aggregates": {
+      "type": "BatchCalcJobAggregate[]",
+      "description": "Collection of aggregate nodes in a data processing engine."
+    },
+    "appends": {
+      "type": "BatchCalcJobUnion[]",
+      "description": "Collection of append nodes in a data processing engine."
+    },
+    "atomicWritebacks": {
+      "type": "BatchCalcJobAtomicWriteBack[]",
+      "description": "Collection of composite writeback nodes in a data processing engine definition. Available in API version 62.0 and later."
+    },
+    "customNodes": {
+      "type": "BatchCalcJobCustomNode[]",
+      "description": "Collection of custom nodes in a data processing engine. Available in API version 57.0 and later."
+    },
+    "dataSpaceApiName": {
+      "type": "string",
+      "description": "Stores the Data Space API Name from Data 360. Available in API version 60.0 and later."
+    },
+    "datasources": {
+      "type": "BatchCalcJobDatasource[]",
+      "description": "Collection of data source nodes in a data processing engine."
+    },
+    "definitionRunMode": {
+      "type": "BatchCalcJobDefRunMode(enumeration of type string)",
+      "description": "Specifies the execution mode in a data processing engine. Valid values are: Batch OnDemand"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of a data processing engine definition."
+    },
+    "doesGenAllFailedRecords": {
+      "type": "boolean",
+      "description": "Indicates whether the error file includes a complete list of all failed writeback records (true) or not (false). The default value is false, and only the first instance of a failure is recorded in the error file. If set to true, all failed records are recorded in the error file for the writeback node. Available in API version 65.0 and later."
+    },
+    "executionPlatformObjectType": {
+      "type": "ExecutionPlatformObjectType(enumeration of type string)",
+      "description": "The execution platform object type that's used during the read, transform, and writeback process for the Data Processing Engine definition. Possible values are: CalculatedInsightsObject DataLakeObject DataModelObject None Available in API version 65.0 and later."
+    },
+    "executionPlatformType": {
+      "type": "ExecutionPlatformType(enumeration of type string)",
+      "description": "The platform that's used to run the Data Processing Engine definition. Valid values are: CRMA CDP CORE Available in API version 59.0 and later."
+    },
+    "filters": {
+      "type": "BatchCalcJobFilter[]",
+      "description": "Collection of filter nodes in a data processing engine. definition."
+    },
+    "forecasts": {
+      "type": "BatchCalcJobForecast[]",
+      "description": "Collection of forecast nodes in a data processing engine. definition. Available in API version 58.0 and later."
+    },
+    "hierarchyPaths": {
+      "type": "BatchCalcJobHierarchyPath[]",
+      "description": "Collection of hierarchy path nodes in a data processing engine definition."
+    },
+    "isTemplate": {
+      "type": "boolean",
+      "description": "Indicates whether it’s a template data processing engine definition."
+    },
+    "joins": {
+      "type": "BatchCalcJobSourceJoin[]",
+      "description": "Collection of join nodes in a data processing engine."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label of a data processing engine definition."
+    },
+    "parameters": {
+      "type": "BatchCalcJobParameter[]",
+      "description": "Collection of input variables in a data processing engine."
+    },
+    "processType": {
+      "type": "BatchCalcProcessType (enumeration of type string)",
+      "description": "The process type of a data processing engine. These process types may be available to you depending on your industry solution and permission sets. Valid values are: AccountingPeriodClosure AccountingSubledger—This value is reserved for internal use. AccrualsAndPayoutEngine ActionableList AdvancedAccountForecast AutomotiveFoundation BenefitManagement BillingSchedulesforInvoiceGeneration CDPEnrichment ChannelInventoryManagement—Available in API version 63.0 and later. CollectionPlan—Available in API version 65.0 and later. CriteriaBsdSearchAndFilter DataProcessingEngine DecisionMatrixDataUpload Decisiontable Education EmployeeService—Available in API version 63.0 and later. EnergyUtilitiesSales FinancialSummaryRollup FlexibleHierarchy ForeignExchangeGainLossCalculations—Available in API version 65.0 and later. FSCHierarchyRollUp Fundraising—Available in API version 64.0 and later. FundraisingRollups—Available in API version 63.0 and later. GeneralLedgerAccountBalancesSummary—Available in API version 65.0 and later. InventoryBatchSearch—Available in API version 65.0 and later. InventorySearch—Available in API version 65.0 and later. InvoiceGeneration Loyalty LegalEntityAccountingPeriodClosureAdvanced—Available in API version 63.0 and later. LifeSciencbatchcalesCommercialTerritoryAlignment—Available in API version 63.0 and later. LifeSciencesCustomerEngagement—Available in API version 64.0 and later. LoyaltyPartnerManagement LoyaltyPointsAggregation MediaAdSales NextGenForecasting—Available in API version 64.0 and earlier. NetZero PatientServicesProgram—Available in API version 64.0 and later. PlanningAndForecasting PnmRosterFileUpload PriceProtection ProductCatalogManagement ProgramBasedBusiness ProviderSearch—This value is reserved for internal use. Rebates RebateAndAccrualManagementAdvanced Recruitment RevenueTransactionManagement—Available in API version 63.0 and later. SalesAgreement—Available in API version 63.0 and later. TestAtomicWritebackScale—Available in API version 64.0 and later. TestProcessType UsageManagement"
+    },
+    "status": {
+      "type": "BatchJobDefinitionStatus (enumeration of type string)",
+      "description": "Status of a data processing engine definition. Valid values are: Active Inactive"
+    },
+    "transforms": {
+      "type": "BatchCalcJobTransform[]",
+      "description": "Collection of data transformation nodes in a data processing engine."
+    },
+    "writebacks": {
+      "type": "BatchCalcJobWritebackObject[]",
+      "description": "Collection of writeback objects in which the results of the data processing engine are written back."
+    }
+  },
+  "sub_types": {
+    "BatchCalcJobAggregate": {
+      "description": {
+        "type": "string",
+        "description": "Description of an aggregate node."
+      },
+      "fields": {
+        "type": "BatchCalcJobAggregateField[]",
+        "description": "Collection of aggregation fields.",
+        "required": true
+      },
+      "groupBy": {
+        "type": "string[]",
+        "description": "Collections of fields used to group data in an aggregate node.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "Label of an aggregate node.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of an aggregate node.",
+        "required": true
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "Name of the source node.",
+        "required": true
+      }
+    },
+    "BatchCalcJobAggregateField": {
+      "aggregateFunction": {
+        "type": "BatchCalcJobAggregateFunction (enumeration of type string)",
+        "description": "Function used for aggregation. Valid values are: Unique—A count of unique values. Sum—The sum of all values. Max—The largest value. Min—The smallest value. Avg—The average value, calculated as the mean. Std—The standard deviation. Stdp—A standard deviation with population variance. Var—The variance. VarP—The variance with population. Count—The total count of values.",
+        "required": true
+      },
+      "alias": {
+        "type": "string",
+        "description": "Name that subsequent nodes within the data processing engine use to refer to the aggregate field.",
+        "required": true
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "description": "Source node field on which the aggregate is calculated.",
+        "required": true
+      }
+    },
+    "BatchCalcJobAtomicWriteback": {
+      "description": {
+        "type": "string",
+        "description": "Description of the composite writeback object."
+      },
+      "label": {
+        "type": "string",
+        "description": "Name of the composite writeback object.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "API name of the composite writeback object.",
+        "required": true
+      },
+      "writebackObjectRelationships": {
+        "type": "BatchCalcJobAtomicWritebackRelationship[]",
+        "description": "Specifies the relationship between the writeback objects that are involved in the writeback operation."
+      },
+      "writebackSequence": {
+        "type": "int",
+        "description": "Sequence in which the data processing engine executes the composite write back node."
+      }
+    },
+    "BatchCalcJobAtomicWritebackRelationship": {
+      "childWritebackObjectField": {
+        "type": "string",
+        "description": "Field name that's associated with the child writeback object in a composite writeback relationship. Available in API version 63.0 and later."
+      },
+      "childWritebackObjectName": {
+        "type": "string",
+        "description": "Name of the child writeback object that's associated with the writeback relationship."
+      },
+      "parentWritebackObjectField": {
+        "type": "string",
+        "description": "Field name that's associated with the parent writeback object in a composite writeback relationship. Available in API version 63.0 and later."
+      },
+      "parentWritebackObjectName": {
+        "type": "string",
+        "description": "Name of the parent writeback object that's associated with the writeback relationship.",
+        "required": true
+      },
+      "relationshipName": {
+        "type": "string",
+        "description": "Describes the relationship between the child and parent writeback objects in a composite writeback node. Available in API version 64.0 and later."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "description": "Sequence number of the writeback node that's associated with its parent node in the relationship."
+      }
+    },
+    "BatchCalcJobCustomNode": {
+      "description": {
+        "type": "string",
+        "description": "Description of a custom node."
+      },
+      "extensionName": {
+        "type": "string",
+        "description": "Name of an extension node.",
+        "required": true
+      },
+      "extensionNamespace": {
+        "type": "string",
+        "description": "Namespace of an extension node.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "Label of a custom node.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of a custom node.",
+        "required": true
+      },
+      "parameters": {
+        "type": "BatchCalcJobCustomNodeParameter[]",
+        "description": "The field mappings of an extension node."
+      },
+      "sources": {
+        "type": "string[]",
+        "description": "Sources of an extension node."
+      }
+    },
+    "BatchCalcJobCustomNodeParameter": {
+      "name": {
+        "type": "string",
+        "description": "Name of a parameter.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "Value of a parameter.",
+        "required": true
+      }
+    },
+    "BatchCalcJobDatasource": {
+      "CSVDelimiter": {
+        "type": "BatchCalcJobCSVDelimiter (enumeration of type string)",
+        "description": "Specifies the field separator to read fields from a CSV file record. Possible values are: COMMA BACKQUOTE CARET PIPE SEMICOLON TAB The default value is COMMA. The same delimiter value used for the CSV file can’t be used within any of the column values in the file. If you mistakenly use the same delimiter value in column values, it can cause data parsing issues."
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of a data source node."
+      },
+      "fields": {
+        "type": "BatchCalcJobDatasourceField[]",
+        "description": "Collection of data source fields.",
+        "required": true
+      },
+      "fileIdentifier": {
+        "type": "string",
+        "description": "Specifies the source of the file or file storage system."
+      },
+      "filePath": {
+        "type": "string",
+        "description": "The file path for the specified file."
+      },
+      "fileSource": {
+        "type": "BatchCalcJobFileSource (enumeration of type string)",
+        "description": "Specifies the source of the file or file storage system. Possible value is: ContentManagement"
+      },
+      "label": {
+        "type": "string",
+        "description": "Label of a data source node.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of a data source node.",
+        "required": true
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "Name of a standard or custom object from which the data source node extracts data.",
+        "required": true
+      },
+      "type": {
+        "type": "BatchCalcJobDataSourceType (enumeration of type string)",
+        "description": "Type of object for the source object field. Supported values are: Analytics CalculatedInsightsObject CRMObject CSV DataModelObject StandardObject.",
+        "required": true
+      }
+    },
+    "BatchCalcJobDatasourceField": {
+      "alias": {
+        "type": "string",
+        "description": "Name that subsequent nodes within the data processing engine use to refer to the data source field. Required when the field name is lookup."
+      },
+      "dataType": {
+        "type": "BatchCalcJobDataType (enumeration of type string)",
+        "description": "Specifies the data type of the input field when using a CSV file as a data source. Possible values are: Boolean—Available in API version 65.0 and later. Date DateTime MultiValue Numeric Text"
+      },
+      "isPrimaryKey": {
+        "type": "boolean",
+        "description": "Indicates whether a column name is the primary key (true) or not (false) for the Data Cloud CSV file."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the field. Can be either of the following: Name of the source field selected in the associated data source object. Name from a nested lookup object with three child levels.",
+        "required": true
+      }
+    },
+    "BatchCalcJobFilter": {
+      "criteria": {
+        "type": "BatchCalcJobFilterCriteria[]",
+        "description": "Collection of filter criteria in a filter node. The field is required when isDynamicFilter is set to False."
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of the batch calculation job filter."
+      },
+      "filterCondition": {
+        "type": "string",
+        "description": "Logic that is specified to apply the filter conditions. The field is required when isDynamicFilter is set to False."
+      },
+      "filterParameterName": {
+        "type": "string",
+        "description": "Name of the parameter of type filter."
+      },
+      "isDynamicFilter": {
+        "type": "boolean",
+        "description": "Indicates whether the filter criteria is dynamic. If value is set to True, filter criteria is passed in runtime with filterParameterName."
+      },
+      "label": {
+        "type": "string",
+        "description": "Label of the filter node.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the filter node.",
+        "required": true
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "Name of the source node.",
+        "required": true
+      }
+    },
+    "BatchCalcJobForecast": {
+      "accuracyPercent": {
+        "type": "BatchCalcJobFrcstAccuracy (enumeration of type string)",
+        "description": "The interval percentage to account for errors in forecasts. Possible values are: Eighty NinetyFive None The default value is None."
+      },
+      "aggregationFields": {
+        "type": "BtchCalcJobFrcstAggrFld[]",
+        "description": "The list of fields to forecast."
+      },
+      "dateFieldName": {
+        "type": "string",
+        "description": "The date field from the source node used to forecast values for the specified forecast length.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the forecast node."
+      },
+      "forecastModelType": {
+        "type": "BatchCalcJobFrcstModel (enumeration of type string)",
+        "description": "The model used to forecast data. Possible values are: Additive Auto Multiplicative The default value is Auto."
+      },
+      "forecastPeriodCount": {
+        "type": "int",
+        "description": "The number of time periods to generate forecast data. For example, if you select Year-Month as the forecast period type, and 4 as the forecast period count, the forecast results are generated for the next 4 months. The minimum and the default count is 1, and the maximum is 100."
+      },
+      "forecastPeriodType": {
+        "type": "BatchCalcJobFrcstPeriodType (enumeration of type string)",
+        "description": "The type of forecast period to group date field values in the forecast results. Possible values are: FiscalYear FiscalYearMonth FiscalYearQuarter FiscalYearWeek Year YearMonth YearMonthDay YearQuarter YearWeek",
+        "required": true
+      },
+      "groupFields": {
+        "type": "BatchCalcJobFrcstGrpFld[]",
+        "description": "The source fields for grouping the data to be processed by the forecast node."
+      },
+      "label": {
+        "type": "string",
+        "description": "The name of the forecast node in the UI.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "A unique name for the forecast node.",
+        "required": true
+      },
+      "periodStartDateName": {
+        "type": "string",
+        "description": "The start date of the forecast period.",
+        "required": true
+      },
+      "seasonality": {
+        "type": "BatchCalcJobFrcstSeasonality (enumeration of type string)",
+        "description": "Represents the periodic fluctuations that occur around the same time every year. Possible values are: Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve Thirteen Fourteen Fifteen Sixteen Seventeen Eighteen Nineteen Twenty TwentyOne TwentyTwo TwentyThree TwentyFour Auto None The default value is None."
+      },
+      "shouldExcludeLastPeriod": {
+        "type": "boolean",
+        "description": "Indicates whether to ignore the last period in the source node when it has incomplete data (true) or not (false). The default value is false."
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "The name of the source node. A source can be any node other than the datasink and register node.",
+        "required": true
+      }
+    },
+    "BtchCalcJobFrcstAggrFld": {
+      "aggregateFunction": {
+        "type": "BatchCalcJobAggregateFunction (enumeration of type string)",
+        "description": "The function of the aggregate field. Possible values are: Avg Count Max Min Std StdP Sum Unique Var VarP",
+        "required": true
+      },
+      "aggregationResultLabel": {
+        "type": "string",
+        "description": "The name of the aggregation result generated from the aggregation function that’s applied to the source node field.",
+        "required": true
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "The name of the source field.",
+        "required": true
+      }
+    },
+    "BatchCalcJobFrcstGrpFld": {
+      "fieldName": {
+        "type": "string",
+        "description": "The name of the source field to group the data to be processed by the forecast node.",
+        "required": true
+      },
+      "groupBy": {
+        "type": "string",
+        "description": "A comma-separated list of values to group data by. Required when the source field type is Date or DateTime. Possible values are: Second Second Epoch Minute Hour Day Day Epoch Week Month Quarter Year"
+      }
+    },
+    "BatchCalcJobHierarchyPath": {
+      "description": {
+        "type": "string",
+        "description": "Description of the hierarchy path node."
+      },
+      "hierarchyFieldName": {
+        "type": "string",
+        "description": "Field name that contains the hierarchy path.",
+        "required": true
+      },
+      "isSelfFieldValueIncluded": {
+        "type": "boolean",
+        "description": "Indicates whether the self value is included in the calculated hierarchy path (True) or not (False)."
+      },
+      "label": {
+        "type": "string",
+        "description": "Label of the hierarchy path node.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the hierarchy path node.",
+        "required": true
+      },
+      "parentFieldName": {
+        "type": "string",
+        "description": "Parent field name to calculate hierarchy path.",
+        "required": true
+      },
+      "selfFieldName": {
+        "type": "string",
+        "description": "Self field name to calculate hierarchy path.",
+        "required": true
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "Name of the source node.",
+        "required": true
+      }
+    },
+    "BatchCalcJobFilterCriteria": {
+      "inputVariable": {
+        "type": "string",
+        "description": "Name of the input variable used as a filter."
+      },
+      "operator": {
+        "type": "BatchCalcJobFilterOperator (enumeration of type string)",
+        "description": "Operator that is specified in the filter condition. Valid values are: Equals NotEquals GreaterThan GreaterThanOrEqual LessThan LessThanOrEqual StartsWith EndsWith Contains DoesNotContain IsNull IsNotNull In NotIn",
+        "required": true
+      },
+      "sequence": {
+        "type": "integer",
+        "description": "Sequence number used to refer the criteria in a filter node.",
+        "required": true
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "description": "Name of the field from the source node to apply the filter.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "Value used to filter data from the source node."
+      }
+    },
+    "BatchCalcJobParameter": {
+      "dataType": {
+        "type": "BatchCalcJobParameterDataType (enumeration of type string)",
+        "description": "Data type of the parameter. Valid values are: Date DateTime Expression FileIdentifier Filter Numeric Text",
+        "required": true
+      },
+      "defaultValue": {
+        "type": "string",
+        "description": "Default value of the parameter."
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of the batch calculation job parameter."
+      },
+      "isMultiValue": {
+        "type": "boolean",
+        "description": "Indicates whether the parameter has different values (True) or not (False). This field is supported only for the Text data type."
+      },
+      "label": {
+        "type": "string",
+        "description": "Label of the batch calculation job parameter.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the batch calculation job parameter.",
+        "required": true
+      }
+    },
+    "BatchCalcJobSourceJoin": {
+      "description": {
+        "type": "string",
+        "description": "Description of the join node."
+      },
+      "fields": {
+        "type": "BatchCalcJobJoinResultField[]",
+        "description": "Collection of fields in a join node."
+      },
+      "joinKeys": {
+        "type": "BatchCalcJobJoinKey[]",
+        "description": "Collection of mapping of fields from the primary source node and the second source node in a join node."
+      },
+      "label": {
+        "type": "string",
+        "description": "Label of the join node.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the join node.",
+        "required": true
+      },
+      "primarySourceName": {
+        "type": "string",
+        "description": "Name associated with the node as the primary source node.",
+        "required": true
+      },
+      "secondarySourceName": {
+        "type": "string",
+        "description": "Name associated with the node as the secondary source node.",
+        "required": true
+      },
+      "type": {
+        "type": "BatchCalcJobSourceJoinType (enumeration of type string)",
+        "description": "Type of join specified between the primary source node and secondary source node. Valid values are: LeftOuter RightOuter Inner Outer Lookup",
+        "required": true
+      }
+    },
+    "BatchCalcJobJoinKey": {
+      "primarySourceFieldName": {
+        "type": "string",
+        "description": "Mapped field name of the primary source node.",
+        "required": true
+      },
+      "secondarySourceFieldName": {
+        "type": "string",
+        "description": "Mapped field name of the secondary source node.",
+        "required": true
+      }
+    },
+    "BatchCalcJobJoinResultField": {
+      "alias": {
+        "type": "string",
+        "description": "Name that subsequent nodes within the data processing engine definition use to refer to the resultant field.",
+        "required": true
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "description": "Name of field from the primary or secondary data source.",
+        "required": true
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "Source node of the primary or secondary data source.",
+        "required": true
+      }
+    },
+    "BatchCalcJobTransform": {
+      "description": {
+        "type": "string",
+        "description": "The description of the batch calculation job transform."
+      },
+      "droppedFields": {
+        "type": "BatchCalcJobTransformDroppedField[]",
+        "description": "The collection of dropped fields in a data transformation. Available when the transformation type is Slice."
+      },
+      "expressionFields": {
+        "type": "BatchCalcJobTransformAddedField[]",
+        "description": "The collection of formula fields in a data transformation. Available when the transformation type is Expression."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label of the batch calculation job transform.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the batch calculation job transform.",
+        "required": true
+      },
+      "orderBy": {
+        "type": "BatchCalcJobOrderByField[]",
+        "description": "A collection of fields that’s used to sort the records within each partition group."
+      },
+      "partitionBy": {
+        "type": "string[]",
+        "description": "A group of fields that’s used to partition the source data into partition groups."
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "Name of the source node.",
+        "required": true
+      },
+      "transformType": {
+        "type": "BatchCalcJobTransformType (enumeration of type string)",
+        "description": "The type of transformation. Valid values are: ComputeRelative—This transformation calculates values based on values of the same partition group. Expression—This transformation calculates values based on existing values of fields in the same record. Slice—This transformation removes fields from the source node.",
+        "required": true
+      }
+    },
+    "BatchCalcJobTransformDroppedField": {
+      "sourceFieldName": {
+        "type": "string",
+        "description": "Name of the field that is dropped.",
+        "required": true
+      }
+    },
+    "BatchCalcJobTransformAddedField": {
+      "alias": {
+        "type": "string",
+        "description": "Name that subsequent nodes within the data processing engine use to the transform node.",
+        "required": true
+      },
+      "dataType": {
+        "type": "BatchCalcJobDataType (enumeration of type string)",
+        "description": "Data type of the formula. Valid values are: Boolean—Available in API version 65.0 and later. Date DateTime MultiValue Numeric Text",
+        "required": true
+      },
+      "decimalPlaces": {
+        "type": "integer",
+        "description": "Number of digits to the right of a decimal point in the value. Required for the Numeric data type."
+      },
+      "expression": {
+        "type": "string",
+        "description": "Formula defined by the user.",
+        "required": true
+      },
+      "length": {
+        "type": "integer",
+        "description": "Total length of the value including the decimal places. Required for data types: Text and Numeric."
+      }
+    },
+    "BatchCalcJobOrderByField": {
+      "name": {
+        "type": "string",
+        "description": "Name of the field that is used to sort data.",
+        "required": true
+      },
+      "orderType": {
+        "type": "BatchCalcJobOrderType(enumeration of type string)",
+        "description": "Order in which the data is sorted. Valid values are: Ascending Descending"
+      }
+    },
+    "BatchCalcJobUnion": {
+      "description": {
+        "type": "string",
+        "description": "Description of the batch calculation job union."
+      },
+      "isDisjointedSchema": {
+        "type": "boolean",
+        "description": "Indicates whether the union is of two disjointed datasets (true) or not (false). Set to True to allow joining of two datasets having no common fields."
+      },
+      "label": {
+        "type": "string",
+        "description": "Label of the batch calculation job union.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the batch calculation job union.",
+        "required": true
+      },
+      "sources": {
+        "type": "string[]",
+        "description": "Names of the source nodes."
+      }
+    },
+    "BatchCalcJobWritebackObject": {
+      "canWrtbckToNonEditableFields": {
+        "type": "boolean",
+        "description": "Indicates whether the non-editable fields are included in field mapping when the action type is upsert. The default value is false. Available in API version 64.0 and later."
+      },
+      "description": {
+        "type": "string",
+        "description": "Descriptions of the batch calculation job writeback object."
+      },
+      "externalIdFieldName": {
+        "type": "string",
+        "description": "Unique external field ID for the target object name. Available in API version 60.0 and later."
+      },
+      "fields": {
+        "type": "BatchCalcJobWritebackMapping[]",
+        "description": "Collection of the writeback fields."
+      },
+      "filterCondition": {
+        "type": "string",
+        "description": "The condition that filters the records from a writeback dataset for a user. Examples of a filter condition include a user ID, stage name, and a security policy that returns only the records that a user owns. Available in API version 57.0 and later."
+      },
+      "folderName": {
+        "type": "string",
+        "description": "The folder where the writeback dataset is saved. Available in API version 57.0 and later."
+      },
+      "groupBy": {
+        "type": "string",
+        "description": "Reserved for future use."
+      },
+      "isChangedRow": {
+        "type": "boolean",
+        "description": "Indicates whether a row in the write back object is changed. Set to True to write back the changed rows."
+      },
+      "isExistingDataset": {
+        "type": "boolean",
+        "description": "Indicates whether a CRM Application (CRMA) dataset or a Data 360 Data Lake object is present (true) or will be created (false). Available in API version 62.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "description": "Name of the write back object.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the batch calculation job write back object.",
+        "required": true
+      },
+      "operationType": {
+        "type": "BatchCalcJobWritebackOpn (enumeration of type string)",
+        "description": "Type of operation specified. Valid values are: Delete—This value is available in API version 56.0 and later. Insert Overwrite—Available only when storageType is DataLakeObject. This value is available in API version 60.0 and later. Update Upsert"
+      },
+      "sharingInheritanceObjectName": {
+        "type": "string",
+        "description": "The name of the source object from which the row-level sharing inheritance settings are applied. Available in API version 57.0 and later."
+      },
+      "shouldCreateTargetObject": {
+        "type": "boolean",
+        "description": "Indicates whether target Data Lake Object or Salesforce Object is created in Salesforce (true) or not (false). Available in API version 65.0 and later."
+      },
+      "shouldMngRowLockForGroupedRec": {
+        "type": "boolean",
+        "description": "Reserved for future use."
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "Name of the source node associated with the write back object.",
+        "required": true
+      },
+      "storageType": {
+        "type": "BatchCalcJobWritebackType (enumeration of type string)",
+        "description": "Specifies where you want to use the data stored in the source node. Available in API version 57.0 and later. Valid values are: Analytics DataLakeObject sObject The default value is sObject."
+      },
+      "targetObjectName": {
+        "type": "string",
+        "description": "Object that is inserted or upserted by the data processing engine.",
+        "required": true
+      },
+      "writebackSequence": {
+        "type": "integer",
+        "description": "Sequence in which the target object is updated by the data processing engine."
+      },
+      "writebackUser": {
+        "type": "string",
+        "description": "ID of the user whose permissions decide which objects and fields of the target object can be updated."
+      }
+    },
+    "BatchCalcJobWritebackMapping": {
+      "fieldType": {
+        "type": "string",
+        "description": "Target field type on the writeback object. Valid values are: Primary Key Qualifier Key Available in API version 64.0 and later."
+      },
+      "isAutogenerated": {
+        "type": "boolean",
+        "description": "Indicates whether the target field value on the writeback object is autogenerated (true) or not (false). Available in API version 64.0 and later."
+      },
+      "parentName": {
+        "type": "string",
+        "description": "Name of the lookup object. Required only when the relationshipName field is defined."
+      },
+      "relationshipName": {
+        "type": "string",
+        "description": "Name of the lookup relationship."
+      },
+      "runtimeParameter": {
+        "type": "boolean",
+        "description": "Indicates whether the source field from runtime parameter is true or false. The default value is false. Available in API version 59.0 and later."
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "description": "Name of the field in the source node that is written back.",
+        "required": true
+      },
+      "targetFieldName": {
+        "type": "string",
+        "description": "Name of the sObject field to which the results are written back."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a BatchCalcJobDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BatchCalcJobDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <aggregates>\n        <description>Aggregate Description</description>\n        <fields>\n            <aggregateFunction>Count</aggregateFunction>\n            <alias>NameCount</alias>\n            <sourceFieldName>Name</sourceFieldName>\n        </fields>\n        <groupBy>ContactId</groupBy>\n        <groupBy>Name</groupBy>\n        <label>AggregateOpportunities</label>\n        <name>AggregateOpportunities</name>\n        <sourceName>Opportunity</sourceName>\n    </aggregates>\n    <forecasts>\n        <description>ForecastNode Description</description>\n        <label>ContactForecast</label>\n        <name>ContactForecast</name>\n        <sourceName>Contact</sourceName>\n        <dateFieldName>CreatedDate</dateFieldName>\n        <forecastPeriodType>YearMonth</forecastPeriodType>\n        <shouldExcludeLastPeriod>false</shouldExcludeLastPeriod>\n        <forecastPeriodCount>12</forecastPeriodCount>\n        <periodStartDateName>CreatedDateYM</periodStartDateName>\n        <forecastModelType>Auto</forecastModelType>\n        <seasonality>None</seasonality>\n        <accuracyPercent>None</accuracyPercent>\n        <aggregationFields>\n            <aggregateFunction>Count</aggregateFunction>\n            <aggregationResultLabel>CountOfLastName</aggregationResultLabel>\n            <fieldName>LastName</fieldName>\n        </aggregationFields>\n        <groupFields>\n            <fieldName>LastModifiedDate</fieldName>\n            <groupBy>Week</groupBy>\n        </groupFields>\n    </forecasts>\n    <appends>\n        <description>Append desc</description>\n        <isDisjointedSchema>true</isDisjointedSchema>\n        <label>AppendAllAccounts</label>\n        <name>AppendAllAccounts</name>\n        <sources>AccountsOfManufacturingIndustry</sources>\n        <sources>ComputeRelativeManufacturingIndustry</sources>\n    </appends>\n    <datasources>\n        <description>Desc Contact</description>\n        <fields>\n            <alias>Id</alias>\n            <name>Id</name>\n            <isPrimaryKey>false</isPrimaryKey>\n            <dataType>Text</dataType>\n        </fields>\n        <fields>\n            <alias>LastName</alias>\n            <name>LastName</name>\n            <isPrimaryKey>false</isPrimaryKey>\n            <dataType>Text</dataType>\n        </fields>\n        <fields>\n            <alias>CreatedDate</alias>\n            <name>CreatedDate</name>\n            <isPrimaryKey>false</isPrimaryKey>\n            <dataType>Date</dataType>\n        </fields>\n        <fields>\n            <alias>LastModifiedDate</alias>\n            <name>LastModifiedDate</name>\n            <isPrimaryKey>false</isPrimaryKey>\n            <dataType>Date</dataType>\n        </fields>\n        <label>Contact</label>\n        <name>Contact</name>\n        <sourceName>Contact</sourceName>\n        <type>StandardObject</type>\n        <fileSource>ContentManagement</fileSource>\n        <fileIdentifier>069xx0000004CAeAAM</fileIdentifier>\n        <CSVDelimiter>COMMA</CSVDelimiter>\n        <filePath>parentFolder/childFolder</filePath>\n    </datasources>\n    <datasources>\n        <fields>\n            <alias>Name</alias>\n            <name>Name</name>\n            <isPrimaryKey>false</isPrimaryKey>\n            <dataType>Text</dataType>\n        </fields>\n        <fields>\n            <alias>ContactId</alias>\n            <name>ContactId</name>\n            <isPrimaryKey>false</isPrimaryKey>\n            <dataType>Text</dataType>\n        </fields>\n        <label>Opportunity</label>\n        <name>Opportunity</name>\n        <sourceName>Opportunity</sourceName>\n        <type>StandardObject</type>\n        <fileSource>ContentManagement</fileSource>\n        <fileIdentifier>069xx0000004CAeAAM</fileIdentifier>\n        <CSVDelimiter>COMMA</CSVDelimiter>\n        <filePath>parentFolder/childFolder</filePath>\n    </datasources>\n    <description>Calculates and creates transaction journal records based on the orders placed by the loyalty program members. The transaction journals are used to accrue points to the member.</description>\n    <filters>\n        <criteria>\n            <operator>Equals</operator>\n            <sequence>1</sequence>\n            <sourceFieldName>LastName</sourceFieldName>\n            <value>Salesforce</value>\n        </criteria>\n        <description>Filter Desc</description>\n        <filterCondition>1</filterCondition>\n        <isDynamicFilter>false</isDynamicFilter>\n        <label>AccountsOfManufacturingIndustry</label>\n        <name>AccountsOfManufacturingIndustry</name>\n        <sourceName>AccountOpportunities</sourceName>\n    </filters>\n    <hierarchyPaths>\n        <description>Hierarchy Path Node</description>\n        <hierarchyFieldName>Hierarchy_Path</hierarchyFieldName>\n        <isAggregationRequired>true</isAggregationRequired>\n        <isSelfFieldValueIncluded>true</isSelfFieldValueIncluded>\n        <label>Get Hierarchy</label>\n        <name>Get_Hierarchy</name>\n        <parentFieldName>ContactId</parentFieldName>\n        <selfFieldName>LastName</selfFieldName>\n        <sourceName>AppendAllAccounts</sourceName>\n        <aggregateFields>\n            <aggregateFunction>Count</aggregateFunction>\n            <aggregationFieldName>*</aggregationFieldName>\n            <aggregateFieldAliasName>CountOfLastName</aggregateFieldAliasName>\n        </aggregateFields>\n    </hierarchyPaths>\n    <isTemplate>false</isTemplate>\n    <executionPlatformObjectType>None</executionPlatformObjectType>\n    <joins>\n        <description>Left Outer Join</description>\n        <fields>\n            <alias>ContactId</alias>\n            <sourceFieldName>Id</sourceFieldName>\n            <sourceName>Contact</sourceName>\n        </fields>\n        <fields>\n            <alias>LastName</alias>\n            <sourceFieldName>LastName</sourceFieldName>\n            <sourceName>Contact</sourceName>\n        </fields>\n        <fields>\n            <alias>NameCount</alias>\n            <sourceFieldName>NameCount</sourceFieldName>\n            <sourceName>AggregateOpportunities</sourceName>\n        </fields>\n        <fields>\n            <alias>OpportunityName</alias>\n            <sourceFieldName>Name</sourceFieldName>\n            <sourceName>AggregateOpportunities</sourceName>\n        </fields>\n        <joinKeys>\n            <primarySourceFieldName>Id</primarySourceFieldName>\n            <secondarySourceFieldName>ContactId</secondarySourceFieldName>\n        </joinKeys>\n        <label>AccountOpportunities</label>\n        <name>AccountOpportunities</name>\n        <primarySourceName>Contact</primarySourceName>\n        <secondarySourceName>AggregateOpportunities</secondarySourceName>\n        <type>LeftOuter</type>\n    </joins>\n    <label>Create Transaction Journals Based on Orders</label>\n    <parameters>\n        <dataType>Date</dataType>\n        <defaultValue>2020-01-01</defaultValue>\n        <description>Desc TextParameter</description>\n        <isMultiValue>false</isMultiValue>\n        <label>DateParameter</label>\n        <name>DateParameter</name>\n    </parameters>\n    <parameters>\n        <dataType>Filter</dataType>\n        <defaultValue>{&quot;filterCondition&quot;: &quot;1 AND 2&quot;, &quot;criteria&quot;: [{&quot;sourceFieldName&quot;: &quot;NameCount&quot;,&quot;operator&quot;: &quot;GreaterThan&quot;,&quot;value&quot;: &quot;20&quot;,&quot;sequence&quot;: &quot;1&quot;}, {&quot;sourceFieldName&quot;: &quot;Name&quot;,&quot;operator&quot;: &quot;Equals&quot;,&quot;value&quot;: &quot;Salesforce&quot;,&quot;sequence&quot;: &quot;2&quot;}]}</defaultValue>\n        <isMultiValue>false</isMultiValue>\n        <label>FilterParameter</label>\n        <name>FilterParameter</name>\n    </parameters>\n    <parameters>\n        <dataType>Numeric</dataType>\n        <defaultValue>5000</defaultValue>\n        <description>Desc TextParameter</description>\n        <isMultiValue>false</isMultiValue>\n        <label>NumericParameter</label>\n        <name>NumericParameter</name>\n    </parameters>\n    <parameters>\n        <dataType>Text</dataType>\n        <defaultValue>@domain.com</defaultValue>\n        <description>Desc TextParameter</description>\n        <isMultiValue>false</isMultiValue>\n        <label>TextParameter</label>\n        <name>TextParameter</name>\n    </parameters>\n    <processType>Rebates</processType>\n    <definitionRunMode>Batch</definitionRunMode>\n    <status>Inactive</status>\n    <transforms>\n        <description>transforms Desc</description>\n        <expressionFields>\n            <alias>NewLastName</alias>\n            <dataType>Text</dataType>\n            <expression>TODAY()</expression>\n            <length>80</length>\n        </expressionFields>\n        <label>ManufacturingIndustry</label>\n        <name>ManufacturingIndustry</name>\n        <sourceName>AccountsOfManufacturingIndustry</sourceName>\n        <transformationType>Expression</transformationType>\n    </transforms>\n    <transforms>\n        <droppedFields>\n            <sourceFieldName>NewLastName</sourceFieldName>\n        </droppedFields>\n        <label>MediaIndustry</label>\n        <name>MediaIndustry</name>\n        <sourceName>ManufacturingIndustry</sourceName>\n        <transformationType>Slice</transformationType>\n    </transforms>\n    <transforms>\n        <description>compute relative transforms Desc</description>\n        <expressionFields>\n            <alias>NewLastName</alias>\n            <dataType>Text</dataType>\n            <expression>rank()</expression>\n            <length>80</length>\n        </expressionFields>\n        <label>ComputeRelativeManufacturingIndustry</label>\n        <name>ComputeRelativeManufacturingIndustry</name>\n        <orderBy>\n            <name>LastName</name>\n            <orderType>Ascending</orderType>\n        </orderBy>\n        <partitionBy>LastName</partitionBy>\n        <sourceName>MediaIndustry</sourceName>\n        <transformationType>ComputeRelative</transformationType>\n    </transforms>\n    <customNodes>\n        <name>RebatesCustomNode</name>\n        <label>Rebates Custom Node</label>\n        <description>customNodes Desc</description>\n        <sources>Get_Hierarchy</sources>\n        <extensionName>RebatesExpression</extensionName>\n        <extensionNamespace>industries_mfg</extensionNamespace>\n        <parameters>\n            <name>inputColumn</name>\n            <value>LastName</value>\n        </parameters>\n        <parameters>\n            <name>isFilterCriteria</name>\n            <value>true</value>\n        </parameters>\n        <parameters>\n            <name>outputColumn</name>\n            <value>GenName</value>\n        </parameters>\n    </customNodes>\n    <writebacks>\n        <fields>\n            <sourceFieldName>GenName</sourceFieldName>\n            <targetFieldName>LastName</targetFieldName>\n        </fields>\n        <isChangedRow>false</isChangedRow>\n        <label>exportToContact</label>\n        <name>exportToContact</name>\n        <description>Export To Contact</description>\n        <operationType>Insert</operationType>\n        <sourceName>RebatesCustomNode</sourceName>\n        <targetObjectName>Contact</targetObjectName>\n        <writebackSequence>1</writebackSequence>\n        <canWrtbckToNonEditableFields>false</canWrtbckToNonEditableFields>\n    </writebacks>\n    <writebacks>\n        <fields>\n            <sourceFieldName>CreatedDateYM</sourceFieldName>\n            <targetFieldName>CreatedDate</targetFieldName>\n        </fields>\n        <isChangedRow>false</isChangedRow>\n        <isExistingDataset>false</isExistingDataset>\n        <label>exportToContactFC</label>\n        <name>exportToContactFC</name>\n        <description>Export To Contact</description>\n        <operationType>Insert</operationType>\n        <sourceName>ContactForecast</sourceName>\n        <targetObjectName>Contact</targetObjectName>\n        <writebackSequence>2</writebackSequence>\n        <canWrtbckToNonEditableFields>false</canWrtbckToNonEditableFields>\n    </writebacks>\n</BatchCalcJobDefinition>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n   ~ Copyright 2020 Salesforce, Inc.\n   ~ All Rights Reserved\n   ~ Company Confidential\n-->\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <types>\n      <members>*</members>\n      <name>BatchCalcJobDefinition</name>\n   </types>\n   <version>60.0</version>\n</Package>"
+    }
+  ]
+}

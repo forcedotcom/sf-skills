@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExternalDataConnector - Metadata API",
+  "description": "Used to represent the object where the data was sourced.",
+  "file_information": ".externalDataConnector",
+  "directory_location": "externalDataConnectors",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "dataConnectionStatus": {
+      "type": "DataConnectionStatus (enumeration of type string)",
+      "description": "Indicates whether you’re connected to a data source. Valid values are: Connected Disconnected Failed"
+    },
+    "dataConnectorConfiguration": {
+      "type": "string",
+      "description": "Reference to the Data Connector Configuration that is used to retrieve or receive data such as DataConnectorS3."
+    },
+    "dataConnectorType": {
+      "type": "DataConnectorType (enumeration of type string)",
+      "description": "Type of connection such as AmazonS3. Valid values are: ACCOUNTENGAGEMENT AmazonS3 CuratedEntity DataCloud ExternalPlatform GoogleCloudStorage IngestApi SalesforceCommerceCloud SalesforceDotCom SalesforceInteractionStudio SalesforceMarketingCloud SFTP StreamingApp UPLOAD"
+    },
+    "dataPlatform": {
+      "type": "string",
+      "description": "Reference to the Data Platform that provides or uses this data, such as Amazon_S3."
+    },
+    "externalDataTranObjects": {
+      "type": "ExternalDataTranObject",
+      "description": "Stores the schema objects related to the data connector. Available in API version 56.0 and later."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The UI name for the ExternalDataConnector.",
+      "required": true
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ExternalDataConnector component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n        <ExternalDataConnector xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n        <dataConnectionStatus>Connected</dataConnectionStatus>\n        <dataConnectorConfiguration>Person</dataConnectorConfiguration>\n        <dataConnectorType>AmazonS3</dataConnectorType>\n        <dataPlatform>Amazon_S3</dataPlatform>\n        <masterLabel>AmazonS3</masterLabel>\n        </ExternalDataConnector>"
+    }
+  ]
+}

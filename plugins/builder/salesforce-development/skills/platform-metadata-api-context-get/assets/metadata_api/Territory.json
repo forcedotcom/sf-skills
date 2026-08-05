@@ -1,0 +1,39 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Territory - Metadata API",
+  "description": "Represents a territory.",
+  "file_information": ".territory",
+  "directory_location": "territories",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "accountAccessLevel": {
+      "type": "string",
+      "description": "Specifies whether users in this territory can access accounts that are assigned to this territory and are otherwise inaccessible. Valid values are: Read Edit All If your organization’s sharing model for accounts is Public Read/Write, valid values are only Edit and All. If no value is set for this field, this field value uses the default access level that is specified in the Manage Territory page in Setup. This field is available in API version 31.0 and later."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component. Corresponds to Territory Name in the user interface."
+    },
+    "parentTerritory": {
+      "type": "string",
+      "description": "The territory above this territory in the territory hierarchy."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RoleOrTerritory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"caseAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"contactAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"mayForecastManagerShare\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"opportunityAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Territory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:RoleOrTerritory\">\n      <xsd:sequence>\n        <xsd:element name=\"accountAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentTerritory\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Territory xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <accountAccessLevel>Edit</accountAccessLevel>\n    <caseAccessLevel>Edit</caseAccessLevel>\n    <contactAccessLevel>Edit</contactAccessLevel>\n    <description>Sample Territory</description>\n    <mayForecastManagerShare>false</mayForecastManagerShare>\n    <name>T22name</name>\n    <opportunityAccessLevel>Read</opportunityAccessLevel>\n</Territory>"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "InvocableActionExtension - Metadata API",
+  "description": "Represents the configuration that defines how an action's inputs are presented in a user interface.",
+  "file_information": ".invocableactionextension",
+  "directory_location": "invocableactionextensions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "targets": {
+      "type": "InvocableActionExtensionTarget[]",
+      "description": "The target of this invocable action extension."
+    }
+  },
+  "sub_types": {
+    "InvocableActionExtensionTarget": {
+      "attributes": {
+        "type": "InvocableActionExtensionTargetAttribute[]",
+        "description": "The list of attributes."
+      },
+      "targetName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the target for the attributes."
+      },
+      "targetType": {
+        "type": "InvocableActionExtTargetType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the type of component within the invocable action. Values are: ActionDefinition—Targets the action class. ActionParameter—Targets the specific input/output parameters. TypeDefinition—Targets the custom Apex types used by the action. TypeProperty—Targets the individual properties within those custom types."
+      }
+    },
+    "InvocableActionExtensionTargetAttribute": {
+      "dataType": {
+        "type": "InvocableActionExtAttributeDataType (enumeration of type string)",
+        "required": true,
+        "description": "The data type of the value stored in the value field. Values are: Boolean Date Double Integer Long String"
+      },
+      "key": {
+        "type": "string",
+        "required": true,
+        "description": "The key field that specifies which standard attribute to provide a value for, or provides a custom key. The available standard keys are: CpeName—Assigns a Lightning web component as a partial custom property editor for a primary input parameter in the action's property panel in Flow Builder. ConfiguredBy—Links an input parameter to be controlled by another parameter's custom property editor in the action's property panel in Flow Builder. ControllingField—Controls the visibility of an input parameter based on another input parameter's existence in the action's property panel in Flow Builder. CustomHeaderLwcName—Adds a custom header at the top of the action's property panel in Flow Builder. GroupName—Organizes input parameters into collapsible sections in the action's property panel in Flow Builder. Order—Controls the vertical display sequence of input parameters in the action's property panel in Flow Builder. ProvidedValueList—Defines picklist values for an input parameter in the action's property panel in Flow Builder. For a custom key, enter any value that contains letters, numbers, or single underscores, starts with a letter, and ends with __c. This field is available in API version 67.0 and later."
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "The value of the associated key. An Invocable Action Extension can have multiple attributes, each with its own value."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"InvocableActionExtAttributeDataType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"String\"/>\n    <xsd:enumeration value=\"Boolean\"/>\n    <xsd:enumeration value=\"Integer\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"Double\"/>\n    <xsd:enumeration value=\"Long\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"InvocableActionExtTargetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ActionDefinition\"/>\n    <xsd:enumeration value=\"ActionParameter\"/>\n    <xsd:enumeration value=\"TypeDefinition\"/>\n    <xsd:enumeration value=\"TypeProperty\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"InvocableActionExtension\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"targets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:InvocableActionExtensionTarget\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"InvocableActionExtensionTarget\">\n  <xsd:sequence>\n    <xsd:element name=\"attributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:InvocableActionExtensionTargetAttribute\"/>\n    <xsd:element name=\"targetName\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetType\" type=\"tns:InvocableActionExtTargetType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"InvocableActionExtensionTargetAttribute\">\n  <xsd:sequence>\n    <xsd:element name=\"dataType\" type=\"tns:InvocableActionExtAttributeDataType\"/>\n    <xsd:element name=\"key\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows an InvocableActionExtension component definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InvocableActionExt xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <targets>\n        <targetType>ActionParameter</targetType>\n        <targetName>Example.Request.inputOne</targetName>\n        <attributes>\n            <key>Order</key>\n            <dataType>Integer</dataType>\n            <value>1</value>\n        </attributes>\n        <attributes>\n            <key>Group</key>\n            <dataType>String</dataType>\n            <value>Group A</value>\n        </attributes>\n    </targets>\n    <targets>\n        <targetType>ActionParameter</targetType>\n        <targetName>Example.Request.inputTwo</targetName>\n        <attributes>\n            <key>Order</key>\n            <dataType>Integer</dataType>\n            <value>2</value>\n        </attributes>\n        <attributes>\n            <key>Group</key>\n            <dataType>String</dataType>\n            <value>Group A</value>\n        </attributes>\n    </targets>\n    <targets>\n        <targetType>ActionParameter</targetType>\n        <targetName>Example.Request.inputThree</targetName>\n        <attributes>\n            <key>Order</key>\n            <dataType>Integer</dataType>\n            <value>3</value>\n        </attributes>\n        <attributes>\n            <key>Group</key>\n            <dataType>String</dataType>\n            <value>Group B</value>\n        </attributes>\n    </targets>\n</InvocableActionExt>"
+    },
+    {
+      "description": "The following example shows how to define static picklist values for an input parameter.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InvocableActionExtension xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <targets>\n        <targetType>ActionParameter</targetType>\n        <targetName>Example.Request.inputOne</targetName>\n        <attributes>\n            <key>ProvidedValueList</key>\n            <dataType>String</dataType>\n            <value>option1|Option 1, option2|Option 2, option3|Option 3</value>\n        </attributes>\n    </targets>\n</InvocableActionExtension>"
+    },
+    {
+      "description": "The following example shows how to reference a dynamic picklist class for an input parameter.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InvocableActionExtension xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <targets>\n        <targetType>ActionParameter</targetType>\n        <targetName>Example.Request.inputOne</targetName>\n        <attributes>\n            <key>ProvidedValueList</key>\n            <dataType>String</dataType>\n            <value>apex://MyDynamicPicklistClass</value>\n        </attributes>\n    </targets>\n</InvocableActionExtension>"
+    },
+    {
+      "description": "The following example shows how to assign a partial custom property editor to a primary parameter and link a related parameter.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InvocableActionExtension xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <targets>\n        <targetType>ActionParameter</targetType>\n        <targetName>Example.Request.inputOne</targetName>\n        <attributes>\n            <key>CpeName</key>\n            <dataType>String</dataType>\n            <value>c:myCustomEditor</value>\n        </attributes>\n    </targets>\n    <targets>\n        <targetType>ActionParameter</targetType>\n        <targetName>Example.Request.inputTwo</targetName>\n        <attributes>\n            <key>ConfiguredBy</key>\n            <dataType>String</dataType>\n            <value>inputOne</value>\n        </attributes>\n    </targets>\n</InvocableActionExtension>"
+    },
+    {
+      "description": "The following example shows how to add a custom header to an action.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InvocableActionExtension xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <targets>\n        <targetType>ActionDefinition</targetType>\n        <targetName>Example</targetName>\n        <attributes>\n            <key>CustomHeaderLwcName</key>\n            <dataType>String</dataType>\n            <value>c:myCustomHeader</value>\n        </attributes>\n    </targets>\n</InvocableActionExtension>"
+    }
+  ]
+}

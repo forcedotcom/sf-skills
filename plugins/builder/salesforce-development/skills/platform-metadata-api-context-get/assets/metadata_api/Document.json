@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Document - Metadata API",
+  "description": "Represents a Document. All documents must be in a document folder, such as sampleFolder/TestDocument.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "content": {
+      "type": "base64",
+      "description": "Content of the document. Base 64-encoded binary data. Prior to making an API call, client applications must encode the binary attachment data as base64. Upon receiving a response, client applications must decode the base64 data to binary. This conversion is usually handled for you by a SOAP client. This field is inherited from the MetadataWithContent component."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the document. Enter a description to distinguish this document from others."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name of the document, including the folder name. In version 17.0 and earlier, the fullName included the document extension. In version 18.0 and later, the fullName does not include the file extension. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. If this field contained characters before version 14.0 that are no longer allowed, the characters were stripped out of this field, and the previous value of the field was saved in the name field. This field is inherited from the Metadata component."
+    },
+    "internalUseOnly": {
+      "type": "boolean",
+      "description": "Indicates whether the document is confidential (true) or not (false). This field and public are mutually exclusive; you cannot set both to true.",
+      "required": true
+    },
+    "keywords": {
+      "type": "string",
+      "description": "Contains one or more words that describe the document. A check for matches to words in this field is performed when doing a search."
+    },
+    "name": {
+      "type": "string",
+      "description": "The list of characters allowed in the fullName field has been reduced for versions 14.0 and later. This field contains the value contained in the fullName field before version 14.0. This field is only populated if the value of the fullName field contained characters that are no longer accepted in that field."
+    },
+    "public": {
+      "type": "boolean",
+      "description": "Indicates whether the document is an image available for HTML email templates and does not require a Salesforce username and password to view in an email (true) or not (false). If the images will be used as a custom app logo or custom tab icon, both of which require a Salesforce username and password to view, set this field to false. This field and internalUseOnly are mutually exclusive; you cannot set both to true.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Document\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"internalUseOnly\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"keywords\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"public\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a document:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <internalUseOnly>false</internalUseOnly>\n    <name>Q2 Campaign Analysis</name>\n    <public>false</public>\n    <description>Analyze Q2 campaign effectiveness</description>\n</Document>"
+    }
+  ]
+}

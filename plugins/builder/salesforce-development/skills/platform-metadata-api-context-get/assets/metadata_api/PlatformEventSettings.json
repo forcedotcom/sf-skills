@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PlatformEventSettings - Metadata API",
+  "description": "Represents settings for platform events and change data capture events.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableEnhancedUsageMetrics": {
+      "type": "boolean",
+      "description": "Enables enhanced usage metrics for queries run against PlatformEventUsageMetric. Enhanced usage metrics provide additional fields for the queries and granular time segments. For more information, see Enhanced Usage Metrics in the Platform Events Developer Guide. Default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PlatformEventSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableEnhancedUsageMetrics\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PlatformEventSettings component that enables the enhanced usage metrics feature.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PlatformEventSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableEnhancedUsageMetrics>true</enableEnhancedUsageMetrics>\n</PlatformEventSettings>"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "GoogleAppsSettings - Metadata API",
+  "description": "Represents the settings for Google Apps in Salesforce.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableGmailButtons": {
+      "type": "boolean",
+      "description": "Indicates whether the Gmail Buttons setting is enabled (true) or not (false)."
+    },
+    "enableGmailButtonsAndLinks": {
+      "type": "boolean",
+      "description": "Indicates whether Gmail Buttons and Links are enabled (true) or not (false)."
+    },
+    "enableGmailLinks": {
+      "type": "boolean",
+      "description": "Indicates whether the Gmail Links setting is enabled (true) or not (false)."
+    },
+    "enableGoogleDocs": {
+      "type": "boolean",
+      "description": "Indicates whether the Add Google Docs to Salesforce setting is enabled (true) or not (false)."
+    },
+    "enableGoogleDocsTab": {
+      "type": "boolean",
+      "description": "Indicates whether the Add Google Docs button on the Libraries tab is enabled (true) or not (false)."
+    },
+    "enableGoogleTalk": {
+      "type": "boolean",
+      "description": "Indicates whether the Google Talk Sidebar Component is enabled (true) or not (false)."
+    },
+    "googleAppsDomain": {
+      "type": "string",
+      "description": "Specifies the domain registered for your organization’s Google Apps account."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"GoogleAppsSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableGmailButtons\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGmailButtonsAndLinks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGmailLinks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGoogleDocs\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGoogleDocsTab\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGoogleTalk\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"googleAppsDomain\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"googleAppsDomainLinked\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"googleAppsDomainValidated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a GoogleAppsSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<GoogleAppsSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableGmailButtons>false</enableGmailButtons>\n    <enableGmailButtonsAndLinks>false</enableGmailButtonsAndLinks>\n    <enableGmailLinks>false</enableGmailLinks>\n    <enableGoogleDocs>false</enableGoogleDocs>\n    <enableGoogleDocsTab>false</enableGoogleDocsTab>\n    <enableGoogleTalk>false</enableGoogleTalk>\n    <googleAppsDomain>example.com</googleAppsDomain>\n    <googleAppsDomainLinked>false</googleAppsDomainLinked>\n    <googleAppsDomainValidated>false</googleAppsDomainValidated>\n</GoogleAppsSettings>"
+    }
+  ]
+}

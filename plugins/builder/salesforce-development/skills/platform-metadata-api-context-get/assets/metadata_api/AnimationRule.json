@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AnimationRule - Metadata API",
+  "description": "Represents criteria for determining when an animation is displayed to Path users.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".animationRule",
+  "directory_location": "animationRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "animationFrequency": {
+      "type": "picklist",
+      "description": "The frequency with which an animation is displayed when a user selects the designated picklist values in a path. Valid values are: always often sometimes rarely A value of always triggers an animation every time. The values often, sometimes, and rarely trigger an animation progressively less frequently.",
+      "required": true
+    },
+    "developerName": {
+      "type": "string",
+      "description": "The developer name for the animation rule. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field.",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the animation rule is active (true) or not (false).",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the animation rule.",
+      "required": true
+    },
+    "recordTypeContext": {
+      "type": "picklist",
+      "description": "An enum to track whether this AnimationRule applies to all record types for the associated sObject, or only to a single or main record type. Valid values are All, Master, or Custom.",
+      "required": true
+    },
+    "recordTypeName": {
+      "type": "reference",
+      "description": "The record type selected for the sObject in which the animation is displayed."
+    },
+    "sobjectType": {
+      "type": "string",
+      "description": "The object on which the animation rule is run."
+    },
+    "targetField": {
+      "type": "string",
+      "description": "Name of the field used to determine when to display an animation.",
+      "required": true
+    },
+    "targetFieldChangeToValues": {
+      "type": "string",
+      "description": "Values used to determine when to display an animation. When a user selects a value in targetField that matches a value stored in targetFieldChangeToValues, the animation is displayed.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AnimationRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"animationFrequency\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordTypeContext\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordTypeName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sobjectType\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetField\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetFieldChangeToValues\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AnimationRule component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AnimationRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <animationFrequency>Always</animationFrequency>\n    <developerName>AnimationRule_DeveloperName</developerName>\n    <isActive>true</isActive>\n    <masterLabel>AnimationRule Label</masterLabel>\n    <recordTypeContext>All</recordTypeContext>\n    <recordTypeName>__MASTER__</recordTypeName>\n    <sobjectType>Opportunity</sobjectType>\n    <targetField>StageName</targetField>\n    <targetFieldChangeToValues>Delivered, Negotiating, Closed Won</targetFieldChangeToValues>\n</AnimationRule>"
+    }
+  ]
+}

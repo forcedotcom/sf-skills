@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OrderManagementSettings - Metadata API",
+  "description": "Represents options for the Salesforce Order Management product. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "deliveryEstimationEnabled": {
+      "type": "boolean",
+      "description": "Specifies whether delivery estimation is active (true) or not (false). The default value is false. Available in API version 62.0 and later."
+    },
+    "enableB2CIntegration": {
+      "type": "boolean",
+      "description": "Indicates whether Order Management is allowed to accept order data from B2C Commerce (true) or not (false). The default value is false."
+    },
+    "enableDuplicateManagement": {
+      "type": "boolean",
+      "description": "Indicates whether the Order Management B2C Commerce Integration applies the Salesforce org’s duplicate and matching rules for Accounts, Contacts, and Person Accounts to shopper records (true) or not (false). The default value is false. The Setup toggle label is B2C Integration Data Matching Rules. Available in API version 53.0 and later."
+    },
+    "enableHighScaleOrders": {
+      "type": "boolean",
+      "description": "Indicates whether the Order Management B2C Commerce Integration uses the High Scale Orders feature (true) or the original order ingestion system (false). The default value is false. Available in API version 56.0 and later."
+    },
+    "enableOrderManagement": {
+      "type": "boolean",
+      "description": "Indicates whether Order Management features are enabled (true) or not (false). The default value is false."
+    },
+    "enablePersonAccountsForShoppers": {
+      "type": "boolean",
+      "description": "Indicates whether Order Management represents each shopper with a Person Account (true) or a normal Account and a Contact (false). The default value is false. Available in API version 49.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"OrderManagementSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"deliveryEstimationEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableActivityFeedPerChangeOrder\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableB2CHighScaleOrders\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableB2CIntegration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBillingTypeOrdSummCreation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDuplicateManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHighScaleOrders\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIndividualOrderItemTaxAdjustments\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMRURecordCaching\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOMAutomation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOrderManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePersonAccountsForShoppers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"initOMAutomation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an OrderManagementSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OrderManagementSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\" \nxmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <enableOrderManagement>true</enableOrderManagement>\n    <deliveryEstimationEnabled>false</deliveryEstimationEnabled>\n    <enableB2CIntegration>true</enableB2CIntegration>\n    <enableDuplicateManagement>true</enableB2CIntegration>\n    <enableHighScaleOrders>false</enableB2CSelfService>\n    <enablePersonAccountsForShoppers>true</enablePersonAccountsForShoppers>\n    </OrderManagementSettings>"
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DiscoveryAIModel - Metadata API",
+  "description": "Represents the metadata associated with a model used in Einstein Discovery.",
+  "file_information": ".model",
+  "directory_location": "discovery",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "algorithmType": {
+      "type": "DiscoveryAlgorithmType",
+      "description": "Algorithm that Einstein Discovery used to create the model associated with this story."
+    },
+    "classificationThreshold": {
+      "type": "double",
+      "description": "Threshold value. Applies only to binary classification models. For regression models, this is null."
+    },
+    "description": {
+      "type": "string",
+      "description": "Model description."
+    },
+    "label": {
+      "type": "string",
+      "description": "Model label. If you package a model, this label appears in Package Manager."
+    },
+    "modelFields": {
+      "type": "DiscoveryModelField[]",
+      "description": "One or more model fields (variables)."
+    },
+    "modelRuntimeType": {
+      "type": "DiscoveryModelRuntimeType",
+      "description": "Model run-time type."
+    },
+    "predictedField": {
+      "type": "string",
+      "description": "Name of the field that is predicted."
+    },
+    "predictionType": {
+      "type": "DiscoveryPredictionType",
+      "description": "Type of prediction. One of the following strings: Regression Classification Unknown"
+    },
+    "sourceType": {
+      "type": "DiscoveryModelSourceType",
+      "description": "Source type."
+    },
+    "status": {
+      "type": "DiscoveryAIModelStatus",
+      "description": "Model status (enabled or disabled)."
+    },
+    "trainingMetrics": {
+      "type": "string",
+      "description": "JSON object that represents metrics about the model when it was trained."
+    },
+    "transformations": {
+      "type": "DiscoveryModelTransform",
+      "description": "One or more model transformations."
+    }
+  },
+  "sub_types": {
+    "DiscoveryAlgorithmType": {
+      "Best": {
+        "type": "string",
+        "description": "Tournament Model. Genetic algorithm used to generate high-quality solutions to optimization and search problems, like optimizing decision trees for better performance."
+      },
+      "Glm": {
+        "type": "string",
+        "description": "Generalized Linear Model. Regression-based algorithm."
+      },
+      "Gbm": {
+        "type": "string",
+        "description": "Gradient Boost Machine. Decision tree-based ensemble machine learning algorithm."
+      },
+      "Xgboost": {
+        "type": "string",
+        "description": "XGBoost. Decision tree-based ensemble machine learning algorithm."
+      },
+      "Drf": {
+        "type": "string",
+        "description": "Random Forest. Supervised learning algorithm that uses multiple decision trees, randomization, and other optimization techniques."
+      }
+    },
+    "DiscoveryModelField": {
+      "isDisparateImpact": {
+        "type": "boolean",
+        "description": "Indicates whether the field is disparate impact (true) or not (false)."
+      },
+      "isSensitive": {
+        "type": "boolean",
+        "description": "Indicates whether the field is sensitive (true) or not (false)."
+      },
+      "label": {
+        "type": "string",
+        "description": "Field label displayed in the UI."
+      },
+      "name": {
+        "type": "string",
+        "description": "Field name."
+      },
+      "type": {
+        "type": "DiscoveryModelFieldType",
+        "description": "Field type. Enumerated."
+      },
+      "values": {
+        "type": "string[]",
+        "description": "A list of field values."
+      }
+    },
+    "DiscoveryModelTransform": {
+      "config": {
+        "type": "string",
+        "description": "The configuration for the transformation."
+      },
+      "sourceFieldNames": {
+        "type": "string[]",
+        "description": "A list of the source field names."
+      },
+      "targetFieldNames": {
+        "type": "string[]",
+        "description": "A list of the target field names."
+      },
+      "type": {
+        "type": "DiscoveryAIModelTransformationType",
+        "description": "Type of transformation."
+      }
+    },
+    "DiscoveryAIModelTransformationType": {
+      "TypographicClustering": {
+        "type": "string",
+        "description": "Typographic clustering transformation."
+      },
+      "SentimentAnalysis": {
+        "type": "string",
+        "description": "Sentiment analysis transformation."
+      },
+      "FreeTextClustering": {
+        "type": "string",
+        "description": "Free text clustering transformation."
+      },
+      "NumericalImputation": {
+        "type": "string",
+        "description": "Numerical imputation transformation."
+      },
+      "CatagoricalImputation": {
+        "type": "string",
+        "description": "Catagorical imputation transformation."
+      },
+      "TimeSeriesForecast": {
+        "type": "string",
+        "description": "Time series forecast transformation."
+      },
+      "ExtractMonthOfYear": {
+        "type": "string",
+        "description": "Extract month of year transformation."
+      },
+      "ExtractDayOfWeek": {
+        "type": "string",
+        "description": "Extract day of week transformation."
+      },
+      "ZipCodeAnalysis": {
+        "type": "string",
+        "description": "Zip code analysis transformation."
+      }
+    },
+    "DiscoveryModelFieldType": {
+      "Text": {
+        "type": "string",
+        "description": "Text data type."
+      },
+      "Number": {
+        "type": "string",
+        "description": "Number data type."
+      },
+      "Date": {
+        "type": "string",
+        "description": "Date data type."
+      }
+    },
+    "DiscoveryModelRuntimeType": {
+      "Discovery": {
+        "type": "string",
+        "description": "The model run-type is Einstein Discovery."
+      },
+      "H2O": {
+        "type": "string",
+        "description": "The model run-type is H20."
+      },
+      "T": {
+        "type": "string",
+        "description": "The model run-type is Tensorflow v2.4.4."
+      },
+      "Tf27": {
+        "type": "string",
+        "description": "The model run-type is Tensorflow v2.7.0."
+      },
+      "SC102": {
+        "type": "string",
+        "description": "The model run-type is Scikit Learn v1.0.2."
+      }
+    },
+    "DiscoveryModelSourceType": {
+      "Discovery": {
+        "type": "string",
+        "description": "Einstein Discovery built the model."
+      },
+      "UserUpload": {
+        "type": "string",
+        "description": "An external tool built the model. The model was then uploaded into Salesforce. Note: This source type is not supported in the Metadata API."
+      }
+    },
+    "DiscoveryAIModelStatus": {
+      "Disabled": {
+        "type": "string",
+        "description": "The model is disabled (inactive)."
+      },
+      "Uploading": {
+        "type": "string",
+        "description": "The model is uploading."
+      },
+      "UploadFailed": {
+        "type": "string",
+        "description": "The model failed to upload."
+      },
+      "UploadCompleted": {
+        "type": "string",
+        "description": "The model upload is complete."
+      },
+      "Validating": {
+        "type": "string",
+        "description": "The model is validating."
+      },
+      "ValidationFailed": {
+        "type": "string",
+        "description": "The model validation failed."
+      },
+      "ValidationCompleted": {
+        "type": "string",
+        "description": "The model validation is complete."
+      },
+      "Enabled": {
+        "type": "string",
+        "description": "The model is enabled (active)."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DiscoveryAIModel\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"algorithmType\" type=\"tns:DiscoveryAlgorithmType\"/>\n        <xsd:element name=\"classificationThreshold\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"modelFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryModelField\"/>\n        <xsd:element name=\"modelRuntimeType\" type=\"tns:DiscoveryModelRuntimeType\"/>\n        <xsd:element name=\"predictedField\" type=\"xsd:string\"/>\n        <xsd:element name=\"predictionType\" type=\"tns:DiscoveryPredictionType\"/>\n        <xsd:element name=\"sourceType\" type=\"tns:DiscoveryModelSourceType\"/>\n        <xsd:element name=\"status\" type=\"tns:DiscoveryAIModelStatus\"/>\n        <xsd:element name=\"trainingMetrics\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"transformations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DiscoveryModelTransform\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryAIModelStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Disabled\"/>\n    <xsd:enumeration value=\"Enabled\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DiscoveryAIModelTransformationType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:simpleType name=\"DiscoveryAlgorithmType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Glm\"/>\n    <xsd:enumeration value=\"Gbm\"/>\n    <xsd:enumeration value=\"Xgboost\"/>\n    <xsd:enumeration value=\"Drf\"/>\n    <xsd:enumeration value=\"Best\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DiscoveryModelField\">\n  <xsd:sequence>\n    <xsd:element name=\"isDisparateImpact\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isSensitive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:DiscoveryModelFieldType\"/>\n    <xsd:element name=\"values\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryModelFieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"Date\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DiscoveryModelRuntimeType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Discovery\"/>\n    <xsd:enumeration value=\"H2O\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DiscoveryModelSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Discovery\"/>\n    <xsd:enumeration value=\"UserUpload\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DiscoveryModelTransform\">\n  <xsd:sequence>\n    <xsd:element name=\"config\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceFieldNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetFieldNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:DiscoveryAIModelTransformationType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DiscoveryPredictionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unknown\"/>\n    <xsd:enumeration value=\"Regression\"/>\n    <xsd:enumeration value=\"Classification\"/>\n    <xsd:enumeration value=\"MulticlassClassification\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here is a sample DiscoveryAIModel:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DiscoveryAIModel xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n   <content xsi:nil=\"true\"/>\n   <algorithmType>Glm</algorithmType>\n   <classificationThreshold>0.7383</classificationThreshold>\n   <label>Maximize Tenure</label>\n   <modelFields>\n      <label>Field</label>\n      <name>Field</name>\n      <type>Text</type>\n   </modelFields>\n   <modelFields>\n      <label>PTO</label>\n      <name>PTO</name>\n      <type>Number</type>\n   </modelFields>\n   <modelFields>\n      <label>Level</label>\n      <name>Level</name>\n      <type>Text</type>\n   </modelFields>\n   <modelFields>\n      <label>Salary</label>\n      <name>Salary</name>\n      <type>Number</type>\n   </modelFields>\n   <modelFields>\n      <label>Tenure</label>\n      <name>Tenure</name>\n      <type>Number</type>\n   </modelFields>\n   <modelRuntimeType>Discovery</modelRuntimeType>\n   <predictedField>Tenure</predictedField>\n   <predictionType>Classification</predictionType>\n   <sourceType>Discovery</sourceType>\n   <status>Enabled</status>\n</DiscoveryAIModel>"
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FlowSettings - Metadata API",
+  "description": "Represents the Salesforce settings for processes and flows, such as whether Lightning runtime for flows is enabled.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "canDebugFlowAsAnotherUser": {
+      "type": "boolean",
+      "description": "Indicates whether a flow can be debugged as another user (true) or not (false). Corresponds to the Let admins debug flows as other users field on the Process Automation Settings page in Setup. Available in API version 50.0 and later."
+    },
+    "doesEnforceApexCpuTimeLimit": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce accurately measures the CPU time that flows and processes consume (true) or not (false). Corresponds to the Accurately Measure the CPU Time Consumption of Flows and Processes release update. Available in API version 51.0 and later."
+    },
+    "doesFormulaEnforceDataAccess": {
+      "type": "boolean",
+      "description": "Indicates whether formula resources and formula fields in a flow enforce record-level security (true) or not (false). Corresponds to the Enforce Data Access in Flow Formulas critical update. Available in API version 48.0 and later."
+    },
+    "doesFormulaGenerateHtmlOutput": {
+      "type": "boolean",
+      "description": "Indicates whether flow formula functions that generate HTML, such as BR(), IMAGE(), and HYPERLINK(), include encoded markers ( __BR_ENCODED__ ) (true) or not (false). Available in API version 48.0 and later."
+    },
+    "enableFlowBREncodedFixEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether BR() functions in flow and process formulas result in a line break (true) or resolve to _BR_ENCODED_ as a literal value (false). Corresponds to the Use the BR() Function in Flows and Processes critical update."
+    },
+    "enableFlowCustomPropertyEditor": {
+      "type": "boolean",
+      "description": "Indicates whether an org has custom property editors enabled for actions and screen fields in Flow Builder (true) or not (false). This field is available in API version 48.0 to 50.0. The field is deprecated in API version 50.0 and later. All orgs that have Flow Builder support custom property editors for actions and screen fields."
+    },
+    "enableFlowDeployAsActiveEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether processes and flows can be deployed as active via change sets or Metadata API. When the value is false, all processes and flows are deployed as inactive. When the value is true, deploying an active process or flow in a production org causes your Apex tests to run. If Apex tests don’t launch your org’s required percentage of active processes and autolaunched flows, the deployment is rolled back. The default value is false for production orgs and is true for non-production orgs such as scratch, sandbox, and developer orgs. Corresponds to the Deploy processes and flows as active field on the Process Automation Settings page in Setup. The field appears in the user interface on production orgs only."
+    },
+    "enableFlowFieldFilterEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether flows can successfully execute Create Records and Update Records elements that update fields to which the running doesn’t have edit access. By default (false), the Create Records or Update Records element fails and executes the fault path if it has one. When the value is true, the element sets only the fields that the running user can edit. No notification is sent when some fields aren’t updated. Corresponds to the Filter inaccessible fields from flow requests field on the Process Automation Settings page in Setup."
+    },
+    "enableFlowFormulasFixEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether process and flow formulas return null values when the calculations involve a null record variable or null lookup relationship field. When the value is true, those formulas return null values at run time. When the value is false, those formulas return unhandled exceptions at run time. Corresponds to the Check for Null Record Variables or Null Values of Lookup Relationship Fields in Process and Flow Formulas critical update."
+    },
+    "enableFlowInterviewSharingEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether users can resume the paused flow interviews that they have edit access to. By default (true), users can resume interviews that are shared with them, either directly or via the role hierarchy. When the value is false, each paused interview can be resumed only by the interview owner or a flow admin who has view access to the interview. Corresponds to the Let users resume shared flow interviews field on the Process Automation Settings page in Setup."
+    },
+    "enableFlowNullPreviousValueFix": {
+      "type": "boolean",
+      "description": "Indicates whether each process evaluates criteria by always using the original record field values from when the process begins. When the value is true, each process with an Update Records action and multiple criteria nodes always evaluates criteria using the original field values of the record. When the value is false, processes evaluate the updated values of record fields that were null when the process began. Corresponds to the Evaluate Criteria Based on Original Record Values in the Process Builder critical update."
+    },
+    "enableFlowPauseEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether screens can display the Pause button so that users can pause flow interviews. By default, the value is false. Corresponds to the Let users pause flows field on the Process Automation Settings page in Setup."
+    },
+    "enableFlowReactiveScreens": {
+      "type": "boolean",
+      "description": "Indicates whether supported screen components in flows running on API version 57.0 and 58.0 can react to changes in other components on the same screen. This setting isn’t applicable to flows running on API version 59.0 and later. By default, the value is false. To make a component reactive, reference the output of another component on the same screen in the configuration pane. Corresponds to the Enable Reactive Components for Specific Flow Versions field on the Process Automation Settings page in Setup."
+    },
+    "enableFlowUseApexExceptionEmail": {
+      "type": "boolean",
+      "description": "Indicates whether process and flow error emails are sent to: The user who last modified the process or flow (false) The addresses set on the Apex Exception Email page in Setup (true) By default, the value is false. Corresponds to the Send Process or Flow Error Email to field on the Process Automation Settings page in Setup."
+    },
+    "enableFlowViaRestUsesUserCtxt": {
+      "type": "boolean",
+      "description": "Indicates whether a flow that runs via REST API uses the running user’s profile and permission sets to determine the object permissions and field-level access of the flow. Corresponds to the Run Flows in User Context via REST API critical update. Available in API version 54.0 and later."
+    },
+    "enableInvocableFlowFixEnabled": {
+      "type": "boolean",
+      "description": "Removed in API version 50.0 and later. Indicates whether all autolaunched flow interviews are executed when they’re invoked in bulk from a process or the Invocable Actions resource in REST API (true) or not (false). When the value is false, flow interviews that share identical input parameters aren’t executed. Corresponds to the Execute All Flow Interviews When Invoked in Bulk critical update."
+    },
+    "enableLightningRuntimeEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether flows that are launched from a URL or from Setup use the Lightning runtime experience (true) or the Classic runtime experience (false). By default, the value is true. Corresponds to the Enable Lightning runtime for flows field on the Process Automation Settings page in Setup."
+    },
+    "isAccessToInvokedApexRequired": {
+      "type": "boolean",
+      "description": "Indicates whether flows can invoke Apex classes only when the running users’ profiles or permission sets include access to those Apex classes. When the value is false, Apex class security doesn’t apply to flows. Corresponds to the Require User Access to Apex Classes Invoked by Flow critical update. This field is available in API versions 47.0 to 58.0. The field is deprecated in API version 59.0 and later."
+    },
+    "isApexPluginAccessModifierRespected": {
+      "type": "boolean",
+      "description": "Indicates whether flows respect the public access modifiers for legacy Apex actions. When the value is true : Flows fail when they execute public legacy Apex actions from a different namespace. Public legacy Apex actions from a different namespace aren't available in Flow Builder. Global legacy Apex actions with public describe or invoke methods are unavailable to flows in a different namespace. When the value is false, you can add public legacy Apex actions to flows even though they’re not supported. Also, global legacy Apex actions with public describe or invoke methods are available to flows in a different namespace. Corresponds to the Make Flows Respect Access Modifiers for Legacy Apex Actions critical update. Available in API version 48.0 and later."
+    },
+    "isEnhancedFlowListViewVisible": {
+      "type": "boolean",
+      "description": "Indicates whether the enhanced Flows list view in Lightning Experience replaces the Classic Flows list view (true) or not (false). The default value is true. If the field is set to false, the Classic Flows list view replaces the enhanced list view."
+    },
+    "isFlowApexContextRetired": {
+      "type": "boolean",
+      "description": "Indicates whether the rules for enforcing explicit access to Apex classes are disabled (true) or not (false). For most Salesforce orgs the default value is true. Corresponds to the Disable Rules for Enforcing Explicit Access to Apex Classes release update. This field is available in API versions 49.0 to 58.0. The field is deprecated in API version 59.0 and later."
+    },
+    "isFlowBlockAccessToSessionIDEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether a valid session ID is returned in API.SessionID (false) or not (true). The default value is false. When the value is true, flows that access the session ID variable receive a placeholder string instead of a valid session ID."
+    },
+    "isManageFlowRequiredForAutomationCharts": {
+      "type": "boolean",
+      "description": "Indicates whether the Manage Flow permission is required to view all charts in Automation Home (Beta) (true) or not (false). The default value is false. All users with the View Setup and Configuration permission can view all charts in Automation Home. If the field is set to true, then users with the View Setup and Configuration permission can view only the Total Started Automations by Process Type chart. The Manage Flow permission is required to view all charts."
+    },
+    "isTimeResumedInSameRunContext": {
+      "type": "boolean",
+      "description": "Indicates whether paused autolaunched flows always resume in the same context and retain the user access that they had before being paused (true) or not (false). Corresponds to the Make Paused Flow Interviews Resume in the Same Context with the Same User Access release update. This field is available in API version 57.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FlowSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"canDebugFlowAsAnotherUser\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesEnforceApexCpuTimeLimit\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesFormulaEnforceDataAccess\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesFormulaGenerateHtmlOutput\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAgentforceFlowAutomation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailSimpleRespectProfiles\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailsimpleSecureProfiles\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowBREncodedFixEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowCustomPropertyEditor\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowDeployAsActiveEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowFieldFilterEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowFormulasFixEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowInterviewSharingEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowNullPreviousValueFix\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowPauseEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowReactiveChoiceOptions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowReactiveScreens\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowUseApexExceptionEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFlowViaRestUsesUserCtxt\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLightningRuntimeEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isApexPluginAccessModifierRespected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isEnhancedFlowListViewVisible\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isFlowBlockAccessToSessionIDEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isManageFlowRequiredForAutomationCharts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSupportRollbackOnErrorForApexInvocableActionsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s an example of the Flow.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FlowSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <doesFormulaEnforceDataAccess>true</doesFormulaEnforceDataAccess>\n    <enableFlowBREncodedFixEnabled>true</enableFlowBREncodedFixEnabled>\n    <enableFlowDeployAsActiveEnabled>false</enableFlowDeployAsActiveEnabled>\n    <enableFlowFieldFilterEnabled>false</enableFlowFieldFilterEnabled>\n    <enableFlowFormulasFixEnabled>true</enableFlowFormulasFixEnabled>\n    <enableFlowInterviewSharingEnabled>true</enableFlowInterviewSharingEnabled>\n    <enableFlowNullPreviousValueFix>true</enableFlowNullPreviousValueFix>\n    <enableFlowPauseEnabled>true</enableFlowPauseEnabled>\n    <enableFlowUseApexExceptionEmail>false</enableFlowUseApexExceptionEmail>\n    <enableLightningRuntimeEnabled>true</enableLightningRuntimeEnabled>\n    <isApexPluginAccessModifierRespected>true</isApexPluginAccessModifierRespected>\n    <isEnhancedFlowListViewVisible>true</isEnhancedFlowListViewVisible>\n    <isManageFlowRequiredForAutomationCharts>false</isManageFlowRequiredForAutomationCharts>\n</FlowSettings>"
+    }
+  ]
+}

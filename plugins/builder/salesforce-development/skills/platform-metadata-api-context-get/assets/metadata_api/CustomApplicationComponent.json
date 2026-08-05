@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomApplicationComponent - Metadata API",
+  "description": "Represents a custom console component (Visualforce page) assigned to a CustomApplication that is marked as a Salesforce console. Custom console components extend the capabilities of Salesforce console apps. See Customize a Console with Custom Components in Salesforce Classic in Salesforce Help.",
+  "file_information": ".customApplicationComponent",
+  "directory_location": "customApplicationComponents",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "buttonIconUrl": {
+      "type": "string",
+      "description": "The address of a page that hosts an icon for the button."
+    },
+    "buttonStyle": {
+      "type": "string",
+      "description": "The inline style used to define how the button looks."
+    },
+    "buttonText": {
+      "type": "string",
+      "description": "The label on the button used to launch the custom console component."
+    },
+    "buttonWidth": {
+      "type": "int",
+      "description": "The pixel width of the button displayed in the Salesforce console."
+    },
+    "height": {
+      "type": "int",
+      "description": "The pixel height of the window used to display the custom console component."
+    },
+    "isHeightFixed": {
+      "type": "boolean",
+      "description": "Indicates whether users can change the custom console component height (false) or not (true).",
+      "required": true
+    },
+    "isHidden": {
+      "type": "boolean",
+      "description": "Indicates whether the custom console component is hidden from users (true) or not (false).",
+      "required": true
+    },
+    "isWidthFixed": {
+      "type": "boolean",
+      "description": "Indicates whether users can change the component width (false) or not (true).",
+      "required": true
+    },
+    "visualforcePage": {
+      "type": "string",
+      "description": "Name of the Visualforce page that represents the custom console component.",
+      "required": true
+    },
+    "width": {
+      "type": "int",
+      "description": "The pixel width of the window used to display the custom console component."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomApplicationComponent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"buttonIconUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"buttonStyle\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"buttonText\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"buttonWidth\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"isHeightFixed\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isHidden\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isWidthFixed\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"visualforcePage\" type=\"xsd:string\"/>\n        <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a custom application component:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomApplicationComponent xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <buttonIconUrl>https://salesforce.com</buttonIconUrl>\n    <buttonStyle>buttonStyleCSS</buttonStyle>\n    <buttonText>buttonText</buttonText>\n    <buttonWidth>200</buttonWidth>\n    <height>200</height>\n    <isHeightFixed>false</isHeightFixed>\n    <isHidden>false</isHidden>\n    <isWidthFixed>false</isWidthFixed>\n    <visualforcePage>MyVisualforcePage</visualforcePage>\n    <width>50</width>\n</CustomApplicationComponent>"
+    }
+  ]
+}

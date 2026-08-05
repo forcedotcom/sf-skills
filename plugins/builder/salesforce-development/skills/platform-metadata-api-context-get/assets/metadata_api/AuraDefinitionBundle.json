@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AuraDefinitionBundle - Metadata API",
+  "description": "Represents an Aura definition bundle. A bundle contains an Aura definition, such as an Aura component, and its related resources, such as a JavaScript controller. The definition can be a component, application, event, interface, or a tokens collection.",
+  "file_information": "An AuraDefinitionBundle component is a folder that contains definition files. Unlike most other metadata components, an AuraDefinitionBundle component isn’t a single file, it’s a collection of files. Each file represents a resource in a bundle, such as markup, applications, code files (including controllers and helpers), events, documentation, and interfaces. For example, this directory structure shows the hierarchy of the folders and files for two bundles: bundle1 and bundle2.\n\n```\naura\n    bundle1\n        bundle1.cmp\n        bundle1Controller.js\n    bundle2\n        bundle2.app\n        bundle2Controller.js\n        bundle2.auradoc\n```\n\nAura definition bundles must be under a top-level folder named aura. Each bundle must have its own subfolder under the aura folder. The name of each definition file must start with the bundle name.\n\nA bundle doesn’t have a suffix. Definition files can have one of these suffixes:\n\nSuffix | Component Type\n--- | ---\n.app | Application\n.cmp | Component\n.design | Design\n.evt | Event\n.intf | Interface\n.js | Controller, Helper, or Renderer\n.svg | SVG image\n.css | Style\n.auradoc | Documentation\n.tokens | Tokens collection\n\nEach bundle can have only one file each with a suffix of .app, .cmp, .design, .evt, .intf, or .tokens.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apiVersion": {
+      "type": "double",
+      "description": "The API version for this definition bundle. When you create an Aura bundle, you can specify the API version to save it with. Available in API version 35.0 and later."
+    },
+    "auraDefinitions": {
+      "type": "AuraDefinitions",
+      "description": "Reserved for internal use."
+    },
+    "controllerContent": {
+      "type": "base64Binary",
+      "description": "The content of a JavaScript client-side controller."
+    },
+    "description": {
+      "type": "string",
+      "description": "The specification of the Aura bundle. Available in API version 35.0 and later."
+    },
+    "designContent": {
+      "type": "base64Binary",
+      "description": "The content of a design definition. Only valid inside a component bundle."
+    },
+    "documentationContent": {
+      "type": "base64Binary",
+      "description": "The content of a documentation definition."
+    },
+    "helperContent": {
+      "type": "base64Binary",
+      "description": "The content of a JavaScript helper."
+    },
+    "markup": {
+      "type": "base64Binary",
+      "description": "The content of the markup for a definition."
+    },
+    "modelContent": {
+      "type": "base64Binary",
+      "description": "Deprecated. Do not use."
+    },
+    "packageVersions": {
+      "type": "PackageVersion[]",
+      "description": "The list of installed managed package versions that this Aura definition bundle references. Available in API version 35.0 and later."
+    },
+    "rendererContent": {
+      "type": "base64Binary",
+      "description": "The content of a JavaScript client-side renderer."
+    },
+    "styleContent": {
+      "type": "base64Binary",
+      "description": "The CSS for the definition."
+    },
+    "SVGContent": {
+      "type": "base64Binary",
+      "description": "The SVG image for the definition."
+    },
+    "testsuiteContent": {
+      "type": "base64Binary",
+      "description": "Reserved for internal use."
+    },
+    "type": {
+      "type": "AuraBundleType (enumeration of type string)",
+      "description": "The definition type. Valid values are: Application Component Event Interface Tokens"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AuraBundleType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Application\"/>\n    <xsd:enumeration value=\"Component\"/>\n    <xsd:enumeration value=\"Event\"/>\n    <xsd:enumeration value=\"Interface\"/>\n    <xsd:enumeration value=\"Tokens\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"AuraDefinition\">\n  <xsd:sequence>\n    <xsd:element name=\"defType\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" type=\"xsd:base64Binary\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AuraDefinitionBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"SVGContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"apiVersion\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"auraDefinitions\" minOccurs=\"0\" type=\"tns:AuraDefinitions\"/>\n        <xsd:element name=\"controllerContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"designContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"documentationContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"helperContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"markup\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"modelContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"packageVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PackageVersion\"/>\n        <xsd:element name=\"rendererContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"styleContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"testsuiteContent\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:AuraBundleType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AuraDefinitions\">\n  <xsd:sequence>\n    <xsd:element name=\"auraDefinition\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AuraDefinition\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PackageVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"majorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"minorNumber\" type=\"xsd:int\"/>\n    <xsd:element name=\"namespace\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"packageId\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows the directory structure of an AuraDefinitionBundle component.",
+      "code": "aura\n    sampleCmp\n        sampleCmp.cmp\n        sampleCmpController.js"
+    },
+    {
+      "description": "Content of sampleCmp.cmp:",
+      "code": "<aura:component>\n    <aura:attribute name=\"val1\" type=\"String\" default=\"Value\"/>\n    <aura:attribute name=\"val2\" type=\"String\" />\n    <aura:handler name=\"init\" value=\"{!this}\" action=\"{!c.myAction}\"/>\n        <ui:outputText value='Hello world!'/>\n        <ui:outputText value='{!v.val1}'/>\n        <ui:outputText value='{!v.val2}'/>\n</aura:component>"
+    },
+    {
+      "description": "Content of sampleCmpController.js:",
+      "code": "({  \n  myAction : function(component) {\n    component.set('v.val1','Value1');\n    component.set('v.val2','Value2');\n  }\n})"
+    }
+  ]
+}

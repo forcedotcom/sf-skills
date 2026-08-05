@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AccountSettings - Metadata API",
+  "description": "Represents an org’s account settings for account teams, account owner report, and the View Hierarchy link.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAccountDiscovery": {
+      "type": "boolean",
+      "description": "When true, sets up Einstein Account Management dashboards and installs the related CRM Analytics and Customer Insights apps. The dashboards give users access to account health analytics including metrics on open pipeline, risk, and engagement scores. Einstein Account Management is part of Revenue Intelligence, which is available for an additional cost. Available in API version 57.0 and later."
+    },
+    "enableAccountHistoryTracking": {
+      "type": "boolean",
+      "description": "Indicates whether history tracking is enabled for accounts (true) or not (false). The default value is false. If history tracking is disabled, the History related list is removed from account page layouts. However, history data is still available for reporting up to the date and time when tracking was disabled. Available in API version 47.0 and later."
+    },
+    "enableAccountInsightsInMobile": {
+      "type": "boolean",
+      "description": "Deprecated in API version 59.0 and later because the feature is no longer available. Indicates whether users can see Einstein Account Insights on their mobile device (true) or not (false). Insights appear in the Einstein Insights component, which is on account records and the Home page. To use this feature, users must have the Einstein Account Insights permission. Available in API version 47.0 to 58.0."
+    },
+    "enableAccountOwnerReport": {
+      "type": "boolean",
+      "description": "Indicates whether the Account Owner Report can (true) or can’t (false) be run by all users."
+    },
+    "enableAccountTeams": {
+      "type": "boolean",
+      "description": "Indicates whether account teams are enabled (true) or not (false). The Metadata API can’t be used to disable account teams."
+    },
+    "enableContactHistoryTracking": {
+      "type": "boolean",
+      "description": "Indicates whether history tracking is enabled for contacts (true) or not (false). Available in API version 46.0 and later."
+    },
+    "enableRelateContactToMultipleAccounts": {
+      "type": "boolean",
+      "description": "Indicates whether users can relate a contact to multiple accounts (true) or only one account (false). The default value is false. If this feature (Contacts to Multiple Accounts) is disabled, secondary contact–account relationships created while the feature was enabled are deleted. Available in API version 47.0 and later. Avoid using the Metadata API to enable this feature. Use the Account Settings page in Setup to enable Contacts to Multiple Accounts."
+    },
+    "enableReportsToOnPersonAccount": {
+      "type": "boolean",
+      "description": "Indicates whether the Reports To field on Person Account, which corresponds to the PersonReportsToId field on the Account object, is enabled. The field allows users to associate person accounts and contacts with other person accounts or contacts that they report to. Available in API version 62.0 and later."
+    },
+    "showViewHierarchyLink": {
+      "type": "boolean",
+      "description": "Indicates whether the default View Hierarchy link on all business account detail pages is visible (true) or hidden (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccountSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAccountDiscovery\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAccountHistoryTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAccountInsightsInMobile\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAccountOwnerReport\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAccountTeams\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContactHistoryTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRelateContactToMultipleAccounts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReportsToOnPersonAccount\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showViewHierarchyLink\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the Account.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableAccountDiscovery>true</enableAccountDiscovery>\n\t<enableAccountHistoryTracking>true</enableAccountHistoryTracking>\n\t<enableAccountInsightsInMobile>false</enableAccountInsightsInMobile>\n\t<enableAccountOwnerReport>true</enableAccountOwnerReport>\n\t<enableAccountTeams>true</enableAccountTeams>\n\t<enableContactHistoryTracking>true</enableContactHistoryTracking>\n\t<enableRelateContactToMultipleAccounts>true</enableRelateContactToMultipleAccounts>\n\t<enableReportsToOnPersonAccount>true</enableReportsToOnPersonAccount>\n\t<showViewHierarchyLink>true</showViewHierarchyLink>\n</AccountSettings>"
+    }
+  ]
+}

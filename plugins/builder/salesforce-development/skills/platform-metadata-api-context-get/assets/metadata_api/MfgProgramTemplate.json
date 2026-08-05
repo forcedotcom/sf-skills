@@ -1,0 +1,88 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MfgProgramTemplate - Metadata API",
+  "description": "Represents a definition of a program to create a program-based business. A program-based business, also known as a Manufacturing Program, enables manufacturers to drive their business models with forecasting tools and manage the end-to-end sales process efficiently.",
+  "file_information": ".mfgProgramTemplate",
+  "directory_location": "MfgProgramTemplate",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of the manufacturing program template."
+    },
+    "programTemplateItems": {
+      "type": "MfgProgramTemplateItem[]",
+      "description": "The list of templates associated with the manufacturing program template."
+    },
+    "programTemplateName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique identifier for the manufacturing program template."
+    },
+    "status": {
+      "type": "MfgProgramTemplateStatus (enumeration of type string)",
+      "required": true,
+      "description": "The status of the manufacturing program template.Values are: Active Draft Inactive The default value is Active."
+    }
+  },
+  "sub_types": {
+    "MfgProgramTemplateItem": {
+      "advAccountForecastSet": {
+        "type": "string",
+        "description": "The forecast set associated with the transformation."
+      },
+      "contextDefinition": {
+        "type": "string",
+        "properties": "Create, Filter, Group, Nillable, Sort, Update",
+        "description": "The context definition that defines how data is mapped and transformed to the target, such as an opportunity or account."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the manufacturing program template item."
+      },
+      "sourceContextMappingName": {
+        "type": "string",
+        "properties": "Create, Filter, Group, Nillable, Sort, Update",
+        "description": "The context mapping that defines how data is mapped from a list of facts(Input Data) to create structured information."
+      },
+      "targetContextMappingName": {
+        "type": "string",
+        "properties": "Create, Filter, Group, Nillable, Sort, Update",
+        "description": "The context mapping that defines how the structured data is saved to the target, such as an opportunity or sales agreement."
+      },
+      "templateItemName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the manufacturing program template item."
+      },
+      "transformationDisplayOrder": {
+        "type": "int",
+        "required": true,
+        "description": "The display order of the transformation in the manufacturing program template."
+      },
+      "transformationType": {
+        "type": "MfgProgramTransformationType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the type of transformation.Values are: BusinessTransformation ForecastSetRelation"
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MfgProgramTemplate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MfgProgramTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n     <description>Program Template</description>\n     <programTemplateItems>\n         <templateItemName>Template Item #1</templateItemName>\n         <transformationDisplayOrder>1</transformationDisplayOrder>\n         <transformationType>BusinessTransformation</transformationType>\n         <description>Program Template Item</description>\n     </programTemplateItems>\n     <programTemplateName>Sample Program Template</programTemplateName>\n     <status>Draft</status>\n</MfgProgramTemplate>"
+    }
+  ]
+}

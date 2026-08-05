@@ -1,0 +1,50 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ActvPlatformFieldValue - Metadata API",
+  "description": "Represents the field values for the ActivationPlatformFields.",
+  "file_information": ".actvPlatformFieldValue",
+  "directory_location": "actvPlatformFieldValues",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "activationPlatformField": {
+      "type": "string",
+      "required": true,
+      "description": "Reference to the ActivationPlatform metadata type."
+    },
+    "isDefault": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the value is default (true) or not (false). The default is false. Picklist isn’t supported in API version 54.0"
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the field."
+    },
+    "value": {
+      "type": "string",
+      "description": "The value of activationPlatformField."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Field with no value:",
+      "code": "<ActvPlatformFieldValue xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <activationPlatformField>AccountIdField</activationPlatformField>\n    <isDefault>true</isDefault>\n    <masterLabel>AccountIdValue</masterLabel>\n    <value>null</value>\n</ActvPlatformFieldValue>"
+    },
+    {
+      "description": "Field with value:",
+      "code": "<ActvPlatformFieldValue xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <activationPlatformField>AccountIdField</activationPlatformField>\n    <isDefault>true</isDefault>\n    <masterLabel>AccountIdValue</masterLabel>\n    <value>1234</value>\n</ActvPlatformFieldValue>"
+    }
+  ]
+}

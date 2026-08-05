@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Opportunities Stage x Quarter</name>
+    <reportType>Opportunity</reportType>
+    <format>Matrix</format>
+    <scope>organization</scope>
+    <description>Cross-tabulates opportunities by stage (rows) and close date quarter (columns) with sum of amount. Demonstrates a Matrix report with both row and column groupings and aggregates.</description>
+    <showDetails>false</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <columns>
+        <field>OPPORTUNITY_NAME</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT_NAME</field>
+    </columns>
+    <columns>
+        <field>STAGE_NAME</field>
+    </columns>
+    <columns>
+        <field>AMOUNT</field>
+        <aggregateTypes>Sum</aggregateTypes>
+    </columns>
+    <columns>
+        <field>CLOSE_DATE</field>
+    </columns>
+    <groupingsDown>
+        <field>STAGE_NAME</field>
+        <dateGranularity>None</dateGranularity>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsAcross>
+        <field>CLOSE_DATE</field>
+        <dateGranularity>FiscalQuarter</dateGranularity>
+        <sortOrder>Asc</sortOrder>
+    </groupingsAcross>
+    <params>
+        <name>open</name>
+        <value>all</value>
+    </params>
+    <params>
+        <name>probability</name>
+        <value>&gt;0</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <timeFrameFilter>
+        <dateColumn>CLOSE_DATE</dateColumn>
+        <interval>INTERVAL_CURY</interval>
+    </timeFrameFilter>
+</Report>

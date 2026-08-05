@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PlatformEncryptionSettings - Metadata API",
+  "description": "Represents an org’s Platform Encryption settings, such as settings for available encryption schemes, permissions, encryption policy access, and which fields can be encrypted. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "canEncryptManagedPackageFields": {
+      "type": "boolean",
+      "description": "Indicates whether users can enable encryption on custom fields in installed managed packages (true) or not (false)."
+    },
+    "isUseHighAssuranceKeysRequired": {
+      "type": "boolean",
+      "description": "This field is for internal use."
+    },
+    "isMEKForEncryptionRequired": {
+      "type": "boolean",
+      "description": "Indicates whether encryption policy tasks, such as enabling encryption on fields, also require the Manage Encryption Keys permission (true) or not (false), in addition to those tasks’ baseline permissions."
+    },
+    "enableDeterministEncryption": {
+      "type": "boolean",
+      "description": "Indicates whether customers apply the deterministic encryption scheme to supported fields (true) or not (false). The deterministic encryption scheme lets customers filter on encrypted data.."
+    },
+    "enableEncryptFieldHistory": {
+      "type": "boolean",
+      "description": "Indicates whether the background encryption process applies the customer's active key material to field history and feed tracking values (true) or not (false). The default value is false. If false, background encryption processes apply active key material to all encrypted data except duplicates of that data stored in field history or feed tracking."
+    },
+    "enableEventBusEncryption": {
+      "type": "boolean",
+      "description": "This field is for internal use."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PlatformEncryptionSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"canEncryptManagedPackageFields\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDeterministicEncryption\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEncryptFieldHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEncryptionSearchEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEventBusEncryption\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isMEKForEncryptionRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isUseHighAssuranceKeysRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"  standalone=\"yes\"?>\n<PlatformEncryptionSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <canEncryptManagedPackageFields>true</canEncryptManagedPackageFields>\n    <isUseHighAssuranceKeysRequired>true</isUseHighAssuranceKeysRequired>\n    <isMEKForEncryptionRequired>true</isMEKForEncryptionRequired>\n    <enableDeterministEncryption>true</enableDeterministEncryption>\n    <enableEncryptFieldHistory>true</enableEncryptFieldHistory></PlatformEncryptionSettings>"
+    }
+  ]
+}

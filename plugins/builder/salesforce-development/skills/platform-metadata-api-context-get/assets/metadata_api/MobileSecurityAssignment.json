@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MobileSecurityAssignment - Metadata API",
+  "description": "Represents the assignment of mobile app security policies to a profile. The policies apply to the Salesforce mobile app with Enhanced Mobile App Security enabled.",
+  "file_information": ".mobileSecurityAssignment",
+  "directory_location": "mobileSecurityAssignments",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "connectedApplication": {
+      "type": "string",
+      "description": "The name of the connected app that’s associated with the mobile security policies assignment."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for MobileSecurityAssignment, which is defined when the MobileSecurityAssignment component is created."
+    },
+    "profile": {
+      "type": "string",
+      "description": "The profile that the mobile security policies are assigned to."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MobileSecurityAssignment component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MobileSecurityAssignment xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <connectedApplication>MyMobileConnectedApp</connectedApplication>\n    <isProtected>false</isProtected>\n    <masterLabel>MyMobileSecurityAssignment</masterLabel>\n    <profile>admin</profile>\n</MobileSecurityAssignment>"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PathAssistantSettings - Metadata API",
+  "description": "Represents the Path preference setting. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "canOverrideAutoPathCollapseWithUserPref": {
+      "type": "boolean",
+      "description": "Keeps a user's path expanded to show guidance and key fields on all their records. A user's path stays expanded until the user collapses it. To use this preference, Path must be enabled. Default value is false for all editions. When set to false, the user’s path is collapsed when the page loads. Available in API version 47.0 and later."
+    },
+    "pathAssistantEnabled": {
+      "type": "boolean",
+      "description": "Determines whether the preference is enabled for Path. Default value is true for Enterprise Edition and false for other editions. Available in API version 35.0 and later."
+    },
+    "pathAssistantForOpportunityEnabled": {
+      "type": "boolean",
+      "description": "Determines whether the preference is enabled for Path in Opportunity or not. Available in API version 34.0 and earlier."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PathAssistantSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"canOverrideAutoPathCollapseWithUserPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"pathAssistantEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PathAssistantSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PathAssistantSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <pathAssistantEnabled>true</pathAssistantEnabled>\n    <canOverrideAutoPathCollapseWithUserPref>true</canOverrideAutoPathCollapseWithUserPref>\n</PathAssistantSettings>"
+    }
+  ]
+}

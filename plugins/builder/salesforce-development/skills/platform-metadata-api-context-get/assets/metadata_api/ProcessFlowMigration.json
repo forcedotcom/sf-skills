@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ProcessFlowMigration - Metadata API",
+  "description": "Represents a process's migrated criteria and the resulting migrated flow.",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "destinationFlowDefinition": {
+      "type": "string",
+      "required": true,
+      "description": "The ID of the resulting migrated flow."
+    },
+    "destinationFlowVersion": {
+      "type": "string",
+      "required": true,
+      "description": "The version ID of the migrated flow."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label for the ProcessFlowMigration."
+    },
+    "migratedCriteriaLabel": {
+      "type": "string",
+      "description": "The label of the criteria that was migrated."
+    },
+    "migratedCriteriaName": {
+      "type": "string",
+      "description": "The name of the criteria that was migrated."
+    },
+    "processVersion": {
+      "type": "string",
+      "required": true,
+      "description": "The version ID of the originating process."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProcessFlowMigration\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"destinationFlowDefinition\" type=\"xsd:string\"/>\n        <xsd:element name=\"destinationFlowVersion\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"migratedCriteriaLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"migratedCriteriaName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"processVersion\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ProcessFlowMigration component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ProcessFlowMigration xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <destinationFlowDefinition>Migration_1</destinationFlowDefinition>\n    <destinationFlowVersion>Migration_1-1</destinationFlowVersion>\n    <developerName>Migration</developerName>\n    <masterLabel>Migration_1</masterLabel>\n    <migratedCriteriaLabel>myCriteria_1</migratedCriteriaLabel>\n    <migratedCriteriaName>myDecision</migratedCriteriaName>\n    <processVersion>Migration-1</processVersion>\n</ProcessFlowMigration>"
+    }
+  ]
+}

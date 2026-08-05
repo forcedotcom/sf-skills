@@ -1,0 +1,155 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SearchSettings - Metadata API",
+  "description": "Represents an org's search settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "documentContentSearchEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether a full-text document search is performed."
+    },
+    "enableAdvancedSearchInAlohaSidebar": {
+      "type": "boolean",
+      "description": "Indicates whether advanced search is available in the search sidebar (true) or not (false). Available in Salesforce Classic only. Available in API version 46.0 and later."
+    },
+    "enableEinsteinSearchAssistantDialog": {
+      "type": "boolean",
+      "description": "Indicates whether the Einstein search experience is enabled (true) or not (false). Available in API version 50.0 and later."
+    },
+    "enableEinsteinSearchEs4kPilot": {
+      "type": "boolean",
+      "description": "Indicates whether Einstein Search for Knowledge enhancements are enabled (true) or not (false). Available in API version 54.0 and later. This feature became generally available in Winter '23. In API version 56.0 and later, the default value is true."
+    },
+    "enableEinsteinSearchNaturalLanguage": {
+      "type": "boolean",
+      "description": "Indicates whether natural language search is enabled (true) or not (false). Available in API version 50.0 and later."
+    },
+    "enableEinsteinSearchNLSFilters": {
+      "type": "boolean",
+      "description": "Indicates whether the Natural Language Search Filters (Pilot) feature is enabled (true) or not (false). Available in API version 54.0 and later."
+    },
+    "enableEinsteinSearchPersonalization": {
+      "type": "boolean",
+      "description": "Indicates whether search personalization is enabled (true) or not (false). Available in Lightning Experience only. Available in API version 47.0 and later."
+    },
+    "enablePersonalTagging": {
+      "type": "boolean",
+      "description": "Indicates whether users are allowed to group records from various objects by a common theme (true) or not (false). Personal tags are visible to the user only. Available in Salesforce Classic only. Available in API version 48.0 and later."
+    },
+    "enablePublicTagging": {
+      "type": "boolean",
+      "description": "Indicates whether users are allowed to group records from various objects by a common theme (true) or not (false). Personal tags are visible to all users. Available in Salesforce Classic only. Available in API version 48.0 and later."
+    },
+    "enableSalesforceGeneratedSynonyms": {
+      "type": "boolean",
+      "description": "Indicates whether search synonyms are enabled (true) or not (false). Available in API version 47.0 and later."
+    },
+    "enableSearchTermHistory": {
+      "type": "boolean",
+      "description": "Indicates whether users are allowed to group records from various objects by a common theme (true) or not (false). Public tags are visible to everyone in the organization. Available in Salesforce Classic only. Available in API version 48.0 and later."
+    },
+    "enableSetupSearch": {
+      "type": "boolean",
+      "description": "Indicates whether the search box in the Setup sidebar returns matching custom fields, custom objects, and other supported setup items when you press Enter (true) or not (false). The default is true in Developer, Performance, Professional, Enterprise, and Unlimited editions, and false in all other editions. Available in API version 47.0 and later."
+    },
+    "enableSuggestArticlesLinksOnly": {
+      "type": "boolean",
+      "description": "Indicates whether links are provided to knowledge articles from Cases similar to the current Case (true) or not (false). Available in API version 48.0 and later."
+    },
+    "enableUseDefaultSearchEntity": {
+      "type": "boolean",
+      "description": "Indicates whether to use the admin-specified default entity in sidebar search (true) or not (false). Available in Salesforce Classic only. Available in API version 48.0 and later."
+    },
+    "optimizeSearchForCJKEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether the search is optimized for the Japanese, Chinese, and Korean languages (true) or not (false). This setting affects sidebar search and the account search for Find Duplicates on a lead record in sidebar search and global search. Enable this option if users are searching mostly in Japanese, Chinese, or Korean, and if the text in searchable fields is mostly in those languages.",
+      "required": true
+    },
+    "recentlyViewedUsersForBlankLookupEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether the list of records that are returned from a user autocomplete lookup and from a blank user lookup is taken from the user’s recently viewed user records (true). Otherwise this setting is false if the lookup shows a list of recently accessed user records from across your org (false). Only applies to User object blank lookup searches.",
+      "required": true
+    },
+    "searchSettingsByObject": {
+      "type": "SearchSettingsByObject",
+      "description": "Represents a list of search settings for each object.",
+      "required": true
+    },
+    "sidebarAutoCompleteEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether autocomplete is enabled for sidebar search (true) or not (false). Autocomplete is when users start typing search terms and sidebar search displays a matching list of recently viewed records.",
+      "required": true
+    },
+    "sidebarDropDownListEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether a dropdown list appears in the sidebar search section (true) or not (false). From this list, users can select to search within tags, within a specific object, or across all objects.",
+      "required": true
+    },
+    "sidebarLimitToItemsIOwnCheckboxEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether the Limit to Items I Own checkbox appears (true) or not (false). The checkbox allows your users to include only records for which they are the record owner when entering search queries in the sidebar.",
+      "required": true
+    },
+    "singleSearchResultShortcutEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether a shortcut is enabled (true) or not (false). With the shortcut, users skip the search results page and go directly to the record’s detail page when their search returns only a single item. This setting doesn't apply to tags, case comments (in advanced search), and global search.",
+      "required": true
+    },
+    "spellCorrectKnowledgeSearchEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether spell check is enabled for Knowledge search (true) or not (false).",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "SearchSettingsByObject": {
+      "searchSettingsByObject": {
+        "type": "ObjectSearchSetting",
+        "description": "Contains a list of search settings for each object."
+      }
+    },
+    "ObjectSearchSetting": {
+      "enhancedLookupEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether enhanced lookups is enabled for the object (true) or not (false).",
+        "required": true
+      },
+      "lookupAutoCompleteEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether autocomplete is enabled for lookup search (true) or not (false). Autocomplete is when users edit the lookup field inline by choosing an autosuggestion.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The entity name of the object being configured.",
+        "required": true
+      },
+      "resultsPerPageCount": {
+        "type": "int",
+        "description": "The number of search results per page.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ObjectSearchSetting\">\n  <xsd:sequence>\n    <xsd:element name=\"enhancedLookupEnabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"lookupAutoCompleteEnabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"resultsPerPageCount\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"documentContentSearchEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAdvancedSearchInAlohaSidebar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinSearchAnswersGPT\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinSearchAnswersOnDMO\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinSearchAssistantDialog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinSearchEs4kPilot\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinSearchNLSFilters\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinSearchNaturalLanguage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinSearchPersonalization\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinSearchQA\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePersonalTagging\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePublicTagging\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableQuerySuggestionPigOn\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSalesforceGeneratedSynonyms\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSearchTermHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSetupSearch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSuggestArticlesLinksOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableUseDefaultSearchEntity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"optimizeSearchForCJKEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recentlyViewedUsersForBlankLookupEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"searchSettingsByObject\" type=\"tns:SearchSettingsByObject\"/>\n        <xsd:element name=\"sidebarAutoCompleteEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sidebarDropDownListEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sidebarLimitToItemsIOwnCheckboxEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"singleSearchResultShortcutEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"spellCorrectKnowledgeSearchEnabled\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SearchSettingsByObject\">\n  <xsd:sequence>\n    <xsd:element name=\"searchSettingsByObject\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ObjectSearchSetting\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the Search.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n    <SearchSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n        <enableSetupSearch>false</enableSetupSearch>\n        <enableAdvancedSearchInAlohaSidebar>false</enableAdvancedSearchInAlohaSidebar>\n        <enableQuerySuggestionPigOn>false</enableQuerySuggestionPigOn>\n        <enableSalesforceGeneratedSynonyms>false</enableSalesforceGeneratedSynonyms>\n        <enableSearchTermHistory>false</enableSearchTermHistory>\n        <enablePublicTagging>false</enablePublicTagging>\n        <enablePersonalTagging>false</enablePersonalTagging>\n        <enableSuggestArticlesLinksOnly>false</enableSuggestArticlesLinksOnly>\n        <enableUseDefaultSearchEntity>false</enableUseDefaultSearchEntity>\n            <documentContentSearchEnabled>true</documentContentSearchEnabled>\n            <optimizeSearchForCJKEnabled>true</optimizeSearchForCJKEnabled>\n            <recentlyViewedUsersForBlankLookupEnabled>true</recentlyViewedUsersForBlankLookupEnabled>\n            <searchSettingsByObject>\n            <searchSettingsByObject>\n                <enhancedLookupEnabled>false</enhancedLookupEnabled>\n                <lookupAutoCompleteEnabled>false</lookupAutoCompleteEnabled>\n                <name>Account</name>\n                <resultsPerPageCount>25</resultsPerPageCount>\n            </searchSettingsByObject>\n            <searchSettingsByObject>\n                <enhancedLookupEnabled>false</enhancedLookupEnabled>\n                <lookupAutoCompleteEnabled>false</lookupAutoCompleteEnabled>\n                <name>Activity</name>\n                <resultsPerPageCount>25</resultsPerPageCount>\n            </searchSettingsByObject>\n            <searchSettingsByObject>\n                <enhancedLookupEnabled>false</enhancedLookupEnabled>\n                <lookupAutoCompleteEnabled>false</lookupAutoCompleteEnabled>\n                <name>Asset</name>\n                <resultsPerPageCount>25</resultsPerPageCount>\n            </searchSettingsByObject>\n            </searchSettingsByObject>\n            <sidebarAutoCompleteEnabled>true</sidebarAutoCompleteEnabled>\n            <sidebarDropDownListEnabled>true</sidebarDropDownListEnabled>\n            <sidebarLimitToItemsIOwnCheckboxEnabled>true</sidebarLimitToItemsIOwnCheckboxEnabled>\n            <singleSearchResultShortcutEnabled>true</singleSearchResultShortcutEnabled>\n            <spellCorrectKnowledgeSearchEnabled>true</spellCorrectKnowledgeSearchEnabled>\n        <enableEinsteinSearchPersonalization>true</enableEinsteinSearchPersonalization>\n    </SearchSettings>"
+    }
+  ]
+}

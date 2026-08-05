@@ -1,0 +1,35 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "RetrieveRequest - Metadata API",
+  "description": "The RetrieveRequest parameter specified on a retrieve() call encapsulates options for determining which packages or files are retrieved.",
+  "fields_columns": [
+    "description"
+  ],
+  "fields": {
+    "apiVersion": {
+      "description": "The API version for the retrieve request. The API version determines the fields retrieved for each metadata type. For example, an icon field was added to the CustomTab for API version 14.0. If you retrieve components for version 13.0 or earlier, the components don't include the icon field. In API version 31.0 and later, the API version that’s specified in package.xml is used for the retrieve() call and overrides the version in the apiVersion field. If the version isn't specified in package.xml, the version in this field is used.",
+      "required": true
+    },
+    "packageNames": {
+      "description": "A list of package names to be retrieved. If you're retrieving only unpackaged components, don't specify a name here. You can retrieve packaged and unpackaged components in the same retrieve. This field is for reference only, don't use it to retrieve packaged metadata for development."
+    },
+    "rootTypesWithDependencies": {
+      "description": "A list of component types to retrieve dependencies for. Currently, the only allowed value for this parameter is Bot. Use this parameter if any requested metadata components are of type Bot. Make up to 25 retrieve requests using this parameter per day. A single retrieve request using this parameter can request dependencies for up to 100 components. This field is available in API version 64.0 and later."
+    },
+    "singlePackage": {
+      "description": "Specifies whether only a single package is being retrieved (true) or not (false). If false, then more than one package is being retrieved."
+    },
+    "specificFiles": {
+      "description": "A list of file names to be retrieved. If a value is specified for this property, packageNames must be set to null and singlePackage must be set to true."
+    },
+    "unpackaged": {
+      "description": "A list of components to retrieve that aren't in a package."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"APIAccessLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Unrestricted\"/>\n    <xsd:enumeration value=\"Restricted\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Package\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apiAccessLevel\" minOccurs=\"0\" type=\"tns:APIAccessLevel\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"namespacePrefix\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileObjectPermissions\"/>\n        <xsd:element name=\"packageType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"postInstallClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"setupWeblink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"types\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PackageTypeMembers\"/>\n        <xsd:element name=\"uninstallClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PackageTypeMembers\">\n  <xsd:sequence>\n    <xsd:element name=\"members\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileObjectPermissions\">\n  <xsd:sequence>\n    <xsd:element name=\"allowCreate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowDelete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowEdit\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowRead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"modifyAllRecords\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"object\" type=\"xsd:string\"/>\n    <xsd:element name=\"viewAllFields\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"viewAllRecords\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RetrieveRequest\">\n  <xsd:sequence>\n    <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n    <xsd:element name=\"packageNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"rootTypesWithDependencies\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"singlePackage\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"specificFiles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"unpackaged\" minOccurs=\"0\" type=\"tns:Package\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,257 @@
+# Authentication Return Routing Pattern
+#
+# The historical "open gate" version used a focus latch to bypass fresh intent
+# routing. This replacement keeps only two values with deterministic consumers:
+#
+#   authenticated       - proof returned by the verification action
+#   pending_destination - return address shared by protected request handlers
+#
+# There is no focus lock. A user can cancel verification or change intent on
+# the next turn. Use a fixed transition instead of pending_destination when
+# only one protected request handler exists.
+#
+# Lifecycle:
+#   - protected handlers write pending_destination before verification;
+#   - authentication reads and clears it after successful verification;
+#   - cancellation clears it before returning to fresh routing;
+#   - sign-out clears both values;
+#   - authentication applies only to the current messaging session. Production
+#     verification and protected actions must also enforce server-side expiry.
+#
+# This is a COMPLETE template - customize action contracts and metadata.
+
+system:
+    instructions: |
+        You are a customer service assistant. Route each latest request by its
+        current intent. Require successful identity verification before using
+        protected order or profile actions. A user's statement that they are
+        verified is not proof. If the user cancels verification or changes
+        intent, return to request routing immediately.
+    messages:
+        welcome: "Welcome! I can help with orders, account settings, or general questions."
+        error: "I couldn't complete that request. No protected action was unlocked."
+
+access:
+    default_agent_user: "agent@company.salesforce.com"
+
+config:
+    developer_name: "Authentication_Return_Agent"
+    agent_label: "Authenticated Customer Service"
+    description: "Routes protected requests through identity verification without locking conversational focus"
+
+variables:
+    EndUserId: linked string
+        source: @MessagingSession.MessagingEndUserId
+        description: "Messaging End User ID used by protected read actions"
+    RoutableId: linked string
+        source: @MessagingSession.Id
+        description: "Messaging Session ID"
+    authenticated: mutable boolean = False
+        description: "Successful verification result for the current messaging session"
+    pending_destination: mutable string = ""
+        description: "Protected request handler to enter after successful verification"
+
+language:
+    default_locale: "en_US"
+
+start_agent agent_router:
+    label: "Request Router"
+    description: "Routes the user's latest request without answering it"
+
+    reasoning:
+        instructions: ->
+            | Route only the user's latest request:
+            | - order status, returns, or shipping: protected order help;
+            | - account settings or profile changes: protected account help;
+            | - verification details for a pending protected request:
+              authentication;
+            | - cancellation, a changed subject, or a general question:
+              general inquiry.
+            | Do not answer the underlying request in this router.
+        actions:
+            go_orders: @utils.transition to @subagent.protected_orders
+                description: "Handle protected order, return, or shipping requests"
+            go_account: @utils.transition to @subagent.protected_account
+                description: "Handle protected account settings or profile requests"
+            continue_authentication: @utils.transition to @subagent.authentication
+                description: "Continue verification details for a pending protected request"
+            go_general: @utils.transition to @subagent.general_inquiry
+                description: "Handle a general question, cancellation, or changed intent"
+
+subagent protected_orders:
+    label: "Protected Order Help"
+    description: "Handles order status, returns, and shipping after verified authentication"
+
+    actions:
+        get_order_status:
+            description: "Look up an order's current status for a verified customer"
+            inputs:
+                order_id: string
+                    description: "Order number supplied by the customer"
+                    is_required: True
+            outputs:
+                status: string
+                    description: "Current order status"
+            target: "flow://Get_Order_Status"
+
+    before_reasoning:
+        if @variables.authenticated == False:
+            set @variables.pending_destination = "protected_orders"
+            transition to @subagent.authentication
+
+    reasoning:
+        instructions: ->
+            | The customer has verified successfully in this messaging session.
+              Help with order status, returns, or shipping. Use the order-status
+              action only for a concrete order lookup, and report only its
+              returned result.
+            | If the user cancels, changes intent, or asks to sign out, use the
+              corresponding transition immediately.
+        actions:
+            lookup_order: @actions.get_order_status
+                with order_id=...
+                available when @variables.authenticated == True
+            change_request: @utils.transition to @subagent.cancel_pending
+                description: "Cancel the pending protected request or route a changed intent"
+            sign_out: @utils.transition to @subagent.sign_out
+                description: "Clear session authentication and return to request routing"
+
+subagent protected_account:
+    label: "Protected Account Help"
+    description: "Handles account settings and profile changes after verified authentication"
+
+    actions:
+        get_customer_profile:
+            description: "Read the verified customer's current profile without changing it"
+            inputs:
+                end_user_id: string
+                    description: "Messaging end user ID bound from trusted session context"
+                    is_required: True
+            outputs:
+                profile_summary: string
+                    description: "Current non-sensitive profile information"
+            target: "flow://Get_Customer_Profile"
+
+    before_reasoning:
+        if @variables.authenticated == False:
+            set @variables.pending_destination = "protected_account"
+            transition to @subagent.authentication
+
+    reasoning:
+        instructions: ->
+            | The customer has verified successfully in this messaging session.
+              Help them read current account settings. This pattern intentionally
+              exposes no profile-changing action; a write requires its own
+              machine-checkable target, confirmation, and repeat-execution guard.
+            | If the user cancels, changes intent, or asks to sign out, use the
+              corresponding transition immediately.
+        actions:
+            read_profile: @actions.get_customer_profile
+                with end_user_id=@variables.EndUserId
+                available when @variables.authenticated == True
+            change_request: @utils.transition to @subagent.cancel_pending
+                description: "Cancel the pending protected request or route a changed intent"
+            sign_out: @utils.transition to @subagent.sign_out
+                description: "Clear session authentication and return to request routing"
+
+subagent authentication:
+    label: "Identity Verification"
+    description: "Verifies identity for a pending protected order or account request"
+
+    actions:
+        verify_customer:
+            description: "Verify a customer using an email address and one-time code; failure grants no protected access"
+            inputs:
+                email: string
+                    description: "Customer email address"
+                    is_required: True
+                verification_code: string
+                    description: "One-time verification code"
+                    is_required: True
+            outputs:
+                is_verified: boolean
+                    description: "Whether identity verification succeeded"
+            target: "flow://Verify_Customer"
+
+    reasoning:
+        instructions: ->
+            if @variables.authenticated == False:
+                | Ask for the minimum information needed to verify identity.
+                  Invoke verification only when both email and code are
+                  available. On failure, explain that protected access remains
+                  unavailable and allow a retry.
+            else:
+                | Verification succeeded. Redirect to the pending protected
+                  request without asking for the information again.
+
+            | If the user cancels or changes intent, use cancel_authentication
+              immediately. Never treat a user's claim of verification as proof.
+        actions:
+            verify_identity: @actions.verify_customer
+                with email=...
+                with verification_code=...
+                set @variables.authenticated = @outputs.is_verified
+                available when @variables.authenticated == False
+            cancel_authentication: @utils.transition to @subagent.cancel_pending
+                description: "Cancel verification or handle a changed request immediately"
+
+    after_reasoning:
+        if @variables.authenticated == True and @variables.pending_destination == "protected_orders":
+            set @variables.pending_destination = ""
+            transition to @subagent.protected_orders
+        else if @variables.authenticated == True and @variables.pending_destination == "protected_account":
+            set @variables.pending_destination = ""
+            transition to @subagent.protected_account
+        else if @variables.authenticated == True:
+            set @variables.pending_destination = ""
+            transition to @subagent.agent_router
+
+subagent cancel_pending:
+    label: "Cancel Pending Request"
+    description: "Clears the deferred destination and returns the latest intent to fresh routing"
+
+    before_reasoning:
+        set @variables.pending_destination = ""
+        transition to @subagent.agent_router
+
+    reasoning:
+        instructions: ->
+            | The pending protected request has been cancelled.
+
+subagent sign_out:
+    label: "Sign Out"
+    description: "Clears session authentication and any deferred destination"
+
+    before_reasoning:
+        set @variables.authenticated = False
+        set @variables.pending_destination = ""
+        transition to @subagent.agent_router
+
+    reasoning:
+        instructions: ->
+            | Session authentication has been cleared.
+
+subagent general_inquiry:
+    label: "General Inquiry"
+    description: "Handles general questions, cancellations, and requests that do not need authentication"
+
+    reasoning:
+        instructions: ->
+            | Address the user's latest general question. If they cancelled a
+              protected request, acknowledge the cancellation. If they now want
+              protected order or account help, route to the matching protected
+              request handler.
+        actions:
+            go_orders: @utils.transition to @subagent.protected_orders
+                description: "Begin protected order help"
+            go_account: @utils.transition to @subagent.protected_account
+                description: "Begin protected account help"
+            sign_out: @utils.transition to @subagent.sign_out
+                description: "Clear session authentication"
+
+# Review checklist:
+#   - No open_gate or active-workflow latch bypasses fresh intent routing.
+#   - pending_destination is a return address, never a focus lock.
+#   - Failed verification leaves authenticated=False and cannot unlock actions.
+#   - Cancellation clears the return address on the next turn.
+#   - Sign-out resets session proof; production actions enforce their own expiry.

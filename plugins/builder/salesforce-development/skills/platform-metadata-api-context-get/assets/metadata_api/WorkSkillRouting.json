@@ -1,0 +1,76 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WorkSkillRouting - Metadata API",
+  "description": "Represents a setup object that stores a set of WorkSkillRoutingAttribute objects. These objects are used to route a work item to an agent who has the skills necessary to take the work. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".workSkillRouting",
+  "directory_location": "workSkillRoutings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether assignment rules are active and can be evaluated.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for this object. This display value is the internal label that is not translated.",
+      "required": true
+    },
+    "relatedEntity": {
+      "type": "string",
+      "description": "Type of Salesforce object that the attributes are associated with.",
+      "required": true
+    },
+    "workSkillRoutingAttributes": {
+      "type": "WorkSkillRoutingAttribute[]",
+      "description": "A set of mappings between work-item field values and skills. Create one attribute mapping set for each object."
+    }
+  },
+  "sub_types": {
+    "WorkSkillRoutingAttribute": {
+      "field": {
+        "type": "string",
+        "description": "Field that this attribute applies to.",
+        "required": true
+      },
+      "isAdditionalSkill": {
+        "type": "boolean",
+        "description": "After a designated timeout period, additional skills are dropped from Omni-Channel routing. The case is then routed to the best-matched agent even if they don’t have all the skills."
+      },
+      "skill": {
+        "type": "string",
+        "description": "Skill used to route the work item when the attribute maps to the value selected.",
+        "required": true
+      },
+      "skillLevel": {
+        "type": "int",
+        "description": "Level of the skill required. This value can range from 0 to 10."
+      },
+      "skillPriority": {
+        "type": "int",
+        "description": "For additional skills, specify the order in which a skill is dropped if after the Drop Additional Skills Timeout on the routing configuration, no agent with that skill is available. Skills with a lower priority rank (9 or 10) are dropped first. Skills with a higher priority rank (0 or 1) are dropped last. Skills with the same priority value are dropped as a group. You can set skill priority using attribute setup for skills-based routing or Apex code. Available in API version 49.0 and later."
+      },
+      "value": {
+        "type": "string",
+        "description": "Attribute value that is assigned to the selected skill."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WorkSkillRouting component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WorkSkillRouting xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <isActive>true</isActive>\n  <masterLabel>Attribute setup for skills-based routing for Case object</masterLabel>\n  <relatedEntity>Case</relatedEntity>\n  <workSkillRoutingAttributes>\n    <field>Case.Origin</field>\n    <isAdditionalSkill>false</isAdditionalSkill>\n    <skill>Technical_Skill</skill>\n    <skillLevel>3</skillLevel>\n    <skillPriority>2</skillPriority>\n    <value>Web</value>\n  </workSkillRoutingAttributes>\n</WorkSkillRouting>"
+    }
+  ]
+}

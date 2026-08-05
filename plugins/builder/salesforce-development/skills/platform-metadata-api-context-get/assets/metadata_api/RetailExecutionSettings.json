@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RetailExecutionSettings - Metadata API",
+  "description": "Represents settings to manage your inventory, promotions, planograms, and in-store activities.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableProductHierarchy": {
+      "type": "boolean",
+      "description": "Indicates whether Product Hierarchy is enabled for your org (true) or not false). This field is available in API version 53.0 and later."
+    },
+    "enableRetailExecution": {
+      "type": "boolean",
+      "description": "Indicates whether Retail Execution is enabled for your org (true) or not (false). The default value is false."
+    },
+    "enableVisitSharing": {
+      "type": "boolean",
+      "description": "Indicates whether Visit Share is enabled for your org (true) or not (false). The default value is false. This field is available in API version 55.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"RetailExecutionSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableProductHierarchy\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRetailExecution\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableVisitSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a RetailExecutionSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<RetailExecutionSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableRetailExecution>true</enableRetailExecution>\n    <enableProductHierarchy>true</enableProductHierarchy>\n    <enableVisitSharing>false</enableVisitSharing>\n</RetailExecutionSettings>"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "FlowDefinition - Metadata API",
+  "description": "Represents the flow definition’s description and active flow version number.",
+  "file_information": ".flowDefinition",
+  "directory_location": "flowDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "activeVersionNumber": {
+      "type": "int",
+      "description": "The version number of the active flow."
+    },
+    "apiVersion": {
+      "type": "int",
+      "description": "Reserved for internal use."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the flow definition."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for the flow definition. In managed packages, this field inherits the flow’s active version name. To change this label from a subscriber’s org, edit the packaged flow name."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FlowDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"activeVersionNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

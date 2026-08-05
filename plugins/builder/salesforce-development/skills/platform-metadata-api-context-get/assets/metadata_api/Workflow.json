@@ -1,0 +1,415 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Workflow - Metadata API",
+  "description": "Represents the metadata associated with a workflow rule. A workflow rule sets workflow actions into motion when its designated conditions are met. You can configure workflow actions to execute immediately when a record meets the conditions in your workflow rule, or set time triggers that execute the workflow actions on a specific day. Use this metadata type to create, update, or delete workflow rule definitions.",
+  "file_information": ".workflow",
+  "directory_location": "workflows",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "alerts": {
+      "type": "WorkflowAlert[]",
+      "description": "An array of all alerts for the object associated with the workflow."
+    },
+    "fieldUpdates": {
+      "type": "WorkflowFieldUpdate[]",
+      "description": "An array of all field updates for the object associated with the workflow."
+    },
+    "flowActions": {
+      "type": "WorkflowFlowAction[]",
+      "description": "An array of flow triggers for the object associated with the workflow. Available in API version 30.0 and later. The pilot program for flow trigger workflow actions is closed. If you already enabled the pilot in your org, you can continue to create and edit flow trigger workflow actions. If you didn’t enable the pilot, use Flow Builder to create a record-triggered flow, or use Process Builder to launch a flow from a process."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component."
+    },
+    "knowledgePublishes": {
+      "type": "WorkflowKnowledgePublish[]",
+      "description": "An array of Salesforce Knowledge Workflow Publishes associated with the workflow. Available in API version 27.0 and later."
+    },
+    "outboundMessages": {
+      "type": "WorkflowOutboundMessage[]",
+      "description": "An array of all the outbound messages for the object associated with the workflow."
+    },
+    "rules": {
+      "type": "WorkflowRule[]",
+      "description": "An array of all the objects associated with the workflow."
+    },
+    "tasks": {
+      "type": "WorkflowTask[]",
+      "description": "An array of all the tasks for the object associated with the workflow."
+    }
+  },
+  "sub_types": {
+    "WorkflowActionReference": {
+      "name": {
+        "type": "string",
+        "description": "The name of the workflow action.",
+        "required": true
+      },
+      "type": {
+        "type": "WorkflowActionType (enumeration of type string)",
+        "description": "Available types of workflow actions: Alert FieldUpdate FlowAction—Available in API version 30.0 and later OutboundMessage Task The pilot program for flow trigger workflow actions is closed. If you already enabled the pilot in your org, you can continue to create and edit flow trigger workflow actions. If you didn't enable the pilot, use Flow Builder to create a record-triggered flow, or use Process Builder to launch a flow from a process.",
+        "required": true
+      }
+    },
+    "WorkflowAlert": {
+      "ccEmails": {
+        "type": "string[]",
+        "description": "Additional email addresses. This field is similar to the CC field in email clients. For the email to be sent successfully, set a value for ccEmails or recipients. You can set values for both fields. The value of ccEmails can include up to 5 different email addresses."
+      },
+      "description": {
+        "type": "string",
+        "description": "A description of the email alert. Available in API version 16.0 and later.",
+        "required": true
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component.",
+        "required": true
+      },
+      "protected": {
+        "type": "boolean",
+        "description": "Indicates whether this component is protected (true) or not (false). Protected components can’t be linked to or referenced by components created in the installing organization.",
+        "required": true
+      },
+      "recipients": {
+        "type": "WorkflowEmailRecipient[]",
+        "description": "The recipients for the email. For the email to be sent successfully, set a value for ccEmails or recipients. You can set values for both fields."
+      },
+      "senderAddress": {
+        "type": "string",
+        "description": "The address in the From field for the email alert. With this address, you can use a standard global email address for your organization, such as support@company.com, instead of the default From field, which is the email address of the person who updates the record. You can only specify a value in this field if the senderType is set to OrgWideEmailAddress. See Organization-Wide Email Addresses in Salesforce Help."
+      },
+      "senderType": {
+        "type": "ActionEmailSenderType (enumeration of type string)",
+        "description": "The email used as the sender’s From and Reply-To addresses. These values are valid. CurrentUser—The email address of the person updating the record. This value is the default setting. DefaultWorkflowUser—The email address of the default workflow user. If the email alert is installed from a package, this field value is changed to CurrentUser. OrgWideEmailAddress—A verified global email address for your organization, such as support@company.com."
+      },
+      "template": {
+        "type": "string",
+        "description": "Named reference to an EmailTemplate. This email template isn’t required to exist in the zip file, but it must exist in Metadata API. Lightning email templates aren’t packageable. We recommend using a Classic email template.",
+        "required": true
+      }
+    },
+    "WorkflowEmailRecipient": {
+      "field": {
+        "type": "string",
+        "description": "Name of the field referenced in type. The field named is of the type specified in type."
+      },
+      "recipient": {
+        "type": "string",
+        "description": "The recipients for the email. Depending on the type selected, this field is required."
+      },
+      "type": {
+        "type": "ActionEmailRecipientTypes (enumeration of type string)",
+        "description": "Named reference to an EmailTemplate component. Valid values are: accountOwner—The email is sent to the record’s account owner. For example, the Account owner for an Opportunity. accountTeam—Only applicable on the Account object. The email is sent to everyone on that Account’s account team. campaignMemberDerivedOwner—Emails are sent to lead and contact owners when contacts are added to a campaign or in response to a campaign. contactLookup—The email is sent to a contact whose value is looked up from a field on the record. For this value, the field field must reference a Contact. creator—The email is sent to the record’s creator. customerPortalOwner—The email is sent to a specific self-service portal user. For this value, the recipient field must reference a self-service portal user by their username. email—The email is sent to an email address whose value is looked up from a field on the record. For this value, the field field must reference an email field. group—The email is sent to all users in a group. For this value, the recipient field must reference a group by group name. opportunityTeam—Only applicable on the Opportunity object. The email is sent to everyone on that Opportunity’s opportunity team. owner—The email is sent to the record’s owner. partnerUser—The email is sent to a specific partner user. For this value, the recipient field must reference a partner user by username. portalRole - Like role, but for portal roles only. portalRoleSubordinates - Like roleSubordinates, but for portal roles only. role—The email is sent to all users in a role. For this value, the recipient field must reference a role name in the role hierarchy. roleSubordinates—The email is sent to all users in a role subordinate. For this value, the recipient field must reference a role. roleSubordinatesInternal—Like roleSubordinates, but for internal portal roles only. user—The email is sent to a specific user. For this value, the recipient field must reference a user by username. userLookup—The email is sent to a user whose value is looked up from a field on the record. For this value, the field field must reference a user foreign key field."
+      }
+    },
+    "WorkflowFieldUpdate": {
+      "description": {
+        "type": "string",
+        "description": "The description of the field update. This information is useful to track the reasoning for initially configuring the field update."
+      },
+      "field": {
+        "type": "string",
+        "description": "The field on the object for the workflow to be updated.",
+        "required": true
+      },
+      "formula": {
+        "type": "string",
+        "description": "If the operation field value is Formula, the formula used to compute the new field value."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component.",
+        "required": true
+      },
+      "literalValue": {
+        "type": "string",
+        "description": "If the operation field value is Literal, the literal value for the field."
+      },
+      "lookupValue": {
+        "type": "string",
+        "description": "If the operation field value is lookupValue, the lookup value that is referenced."
+      },
+      "lookupValueType": {
+        "type": "LookupValueType (enumeration of type string)",
+        "description": "The type of object that the lookupValue field value is referencing. The valid values are: Queue RecordType User"
+      },
+      "name": {
+        "type": "string",
+        "description": "A name for the component. Available in version API 16.0 and later.",
+        "required": true
+      },
+      "notifyAssignee": {
+        "type": "boolean",
+        "description": "Notify the assignee when the field is updated.",
+        "required": true
+      },
+      "operation": {
+        "type": "FieldUpdateOperation (enumeration of type string)",
+        "description": "The operation that computes the value with which to update the field. Valid values are: Formula—Indicates the field is set to a formula. If set, the formula must be a valid formula. Literal—Indicates the field is set to a literal value. If set, the literalValue must be a valid literal value for this field. LookupValue—Similar to Literal, but for an object reference, such as a contact, user, or account. If set, the lookupValue element must be set. Only User is supported in the current API. NextValue—Indicates that the field will be set to its next value. Only allowed when the field update references a picklist. Null—Indicates that the field is set to null. PreviousValue—Indicates that the field is set to its previous value. Only allowed when the field update references a picklist.",
+        "required": true
+      },
+      "protected": {
+        "type": "boolean",
+        "description": "Indicates whether this component is protected (true) or not (false). Protected components can’t be linked to or referenced by components created in the installing organization.",
+        "required": true
+      },
+      "reevaluateOnChange": {
+        "type": "boolean",
+        "description": "When set to true, if the field update changes the field’s value, all workflow rules on the associated object are reevaluated. Any workflow rules whose criteria are met as a result of the field value change are triggered. If any of the triggered workflow rules result in another field update that’s also enabled for workflow rule reevaluation, a domino effect occurs, and more workflow rules can be reevaluated as a result of the newly triggered field update. This cascade of workflow rule reevaluation and triggering can happen up to 5 times after the initial field update that started it."
+      },
+      "targetObject": {
+        "type": "string",
+        "description": "Object set if the change is detected on a child record. If set, the object points to the foreign key reference on the child object that points to the parent. For example, if EmailMessage child record is changed, EmailMessage.ParentId points to the Case parent. This field is named sourceField before version 14.0. The field name change is automatically handled between versions and doesn’t require any manual editing of existing XML component files."
+      }
+    },
+    "WorkflowFlowAction": {
+      "description": {
+        "type": "string",
+        "description": "Describes the flow trigger."
+      },
+      "flow": {
+        "type": "string",
+        "description": "API name of the flow that this workflow action launches.",
+        "required": true
+      },
+      "flowInputs": {
+        "type": "WorkflowFlowActionParameter[]",
+        "description": "An array of values to pass into flow variables when launching the flow."
+      },
+      "label": {
+        "type": "string",
+        "description": "Name of the flow trigger.",
+        "required": true
+      },
+      "language": {
+        "type": "string",
+        "description": "Reserved for future use."
+      },
+      "protected": {
+        "type": "boolean",
+        "description": "Reserved for future use."
+      }
+    },
+    "WorkflowFlowActionParameter": {
+      "name": {
+        "type": "string",
+        "description": "API name of the flow variable. The flow variable must have isInput set to True.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "Value to assign to the flow variable when launching the flow. If the variable's data type is sObject, value must be a merge field that identifies a record—or a lookup relationship field that references a record—of the same object type as the variable. For example: {!this}—Identifies the record that fired the workflow rule. {!Contact}—Identifies the contact associated with the record that fired the workflow rule. {!Asset.Account}—Identifies the account associated with the asset that is associated with the record that fired the workflow rule. {!SomeObject__r}—Uses a lookup relationship field to identify a custom object record associated with the record that fired the workflow rule. For variables of other data types, you can enter a merge field or a literal value. Manually enter a literal value when the variable requires the same value every time the flow is launched, regardless of which record fired the workflow rule. For example, you can enter true or false for a variable of type Boolean. Supported merge fields identify a global variable or a field of the same data type as the flow variable. For example: {!Id}—ID of the record that fired the workflow rule. {!Account.Owner.Email}—Email address of the account owner for the account associated with the record that fired the workflow rule. {!$Organization.Country}—Country of the organization.",
+        "required": true
+      }
+    },
+    "WorkflowKnowledgePublish": {
+      "action": {
+        "type": "KnowledgeWorkflowAction (enumeration of type string)",
+        "description": "The article publishing actions available when this rule fires. Valid values are: PublishAsNew—Publishes the article as a new article. Publish—Publishes the article as a version of a previously published article.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "A brief article description."
+      },
+      "label": {
+        "type": "string",
+        "description": "Label that represents the article throughout the Salesforce user interface.",
+        "required": true
+      },
+      "language": {
+        "type": "string",
+        "description": "The language of the article."
+      },
+      "protected": {
+        "type": "boolean",
+        "description": "Indicates whether this component is protected (true) or not (false). Protected components can’t be linked to or referenced by components created in the installing organization.",
+        "required": true
+      }
+    },
+    "WorkflowOutboundMessage": {
+      "apiVersion": {
+        "type": "double",
+        "description": "The API version of the outbound message. Automatically set to the current API version when the outbound message is created. Valid API versions for outbound messages are 8.0 and 18.0 or later. This API version is used in API calls back to Salesforce using the enterprise or partner WSDLs. The API Version can only be modified by using Metadata API. It can’t be modified using the Salesforce user interface. This field is available in API version 18.0 and later. If you change the apiVersion to a version that doesn’t support one of the fields configured for the outbound message, the messages fail until you update your outbound message listener to consume the updated WSDL. To monitor the status of outbound messages, from Setup, in the Quick Find box, enter Outbound Messages, and then select Outbound Messages inSalesforce.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Describes the outbound message."
+      },
+      "endpointUrl": {
+        "type": "string",
+        "description": "The endpoint URL to which the outbound message is sent.",
+        "required": true
+      },
+      "fields": {
+        "type": "string[]",
+        "description": "The named references to the fields to be sent."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component.",
+        "required": true
+      },
+      "includeSessionId": {
+        "type": "boolean",
+        "description": "Set if you want the Salesforce session ID included in the outbound message. Useful if you intend to make API calls and you don’t want to include a username and password.",
+        "required": true
+      },
+      "integrationUser": {
+        "type": "string",
+        "description": "The named reference to the user under which this message is sent.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "A name for the component. Available in version API 16.0 and later.",
+        "required": true
+      },
+      "protected": {
+        "type": "boolean",
+        "description": "Indicates whether this component is protected (true) or not (false). Protected components can’t be linked to or referenced by components created in the installing organization.",
+        "required": true
+      },
+      "useDeadLetterQueue": {
+        "type": "boolean",
+        "description": "This field is only available for organizations with dead letter queue permissions turned on. If set, this outbound message uses the dead letter queue if normal delivery fails."
+      }
+    },
+    "WorkflowRule": {
+      "actions": {
+        "type": "WorkflowActionReference[]",
+        "description": "An array of references for the actions that happen when this rule fires."
+      },
+      "active": {
+        "type": "boolean",
+        "description": "Determines if this rule is active.",
+        "required": true
+      },
+      "booleanFilter": {
+        "type": "string",
+        "description": "For advanced criteria filter, the boolean formula. For example, (1 AND 2) OR 3."
+      },
+      "criteriaItems": {
+        "type": "FilterItem[]",
+        "description": "An array of the boolean criteria (conditions) under which this rule fires. Either criteriaItems or formula must be set."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the workflow rule."
+      },
+      "failedMigrationToolVersion": {
+        "type": "string",
+        "description": "The API version in which a migration fails. Used as a reference to admins to retry the migration when the next version is released. Available in API version 54.0 and later."
+      },
+      "formula": {
+        "type": "string",
+        "description": "The formula condition under which this rule first must be set, either formula or criteriaItems."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component."
+      },
+      "triggerType": {
+        "type": "WorkflowTriggerTypes (enumeration of type string)",
+        "description": "Under what conditions the trigger fires. Valid values are: onAllChanges—The workflow rule is considered on all changes. onCreateOnly—The workflow rule is considered only on create. onCreateOrTriggeringUpdate—The workflow rule is considered on create and triggering updates."
+      },
+      "workflowTimeTriggers": {
+        "type": "WorkflowTimeTrigger",
+        "description": "Represents a set of Workflow actions, including Field Updates, Email Alerts, Outbound Messages, and Tasks, that executes before or after a specified interval of time."
+      }
+    },
+    "WorkflowTask": {
+      "assignedTo": {
+        "type": "string",
+        "description": "Specifies the user, role, or team to which the workflow rule or action is assigned. The field corresponding to the value specified here must be the same as the specified assignedToType."
+      },
+      "assignedToType": {
+        "type": "ActionTaskAssignedToTypes (enumeration of type string)",
+        "description": "Valid string values for this type are: accountCreator—When set, the task is assigned to the record’s account's creator. accountOwner—When set, the task is assigned to the record’s account owner (Opportunity). accountTeam—Same as WorkflowAlert type creator—When set, the task is assigned to the record’s creator. opportunityTeam—Same as WorkflowAlert type owner—When set, the task is assigned to the record’s owner. partnerUser—When set, the assignedTo field references a partner user by username. portalRole—When set, the assignedTo field references a Role by role name, a portal role. role—When set, the assignedTo field references a Role by role name. user—When set, the assignedTo field references a User by username."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of this workflow task."
+      },
+      "dueDateOffset": {
+        "type": "int",
+        "description": "The offset, in days, from either the trigger date, or the date specified in the (optional) offsetFromField. The offset can be a negative number.",
+        "required": true
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The developer name used as a unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component.",
+        "required": true
+      },
+      "notifyAssignee": {
+        "type": "boolean",
+        "description": "Set to send an email notification when the task is assigned.",
+        "required": true
+      },
+      "offsetFromField": {
+        "type": "string",
+        "description": "Optional field reference of the date field from which the dueDate is computed."
+      },
+      "priority": {
+        "type": "string",
+        "description": "The priority to assign the created task.",
+        "required": true
+      },
+      "protected": {
+        "type": "boolean",
+        "description": "Indicates whether this component is protected (true) or not (false). Protected components can’t be linked to or referenced by components created in the installing organization.",
+        "required": true
+      },
+      "status": {
+        "type": "string",
+        "description": "The status to assign the created task.",
+        "required": true
+      },
+      "subject": {
+        "type": "string",
+        "description": "A subject for the workflow task that’s used if an email notification is sent when the task is assigned. Available in API version 16.0 and later.",
+        "required": true
+      }
+    },
+    "WorkflowTimeTrigger": {
+      "actions": {
+        "type": "WorkflowActionReference[]",
+        "description": "An array of references for the actions that happen when this trigger fires."
+      },
+      "offsetFromField": {
+        "type": "string",
+        "description": "The date type field name that the time-based workflow triggers from, such as Created Date, Last Modified Date, Rule Trigger Date, or a custom date field on the object for which the workflow rule is defined."
+      },
+      "timeLength": {
+        "type": "string",
+        "description": "The numeric value of the time after or before the workflow triggers. A negative value represents the time length before the trigger fires. The timeLength is measured in either hours or days, as specified by workflowTimeTriggerUnit."
+      },
+      "workflowTimeTriggerUnit": {
+        "type": "WorkflowTimeUnits (enumeration of type string)",
+        "description": "The unit of time before or after which the time-based workflow triggers. Valid string values are: Hours Days"
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ActionEmailRecipientTypes\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"group\"/>\n    <xsd:enumeration value=\"role\"/>\n    <xsd:enumeration value=\"user\"/>\n    <xsd:enumeration value=\"opportunityTeam\"/>\n    <xsd:enumeration value=\"accountTeam\"/>\n    <xsd:enumeration value=\"roleSubordinates\"/>\n    <xsd:enumeration value=\"owner\"/>\n    <xsd:enumeration value=\"creator\"/>\n    <xsd:enumeration value=\"partnerUser\"/>\n    <xsd:enumeration value=\"accountOwner\"/>\n    <xsd:enumeration value=\"customerPortalUser\"/>\n    <xsd:enumeration value=\"portalRole\"/>\n    <xsd:enumeration value=\"portalRoleSubordinates\"/>\n    <xsd:enumeration value=\"contactLookup\"/>\n    <xsd:enumeration value=\"userLookup\"/>\n    <xsd:enumeration value=\"roleSubordinatesInternal\"/>\n    <xsd:enumeration value=\"email\"/>\n    <xsd:enumeration value=\"caseTeam\"/>\n    <xsd:enumeration value=\"campaignMemberDerivedOwner\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ActionEmailSenderType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CurrentUser\"/>\n    <xsd:enumeration value=\"OrgWideEmailAddress\"/>\n    <xsd:enumeration value=\"DefaultWorkflowUser\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ActionTaskAssignedToTypes\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"user\"/>\n    <xsd:enumeration value=\"role\"/>\n    <xsd:enumeration value=\"opportunityTeam\"/>\n    <xsd:enumeration value=\"accountTeam\"/>\n    <xsd:enumeration value=\"owner\"/>\n    <xsd:enumeration value=\"accountOwner\"/>\n    <xsd:enumeration value=\"creator\"/>\n    <xsd:enumeration value=\"accountCreator\"/>\n    <xsd:enumeration value=\"partnerUser\"/>\n    <xsd:enumeration value=\"portalRole\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FieldUpdateOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Formula\"/>\n    <xsd:enumeration value=\"Literal\"/>\n    <xsd:enumeration value=\"Null\"/>\n    <xsd:enumeration value=\"NextValue\"/>\n    <xsd:enumeration value=\"PreviousValue\"/>\n    <xsd:enumeration value=\"LookupValue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"KnowledgeWorkflowAction\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PublishAsNew\"/>\n    <xsd:enumeration value=\"Publish\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"LookupValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"Queue\"/>\n    <xsd:enumeration value=\"RecordType\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SendAction\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Send\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Workflow\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"alerts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowAlert\"/>\n        <xsd:element name=\"fieldUpdates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowFieldUpdate\"/>\n        <xsd:element name=\"flowActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowFlowAction\"/>\n        <xsd:element name=\"flowAutomation\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowFlowAutomation\"/>\n        <xsd:element name=\"knowledgePublishes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowKnowledgePublish\"/>\n        <xsd:element name=\"outboundMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowOutboundMessage\"/>\n        <xsd:element name=\"rules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowRule\"/>\n        <xsd:element name=\"send\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowSend\"/>\n        <xsd:element name=\"tasks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowTask\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowAction\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowActionReference\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:WorkflowActionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"WorkflowActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"FieldUpdate\"/>\n    <xsd:enumeration value=\"KnowledgePublish\"/>\n    <xsd:enumeration value=\"Task\"/>\n    <xsd:enumeration value=\"Alert\"/>\n    <xsd:enumeration value=\"Send\"/>\n    <xsd:enumeration value=\"OutboundMessage\"/>\n    <xsd:enumeration value=\"FlowAction\"/>\n    <xsd:enumeration value=\"FlowAutomation\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"WorkflowAlert\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"ccEmails\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" type=\"xsd:string\"/>\n        <xsd:element name=\"promptTemplateVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recipients\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowEmailRecipient\"/>\n        <xsd:element name=\"senderAddress\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"senderType\" minOccurs=\"0\" type=\"tns:ActionEmailSenderType\"/>\n        <xsd:element name=\"template\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowEmailRecipient\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"recipient\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:ActionEmailRecipientTypes\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowFieldUpdate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"field\" type=\"xsd:string\"/>\n        <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"literalValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lookupValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lookupValueType\" minOccurs=\"0\" type=\"tns:LookupValueType\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"notifyAssignee\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"operation\" type=\"tns:FieldUpdateOperation\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"reevaluateOnChange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"targetObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowFlowAction\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"flow\" type=\"xsd:string\"/>\n        <xsd:element name=\"flowInputs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowFlowActionParameter\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"language\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowFlowActionParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowFlowAutomation\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"activeOrLastInactiveVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"activeOrLatestVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"activeVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"fireflyGuid\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isFlowAccessEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"latestVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"migratedFrom\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectType\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowKnowledgePublish\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"action\" type=\"tns:KnowledgeWorkflowAction\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"language\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowOutboundMessage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"apiVersion\" type=\"xsd:double\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"endpointUrl\" type=\"xsd:string\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"includeSessionId\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"integrationUser\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useDeadLetterQueue\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowActionReference\"/>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"failedMigrationToolVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"triggerType\" type=\"tns:WorkflowTriggerTypes\"/>\n        <xsd:element name=\"workflowTimeTriggers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowTimeTrigger\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowSend\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"action\" type=\"tns:SendAction\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"language\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowTask\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WorkflowAction\">\n      <xsd:sequence>\n        <xsd:element name=\"assignedTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"assignedToType\" type=\"tns:ActionTaskAssignedToTypes\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dueDateOffset\" type=\"xsd:int\"/>\n        <xsd:element name=\"notifyAssignee\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"offsetFromField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"priority\" type=\"xsd:string\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"status\" type=\"xsd:string\"/>\n        <xsd:element name=\"subject\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowTimeTrigger\">\n  <xsd:sequence>\n    <xsd:element name=\"actions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowActionReference\"/>\n    <xsd:element name=\"offsetFromField\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"timeLength\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"workflowTimeTriggerUnit\" type=\"tns:WorkflowTimeUnits\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"WorkflowTimeUnits\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Hours\"/>\n    <xsd:enumeration value=\"Days\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WorkflowTriggerTypes\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"onCreateOnly\"/>\n    <xsd:enumeration value=\"onCreateOrTriggeringUpdate\"/>\n    <xsd:enumeration value=\"onAllChanges\"/>\n    <xsd:enumeration value=\"OnRecursiveUpdate\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s the definition of a workflow rule.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Workflow xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <alerts>\n        <fullName>Another_alert</fullName>\n        <description>Another alert</description>\n        <protected>false</protected>\n        <recipients>\n            <type>accountOwner</type>\n        </recipients>\n        <recipients>\n            <field>Contact__c</field>\n            <type>contactLookup</type>\n        </recipients>\n        <recipients>\n            <field>Email__c</field>\n            <type>email</type>\n        </recipients>\n        <template>TestEmail/Email Test</template>\n    </alerts>\n    <fieldUpdates>\n        <fullName>Enum_Field_Update</fullName>\n        <description>Blah</description>\n        <field>EnumField__c</field>\n        <name>Enum Field Update</name>\n        <notifyAssignee>true</notifyAssignee>\n        <operation>NextValue</operation>\n        <protected>false</protected>\n    </fieldUpdates>\n    <fieldUpdates>\n        <fullName>Enum_Field_Update2</fullName>\n        <description>Blah</description>\n        <field>EnumField__c</field>\n        <literalValue>PLX2</literalValue>\n        <name>Enum Field Update2</name>\n        <notifyAssignee>true</notifyAssignee>\n        <operation>Literal</operation>\n        <protected>false</protected>\n    </fieldUpdates>\n    <fieldUpdates>\n        <fullName>Field_Update</fullName>\n        <description>TestField update desc</description>\n        <field>Name</field>\n        <formula>Name &amp; &quot;Updated&quot;</formula>\n        <name>Field Update</name>\n        <notifyAssignee>false</notifyAssignee>\n        <operation>Formula</operation>\n        <protected>false</protected>\n    </fieldUpdates>\n    <fieldUpdates>\n        <fullName>Lookup_On_Contact</fullName>\n        <field>RealOwner__c</field>\n        <lookupValue>admin@acme.com</lookupValue>\n        <name>Lookup On Contact</name>\n        <notifyAssignee>false</notifyAssignee>\n        <operation>LookupValue</operation>\n        <protected>false</protected>\n    </fieldUpdates>\n    <outboundMessages>\n        <fullName>Another_Outbound_message</fullName>\n        <description>Another Random outbound.</description>\n        <endpointUrl>http://www.test.com</endpointUrl>\n        <fields>Email__c</fields>\n        <fields>Id</fields>\n        <fields>Name</fields>\n        <includeSessionId>true</includeSessionId>\n        <integrationUser>admin@acme.com</integrationUser>\n        <name>Another Outbound message</name>\n        <protected>false</protected>\n    </outboundMessages>\n    <rules>\n        <fullName>BooleanFilter</fullName>\n        <active>false</active>\n        <booleanFilter>1 AND 2 OR 3</booleanFilter>\n        <criteriaItems>\n            <field>CustomObjectForWorkflow__c.CreatedById</field>\n            <operation>notEqual</operation>\n        </criteriaItems>\n        <criteriaItems>\n            <field>CustomObjectForWorkflow__c.CreatedById</field>\n            <operation>notEqual</operation>\n            <value>abc</value>\n        </criteriaItems>\n        <criteriaItems>\n            <field>CustomObjectForWorkflow__c.CreatedById</field>\n            <operation>equals</operation>\n            <value>xyz</value>\n        </criteriaItems>\n        <triggerType>onCreateOrTriggeringUpdate</triggerType>\n    </rules>\n    <rules>\n        <fullName>Custom Rule1</fullName>\n        <actions>\n            <name>Another_alert</name>\n            <type>Alert</type>\n        </actions>\n        <actions>\n            <name>Enum_Field_Update2</name>\n            <type>FieldUpdate</type>\n        </actions>\n        <actions>\n            <fullName>Field_Update</name>\n                <type>FieldUpdate</type>\n        </actions>\n        <actions>\n            <name>Another_Outbound_message</name>\n            <type>OutboundMessage</type>\n        </actions>\n        <actions>\n            <name>Role_task_was_completed</name>\n            <type>Task</type>\n        </actions>\n        <active>true</active>\n        <criteriaItems>\n            <field>CustomObjectForWorkflow__c.Name</field>\n            <operation>startsWith</operation>\n            <value>ABC</value>\n        </criteriaItems>\n        <description>Custom Rule1 desc</description>\n        <triggerType>onCreateOrTriggeringUpdate</triggerType>\n    </rules>\n    <rules>\n        <fullName>IsChangedFunctionRule</fullName>\n        <active>true</active>\n        <description>IsChangedDesc</description>\n        <formula>ISCHANGED(Name)</formula>\n        <triggerType>onAllChanges</triggerType>\n    </rules>\n    <tasks>\n        <fullName>Another_task_was_completed</fullName>\n        <assignedToType>owner</assignedToType>\n        <description>Random Comment</description>\n        <dueDateOffset>20</dueDateOffset>\n        <notifyAssignee>true</notifyAssignee>\n        <priority>High</priority>\n        <protected>false</protected>\n        <status>Completed</status>\n        <subject>Another task was completed</subject>\n    </tasks>\n    <tasks>\n        <fullName>Role_task_was_completed</fullName>\n        <assignedTo>R11</assignedTo>\n        <assignedToType>role</assignedToType>\n        <dueDateOffset>-2</dueDateOffset>\n        <notifyAssignee>true</notifyAssignee>\n        <offsetFromField>CustomObjectForWorkflow__c.CreatedDate</offsetFromField>\n        <priority>High</priority>\n        <protected>false</protected>\n        <status>Completed</status>\n        <subject>Role task was completed</subject>\n    </tasks>\n    <tasks>\n        <fullName>User_task_was_completed</fullName>\n        <assignedTo>admin@acme.com</assignedTo>\n        <assignedToType>user</assignedToType>\n        <dueDateOffset>-2</dueDateOffset>\n        <notifyAssignee>true</notifyAssignee>\n        <offsetFromField>User.CreatedDate</offsetFromField>\n        <priority>High</priority>\n        <protected>false</protected>\n        <status>Completed</status>\n        <subject>User task was completed</subject>\n    </tasks>\n</Workflow>"
+    }
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "name": "salesforce-development",
+  "displayName": "Salesforce Development",
+  "version": "1.9.0",
+  "description": "Build Salesforce apps and agents using these core building blocks: metadata, Apex, deploy/retrieve, security, reporting, and generated installed-versus-available capability discovery.",
+  "author": { "name": "Salesforce", "url": "https://github.com/forcedotcom/sf-skills" },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/forcedotcom/sf-skills/tree/main/plugins/builder/salesforce-development",
+  "repository": "https://github.com/forcedotcom/sf-skills.git",
+  "keywords": ["salesforce", "apex", "flow", "soql", "metadata", "deploy", "agentforce"],
+  "dependencies": [],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context detect"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(sf project deploy *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context verify-org"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project delete *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context verify-org"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project deploy start*)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-deploy-gate prod-check"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project deploy quick*)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-deploy-gate prod-check"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project delete*)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-deploy-gate destructive"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project deploy start*)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/bin/lsp-precheck"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project deploy validate*)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/bin/lsp-precheck"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf apex run *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project retrieve *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf data query *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
+          }
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context record-skill-dispatch"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context reset-dispatch-turn"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context orientation-rail"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(sf project deploy *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context post-deploy"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context wayfinder"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Edit(force-app/**)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-deploy-gate auto-deploy"
+          },
+          {
+            "type": "command",
+            "if": "Write(force-app/**)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-deploy-gate auto-deploy"
+          },
+          {
+            "type": "command",
+            "if": "MultiEdit(force-app/**)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-deploy-gate auto-deploy"
+          }
+        ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context resolution-trace"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/agent-validator.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(sf project deploy *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context post-deploy-failure"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context feedback-nudge"
+          }
+        ]
+      }
+    ]
+  }
+}

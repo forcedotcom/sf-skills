@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ForecastingSourceDefinition - Metadata API",
+  "description": "Represents the object, measure, date type, and hierarchy that a forecast uses to project sales.",
+  "file_information": ".forecastingSourceDefinition",
+  "directory_location": "forecastingSourceDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "categoryField": {
+      "type": "string",
+      "description": "Name of the forecast category that is associated with the forecast type. Possible values are: Opportunity.ForecastCategoryName"
+    },
+    "dateField": {
+      "type": "string",
+      "description": "Field that is used for the forecast type’s date type. For example, the CloseDate field on Opportunity is used for opportunity close date-based forecast types. Possible values are: Opportunity.CloseDate OpportunityLineItem.ServiceDate OpportunityLineItemSchedule.ScheduleDate"
+    },
+    "familyField": {
+      "type": "string",
+      "description": "Use this field to group forecasts by product family. Possible values are: Product2.Family"
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Controlling label for this forecasting source definition.",
+      "required": true
+    },
+    "measureField": {
+      "type": "string",
+      "description": "Field that is used for the forecast type’s measure. For example, the Amount field on Opportunity is associated with revenue-based forecast types. Possible values are*: Opportunity.Amount Opportunity.Custom Opportunity.TotalOpportunityQuantity OpportunityLineItem.Custom OpportunityLineItem.Quantity OpportunityLineItem.TotalPrice OpportunityLineItemSchedule.Custom OpportunityLineItemSchedule.Quantity OpportunityLineItemSchedule.Revenue OpportunitySplit.Custom OpportunitySplit.SplitAmount *Where Custom represents the name of the custom field that a forecast type’s measure is based on. Example: Use Megawatts__c to forecast energy consumption."
+    },
+    "sourceObject": {
+      "type": "string",
+      "description": "Object associated with this forecasting source definition. Possible values are: Opportunity OpportunityLineItem OpportunityLineItemSchedule OpportunitySplit Product2",
+      "required": true
+    },
+    "territory2Field": {
+      "type": "string",
+      "description": "For a territory-based forecast type, indicates the field that is used for territory information. Possible values are: Opportunity.Territory2Id For user role-based forecast types, this value is null."
+    },
+    "userField": {
+      "type": "string",
+      "description": "Specifies who owns the forecast. Possible values are: Opportunity.OwnerId OpportunitySplit.SplitOwnerId"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingSourceDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"categoryField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"cdpDataspace\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dateField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSourceObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"familyField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"measureField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"territory2Field\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"userField\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ForecastingSourceDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingSourceDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>TestFsd</masterLabel>\n    <sourceObject>Opportunity</sourceObject>\n    <measureField>Opportunity.Amount</measureField>\n    <dateField>Opportunity.CloseDate</dateField>\n    <userField>Opportunity.OwnerId</userField>\n    <categoryField>Opportunity.ForecastCategoryName</categoryField>\n</ForecastingSourceDefinition>"
+    }
+  ]
+}

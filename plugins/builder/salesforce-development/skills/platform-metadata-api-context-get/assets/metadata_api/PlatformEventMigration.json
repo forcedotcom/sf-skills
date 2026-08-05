@@ -1,0 +1,39 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PlatformEventMigration - Metadata API",
+  "description": "Represents configuration settings for a migration from standard volume platform events to high volume platform events.",
+  "file_information": ".platformEventMigration",
+  "directory_location": "PlatformEventMigrations",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "eventObject": {
+      "type": "string",
+      "required": true,
+      "description": "The API name of the standard volume platform event that needs to be migrated to a high volume platform event."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label for the PlatformEventMigration component."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PlatformEventMigration\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"endDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <xsd:element name=\"eventObject\" type=\"xsd:string\"/>\n        <xsd:element name=\"highVolumePosition\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"migrationStatus\" minOccurs=\"0\" type=\"tns:PlatformEventsMigrationStatus\"/>\n        <xsd:element name=\"startDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"PlatformEventsMigrationStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"MIGRATING\"/>\n    <xsd:enumeration value=\"COMPLETED\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PlatformEventMigration component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n        <PlatformEventMigration xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n          <masterLabel>My Event Migration</masterLabel>\n          <eventObject>MyEvent__e</eventObject>\n        </PlatformEventMigration>"
+    }
+  ]
+}

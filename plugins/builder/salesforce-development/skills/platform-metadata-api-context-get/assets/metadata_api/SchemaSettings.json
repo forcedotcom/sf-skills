@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SchemaSettings - Metadata API",
+  "description": "Represents an org’s schema settings, which manage the availability of custom settings and custom metadata type values. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAdvancedCMTSecurity": {
+      "type": "boolean",
+      "description": "Indicates whether custom metadata type values are available only to Apex, flow, and formula operations (true) or exposed in other contexts such as through the Enterprise WSDL or SOAP API (false). This field has a default value of false."
+    },
+    "enableAdvancedCSSecurity": {
+      "type": "boolean",
+      "description": "Indicates whether custom settings type values are available only to Apex, flow, and formula operations (true) or exposed in other contexts such as through the Enterprise WSDL or SOAP API (false). This field has a default value of false."
+    },
+    "enableListCustomSettingCreation": {
+      "type": "boolean",
+      "description": "Indicates whether you can create custom settings when using application-level data definitions (true) or not (false). This field has a default value of false."
+    },
+    "enableSOSLOnCustomSettings": {
+      "type": "boolean",
+      "description": "Indicates whether custom settings values are returned in Salesforce Object Search language (SOSL) queries (true) or not (false). This field has a default value of false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SchemaSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAdvancedCMTSecurity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAdvancedCSSecurity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableListCustomSettingCreation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSOSLOnCustomSettings\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SchemaSettings",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SchemaSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableAdvancedCMTSecurity>true</enableAdvancedCMTSecurity>\n    <enableAdvancedCSSecurity>true</enableAdvancedCSSecurity>\n    <enableListCustomSettingCreation>false</enableListCustomSettingCreation>\n    <enableSOSLOnCustomSettings>true</enableSOSLOnCustomSettings>\n</SchemaSettings>"
+    }
+  ]
+}

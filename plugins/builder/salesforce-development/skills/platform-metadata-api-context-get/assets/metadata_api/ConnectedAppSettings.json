@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ConnectedAppSettings - Metadata API",
+  "description": "Represents settings for connected apps. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAdminApprovedAppsOnly": {
+      "type": "boolean",
+      "description": "If false (default), any connected app can call the Salesforce API. If true, only apps that have been approved or installed by the admin can call the Salesforce API. To access this field, you must contact Salesforce Customer Support to enable API Access Control."
+    },
+    "enableAdminApprovedAppsOnlyForExternalUser": {
+      "type": "boolean",
+      "description": "If false (default), authenticated customers or partners can use any unblocked connected app to access the Salesforce API. If true, authenticated customers and partners can’t access the Salesforce API unless they use a connected app that is installed in the org and unblocked. Install and unblock connected apps on the Connected Apps OAuth Usage page. To access this field, you must contact Salesforce Customer Support to enable API Access Control."
+    },
+    "enableSkipUserProvisioningWizardWelcomePage": {
+      "type": "boolean",
+      "description": "If false (default), the User Provisioning Wizard Welcome page shows up when you access the wizard. To skip the welcome page in the future, you can select Do not show me this next time. If true, the Welcome page doesn’t show up the next time that you access the wizard."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ConnectedAppSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAdminApprovedAppsOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAdminApprovedAppsOnlyForExternalUser\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSkipUserProvisioningWizardWelcomePage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ConnectedAppSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ConnectedAppSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableAdminApprovedAppsOnly>false</enableAdminApprovedAppsOnly>\n    <enableAdminApprovedAppsOnlyForExternalUser>false</enableAdminApprovedAppsOnlyForExternalUser>\n    <enableSkipUserProvisioningWizardWelcomePage>true</enableSkipUserProvisioningWizardWelcomePage>\n</ConnectedAppSettings>"
+    }
+  ]
+}

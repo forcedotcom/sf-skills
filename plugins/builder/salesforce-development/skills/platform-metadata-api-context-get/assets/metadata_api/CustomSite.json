@@ -1,0 +1,288 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomSite - Metadata API",
+  "description": "Represents a Salesforce site. Create public websites and applications that are directly integrated with your Salesforce organization, but don't require users to log in with a username and password.",
+  "file_information": ".site",
+  "directory_location": "sites",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Determines whether the site is active.",
+      "required": true
+    },
+    "allowHomePage": {
+      "type": "boolean",
+      "description": "Determines whether the standard home page is visible to public users. This field is available in API version 15.0 and later.",
+      "required": true
+    },
+    "allowStandardAnswersPages": {
+      "type": "boolean",
+      "description": "Determines whether the standard answer pages are visible to public users. This field is available in API version 19.0 and later."
+    },
+    "allowStandardIdeasPages": {
+      "type": "boolean",
+      "description": "Determines whether the standard Ideas pages are visible to public users. This field is available in API version 15.0 and later.",
+      "required": true
+    },
+    "allowStandardLookups": {
+      "type": "boolean",
+      "description": "Determines whether the standard lookup pages are visible to public users. This field is available in API version 15.0 and later.",
+      "required": true
+    },
+    "allowStandardPortalPages": {
+      "type": "boolean",
+      "description": "When enabled, authenticated users in this site can access standard Salesforce pages as allowed by their access controls. When disabled, authenticated users in this site can't access standard Salesforce pages, even if their access controls allow it. If your site serves only Visualforce pages, disabling this setting helps add a layer of access protection to your site. This field is available in API version 39.0 and later.",
+      "required": true
+    },
+    "allowStandardSearch": {
+      "type": "boolean",
+      "description": "Determines whether the standard search pages are visible to public users. This field is available in API version 15.0 and later.",
+      "required": true
+    },
+    "analyticsTrackingCode": {
+      "type": "string",
+      "description": "The tracking code associated with your site. Services such as Google Analytics can use this code to track page request data for your site. This field is available in API version 17.0 and later."
+    },
+    "authorizationRequiredPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display when the guest user tries to access a page for which they aren’t authorized."
+    },
+    "bandwidthExceededPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display when the site has exceeded its bandwidth quota."
+    },
+    "browserXssProtection": {
+      "type": "boolean",
+      "description": "Determines whether protection against reflected cross-site scripting attacks is enabled. If a reflected cross-site scripting attack is detected, the browser shows a blank page with no content. Available in API version 41.0 and later.",
+      "required": true
+    },
+    "cachePublicVisualforcePagesInProxyServers": {
+      "type": "boolean",
+      "description": "Indicates whether proxy servers cache this site’s publicly available pages only for unauthenticated guest users (true) or not (false). When this field is false, this site’s cache-enabled Visualforce pages are cached in the web browser for both authenticated and unauthenticated users. The default is true. See Configure Site Caching in Salesforce Help for more information. This field is available in API version 52.0 and later."
+    },
+    "changePasswordPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display when the portal user attempts to change their password for either the portal or for Chatter Answers, when enabled."
+    },
+    "chatterAnswersForgotPasswordConfirmPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page that informs the user that an email has been sent to them with a temporary password. This field is available if Chatter Answers is enabled for your organization. This field is available in API version 27.0 and later."
+    },
+    "chatterAnswersForgotPasswordPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display when a user clicks the link to retrieve a forgotten password. This field is available if Chatter Answers is enabled for your organization. This field is available in API version 27.0 and later."
+    },
+    "chatterAnswersHelpPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display when the user clicks the help link. This field is available if Chatter Answers is enabled for your organization. This field is available in API version 27.0 and later."
+    },
+    "chatterAnswersLoginPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display where users can log in to the portal. This field is available if Chatter Answers is enabled for your organization. This field is available in API version 27.0 and later."
+    },
+    "chatterAnswersRegistrationPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display where users can register themselves and access the portal. This field is available in API version 27.0 and later."
+    },
+    "clickjackProtectionLevel": {
+      "type": "SiteClickjackProtectionLevel (enumeration of type string)",
+      "description": "Sets the clickjack protection level. The options are: AllowAllFraming — Allow framing by any page (no protection) External — Allow framing of site or Experience Cloud site pages on external domains (good protection) SameOriginOnly — Allow framing by the same origin only (recommended) NoFraming — Don’t allow framing by any page (most protection) This field is available in API version 30.0 and later.",
+      "required": true
+    },
+    "contentSniffingProtection": {
+      "type": "boolean",
+      "description": "Determines whether the browser is prevented from inferring the MIME type from the document content. If enabled, it also prevents the browser from executing some malicious files (JavaScript, Stylesheet) as dynamic content. This field is available in API version 41.0 and later.",
+      "required": true
+    },
+    "cspUpgradeInsecureRequests": {
+      "type": "boolean",
+      "description": "This field is removed in API version 52.0 and later. In API version 51.0 and earlier, the value in the field is ignored."
+    },
+    "customWebAddresses": {
+      "type": "SiteWebAddress[]",
+      "description": "The root custom URLs associated with the site. Saving or deploying a CustomSite replaces all root custom URLs in the site with the root custom URLs in this list. Custom URLs that use a non-root path prefix aren’t included in this list and aren’t affected when saving or deploying a CustomSite. This field is available in API version 21.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The site description."
+    },
+    "enableAuraRequests": {
+      "type": "boolean",
+      "description": "Determines whether guest users can view features available only in Lightning (true). If set to false, Lightning features don’t load. This field is available in API version 46.0 and later."
+    },
+    "favoriteIcon": {
+      "type": "string",
+      "description": "The name of the static resource, without the extension, for the icon that appears in next to the site’s name in browser tabs, bookmarks, and search results. To update a site’s favorite icon, create a 16px by 16px ICO file. Then store that images a static resource at the base path for the site. For example, if the icon file name is favico.ico, https://myDomainName.my.site.com/store/favicon.ico is the required path for a site with the URL https://myDomainName.my.site.com/store. To use that icon, set favoriteIcon to favicon. If the specified the ICO file doesn’t exist in the required location, a 404 error is returned. Otherwise, if the file isn’t present, no favorite icon is used."
+    },
+    "fileNotFoundPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display when the guest user tries to access a non-existent page."
+    },
+    "forgotPasswordPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display when a user clicks the Forgot Password link on the site’s login page. This field is only applicable for Experience Cloud sites."
+    },
+    "genericErrorPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display for errors not otherwise specified."
+    },
+    "guestProfile": {
+      "type": "string",
+      "description": "Read only. The name of the profile associated with the guest user."
+    },
+    "inMaintenancePage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display when the site is down for maintenance."
+    },
+    "inactiveIndexPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page set as the inactive site home page."
+    },
+    "indexPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page set as the active site home page.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the site label in the Salesforce user interface.",
+      "required": true
+    },
+    "myProfilePage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display as the site user’s profile page, where users can update their contact information. This field is available in API version 20.0 and later."
+    },
+    "portal": {
+      "type": "string",
+      "description": "The name of the portal associated with this site for login access."
+    },
+    "redirectToCustomDomain": {
+      "type": "boolean",
+      "description": "Indicates whether requests for this site’s system-managed URLs are redirected to the HTTPS custom domain serving this site (true) or not (false). System-managed site URLs end in *.my.salesforce-sites.com or *.my.site.com. In Experience Cloud sites, the default is false. In Salesforce Sites, the default is true. If multiple custom domains serve this site and this field is set to true, requests are routed to the site’s primary custom URL only if it’s an HTTPS custom domain. Otherwise, requests are redirected to the first HTTPS custom domain associated with this site, in alphanumeric order. If no HTTPS custom domain serves this site, this option has no effect. This field is available in API version 52.0 and later."
+    },
+    "referrerPolicyOriginWhenCrossOrigin": {
+      "type": "boolean",
+      "description": "Determines whether the referrer header shows only Salesforce.com rather than the entire URL when loading a page. This feature eliminates the potential for a referrer header to reveal sensitive information that could be present in a full URL, such as an org ID. This field is available in API version 41.0 and later.",
+      "required": true
+    },
+    "requireHttps": {
+      "type": "boolean",
+      "description": "This field is removed in API version 52.0 and later. In API version 51.0 and earlier, the value in the field is ignored."
+    },
+    "requireInsecurePortalAccess": {
+      "type": "boolean",
+      "description": "Determines whether to override your organization's security settings and exclusively use HTTP when logging in to the associated portal from your site. Removed in API version 50.0 and later."
+    },
+    "robotsTxtPage": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display for the robots.txt file used by web crawlers."
+    },
+    "selfRegPage": {
+      "type": "string",
+      "description": "Visualforce page used for self-registration."
+    },
+    "serverIsDown": {
+      "type": "string",
+      "description": "The name of the static resource to be displayed from the cache server when Salesforce servers are down. The static resource must be a public zip file 1 MB or smaller and must contain a page named maintenance.html at the root level of the zip file. Other resources in the zip file, such as images or CSS files, can follow any directory structure. This field is available in API version 17.0 and later."
+    },
+    "siteAdmin": {
+      "type": "string",
+      "description": "The username of the site administrator."
+    },
+    "siteGuestRecordDefaultOwner": {
+      "type": "string",
+      "description": "The username of the user who owns all new records that unauthenticated guest users create. This field is available in API version 51.0 and later."
+    },
+    "siteIframeWhiteListUrls": {
+      "type": "SiteIframeWhiteListUrl[]",
+      "description": "The list of external domains that you allow to frame your Salesforce site. This field is available in API 49.0 and later."
+    },
+    "siteRedirectMappings": {
+      "type": "SiteRedirectMapping[]",
+      "description": "An array of all URL redirect rules set for your site. This field is available in API version 20.0 and later."
+    },
+    "siteTemplate": {
+      "type": "string",
+      "description": "The name of the Visualforce page to be used as the site template."
+    },
+    "siteType": {
+      "type": "siteType",
+      "description": "Identifies whether the site is a Visualforce (Salesforce Sites), Site.com site, or ChatterNetwork (Salesforce Sites). This field is available in API version 27.0 and later.",
+      "required": true
+    },
+    "subdomain": {
+      "type": "string",
+      "description": "Read only. The previous custom subdomain prefix for the site. For example, if your site URL is mycompany.force.com/partners, mycompany is the subdomain. This field is applicable and required only when the myDomainSuffix MyDomainSettings field is set to MySalesforceLimited, CloudforceLimited, or DatabaseLimited. If you enabled Salesforce Sites or Digital Experiences when the myDomainSuffix MyDomainSettings field was set to one of those values, this field returns this site’s previous subdomain. Otherwise, this field returns a null value."
+    },
+    "urlPathPrefix": {
+      "type": "string",
+      "description": "The first part of the path on the site's URL that distinguishes this site from other sites. For example, if your site URL is MyDomainName.my.salesforce-sites.com/partners, partners is the urlPathPrefix."
+    }
+  },
+  "sub_types": {
+    "SiteIframeWhiteListUrl": {
+      "url": {
+        "type": "string",
+        "description": "The trusted domain that you allow to frame your site or Experience Cloud site pages. Accepts these formats: example, example.com, *example.com, and https://example.com.",
+        "required": true
+      }
+    },
+    "SiteRedirectMapping": {
+      "action": {
+        "type": "SiteRedirect (enumeration of type string)",
+        "description": "The type of the redirect. Available string values are: Permanent Temporary",
+        "required": true
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "The status of the redirect: active or inactive."
+      },
+      "source": {
+        "type": "string",
+        "description": "The URL that you want to redirect. It must be a relative URL, but can have any valid extension type, such as.html or.php.",
+        "required": true
+      },
+      "target": {
+        "type": "string",
+        "description": "The new URL you want users to visit. It can be a relative URL or a fully-qualified URL with an http:// or https:// prefix.",
+        "required": true
+      }
+    },
+    "SiteWebAddress": {
+      "certificate": {
+        "type": "string",
+        "description": "Identifies the certificate associated with the custom domain. If the custom domain is set up for Salesforce to serve HTTPS, this field indicates which certificate to use."
+      },
+      "domainName": {
+        "type": "string",
+        "description": "The domain of the website, in the form of www.acme.com.",
+        "required": true
+      },
+      "primary": {
+        "type": "boolean",
+        "description": "Indicates whether this is the primary domain (true). If false, this is not the primary domain.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomSite\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowHomePage\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowStandardAnswersPages\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowStandardIdeasPages\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowStandardLookups\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowStandardPortalPages\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowStandardSearch\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"analyticsTrackingCode\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"authorizationRequiredPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"bandwidthExceededPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"browserXssProtection\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"cachePublicVisualforcePagesInProxyServers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"changePasswordPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"chatterAnswersForgotPasswordConfirmPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"chatterAnswersForgotPasswordPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"chatterAnswersHelpPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"chatterAnswersLoginPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"chatterAnswersRegistrationPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"clickjackProtectionLevel\" minOccurs=\"0\" type=\"tns:SiteClickjackProtectionLevel\"/>\n        <xsd:element name=\"contentSniffingProtection\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"customWebAddresses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SiteWebAddress\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableAuraRequests\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"favoriteIcon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"fileNotFoundPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"forgotPasswordPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"genericErrorPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"guestProfile\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"inMaintenancePage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"inactiveIndexPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"indexPage\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"myProfilePage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"portal\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"redirectToCustomDomain\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"referrerPolicyOriginWhenCrossOrigin\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"robotsTxtPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"selfRegPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"serverIsDown\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"siteAdmin\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"siteGuestRecordDefaultOwner\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"siteIframeWhiteListUrls\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SiteIframeWhiteListUrl\"/>\n        <xsd:element name=\"siteRedirectMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SiteRedirectMapping\"/>\n        <xsd:element name=\"siteTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"siteType\" type=\"tns:SiteType\"/>\n        <xsd:element name=\"subdomain\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"urlPathPrefix\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SiteClickjackProtectionLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AllowAllFraming\"/>\n    <xsd:enumeration value=\"External\"/>\n    <xsd:enumeration value=\"SameOriginOnly\"/>\n    <xsd:enumeration value=\"NoFraming\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SiteIframeWhiteListUrl\">\n  <xsd:sequence>\n    <xsd:element name=\"url\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SiteRedirect\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Permanent\"/>\n    <xsd:enumeration value=\"Temporary\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SiteRedirectMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"action\" type=\"tns:SiteRedirect\"/>\n    <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isDynamic\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"source\" type=\"xsd:string\"/>\n    <xsd:element name=\"target\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SiteType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Siteforce\"/>\n    <xsd:enumeration value=\"Visualforce\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SiteWebAddress\">\n  <xsd:sequence>\n    <xsd:element name=\"certificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"domainName\" type=\"xsd:string\"/>\n    <xsd:element name=\"primary\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here is a sample XML definition of a site.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomSite xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <allowHomePage>true</allowHomePage>\n    <allowStandardAnswersPages>true</allowStandardAnswersPages>\n    <allowStandardIdeasPages>true</allowStandardIdeasPages>\n    <allowStandardLookups>true</allowStandardLookups>\n    <allowStandardPortalPages>true</allowStandardPortalPages>\n    <allowStandardSearch>true</allowStandardSearch>\n    <analyticsTrackingCode>UA-000000-2</analyticsTrackingCode>\n    <authorizationRequiredPage>Unauthorized</authorizationRequiredPage>\n    <bandwidthExceededPage>BandwidthExceeded</bandwidthExceededPage>\n    <browserXssProtection>true</browserXssProtection>\n    <cachePublicVisualforcePagesInProxyServers>false</cachePublicVisualforcePagesInProxyServers>\n    <changePasswordPage>ChangePassword</changePasswordPage>\n    <chatterAnswersForgotPasswordConfirmPage>ChatterAnswersForgotPasswordConfirm</chatterAnswersForgotPasswordConfirmPage>\n    <chatterAnswersForgotPasswordPage>ChatterAnswersForgotPassword</chatterAnswersForgotPasswordPage>\n    <chatterAnswersHelpPage>ChatterAnswersHelp</chatterAnswersHelpPage>\n    <chatterAnswersLoginPage>ChatterAnswersLogin</chatterAnswersLoginPage>\n    <chatterAnswersRegistrationPage>ChatterAnswersRegistration</chatterAnswersRegistrationPage>\n    <clickjackProtectionLevel>SameOriginOnly</clickjackProtectionLevel>\n    <contentSniffingProtection>true</contentSniffingProtection>\n    <customWebAddresses>\n      <domainName>www.testing123.com</domainName>\n      <primary>true</primary>\n    </customWebAddresses>\n    <description>Partners portal for My Company</description>\n    <enableAuraRequests>true</enableAuraRequests>\n    <favoriteIcon>favicon</favoriteIcon>\n    <fileNotFoundPage>FileNotFound</fileNotFoundPage>\n    <forgotPasswordPage>ForgotPassword</forgotPasswordPage>\n    <genericErrorPage>Exception</genericErrorPage>\n    <guestProfile>Guest</guestProfile>\n    <inMaintenancePage>InMaintenance</inMaintenancePage>\n    <inactiveIndexPage>Inactive</inactiveIndexPage>\n    <indexPage>UnderConstruction</indexPage>\n    <masterLabel>customSite</masterLabel>\n    <myProfilePage>UserProfile</myProfilePage>\n    <portal>Customer Portal</portal>\n    <redirectToCustomDomain>true</redirectToCustomDomain>\n    <referrerPolicyOriginWhenCrossOrigin>true</referrerPolicyOriginWhenCrossOrigin>\n    <robotsTxtPage>RobotsTxt</robotsTxtPage>\n    <selfRegPage>SelfReg</selfRegPage>\n    <serverIsDown>MyServerDownResource</serverIsDown>\n    <siteAdmin>admin@myco.org</siteAdmin>\n    <siteGuestRecordDefaultOwner>admin@myco.org</siteGuestRecordDefaultOwner>\n    <siteIframeWhiteListUrl>\n      <url>example.com</url>\n    </siteIframeWhiteListUrl>\n    <siteTemplate>SiteTemplate</siteTemplate>\n    <siteType>Siteforce</siteType>\n    <subdomain>myco</subdomain>\n    <urlPathPrefix>partners</urlPathPrefix>\n</CustomSite>"
+    }
+  ]
+}

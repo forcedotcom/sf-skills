@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OmniChannelSettings - Metadata API",
+  "description": "Represents the Omni-Channel settings for an org.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableOmniAutoLoginPrompt": {
+      "type": "boolean",
+      "description": "Indicates whether to display a login confirmation upon loading a console with Omni-Channel. The default value is false. When true, the console displays a prompt before logging into Omni-Channel when an agent opens another Omni-Channel console in a different tab or window or refreshes the current tab. The agent is logged out of Omni-Channel on other consoles and any ongoing conversations are ended. Available in API version 47.0 and later."
+    },
+    "enableOmniChannel": {
+      "type": "boolean",
+      "description": "Indicates whether Omni-Channel is enabled, giving you access to the objects required to set up the feature in your org. The default value is false."
+    },
+    "enableOmniSecondaryRoutingPriority": {
+      "type": "boolean",
+      "description": "Indicates whether Secondary Routing Priority is enabled in your org. The default value is false. Available in API version 47.0 and later."
+    },
+    "enableOmniSkillsRouting": {
+      "type": "boolean",
+      "description": "Indicates whether skills-based routing is enabled in your org. The default value is false."
+    },
+    "enableOmniStatusCapModel": {
+      "type": "boolean",
+      "description": "Indicates whether the status based capacity model for rep work is enabled or not. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"OmniChannelSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableOmniAutoLoginPrompt\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOmniChannel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOmniSecondaryRoutingPriority\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOmniSkillsRouting\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOmniStatusCapModel\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a OmniChannelSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OmniChannelSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableOmniChannel>true</enableOmniChannel>\n    <enableOmniAutoLoginPrompt>true</enableOmniAutoLoginPrompt>\n    <enableOmniSecondaryRoutingPriority>true</enableOmniSecondaryRoutingPriority>\n    <enableOmniSkillsRouting>true</enableOmniSkillsRouting>\n</OmniChannelSettings>"
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EnablementProgramDefinition - Metadata API",
+  "description": "Represents an Enablement program, which includes exercises and measurable milestones to help users such as sales reps achieve specific outcomes related to your company’s revenue goals.",
+  "file_information": ".enablementProgramDefinition",
+  "directory_location": "enablementProgramDefinitions",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "required": true,
+      "description": "A summary of the program’s goals and content that’s visible to users."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique programmatic name for the program record."
+    },
+    "doesAllowSelfEnrollment": {
+      "type": "boolean",
+      "description": "Indicates whether users can self-enroll in programs that are shared with them (true) or take only assigned programs (false). The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for the program, which is defined when the program is created."
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the program that’s visible to users."
+    },
+    "network": {
+      "type": "string",
+      "description": "The Experience Cloud site where a program is published for partner users."
+    },
+    "sections": {
+      "type": "EnablementProgramSection[]",
+      "description": "Groups of milestones and exercises within a program."
+    },
+    "tasks": {
+      "type": "EnablementProgramTask[]",
+      "description": "The outcome, milestones, and exercises in the program."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Indicates whether the program is for sales users in Lightning Experience (Enablement) or partner users in supported Experience Cloud sites (PtnrEnablement)."
+    }
+  },
+  "sub_types": {
+    "EnablementProgramSection": {
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique programmatic name for the section."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The title of the section that’s visible to users when they take the program."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "A number that specifies the order of the section, relative to other sections, starting at 0."
+      },
+      "tasks": {
+        "type": "EnablementProgramTask[]",
+        "description": "The milestones and exercises in the section."
+      }
+    },
+    "EnablementProgramTask": {
+      "customSubCategoryName": {
+        "type": "string",
+        "description": "The API name of custom exercise task subcategory. This value determines the type of the custom exercise and its associated content. Available in API version 63.0 and later."
+      },
+      "day": {
+        "type": "int",
+        "required": true,
+        "description": "The day of the program when the item is due, relative to the program's start date. For example, if a user is expected to complete an exercise where they watch a product demo by day 2, this field’s value is 2. For an outcome, this field specifies the number of days the full program takes. For example, if your program lasts 60 days, the value of this field is 60 for the outcome. This field’s value contributes to the program’s due date that users see when they take the program."
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "A summary of the outcome, milestone, or exercise that’s visible to users when they take the program."
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "The unique programmatic name for the outcome, milestone, or exercise."
+      },
+      "exercise": {
+        "type": "EnablementProgramTaskExercise",
+        "description": "The content used with an exercise. If taskSubCategory is ActionItem, this field isn’t included when retrieving metadata."
+      },
+      "milestone": {
+        "type": "EnablementProgramTaskMilestone",
+        "description": "The definition of an outcome or milestone, including the Enablement measures used and the criteria for completing the goal."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "The title of the outcome, milestone, or exercise that’s visible to users when they take the program."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "A number that specifies the order of the milestone or exercise, relative to other milestones or exercises that have the same due date in the program or in the same section, starting at 0. This number determines the order of items that users see for that day in the program."
+      },
+      "taskCategory": {
+        "type": "ProgramTaskDefCategory (enumeration of type string)",
+        "required": true,
+        "description": "The type of the program item. Values are: Exercise Milestone Milestone is used for both the program’s outcome and incremental milestones."
+      },
+      "taskSubCategory": {
+        "type": "string",
+        "required": true,
+        "description": "The type of exercise. This value determines the content associated with the exercise. For example, if the field value is Video, the exercise must reference video content from the Enablement workspace in the Digital Experiences app. Possible values are: ActionItem AudioRecording CustomExercise—Available in API version 62.0 and later. Document FeedbackRequest Other OtherExercise ScheduledEvent TextLesson Trailhead Video When taskCategory is Milestone, the value of taskSubCategory must be Other."
+      }
+    },
+    "EnablementProgramTaskExercise": {
+      "cmsContent": {
+        "type": "EnablementProgramTaskCmsContent",
+        "description": "The definition of content managed in the Enablement workspace in the Digital Experiences app when taskSubCategory on EnablementProgramTask is AudioRecording, Document, OtherExercise, ScheduledEvent, TextLesson, or Video."
+      },
+      "customContent": {
+        "type": "EnablementProgramTaskCustomContent",
+        "description": "The definition of content used with a custom exercise type when taskSubCategory on EnablementProgramTask is CustomExercise."
+      },
+      "externalContent": {
+        "type": "EnablementProgramTaskExternalContent",
+        "description": "The definition of Trailhead content when taskSubCategory on EnablementProgramTask is Trailhead."
+      },
+      "feedbackContent": {
+        "type": "EnablementProgramTaskFeedbackContent",
+        "description": "The definition of an assessment survey or Einstein prompt template when taskSubCategory on EnablementProgramTask is FeedbackRequest."
+      }
+    },
+    "EnablementProgramTaskCmsContent": {
+      "apiName": {
+        "type": "string",
+        "description": "Required in API version 62.0. The unique programmatic ID of the Digital Experiences content for the exercise. This string’s format is workspaceType/workspaceApiName.contentFQN/contentApiName, which matches the fullName field value on the corresponding DigitalExperience metadata type. For example, a Link content record from the Enablement workspace has this API name: enablement/sfdcEnablement_EnablementWorkspace.sfdc_enablement__link/link_API_name.",
+        "required": true
+      },
+      "contentKey": {
+        "type": "string",
+        "description": "Required in API version 61.0 only.",
+        "required": true
+      }
+    },
+    "EnablementProgramTaskCustomContent": {
+      "content": {
+        "type": "string",
+        "description": "A serialized string returned by the Apex class that’s specified in the corresponding LearningItemType metadata type’s apexSerializerDeserializer field. This string identifies the content used with the custom exercise type so the custom exercise can be recreated in the destination org. This string: Can’t exceed 250 characters Must contain only alphanumeric characters For details, see Implement Custom Exercise Types for Enablement Programs in the Sales Programs and Partner Tracks with Enablement Developer Guide."
+      }
+    },
+    "EnablementProgramTaskExternalContent": {
+      "externalId": {
+        "type": "string",
+        "required": true,
+        "description": "The API name of the Trailhead module used with the exercise."
+      },
+      "providerType": {
+        "type": "ProgramExtContentDefProvider (enumeration of type string)",
+        "required": true,
+        "description": "The supported external content platform or system. Values are: Trailhead"
+      }
+    },
+    "EnablementProgramTaskFeedbackContent": {
+      "inviteeCount": {
+        "type": "int",
+        "description": "The number of peers or managers that the user is required to invite for giving feedback when type is PeerFeedback. Each peer or manager receives an invitation to the assessment survey associated with the Feedback Request exercise.When type is AIFeedback, this value is always 1."
+      },
+      "promptTemplate": {
+        "type": "string",
+        "description": "The prompt template to use with this exercise when type is AIFeedback."
+      },
+      "surveyDeveloperName": {
+        "type": "string",
+        "description": "The unique programmatic name for the assessment survey that’s sent to peers and managers when type is PeerFeedback."
+      },
+      "type": {
+        "type": "string",
+        "required": true,
+        "description": "The type of feedback used with the exercise. Values are: AIFeedback—Users submit a video call, and Einstein generates feedback from the call’s transcription. With this type, promptTemplate is required. PeerFeedback—Users submit a URL to a sample of their work, and select peers and managers to review their work. Selected peers and managers complete an assessment survey. With this type, surveyId is required."
+      }
+    },
+    "EnablementProgramTaskMilestone": {
+      "compositeMilestoneType": {
+        "type": "EnblCompositeMilestoneType (enumeration of type string)",
+        "description": "The type of logic to use for evaluating the activity from two Enablement measures in a composite milestone.Values are: Addition Division Percentage"
+      },
+      "isMilestoneAnOutcome": {
+        "type": "boolean",
+        "required": true,
+        "description": "Indicates whether the program item is the program’s outcome (true) or an incremental milestone (false)."
+      },
+      "milestoneMeasures": {
+        "type": "EnablementProgramTaskMilestoneMeasure[]",
+        "description": "The Enablement measures used with the outcome or milestone."
+      },
+      "milestoneTarget": {
+        "type": "double",
+        "description": "The target value for a user to achieve to get credit for completing the outcome or milestone. The unit depends on the specific measure used with the outcome or milestone. For example, if the measure is the dollar amount of all closed opportunities, then the field value is measured in dollars."
+      },
+      "minimumSampleSize": {
+        "type": "int",
+        "description": "The number of records to evaluate when calculating progress for an outcome or milestone that uses an average-based measure. Use this field with milestoneTarget. For example, if you want users to achieve an average deal size of $50,000 after closing 4 deals, then this field’s value is 4 and milestoneTarget is 50000."
+      }
+    },
+    "EnablementProgramTaskMilestoneMeasure": {
+      "measureDefinitionDeveloperName": {
+        "type": "string",
+        "description": "The unique programmatic name of the Enablement measure used with the outcome or milestone."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "description": "A number that specifies the order of the Enablement measure when multiple measures are used with one outcome or milestone, starting at 0. For example, in a composite milestone that uses the Percentage function, the measure that provides the numerator value is sequence 0 and the measure that provides the denominator value is sequence 1."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EnablementProgramDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EnablementProgramDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Get started with sales at Cloud Kicks and close your first deal!</description>\n    <developerName>Get_Started_Close_First_Deal_Program</developerName>\n    <doesAllowSelfEnrollment>false</doesAllowSelfEnrollment>\n    <masterLabel>Welcome to Sales at Cloud Kicks</masterLabel>\n    <name>Welcome to Sales at Cloud Kicks</name>\n    <sections>\n        <developerName>section_0</developerName>\n        <name>Learn the Ropes in Your First Week</name>\n        <sequenceNumber>0</sequenceNumber>\n        <tasks>\n            <day>1</day>\n            <description>Learn the basics of sales at Cloud Kicks.</description>\n            <developerName>task_0</developerName>\n            <exercise>\n                <externalContent>\n                    <externalId>sales-rep-training</externalId>\n                    <providerType>Trailhead</providerType>\n                </externalContent>\n            </exercise>\n            <name>Sales Rep Training</name>\n            <sequenceNumber>0</sequenceNumber>\n            <taskCategory>Exercise</taskCategory>\n            <taskSubCategory>Trailhead</taskSubCategory>\n        </tasks>\n        <tasks>\n            <day>2</day>\n            <description>Watch our CEO explain the company vision.</description>\n            <developerName>task_1</developerName>\n            <exercise>\n                <cmsContent>\n                    <apiName>enablement/sfdcEnablement_EnablementWorkspace.sfdc_enablement__link/company_vision_video</apiName>\n                </cmsContent>\n            </exercise>\n            <name>See Our Company Vision</name>\n            <sequenceNumber>1</sequenceNumber>\n            <taskCategory>Exercise</taskCategory>\n            <taskSubCategory>Video</taskSubCategory>\n        </tasks>\n        <tasks>\n            <day>3</day>\n            <description>Action Item</description>\n            <developerName>task_2</developerName>\n            <name>Action Item</name>\n            <sequenceNumber>2</sequenceNumber>\n            <taskCategory>Exercise</taskCategory>\n            <taskSubCategory>ActionItem</taskSubCategory>\n        </tasks>\n        <tasks>\n            <day>4</day>\n            <description>Try out your first sales patch at Cloud Kicks and get feedback from our in-house experts.</description>\n            <developerName>task_3</developerName>\n            <exercise>\n                <feedbackContent>\n                <inviteeCount>1</inviteeCount>\n                <surveyDeveloperName>discovery_call_assessment</surveyDeveloperName>\n            </feedbackContent>\n            </exercise>\n            <name>Feedback from Peers and Managers</name>\n            <sequenceNumber>3</sequenceNumber>\n            <taskCategory>Exercise</taskCategory>\n            <taskSubCategory>FeedbackRequest</taskSubCategory>\n        </tasks>\n        <tasks>\n            <day>5</day>\n            <description>Complete a discovery calls by day 5.</description>\n            <developerName>task_4</developerName>\n            <isMilestoneAnOutcome>false</isMilestoneAnOutcome>\n            <milestone>\n                <milestoneMeasures>\n                    <measureDefinitionDeveloperName>salesforceTemplate_CallsEmails</measureDefinitionDeveloperName>\n                </milestoneMeasures>\n                <milestoneTarget>1.0</milestoneTarget>\n            </milestone>\n            <name>Log a Discovery Call by Day 5</name>\n            <sequenceNumber>4</sequenceNumber>\n            <taskCategory>Milestone</taskCategory>\n            <taskSubCategory>Other</taskSubCategory>\n        </tasks>\n        <tasks>\n            <day>6</day>\n            <description>Browse our sales leaders blog for more insights.</description>\n            <developerName>task_5</developerName>\n            <exercise>\n                <cmsContent>\n                    <apiName>enablement/sfdcEnablement_EnablementWorkspace.sfdc_enablement__link/sales_blog</apiName>\n                </cmsContent>\n            </exercise>\n            <name>Review Tips from Sales Leaders</name>\n            <sequenceNumber>5</sequenceNumber>\n            <taskCategory>Exercise</taskCategory>\n            <taskSubCategory>OtherExercise</taskSubCategory>\n        </tasks>\n        <tasks>\n            <day>7</day>\n            <description>Follow a screen flow for onboarding to the sales team.</description>\n            <developerName>task_6</developerName>\n            <exercise>\n                <customContent>\n                    <content>flowDeveloperName=OnboardingFlow</content>\n                </customContent>\n            </exercise>\n            <name>Onboarding Flow</name>\n            <sequenceNumber>6</sequenceNumber>\n            <taskCategory>Exercise</taskCategory>\n            <taskSubCategory>CustomExercise</taskSubCategory>\n            <customSubCategoryName>ScreenFlowTaskSubCategory</customSubCategoryName>\n        </tasks>\n    </sections>\n    <tasks>\n        <day>30</day>\n        <description>Close your first opportunity. To make sure it's counted, set the opportunity Stage field to Closed Won.</description>\n        <developerName>task_enablementProgramOutcomeCard</developerName>\n        <isMilestoneAnOutcome>true</isMilestoneAnOutcome>\n        <milestone>\n            <milestoneMeasures>\n                <measureDefinitionDeveloperName>measure_CloseFirstDeal</measureDefinitionDeveloperName>\n            </milestoneMeasures>\n            <milestoneTarget>1.0</milestoneTarget>\n        </milestone>\n        <name>outcome</name>\n        <sequenceNumber>0</sequenceNumber>\n        <taskCategory>Milestone</taskCategory>\n        <taskSubCategory>Other</taskSubCategory>\n    </tasks>        \n    <type>Enablement</type>\n</EnablementProgramDefinition>"
+    }
+  ]
+}

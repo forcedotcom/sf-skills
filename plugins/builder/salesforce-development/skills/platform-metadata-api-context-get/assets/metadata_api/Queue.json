@@ -1,0 +1,123 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Queue - Metadata API",
+  "description": "Represents a holding area for items before they are processed.",
+  "file_information": ".queue",
+  "directory_location": "queues",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "doesIncludeBosses": {
+      "type": "boolean",
+      "description": "Indicates whether records shared with users in this queue are also shared with users higher in the role hierarchy (true) or not (false). This field corresponds to the Grant Access Using Hierarchies checkbox on the queue’s detail page. Available in API version 67.0 and later.",
+      "required": true
+    },
+    "doesSendEmailToMembers": {
+      "type": "boolean",
+      "description": "Indicates whether emails are sent to queue members (true) or not (false) when a new record is added to the queue."
+    },
+    "email": {
+      "type": "string",
+      "description": "The email address of the queue owner."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the queue. Corresponds to Label in the user interface.",
+      "required": true
+    },
+    "queueMembers": {
+      "type": "QueueMembers[]",
+      "description": "Represents queue members added to the queue. Members can be added directly or selected by roles and public groups they belong to. Available in API version 42.0 and later."
+    },
+    "queueRoutingConfig": {
+      "type": "string",
+      "description": "Routing configuration name. Applies to orgs that use Omni-Channel with a routing configuration. Available in API version 42.0 and later."
+    },
+    "queueSobject": {
+      "type": "QueueSobject[]",
+      "description": "Indicates the supported entity types."
+    }
+  },
+  "sub_types": {
+    "QueueMembers": {
+      "publicGroups": {
+        "type": "PublicGroups[]",
+        "description": "Represents public groups in the org. Public groups are optionally used to add queue members."
+      },
+      "roleAndSubordinates": {
+        "type": "RoleAndSubordinates[]",
+        "description": "Represents roles and their subordinates in the org’s role hierarchy, including customer and partner roles. Roles and their subordinate hierarchy are optionally used to add queue members."
+      },
+      "roleAndSubordinatesInternal": {
+        "type": "RoleAndSubordinatesInternal[]",
+        "description": "Represents internal roles and their subordinates in the org’s role hierarchy, excluding customer and partner roles. Roles and their subordinate hierarchy are optionally used to add queue members."
+      },
+      "roles": {
+        "type": "Roles[]",
+        "description": "Represents roles in the org. Roles are optionally used to add queue members."
+      },
+      "users": {
+        "type": "Users[]",
+        "description": "Represents users in the org. Users can be added directly as queue members."
+      }
+    },
+    "PublicGroups": {
+      "publicGroup": {
+        "type": "string",
+        "description": "Represents a public group."
+      }
+    },
+    "RoleAndSubordinates": {
+      "roleAndSubordinate": {
+        "type": "string",
+        "description": "Represents a role and its subordinates, including customer and partner roles. Only available when digital experiences is enabled for your org and Experience Cloud site users are created with external account roles other than a shared person account role."
+      }
+    },
+    "RoleAndSubordinatesInternal": {
+      "roleAndSubordinateInternal": {
+        "type": "string",
+        "description": "Represents a role and its subordinates, excluding customer and partner roles."
+      }
+    },
+    "Roles": {
+      "role": {
+        "type": "string",
+        "description": "Represents a role."
+      }
+    },
+    "Users": {
+      "user": {
+        "type": "string",
+        "description": "Represents a user. Specify the user’s username."
+      }
+    },
+    "QueueSobject": {
+      "sobjectType": {
+        "type": "string",
+        "description": "Valid values are: Case ContactRequest Lead ServiceContract Task (Available in API version 48.0 and later.) Custom objects (such as ObjA_c)"
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PublicGroups\">\n  <xsd:sequence>\n    <xsd:element name=\"publicGroup\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Queue\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"doesIncludeBosses\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesSendEmailToMembers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"email\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"queueMembers\" minOccurs=\"0\" type=\"tns:QueueMembers\"/>\n        <xsd:element name=\"queueRoutingConfig\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"queueSobject\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:QueueSobject\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"QueueMembers\">\n  <xsd:sequence>\n    <xsd:element name=\"publicGroups\" minOccurs=\"0\" type=\"tns:PublicGroups\"/>\n    <xsd:element name=\"roleAndSubordinates\" minOccurs=\"0\" type=\"tns:RoleAndSubordinates\"/>\n    <xsd:element name=\"roleAndSubordinatesInternal\" minOccurs=\"0\" type=\"tns:RoleAndSubordinatesInternal\"/>\n    <xsd:element name=\"roles\" minOccurs=\"0\" type=\"tns:Roles\"/>\n    <xsd:element name=\"users\" minOccurs=\"0\" type=\"tns:Users\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QueueSobject\">\n  <xsd:sequence>\n    <xsd:element name=\"sobjectType\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RoleAndSubordinates\">\n  <xsd:sequence>\n    <xsd:element name=\"roleAndSubordinate\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RoleAndSubordinatesInternal\">\n  <xsd:sequence>\n    <xsd:element name=\"roleAndSubordinateInternal\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Roles\">\n  <xsd:sequence>\n    <xsd:element name=\"role\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Users\">\n  <xsd:sequence>\n    <xsd:element name=\"user\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a queue, which supports Case, Lead, and a custom object named ObjA.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Queue xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <doesIncludeBosses>false</doesIncludeBosses>\n    <doesSendEmailToMembers>true</doesSendEmailToMembers>\n    <email>member@company.com</email>\n    <fullName>Your Name</fullName>\n    <name>memberQueue</name>\n    <queueSobject>\n        <sobjectType>Case</sobjectType>\n    </queueSobject>\n    <queueSobject>\n        <sobjectType>Lead</sobjectType>\n    </queueSobject>\n    <queueSobject>\n        <sobjectType>ObjA__c</sobjectType>\n    </queueSobject>\n</Queue>"
+    },
+    {
+      "description": "Here’s another definition of a queue containing queue members added directly or via public groups and roles. Queries retrieve values using the DeveloperName field, not the Name field, so that the returned names are unique. The query also appends letters to the end of duplicate names, so these groups and roles can be referred to independently.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Queue xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <doesIncludeBosses>false</doesIncludeBosses>\n    <doesSendEmailToMembers>false</doesSendEmailToMembers>\n    <name>queue1</name>\n    <queueMembers>\n        <publicGroups>\n            <publicGroup>All Internal Users</publicGroup>\n        <publicGroups>\n        <queueRoleAndSubordinates>\n            <queueRoleAndSubordinate>role1</queueRoleAndSubordinate>\n            <queueRoleAndSubordinate>role2</queueRoleAndSubordinate>\n            <queueRoleAndSubordinate>role3</queueRoleAndSubordinate>\n        </queueRoleAndSubordinates>\n        <roles>\n            <role>role1</role>\n        </roles>\n        <users>\n            <user>s@sm.com</user>\n            <user>std@sm.com</user>\n        </users>\n    </queueMembers>\n    <queueRoutingConfig>my_omni_routing_config</queueRoutingConfig>\n    <queueSobject>\n        <sobjectType>Case</sobjectType>\n    </queueSobject>\n    <queueSobject>\n        <sobjectType>Lead</sobjectType>\n    </queueSobject>\n</Queue>"
+    }
+  ]
+}

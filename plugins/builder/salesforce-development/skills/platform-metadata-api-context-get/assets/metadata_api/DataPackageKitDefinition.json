@@ -1,0 +1,74 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataPackageKitDefinition - Metadata API",
+  "description": "Represents the top-level data kit container definition. Content objects can be added after the data kit is defined.",
+  "file_information": ".dataPackageKitDefinition",
+  "directory_location": "dataPackageKitDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "dataKitType": {
+      "type": "string",
+      "description": "The type of data kit created. Available in API version 63.0 and later. Valid values are: Default Sandbox"
+    },
+    "dataKitSource": {
+      "type": "string",
+      "description": "The data source in the updated data kit. Available in API version 63.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the data kit."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the application. This name contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "isDeployed": {
+      "type": "boolean",
+      "description": "Indicates whether the data kit content is deployed."
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether the data kit is enabled."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Label that identifies the AI application throughout the Salesforce user interface."
+    },
+    "useDeterministicNaming": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the data kit should use the deterministic naming feature. Available in API version 65.0 and later. Valid values are: True False"
+    },
+    "versionNumber": {
+      "type": "double",
+      "description": "Auto incremented version number."
+    },
+    "dataSpaceDefinitionDevName": {
+      "type": "string",
+      "description": "Data space name used to create the data kit. Available in API version 61.0 and later."
+    },
+    "deploymentOrder": {
+      "type": "string",
+      "description": "Deployment order of components that are added to the data kit. Available in API version 61.0 and later."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataPackageKitDefinition component.",
+      "code": "<DataPackageKitDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <developerName>SalesforceCRM</developerName>\n    <isDeployed>false</isDeployed>\n    <isEnabled>false</isEnabled>\n    <masterLabel>SalesforceCRM</masterLabel>\n    <versionNumber>1.0</versionNumber>\n</DataPackageKitDefinition>"
+    }
+  ]
+}

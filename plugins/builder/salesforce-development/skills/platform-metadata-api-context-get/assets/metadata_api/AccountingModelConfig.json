@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AccountingModelConfig - Metadata API",
+  "description": "Represents the mapping of the financial data model to a logical data model and configuration for the generation of Transaction Journal records.",
+  "file_information": ".accountingModelConfig",
+  "directory_location": "accountingModelConfigs",
+  "fields_columns": [
+    "type",
+    "required",
+    "description",
+    "reserved_for_internal_use"
+  ],
+  "fields": {
+    "accountingType": {
+      "type": "AccountingType (enumeration of type string)",
+      "required": true,
+      "description": "Determines whether the accounting set generates revenue or expense type transaction journal records.Valid values are: Expense Revenue"
+    },
+    "defaultAccrualAccountCode": {
+      "type": "string",
+      "description": "The code for your accounting system's default accrual account."
+    },
+    "defaultWriteOffAccountCode": {
+      "type": "string",
+      "description": "Represents the name of your account for written off payments."
+    },
+    "earliestCreatedDate": {
+      "type": "dateTime",
+      "required": true,
+      "description": "The date used to filter source records for processing. The Accounting Subledger only considers records created on or after this date."
+    },
+    "expectedCashFlowGrouping": {
+      "type": "ExpectedCashFlowGrouping (enumeration of type string)",
+      "description": "Determines whether Accounting Subledger groups transaction journal records by fund account or by a combination of fund account and due date. Note: Changing this setting doesn't impact existing records; it only affects records created or reversed afterward. Valid values are: GroupByFundAccount GroupByFundAndDueDate"
+    },
+    "financeBook": {
+      "type": "string",
+      "reserved_for_internal_use": true
+    },
+    "internalMappingDetails": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the structure of your financial data in JSON format."
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether only records that are true are processed when the Subledger Job runs."
+    },
+    "isGroupedByFundAccount": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "isUsed": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the Accounting Model has been used or activated at least once (true) or not (false). Note: If the value is set to true, you can’t select another object for the object model or change the number of objects associated with that Accounting Model."
+    },
+    "jobFilterCriteria": {
+      "type": "string",
+      "reserved_for_internal_use": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for AccountingModelConfig, which is defined when the AccountingModelConfig is created."
+    },
+    "paidCashFlowGrouping": {
+      "type": "PaidCashFlowGrouping (enumeration of type string)",
+      "description": "Determines the level of detail for generated transaction journal records.Valid values are: GroupByFundAccount—Accounting Subledger splits all transaction journal records into fund accounts. Secondary records are created for payment type records but not for transaction type records. GroupBySummary—Accounting Subledger only splits credits for revenue and debits for expenses by fund accounts."
+    },
+    "recordTypeFilter": {
+      "type": "string",
+      "description": "Specify the record type IDs from the primary object to be processed. This field is case-sensitive. Note: If no record type is specified in the filter, all records are processed."
+    },
+    "runOrder": {
+      "type": "int",
+      "description": "Determines the load order sequence of the multiple Accounting Model. The lower number runs first. For example, load order 1 runs before load order 2."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AccountingModelConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountingModelConfig\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<fullName>ModelConfigOne</fullName>\n\t<masterLabel>ModelConfigOne</masterLabel>\n\t<defaultAccrualAccountCode>abc</defaultAccrualAccountCode>\n\t<defaultWriteOffAccountCode>abc</defaultWriteOffAccountCode>\n\t<isUsed>false</isUsed>\n\t<isActive>false</isActive>\n\t<runOrder>123</runOrder>\n\t<recordTypeFilter>abcabc</recordTypeFilter>\n\t<earliestCreatedDate>2021-12-01T00:00:00.000Z</earliestCreatedDate>\n\t<internalMappingDetails>abcabc</internalMappingDetails>\n\t<accountingType>Revenue</accountingType>\n\t<expectedCashFlowGrouping>GroupByFundAccount</expectedCashFlowGrouping>\n\t<paidCashFlowGrouping>GroupBySummary</paidCashFlowGrouping>\n</AccountingModelConfig>"
+    }
+  ]
+}

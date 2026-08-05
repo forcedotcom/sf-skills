@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AccountsWithProjects</fullName>
+    <baseObject>Account</baseObject>
+    <category>accounts</category>
+    <deployed>true</deployed>
+    <label>Accounts with or without Projects</label>
+    <description>Shows every account; related project fields appear when projects exist. Demonstrates outer join — primary records included regardless of related-record presence — and the dotted relationship path used in <table>Account.Projects__r</table> for joined-object fields.</description>
+    <join>
+        <outerJoin>true</outerJoin>
+        <relationship>Projects__r</relationship>
+    </join>
+    <sections>
+        <masterLabel>Account Fields</masterLabel>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Name</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Industry</field>
+            <table>Account</table>
+        </columns>
+    </sections>
+    <sections>
+        <masterLabel>Project Fields</masterLabel>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Name</field>
+            <table>Account.Projects__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Status__c</field>
+            <table>Account.Projects__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CreatedDate</field>
+            <table>Account.Projects__r</table>
+        </columns>
+    </sections>
+</ReportType>

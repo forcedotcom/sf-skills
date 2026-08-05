@@ -1,0 +1,183 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "GenAiPromptTemplate - Metadata API",
+  "description": "Represents the definition of a prompt template, including its related objects and fields.",
+  "file_information": ".genAiPromptTemplate",
+  "directory_location": "genAiPromptTemplates",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "activeVersion": {
+      "type": "int",
+      "description": "This tag will be deprecated in 63.0 and will not work in 64.0 and later. Use activeVersionIdentifier instead."
+    },
+    "activeVersionIdentifier": {
+      "type": "string",
+      "description": "Specifies the version identifier of the active prompt template version. This tag will use versionIdentifier as the value for the active version."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the prompt template."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for GenAiPromptTemplate, which is defined when the GenAiPromptTemplate is created."
+    },
+    "relatedEntity": {
+      "type": "string",
+      "description": "The Salesforce record type that the prompt template is associated with."
+    },
+    "relatedField": {
+      "type": "string",
+      "description": "The Salesforce field that the prompt template is associated with."
+    },
+    "templateVersions": {
+      "type": "GenAiPromptTemplateVersion[]",
+      "required": true,
+      "description": "An array of prompt template versions."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the template type that the prompt template is based on. Valid values are: einstein_gpt__fieldCompletion einstein_gpt__salesEmail einstein_gpt__recordSummary einstein_gpt__flex einstein_gpt__caseEmailDraft"
+    },
+    "visibility": {
+      "type": "GenAiPromptTemplateVisibilityType (enumeration of type string)",
+      "description": "Indicates the scope of visibility for the prompt template. Valid values are: API Global"
+    }
+  },
+  "sub_types": {
+    "GenAiPromptTemplateVersion": {
+      "content": {
+        "type": "string",
+        "required": true,
+        "description": "Text of the prompt template version."
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of the prompt template version."
+      },
+      "generationTemplateConfigs": {
+        "type": "GenAiPromptTemplateGenerationConfig[]",
+        "description": "Reference to the policies for the prompt template version."
+      },
+      "inputs": {
+        "type": "GenAiPromptTemplateInput[]",
+        "description": "An array of prompt template inputs associated with the prompt template version."
+      },
+      "primaryModel": {
+        "type": "string",
+        "description": "The model associated with the prompt template version."
+      },
+      "status": {
+        "type": "GenAiPromptTemplateStatus (enumeration of type string)",
+        "required": true,
+        "description": "Indicates the status of the prompt template in Prompt Builder. Valid values are: Published—Published version of a prompt template. The active version of the prompt template must be published.Published prompt templates can't be edited with UI or Metadata API. Draft—Draft version of a prompt template."
+      },
+      "templateDataProviders": {
+        "type": "GenAiPromptTemplateDataProvider[]",
+        "description": "An array of prompt template data providers associated with the prompt template version."
+      },
+      "versionNumber": {
+        "type": "int",
+        "required": true,
+        "description": "Version number of the prompt template version. Versions are counted sequentially from 1.This tag will be deprecated in 63.0 and will not work in 64.0 and later. Use versionIdentifier instead."
+      },
+      "versionIdentifier": {
+        "type": "string",
+        "description": "Version identifier of the prompt template version identifier. This is generated automatically once a template is deployed and retrieved from an org. If a unique value is not specified then it will be generated for you. It must be unique for each version for a given template."
+      }
+    },
+    "GenAiPromptTemplateGenerationConfig": {
+      "generationConfigDeveloperName": {
+        "type": "string",
+        "description": "Developer name of the policy for this prompt template version."
+      }
+    },
+    "GenAiPromptTemplateInput": {
+      "apiName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the prompt template input parameter."
+      },
+      "definition": {
+        "type": "string",
+        "required": true,
+        "description": "The URI definition of the input parameter. For example, SOBJECT://Account and SOBJECT://Account/Description."
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of the prompt template input parameter."
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "A user-friendly name for GenAiPromptTemplateInput, which is defined when the GenAiPromptTemplateInput is created."
+      },
+      "referenceName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the prompt template input to use in expressions. For example, Input:Recipient and Input:Sender</referenceName>."
+      },
+      "required": {
+        "type": "boolean",
+        "required": true,
+        "description": "Specifies whether this input parameter is required (true) or optional (false)."
+      }
+    },
+    "GenAiPromptTemplateDataProvider": {
+      "definition": {
+        "type": "string",
+        "required": true,
+        "description": "The URI definition of the data provider, such as flow://ns__CallToActionFlow."
+      },
+      "parameters": {
+        "type": "GenAiPromptTemplateDataProviderParam[]",
+        "description": "An array of parameters associated with the data provider."
+      },
+      "referenceName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the data provider to use in expressions."
+      }
+    },
+    "GenAiPromptTemplateDataProviderParam": {
+      "definition": {
+        "type": "string",
+        "required": true,
+        "description": "URI definition of the parameter. For example, SOBJECT://User</definition>."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "required": true,
+        "description": "Specifies whether the parameter is required (true) or optional (false)."
+      },
+      "parameterName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the parameter."
+      },
+      "valueExpression": {
+        "type": "string",
+        "description": "Value or expression of the parameter to use in prompt template text. For example, {!$Input:Recipient}."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a GenAiPromptTemplate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<GenAiPromptTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <activeVersionIdentifier>a94ACO8feseESrBtllQUNLvKEqlCHiPSDLX5rXUnvPs=_1</activeVersionIdentifier>\n    <description>Recommend relevant financial products to client based on their needs and goals</description>\n    <masterLabel>Recommend Relevant Products</masterLabel>\n    <relatedEntity>Contact</relatedEntity>\n    <templateVersions>\n        <content>You are a financial advisor at {!$Input:Sender.CompanyName} and your name is {!$Input:Sender.Name}. You are writing an email to a prospective client recommending relevant financial products based on their data and goals. Reference the data below to generate your email, recommending only relevant products for the customer that match our recommendation criteria for each product.\nClient name: {!$Input:Recipient.Name}\nClient age: {!$Input:Recipient.Age__c}\nClient occupation: {!$Input:Recipient.Occupation__c}\nClient income: {!$Input:Recipient.Income__c}\nClient financial goals: {!$Input:Recipient.Financial_Goals__c}\n\n{!$Flow:Fetch_Products.Prompt}\n\nGenerate a subject line that can increase the open rate using words and content that is related to the email body content. It must be no more than 10 words.\nStart the opening message of the email with an ice-breaker talking about relevant challenges or opportunities with personal finance and how you can help.\nIndirectly allude to a point of common interest, shared background, or relevant experience with {!$Input:Recipient.Name}. You aim to subtly reference or highlight this connection to establish rapport, demonstrate relevance, and foster a sense of familiarity.\nIndirectly encourage the lead {!$Input:Recipient.Name} to respond to your email by showing that you are willing to discuss opportunities for working together and answer any questions they may have.\nBe concise in your email.</content>\n        <inputs>\n            <apiName>Sender</apiName>\n            <definition>SOBJECT://User</definition>\n            <referenceName>Input:Sender</referenceName>\n            <required>true</required>\n        </inputs>\n        <inputs>\n            <apiName>Recipient</apiName>\n            <definition>SOBJECT://Contact</definition>\n            <referenceName>Input:Recipient</referenceName>\n            <required>true</required>\n        </inputs>\n        <primaryModel>sfdc_ai__DefaultOpenAIGPT4</primaryModel>\n        <status>Published</status>\n        <templateDataProviders>\n            <definition>flow://Fetch_Products</definition>\n            <parameters>\n                <definition>SOBJECT://User</definition>\n                <isRequired>true</isRequired>\n                <parameterName>Sender</parameterName>\n                <valueExpression>{!$Input:Sender}</valueExpression>\n            </parameters>\n            <parameters>\n                <definition>SOBJECT://Contact</definition>\n                <isRequired>true</isRequired>\n                <parameterName>Recipient</parameterName>\n                <valueExpression>{!$Input:Recipient}</valueExpression>\n            </parameters>\n            <referenceName>Flow:Fetch_Products</referenceName>\n        </templateDataProviders>\n        <versionIdentifier>a94ACO8feseESrBtllQUNLvKEqlCHiPSDLX5rXUnvPs=_1\n</versionIdentifier>\n    </templateVersions>\n    <type>einstein_gpt__salesEmail</type>\n    <visibility>Global</visibility>\n</GenAiPromptTemplate>"
+    }
+  ]
+}

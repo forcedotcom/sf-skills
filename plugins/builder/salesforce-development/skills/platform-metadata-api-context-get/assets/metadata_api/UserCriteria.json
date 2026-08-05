@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UserCriteria - Metadata API",
+  "description": "Represents the member criteria to use in Experience Cloud site moderation rules. This type extends the Metadata metadata type and inherits its fullName field..",
+  "file_information": ".userCriteria",
+  "directory_location": "UserCriteria",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "creationAgeInSeconds": {
+      "type": "int",
+      "description": "If specified, includes only users that were created within a specific time frame."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the user criteria."
+    },
+    "lastChatterActivityAgeInSeconds": {
+      "type": "int",
+      "description": "If specified, includes only members that have posted or commented in the Experience Cloud site within a specific time frame."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Name of the user criteria."
+    },
+    "userTypes": {
+      "type": "NetworkUserType enumeration ( of type string)",
+      "description": "The member type to use in moderation rules. Valid values are: Internal Customer Partner"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"NetworkUserType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Internal\"/>\n    <xsd:enumeration value=\"Customer\"/>\n    <xsd:enumeration value=\"Partner\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"UserCriteria\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"creationAgeInSeconds\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lastChatterActivityAgeInSeconds\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"profiles\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"userTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:NetworkUserType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a UserCriteria component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<UserCriteria xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>Customer and Partner Members</masterLabel>\n    <description>Member criteria matches customer and partner member</description>\n    <userTypes>Partner</userTypes>\n    <userTypes>Customer</userTypes>\n</UserCriteria>"
+    }
+  ]
+}

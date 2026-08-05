@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EncryptionKeySettings - Metadata API",
+  "description": "Represents an org’s encryption key settings, such as customer-supplied keys options and key derivation settings. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "canEncryptTransactionalDatabase": {
+      "type": "boolean",
+      "description": "Indicates whether users can encrypt the transactional database (true) or can’t (false). The default value is false. If set to true, transactional database encryption is enabled and a transactional database tenant secret is generated. Available in API version 63.0 and later."
+    },
+    "canExternalKeyManagement": {
+      "type": "boolean",
+      "description": "Indicates whether External Key Management is available (true) or not (false). The default value is false. If set to true, users can configure connections to external key stores and use keys saved in those key stores to encrypt and decrypt Salesforce data. Available in API version 63.0 and later."
+    },
+    "canManageDataCloudKeys": {
+      "type": "boolean",
+      "description": "Indicates whether key management for Data 360 is enabled and an initial customer-managed root key is present (true) or not (false). Available in API version 63.0 and later."
+    },
+    "canOptOutOfDerivationWithBYOK": {
+      "type": "boolean",
+      "description": "Indicates that users can opt out of key derivation processes on a key-by-key basis when they upload key material (true) or can’t (false). The default value is false."
+    },
+    "enableCacheOnlyKeys": {
+      "type": "boolean",
+      "description": "Indicates whether the Cache-Only Key Service is available (true) or not (false). The default value is false. If set to true, users can configure a cache-only key callout connection and apply key material stored outside of Salesforce to data on demand."
+    },
+    "enableReplayDetection": {
+      "type": "boolean",
+      "description": "Indicates whether cache-only key callouts are protected from replay attacks by a nonce (true) or not (false). Requires enableCacheOnlyKeys=”true” before setting enableReplayDetection to true."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EncryptionKeySettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"canEncryptTransactionalDatabase\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canExternalKeyManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canManageDataCloudKeys\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canOptOutOfDerivationWithBYOK\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCacheOnlyKeys\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReplayDetection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EncryptionKeySettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <canEncryptTransactionalDatabase>true</canEncryptTransactionalDatabase>\n    <canManageDataCloudKeys>true</canManageDataCloudKeys>\n    <enableExternalKeyManagement>true</enableExternalKeyManagement>\n</EncryptionKeySettings>"
+    }
+  ]
+}

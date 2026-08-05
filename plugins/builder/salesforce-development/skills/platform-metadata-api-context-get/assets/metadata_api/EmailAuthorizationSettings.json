@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EmailAuthorizationSettings - Metadata API",
+  "description": "Represents your org’s email authorization settings. This type extends the MetadataForSettings metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableSubstituteFromAddress": {
+      "type": "boolean",
+      "description": "If true , Salesforce substitutes the From address to send outbound emails with unverified email domains. The outbound email uses the From address email@UniqueId.sfcustomeremail.com, where UniqueId is your org ID or Experience Cloud site ID. If false, Salesforce users and automations can send messages from Salesforce only when the email domain is verified. The default is false. This field applies only to outbound email that requires domain-level verification. For more information, including exemptions to domain-level verification, see Requirements to Send Email from Salesforce in Salesforce Help."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmailAuthorizationSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableSubstituteFromAddress\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EmailAuthorizationSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EmailAuthorizationSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <enableSubstituteFromAddress>true</enableSubstituteFromAddress>\n</EmailAuthorizationSettings>"
+    }
+  ]
+}

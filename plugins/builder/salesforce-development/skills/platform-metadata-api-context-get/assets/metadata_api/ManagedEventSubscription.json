@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ManagedEventSubscription (Beta) - Metadata API",
+  "description": "Represents a managed event subscription in Pub/Sub API. Use a managed event subscription to track the events that a subscriber client consumed and resume a subscription where it left off. This type extends the metadata type and inherits its fullName field.",
+  "file_information": ".managedEventSubscription",
+  "directory_location": "managedEventSubscriptions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "defaultReplay": {
+      "type": "EventSubscriptionReplayPreset (enumeration of type string)",
+      "description": "The position in the stream where the subscription starts when the client initiates the subscription for the first time or if the client doesn’t commit a Replay ID. Possible values are: LATEST—(Default) The subscription starts from the latest events received. This option skips sending events that were published when the client was disconnected. EARLIEST—The subscription starts from the earliest events stored in the event bus. This option sends new events and any other events less than 72 hours old. You can reprocess all stored events and catch up on missed events. Use this option sparingly. Subscribing with the EARLIEST option when a large number of event messages are stored can slow performance and exhaust the event delivery allocation."
+    },
+    "errorRecoveryReplay": {
+      "type": "EventSubscriptionReplayPreset (enumeration of type string)",
+      "description": "The position in the stream where the subscription restarts if the committed Replay ID is invalid. The Replay ID can be invalid if it’s older than the event retention window. Possible values are: LATEST—(Default) The subscription restarts from the latest events received. This option skips sending events that were published when the client was disconnected. EARLIEST—The subscription restarts from the earliest events stored in the event bus. This option sends new events and any other events less than 72 hours old. You can reprocess all stored events and catch up on missed events. Use this option sparingly. Subscribing with the EARLIEST option when a large number of event messages are stored can slow performance and exhaust the event delivery allocation."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for the managed subscription."
+    },
+    "state": {
+      "type": "EventSubscriptionAdminState (enumeration of type string)",
+      "description": "The execution state that the ManagedSubscribe RPC call consumes. If state is set to RUN, the subscription starts when the ManagedSubscribe RPC call is made. Otherwise, the subscription doesn't start. If an administrator later changes state from RUN to STOP, the system notifies the Pub/Sub API client of the new state value and the subscription disconnects. Also, the stored Replay ID value that was committed previously is deleted. The next time the ManagedSubscribe RPC call is made after state is changed from STOP to RUN, the subscription starts from the defaultReplay value. The possible values for state are: RUN—(Default) The subscription is running and delivering new events to the Pub/Sub API client. STOP—The subscription is stopped. No events are delivered to the Pub/Sub API client during this state and the previously committed Replay ID is deleted. PAUSE—Reserved for internal use."
+    },
+    "topicName": {
+      "type": "string",
+      "description": "The topic name of the platform event or change event or the channel name of a custom platform event channel or custom or standard change data capture channel. The topic name can be one of the following values. For a platform event—/event/EventName__e For a custom platform event channel—/event/CustomPEChannel__chn For the standard change event channel—/data/ChangeEvents For a change event (replace Object with the object name)—/data/ObjectChangeEvent. For example, for Account, it’s /data/AccountChangeEvent. For a custom change event channel—/data/CustomChangeChannel__chn"
+    },
+    "version": {
+      "type": "string",
+      "description": "Reserved for internal use."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EventSubscriptionAdminState\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RUN\"/>\n    <xsd:enumeration value=\"STOP\"/>\n    <xsd:enumeration value=\"PAUSE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EventSubscriptionReplayPreset\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"EARLIEST\"/>\n    <xsd:enumeration value=\"LATEST\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ManagedEventSubscription\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"defaultReplay\" minOccurs=\"0\" type=\"tns:EventSubscriptionReplayPreset\"/>\n        <xsd:element name=\"errorRecoveryReplay\" minOccurs=\"0\" type=\"tns:EventSubscriptionReplayPreset\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"state\" minOccurs=\"0\" type=\"tns:EventSubscriptionAdminState\"/>\n        <xsd:element name=\"topicName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ManagedEventSubscription component with the file name My_Managed_Subscription.managedSubscription.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ManagedEventSubscription xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <defaultReplay>LATEST</defaultReplay>\n    <errorRecoveryReplay>LATEST</errorRecoveryReplay>\n    <label>My Managed Subscription</label>\n    <state>RUN</state>\n    <topicName>/event/Order_Event__e</topicName>\n</ManagedEventSubscription>"
+    }
+  ]
+}

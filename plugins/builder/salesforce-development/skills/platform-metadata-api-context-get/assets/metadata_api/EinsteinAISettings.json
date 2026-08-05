@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EinsteinAISettings - Metadata API",
+  "description": "Represents Einstein AI settings, including AI feedback integration with Data 360 and PII masking for AI trust features.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAIFeedbackWithDC": {
+      "type": "boolean",
+      "description": "Indicates whether AI feedback integration with Data 360 is enabled (true) or not (false). Available in API version 60.0 and later."
+    },
+    "enableAITrustInputToxicityDetection": {
+      "description": "Reserved for internal use."
+    },
+    "enableAITrustPromptInjectionDetection": {
+      "description": "Reserved for internal use."
+    },
+    "enableAgentHealthMonitoringGA": {
+      "description": "Reserved for internal use."
+    },
+    "enableTrustPIIMasking": {
+      "type": "boolean",
+      "description": "Indicates whether PII (Personally Identifiable Information) masking for AI trust features is enabled (true) or not (false). Available in API version 60.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EinsteinAISettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAIFeedbackWithDC\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAITrustInputToxicityDetection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAITrustPromptInjectionDetection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAgentHealthMonitoringGA\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTrustPIIMasking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EinsteinAISettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EinsteinAISettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableAIFeedbackWithDC>true</enableAIFeedbackWithDC>\n    <enableTrustPIIMasking>true</enableTrustPIIMasking>\n</EinsteinAISettings>"
+    }
+  ]
+}

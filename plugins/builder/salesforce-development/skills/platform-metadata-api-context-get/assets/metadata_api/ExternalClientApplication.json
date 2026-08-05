@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExternalClientApplication - Metadata API",
+  "description": "Represents the header file for an external client application configuration.",
+  "file_information": ".eca",
+  "directory_location": "externalClientApps",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "contactEmail": {
+      "type": "string",
+      "description": "The email address that Salesforce uses to contact the external client app admin for the subscriber org."
+    },
+    "contactPhone": {
+      "type": "string",
+      "description": "The phone number that Salesforce uses to contact the external client app admin for the subscriber org."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description for the app."
+    },
+    "distributionState": {
+      "type": "ExtlClntAppDistState (enumeration of type string)",
+      "description": "The distribution state of an external client app. Values are: AutoInstalled. For internal use only. Local. Managed. For internal use only. Packaged."
+    },
+    "iconUrl": {
+      "type": "string",
+      "description": "The URL for the icon image."
+    },
+    "infoUrl": {
+      "type": "string",
+      "description": "Reserved for future use."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "A package construct that developers use to control the visibility of components in subscriber orgs. Default is false."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for the external client app."
+    },
+    "logoUrl": {
+      "type": "string",
+      "description": "The URL for the logo image."
+    },
+    "managedType": {
+      "type": "ExtlClntAppManagedType (enumeration of type string)",
+      "description": "For internal use only."
+    },
+    "orgScopedExternalApp": {
+      "type": "string",
+      "description": "A unique ID consisting of the org ID and the name of this external client app. Either defined by the developer or auto-generated during the first deployment. The expected value uses this format: [Organization_ID]:[External Client App Name]."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExternalClientApplication\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"contactEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"contactPhone\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"distributionState\" minOccurs=\"0\" type=\"tns:ExtlClntAppDistState\"/>\n        <xsd:element name=\"iconUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"infoUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"logoUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"managedType\" minOccurs=\"0\" type=\"tns:ExtlClntAppManagedType\"/>\n        <xsd:element name=\"orgScopedExternalApp\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ExtlClntAppDistState\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Local\"/>\n    <xsd:enumeration value=\"Packaged\"/>\n    <xsd:enumeration value=\"Managed\"/>\n    <xsd:enumeration value=\"AutoInstalled\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExtlClntAppManagedType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Local\"/>\n    <xsd:enumeration value=\"Global\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows an ExternalClientApplication component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExternalClientApplication xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <contactEmail>johndoe@example.com</contactEmail>\n    <description>Test external client app</description>\n    <distributionState>Local</distributionState>\n    <iconUrl>https://icon.example.com</iconUrl>\n    <infoUrl>https://info.example.com</infoUrl>\n    <logoUrl>https://logo.example.com</logoUrl>\n    <label>myeca</label>\n    <isProtected>false</isProtected>\n    <orgScopedExternalApp>Org_ID:External_Client_App_Name</orgScopedExternalApp> \n</ExternalClientApplication>"
+    }
+  ]
+}

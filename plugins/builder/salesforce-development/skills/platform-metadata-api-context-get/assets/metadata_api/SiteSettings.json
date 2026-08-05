@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SiteSettings - Metadata API",
+  "description": "Represents the settings for Experience Cloud sites and for Salesforce Sites.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableEnhancedSitesAndContentPlatform": {
+      "type": "boolean",
+      "description": "Indicates whether the enhanced sites and content platform for Experience Cloud is enabled for your org (true) or not (false). The default is true. When true, new LWR sites and enhanced CMS workspaces are hosted together on a redesigned platform that offers partial deployment, site content search, and easy content management. Enhanced LWR sites are represented by the DigitalExperienceBundle and DigitalExperienceConfig types. Available in API version 56.0 and later."
+    },
+    "enableExpBuilderCopilot": {
+      "type": "boolean",
+      "description": "Enables Agentforce (beta) in Experience Builder for enhanced LWR sites. The default value is false. Available in API 64.0 and later. Note: Agentforce Experience Builder Agent is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or your written Unified Pilot Agreement, and following terms in the Product Terms Directory: Non-GA Agentforce, the Non-GA Open AI LLM Provider and the Non-GA Credit Consumption. Use of this pilot or beta service consumes Einstein Requests and is at the Customer’s sole discretion."
+    },
+    "enableExperienceFriendlyUrls": {
+      "type": "boolean",
+      "description": "Indicates whether SEO-friendly URL snippets, or “slugs,” are enabled for your org (true) or not (false). The default is false. When true, available only in B2C Commerce LWR sites. Available only in API version 58.0. In API version 59.0 and later, use expFriendlyUrlsAsDefault in the Network type."
+    },
+    "enableProxyLoginICHeader": {
+      "type": "boolean",
+      "description": "Indicates whether security tokens for API logins from callouts (in API version 31.0 and earlier) are required (true) or not (false). The default value is true."
+    },
+    "enableSitesRecordReassignOrgPref": {
+      "type": "boolean",
+      "description": "Deprecated in API version 63.0 and later. When true, indicates when the org assigns records created by guest users of a site to a default owner in the org. When false, the guest user remains the owner of the record. The default value is false. Available in API version 48.0 through 63.0."
+    },
+    "enableTopicsInSites": {
+      "type": "boolean",
+      "description": "Indicates whether guest and authenticated external users can view topics in Salesforce Sites and Salesforce portals (true) or not (false). The default value is false."
+    },
+    "enableVisualforceApiAccessAllowed": {
+      "type": "boolean",
+      "description": "Deprecated in API version 52.0 and later. Allow users of Visualforce pages to override API access control restrictions and access APIs when the enableAdminApprovedAppsOnly in ConnectedAppSettings is enabled (true). The default value is false."
+    },
+    "enableWebruntimeBYOTemplate": {
+      "type": "boolean",
+      "description": "Indicates whether the Build Your Own (LWC) template is available in Experience Builder. The default value is false. Available in API version 48.0 and later. Removed in API version 51.0."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"SiteSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableExpBuilderCopilot\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableProxyLoginICHeader\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTopicsInSites\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SiteSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SiteSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <enableProxyLoginICHeader>true</enableProxyLoginICHeader>\n     <enableTopicsInSites>false</enableTopicsInSites>\n</SiteSettings>"
+    }
+  ]
+}

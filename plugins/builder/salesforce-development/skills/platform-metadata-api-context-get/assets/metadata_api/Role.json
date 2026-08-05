@@ -1,0 +1,35 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Role - Metadata API",
+  "description": "Represents a role in your organization.",
+  "file_information": ".role",
+  "directory_location": "roles",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "fullName": {
+      "type": "string",
+      "description": "The unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component. Corresponds to Role Name in the user interface."
+    },
+    "parentRole": {
+      "type": "string",
+      "description": "The role above this role in the hierarchy."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Role\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:RoleOrTerritory\">\n      <xsd:sequence>\n        <xsd:element name=\"parentRole\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"RoleOrTerritory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"caseAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"contactAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"mayForecastManagerShare\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"opportunityAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Role xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <caseAccessLevel>Edit</caseAccessLevel>\n    <contactAccessLevel>Edit</contactAccessLevel>\n    <description>Sample Role</description>\n    <mayForecastManagerShare>false</mayForecastManagerShare>\n    <name>R22</name>\n    <opportunityAccessLevel>Read</opportunityAccessLevel>\n</Role>"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomIndex - Metadata API",
+  "description": "Represents an index used to increase the speed of queries.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".indx",
+  "directory_location": "customindex",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "allowNullValues": {
+      "type": "boolean",
+      "description": "Indicates whether null values are allowed in the index (true) or not (false). The default value is false."
+    },
+    "booleanIndexedValue": {
+      "type": "boolean",
+      "description": "Indicates whether boolean fields are indexed (true) or not (false). Available in API version 61.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomIndex\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"allowNullValues\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"booleanIndexedValue\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CustomIndex component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<CustomIndex xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <allowNullValues>false</allowNullValues>\n    <booleanIndexedValue>true</booleanIndexedValue>\n</CustomIndex>"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "CaseSubjectParticle - Metadata API",
+  "description": "Represents the Social Business Rules custom format for the Case Subject field on cases created from inbound social posts.",
+  "file_information": ".CaseSubjectParticle",
+  "directory_location": "CaseSubjectParticles",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "index": {
+      "type": "int",
+      "description": "The order in which the custom Case Subject is generated, meaning if the social network is 0 and the social message is 1, then the subject generates as Twitter | Tweet.",
+      "required": true
+    },
+    "textField": {
+      "type": "string",
+      "description": "Specifies inbound social content added to Case Subject in case records."
+    },
+    "type": {
+      "type": "CaseSubjectParticleType (enumeration of type string)",
+      "description": "Specifies the custom Case Subject format from which inbound social content appears in case records. Valid values are: ProvidedString Source MessageType SocialHandle SocialNetwork Sentiment RealName Content PipeSeparator ColonSeparator HyphenSeparator",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CaseSubjectParticle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"index\" type=\"xsd:int\"/>\n        <xsd:element name=\"textField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:CaseSubjectParticleType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CaseSubjectParticleType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ProvidedString\"/>\n    <xsd:enumeration value=\"Source\"/>\n    <xsd:enumeration value=\"MessageType\"/>\n    <xsd:enumeration value=\"SocialHandle\"/>\n    <xsd:enumeration value=\"SocialNetwork\"/>\n    <xsd:enumeration value=\"Sentiment\"/>\n    <xsd:enumeration value=\"RealName\"/>\n    <xsd:enumeration value=\"Content\"/>\n    <xsd:enumeration value=\"PipeSeparator\"/>\n    <xsd:enumeration value=\"ColonSeparator\"/>\n    <xsd:enumeration value=\"HyphenSeparator\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

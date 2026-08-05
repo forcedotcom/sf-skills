@@ -1,0 +1,117 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WebLink - Metadata API",
+  "description": "Represents a custom button or link defined in a custom object.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "availability": {
+      "type": "WebLinkAvailability (enumeration of type string)",
+      "description": "Indicates whether the button or link is only available online ( online, or if it is also available offline ( offline ).",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the button or link."
+    },
+    "displayType": {
+      "type": "WebLinkDisplayType (enumeration of type string)",
+      "description": "Represents how the button or link is rendered. Valid values are: link for a hyperlink button for a button massActionButton for a button attached to a related list"
+    },
+    "encodingKey": {
+      "type": "Encoding",
+      "description": "The default encoding setting is Unicode: UTF-8. Change it if your template requires data in a different format. This is available if your content source is URL. Valid values include: UTF-8—Unicode (UTF-8) ISO-8859-1—General US & Western Europe (ISO-8859–1, ISO-LATIN-1) Shift_JIS—Japanese (Shift-JIS) ISO-2022-JP—Japanese (JIS) EUC-JP—Japanese (EUC-JP) x-SJIS_0213—Japanese (Shift-JIS_2004) ks_c_5601-1987—Korean (ks_c_5601-1987) Big5—Traditional Chinese (Big5) GB2312—Simplified Chinese (GB2312) Big5-HKSCS—Traditional Chinese Hong Kong (Big5–HKSCS)",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name of the custom button or link with white spaces and special characters escaped for validity. The name can only contain characters, letters, and the underscore (_) character. The name must start with a letter, and can’t end with an underscore or contain two consecutive underscore characters. Inherited from the Metadata component, this field isn’t defined in the WSDL for this component. It must be specified when creating, updating, or deleting. See create() to see an example of this field specified for a call."
+    },
+    "hasMenubar": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to show the browser menu bar for the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "hasScrollbars": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to show the scroll bars for the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "hasToolbar": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to show the browser toolbar for the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "height": {
+      "type": "int",
+      "description": "Height in pixels of the window opened by the custom button or link. Required if the openType is newWindow. Otherwise, leave this field empty."
+    },
+    "isResizable": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to allow resizing of the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "linkType": {
+      "type": "WebLinkType (enumeration of type string)",
+      "description": "Represents whether the content of the button or link is specified by a URL, an sControl, a JavaScript code block, or a Visualforce page. url sControl javascript page flow—Reserved for future use.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Master label for this object. This display value is the internal label that is not translated."
+    },
+    "openType": {
+      "type": "WebLinkWindowType (enumeration of type string)",
+      "description": "When the button or link is clicked, specifies the window style that will be used to display the content. Valid values: newWindow sidebar noSidebar replace onClickJavaScript",
+      "required": true
+    },
+    "page": {
+      "type": "string",
+      "description": "If the value of linkType is page, this field represents the Visualforce page. Otherwise, leave this field empty."
+    },
+    "position": {
+      "type": "WebLinkPosition (enumeration of type string)",
+      "description": "If the value of OpenType is newWindow, this field indicates how the new window should be displayed. Otherwise, don’t specify a value. Valid values are: fullScreen none topLeft"
+    },
+    "protected": {
+      "type": "boolean",
+      "description": "Indicates whether this subcomponent is protected (true) or not (false). Protected subcomponents can’t be linked to or referenced by components or subcomponents created in the installing organization.",
+      "required": true
+    },
+    "requireRowSelection": {
+      "type": "boolean",
+      "description": "If the displayType is massActionButton, this field indicates whether to require individual row selection to execute the action for this button (true) or not (false). Otherwise, leave this field empty."
+    },
+    "scontrol": {
+      "type": "string",
+      "description": "If the value of linkType is sControl, this field represents the name of the sControl. Otherwise, leave this field empty."
+    },
+    "showsLocation": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to show the browser location bar for the window (true) or not (false). Otherwise, leave this field empty."
+    },
+    "showsStatus": {
+      "type": "boolean",
+      "description": "If the openType is newWindow, this field indicates whether to show the browser status bar for the window. Otherwise, leave this field empty."
+    },
+    "url": {
+      "type": "string",
+      "description": "If the value of linkType is url, this is the URL value. If the value of linkType is javascript, this is the JavaScript content. If the value is neither of these options, leave this field empty. Content must be escaped in a manner consistent with XML parsing rules."
+    },
+    "width": {
+      "type": "int",
+      "description": "Width in pixels of the window opened by the button or link. Required if the openType is newWindow. Otherwise, leave this field empty."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomObject\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionOverride\"/>\n        <xsd:element name=\"allowInChatterGroups\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"articleTypeChannelDisplay\" minOccurs=\"0\" type=\"tns:ArticleTypeChannelDisplay\"/>\n        <xsd:element name=\"businessProcesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BusinessProcess\"/>\n        <xsd:element name=\"compactLayoutAssignment\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"compactLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CompactLayout\"/>\n        <xsd:element name=\"customHelp\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHelpPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customSettingsType\" minOccurs=\"0\" type=\"tns:CustomSettingsType\"/>\n        <xsd:element name=\"deploymentStatus\" minOccurs=\"0\" type=\"tns:DeploymentStatus\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableActivities\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBulkApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataTranslation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDivisions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedLookup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeeds\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLicensing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePublishStatusTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReports\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSearch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableStreamingApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enrichments\" minOccurs=\"0\" type=\"tns:MetadataEnrichments\"/>\n        <xsd:element name=\"eventType\" minOccurs=\"0\" type=\"tns:PlatformEventType\"/>\n        <xsd:element name=\"externalDataSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalRepository\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"fieldSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldSet\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"gender\" minOccurs=\"0\" type=\"tns:Gender\"/>\n        <xsd:element name=\"historyRetentionPolicy\" minOccurs=\"0\" type=\"tns:HistoryRetentionPolicy\"/>\n        <xsd:element name=\"household\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"indexes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Index\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"listViews\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ListView\"/>\n        <xsd:element name=\"mktDataLakeAttributes\" minOccurs=\"0\" type=\"tns:MktDataLakeAttributes\"/>\n        <xsd:element name=\"mktDataModelAttributes\" minOccurs=\"0\" type=\"tns:MktDataModelAttributes\"/>\n        <xsd:element name=\"nameField\" minOccurs=\"0\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"pluralLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"profileSearchLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileSearchLayouts\"/>\n        <xsd:element name=\"publishBehavior\" minOccurs=\"0\" type=\"tns:PlatformEventPublishBehavior\"/>\n        <xsd:element name=\"recordTypeTrackFeedHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypeTrackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordType\"/>\n        <xsd:element name=\"searchLayouts\" minOccurs=\"0\" type=\"tns:SearchLayouts\"/>\n        <xsd:element name=\"sharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"sharingReasons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingReason\"/>\n        <xsd:element name=\"sharingRecalculations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingRecalculation\"/>\n        <xsd:element name=\"startsWith\" minOccurs=\"0\" type=\"tns:StartsWith\"/>\n        <xsd:element name=\"validationRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValidationRule\"/>\n        <xsd:element name=\"visibility\" minOccurs=\"0\" type=\"tns:SetupObjectVisibility\"/>\n        <xsd:element name=\"webLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WebLink\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"Encoding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UTF-8\"/>\n    <xsd:enumeration value=\"ISO-8859-1\"/>\n    <xsd:enumeration value=\"Shift_JIS\"/>\n    <xsd:enumeration value=\"ISO-2022-JP\"/>\n    <xsd:enumeration value=\"EUC-JP\"/>\n    <xsd:enumeration value=\"ks_c_5601-1987\"/>\n    <xsd:enumeration value=\"Big5\"/>\n    <xsd:enumeration value=\"GB2312\"/>\n    <xsd:enumeration value=\"Big5-HKSCS\"/>\n    <xsd:enumeration value=\"x-SJIS_0213\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WebLink\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"availability\" type=\"tns:WebLinkAvailability\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"displayType\" type=\"tns:WebLinkDisplayType\"/>\n        <xsd:element name=\"encodingKey\" minOccurs=\"0\" type=\"tns:Encoding\"/>\n        <xsd:element name=\"hasMenubar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasScrollbars\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasToolbar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"isResizable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"linkType\" type=\"tns:WebLinkType\"/>\n        <xsd:element name=\"masterLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"openType\" type=\"tns:WebLinkWindowType\"/>\n        <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"position\" minOccurs=\"0\" type=\"tns:WebLinkPosition\"/>\n        <xsd:element name=\"protected\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"requireRowSelection\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"scontrol\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"showsLocation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"showsStatus\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"url\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"WebLinkAvailability\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"online\"/>\n    <xsd:enumeration value=\"offline\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkDisplayType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"link\"/>\n    <xsd:enumeration value=\"button\"/>\n    <xsd:enumeration value=\"massActionButton\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"fullScreen\"/>\n    <xsd:enumeration value=\"none\"/>\n    <xsd:enumeration value=\"topLeft\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"url\"/>\n    <xsd:enumeration value=\"sControl\"/>\n    <xsd:enumeration value=\"javascript\"/>\n    <xsd:enumeration value=\"page\"/>\n    <xsd:enumeration value=\"flow\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"WebLinkWindowType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"newWindow\"/>\n    <xsd:enumeration value=\"sidebar\"/>\n    <xsd:enumeration value=\"noSidebar\"/>\n    <xsd:enumeration value=\"replace\"/>\n    <xsd:enumeration value=\"onClickJavaScript\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a WebLink in a custom object. For related samples, see Declarative Metadata Sample Definition and Declarative Metadata Sample Definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n....\n    <WebLinks>\n        <fullName>googleButton</fullName>\n        <availability>online</availability>\n        <displayType>link</displayType>\n        <encodingKey>UTF-8</encodingKey>\n        <hasMenubar>false</hasMenubar>\n        <hasScrollbars>true</hasScrollbars>\n        <hasToolbar>false</hasToolbar>\n        <height>600</height>\n        <isResizable>true</isResizable>\n        <linkType>url</linkType>\n        <masterLabel>google</masterLabel>\n        <openType>newWindow</openType>\n        <position>none</position>\n        <protected>false</protected>\n        <showsLocation>false</showsLocation>\n        <showsStatus>false</showsStatus>\n        <url>http://www.google.com</url>\n        <width>600</width>\n    </WebLinks>\n....\n</CustomObject>"
+    }
+  ]
+}

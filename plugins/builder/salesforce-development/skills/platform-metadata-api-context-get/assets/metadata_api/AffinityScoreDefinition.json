@@ -1,0 +1,74 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AffinityScoreDefinition - Metadata API",
+  "description": "Represents the affinity information used in calculations to analyze and categorize contacts for marketing purposes.",
+  "file_information": ".affinityScoreDefinition",
+  "directory_location": "affinityScoreDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "affinityScoreDefinitionDesc": {
+      "type": "string",
+      "description": "Description of the affinity score definition."
+    },
+    "affinityScoreDefinitionName": {
+      "type": "string",
+      "description": "Name of the affinity score definition."
+    },
+    "affinityScoreType": {
+      "type": "AffinityScoreType (enumeration of type string)",
+      "description": "Type of the affinity score that’s defined.Valid values are: CAP—Capacity, Ability, Propensity (CAP) RFM—Recency, Frequency, Monetary (RFM) The default value is RFM."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for this affinity score definition value. This display value is the internal label that doesn't get translated."
+    },
+    "numberOfMonths": {
+      "type": "int",
+      "description": "Number of months to analyze the records for calculating the affinity score."
+    },
+    "numberOfRanges": {
+      "type": "int",
+      "required": true,
+      "description": "Number of ranges to use in the calculation, ranging from 0 to 9. Provide the corresponding range list values in the scoreRangeList field."
+    },
+    "scoreRangeList": {
+      "type": "string",
+      "required": true,
+      "description": "Ranges that are referenced in the affinity score calculation. This field is used with scoreRangeList. For example, to calculate RFM with numberOfRanges value as 3, provide the values for the scoreRangeList field in this format. { \"R ranges\":\"0-30, 31-100, 100+\", \"F ranges\":\"0-10, 11-100, 100+\", \"M ranges\":\"0-1000, 1001-5000, 5000+\" }"
+    },
+    "sourceFieldApiNameList": {
+      "type": "string",
+      "required": true,
+      "description": "API names of the source fields that are referenced in the score calculation."
+    },
+    "sourceObjectApiNameList": {
+      "type": "string",
+      "description": "API names of the source objects that are referenced in the score calculation."
+    },
+    "targetFieldApiNameList": {
+      "type": "string",
+      "required": true,
+      "description": "API names of the target fields where the calculated scores are added."
+    },
+    "targetObjectApiName": {
+      "type": "string"
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows a sample of an AffinityScoreDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AffinityScoreDefinition\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<affinityScoreDefinitionDesc>RFM Affinity Score</affinityScoreDefinitionDesc>\n\t<affinityScoreDefinitionName>AffinityScoreDefinition_RFM</affinityScoreDefinitionName>\n\t<affinityScoreType>RFM</affinityScoreType>\n\t<masterLabel>MasterLabel</masterLabel>\n\t<numberOfMonths>12</numberOfMonths>\n\t<numberOfRanges>3</numberOfRanges>\n\t<scoreRangeList>\n        [\n          {\n            \"name\": \"R Ranges\",\n            \"direction\": \"ascending\",\n            \"ranges\": [30,90,180]\n          },\n          {\n            \"name\": \"F Ranges\",\n            \"direction\": \"descending\",\n            \"ranges\": [10,15,100]\n          },\n          {\n            \"name\": \"M Ranges\",\n            \"direction\": \"descending\",\n            \"ranges\": [500,1000,5000]\n          }\n     ]\n      </scoreRangeList>\n\t<sourceFieldApiNameList>\n        [\n          {\n            \"name\": \"R Source\",\n            \"values\": \n                [\n                  {\n                    \"fieldName\": \"DonorGiftSummary.DaysSinceLastGift\",\n                    \"fieldWeight\": 1\n                  }\n                ]\n          },\n          {\n            \"name\": \"F Source\",\n            \"values\": \n                [\n                  {\n                    \"fieldName\": \"DonorGiftSummary.GiftCount\",\n                    \"fieldWeight\": 1\n                  }\n                ]\n          },\n          {\n            \"name\": \"M Source\",\n            \"values\": \n                [\n                  {\n                    \"fieldName\": \"DonorGiftSummary.TotalGiftsCount\",\n                    \"fieldWeight\": 1\n                  }\n                ]\n          }\n        ]\n      </sourceFieldApiNameList>\n\t<targetFieldApiNameList>\n        [\n          {\n            \"name\": \"R Target\",\n            \"values\": \n                [\n                  {\n                    \"fieldName\": \"DonorGiftSummary.RecencyScore\",\n                    \"fieldWeight\": 1\n                  }\n                ]\n          },\n          {\n            \"name\": \"F Target\",\n            \"values\": \n                [\n                  {\n                    \"fieldName\": \"DonorGiftSummary.FrequencyScore\",\n                    \"fieldWeight\": 1\n                  }\n                ]\n          },\n          {\n            \"name\": \"M Target\",\n            \"values\": \n                [\n                  {\n                    \"fieldName\": \"DonorGiftSummary.MonetaryScore\",\n                    \"fieldWeight\": 1\n                  }\n                ]\n          }\n        ]\n      </targetFieldApiNameList>\n</AffinityScoreDefinition>"
+    }
+  ]
+}

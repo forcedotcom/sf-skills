@@ -1,0 +1,102 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AppointmentSchedulingPolicy - Metadata API",
+  "description": "Represents a set of rules for scheduling appointments using Lightning Scheduler. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".policy",
+  "directory_location": "appointmentSchedulingPolicies",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "appointmentAssignmentPolicy": {
+      "type": "string",
+      "description": "The name of the appointment assignment policy. This field is available in API version 53.0 and later."
+    },
+    "appointmentStartTimeInterval": {
+      "type": "picklist",
+      "description": "The proposed time interval in minutes between appointment start times. For example, if you set the interval to 15, appointments can then begin at the top of the hour and at 15-minute intervals thereafter (10:00 AM, 10:15 AM, 10:30 AM, and so on). Valid values are: 5 10 15 20 30 45 60 90 120 150 180 240 300 360 420 480",
+      "required": true
+    },
+    "extCalEventHandler": {
+      "type": "lookup",
+      "description": "The API name of the custom Apex class that checks service resources’ external calendar events and returns the time slots where service resources are already booked. Available in API version 50.0 and later.",
+      "required": true
+    },
+    "isSvcTerritoryMemberShiftUsed": {
+      "type": "boolean",
+      "description": "Indicates whether to consider shifts of service territory members when determining the availability of service resources for appointments (true) or not (false). This field is available in API version 54.0 and later.",
+      "required": true
+    },
+    "isSvcTerrOpHoursWithShiftsUsed": {
+      "type": "boolean",
+      "description": "Indicates whether to consider the intersection of shifts and service territory operating hours when determining the availability of service resources for appointments (true) or not (false). This field is available in API version 54.0 and later.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the appointment scheduling policy.",
+      "required": true
+    },
+    "shouldCheckExternalCalendar": {
+      "type": "boolean",
+      "description": "Indicates whether to check the external calendar for resource availability (true) or not (false). This field is available in API version 53.0 and later.",
+      "required": true
+    },
+    "shouldConsiderCalendarEvents": {
+      "type": "boolean",
+      "description": "Indicates whether to consider events on the Salesforce calendar to determine the availability of service resources to be assigned to appointments (true) or not (false).",
+      "required": true
+    },
+    "shouldEnforceExcludedResource": {
+      "type": "boolean",
+      "description": "Indicates whether this appointment scheduling policy prevents excluded service resources from being assigned to appointments (true) or not (false).",
+      "required": true
+    },
+    "shouldEnforceRequiredResource": {
+      "type": "boolean",
+      "description": "Indicates whether this appointment scheduling policy allows only required service resources to be assigned to appointments (true) or not (false).",
+      "required": true
+    },
+    "shouldMatchSkill": {
+      "type": "boolean",
+      "description": "Indicates whether this appointment scheduling policy allows only required service resources who have certain skills to be assigned to appointments (true) or not (false).",
+      "required": true
+    },
+    "shouldMatchSkillLevel": {
+      "type": "boolean",
+      "description": "Indicates whether this appointment scheduling policy allows only required service resources who have certain skills and skill levels to be assigned to appointments (true) or not (false).",
+      "required": true
+    },
+    "shouldRespectVisitingHours": {
+      "type": "boolean",
+      "description": "Indicates whether this appointment scheduling policy prevents users from scheduling appointments outside of an account’s visiting hours (true) or not (false).",
+      "required": true
+    },
+    "shouldUsePrimaryMembers": {
+      "type": "boolean",
+      "description": "Indicates whether this appointment scheduling policy allows only service resources who are primary members of a service territory to be assigned to appointments (true) or not (false).",
+      "required": true
+    },
+    "shouldUseSecondaryMembers": {
+      "type": "boolean",
+      "description": "Indicates whether this appointment scheduling policy allows service resources who are secondary members of a service territory to be assigned to appointments (true) or not (false).",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AppointmentSchedulingPolicy\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"appointmentAssignmentPolicy\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"appointmentStartTimeInterval\" type=\"xsd:string\"/>\n        <xsd:element name=\"extCalEventHandler\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isSvcTerrOpHoursWithShiftsUsed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSvcTerritoryMemberShiftUsed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"shouldCheckExternalCalendar\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldConsiderCalendarEvents\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldEnforceExcludedResource\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldEnforceRequiredResource\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldMatchSkill\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldMatchSkillLevel\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldRespectVisitingHours\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldUsePrimaryMembers\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldUseSecondaryMembers\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an appointmentSchedulingPolicy component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AppointmentSchedulingPolicy xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <appointmentAssignmentPolicy>ResourceAssignmentRule1</appointmentAssignmentPolicy>\n  <appointmentStartTimeInterval>15</appointmentStartTimeInterval>\n  <masterLabel>Default Appointment Scheduling Policy</masterLabel>\n  <shouldCheckExternalCalendar>true</shouldCheckExternalCalendar>\n  <shouldConsiderCalendarEvents>true</shouldConsiderCalendarEvents>\n  <shouldEnforceExcludedResource>true</shouldEnforceExcludedResource>\n  <shouldEnforceRequiredResource>true</shouldEnforceRequiredResource>\n  <shouldMatchSkill>true</shouldMatchSkill>\n  <shouldMatchSkillLevel>false</shouldMatchSkillLevel>\n  <shouldRespectVisitingHours>true</shouldRespectVisitingHours>\n  <shouldUsePrimaryMembers>true</shouldUsePrimaryMembers>\n  <shouldUseSecondaryMembers>true</shouldUseSecondaryMembers>\n</AppointmentSchedulingPolicy>"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -1,11 +1,31 @@
+ ---
+ name: platform-apex-generate
+ description: "Primary Apex authoring skill for class generation, refactoring, and review. ALWAYS ACTIVATE when the user mentions Apex, .cls, triggers, or asks to create/refactor a class (service, selector, domain, batch, queueable, schedulable, invocable, DTO, utility, interface, abstract, exception, REST resource). Use this skill for requests involving SObject CRUD, mapping collections, fetching related records, scheduled jobs, batch jobs, trigger design, @AuraEnabled controllers, @RestResource endpoints, custom REST APIs, or code review of existing Apex."
++allowed-tools: |
++  Bash Read Write
++  mcp__plugin_salesforce-development_salesforce-lsp__apex_diagnostics
++  mcp__plugin_salesforce-development_salesforce-lsp__apex_hover
++  mcp__plugin_salesforce-development_salesforce-lsp__apex_documentSymbol
++  mcp__plugin_salesforce-development_salesforce-lsp__refresh_org_schema
+ metadata:
+   version: "1.0"
+   minApiVersion: "66.0"
+   relatedSkills:
+     - "platform-apex-test-generate"
++  mcpTools:
++    # Native salesforce-lsp server tool IDs, as registered by the bundled LSP
++    # host (bin/sf-lsp-host.bundled.js) — the host returns dotted names for the
++    # apex.* tools. In allowed-tools above these appear in Claude Code's
++    # sanitized permission form (any char outside [A-Za-z0-9_-] -> _), e.g.
++    # apex.diagnostics -> ...salesforce-lsp__apex_diagnostics. refresh_org_schema
++    # is natively underscored, so both forms match.
++    salesforce-lsp:
++      tools:
++        - apex.diagnostics
++        - apex.hover
++        - apex.documentSymbol
++        - refresh_org_schema
++      semver: ">=0.1.0"
+   cliTools:
+     - tool: ["sf"]
+       semver: ">=2.0.0"
+@@ -46,6 +66,7 @@
+    - Service-Selector-Domain layering, logging utilities
+    - Existing classes/triggers and current trigger framework or handler pattern
+    - Whether Trigger Actions Framework (TAF) is already in use
++   - When refactoring or reviewing an existing `.cls`, call `mcp__plugin_salesforce-development_salesforce-lsp__apex_documentSymbol` with `{filePath: "<absolute-path>"}` to map the class's methods, properties, and inner types before editing, and call `mcp__plugin_salesforce-development_salesforce-lsp__apex_hover` with `{filePath, line, character}` (one-based line/character) to resolve the type or signature of a symbol you are unsure about. On error envelope or unavailable (`{error: <code>}` / tool not registered), fall back to reading the source directly.
+ 
+ 2. **Choose the smallest correct pattern** (see Type-Specific Guidance below)
+ 
+@@ -62,15 +83,28 @@
+ 
+ ### Phase 2 — Validate (required before reporting)
+ 
+-Writing files is the midpoint, not the finish line. Steps 6 and 7 each require a tool invocation and produce output that must appear in the Step 8 report. Do not summarize or present the report until both steps have run and their output is captured.
++Writing files is the midpoint, not the finish line. Steps 6, 7, and 8 each require a tool invocation and produce output that must appear in the Step 9 report. Do not summarize or present the report until all three steps have run and their output is captured.
+ 
+-6. **Run code analyzer**
+-   - Invoke MCP `run_code_analyzer` on all generated/updated `.cls` files.
+-   - Remediate all `sev0`, `sev1`, and `sev2` violations; re-run until clean.
+-   - Capture the final tool output verbatim for the report.
+-   - Fallback: `sf code-analyzer run --target <target>`. If both are unavailable, record `run_code_analyzer=unavailable: <error>` in the report.
++6. **Compile-check every file (REQUIRED)** — via the diagnostics tool when available, otherwise via the fallback. Running one of these is mandatory; which one depends on what your environment exposes.
++   - **Preferred:** Invoke `mcp__plugin_salesforce-development_salesforce-lsp__apex_diagnostics` with `{filePath: "<absolute-path>"}` on every generated/updated `.cls` **and `.trigger`** file to compile-check and surface errors/warnings before deploy.
++     - On success with diagnostics (`{ok: true}`, non-empty list), remediate all diagnostics with severity `error` or `warning`; re-run until clean.
++     - **Fail closed on an empty diagnostics result — always.** The tool returns `{ok: true, diagnostics: []}` for BOTH a genuinely clean compile AND a swallowed timeout/internal error, so an empty list is not by itself proof the code compiled. Whenever diagnostics come back empty, you MUST corroborate with the Fallback (`sf project deploy start --dry-run`) before reporting the file as clean or deploy-ready. Do not treat any empty `apex_diagnostics` response as a passing compile on its own.
++     - On error envelope (`{error: <code>}`), record `apex_diagnostics=unavailable: <code>` and use the Fallback.
++     - On unavailable (tool not registered), record `apex_diagnostics=unavailable: lsp_not_present` and use the Fallback.
++     - If the tool is not resolvable in this environment — e.g. it is a deferred tool and a `ToolSearch` for it returns no match, or the call otherwise cannot be made — do NOT stall or retry discovery. Record `apex_diagnostics=unavailable: lsp_not_present` and use the Fallback immediately.
++     - If diagnostics report an unknown field or object that you just deployed, call `mcp__plugin_salesforce-development_salesforce-lsp__refresh_org_schema` to invalidate the cached org describe, then re-run `apex_diagnostics` before treating it as a real code error.
++   - **Fallback (fully satisfies this step):** Compile-check via `sf project deploy start --dry-run` and read CLI errors. Remediate any errors and re-run until clean. A clean fallback result is a valid, complete outcome for this step — the diagnostics MCP tool is preferred, not required, when it is not available.
++   - Compilation is this step's only concern. It does NOT cover PMD, CRUD/FLS, or complexity rules — those are static analysis, run as a separate required step below (Step 7).
++   - **NEVER** report a class or trigger as valid or deploy-ready without running EITHER the diagnostics tool OR the fallback. "The tool wasn't available" is not a reason to skip validation — fall back and validate. Recording `apex_diagnostics=unavailable: <reason>` is only acceptable alongside a completed fallback.
++   - Capture the final tool (or fallback) output verbatim for the report.
+ 
+-7. **Execute Apex tests**
++7. **Run static analysis (REQUIRED)** — compilation does not check PMD, CRUD/FLS, complexity, and related rules; this step does.
++   - Invoke `sf code-analyzer run --target <target>` on all generated/updated `.cls` and `.trigger` files. Remediate all `sev0`, `sev1`, and `sev2` violations; re-run until clean.
++   - This is a distinct gate from Step 6 — a clean compile does not satisfy it, and running it does not substitute for the compile-check.
++   - If Code Analyzer cannot run in this environment, record `run_code_analyzer=unavailable: <reason>` in the report. That explicit outcome is the only acceptable way to skip it.
++   - Capture the final tool output verbatim for the report.
++
++8. **Execute Apex tests**
+    - Run org tests including `{ClassName}Test` via `sf apex run test` or MCP.
+    - Delegate all test generation/fixes/coverage work to `platform-apex-test-generate`; iterate until the tests pass.
+    - Capture pass/fail counts and coverage percentage for the report.
+@@ -78,10 +112,11 @@
+ 
+ ### Phase 3 — Report
+ 
+-8. **Report** -- use the output format at the bottom of this file.
+-   - The `Analyzer` line must contain the actual Step 6 tool output (or `run_code_analyzer=unavailable: <reason>` after attempting invocation).
+-   - The `Testing` line must contain the actual Step 7 results (or `test_execution=unavailable: <reason>` after attempting invocation).
+-   - A report missing either line is incomplete. Always attempt the tool invocation before recording unavailable.
++9. **Report** -- use the output format at the bottom of this file.
++   - The `Compile` line must contain the actual Step 6 output — either the diagnostics tool result, or the fallback (`sf project deploy start --dry-run`) result prefixed with `apex_diagnostics=unavailable: <reason>`. Code Analyzer does NOT belong on this line — it cannot establish that Apex compiles.
++   - The `Analyzer` line must contain the actual Step 7 `sf code-analyzer run` output (or `run_code_analyzer=unavailable: <reason>` after attempting invocation).
++   - The `Testing` line must contain the actual Step 8 results (or `test_execution=unavailable: <reason>` after attempting invocation).
++   - A report missing any of these lines is incomplete. Always run each step or record its explicit unavailable outcome before reporting.
+ 
+ ---
+ 
+@@ -388,9 +423,10 @@
+ Apex work: <summary>
+ Files: <paths>
+ Design: <pattern / framework choices>
+-Workflow: all steps completed (1-8); any N/A justified
++Workflow: all steps completed (1-9); any N/A justified
+ Risks: <security, bulkification, async, dependency notes>
+-Analyzer: <REQUIRED -- paste actual run_code_analyzer output or state "run_code_analyzer=unavailable: <reason>">
++Compile: <REQUIRED -- paste actual apex_diagnostics output, or the "sf project deploy start --dry-run" fallback result prefixed with "apex_diagnostics=unavailable: <reason>">
++Analyzer: <REQUIRED -- paste actual "sf code-analyzer run" output or state "run_code_analyzer=unavailable: <reason>">
+ Testing: <REQUIRED -- paste actual test execution results (pass/fail, coverage) or state "test_execution=unavailable: <reason>">
+ Deploy: <dry-run or next step>
+ ```

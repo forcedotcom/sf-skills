@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AgentforceForDevelopersSettings - Metadata API",
+  "description": "Represents Agentforce for Developers settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "agentforceForDevelopersOptOut": {
+      "type": "boolean",
+      "description": "Indicates whether Agentforce for Developers is enabled: true or false. If true, Agentforce for Developers isn't enabled in your org, which means that you've opted out of using it. If false, Agentforce for Developers is enabled. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AgentforceForDevelopersSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"agentforceForDevelopersOptOut\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the AgentforceForDevelopers.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n        <AgentforceForDevelopersSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n        <agentforceForDevelopersOptOut>false</agentforceForDevelopersOptOut>\n        </AgentforceForDevelopersSettings>"
+    }
+  ]
+}

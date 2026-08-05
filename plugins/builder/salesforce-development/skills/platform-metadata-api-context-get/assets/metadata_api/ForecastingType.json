@@ -1,0 +1,100 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ForecastingType - Metadata API",
+  "description": "Represents a forecast type.",
+  "file_information": ".forecastingType",
+  "directory_location": "forecastingTypes",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "If true, the forecast type is active. If false, the forecast type isn’t active. The default value is false.",
+      "required": true
+    },
+    "amount": {
+      "type": "boolean",
+      "description": "If true, the forecast type is based on a revenue measure. If false, the forecast type is based on a quantity measure. The default value is true.",
+      "required": true
+    },
+    "dateType": {
+      "type": "string",
+      "description": "The date type that forecast amounts are based on. OpportunityCloseDate: Base forecasts on opportunity close dates. ProductDate: Base forecasts on opportunity product line item dates, if available. ScheduleDate: Base forecasts on opportunity product schedule dates, if available. The following values are available in API version 52.0 and later, in Performance Edition and in Unlimited Edition with Sales Cloud. OLIMeasureCloseDateOnly: Base forecasts on opportunity close dates. ProductDateOnly: Base forecasts on opportunity product line item dates, if available. ScheduleDateOnly: Base forecasts on opportunity product schedule dates, if available.",
+      "required": true
+    },
+    "developerName": {
+      "type": "string",
+      "description": "The name of the forecasting type. The DeveloperName is called name in ForecastingSettings and Forecasting Type in custom reports.",
+      "required": true
+    },
+    "forecastingGroupDeveloperName": {
+      "type": "string",
+      "description": "Indicates the forecast group assigned to the forecast type. Required if hasCustomGroup is true."
+    },
+    "hasCustomGroup": {
+      "type": "boolean",
+      "description": "Indicates whether the forecasting type has a forecast group, based on a custom picklist assigned. Use ForecastingGroup and ForecastingGroupItems subtypes in ForecastingSettings to identify the group and the values."
+    },
+    "hasProductFamily": {
+      "type": "boolean",
+      "description": "If true, the forecast type includes product families. If false, the forecast type doesn’t include product families. The default value is false.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Controlling label for this ForecastingType value. This display value is the internal label that doesn’t get translated.",
+      "required": true
+    },
+    "opportunitySplitType": {
+      "type": "string",
+      "description": "Indicates whether the forecasting type has a split type and, if so, the name of the split type."
+    },
+    "opptyLineItemSplitType": {
+      "type": "string",
+      "description": "Indicates whether the forecasting type has an opportunity line item (product) split type and, if so, the name of the line item split type. Available in API version 58.0 and later."
+    },
+    "quantity": {
+      "type": "boolean",
+      "description": "If true, the forecast type is based on a quantity measure. If false, the forecast type is based on a revenue measure. The default value is false.",
+      "required": true
+    },
+    "roleType": {
+      "type": "string",
+      "description": "Indicates whether the role type has a ForecastingType, and if so, which ForecastingType. Possible values are R (user role-based forecast type) and Y (Territory2-based forecast type).",
+      "required": true
+    },
+    "territory2Model": {
+      "type": "string",
+      "description": "Indicates whether the ForecastingType has a Territory2 model and, if so, the name of the Territory2 model."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ForecastingType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"amount\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"dateType\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"forecastingGroupDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"hasCustomGroup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hasProductFamily\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"opportunitySplitType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"opptyLineItemSplitType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"quantity\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"roleType\" type=\"xsd:string\"/>\n        <xsd:element name=\"territory2Model\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ForecastingType component using the role hierarchy.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>false</active>\n    <amount>true</amount>\n    <dateType>0</dateType>\n    <developerName>qqw</developerName>\n    <hasProductFamily>false</hasProductFamily>\n    <masterLabel>qqw</masterLabel>\n    <quantity>false</quantity>\n    <roleType>R</roleType>\n</ForecastingType>"
+    },
+    {
+      "description": "The following is an example of a ForecastingType component using the territory hierarchy.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>false</active>\n    <amount>false</amount>\n    <dateType>0</dateType>\n    <developerName>New_Model6</developerName>\n    <hasProductFamily>false</hasProductFamily>\n    <masterLabel>Opportunity Quantity by Territory</masterLabel>\n    <quantity>true</quantity>\n    <roleType>Y</roleType>\n    <territory2Model>New_Model6</territory2Model>\n</ForecastingType>"
+    },
+    {
+      "description": "The following is an example of a ForecastingType component using an opportunity split type.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>false</active>\n    <amount>true</amount>\n    <dateType>0</dateType>\n    <developerName>split12</developerName>\n    <hasProductFamily>false</hasProductFamily>\n    <masterLabel>split12</masterLabel>\n    <opportunitySplitType>Custom_Revenue</opportunitySplitType>\n    <quantity>false</quantity>\n    <roleType>R</roleType>\n</ForecastingType>"
+    },
+    {
+      "description": "The following is an example of a ForecastingType component using an opportunity line item split type.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <amount>true</amount>\n    <dateType>0</dateType>\n    <developerName>productrevenuesplit</developerName>\n    <hasProductFamily>true</hasProductFamily>\n    <masterLabel>productrevenuesplit</masterLabel>\n    <opportunitySplitType>Revenue</opportunitySplitType>\n    <opptyLineItemSplitType>Revenue</opptyLineItemSplitType>\n    <quantity>false</quantity>\n    <roleType>R</roleType>\n</ForecastingType>"
+    }
+  ]
+}

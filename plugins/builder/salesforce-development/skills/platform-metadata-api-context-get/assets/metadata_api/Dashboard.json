@@ -1,0 +1,584 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Dashboard - Metadata API",
+  "description": "Represents a dashboard. Dashboards are visual representations of data that allow you to see key metrics and performance at a glance.",
+  "file_information": ".dashboard",
+  "directory_location": "dashboards",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "backgroundEndColor": {
+      "type": "string",
+      "description": "A dashboard can have a gradient color change on its charts. This field defines the second color for the gradient and backgroundStartColor defines the first color. If you prefer your background to be all one color or do not want a gradient color change, select the same color for this field and backgroundStartColor. The color is in hexadecimal format; for example #FF6600.",
+      "required": true
+    },
+    "backgroundFadeDirection": {
+      "type": "ChartBackgroundDirection (enumeration of type string)",
+      "description": "The direction of the gradient color change, defined by the backgroundStartColor and backgroundEndColor fields. The valid values are: Diagonal LeftToRight TopToBottom",
+      "required": true
+    },
+    "backgroundStartColor": {
+      "type": "string",
+      "description": "The starting color for the gradient color change on the dashboard's charts. See backgroundEndColor for more information. The color is in hexadecimal format; for example #FF6600.",
+      "required": true
+    },
+    "chartTheme": {
+      "type": "ChartTheme (enumeration of type string)",
+      "description": "Determines the default theme for all dashboard charts. Replaces dashboardChartTheme for API v42.0 and later. light—Light-colored theme. dark—Dark-colored theme. This field is available in API version 42.0 and later."
+    },
+    "colorPalette": {
+      "type": "ChartColorPalettes (enumeration of type string)",
+      "description": "Determines the default palette for all dashboard charts. Replaces dashboardColorPalette for API v42.0 and later. accessible bluegrass colorSafe Default dusk earth fire gray heat justice nightfall pond sunrise tropic unity water watermelon This field is available in API version 42.0 and later."
+    },
+    "dashboardChartTheme": {
+      "type": "ChartTheme (enumeration of type string)",
+      "description": "Determines the default theme for all dashboard charts. light—Light-colored theme. dark—Dark-colored theme. This field is available to maintain backward compatibility with versions prior to API version 42.0."
+    },
+    "dashboardColorPalette": {
+      "type": "ChartColorPalettes (enumeration of type string)",
+      "description": "Determines the default palette for all dashboard charts. accessible bluegrass colorSafe Default dusk earth fire gray heat justice nightfall pond sunrise tropic unity water watermelon This field is available to maintain backward compatibility with versions prior to API version 42.0."
+    },
+    "dashboardFilters": {
+      "type": "DashboardFilter[]",
+      "description": "The list of filters in a dashboard. This field is available in API version 23.0 and later."
+    },
+    "dashboardGridLayout": {
+      "type": "DashboardGridLayout",
+      "description": "Lists the included DashboardGridComponent objects, specifies the number of dashboard columns, and sets each dashboard row’s height in pixels. This field is available in API version 35.0 and later."
+    },
+    "dashboardType": {
+      "type": "DashboardType (enumeration of type string)",
+      "description": "Determines the way visibility settings are set for a dashboard. The valid values are: SpecifiedUser—All users see data at the access level of one specific running user, specified in the runningUser field, regardless of their own security settings. LoggedInUser—Each logged-in user sees data according to his or her own access level. MyTeamUser—Managers can choose to view the dashboard from the point of view of their subordinates in the role hierarchy. This value is available in API version 20.0 and later. This field is available in API version 19.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description for the dashboard. Maximum of 255 characters."
+    },
+    "folderName": {
+      "type": "string",
+      "description": "Name of the folder that houses the dashboard. This field is available in API version 35.0 and later."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call. This field specifies the folder and dashboard title; for example folderSales/California."
+    },
+    "isGridLayout": {
+      "type": "boolean",
+      "description": "Specifies whether a dashboard uses the Lightning Experience layout (true) or not (false). Lightning Experience allows dashboards with more than three columns with components that span multiple columns and multiple rows in size. This field is available in API version 35.0 and later."
+    },
+    "dashboardResultRefreshedDate": {
+      "type": "string",
+      "description": "Date that the dashboard was last refreshed.",
+      "required": true
+    },
+    "dashboardResultRunningUser": {
+      "type": "string",
+      "description": "User currently accessing the dashboard.",
+      "required": true
+    },
+    "leftSection": {
+      "type": "DashboardComponentSection",
+      "description": "The left section or column of the dashboard.",
+      "required": true
+    },
+    "middleSection": {
+      "type": "DashboardComponentSection",
+      "description": "The middle section or column of the dashboard."
+    },
+    "numSubscriptions": {
+      "type": "int",
+      "description": "Number of subscriptions reported on the dashboard. This field is available in API version 42.0 and later."
+    },
+    "owner": {
+      "type": "string",
+      "description": "The creator of the dashboard."
+    },
+    "rightSection": {
+      "type": "DashboardComponentSection",
+      "description": "The right section or column of the dashboard.",
+      "required": true
+    },
+    "runningUser": {
+      "type": "string",
+      "description": "The username of the user whose role and sharing settings are used to determine the data shown in the dashboard. When you deploy a dashboard and the value in this field is not defined or does not correspond to a valid user, the field is populated with the username of the user performing the deployment. Regardless of their security settings, all users viewing a dashboard see exactly the same data, because dashboards are always run using the security settings of a particular user. Tip: To avoid inappropriate exposure of sensitive data, save the dashboard to a folder that is visible only to appropriate users."
+    },
+    "textColor": {
+      "type": "string",
+      "description": "Color of the text on each chart in the dashboard. The color is in hexadecimal format; for example #FF6600.",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "description": "The dashboard title.",
+      "required": true
+    },
+    "titleColor": {
+      "type": "string",
+      "description": "Color of the titles on each dashboard component. The color is in hexadecimal format; for example #FF6600.",
+      "required": true
+    },
+    "titleSize": {
+      "type": "int",
+      "description": "Size of characters in title text. For example, a value of 12 indicates 12pt text.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "DashboardFilter": {
+      "dashboardFilterOptions": {
+        "type": "DashboardFilterOption[]",
+        "description": "The list of items you can select in the Filter Options section of the Add Filter dialog."
+      },
+      "name": {
+        "type": "string",
+        "description": "The filter label.",
+        "required": true
+      }
+    },
+    "DashboardFilterOption": {
+      "operator": {
+        "type": "DashboardFilterOperation (enumeration of type string)",
+        "description": "Represents the filter operation for this filter item. Valid values are: equals notEqual lessThan greaterThan lessOrEqual greaterOrEqual contains notContain startsWith includes excludes between Note: The “between” operator takes two operands (for example, “between MinimumValue, MaximumValue”). Note also that the minimum value is inclusive, while the maximum value is exclusive. All other dashboard filter operations take a single operand only. This field is available in API version 24.0 and later. With API version 23.0, valid values are enumerated in CustomField.",
+        "required": true
+      },
+      "values": {
+        "type": "string[]",
+        "description": "One or more values in the Filter Options area of the Add Filter dialog. This field is available in API version 24.0 and later.",
+        "required": true
+      }
+    },
+    "DashboardGridLayout": {
+      "dashboardGridComponents": {
+        "type": "DashboardGridComponent[]",
+        "description": "List of DashboardGridComponent objects in the dashboard."
+      },
+      "numberOfColumns": {
+        "type": "int",
+        "description": "Total number of columns in the dashboard.",
+        "required": true
+      },
+      "rowHeight": {
+        "type": "int",
+        "description": "Height of each row in pixels.",
+        "required": true
+      }
+    },
+    "DashboardGridComponent": {
+      "colSpan": {
+        "type": "int",
+        "description": "The width of the dashboard component in columns. For example, if colSpan is 5, then the dashboard component spans five columns.",
+        "required": true
+      },
+      "columnIndex": {
+        "type": "int",
+        "description": "The left-most column that is occupied by the dashboard component.",
+        "required": true
+      },
+      "dashboardComponent": {
+        "type": "DashboardComponent",
+        "description": "The dashboard component that is being sized and placed.",
+        "required": true
+      },
+      "rowIndex": {
+        "type": "int",
+        "description": "The top-most row that is occupied by the dashboard component.",
+        "required": true
+      },
+      "rowSpan": {
+        "type": "int",
+        "description": "The height of the dashboard component in rows.",
+        "required": true
+      }
+    },
+    "DashboardComponent": {
+      "chartAxisRange": {
+        "type": "ChartRangeType (enumeration of type string)",
+        "description": "A manual or automatic axis range for bar or line charts. The valid values are: auto manual"
+      },
+      "chartAxisRangeMax": {
+        "type": "double",
+        "description": "The maximum axis range to be displayed. This only applies to bar and line charts in which the manual axis range is selected for the chartAxisRange field."
+      },
+      "chartAxisRangeMin": {
+        "type": "double",
+        "description": "The minimum axis range to be displayed. This only applies to bar and line charts in which the manual axis range is selected for the chartAxisRange field."
+      },
+      "chartSummary": {
+        "type": "ChartSummary",
+        "description": "Specifies the summary field for the chart data. Required if isAutoSelectFromReport is set to false. This field is available in API version 25.0 and later."
+      },
+      "componentType": {
+        "type": "DashboardComponentType (enumeration of type string)",
+        "description": "Dashboard component type. The valid values are: Bar BarGrouped BarStacked BarStacked100 Column ColumnGrouped ColumnLine ColumnLineGrouped ColumnLineStacked ColumnLineStacked100 ColumnStacked ColumnStacked100 Donut FlexTable Funnel Gauge Image LightningWebComponent Line LineCumulative LineGrouped LineGroupedCumulative Metric Pie PulseMetricCard RichText Scatter ScatterGrouped SControl Table VisualforcePage",
+        "required": true
+      },
+      "dashboardComponentContents": {
+        "type": "DashboardComponentContent[]",
+        "description": "A list of dashboard component contents. This field is available in API version 58.0 and later."
+      },
+      "dashboardDynamicValues": {
+        "type": "DashboardDynamicValue[]",
+        "description": "A list of dashboard dynamic values. This field is available in API version 36.0 and later."
+      },
+      "dashboardFilterColumns": {
+        "type": "DashboardFilterColumn[]",
+        "description": "A list of dashboard filter columns. Each report-based component must have a dashboard filter column that defines the column that the filter applies to. This field is available in API version 23.0 and later."
+      },
+      "dashboardTableColumn": {
+        "type": "DashboardTableColumn[]",
+        "description": "Represents a list of columns on a customized dashboard table component."
+      },
+      "displayUnits": {
+        "type": "ChartUnits (enumeration of type string)",
+        "description": "Chart Units. The valid values are: Auto Integer Hundreds Thousands Millions Billions Trillions"
+      },
+      "drillDownUrl": {
+        "type": "string",
+        "description": "For charts, specifies a URL that users go to when they click the dashboard component. Use this option to send users to another dashboard, report, record detail page, or other system that uses a Web interface. This field overrides the drillEnabled and drillToDetailEnabled fields."
+      },
+      "drillEnabled": {
+        "type": "boolean",
+        "description": "Specifies whether to take users to the full or filtered source report when they click the dashboard component. Set to false to drill to the full source report; set to true to drill to the source report filtered by what they clicked. If set to true, users can click individual groups, axis values, or legend entries. This overrides the drillToDetailEnabled field. This field is available in API version 17.0 and later."
+      },
+      "drillToDetailEnabled": {
+        "type": "boolean",
+        "description": "When enabled, users are taken to the record detail page when they click a record name, record owner, or feed post in a table or chart. When set to true users can click axis and legend values, chart elements, and table entries. The drillDownUrl and drillEnabled fields override this field. This field is available in API version 20.0 and later."
+      },
+      "enableHover": {
+        "type": "boolean",
+        "description": "Specifies whether to display values, labels, and percentages when hovering over charts. Hover details depend on chart type. Percentages apply to pie, donut, and funnel charts only. This field is available in API version 17.0 and later."
+      },
+      "expandOthers": {
+        "type": "boolean",
+        "description": "Specifies whether to combine all groups less than or equal to 3% of the total into a single 'Others' wedge or segment. This only applies to pie, donut, and funnel charts. Set to true to show all values individually on the chart; set to false to combine small groups into 'Others.' This field is available in API version 17.0 and later."
+      },
+      "flexComponentProperties": {
+        "type": "DashboardFlexTableComponentProperties",
+        "description": "Defines metadata for Lightning Experience table columns and sorting. This field is available in API version 41.0 and later."
+      },
+      "footer": {
+        "type": "string",
+        "description": "Footer displayed at the bottom of the dashboard component. Maximum of 255 characters."
+      },
+      "gaugeMax": {
+        "type": "double",
+        "description": "The maximum value on a gauge. A gauge is used to see how far you are from reaching a goal. It looks like a speedometer in a car."
+      },
+      "gaugeMin": {
+        "type": "double",
+        "description": "The minimum value on a gauge."
+      },
+      "groupingColumn": {
+        "type": "string",
+        "description": "Specifies the field by which to group data. This data is displayed on the X-axis for vertical column charts and on the Y-axis for horizontal bar charts. This field is available in API version 25.0 and later."
+      },
+      "GroupingSortProperties": {
+        "type": "DashboardComponentGroupingSortProperties",
+        "description": "This field captures sort properties of the dashboard component. If the component has one or more groupings, sort information is stored here; otherwise, it is stored in the sortBy field. This field is available in API version 46.0 and later."
+      },
+      "header": {
+        "type": "string",
+        "description": "Header displayed at the top of the dashboard component. Maximum of 80 characters."
+      },
+      "indicatorBreakpoint1": {
+        "type": "double",
+        "description": "The value that separates the indicatorLowColor from the indicatorMiddleColor on the dashboard."
+      },
+      "indicatorBreakpoint2": {
+        "type": "double",
+        "description": "The value that separates the indicatorMiddleColor from the indicatorHighColor on the dashboard."
+      },
+      "indicatorHighColor": {
+        "type": "string",
+        "description": "The color representing a high number range on the gauge."
+      },
+      "indicatorLowColor": {
+        "type": "string",
+        "description": "The color representing a low number range on the gauge."
+      },
+      "indicatorMiddleColor": {
+        "type": "string",
+        "description": "The color representing a medium number range on the gauge."
+      },
+      "legendPosition": {
+        "type": "ChartLegendPosition (enumeration of type string)",
+        "description": "The location of the legend with respect to the chart. The valid values are: Bottom OnChart Right"
+      },
+      "maxValuesDisplayed": {
+        "type": "int",
+        "description": "The maximum number of elements to include in the top-level grouping of the horizontal axis of a horizontal chart, vertical axis of a vertical chart, or selected axis of a stacked bar chart. For example, if you want to list only your top five salespeople, create an opportunity report that lists total opportunity amounts by owner and enter 5 in this field."
+      },
+      "metricLabel": {
+        "type": "string",
+        "description": "Descriptive label for the metric. This is relevant if metric is the value of the componentType field."
+      },
+      "page": {
+        "type": "string",
+        "description": "Visualforce page associated with the component."
+      },
+      "pageHeightInPixels": {
+        "type": "int",
+        "description": "Display height of the Visualforce page in pixels."
+      },
+      "report": {
+        "type": "string",
+        "description": "Name of the report associated with the component."
+      },
+      "scontrol": {
+        "type": "string",
+        "description": "S-control associated with component if scontrol is the value of the componentType field. For more information, see “Defining Custom S-Controls” in the Salesforce online help."
+      },
+      "scontrolHeightInPixels": {
+        "type": "int",
+        "description": "Display height of the s-control in pixels."
+      },
+      "showPercentage": {
+        "type": "boolean",
+        "description": "Indicates if percentages are displayed for regions of gauges and wedges and segments of pie, donut, and funnel charts (true), or not (false)."
+      },
+      "showPicturesOnCharts": {
+        "type": "boolean",
+        "description": "Display Chatter photos for up to 20 records in a horizontal bar chart component whose source report is grouped by a user or group name field. If there are more than 20 records with photos, record names are shown instead of photos. Set Grouping Display to None to show photos. Set the Drill Down to option to Record Detail Page to take users directly to user profile or group pages when they click photos. Chatter must be enabled for photos to be displayed. Depending on your organization's setup, you may not see photos on tables and charts."
+      },
+      "showPicturesOnTables": {
+        "type": "boolean",
+        "description": "Display Chatter photos for up to 20 records in a horizontal bar chart component whose source report is grouped by a user or group name field. If there are more than 20 records with photos, record names are shown instead of photos. Set Grouping Display to None to show photos. Set the Drill Down to option to Record Detail Page to take users directly to user profile or group pages when they click photos. Chatter must be enabled for photos to be displayed. Depending on your organization's setup, you may not see photos on tables and charts."
+      },
+      "showTotal": {
+        "type": "boolean",
+        "description": "Indicates if the total of all wedges is displayed for gauges and donut charts (true), or not (false)."
+      },
+      "showValues": {
+        "type": "boolean",
+        "description": "Indicates if the values of individual records or groups are displayed for charts (true), or not (false)."
+      },
+      "sortBy": {
+        "type": "DashboardComponentFilter (enumeration of type string)",
+        "description": "The sort option for the dashboard component."
+      },
+      "sortLegendValues": {
+        "type": "boolean",
+        "description": "Specifies whether to sort the legend values for the dashboard component."
+      },
+      "title": {
+        "type": "string",
+        "description": "The title of the dashboard component. Maximum of 40 characters."
+      },
+      "useReportChart": {
+        "type": "boolean",
+        "description": "Specifies whether to use the chart defined in the source report on this dashboard component. The chart settings in the source report determine how the chart displays in the dashboard, and any chart settings you define for the dashboard are overridden. If you defined a combination chart in the source report, use this option to use that combination chart on this dashboard."
+      }
+    },
+    "DashboardComponentContent": {
+      "additionalInfo": {
+        "type": "string",
+        "description": "Any additional metadata the user wants to include for the component contents."
+      },
+      "altText": {
+        "type": "string",
+        "description": "The component’s alternative text."
+      },
+      "fileName": {
+        "type": "string",
+        "description": "The name of the component file."
+      },
+      "fit": {
+        "type": "Fit (enumeration of type string)",
+        "description": "The image alignment type. Valid values are: FitHeight FitWidth Original Stretch Tile"
+      },
+      "horizontalAlignment": {
+        "type": "HorizontalAlignment (enumeration of type string)",
+        "description": "The horizontal alignment type. Valid values are: Left Center Right"
+      },
+      "componentParameters": {
+        "type": "string",
+        "description": "The parameters for the component."
+      },
+      "richTextContent": {
+        "type": "string",
+        "description": "The rich text content for the component."
+      },
+      "tooltip": {
+        "type": "string",
+        "description": "The dashboard component’s tooltip."
+      },
+      "verticalAlignment": {
+        "type": "VerticalAlignment (enumeration of type string)",
+        "description": "The vertical alignment type. Valid values are: Bottom Center Top"
+      }
+    },
+    "DashboardDynamicValue": {
+      "additionalInfo": {
+        "type": "string",
+        "description": "Any additional metadata the user wants to include for the dynamic value."
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "The name of the field for the dynamic value.",
+        "required": true
+      },
+      "isDynamicUser": {
+        "type": "boolean",
+        "description": "Indicates whether the value should be retrieved as the user running the dashboard (true) or not (false)."
+      }
+    },
+    "DashboardFilterColumn": {
+      "column": {
+        "type": "string",
+        "description": "The report column code for the filter.",
+        "required": true
+      }
+    },
+    "DashboardTableColumn": {
+      "aggregateType": {
+        "type": "ReportSummaryType[] (enumeration of type string)",
+        "description": "Specifies the aggregation type for the table column."
+      },
+      "column": {
+        "type": "string",
+        "description": "The label of the column to use in the table.",
+        "required": true
+      },
+      "showTotal": {
+        "type": "boolean",
+        "description": "Displays the totals for each summarizable column in the dashboard table. This field is available in API version 19.0 and later."
+      },
+      "sortBy": {
+        "type": "DashboardComponentSection(enumeration of type string)",
+        "description": "The sort option for the dashboard table component. Sort on just one column per table."
+      }
+    },
+    "DashboardFlexTableComponentProperties": {
+      "flexTableColumn": {
+        "type": "DashboardComponentColumn",
+        "description": "Represents a column in a Lightning Experience table component. This field is available in API version 41.0 and later."
+      },
+      "flexTableSortInfo": {
+        "type": "DashboardComponentSortInfo",
+        "description": "Represents sorting column and order in a Lightning Experience table component. This field is available in API version 41.0 and later."
+      },
+      "hideChatterPhotos": {
+        "type": "boolean",
+        "description": "If true, hides any photos from Chatter feeds. This field is available in API version 41.0 and later."
+      },
+      "decimalPrecision": {
+        "type": "integer",
+        "description": "For columns with numeric values, indicates the number of significant digits."
+      },
+      "useReportTableSetting": {
+        "type": "boolean",
+        "description": "If true, users can import report table settings to this component. This field is available in API version 65.0 and later."
+      }
+    },
+    "DashboardComponentGroupingSortProperties": {
+      "groupingSorts": {
+        "type": "DashboardComponentGroupingSort",
+        "description": "This field stores sort information for a dashboard at each grouping level of granularity. This field is available in API version 46.0 and later."
+      }
+    },
+    "DashboardComponentGroupingSort": {
+      "groupingLevel": {
+        "type": "String",
+        "description": "Grouping at which this sort configuration is applied."
+      },
+      "inheritedReportGroupingSort": {
+        "type": "String",
+        "description": "true if the sort order is picked up from an underlying report for this grouping level."
+      },
+      "sortColumn": {
+        "type": "String",
+        "description": "If grouping is sorted by an aggregate, this value is the aggregate value (such as sortColumn ). If the grouping is sorted by its own value, this field is null."
+      },
+      "sortOrder": {
+        "type": "String",
+        "description": "Ascending or Descending to reflect the sort order."
+      }
+    },
+    "DashboardComponentColumn": {
+      "breakPoint1": {
+        "type": "double",
+        "description": "The value that separates the lowRangeColor from the midRangeColor on the dashboard."
+      },
+      "breakPoint2": {
+        "type": "double",
+        "description": "The value that separates the midRangeColor from the highRangeColor on the dashboard."
+      },
+      "breakPointOrder": {
+        "type": "double",
+        "description": "Conditional highlighting can be applied to multiple columns. This field stores the order of conditional highlights."
+      },
+      "highRangeColor": {
+        "type": "int",
+        "description": "The color representing a high number range on the column."
+      },
+      "lowRangeColor": {
+        "type": "int",
+        "description": "The color representing a low number range on the column."
+      },
+      "midRangeColor": {
+        "type": "int",
+        "description": "The color representing a mid number range on the column."
+      },
+      "reportColumn": {
+        "type": "string",
+        "description": "The report column code for the filter.",
+        "required": true
+      },
+      "showTotal": {
+        "type": "boolean",
+        "description": "If true, the column total is displayed."
+      },
+      "type": {
+        "type": "DashboardComponentColumnType (enumeration of type string)",
+        "description": "Represents the type of Lightning Experience table column: Details Aggregates Grouping This field is available in API version 41.0 and later."
+      }
+    },
+    "DashboardComponentSortInfo": {
+      "ComponentSortColumn": {
+        "type": "string",
+        "description": "Indicates the column on which the table is sorted. This field is available in API version 41.0 and later."
+      },
+      "sortOrder": {
+        "type": "string",
+        "description": "Indicates whether column sorting is ascending or descending. This field is available in API version 41.0 and later."
+      }
+    },
+    "DashboardComponentSection": {
+      "columnSize": {
+        "type": "DashboardComponentSize (enumeration of type string)",
+        "description": "The size of the column in the dashboard: Medium Narrow Wide",
+        "required": true
+      },
+      "components": {
+        "type": "DashboardComponent[]",
+        "description": "The list of DashboardComponent objects in the dashboard column."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ChartAxis\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"x\"/>\n    <xsd:enumeration value=\"y\"/>\n    <xsd:enumeration value=\"y2\"/>\n    <xsd:enumeration value=\"r\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartBackgroundDirection\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TopToBottom\"/>\n    <xsd:enumeration value=\"LeftToRight\"/>\n    <xsd:enumeration value=\"Diagonal\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartColorPalettes\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Default\"/>\n    <xsd:enumeration value=\"gray\"/>\n    <xsd:enumeration value=\"colorSafe\"/>\n    <xsd:enumeration value=\"unity\"/>\n    <xsd:enumeration value=\"justice\"/>\n    <xsd:enumeration value=\"nightfall\"/>\n    <xsd:enumeration value=\"sunrise\"/>\n    <xsd:enumeration value=\"bluegrass\"/>\n    <xsd:enumeration value=\"tropic\"/>\n    <xsd:enumeration value=\"heat\"/>\n    <xsd:enumeration value=\"dusk\"/>\n    <xsd:enumeration value=\"pond\"/>\n    <xsd:enumeration value=\"watermelon\"/>\n    <xsd:enumeration value=\"fire\"/>\n    <xsd:enumeration value=\"water\"/>\n    <xsd:enumeration value=\"earth\"/>\n    <xsd:enumeration value=\"accessible\"/>\n    <xsd:enumeration value=\"branding\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartLegendPosition\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Right\"/>\n    <xsd:enumeration value=\"Bottom\"/>\n    <xsd:enumeration value=\"OnChart\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartRangeType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Auto\"/>\n    <xsd:enumeration value=\"Manual\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ChartSummary\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregate\" minOccurs=\"0\" type=\"tns:ReportSummaryType\"/>\n    <xsd:element name=\"axisBinding\" minOccurs=\"0\" type=\"tns:ChartAxis\"/>\n    <xsd:element name=\"column\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ChartTheme\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"light\"/>\n    <xsd:enumeration value=\"dark\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ChartUnits\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Auto\"/>\n    <xsd:enumeration value=\"Integer\"/>\n    <xsd:enumeration value=\"Hundreds\"/>\n    <xsd:enumeration value=\"Thousands\"/>\n    <xsd:enumeration value=\"Millions\"/>\n    <xsd:enumeration value=\"Billions\"/>\n    <xsd:enumeration value=\"Trillions\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Dashboard\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"backgroundEndColor\" type=\"xsd:string\"/>\n        <xsd:element name=\"backgroundFadeDirection\" type=\"tns:ChartBackgroundDirection\"/>\n        <xsd:element name=\"backgroundStartColor\" type=\"xsd:string\"/>\n        <xsd:element name=\"chartTheme\" minOccurs=\"0\" type=\"tns:ChartTheme\"/>\n        <xsd:element name=\"colorPalette\" minOccurs=\"0\" type=\"tns:ChartColorPalettes\"/>\n        <xsd:element name=\"dashboardChartTheme\" minOccurs=\"0\" type=\"tns:ChartTheme\"/>\n        <xsd:element name=\"dashboardColorPalette\" minOccurs=\"0\" type=\"tns:ChartColorPalettes\"/>\n        <xsd:element name=\"dashboardFilters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardFilter\"/>\n        <xsd:element name=\"dashboardGridLayout\" minOccurs=\"0\" type=\"tns:DashboardGridLayout\"/>\n        <xsd:element name=\"dashboardResultRefreshedDate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dashboardResultRunningUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dashboardType\" minOccurs=\"0\" type=\"tns:DashboardType\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"folderName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isGridLayout\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"leftSection\" minOccurs=\"0\" type=\"tns:DashboardComponentSection\"/>\n        <xsd:element name=\"middleSection\" minOccurs=\"0\" type=\"tns:DashboardComponentSection\"/>\n        <xsd:element name=\"numSubscriptions\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"owner\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"rightSection\" minOccurs=\"0\" type=\"tns:DashboardComponentSection\"/>\n        <xsd:element name=\"runningUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"textColor\" type=\"xsd:string\"/>\n        <xsd:element name=\"title\" type=\"xsd:string\"/>\n        <xsd:element name=\"titleColor\" type=\"xsd:string\"/>\n        <xsd:element name=\"titleSize\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardComponent\">\n  <xsd:sequence>\n    <xsd:element name=\"autoselectColumnsFromReport\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"chartAxisRange\" minOccurs=\"0\" type=\"tns:ChartRangeType\"/>\n    <xsd:element name=\"chartAxisRangeMax\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"chartAxisRangeMin\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"chartSummary\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ChartSummary\"/>\n    <xsd:element name=\"componentChartTheme\" minOccurs=\"0\" type=\"tns:ChartTheme\"/>\n    <xsd:element name=\"componentType\" type=\"tns:DashboardComponentType\"/>\n    <xsd:element name=\"dashboardComponentContents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardComponentContent\"/>\n    <xsd:element name=\"dashboardDynamicValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardDynamicValue\"/>\n    <xsd:element name=\"dashboardFilterColumns\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardFilterColumn\"/>\n    <xsd:element name=\"dashboardTableColumn\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardTableColumn\"/>\n    <xsd:element name=\"decimalPrecision\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"displayUnits\" minOccurs=\"0\" type=\"tns:ChartUnits\"/>\n    <xsd:element name=\"drillDownUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"drillEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"drillToDetailEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableHover\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"expandOthers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"flexComponentProperties\" minOccurs=\"0\" type=\"tns:DashboardFlexTableComponentProperties\"/>\n    <xsd:element name=\"footer\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"gaugeMax\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"gaugeMin\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"groupingColumn\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"groupingSortProperties\" minOccurs=\"0\" type=\"tns:DashboardComponentGroupingSortProperties\"/>\n    <xsd:element name=\"header\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"indicatorBreakpoint1\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"indicatorBreakpoint2\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"indicatorHighColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"indicatorLowColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"indicatorMiddleColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"legendPosition\" minOccurs=\"0\" type=\"tns:ChartLegendPosition\"/>\n    <xsd:element name=\"maxValuesDisplayed\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"metricLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"pageHeightInPixels\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"report\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"scontrol\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"scontrolHeightInPixels\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"showPercentage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showPicturesOnCharts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showPicturesOnTables\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showRange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showTotal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showValues\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"sortBy\" minOccurs=\"0\" type=\"tns:DashboardComponentFilter\"/>\n    <xsd:element name=\"sortLegendValues\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"title\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"useReportChart\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardComponentColumn\">\n  <xsd:sequence>\n    <xsd:element name=\"breakPoint1\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"breakPoint2\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"breakPointOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"highRangeColor\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"lowRangeColor\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"midRangeColor\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"reportColumn\" type=\"xsd:string\"/>\n    <xsd:element name=\"showSubTotal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showTotal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"type\" type=\"tns:DashboardComponentColumnType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DashboardComponentColumnType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"DashboardComponentContent\">\n  <xsd:sequence>\n    <xsd:element name=\"additionalInfo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"altText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"componentParameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fileName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fit\" minOccurs=\"0\" type=\"tns:Fit\"/>\n    <xsd:element name=\"horizontalAlignment\" minOccurs=\"0\" type=\"tns:HorizontalAlignment\"/>\n    <xsd:element name=\"richTextContent\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"tooltip\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"verticalAlignment\" minOccurs=\"0\" type=\"tns:VerticalAlignment\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DashboardComponentFilter\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RowLabelAscending\"/>\n    <xsd:enumeration value=\"RowLabelDescending\"/>\n    <xsd:enumeration value=\"RowValueAscending\"/>\n    <xsd:enumeration value=\"RowValueDescending\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DashboardComponentGroupingSort\">\n  <xsd:sequence>\n    <xsd:element name=\"groupingLevel\" type=\"xsd:string\"/>\n    <xsd:element name=\"inheritedReportGroupingSort\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortColumn\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardComponentGroupingSortProperties\">\n  <xsd:sequence>\n    <xsd:element name=\"groupingSorts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardComponentGroupingSort\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardComponentSection\">\n  <xsd:sequence>\n    <xsd:element name=\"columnSize\" type=\"tns:DashboardComponentSize\"/>\n    <xsd:element name=\"components\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardComponent\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DashboardComponentSize\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Narrow\"/>\n    <xsd:enumeration value=\"Medium\"/>\n    <xsd:enumeration value=\"Wide\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DashboardComponentSortInfo\">\n  <xsd:sequence>\n    <xsd:element name=\"sortColumn\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DashboardComponentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Bar\"/>\n    <xsd:enumeration value=\"BarGrouped\"/>\n    <xsd:enumeration value=\"BarStacked\"/>\n    <xsd:enumeration value=\"BarStacked100\"/>\n    <xsd:enumeration value=\"Column\"/>\n    <xsd:enumeration value=\"ColumnGrouped\"/>\n    <xsd:enumeration value=\"ColumnStacked\"/>\n    <xsd:enumeration value=\"ColumnStacked100\"/>\n    <xsd:enumeration value=\"Line\"/>\n    <xsd:enumeration value=\"LineGrouped\"/>\n    <xsd:enumeration value=\"Pie\"/>\n    <xsd:enumeration value=\"Table\"/>\n    <xsd:enumeration value=\"Metric\"/>\n    <xsd:enumeration value=\"Gauge\"/>\n    <xsd:enumeration value=\"LineCumulative\"/>\n    <xsd:enumeration value=\"LineGroupedCumulative\"/>\n    <xsd:enumeration value=\"Scontrol\"/>\n    <xsd:enumeration value=\"VisualforcePage\"/>\n    <xsd:enumeration value=\"Donut\"/>\n    <xsd:enumeration value=\"Funnel\"/>\n    <xsd:enumeration value=\"ColumnLine\"/>\n    <xsd:enumeration value=\"ColumnLineGrouped\"/>\n    <xsd:enumeration value=\"ColumnLineStacked\"/>\n    <xsd:enumeration value=\"ColumnLineStacked100\"/>\n    <xsd:enumeration value=\"Scatter\"/>\n    <xsd:enumeration value=\"ScatterGrouped\"/>\n    <xsd:enumeration value=\"FlexTable\"/>\n    <xsd:enumeration value=\"Image\"/>\n    <xsd:enumeration value=\"RichText\"/>\n    <xsd:enumeration value=\"PulseMetric\"/>\n    <xsd:enumeration value=\"LightningWebComponent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DashboardDynamicValue\">\n  <xsd:sequence>\n    <xsd:element name=\"additionalInfo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n    <xsd:element name=\"isDynamicUser\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"dashboardFilterOptions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardFilterOption\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardFilterColumn\">\n  <xsd:sequence>\n    <xsd:element name=\"column\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DashboardFilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"between\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"DashboardFilterOption\">\n  <xsd:sequence>\n    <xsd:element name=\"operator\" type=\"tns:DashboardFilterOperation\"/>\n    <xsd:element name=\"values\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardFlexTableComponentProperties\">\n  <xsd:sequence>\n    <xsd:element name=\"decimalPrecision\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"flexTableColumn\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardComponentColumn\"/>\n    <xsd:element name=\"flexTableSortInfo\" minOccurs=\"0\" type=\"tns:DashboardComponentSortInfo\"/>\n    <xsd:element name=\"hideChatterPhotos\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"useReportTableSetting\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardGridComponent\">\n  <xsd:sequence>\n    <xsd:element name=\"colSpan\" type=\"xsd:int\"/>\n    <xsd:element name=\"columnIndex\" type=\"xsd:int\"/>\n    <xsd:element name=\"dashboardComponent\" type=\"tns:DashboardComponent\"/>\n    <xsd:element name=\"rowIndex\" type=\"xsd:int\"/>\n    <xsd:element name=\"rowSpan\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardGridLayout\">\n  <xsd:sequence>\n    <xsd:element name=\"dashboardGridComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardGridComponent\"/>\n    <xsd:element name=\"numberOfColumns\" type=\"xsd:int\"/>\n    <xsd:element name=\"rowHeight\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardTableColumn\">\n  <xsd:sequence>\n    <xsd:element name=\"aggregateType\" minOccurs=\"0\" type=\"tns:ReportSummaryType\"/>\n    <xsd:element name=\"calculatePercent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"column\" type=\"xsd:string\"/>\n    <xsd:element name=\"decimalPlaces\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"showSubTotal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showTotal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"sortBy\" minOccurs=\"0\" type=\"tns:DashboardComponentFilter\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"DashboardType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SpecifiedUser\"/>\n    <xsd:enumeration value=\"LoggedInUser\"/>\n    <xsd:enumeration value=\"MyTeamUser\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"Fit\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:simpleType name=\"HorizontalAlignment\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ReportSummaryType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sum\"/>\n    <xsd:enumeration value=\"Average\"/>\n    <xsd:enumeration value=\"Maximum\"/>\n    <xsd:enumeration value=\"Minimum\"/>\n    <xsd:enumeration value=\"Unique\"/>\n    <xsd:enumeration value=\"Median\"/>\n    <xsd:enumeration value=\"Noop\"/>\n    <xsd:enumeration value=\"None\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"VerticalAlignment\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample XML definition of a filtered dashboard is shown below. Note that this example is supported in API version 24.0 and later. The file name matches the dashboard title and the extension is .dashboard.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Dashboard xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <backgroundEndColor>#FFFFFF</backgroundEndColor>\n    <backgroundFadeDirection>Diagonal</backgroundFadeDirection>\n    <backgroundStartColor>#FFFFFF</backgroundStartColor>\n    <dashboardFilters>\n        <dashboardFilterOptions>\n            <operator>equals</operator>\n            <values>Media</values>\n        </dashboardFilterOptions>\n        <dashboardFilterOptions>\n            <operator>lessThan</operator>\n            <values>Working</values>\n        </dashboardFilterOptions>\n        <dashboardFilterOptions>\n            <operator>between</operator>\n            <values>ABC</values>\n            <values>XYZ</values>\n        </dashboardFilterOptions>\n        <name>Industry</name>\n    </dashboardFilters>\n    <dashboardFilters>\n        <dashboardFilterOptions>\n            <operator>equals</operator>\n            <values>Analyst,Partner</values>\n        </dashboardFilterOptions>\n        <dashboardFilterOptions>\n            <operator>startsWith</operator>\n            <values>Integrator</values>\n        </dashboardFilterOptions>\n        <name>Account Type</name>\n    </dashboardFilters>\n    <dashboardType>SpecifiedUser</dashboardType>\n    <leftSection>\n        <columnSize>Medium</columnSize>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Bar</componentType>\n            <dashboardFilterColumns>\n                <column>INDUSTRY</column>\n            </dashboardFilterColumns>\n            <dashboardFilterColumns>\n                <column>TYPE</column>\n            </dashboardFilterColumns>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>false</drillEnabled>\n            <drillToDetailEnabled>false</drillToDetailEnabled>\n            <enableHover>false</enableHover>\n            <expandOthers>false</expandOthers>\n            <legendPosition>Bottom</legendPosition>\n            <report>unfiled$public/SampleReportofAccounts</report>\n            <showPercentage>false</showPercentage>\n            <showPicturesOnCharts>false</showPicturesOnCharts>\n            <showValues>false</showValues>\n            <sortBy>RowLabelAscending</sortBy>\n            <useReportChart>false</useReportChart>\n        </components>\n    </leftSection>\n    <middleSection>\n        <columnSize>Medium</columnSize>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Funnel</componentType>\n            <dashboardFilterColumns>\n                <column>ACCOUNT_INDUSTRY</column>\n            </dashboardFilterColumns>\n            <dashboardFilterColumns>\n                <column>ACCOUNT.TYPE</column>\n            </dashboardFilterColumns>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>false</drillEnabled>\n            <drillToDetailEnabled>false</drillToDetailEnabled>\n            <enableHover>false</enableHover>\n            <expandOthers>false</expandOthers>\n            <legendPosition>Bottom</legendPosition>\n            <report>unfiled$public/SampleReportofCases</report>\n            <showPercentage>false</showPercentage>\n            <showValues>true</showValues>\n            <sortBy>RowLabelAscending</sortBy>\n            <useReportChart>false</useReportChart>\n        </components>\n    </middleSection>\n    <rightSection>\n        <columnSize>Medium</columnSize>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Column</componentType>\n            <dashboardFilterColumns>\n                <column>INDUSTRY</column>\n            </dashboardFilterColumns>\n            <dashboardFilterColumns>\n                <column>ACCOUNT_TYPE</column>\n            </dashboardFilterColumns>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>false</drillEnabled>\n            <drillToDetailEnabled>false</drillToDetailEnabled>\n            <enableHover>false</enableHover>\n            <expandOthers>false</expandOthers>\n            <legendPosition>Bottom</legendPosition>\n            <report>unfiled$public/SampleReportofOpportunities</report>\n            <showPercentage>false</showPercentage>\n            <showValues>false</showValues>\n            <sortBy>RowLabelAscending</sortBy>\n            <useReportChart>false</useReportChart>\n        </components>\n    </rightSection>\n    <runningUser>admin@TESTORGNUM</runningUser>\n    <textColor>#000000</textColor>\n    <title>My Dashboard</title>\n    <titleColor>#000000</titleColor>\n    <titleSize>12</titleSize>\n</Dashboard>"
+    },
+    {
+      "description": "A sample XML definition of a dashboard is shown below. The file name matches the dashboard title and the extension is .dashboard.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Dashboard xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <backgroundEndColor>#FFFFFF</backgroundEndColor>\n    <backgroundFadeDirection>LeftToRight</backgroundFadeDirection>\n    <backgroundStartColor>#FFFFFF</backgroundStartColor>\n    <description>Dashboard with all possible chart types</description>\n    <leftSection>\n        <columnSize>Medium</columnSize>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>BarStacked100</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <componentType>Table</componentType>\n            <dashboardTableColumn>\n                <column>CLOSE_DATE</column>\n                <sortBy>RowLabelAscending</sortBy>\n            </dashboardTableColumn>\n            <dashboardTableColumn>\n                <aggregateType>Sum</aggregateType>\n                <column>AMOUNT</column>\n                <showTotal>true</showTotal>\n            </dashboardTableColumn>\n            <dashboardTableColumn>\n                <column>STAGE_NAME</column>\n            </dashboardTableColumn>\n            <dashboardTableColumn>\n                <column>PROBABILITY</column>\n                <aggregateType>Maximum</aggregateType>\n            </dashboardTableColumn>\n            <displayUnits>Integer</displayUnits>\n            <header>Opportunities Table</header>\n            <indicatorHighColor>#54C254</indicatorHighColor>\n            <indicatorLowColor>#C25454</indicatorLowColor>\n            <indicatorMiddleColor>#C2C254</indicatorMiddleColor>\n            <maxValuesDisplayed>10</maxValuesDisplayed>\n            <report>testFolder/sourceRep</report>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Bar</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Column</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <legendPosition>Bottom</legendPosition>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n            <useReportChart>true</useReportChart>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Funnel</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <expandOthers>true</expandOthers>\n            <legendPosition>Bottom</legendPosition>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n    </leftSection>\n    <middleSection>\n        <columnSize>Medium</columnSize>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>ColumnStacked100</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>ColumnStacked</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>ColumnStacked</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>ColumnGrouped</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Column</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n    </middleSection>\n    <rightSection>\n        <columnSize>Medium</columnSize>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Bar</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Pie</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <expandOthers>true</expandOthers>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>LineGroupedCumulative</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>LineGrouped</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>LineCumulative</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n        <components>\n            <chartAxisRange>Auto</chartAxisRange>\n            <componentType>Donut</componentType>\n            <displayUnits>Auto</displayUnits>\n            <drillEnabled>true</drillEnabled>\n            <enableHover>true</enableHover>\n            <expandOthers>true</expandOthers>\n            <report>testFolder/sourceRep</report>\n            <sortBy>RowLabelAscending</sortBy>\n        </components>\n    </rightSection>\n    <runningUser>admin@TESTORGNUM</runningUser>\n    <textColor>#000000</textColor>\n    <title>Db Title</title>\n    <titleColor>#000000</titleColor>\n    <titleSize>12</titleSize>\n</Dashboard>"
+    },
+    {
+      "description": "A sample XML definition of a Lightning Experience dashboard with isGridLayout equals true is shown below. Note that this example is supported in API version 35.0 and later. The file name matches the dashboard title and the extension is .dashboard.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Dashboard xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <backgroundEndColor>#FFFFFF</backgroundEndColor>\n    <backgroundFadeDirection>Diagonal</backgroundFadeDirection>\n    <backgroundStartColor>#FFFFFF</backgroundStartColor>\n    <dashboardType>SpecifiedUser</dashboardType>\n    <gridLayout>\n        <dashboardGridComponents>\n            <colSpan>3</colSpan>\n            <columnIndex>0</columnIndex>\n            <dashboardComponent>\n                <autoselectColumnsFromReport>false</autoselectColumnsFromReport>\n                <chartAxisRange>Auto</chartAxisRange>\n                <chartSummary>\n                    <axisBinding>y</axisBinding>\n                    <column>RowCount</column>\n                </chartSummary>\n                <componentType>Donut</componentType>\n                <drillEnabled>false</drillEnabled>\n                <drillToDetailEnabled>false</drillToDetailEnabled>\n                <enableHover>false</enableHover>\n                <expandOthers>false</expandOthers>\n                <groupingColumn>TITLE</groupingColumn>\n                <legendPosition>Bottom</legendPosition>\n                <report>unfiled$public/lead_rpt</report>\n                <showPercentage>false</showPercentage>\n                <showTotal>false</showTotal>\n                <showValues>true</showValues>\n                <sortBy>RowLabelAscending</sortBy>\n                <useReportChart>false</useReportChart>\n            </dashboardComponent>\n            <rowIndex>0</rowIndex>\n            <rowSpan>3</rowSpan>\n        </dashboardGridComponents>\n        <dashboardGridComponents>\n            <colSpan>3</colSpan>\n            <columnIndex>0</columnIndex>\n            <dashboardComponent>\n                <autoselectColumnsFromReport>false</autoselectColumnsFromReport>\n                <chartAxisRange>Auto</chartAxisRange>\n                <chartSummary>\n                    <axisBinding>y</axisBinding>\n                    <column>RowCount</column>\n                </chartSummary>\n                <componentType>Pie</componentType>\n                <drillEnabled>false</drillEnabled>\n                <drillToDetailEnabled>false</drillToDetailEnabled>\n                <enableHover>false</enableHover>\n                <expandOthers>false</expandOthers>\n                <groupingColumn>TITLE</groupingColumn>\n                <legendPosition>Bottom</legendPosition>\n                <report>unfiled$public/lead_rpt</report>\n                <showPercentage>false</showPercentage>\n                <showValues>true</showValues>\n                <sortBy>RowLabelAscending</sortBy>\n                <useReportChart>false</useReportChart>\n            </dashboardComponent>\n            <rowIndex>3</rowIndex>\n            <rowSpan>3</rowSpan>\n        </dashboardGridComponents>\n        <dashboardGridComponents>\n            <colSpan>3</colSpan>\n            <columnIndex>0</columnIndex>\n            <dashboardComponent>\n                <autoselectColumnsFromReport>false</autoselectColumnsFromReport>\n                <chartAxisRange>Auto</chartAxisRange>\n                <chartSummary>\n                    <axisBinding>y</axisBinding>\n                    <column>RowCount</column>\n                </chartSummary>\n                <componentType>Column</componentType>\n                <drillEnabled>false</drillEnabled>\n                <drillToDetailEnabled>false</drillToDetailEnabled>\n                <enableHover>false</enableHover>\n                <expandOthers>false</expandOthers>\n                <groupingColumn>TITLE</groupingColumn>\n                <legendPosition>Bottom</legendPosition>\n                <report>unfiled$public/lead_rpt</report>\n                <showPercentage>false</showPercentage>\n                <showValues>false</showValues>\n                <sortBy>RowLabelAscending</sortBy>\n                <useReportChart>false</useReportChart>\n            </dashboardComponent>\n            <rowIndex>9</rowIndex>\n            <rowSpan>3</rowSpan>\n        </dashboardGridComponents>\n        <numberOfColumns>9</numberOfColumns>\n        <rowHeight>90</rowHeight>\n    </gridLayout>\n    <isGridLayout>true</isGridLayout>\n    <runningUser>admin@s1.com</runningUser>\n    <textColor>#000000</textColor>\n    <title>sfx</title>\n    <titleColor>#000000</titleColor>\n    <titleSize>12</titleSize>\n</Dashboard>"
+    }
+  ]
+}

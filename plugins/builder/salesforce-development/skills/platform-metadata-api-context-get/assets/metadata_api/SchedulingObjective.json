@@ -1,0 +1,66 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SchedulingObjective - Metadata API",
+  "description": "Represents a scheduling objective in Workforce Engagement. Scheduling objectives define business goals that the scheduling tools consider when identifying agents for shifts.",
+  "file_information": ".SchedulingObjective",
+  "directory_location": "SchedulingObjective",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "isProtected": {
+      "type": "boolean",
+      "description": "Indicates whether the component is protected (true) or not (false). The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the objective."
+    },
+    "schedulingCategory": {
+      "type": "SchedulingCategory (enumeration of type string)",
+      "required": true,
+      "description": "What the scheduling logic applies the objective to. The valid values are: A—Service Appointment B—Shift"
+    },
+    "schedulingObjectiveParameters": {
+      "type": "SchedulingObjectiveParameter[]",
+      "description": "Parameters associated with a scheduling objective, such as the number of days before and after a shift that the logic considers when balancing assignments."
+    },
+    "schedulingObjectiveType": {
+      "type": "SchedulingObjectiveType (enumeration of type string)",
+      "required": true,
+      "description": "Specifies the type of objective. Possible values are: AgentPreference—In the UI, this value appears as Maximized Preferences. BalanceNonStandardShifts BalanceShifts"
+    }
+  },
+  "sub_types": {
+    "SchedulingObjectiveParameter": {
+      "parameterKey": {
+        "type": "ObjectiveParameterKey (enumeration of type string)",
+        "required": true,
+        "description": "The scheduling objective parameter key. Possible values are: DaysAhead DaysBack"
+      },
+      "value": {
+        "type": "string",
+        "description": "The scheduling objective parameter value."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ObjectiveParameterKey\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"DaysBack\"/>\n    <xsd:enumeration value=\"DaysAhead\"/>\n    <xsd:enumeration value=\"FatigueLimitType\"/>\n    <xsd:enumeration value=\"Count\"/>\n    <xsd:enumeration value=\"DurationInHours\"/>\n    <xsd:enumeration value=\"ActivityType\"/>\n    <xsd:enumeration value=\"MinimumRestTimeInMinutes\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SchedulingCategory\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"A\"/>\n    <xsd:enumeration value=\"B\"/>\n    <xsd:enumeration value=\"C\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SchedulingObjective\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"schedulingCategory\" type=\"tns:SchedulingCategory\"/>\n        <xsd:element name=\"schedulingObjectiveParameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SchedulingObjectiveParameter\"/>\n        <xsd:element name=\"schedulingObjectiveType\" type=\"tns:SchedulingObjectiveType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SchedulingObjectiveParameter\">\n  <xsd:sequence>\n    <xsd:element name=\"parameterKey\" type=\"tns:ObjectiveParameterKey\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SchedulingObjectiveType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AgentPreference\"/>\n    <xsd:enumeration value=\"BalanceShifts\"/>\n    <xsd:enumeration value=\"BalanceNonStandardShifts\"/>\n    <xsd:enumeration value=\"Fatigue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SchedulingObjective component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SchedulingObjective xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>Balance Shifts</masterLabel>\n    <schedulingCategory>B</schedulingCategory>\n    <schedulingObjectiveType>BalanceShifts</schedulingObjectiveType>\n    <schedulingObjectiveParameters>\n        <parameterKey>DaysAhead</parameterKey>\n        <value>30</value>\n    </schedulingObjectiveParameters>\n</SchedulingObjective>"
+    }
+  ]
+}

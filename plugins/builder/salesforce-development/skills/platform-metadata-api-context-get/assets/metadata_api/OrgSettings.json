@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OrgSettings - Metadata API",
+  "description": "Represents the settings for org-wide functionality that isn’t associated with any specific feature.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCustomerSuccessPortal": {
+      "type": "boolean",
+      "description": "Indicates whether Customer Portal is enabled (true) or not (false)."
+    },
+    "enableManageSelfServiceUsers": {
+      "type": "boolean",
+      "description": "Indicates whether mass management of self-service users is enabled through the Self-Service Portal (true) or not (false)."
+    },
+    "enableOrgFeedSentimentAnalysis": {
+      "type": "boolean",
+      "description": "Indicates whether feed sentiment analysis is enabled for the org (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"OrgSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCustomerSuccessPortal\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIncludeContractStatus\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMakeDeploymentsMandatory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableManageSelfServiceUsers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOrgFeedSentimentAnalysis\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRADeploymentAttributeOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableResetDivisionOnLogin\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a OrgSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OrgSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <enableCustomerSuccessPortal>false</enableCustomerSuccessPortal>\n    <enableMakeDeploymentsMandatory>true</enableMakeDeploymentsMandatory>\n    <enableManageSelfServiceUsers>false</enableManageSelfServiceUsers>\n    <enableOrgFeedSentimentAnalysis>false</enableOrgFeedSentimentAnalysis>\n    <enableRADeploymentAttributeOnly>true</enableRADeploymentAttributeOnly>\n    <enableResetDivisionOnLogin xsi:nil=\"true\"/>\n</OrgSettings>"
+    }
+  ]
+}

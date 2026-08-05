@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DevHubSettings - Metadata API",
+  "description": "Represents Dev Hub settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableALMDevopsCorePref": {
+      "type": "boolean",
+      "description": "Indicates whether the next-generation DevOps Center (Beta) is enabled: true or false. When enabled, you can access the AI-powered, next-generation DevOps Center for change and release management in the org. Available in API version 65.0 and later. Note: enableALMDevopsCorePref is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "enableDevOpsCenterGA": {
+      "type": "boolean",
+      "description": "Indicates whether DevOps Center managed package is enabled: true or false. When enabled, you can install and use the generally available (GA) DevOps Center package in the org. This is an older version of DevOps Center. Available in API version 56.0 and later."
+    },
+    "enableALMSimpleDeployDataPref": {
+      "type": "boolean",
+      "description": "Indicates whether configuration data migration to a target org is enabled: true or false. When enabled, you can migrate configuration data from a Salesforce org to a target org. To enable enableALMSimpleDeployDataPref, first enable enableALMSimpleDeployPref. Available in API version 65.0 and later. Note: enableALMSimpleDeployDataPref is available as a developer preview. Feature isn’t generally available unless or until Salesforce announces its general availability in documentation or in press releases or public statements. All commands, parameters, and other features are subject to change or deprecation at any time, with or without notice. Don't implement functionality developed with these commands or tools."
+    },
+    "enableALMSimpleDeployPref": {
+      "type": "boolean",
+      "description": "Indicates whether metadata deployment to a target org is enabled: true or false. When enabled, you can deploy the metadata from a Salesforce org to a target org. Available in API version 65.0 and later. Note: enableALMSimpleDeployPref is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "enablePackaging2": {
+      "type": "boolean",
+      "description": "Indicates whether unlocked and second-generation managed packaging is enabled: true or false. To enable enablePackaging2, first enable enableScratchOrgManagementPref."
+    },
+    "enableScratchOrgManagementPref": {
+      "type": "boolean",
+      "description": "Indicates whether Dev Hub is enabled: true or false. When enabled, a Dev Hub allows you to create and manage scratch orgs."
+    },
+    "enableScratchOrgSnapshotPref": {
+      "type": "boolean",
+      "description": "Indicates whether Scratch Org Snapshots is enabled: true or false. When enabled, you can create snapshots of a fully configured scratch org. A snapshot is a point-in-time copy of a scratch org that you can use to create additional scratch orgs. Available in API version 61.0 and later."
+    },
+    "enableShapeExportPref": {
+      "type": "boolean",
+      "description": "Indicates whether Org Shape is enabled: true or false. When enabled, you can create org shapes as the basis for scratch orgs. Available in API version 55.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DevHubSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableALMDevopsCorePref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableALMSimpleDeployDataPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableALMSimpleDeployPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDevOpsCenter\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDevOpsCenterGA\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDevopsTestingPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePackaging2\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableScratchOrgManagementPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableScratchOrgSnapshotPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableShapeExportPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DevHubSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DevHubSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enablePackaging2>true</enablePackaging2>\n    <enableScratchOrgManagementPref>true</enableScratchOrgManagementPref>\n</DevHubSettings>"
+    }
+  ]
+}

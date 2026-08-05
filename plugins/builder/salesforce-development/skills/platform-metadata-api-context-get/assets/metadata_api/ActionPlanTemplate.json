@@ -1,0 +1,166 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ActionPlanTemplate - Metadata API",
+  "description": "Represents the instance of an action plan template.",
+  "file_information": ".apt",
+  "directory_location": "actionPlanTemplates",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "actionPlanTemplateItem": {
+      "type": "ActionPlanTemplateItem",
+      "description": "The instance of an item on an action plan template version."
+    },
+    "actionPlanTemplateItemDependencies": {
+      "type": "ActionPlanTemplateItemDependency[]",
+      "description": "Defines the dependencies between action plan template items. Available in API version 59.0 and later."
+    },
+    "actionPlanType": {
+      "type": "ActionPlanTemplateType (enumeration of type string)",
+      "description": "Type of the action plan template. Valid values are: Industries Retail ITSM—Available in API version 65.0 and later. PrvdEngmtCompliance KAM Available in API version 63.0 and later."
+    },
+    "category": {
+      "type": "string",
+      "description": "Category for this action plan template. Available in API version 64.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the action plan template."
+    },
+    "estimatedCompletionDays": {
+      "type": "int",
+      "description": "Estimated number of days required to complete the action plan. Available in API version 64.0 and later."
+    },
+    "fileBasedTemplatePath": {
+      "type": "string",
+      "description": "File path for a file-based action plan template. Available in API version 64.0 and later."
+    },
+    "isAdHocItemCreationEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether ad hoc item creation is enabled for this action plan template (true) or not (false). Available in API version 59.0 and later.",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the action plan template.",
+      "required": true
+    },
+    "ParentTemplateId": {
+      "type": "reference",
+      "description": "The ID of the parent Action Plan Template record. This field is a relationship field to the ParentTemplate and refers to ActionPlanTemplate. Available in API version 66.0 and later."
+    },
+    "sourceType": {
+      "type": "string",
+      "description": "Source type of the action plan template. Available in API version 64.0 and later."
+    },
+    "status": {
+      "type": "string",
+      "description": "Status of the action plan template. Available in API version 64.0 and later."
+    },
+    "subcategory": {
+      "type": "string",
+      "description": "Subcategory for this action plan template. Available in API version 64.0 and later."
+    },
+    "targetEntityType": {
+      "type": "string",
+      "description": "The parent object this action plan template relates to. Supported parent objects are Account, BusinessMilestone, Campaign, Case, Claim, Contact, Contract, InsurancePolicy, InsurancePolicyCoverage, Lead, Opportunity, PersonLifeEvent, and Visit and custom objects with activities enabled.",
+      "required": true
+    },
+    "uniqueName": {
+      "type": "string",
+      "description": "The unique identifier for this action plan template record.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "ActionPlanTemplateItem": {
+      "actionPlanTemplateItemValue": {
+        "type": "ActionPlanTemplateItemValue",
+        "description": "The value associated with the action plan template item."
+      },
+      "displayOrder": {
+        "type": "int",
+        "description": "The order in which this item is displayed within the action plan template version."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "description": "Indicates whether the task created from this template item is required."
+      },
+      "itemEntityType": {
+        "type": "string",
+        "description": "The name of the field on the action plan template item that this value is for. Available in API version 48.0 and later.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the action plan template item.",
+        "required": true
+      },
+      "uniqueName": {
+        "type": "string",
+        "description": "The unique identifier for this action plan template item record.",
+        "required": true
+      }
+    },
+    "ActionPlanTemplateItemDependency": {
+      "creationType": {
+        "type": "string",
+        "description": "Defines how the dependent item is created in the action plan.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the dependency relationship.",
+        "required": true
+      },
+      "previousTemplateItem": {
+        "type": "ActionPlanTemplateItem",
+        "description": "Reference to the prerequisite template item that must be completed before the dependent item begins.",
+        "required": true
+      },
+      "templateItem": {
+        "type": "ActionPlanTemplateItem",
+        "description": "Reference to the dependent template item that relies on the completion of the previous item.",
+        "required": true
+      }
+    },
+    "ActionPlanTemplateItemValue": {
+      "itemEntityType": {
+        "type": "string",
+        "description": "The name of the field on the action plan template item that this value is for. Available in API version 48.0 and later.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the action plan template item value.",
+        "required": true
+      },
+      "valueFormula": {
+        "type": "string",
+        "description": "The formula for this action plan template item."
+      },
+      "valueLiteral": {
+        "type": "string",
+        "description": "The value for this action plan template item."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ActionPlanTemplate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionPlanTemplateItem\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionPlanTemplateItem\"/>\n        <xsd:element name=\"actionPlanTemplateItemDependencies\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionPlanTemplateItemDependency\"/>\n        <xsd:element name=\"actionPlanType\" minOccurs=\"0\" type=\"tns:ActionPlanTemplateType\"/>\n        <xsd:element name=\"category\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"estimatedCompletionDays\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"fileBasedTemplatePath\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isAdHocItemCreationEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"status\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"subcategory\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetEntityType\" type=\"xsd:string\"/>\n        <xsd:element name=\"uniqueName\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ActionPlanTemplateItem\">\n  <xsd:sequence>\n    <xsd:element name=\"actionPlanTemplateItemValue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionPlanTemplateItemValue\"/>\n    <xsd:element name=\"displayOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"isRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"itemEntityType\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"uniqueName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ActionPlanTemplateItemDependency\">\n  <xsd:sequence>\n    <xsd:element name=\"creationType\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"previousTemplateItem\" type=\"tns:ActionPlanTemplateItem\"/>\n    <xsd:element name=\"templateItem\" type=\"tns:ActionPlanTemplateItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ActionPlanTemplateItemValue\">\n  <xsd:sequence>\n    <xsd:element name=\"itemEntityType\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueFormula\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueLiteral\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ActionPlanTemplateType\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ActionPlanTemplate component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ActionPlanTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <actionPlanTemplateItem>\n        <actionPlanTemplateItemValue>\n            <name>Subject</name>\n            <valueLiteral>APT 01 Account Packaging APTI 01</valueLiteral>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <actionPlanTemplateItemValue>\n            <name>Priority</name>\n            <valueLiteral>Normal</valueLiteral>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <actionPlanTemplateItemValue>\n            <name>ActivityDate</name>\n            <valueFormula>StartDate + 10</valueFormula>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <displayOrder>1</displayOrder>\n        <isRequired>true</isRequired>\n        <itemEntityType>Task</itemEntityType>\n        <name>APT 01 Account Packaging APTI 01</name>\n        <uniqueName>APT_01_Account_Packaging_APTI_01_2827f387_9dbc_11e9_920a_e95716848ddd</uniqueName>\n    </actionPlanTemplateItem>\n    <actionPlanTemplateItem>\n        <actionPlanTemplateItemValue>\n            <name>Subject</name>\n            <valueLiteral>APT 01 Account Packaging APTI 02</valueLiteral>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <actionPlanTemplateItemValue>\n            <name>Priority</name>\n            <valueLiteral>Normal</valueLiteral>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <actionPlanTemplateItemValue>\n            <name>ActivityDate</name>\n            <valueFormula>StartDate + 10</valueFormula>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <displayOrder>1</displayOrder>\n        <isRequired>true</isRequired>\n        <itemEntityType>Task</itemEntityType>\n        <name>APT 01 Account Packaging APTI 02</name>\n        <uniqueName>APT_01_Account_Packaging_APTI_02_3430da7b_9dbc_11e9_920a_b5d3292906c3</uniqueName>\n    </actionPlanTemplateItem>\n    <actionPlanTemplateItem>\n        <actionPlanTemplateItemValue>\n            <name>Subject</name>\n            <valueLiteral>APT 01 Account Packaging APTI 03</valueLiteral>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <actionPlanTemplateItemValue>\n            <name>Priority</name>\n            <valueLiteral>Normal</valueLiteral>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <actionPlanTemplateItemValue>\n            <name>ActivityDate</name>\n            <valueFormula>StartDate + 10</valueFormula>\n            <itemEntityType>Task</itemEntityType>\n        </actionPlanTemplateItemValue>\n        <displayOrder>1</displayOrder>\n        <isRequired>true</isRequired>\n        <itemEntityType>Task</itemEntityType>\n        <name>APT 01 Account Packaging APTI 03</name>\n        <uniqueName>APT_01_Account_Packaging_APTI_03_2d0363d9_9dbc_11e9_920a_219a003f176d</uniqueName>\n    </actionPlanTemplateItem>\n    <actionPlanTemplateItemDependencies>\n        <name>APT Task Dependency</name>\n        <creationType>OnPreviousItemCompleted</creationType>\n        <previousTemplateItem>\n            <actionPlanTemplateItemValue>\n                <name>Subject</name>\n                    <valueLiteral>APT 01 Account Packaging APTI 01</valueLiteral>\n                    <itemEntityType>Task</itemEntityType>\n                </actionPlanTemplateItemValue>\n                <actionPlanTemplateItemValue>\n                    <name>Priority</name>\n                    <valueLiteral>Normal</valueLiteral>\n                    <itemEntityType>Task</itemEntityType>\n                </actionPlanTemplateItemValue>\n                <actionPlanTemplateItemValue>\n                    <name>ActivityDate</name>\n                    <valueFormula>StartDate + 10</valueFormula>\n                    <itemEntityType>Task</itemEntityType>\n            </actionPlanTemplateItemValue>\n            <displayOrder>1</displayOrder>\n            <isRequired>true</isRequired>\n            <itemEntityType>Task</itemEntityType>\n            <name>APT 01 Account Packaging APTI 01</name>\n            <uniqueName>APT_01_Account_Packaging_APTI_01_2827f387_9dbc_11e9_920a_e95716848ddd</uniqueName>\n        </previousTemplateItem>\n        <templateItem>\n            <actionPlanTemplateItemValue>\n            <name>Subject</name>\n            <valueLiteral>APT 01 Account Packaging APTI 02</valueLiteral>\n            <itemEntityType>Task</itemEntityType>\n            </actionPlanTemplateItemValue>\n            <actionPlanTemplateItemValue>\n                <name>Priority</name>\n                <valueLiteral>Normal</valueLiteral>\n                <itemEntityType>Task</itemEntityType>\n            </actionPlanTemplateItemValue>\n            <actionPlanTemplateItemValue>\n                <name>ActivityDate</name>\n                <valueFormula>StartDate + 10</valueFormula>\n                <itemEntityType>Task</itemEntityType>\n            </actionPlanTemplateItemValue>\n            <displayOrder>1</displayOrder>\n            <isRequired>true</isRequired>\n            <itemEntityType>Task</itemEntityType>\n            <name>APT 01 Account Packaging APTI 02</name>\n            <uniqueName>APT_01_Account_Packaging_APTI_02_3430da7b_9dbc_11e9_920a_b5d3292906c3</uniqueName>\n        </templateItem>\n    </actionPlanTemplateItemDependencies>\n    <description>APT 01 Account Packaging Description</description>\n    <name>APT 01 Account Packaging</name>\n    <targetEntityType>Account</targetEntityType>\n    <actionPlanType>Industries</actionPlanType>\n    <uniqueName>APT_01_Account_Packaging_0c9e8b15_9dbc_11e9_920a_8d6ecf990219</uniqueName>\n    <isAdHocItemCreationEnabled>false</isAdHocItemCreationEnabled>\n    <category>Onboarding</category>\n    <subcategory>OnBoarding Product</subcategory>\n    <estimatedCompletionDays>4</estimatedCompletionDays>\n    <sourceType>Migrated From SandBox</sourceType>\n    <fileBasedTemplatePath>Action Plan Template</fileBasedTemplatePath>\n    <status>Draft</status>\n</ActionPlanTemplate>"
+    }
+  ]
+}

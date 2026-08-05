@@ -1,0 +1,318 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "embeddedservicemessagingchannel",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EmbeddedServiceConfig - Metadata API",
+  "description": "Represents a setup node for creating an Embedded Service for Web deployment. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".EmbeddedServiceConfig",
+  "directory_location": "EmbeddedServiceConfig",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "areGuestUsersAllowed": {
+      "type": "boolean",
+      "description": "Specifies whether a user must be logged in to access an embedded component. Available in API version 45.0 and later."
+    },
+    "authMethod": {
+      "type": "EmbeddedServiceAuthMethod (enumeration of type string)",
+      "description": "Type of login method selected for this Embedded Service deployment. Valid values are: CommunitiesLogin–Customers log in using Communities. CustomLogin–Customers log in using your own custom authentication. Available in API version 43.0 and later."
+    },
+    "branding": {
+      "type": "string",
+      "description": "The branding set that has all of the branding configurations for this Embedded Service configuration. Available in API version 52.0 and later."
+    },
+    "customMinimizedComponent": {
+      "type": "string",
+      "description": "The custom Lightning component that’s used in this Embedded Service deployment in its minimized state. Available in API version 43.0 to 45.0."
+    },
+    "deploymentFeature": {
+      "type": "EmbeddedServiceDeploymentFeature(enumeration of type string)",
+      "description": "The conversation type of this Embedded Service deployment. Valid values are: EmbeddedMessaging—Messaging for In-App and Messaging for Web deployments Flows FieldService LiveAgent None Available in API version 52.0 and later."
+    },
+    "deploymentType": {
+      "type": "EmbeddedServiceDeploymentType (enumeration of type string)",
+      "description": "The platform this Embedded Service is deployed to. Valid values are: Mobile—For future use Web API Available in API version 51.0 and later."
+    },
+    "embeddedServiceAppointmentSettings": {
+      "type": "EmbeddedServiceAppointmentSettings[]",
+      "description": "The settings of the Embedded Service deployment whose deploymentFeature is FieldService. Available in API version 46.0 and later."
+    },
+    "embeddedServiceCustomComponents": {
+      "type": "EmbeddedServiceCustomComponent[]",
+      "description": "The custom components used in this Embedded Service deployment. Available in API version 44.0 and later."
+    },
+    "embeddedServiceCustomLabels": {
+      "type": "EmbeddedServiceCustomLabel[]",
+      "description": "The custom labels used in this Embedded Service deployment. Available in API version 44.0 and later."
+    },
+    "embeddedServiceCustomizations": {
+      "type": "EmbeddedServiceCustomization[]",
+      "description": "The customizations used in this Embedded Service deployment. Each customization is associated with a static resource. Available in API version 50.0 and later."
+    },
+    "embeddedServiceFlowConfig": {
+      "type": "EmbeddedServiceFlowConfig[]",
+      "description": "Represents a setup node for creating an embedded flow. Available in API version 45.0 and later."
+    },
+    "embeddedServiceFlows": {
+      "type": "EmbeddedServiceFlow[]",
+      "description": "All of the flows used by this Embedded Service deployment. Available in API version 45.0 and later."
+    },
+    "embeddedServiceLayouts": {
+      "type": "EmbeddedServiceLayout[]",
+      "description": "The layout of an Appointment Management deployment of an Embedded Service. Available in API version 44.0 and later."
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "description": "Indicates if this Embedded Service deployment is enabled (true)."
+    },
+    "isTermsAndConditionsEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Terms and Conditions is displayed. Displaying Terms and Conditions is supported if the deploymentFeature is either EmbeddedMesssaging or LiveAgent. The default is false. Available in API version 59.0 and later."
+    },
+    "isTermsAndConditionsRequired": {
+      "type": "boolean",
+      "description": "Indicates whether acceptance of the Terms and Conditions is required before starting a chat. Displaying Terms and Conditions is supported if the deploymentFeature is either EmbeddedMesssaging or LiveAgent. The default is false. Available in API version 59.0 and later."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the Embedded Service configuration node. Available in API version 37.0 and later.",
+      "required": true
+    },
+    "shouldHideAuthDialog": {
+      "type": "boolean",
+      "description": "Specifies whether the prompt that the customer log in again during a flow is hidden (true) or not (false). When it’s hidden, the customer is taken directly to your login page. This field is set to false by default. Available in API version 43.0 and later."
+    },
+    "site": {
+      "type": "string",
+      "description": "The name of the Experience site or website connected to this Embedded Service deployment. Available in API version 37.0 and later.",
+      "required": true
+    }
+  },
+  "embeddedservicemessagingchannel": {
+    "businessHours": {
+      "type": "String",
+      "description": "The Business Hours record that’s associated with this specific embedded service deployment."
+    },
+    "isEnabled": {
+      "type": "Boolean",
+      "description": "Indicates whether this embedded service deployment is enabled.",
+      "required": true
+    },
+    "messagingChannel": {
+      "type": "String",
+      "description": "The MessagingChannel record that’s associated with this specific embedded service deployment.",
+      "required": true
+    },
+    "shouldShowDeliveryReceipts": {
+      "type": "Boolean",
+      "description": "Indicates whether delivery receipts are shown in the UI.",
+      "required": true
+    },
+    "shouldShowEmojiSelection": {
+      "type": "Boolean",
+      "description": "Indicates whether emoji selection is shown in the UI.",
+      "required": true
+    },
+    "shouldShowReadReceipts": {
+      "type": "Boolean",
+      "description": "Indicates whether read reciepts are shown in the UI.",
+      "required": true
+    },
+    "shouldShowTypingIndicators": {
+      "type": "Boolean",
+      "description": "Indicates whether typing indicators are shown in the UI.",
+      "required": true
+    },
+    "shouldStartNewLineOnEnter": {
+      "type": "Boolean",
+      "description": "Indicates whether pressing Enter starts a new line of text in the UI.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "EmbeddedServiceAppointmentSettings": {
+      "appointmentConfirmImg": {
+        "type": "string",
+        "description": "The URL of the image to display when an appointment is confirmed."
+      },
+      "enabled": {
+        "type": "boolean",
+        "required": true,
+        "description": "Indicates whether this deployment is enabled. The default is false."
+      },
+      "homeImg": {
+        "type": "string",
+        "description": "The URL of the image to display on the appointment management widget home screen."
+      },
+      "logoImg": {
+        "type": "string",
+        "description": "The URL of the logo to display in the appointment management widget."
+      },
+      "shouldShowExistingAppointment": {
+        "type": "boolean",
+        "description": "Indicates whether existing appointments are displayed in the appointment management widget. The default is false."
+      },
+      "shouldShowNewAppointment": {
+        "type": "boolean",
+        "description": "Indicates whether new appointments are displayed in the appointment management widget. The default is false."
+      }
+    },
+    "EmbeddedServiceCustomComponent": {
+      "customComponent": {
+        "type": "string",
+        "description": "The name of the custom component."
+      },
+      "customComponentType": {
+        "type": "EmbeddedServiceCustomComponentType (enumeration of type string)",
+        "description": "The type of custom component. Valid values are: LA_Prechat (component for pre-chat in Embedded Chat) LA_Minimized (component for the minimized chat window) LA_PlainTextChatMessage (component for the text area in Embedded Chat) MIAW_Prechat(component for the prechat form in Messaging for In-App and Web) MIAW_Header(component for the header of the messaging conversation window in Messaging for In-App and Web) MIAW_TextMessage(component for the text message bubbles in a Messaging for In-App and Web conversation)"
+      }
+    },
+    "EmbeddedServiceCustomLabel": {
+      "customLabel": {
+        "type": "string",
+        "description": "The customized label that appears in the embedded component."
+      },
+      "feature": {
+        "type": "EmbeddedServiceFeature (enumeration of type string)",
+        "description": "The feature that this embedded component uses. Valid values are: Base ChannelMenu EmbeddedMessaging—Messaging for In-App and Messaging for Web deployments FieldService Flows LiveAgent NotInUse"
+      },
+      "labelKey": {
+        "type": "EmbeddedServiceLabelKey (enumeration of type string)",
+        "description": "The type of label for this embedded component. The value corresponds to the label within a label group (substate of chat state or page type)."
+      }
+    },
+    "EmbeddedServiceCustomization": {
+      "customizationName": {
+        "type": "string",
+        "description": "The name of the customization applied to the embedded service. This name can contain only underscores and alphanumeric characters and must be unique in an EmbeddedServiceConfig setup. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "A description of the customization."
+      },
+      "embeddedServiceResources": {
+        "type": "EmbeddedServiceResource[]",
+        "description": "The reference to the static resource that contains the javascript file of the customization.",
+        "required": true
+      }
+    },
+    "EmbeddedServiceForm": {
+      "displayContext": {
+        "type": "EmbeddedServiceFormDisplayContext (enumeration of type string)",
+        "description": "Indicates when we display this form. Values are: Session- The pre-chat form is displayed every session. Conversation- Tthe pre-chat form is displayed every conversation. None- Don’t select this option.",
+        "required": true
+      },
+      "isActive": {
+        "type": "Boolean",
+        "description": "Indicates whether the form is active. The default value is false."
+      }
+    },
+    "EmbeddedServiceFormField": {
+      "formField": {
+        "type": "string or enum",
+        "description": "Maps to either a StandardMessingChannelParameter or a CustomMessagingChannelParameter",
+        "required": true
+      },
+      "messagingChannelParameterType": {
+        "type": "MessagingChannelParameterType (enumeration of type string) OR StandardMessagingChannelParameter (enumeration of type string)",
+        "description": "Indicates whether formField points to a StandardMessagingChannelParameter or a CustomMessagingChannelParameter. Please match the Enum value here to the formField passed in. Valid values for MessagingChannelParameterType are: Standard - select this field when you want to reference a StandardMessagingChannelParameter Custom - select this field when you want to reference a CustomMessagingChannelParameter Valid values for StandardMessagingChannelParameter are: FirstName LastName Email Subject",
+        "required": true
+      },
+      "formFieldType": {
+        "type": "EmbeddedServiceFormFieldType (enumeration of type string)",
+        "description": "Indicates the type of data is passed by the End User when filling out the Prechat form. Valid values are: Text Email Phone Number Checkbox Choicelist",
+        "required": true
+      },
+      "displayOrder": {
+        "type": "Integer",
+        "description": "Indicates the relative order of the form field in the prechat form. For Prechat fields where isHidden is set to true displayOrder must be set to -1. For Prechat fields where isHidden is set to false, this value must be greater than or equal to 0."
+      },
+      "isRequired": {
+        "type": "Boolean",
+        "description": "Indicates whether a Prechat form field is required. If isHidden is set to true, isRequired must be set to false."
+      },
+      "isHidden": {
+        "type": "Boolean",
+        "description": "Indicates whether a Prechat form field is displayed in the UI. isHidden can only be set to true if the formField field is set to CustomMessagingChannelParameter and messagingChannelParameterType is set to Custom."
+      },
+      "choiceList": {
+        "type": "ChoiceList",
+        "description": "The choice list that's associated with EmbeddedServiceFormField. ChoiceList can only be associated if the formField is set to CustomMessagingChannelParameter and messagingChannelParameterType is set to Custom."
+      },
+      "embeddedServiceCustomLabels": {
+        "type": "EmbeddedServiceCustomLabel[]",
+        "description": "The custom label for this field."
+      }
+    },
+    "EmbeddedServiceResource": {
+      "resource": {
+        "type": "string",
+        "description": "The ID of the static resource that contains the javascript file of the customization.",
+        "required": true
+      },
+      "resourceType": {
+        "type": "EmbeddedServiceResourceType (enumeration of type string)",
+        "description": "The embedded service feature to customize. Valid values are: ChatInvitation—Use for Chat deployments. SettingsFile—Use if you’re configuring a settings file for a Channel Menu deployment.",
+        "required": true
+      }
+    },
+    "EmbeddedServiceFlow": {
+      "flow": {
+        "type": "string",
+        "description": "The developer name of the flow."
+      },
+      "flowType": {
+        "type": "EmbeddedServiceFlowType(enumeration of type string)",
+        "description": "The type of flow. Valid values are: FS_CancelAppointment FS_Flow FS_ModifyAppointment FS_NewAppointment LA_Survey"
+      },
+      "isAuthenticationRequired": {
+        "type": "boolean",
+        "description": "Indicates whether users are required to log in to access the Embedded Service component. The value can’t be true for the FS_Flow value and must be true for all other values."
+      }
+    },
+    "EmbeddedServiceFlowConfig": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the embedded flow is enabled."
+      }
+    },
+    "EmbeddedServiceLayout": {
+      "embeddedServiceLayoutRules": {
+        "type": "EmbeddedServiceLayoutRule[]",
+        "description": "The appointment statuses that the layout of the Embedded Service deployment is valid for."
+      },
+      "layout": {
+        "type": "string",
+        "description": "The FlexiPage that represents the layout of this Embedded Service deployment."
+      },
+      "layoutType": {
+        "type": "EmbeddedServiceLayoutType (enumeration of type string)",
+        "description": "The type of layout applied to the Embedded Service deployment. Values are: FS_AppointmentHome"
+      }
+    },
+    "EmbeddedServiceLayoutRule": {
+      "appointmentStatus": {
+        "type": "string",
+        "description": "The service appointment status that the EmbeddedServiceLayout subtype is valid for."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmbdMsgChannelInvitationCondition\">\n  <xsd:sequence>\n    <xsd:element name=\"conditionType\" type=\"tns:EswInvitationConditionResource\"/>\n    <xsd:element name=\"customVariableName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"operand\" type=\"tns:EswInvitationConditionOperator\"/>\n    <xsd:element name=\"sequence\" type=\"xsd:int\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EmbeddedServiceAppointmentSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"appointmentConfirmImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"homeImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"logoImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"shouldShowExistingAppointment\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"shouldShowNewAppointment\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceAuthMethod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CommunitiesLogin\"/>\n    <xsd:enumeration value=\"CustomLogin\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceClientVersion\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"WebV1\"/>\n    <xsd:enumeration value=\"WebV2\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceComponentBundleType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AuraDefinitionBundle\"/>\n    <xsd:enumeration value=\"LightningComponentBundle\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"areGuestUsersAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"authMethod\" minOccurs=\"0\" type=\"tns:EmbeddedServiceAuthMethod\"/>\n        <xsd:element name=\"branding\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"clientVersion\" minOccurs=\"0\" type=\"tns:EmbeddedServiceClientVersion\"/>\n        <xsd:element name=\"deploymentFeature\" type=\"tns:EmbeddedServiceDeploymentFeature\"/>\n        <xsd:element name=\"deploymentType\" type=\"tns:EmbeddedServiceDeploymentType\"/>\n        <xsd:element name=\"embeddedServiceAppointmentSettings\" minOccurs=\"0\" type=\"tns:EmbeddedServiceAppointmentSettings\"/>\n        <xsd:element name=\"embeddedServiceCustomComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceCustomComponent\"/>\n        <xsd:element name=\"embeddedServiceCustomLabels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceCustomLabel\"/>\n        <xsd:element name=\"embeddedServiceCustomizations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceCustomization\"/>\n        <xsd:element name=\"embeddedServiceFlowConfig\" minOccurs=\"0\" type=\"tns:EmbeddedServiceFlowConfig\"/>\n        <xsd:element name=\"embeddedServiceFlows\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceFlow\"/>\n        <xsd:element name=\"embeddedServiceForms\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceForm\"/>\n        <xsd:element name=\"embeddedServiceLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceLayout\"/>\n        <xsd:element name=\"embeddedServiceMessagingChannel\" minOccurs=\"0\" type=\"tns:EmbeddedServiceMessagingChannel\"/>\n        <xsd:element name=\"isEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTermsAndConditionsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isTermsAndConditionsRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"shouldHideAuthDialog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"site\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EmbeddedServiceCustomComponent\">\n  <xsd:sequence>\n    <xsd:element name=\"componentBundleType\" minOccurs=\"0\" type=\"tns:EmbeddedServiceComponentBundleType\"/>\n    <xsd:element name=\"customComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"customComponentType\" minOccurs=\"0\" type=\"tns:EmbeddedServiceCustomComponentType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceCustomComponentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"LA_Prechat\"/>\n    <xsd:enumeration value=\"LA_Minimized\"/>\n    <xsd:enumeration value=\"LA_PlainTextChatMessage\"/>\n    <xsd:enumeration value=\"LA_ChatHeader\"/>\n    <xsd:enumeration value=\"MIAW_Prechat\"/>\n    <xsd:enumeration value=\"MIAW_Header\"/>\n    <xsd:enumeration value=\"MIAW_TextMessage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceCustomLabel\">\n  <xsd:sequence>\n    <xsd:element name=\"customLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"feature\" minOccurs=\"0\" type=\"tns:EmbeddedServiceFeature\"/>\n    <xsd:element name=\"labelKey\" minOccurs=\"0\" type=\"tns:EmbeddedServiceLabelKey\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EmbeddedServiceCustomization\">\n  <xsd:sequence>\n    <xsd:element name=\"customizationName\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"embeddedServiceResources\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceResource\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceDeploymentFeature\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"EmbeddedMessaging\"/>\n    <xsd:enumeration value=\"LiveAgent\"/>\n    <xsd:enumeration value=\"Flows\"/>\n    <xsd:enumeration value=\"FieldService\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceDeploymentType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Web\"/>\n    <xsd:enumeration value=\"Mobile\"/>\n    <xsd:enumeration value=\"API\"/>\n    <xsd:enumeration value=\"InternalCopilot\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceFeature\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"NotInUse\"/>\n    <xsd:enumeration value=\"Base\"/>\n    <xsd:enumeration value=\"LiveAgent\"/>\n    <xsd:enumeration value=\"FieldService\"/>\n    <xsd:enumeration value=\"Flows\"/>\n    <xsd:enumeration value=\"ChannelMenu\"/>\n    <xsd:enumeration value=\"EmbeddedMessaging\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceFlow\">\n  <xsd:sequence>\n    <xsd:element name=\"flow\" type=\"xsd:string\"/>\n    <xsd:element name=\"flowType\" type=\"tns:EmbeddedServiceFlowType\"/>\n    <xsd:element name=\"isAuthenticationRequired\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EmbeddedServiceFlowConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceFlowType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"FL_Flow\"/>\n    <xsd:enumeration value=\"FS_NewAppointment\"/>\n    <xsd:enumeration value=\"FS_ModifyAppointment\"/>\n    <xsd:enumeration value=\"FS_CancelAppointment\"/>\n    <xsd:enumeration value=\"LA_Survey\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceForm\">\n  <xsd:sequence>\n    <xsd:element name=\"displayContext\" type=\"tns:EmbeddedServiceFormDisplayContext\"/>\n    <xsd:element name=\"embeddedServiceFormFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceFormField\"/>\n    <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceFormDisplayContext\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Conversation\"/>\n    <xsd:enumeration value=\"Session\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceFormField\">\n  <xsd:sequence>\n    <xsd:element name=\"choiceList\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"displayOrder\" type=\"xsd:int\"/>\n    <xsd:element name=\"embeddedServiceCustomLabels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceCustomLabel\"/>\n    <xsd:element name=\"formField\" type=\"xsd:string\"/>\n    <xsd:element name=\"formFieldType\" type=\"tns:EmbeddedServiceFormFieldType\"/>\n    <xsd:element name=\"isHidden\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"messagingChannelParameterType\" type=\"tns:MessagingChannelParameterType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceFormFieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Email\"/>\n    <xsd:enumeration value=\"Phone\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"Checkbox\"/>\n    <xsd:enumeration value=\"ChoiceList\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceLabelKey\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"LA_Container_Base_Close\"/>\n    <xsd:enumeration value=\"LA_Container_Base_Minimize\"/>\n    <xsd:enumeration value=\"LA_Container_Base_EndOfDialog\"/>\n    <xsd:enumeration value=\"LA_Container_Base_MinimizedContainerAssistiveText\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_ChatWindowAgent\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_InputTextPlaceholder\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_AgentTypingUpdate\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_Send\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_ChatStartTime\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_MessageAreaTransferred\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_FileTransferCanceled\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_FileTransferSuccess\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_FileTransferFailure\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_FileTransferRequested\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_TransferFailed\"/>\n    <xsd:enumeration value=\"LA_Chat_ExtendedHeader_ShowExtendedHeader\"/>\n    <xsd:enumeration value=\"LA_Chat_ExtendedHeader_HideExtendedHeader\"/>\n    <xsd:enumeration value=\"LA_Chat_ExtendedHeader_ChatStateHeaderGreeting\"/>\n    <xsd:enumeration value=\"LA_Chat_ExtendedHeader_SaveTranscript\"/>\n    <xsd:enumeration value=\"LA_Chat_ExtendedHeader_EndChatAction\"/>\n    <xsd:enumeration value=\"LA_Chat_FileTransfer_FileUpload\"/>\n    <xsd:enumeration value=\"LA_Chat_FileTransfer_UploadFile\"/>\n    <xsd:enumeration value=\"LA_Chat_FileTransfer_SelectNewFile\"/>\n    <xsd:enumeration value=\"LA_Chat_FileTransfer_UsePreviousElementToUploadFile\"/>\n    <xsd:enumeration value=\"LA_Chat_FileTransfer_RemoveFile\"/>\n    <xsd:enumeration value=\"LA_Chat_Minimized_MessageNotification\"/>\n    <xsd:enumeration value=\"LA_Chat_Minimized_SingleMessageNotification\"/>\n    <xsd:enumeration value=\"LA_Chat_Minimized_AgentSaysNotification\"/>\n    <xsd:enumeration value=\"LA_Chat_Minimized_IdleTimeoutMinimizedWarning\"/>\n    <xsd:enumeration value=\"LA_Chat_Minimized_IdleTimeoutMinimizedEndChat\"/>\n    <xsd:enumeration value=\"LA_Chat_Ended_ChatEnd\"/>\n    <xsd:enumeration value=\"LA_Chat_Ended_ChatEndAgent\"/>\n    <xsd:enumeration value=\"LA_Chat_Ended_ChatEndConnection\"/>\n    <xsd:enumeration value=\"LA_Chat_Ended_ChatButtonClose\"/>\n    <xsd:enumeration value=\"LA_Chat_Ended_PostChatButton\"/>\n    <xsd:enumeration value=\"LA_Chat_Ended_IdleTimeoutEndChatMessage\"/>\n    <xsd:enumeration value=\"LA_Chat_Reconnecting_ReconnectingChasitorIssue\"/>\n    <xsd:enumeration value=\"LA_Chat_Reconnecting_ReconnectingMinimizedMessage\"/>\n    <xsd:enumeration value=\"LA_Chat_Timeout_IdleTimeoutWarningQuestion\"/>\n    <xsd:enumeration value=\"LA_Chat_AgentTransfer_BannerInProgressTransfer\"/>\n    <xsd:enumeration value=\"LA_Chat_AgentTransfer_MinimizedInProgressTransfer\"/>\n    <xsd:enumeration value=\"LA_Chat_AgentTransfer_BannerTransferred\"/>\n    <xsd:enumeration value=\"LA_Chat_AgentTransfer_BannerReconnected\"/>\n    <xsd:enumeration value=\"LA_Chat_CloseConfirmation_ChatStateHeader\"/>\n    <xsd:enumeration value=\"LA_Chat_CloseConfirmation_ChatStateBody\"/>\n    <xsd:enumeration value=\"LA_Chat_CloseConfirmation_ChatStateResume\"/>\n    <xsd:enumeration value=\"LA_Chat_CloseConfirmation_ChatStateEnd\"/>\n    <xsd:enumeration value=\"LA_Chat_UnseenMessage_UnseenMessage\"/>\n    <xsd:enumeration value=\"LA_Chat_UnseenMessage_SingleUnseenMessage\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_SupportForm_HeaderText\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_Error_ErrorDialogTitle\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_Error_ErrorDialogBody\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_Error_ErrorDialogButton\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_SupportForm_SupportFormTitle\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_SupportForm_SupportFormSubtitle\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_SupportForm_SupportFormButton\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_SupportForm_BannerAltText\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_CloseConfirmation_ConfirmationDialogTitle\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_CloseConfirmation_ConfirmationDialogBody\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_CloseConfirmation_ConfirmationDialogButton\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_Minimized_ConfirmationMinimizedText\"/>\n    <xsd:enumeration value=\"LA_OfflineSupport_Minimized_ErrorMinimizedText\"/>\n    <xsd:enumeration value=\"LA_PostChat_Base_PostChat\"/>\n    <xsd:enumeration value=\"LA_PreChat_Base_LiveChat\"/>\n    <xsd:enumeration value=\"LA_PreChat_Base_Instructions\"/>\n    <xsd:enumeration value=\"LA_PreChat_Base_BannerAltText\"/>\n    <xsd:enumeration value=\"LA_PreChat_Base_PrechatAssistiveText\"/>\n    <xsd:enumeration value=\"LA_PreChat_Base_StartChat\"/>\n    <xsd:enumeration value=\"LA_PreChat_Base_FieldError\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithoutQueuePos_WaitingGreeting\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithoutQueuePos_WaitingDefaultName\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithoutQueuePos_WaitingMessage\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithoutQueuePos_WaitingCancelChatRequest\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithQueuePos_WaitingQueuePosMessageFirstLine\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithQueuePos_WaitingQueuePosMessageSecondLine\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithQueuePos_WaitingQueuePosZeroMessage\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithQueuePos_WaitingQueuePosConnectingMessage\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithQueuePos_WaitingQueuePosMaxNumber\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithQueuePos_WaitingQueuePosMaxMessageFirstLine\"/>\n    <xsd:enumeration value=\"LA_Waiting_WithQueuePos_WaitingQueuePosMaxMessageSecondLine\"/>\n    <xsd:enumeration value=\"LA_Waiting_Minimized_MinimizedWaitingMessage\"/>\n    <xsd:enumeration value=\"LA_Waiting_Minimized_MinimizedQueuePosMessage\"/>\n    <xsd:enumeration value=\"LA_Waiting_Minimized_MinimizedQueuePosZeroMessage\"/>\n    <xsd:enumeration value=\"LA_Waiting_Minimized_MinimizedQueuePosAssistiveMessage\"/>\n    <xsd:enumeration value=\"LA_Waiting_Minimized_MinimizedQueuePosZeroAssistiveMessage\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorNoAgentTitle\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorNoAgentHeader\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorNoAgentBodyApology\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorBlockedTitleAndHeader\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorBlockedBody\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorBlockedCloseButton\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorNoConnectionTitle\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorNoConnectionHeader\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorNoConnectionBodyApology\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorTryAgainButton\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorExitChatButton\"/>\n    <xsd:enumeration value=\"LA_Waiting_CloseConfirmation_WaitingStateHeader\"/>\n    <xsd:enumeration value=\"LA_Waiting_CloseConfirmation_WaitingStateBodyApology\"/>\n    <xsd:enumeration value=\"LA_Waiting_CloseConfirmation_WaitingStateLeave\"/>\n    <xsd:enumeration value=\"LA_Waiting_CloseConfirmation_WaitingStateContinue\"/>\n    <xsd:enumeration value=\"LA_Chat_Timeout_IdleTimeoutWarningRequest\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorNoAgentBodyRequest\"/>\n    <xsd:enumeration value=\"LA_Waiting_Error_ErrorNoConnectionBodyRequest\"/>\n    <xsd:enumeration value=\"LA_Waiting_CloseConfirmation_WaitingStateBodyWarning\"/>\n    <xsd:enumeration value=\"LA_General_CloseSessionWarningTitle\"/>\n    <xsd:enumeration value=\"LA_General_CloseSessionWarningBody\"/>\n    <xsd:enumeration value=\"LA_General_CloseSessionWarningButton\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_ChooseOption\"/>\n    <xsd:enumeration value=\"LA_Waiting_Base_BannerAssistiveText\"/>\n    <xsd:enumeration value=\"LA_Chat_Group_Chat_HeaderTitle\"/>\n    <xsd:enumeration value=\"LA_Chat_Group_Chat_ExtendedHeaderGreeting\"/>\n    <xsd:enumeration value=\"LA_Chat_Group_Chat_AgentJoinedChat\"/>\n    <xsd:enumeration value=\"LA_Chat_Group_Chat_AgentLeftChat\"/>\n    <xsd:enumeration value=\"LA_Chat_Group_Chat_MinimizedStateMessage\"/>\n    <xsd:enumeration value=\"LA_Chat_WithQueuePos_QueuePosTransferringMessage\"/>\n    <xsd:enumeration value=\"LA_Chat_Ended_ChatEndChatbot\"/>\n    <xsd:enumeration value=\"LA_Chat_Body_InputTextAssistiveText\"/>\n    <xsd:enumeration value=\"LA_Waiting_Header_Text\"/>\n    <xsd:enumeration value=\"LA_PreChat_Terms_And_Conditions\"/>\n    <xsd:enumeration value=\"LA_PreChat_Base_Terms_And_Conditions_Acknowledgement\"/>\n    <xsd:enumeration value=\"FS_Container_Base_Back\"/>\n    <xsd:enumeration value=\"FS_Container_AuthenticationFailure_Title\"/>\n    <xsd:enumeration value=\"FS_Container_AuthenticationFailure_Body\"/>\n    <xsd:enumeration value=\"FS_Container_AuthenticationFailure_Button\"/>\n    <xsd:enumeration value=\"FS_AppointmentDetail_Error_AccessDenied\"/>\n    <xsd:enumeration value=\"FS_AppointmentDetail_Error_NoAppointmentFound\"/>\n    <xsd:enumeration value=\"FS_AppointmentDetail_Error_ButtonOK\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Base_ActiveAppointmentTab\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Base_ClosedAppointmentTab\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Base_Header\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Base_NewAppointmentButtonLabel\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Error_GenericErrorStatement\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Empty_NoAppointmentsTitleUpcomingTab\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Empty_NoAppointmentsDescriptionUpcomingTab\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Empty_NoAppointmentsTitlePastTab\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Empty_NoAppointmentsDescriptionPastTab\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_Scheduled\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_Assigned\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_Arriving\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_InProgress\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_Dispatched\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_Completed\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_HeaderText\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_AddCalendar\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_ViewAppointment\"/>\n    <xsd:enumeration value=\"FS_Flows_Error_Title\"/>\n    <xsd:enumeration value=\"FS_Flows_Error_Body\"/>\n    <xsd:enumeration value=\"FS_Flows_Error_ConfirmButton\"/>\n    <xsd:enumeration value=\"FS_Flows_Error_CancelOrModifyError\"/>\n    <xsd:enumeration value=\"FS_Flows_NewAppointmentCloseConfirmation_Title\"/>\n    <xsd:enumeration value=\"FS_Flows_NewAppointmentCloseConfirmation_Body\"/>\n    <xsd:enumeration value=\"FS_Flows_NewAppointmentCloseConfirmation_ButtonClose\"/>\n    <xsd:enumeration value=\"FS_Flows_NewAppointmentCloseConfirmation_ButtonCancel\"/>\n    <xsd:enumeration value=\"FS_Flows_CancelAppointmentCloseConfirmation_Title\"/>\n    <xsd:enumeration value=\"FS_Flows_CancelAppointmentCloseConfirmation_Body\"/>\n    <xsd:enumeration value=\"FS_Flows_CancelAppointmentCloseConfirmation_ButtonClose\"/>\n    <xsd:enumeration value=\"FS_Flows_CancelAppointmentCloseConfirmation_ButtonCancel\"/>\n    <xsd:enumeration value=\"FS_Flows_CancelAppointmentCloseConfirmation_Footer\"/>\n    <xsd:enumeration value=\"FS_Flows_ModifyAppointmentCloseConfirmation_Title\"/>\n    <xsd:enumeration value=\"FS_Flows_ModifyAppointmentCloseConfirmation_Body\"/>\n    <xsd:enumeration value=\"FS_Flows_ModifyAppointmentCloseConfirmation_ButtonClose\"/>\n    <xsd:enumeration value=\"FS_Flows_ModifyAppointmentCloseConfirmation_ButtonCancel\"/>\n    <xsd:enumeration value=\"FS_Flows_ModifyAppointmentCloseConfirmation_Footer\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Base_HeaderText\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Base_RecommendedTab\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Base_ByDateTab\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Base_PreviousWeekAssistiveText\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Base_NextWeekAssistiveText\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Base_DatePickerAssistiveText\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Error_UnexpectedError\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Error_NoAvailableTimeslotsError\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Error_NoAvailableTimeslotsByDateError\"/>\n    <xsd:enumeration value=\"FS_Welcome_Base_GreetingTitle\"/>\n    <xsd:enumeration value=\"FS_Welcome_Base_NewAppointmentButton\"/>\n    <xsd:enumeration value=\"FS_Welcome_Base_ExistingAppointmentsButton\"/>\n    <xsd:enumeration value=\"FS_Confirmation_Base_DoneButton\"/>\n    <xsd:enumeration value=\"FS_AppointmentList_Error_GenericErrorRequest\"/>\n    <xsd:enumeration value=\"FS_AppointmentHome_Base_CancelAppointmentButton\"/>\n    <xsd:enumeration value=\"FS_AppointmentHome_Base_ModifyAppointmentButton\"/>\n    <xsd:enumeration value=\"FS_AppointmentHome_Base_ErrorTitle\"/>\n    <xsd:enumeration value=\"FS_Scheduling_Base_TimePickerAssistiveText\"/>\n    <xsd:enumeration value=\"FS_ResourceDetail_Base_Header\"/>\n    <xsd:enumeration value=\"FS_AppointmentHome_Base_DefaultCardHeaderText\"/>\n    <xsd:enumeration value=\"FS_Error_Dialog_Title\"/>\n    <xsd:enumeration value=\"FS_Error_Dialog_Body\"/>\n    <xsd:enumeration value=\"FS_Error_Dialog_Confirm_Button\"/>\n    <xsd:enumeration value=\"CM_Container_Header_Primary_Greeting\"/>\n    <xsd:enumeration value=\"CM_Container_Header_Secondary_Greeting\"/>\n    <xsd:enumeration value=\"CM_Container_MenuItems_WebChatAvailable\"/>\n    <xsd:enumeration value=\"CM_Container_MenuItems_WebChatUnavailable\"/>\n    <xsd:enumeration value=\"CM_Container_MenuItems_WebChatLoading\"/>\n    <xsd:enumeration value=\"CM_Container_MenuItems_ChannelLabel\"/>\n    <xsd:enumeration value=\"CM_Container_Button_AssistiveText\"/>\n    <xsd:enumeration value=\"CM_Container_MenuItems_AssistiveText\"/>\n    <xsd:enumeration value=\"CM_Container_MenuItems_WebLinkNewTabAssistiveText\"/>\n    <xsd:enumeration value=\"CM_Container_MenuItems_EmbeddedMessagingChatLoading\"/>\n    <xsd:enumeration value=\"EM_Container_Base_DefaultHeaderText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_Minimize\"/>\n    <xsd:enumeration value=\"EM_Container_Base_Close\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CloseConversation\"/>\n    <xsd:enumeration value=\"EM_Container_Base_DefaultMinimizedText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MinimizedButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MinimizedNotifDismissButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_HeaderGreetingAnnouncement\"/>\n    <xsd:enumeration value=\"EM_Container_Base_NinePlusUnseenMessageCount\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ZeroUnseenMessagesAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_UnseenMessagesAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_NinePlusUnseenMessagesAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterTextAreaPlaceHolder\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PrechatFirstName\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PrechatLastName\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PrechatSubject\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PrechatEmail\"/>\n    <xsd:enumeration value=\"EM_Container_Base_BeforeUnloadWarningMessage\"/>\n    <xsd:enumeration value=\"EM_Container_Base_StartBookendText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_EndBookendText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ChatMessageMetadataAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ParticipantJoinText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ParticipantLeaveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterTextAreaAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterSendButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PrechatStateSubmitButton\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InvalidEmailFormFieldError\"/>\n    <xsd:enumeration value=\"EM_Container_Base_RequiredFormFieldError\"/>\n    <xsd:enumeration value=\"EM_Container_Base_NotificationDismissButtonText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ConversationEndedMinimizedText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ExpiredJWT\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_SelectNewFileText\"/>\n    <xsd:enumeration value=\"EM_PreChat_Base_PrechatCustomFieldLabel\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_FileSendingText\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_DownloadFileButtonTitle\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_SelectFileAttachmentButtonTitle\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_CancelFileAttachmentButtonTitle\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_DownloadFileButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_SelectFileAttachmentButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_CancelFileAttachmentButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_Sent\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_Delivered\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_Read\"/>\n    <xsd:enumeration value=\"EM_Chat_ChoicesMessage_MenuAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChoicesSelectionResponse_PlaceholderText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChoicesMessage_ButtonsAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_HeaderAnnouncementTransferRequestSuccess\"/>\n    <xsd:enumeration value=\"EM_Container_Base_HeaderAnnouncementTransferRequestFailure\"/>\n    <xsd:enumeration value=\"EM_Container_Base_SystemMessageTransferRequestSuccess\"/>\n    <xsd:enumeration value=\"EM_Container_Base_SystemMessageTransferRequestFailure\"/>\n    <xsd:enumeration value=\"EM_Container_Base_SystemMessageTransferRequestTryAgain\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_AgentTypingIndicator\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_ChatbotTypingIndicator\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterTextAreaPlaceholderOnlyParticipant\"/>\n    <xsd:enumeration value=\"EM_Container_Base_AgentJoinAnnouncement\"/>\n    <xsd:enumeration value=\"EM_Container_Base_AgentLeaveAnnouncement\"/>\n    <xsd:enumeration value=\"EM_Container_Base_JWTExpiredAnnouncement\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ParticipantJoinedText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ParticipantLeftText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_NewMessageText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MultipleNewMessagesText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_JwtExpiredText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_TransferInitiatedText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_TransferFailedText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_NotSent\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_SpinnerDefaultAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_FetchMoreEntriesSpinnerAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MinimizeButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CloseButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ConfirmationDialogMenuItemAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MinimizedNotificationAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MinimizedStateAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_NotRoutedToAgentRoutingResult\"/>\n    <xsd:enumeration value=\"EM_Container_Base_TitleNotificationSenderDisplayName\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MessagingIframeTitle\"/>\n    <xsd:enumeration value=\"EM_Container_Base_FilePreviewIframeTitle\"/>\n    <xsd:enumeration value=\"EM_Container_Base_FilePreviewIframeCloseButtonTitle\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_MessageResendButtonText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_EstimatedWaitTimeInMinute\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_EstimatedWaitTimeInMinutes\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterEmojiButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterEmojiKeyboardAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatFrameTitle\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatHeaderText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatHeaderBackButtonTitle\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatHeaderBackButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatConfirmationDialogTitleText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatConfirmationDialogBodyText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatConfirmationDialogConfirmButton\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatConfirmationDialogCancelButton\"/>\n    <xsd:enumeration value=\"EM_Container_Base_JWTRetrievalFailureText\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_MaximumNumberOfFilesAllowedErrorText\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_UnsupportedFileTypeErrorText\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_FileExceededSizeLimitErrorText\"/>\n    <xsd:enumeration value=\"EM_PreChat_ChoiceList_PrechatCustomFieldLabel\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PrechatChoiceListValueNone\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MenuButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CloseMenuButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_Yesterday\"/>\n    <xsd:enumeration value=\"EM_PreChat_TermsAndConditions\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ReconnectInProgress\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ReconnectInProgressAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_MinimizedReconnectInProgress\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PrechatTermsAndConditionsAcknowledgement\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ChatWindowAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_FormButtonInitialStateAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_FormButtonInactiveStateAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_FormButtonPendingStateTitle\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_FormButtonErrorResponseStateTitle\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_FormButtonSuccessResponseStateTitle\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_OptionSelectInputSingleSelectInstruction\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_OptionSelectInputMultipleSelectInstruction\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_DatePickerInputSelectInstruction\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_TextInputSelectInstruction\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_RequiredInputMissing\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_RegexPatternMismatch\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_NextButtonLabel\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_BackButtonLabel\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_SubmitButtonLabel\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_ProgressBarAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_NextButtonDisabledAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_BackButtonDisabledAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_SubmitButtonDisabledAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_CloseConfirmationDialogTitleText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_CloseConfirmationDialogBodyText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_CloseConfirmationConfirmButtonLabel\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_CloseConfirmationCancelButtonLabel\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_RequiredSelectInputMissing\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_UnsupportedMessageTypeText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PrechatLoading\"/>\n    <xsd:enumeration value=\"EM_Container_Base_RequestTranscriptMenuOption\"/>\n    <xsd:enumeration value=\"EM_Container_Base_DownloadInProgressNotification\"/>\n    <xsd:enumeration value=\"EM_Container_Base_DownloadSuccessNotification\"/>\n    <xsd:enumeration value=\"EM_Container_Base_DownloadErrorNotification\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CloseNotification\"/>\n    <xsd:enumeration value=\"EM_Chat_Carousels_PreviousCardButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_Carousels_NextCardButtonAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_Carousels_CarouselDescriptionAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterTextAreaPlaceHolderAwaitingResponse\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_AttachedFilesAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_RemoveAttachmentButton\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterSendButton\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterTextAreaAssistiveLabelText\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_SendFileAttachmentAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Fallback_FallbackMessage\"/>\n    <xsd:enumeration value=\"EM_Container_Base_EndSession\"/>\n    <xsd:enumeration value=\"EM_Container_Base_EndUserEndedChatText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_AgentEndedChatText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ChatbotEndedChatText\"/>\n    <xsd:enumeration value=\"EM_Container_Error_GenericError\"/>\n    <xsd:enumeration value=\"EM_Chat_InboundNewMessageScreenReaderText\"/>\n    <xsd:enumeration value=\"EM_Chat_OutboundNewMessageScreenReaderText\"/>\n    <xsd:enumeration value=\"EM_Chat_MessageCitationSourcesSectionText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_StreamingTokenValidationSystemMessage\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_StreamingTokenValidationMessageFooterText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_SSEConnectionTryAgainNotification\"/>\n    <xsd:enumeration value=\"EM_Container_Base_StartNewConversationNotification\"/>\n    <xsd:enumeration value=\"EM_Container_Base_SSEConnectionTryAgainButtonText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_StartNewConversationButtonText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_EventSourceUnavailable\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ConferenceHeaderText\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_ReadByAll\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_MultiAgentTypingIndicator\"/>\n    <xsd:enumeration value=\"EM_Container_Invitation_DialogHeader\"/>\n    <xsd:enumeration value=\"EM_Container_Invitation_Window\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_QueuePositionText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_AgentUnavailableText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_StartNewMessagingSessionButtonText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcMinimizedState\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcConversationEnded\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcLoading\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_QueuePositionPlaceholderText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcTransferred\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcConversationEnd\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcEndedConversation\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcNewConversation\"/>\n    <xsd:enumeration value=\"EM_Chat_FileTransfer_FileAttachmentAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcEwtOneMinute\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcEwtMultipleMinutes\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcEwtWaitedOneMinute\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcEwtWaitedMultipleMinutes\"/>\n    <xsd:enumeration value=\"EM_Chat_ChoicesMessage_SelectedMenuOptionAssistiveText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_PostchatBackButtonText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_ConversationClosedText\"/>\n    <xsd:enumeration value=\"EM_Chat_SecureForms_StepLabel\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_SwitchedToVoiceMode\"/>\n    <xsd:enumeration value=\"EM_Chat_ChatBody_SwitchedToTextMode\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterSwitchToVoice\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterSwitchToText\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcRelativeTimestampJustNow\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcRelativeTimestampOneMinuteAgo\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcRelativeTimestampManyMinutesAgo\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcRelativeTimestampOneHourAgo\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcRelativeTimestampManyHoursAgo\"/>\n    <xsd:enumeration value=\"EM_Container_Base_CwcRelativeTimestampYesterday\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterTurnOffMicrophone\"/>\n    <xsd:enumeration value=\"EM_Container_Base_InputFooterTurnOnMicrophone\"/>\n    <xsd:enumeration value=\"EM_Container_Base_StartWithVoice\"/>\n    <xsd:enumeration value=\"EM_Container_Base_StartWithText\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceLayout\">\n  <xsd:sequence>\n    <xsd:element name=\"embeddedServiceLayoutRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceLayoutRule\"/>\n    <xsd:element name=\"layout\" type=\"xsd:string\"/>\n    <xsd:element name=\"layoutType\" minOccurs=\"0\" type=\"tns:EmbeddedServiceLayoutType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EmbeddedServiceLayoutRule\">\n  <xsd:sequence>\n    <xsd:element name=\"appointmentStatus\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceLayoutType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"FS_AppointmentHome\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceMessagingChannel\">\n  <xsd:sequence>\n    <xsd:element name=\"businessHours\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"displayNameFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"embdMsgChannelInvitationConditions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbdMsgChannelInvitationCondition\"/>\n    <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isChatInvitationCustomizable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isEnabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isInvitationEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isSendInvtAllowedAfterAccept\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isSendInvtAllowedAfterReject\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"messagingChannel\" type=\"xsd:string\"/>\n    <xsd:element name=\"shouldShowAgentforceTagline\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"shouldShowDeliveryReceipts\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"shouldShowEmojiSelection\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"shouldShowReadReceipts\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"shouldShowTypingIndicators\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"shouldStartNewLineOnEnter\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EmbeddedServiceResource\">\n  <xsd:sequence>\n    <xsd:element name=\"resource\" type=\"xsd:string\"/>\n    <xsd:element name=\"resourceType\" type=\"tns:EmbeddedServiceResourceType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceResourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SettingsFile\"/>\n    <xsd:enumeration value=\"ChatInvitation\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EswInvitationConditionOperator\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Equals\"/>\n    <xsd:enumeration value=\"NotEqual\"/>\n    <xsd:enumeration value=\"LessThan\"/>\n    <xsd:enumeration value=\"GreaterThan\"/>\n    <xsd:enumeration value=\"LessOrEqual\"/>\n    <xsd:enumeration value=\"GreaterOrEqual\"/>\n    <xsd:enumeration value=\"Contains\"/>\n    <xsd:enumeration value=\"NotContain\"/>\n    <xsd:enumeration value=\"StartWith\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EswInvitationConditionResource\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SecondsOnPage\"/>\n    <xsd:enumeration value=\"SecondsOnSite\"/>\n    <xsd:enumeration value=\"NumberOfPageViews\"/>\n    <xsd:enumeration value=\"UrlMatch\"/>\n    <xsd:enumeration value=\"CustomVariable\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"MessagingChannelParameterType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"Custom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EmbeddedServiceConfig file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EmbeddedServiceConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <areGuestUsersAllowed>false</areGuestUsersAllowed>\n    <deploymentType>Mobile</deploymentType>\n    <deploymentFeature>EmbeddedMessaging</deploymentFeature>\n    <masterLabel>ESWOne</masterLabel>\n    <shouldHideAuthDialog>false</shouldHideAuthDialog>\n\n    <embeddedServiceMessagingChannel>\n        <isEnabled>true</isEnabled>\n        <shouldShowTypingIndicators>false</shouldShowTypingIndicators>\n        <shouldShowReadReceipts>false</shouldShowReadReceipts>\n        <shouldShowDeliveryReceipts>false</shouldShowDeliveryReceipts>\n        <shouldShowEmojiSelection>false</shouldShowEmojiSelection>\n        <shouldStartNewLineOnEnter>false</shouldStartNewLineOnEnter>\n        <messagingChannel>EM1</messagingChannel>\n    </embeddedServiceMessagingChannel>\n\n    <embeddedServiceForms>\n        <isActive>true</isActive>\n        <displayContext>Session</displayContext>\n\n        <embeddedServiceFormFields>\n            <displayOrder>0</displayOrder>\n            <formField>_FirstName</formField>\n            <messagingChannelParameterType>Standard</messagingChannelParameterType>\n            <formFieldType>Text</formFieldType>\n            <isHidden>false</isHidden>\n            <isRequired>true</isRequired>\n            <embeddedServiceCustomLabels>\n                <customLabel>EM_PreChat_Base_PrechatCustomFieldLabel_133xx0000004GG2_5523048</customLabel>\n                <labelKey>EM_PreChat_Base_PrechatCustomFieldLabel</labelKey>\n                <feature>EmbeddedMessaging</feature>\n            </embeddedServiceCustomLabels>\n        </embeddedServiceFormFields>\n        <embeddedServiceFormFields>\n            <displayOrder>1</displayOrder>\n            <formField>_LastName</formField>\n            <messagingChannelParameterType>Standard</messagingChannelParameterType>\n            <formFieldType>Text</formFieldType>\n            <isHidden>false</isHidden>\n            <isRequired>true</isRequired>\n            <embeddedServiceCustomLabels>\n                <customLabel>EM_PreChat_Base_PrechatCustomFieldLabel_133xx0000004GG2_5523058</customLabel>\n                <labelKey>EM_PreChat_Base_PrechatCustomFieldLabel</labelKey>\n                <feature>EmbeddedMessaging</feature>\n            </embeddedServiceCustomLabels>\n        </embeddedServiceFormFields>\n        <embeddedServiceFormFields>\n            <displayOrder>2</displayOrder>\n            <formField>FavoriteFood_name</formField>\n            <messagingChannelParameterType>Custom</messagingChannelParameterType>\n            <formFieldType>ChoiceList</formFieldType>\n            <isHidden>false</isHidden>\n            <isRequired>true</isRequired>\n            <choiceList>Food</choiceList>\n        </embeddedServiceFormFields>\n    </embeddedServiceForms>\n</EmbeddedServiceConfig>"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PipelineInspMetricConfig - Metadata API",
+  "description": "Represents the settings of Pipeline Inspection forecast category metrics.",
+  "file_information": ".pipelineInspMetricConfig",
+  "directory_location": "pipelineInspMetricConfigs",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "isCumulative": {
+      "type": "boolean",
+      "required": true,
+      "description": "Read only. Indicates whether the metric is cumulative (true) or not (false). The default value is true."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Indicates whether the component is protected (true) or not (false). The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Customized label of the Pipeline Inspection metric. Limit: 50 characters."
+    },
+    "metric": {
+      "type": "PipelineInspectionMetric (enumeration of type string)",
+      "required": true,
+      "description": "The Pipeline Inspection metric. Possible values are: BestCase (available in API version 58.0 and later) ClosedLost (available in API version 58.0 and later) ClosedWon (available in API version 58.0 and later) Commit (available in API version 58.0 and later) MostLikely (available in API version 58.0 and later) OpenPipeline (available in API version 58.0 and later) TotalPipeline (available in API version 58.0 and later)"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PipelineInspMetricConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isCumulative\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"metric\" type=\"tns:PipelineInspectionMetric\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"PipelineInspectionMetric\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TotalPipeline\"/>\n    <xsd:enumeration value=\"ClosedWon\"/>\n    <xsd:enumeration value=\"Commit\"/>\n    <xsd:enumeration value=\"MostLikely\"/>\n    <xsd:enumeration value=\"BestCase\"/>\n    <xsd:enumeration value=\"OpenPipeline\"/>\n    <xsd:enumeration value=\"ClosedLost\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PipelineInspMetricConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PipelineInspMetricConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <isCumulative>true</isCumulative>\n    <isProtected>false</isProtected>\n    <masterLabel>Lost the opportunity</masterLabel>\n    <metric>ClosedLost</metric>\n\n</PipelineInspMetricConfig>"
+    }
+  ]
+}

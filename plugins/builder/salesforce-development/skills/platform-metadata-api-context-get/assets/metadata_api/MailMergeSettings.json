@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MailMergeSettings - Metadata API",
+  "description": "Represents the settings for Extended Mail Merge functionality.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableExtendedMailMerge": {
+      "type": "boolean",
+      "description": "Indicates whether the Salesforce Classic product, Extended Mail Merge, is enabled (true) or not (false). Use Extended Mail Merge to generate Microsoft Word documents — such as form letters or address labels — from Salesforce records using Word document templates. Default value is false."
+    },
+    "saveMailMergeDocsAsSalesforceDocs": {
+      "type": "boolean",
+      "description": "Indicates whether mail-merged documents are saved to the My Personal Documents folder of the user who generated the mail merge. (true) or not (false). If (false), only documents over 3 MB are saved to the user’s documents folder. Smaller documents are emailed to the user. Default value is (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"MailMergeSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableExtendedMailMerge\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"saveMailMergeDocsAsSalesforceDocs\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MailMergeSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MailMergeSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <enableExtendedMailMerge>true</enableExtendedMailMerge>\n</MailMergeSettings>"
+    }
+  ]
+}

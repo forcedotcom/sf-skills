@@ -1,0 +1,92 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EmailIntegrationSettings - Metadata API",
+  "description": "Represents an org’s settings for the Outlook integration, Gmail integration, and Salesforce Inbox. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "doesEmailLogAsEmailMessageInOutlook": {
+      "type": "boolean",
+      "description": "Indicates whether the Outlook integration logs emails to the Email Message object (true) or as tasks (false). The default value is true. This field can only be used if the enableOutlookIntegration field is set to true."
+    },
+    "doesGmailStayConnectedToSalesforce": {
+      "type": "boolean",
+      "description": "Indicates whether Gmail integration users log in to Salesforce from Gmail each time their session expires. If set to true, users log in from the Gmail integration one time, and their credentials are remembered the next time they use the Gmail integration. If set to false, users log in to Salesforce from the Gmail integration each time their Salesforce session expires. The default value is false. This field can only be used if the enableGmailIntegration field is set to true."
+    },
+    "enableContactAndEventSync": {
+      "type": "boolean",
+      "description": "Indicates whether users can sync calendar events and contacts between Salesforce and their Microsoft and Google accounts (true) or not (false). Lightning Sync or Einstein Activity Capture must be enabled to use this feature. The default value is false. Available in API version 48.0 and later."
+    },
+    "enableContextualEverywhere": {
+      "type": "boolean",
+      "description": "Indicates whether contextual insights in Sales Cloud Everywhere, available in the Salesforce Chrome extension, are enabled (true) or not (false). This field is available in API version 58.0 and later."
+    },
+    "enableEmailTrackingInMobile": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce Inbox users can track emails (true) or not (false) while in the Outlook integration with Inbox or the Gmail integration with Inbox. It also controls email tracking in the Inbox mobile app and legacy versions of Inbox. The default value is true."
+    },
+    "enableEngageForOutlook": {
+      "type": "boolean",
+      "description": "Indicates whether Engage For Outlook is enabled (true) or not (false). When set to true, Engage users can connect their Outlook account and send Engage emails from their Outlook inbox."
+    },
+    "enableExtensionHostUnrestricted": {
+      "type": "boolean",
+      "description": "Indicates whether the contextual web experience is enabled in the chrome extension or not."
+    },
+    "enableGmailIntegration": {
+      "type": "boolean",
+      "description": "Indicates whether the Gmail integration is enabled (true) or not (false). When set to true, G Suite users with the Gmail integration can connect their Gmail account and work with Salesforce data in their email. The default value is true."
+    },
+    "enableInboxInternalEmailTracking": {
+      "type": "boolean",
+      "description": "Indicates whether a read-receipt status is shown for emails that are sent within the same domain (true) or not (false). This field is available in API version 58.0 and later."
+    },
+    "enableInboxMobileIntune": {
+      "type": "boolean",
+      "description": "Indicates whether Inbox is enabled to use Microsoft Intune to manage security settings (true) or not (false). When set to true, Inbox mobile users need a Microsoft Intune license to log in to the app. The default value is false. Available in API version 50.0 and later."
+    },
+    "enableOutlookIntegration": {
+      "type": "boolean",
+      "description": "Indicates whether the Outlook integration is enabled (true) or not (false). When set to true, Outlook users with the Outlook integration can connect their Outlook account and work with Salesforce data in their email. The default value is false."
+    },
+    "enableProductivityFeatures": {
+      "type": "boolean",
+      "description": "Indicates whether Inbox features, such as Availability and Send later, are available (true) or not available (false) in the Outlook or Gmail integration. The default value is false. This field can only be used if either the enableOutlookIntegration or enableGmailIntegration field is set to true and if the org has an Inbox license. Note: To see Inbox features, users must also have either the Inbox with Einstein Activity Capture or the Inbox without Einstein Activity capture permission set."
+    },
+    "enableSupplementalContactInfoInMobile": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce Inbox mobile app users see third-party contact information when contacts are shown (true) or not (false) in the Inbox mobile app. The default value is false."
+    },
+    "isLayoutCustomizationAllowed": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce admins are allowed (true) or not allowed (false) to create custom email application panes using the Lightning App Builder. The email application pane defines the layout of the Salesforce pane in Outlook and Gmail. The default value is true. This field can only be used if either the enableOutlookIntegration or enableGmailIntegration field is set to true."
+    },
+    "orgIsSyncingEventsOutbound": {
+      "type": "boolean",
+      "description": "Indicates whether changes to Salesforce events sync to Outlook and Google calendars (true) or not (false). Note: This field is set by Salesforce. We do not recommend that you set this field manually, as doing so may cause interruptions in your org's event syncing. This field is available in API version 50.0 and later"
+    },
+    "shouldUseTrustedDomainsList": {
+      "type": "boolean",
+      "description": "Indicates if the web domains listed in the Outlook Integration & Sync page in Salesforce Setup are supported (true) or not (false). These domains are for users who access email using Outlook on the web. The default value is true. This field can only be used if the enableOutlookIntegration field is set to true."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmailIntegrationSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"doesEmailLogAsEmailMessageInOutlook\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesGmailStayConnectedToSalesforce\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContactAndEventSync\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContextualEverywhere\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEmailTrackingInMobile\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEngageForOutlook\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableExtensionHostUnrestricted\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGmailIntegration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInboxInternalEmailTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInboxMobileIntune\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInboxUseGraphApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOutlookIntegration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOutlookMobileIntegration\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableProductivityFeatures\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSupplementalContactInfoInMobile\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isLayoutCustomizationAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"orgIsSyncingEventsOutbound\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"shouldUseTrustedDomainsList\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a EmailIntegrationSettings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EmailIntegrationSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n        <enableContactAndEventSync>true</enableContactAndEventSync>\n        <enableProductivityFeatures>true</enableProductivityFeatures>\n        <doesGmailStayConnectedToSalesforce>true</doesGmailStayConnectedToSalesforce>\n        <enableOutlookIntegration>true</enableOutlookIntegration>\n        <enableGmailIntegration>true</enableGmailIntegration>\n        <isLayoutCustomizationAllowed>true</isLayoutCustomizationAllowed>\n        <doesEmailLogAsEmailMessageInOutlook>false</doesEmailLogAsEmailMessageInOutlook>\n        <shouldUseTrustedDomainsList>false</shouldUseTrustedDomainsList>\n        <enableEmailTrackingInMobile>true</enableEmailTrackingInMobile>\n        <enableSupplementalContactInfoInMobile>false</enableSupplementalContactInfoInMobile>\n        <enableEngageForOutlook>true</enableEngageForOutlook>\n</EmailIntegrationSettings>"
+    }
+  ]
+}

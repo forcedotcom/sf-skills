@@ -1,0 +1,492 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Profile - Metadata API",
+  "description": "Represents a user profile. A profile defines a user’s permission to perform different functions within Salesforce. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".profile",
+  "directory_location": "profiles",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "agentAccesses": {
+      "type": "ProfileAgentAccess[]",
+      "description": "Indicates which agents are visible to users assigned to this profile. Available in API version 63.0 and later."
+    },
+    "applicationVisibilities": {
+      "type": "ProfileApplicationVisibility[]",
+      "description": "Indicates which apps are visible to users assigned to this profile. In API version 29.0 and earlier, this field supports custom apps only. In API version 30.0 and later, this field supports both standard and custom apps."
+    },
+    "categoryGroupVisibilities": {
+      "type": "ProfileCategoryGroupVisibility[]",
+      "description": "Indicates which data category groups are visible to users assigned to this profile. Available in API version 41.0 and later."
+    },
+    "classAccesses": {
+      "type": "ProfileApexClassAccess[]",
+      "description": "Indicates which top-level Apex classes have methods that users assigned to this profile can execute."
+    },
+    "custom": {
+      "type": "boolean",
+      "description": "Indicates whether the profile is a custom (true) or standard (false) profile. Available in API version 30.0 and later."
+    },
+    "customMetadataTypeAccesses": {
+      "type": "ProfileCustomMetadataTypeAccess[]",
+      "description": "Indicates the custom metadata types that are read-accessible to a user assigned to this profile. Available in API version 47.0 and later."
+    },
+    "customPermissions": {
+      "type": "ProfileCustomPermissions[]",
+      "description": "Indicates which custom permissions are available to users assigned to this profile. Available in API version 31.0 and later."
+    },
+    "customSettingAccesses": {
+      "type": "ProfileCustomSettingAccesses[]",
+      "description": "Indicates the custom settings that are read-accessible to a user assigned to this profile. Available in API version 47.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The profile description. Limit: 255 characters. Available in API version 30.0 and later."
+    },
+    "externalDataSourceAccesses": {
+      "type": "ProfileExternalDataSourceAccess[]",
+      "description": "Indicates which data sources with identity type of Per User are available to users assigned to this profile. Available in API version 27.0 and later."
+    },
+    "fieldLevelSecurities": {
+      "type": "ProfileFieldLevelSecurity[]",
+      "description": "Indicates which fields are visible to a user assigned to this profile, and the kind of access available (editable or hidden). This field is available in API version 22.0 and earlier."
+    },
+    "fieldPermissions": {
+      "type": "ProfileFieldLevelSecurity[]",
+      "description": "Indicates which fields are visible to a user assigned to this profile, and the kind of access available (editable or readable). This field is available in API version 23.0 and later."
+    },
+    "flowAccesses": {
+      "type": "ProfileFlowAccess[]",
+      "description": "Indicates which flows can be accessed by a user assigned to this profile. Available in API version 47.0 and later."
+    },
+    "genComputingSummaryDefAccess": {
+      "type": "ProfileGenComputingSummaryDefAccess[]",
+      "description": "Indicates enhanced summary access configuration for users assigned to this profile. Available in API version 66.0 and later."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name can only contain characters, letters, and the underscore (_) character. The name must start with a letter, and can’t end with an underscore or contain two consecutive underscore characters. Inherited from the Metadata component, this field isn’t defined in the WSDL for this component. It must be specified when creating, updating, or deleting. See create() to see an example of this field specified for a call."
+    },
+    "layoutAssignments": {
+      "type": "ProfileLayoutAssignments[]",
+      "description": "Indicates which layout to use for this profile."
+    },
+    "loginFlows": {
+      "type": "LoginFlow[]",
+      "description": "Indicates a business process that you direct users to before they access Salesforce."
+    },
+    "loginHours": {
+      "type": "ProfileLoginHours[]",
+      "description": "Indicates the hours within which a user with this profile can log in. If not specified, the profile doesn’t restrict a user’s login hours. This field is available in API version 25.0 and later."
+    },
+    "loginIpRanges": {
+      "type": "ProfileLoginIpRange[]",
+      "description": "The list of IP address ranges from which users with a particular profile can log in. This field is available in API version 17.0 and later."
+    },
+    "objectPermissions": {
+      "type": "ProfileObjectPermissions[]",
+      "description": "Indicates which objects are accessible to a user assigned to this profile, and the kind of access available (create, read, edit, delete, and so on). In API version 28.0 and later, this field is only retrieved when allowRead is true. In API version 50.0 and later, editing standard objects on standard profiles is disabled."
+    },
+    "pageAccesses": {
+      "type": "ProfileApexPageAccess[]",
+      "description": "Indicates which Visualforce pages that users assigned to this profile can execute."
+    },
+    "profileActionOverrides": {
+      "type": "ProfileActionOverride[]",
+      "description": "A list of the Lightning Experience Home page action overrides that are assigned to this profile. When a user logs in with a profile, a matching ProfileActionOverride assignment takes precedence over existing overrides for the Home tab specified in ActionOverride. This field is available in API versions 37.0 to 44.0."
+    },
+    "recordTypeVisibilities": {
+      "type": "ProfileRecordTypeVisibility[]",
+      "description": "Indicates the visibility of record types for users assigned to this profile. In API version 29.0 and later, this field isn’t retrieved or deployed for inactive record types."
+    },
+    "ServicePresenceStatusAccesses": {
+      "type": "ProfileServicePresenceStatusAccess[]",
+      "description": "Indicates which Service presence statuses that the user assigned to this profile can execute. Available in API version 64.0 and later."
+    },
+    "tabVisibilities": {
+      "type": "ProfileTabVisibility[]",
+      "description": "Indicates which record types are visible to a user assigned to this profile, and therefore which tabs within an app are visible."
+    },
+    "userLicense": {
+      "type": "string",
+      "description": "The User License for the profile. A user license determines the baseline of features that the user can access. Every user must have exactly one user license. This field is available in API version 17.0 and later."
+    },
+    "userPermissions": {
+      "type": "ProfileUserPermission[]",
+      "description": "Specifies a user permission (such as “API Enabled”) and whether it’s enabled for this profile. This field retrieves only enabled user permissions. Available in API version 29.0 and later."
+    }
+  },
+  "sub_types": {
+    "LoginFlow": {
+      "flow": {
+        "type": "string",
+        "description": "Required only if the uiLoginFlowType is VisualWorkflow. The fullName of the Flow. Before you can deploy the LoginFlow, the Flow referenced here must be deployed in your org and its status must be Active.",
+        "required": true
+      },
+      "flowtype": {
+        "type": "LoginFlowType (enumeration of type string)",
+        "description": "The value is UI.",
+        "required": true
+      },
+      "friendlyname": {
+        "type": "string",
+        "description": "The name of the LoginFlow.",
+        "required": true
+      },
+      "uiLoginFlowType": {
+        "type": "UiLoginFlowType (enumeration of type string)",
+        "description": "The type of login flow. These are valid values. VisualWorkflow—Indicates a Salesforce Flow. You can create these flows using Flow Builder. VisualForce—Indicates a flow created using Visualforce.",
+        "required": true
+      },
+      "useLightningRuntime": {
+        "type": "boolean",
+        "description": "Indicates if Lightning Runtime is used (true) or not ( false (default)). Used only if uiLoginFlowType is VisualWorkflow."
+      },
+      "vfFlowPage": {
+        "type": "string",
+        "description": "Required only if the uiLoginFlowType is VisualForce. The name of the VisualForce page.",
+        "required": true
+      },
+      "vfFlowPageTitle": {
+        "type": "string",
+        "description": "Required only if the uiLoginFlowType is VisualForce. The name of the VisualForce page.",
+        "required": true
+      }
+    },
+    "ProfileActionOverride": {
+      "actionName": {
+        "type": "string",
+        "description": "The possible values are the same as the actions you can override: accept clone delete edit list new tab view",
+        "required": true
+      },
+      "content": {
+        "type": "string",
+        "description": "Set this field if type is set to flexipage, lightningcomponent, scontrol, or visualforce. It refers to the name of the Lightning page, Lightning component, s-control, or Visualforce page to use as the override. To reference installed components, use this format: Component_namespace__Component_name."
+      },
+      "formFactor": {
+        "type": "FormFactor (enumeration of type string)",
+        "description": "The size of the page being overridden. The Large value represents the Lightning Experience desktop environment and is valid only for the flexipage and lightningcomponent types. The Small value represents the Salesforce mobile app on a phone or tablet. The Medium value is reserved for future use. The null value (which is the same as specifying no value) represents Salesforce Classic."
+      },
+      "pageOrSobjectType": {
+        "type": "string",
+        "description": "The name of the sObject type being overridden. Valid values are standard and custom. This value must be standard-home when actionName is tab."
+      },
+      "recordType": {
+        "type": "string",
+        "description": "The record type assigned to the ProfileActionOverride. If the PageOrSobjectType is standard-home, this field is null."
+      },
+      "type": {
+        "type": "ActionOverrideType (enumeration of type string)",
+        "description": "Represents the type of action override. Valid values are described in ActionOverrideType.",
+        "required": true
+      }
+    },
+    "ProfileAgentAccess": {
+      "agentName": {
+        "type": "string",
+        "description": "The name of the employee agent.",
+        "required": true
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether users assigned to this profile can use the Agentforce Employee Agent (true) or not (false).",
+        "required": true
+      }
+    },
+    "ProfileApplicationVisibility": {
+      "application": {
+        "type": "string",
+        "description": "The name of the app.",
+        "required": true
+      },
+      "default": {
+        "type": "boolean",
+        "description": "Indicates whether the app is the default app (true) or not (false). Only one app per profile can be set to true.",
+        "required": true
+      },
+      "visible": {
+        "type": "boolean",
+        "description": "Indicates whether this app is visible to users assigned to this profile (true) or not (false).",
+        "required": true
+      }
+    },
+    "ProfileCategoryGroupVisibility": {
+      "dataCategories": {
+        "type": "string[]",
+        "description": "Array of one or more data category names."
+      },
+      "dataCategoryGroup": {
+        "type": "string",
+        "description": "The name of the data category group.",
+        "required": true
+      },
+      "visibility": {
+        "type": "CategoryGroupVisibility (enumeration of type string)",
+        "description": "Indicates the visibility of the data category. Valid values are: ALL CUSTOM NONE",
+        "required": true
+      }
+    },
+    "ProfileCustomMetadataTypeAccess": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the records for this custom metadata type are readable (true) or not (false).",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The custom metadata type name.",
+        "required": true
+      }
+    },
+    "ProfileApexClassAccess": {
+      "apexClass": {
+        "type": "string",
+        "description": "The Apex class name.",
+        "required": true
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether users assigned to this profile can execute methods in the top-level class (true) or not (false).",
+        "required": true
+      }
+    },
+    "ProfileCustomPermissions": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the custom permission is enabled (true) or not (false).",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The custom permission name.",
+        "required": true
+      }
+    },
+    "ProfileCustomSettingAccesses": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the records for this custom setting are readable (true) or not (false).",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The custom setting name.",
+        "required": true
+      }
+    },
+    "ProfileExternalDataSourceAccess": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the data source is enabled (true) or not (false).",
+        "required": true
+      },
+      "externalDataSource": {
+        "type": "string",
+        "description": "The name of the external data source."
+      }
+    },
+    "ProfileFieldLevelSecurity": {
+      "editable": {
+        "type": "boolean",
+        "description": "Indicates whether this field is editable (true) or not (false). In API version 30.0 and later, when deploying a new custom field, this field is false by default.",
+        "required": true
+      },
+      "field": {
+        "type": "string",
+        "description": "Indicates the name of the field. When referencing shared Activity fields, specify Event or Task. For example, Event.Meeting__c.",
+        "required": true
+      },
+      "hidden": {
+        "type": "boolean",
+        "description": "Indicates whether this field is hidden (true) or not (false). This field is available in API version 22.0 and earlier. For portal profiles, this field is set to true by default in API version 19.0 and later."
+      },
+      "readable": {
+        "type": "boolean",
+        "description": "Indicates whether this field is readable (true) or not (false). This field is available in API version 23.0 and later. It replaces the hidden field. In API version 30.0 and later, when deploying a new custom field, this field is false by default. For portal profiles, this field is set to false by default."
+      }
+    },
+    "ProfileFlowAccess": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether users assigned this profile can access the flow (true) or not (false). The default value is false.",
+        "required": true
+      },
+      "flow": {
+        "type": "string",
+        "description": "The name of the flow to which access is granted.",
+        "required": true
+      }
+    },
+    "ProfileGenComputingSummaryDefAccess": {
+      "configName": {
+        "type": "string",
+        "description": "The enhanced summary access configuration name given by the admin.",
+        "required": true
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the configuration is enabled (true) or not (false).",
+        "required": true
+      }
+    },
+    "ProfileLayoutAssignments": {
+      "layout": {
+        "type": "string",
+        "description": "Indicates the layout for this particular entity.",
+        "required": true
+      },
+      "recordType": {
+        "type": "string",
+        "description": "This field is optional. If the recordType of the record matches a layout assignment rule, it uses the specified layout."
+      }
+    },
+    "ProfileLoginHours": {
+      "weekdayStart": {
+        "type": "string",
+        "description": "Specifies the earliest time on that day that a user with this profile can log in. If a start time for a particular day is specified, an end time for that day also must be specified. Start can’t be greater than end for a particular day. Valid values for weekday: monday, tuesday, wednesday, thursday, friday, saturday, or sunday. For example, mondayStart indicates the beginning of the login period for Monday. Valid values for Start: the number of minutes since midnight. Must be evenly divisible by 60 (full hours). For example, 300 is 5:00 AM."
+      },
+      "weekdayEnd": {
+        "type": "string",
+        "description": "Specifies the time on that day that a user with this profile must log out by. Valid values for weekday: monday, tuesday, wednesday, thursday, friday, saturday, or sunday. For example, mondayEnd indicates the close of the login period for Monday. Valid values for End: the number of minutes since midnight. Must be evenly divisible by 60 (full hours). For example, 1020 is 5:00 PM."
+      }
+    },
+    "ProfileLoginIpRange": {
+      "description": {
+        "type": "string",
+        "description": "Use this field to identify the purpose of the range, such as which part of a network corresponds to this range. This field is available in API version 31.0 and later."
+      },
+      "endAddress": {
+        "type": "string",
+        "description": "The end IP address for the range.",
+        "required": true
+      },
+      "startAddress": {
+        "type": "string",
+        "description": "The start IP address for the range.",
+        "required": true
+      }
+    },
+    "ProfileObjectPermissions": {
+      "allowCreate": {
+        "type": "boolean",
+        "description": "Indicates whether the object referenced by the object field can be created by the users assigned to this profile (true) or not (false). This field is named revokeCreate before version 14.0 and the logic is reversed. The field name change and the update from true to false and the reverse is automatically handled between versions and doesn’t require any manual editing of existing XML component files."
+      },
+      "allowDelete": {
+        "type": "boolean",
+        "description": "Indicates whether the object referenced by the object field can be deleted by the users assigned to this profile (true) or not (false). This field is named The field name change and the update from revokeDelete before version 14.0 and the logic is reversed. true to false and the reverse is automatically handled between versions and doesn’t require any manual editing of existing XML component files."
+      },
+      "allowEdit": {
+        "type": "boolean",
+        "description": "Indicates whether the object referenced by the object field can be edited by the users assigned to this profile (true) or not (false). This field is named The field name change and the update from revokeEdit before version 14.0 and the logic is reversed. true to false and the reverse is automatically handled between versions and doesn’t require any manual editing of existing XML component files."
+      },
+      "allowRead": {
+        "type": "boolean",
+        "description": "Indicates whether the object referenced by the object field can be seen by the users assigned to this profile (true) or not (false). This field is named The field name change and the update from revokeRead before version 14.0 and the logic is reversed. true to false and the reverse is automatically handled between versions and doesn’t require any manual editing of existing XML component files."
+      },
+      "modifyAllRecords": {
+        "type": "boolean",
+        "description": "Indicates whether all records for the object referenced by the object field can be read, edited, or deleted by the users assigned to this profile (true) or not (false), regardless of the sharing settings for the object. This setting is equivalent to the Modify All Data user permission limited to the individual object level. Available in API version 15.0 and later. This field isn’t available for all objects. Refer to the profile in the user interface to determine which objects currently support these permissions. Profiles with Modify All Data ignore modifyAllRecords entries in Metadata API and don't return an error if Modify All Data is enabled on the profile."
+      },
+      "object": {
+        "type": "string",
+        "description": "The name of the object whose permissions are altered by this profile, for example, MyCustomObject__c.",
+        "required": true
+      },
+      "viewAllFields": {
+        "type": "boolean",
+        "description": "Indicates whether all fields and field data for the object referenced by the object field can be read by the users assigned to this profile (true) or not (false). Available in API version 63.0 and later."
+      },
+      "viewAllRecords": {
+        "type": "boolean",
+        "description": "Indicates whether all records for the object referenced by the object field can be read by the users assigned to this profile (true) or not (false), regardless of the sharing settings for the object. This setting includes private records (records with no parent object). This setting is equivalent to the View All Data user permission limited to the individual object level. Available in API version 15.0 and later. This field isn’t available for all objects. Refer to the profile in the user interface to determine which objects currently support these permissions. Profiles with \"View All Data\" ignore viewAllRecords entries in the Metadata API and don't return an error if View All Data is enabled on the profile."
+      }
+    },
+    "ProfileApexPageAccess": {
+      "apexPage": {
+        "type": "string",
+        "description": "The Visualforce page name.",
+        "required": true
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether users assigned to this profile can execute the Visualforce page (true) or not (false).",
+        "required": true
+      }
+    },
+    "ProfileRecordTypeVisibility": {
+      "default": {
+        "type": "boolean",
+        "description": "Indicates whether the record type is the default when users with this profile create records for this object (true) or not (false).",
+        "required": true
+      },
+      "personAccountDefault": {
+        "type": "boolean",
+        "description": "When Person Accounts is enabled, this field indicates whether the record type is this profile’s default person account record type (true) or not (false). When Person Accounts is disabled, this field’s value has no impact. Person accounts aren’t enabled by default in Salesforce. To request person accounts, contact Salesforce."
+      },
+      "recordType": {
+        "type": "string",
+        "description": "The record type name, for example Account.MyRecordType.",
+        "required": true
+      },
+      "visible": {
+        "type": "boolean",
+        "description": "Indicates whether this record type is visible to users assigned to this profile (true) or not (false).",
+        "required": true
+      }
+    },
+    "ProfileTabVisibility": {
+      "tab": {
+        "type": "string",
+        "description": "The name of the tab.",
+        "required": true
+      },
+      "visibility": {
+        "type": "TabVisibility (enumeration of type string)",
+        "description": "Indicates the visibility of the tab. Valid values are: DefaultOff—The tab is available on the All Tabs page. Users can individually customize their display to make the tab visible in any app. DefaultOn—The tab is available on the All Tabs page and appears in the visible tabs for its associated app. Users can individually customize their display to hide the tab or make it visible in other apps. Hidden—The tab isn’t available on the All Tabs page or visible in any apps. In API version 36.0 and earlier, Hidden is returned only if visibility was set using the API. If it was set to Hidden from the profile in Salesforce, the API doesn’t return a visibility value. For version 37.0 and later, when tab visibility is set to hidden, the API returns Hidden, regardless of how the value was set.",
+        "required": true
+      }
+    },
+    "ProfileUserPermission": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the permission is enabled (true) or disabled (false).",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The permission name.",
+        "required": true
+      }
+    },
+    "ProfileServicePresenceStatusAccess": {
+      "servicePresenceStatus": {
+        "type": "string",
+        "description": "The name of Service Presence Status.",
+        "required": true
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the rep assigned to this profile has access to the presence status (true) or not (false).",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ActionOverrideType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Default\"/>\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"Scontrol\"/>\n    <xsd:enumeration value=\"Visualforce\"/>\n    <xsd:enumeration value=\"Flexipage\"/>\n    <xsd:enumeration value=\"LightningComponent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CategoryGroupVisibility\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ALL\"/>\n    <xsd:enumeration value=\"NONE\"/>\n    <xsd:enumeration value=\"CUSTOM\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FormFactor\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Small\"/>\n    <xsd:enumeration value=\"Medium\"/>\n    <xsd:enumeration value=\"Large\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LoginFlow\">\n  <xsd:sequence>\n    <xsd:element name=\"flow\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"flowType\" type=\"tns:LoginFlowType\"/>\n    <xsd:element name=\"friendlyName\" type=\"xsd:string\"/>\n    <xsd:element name=\"uiLoginFlowType\" type=\"tns:UiLoginFlowType\"/>\n    <xsd:element name=\"useLightningRuntime\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"vfFlowPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"vfFlowPageTitle\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"LoginFlowType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UI\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Profile\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"agentAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileAgentAccess\"/>\n        <xsd:element name=\"applicationVisibilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileApplicationVisibility\"/>\n        <xsd:element name=\"categoryGroupVisibilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileCategoryGroupVisibility\"/>\n        <xsd:element name=\"classAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileApexClassAccess\"/>\n        <xsd:element name=\"custom\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"customMetadataTypeAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileCustomMetadataTypeAccess\"/>\n        <xsd:element name=\"customPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileCustomPermissions\"/>\n        <xsd:element name=\"customSettingAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileCustomSettingAccess\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalDataSourceAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileExternalDataSourceAccess\"/>\n        <xsd:element name=\"fieldPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileFieldLevelSecurity\"/>\n        <xsd:element name=\"flowAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileFlowAccess\"/>\n        <xsd:element name=\"genComputingSummaryDefAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileGenComputingSummaryDefAccess\"/>\n        <xsd:element name=\"layoutAssignments\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileLayoutAssignment\"/>\n        <xsd:element name=\"loginFlows\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LoginFlow\"/>\n        <xsd:element name=\"loginHours\" minOccurs=\"0\" type=\"tns:ProfileLoginHours\"/>\n        <xsd:element name=\"loginIpRanges\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileLoginIpRange\"/>\n        <xsd:element name=\"objectPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileObjectPermissions\"/>\n        <xsd:element name=\"pageAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileApexPageAccess\"/>\n        <xsd:element name=\"profileActionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileActionOverride\"/>\n        <xsd:element name=\"recordTypeVisibilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileRecordTypeVisibility\"/>\n        <xsd:element name=\"servicePresenceStatusAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileServicePresenceStatusAccess\"/>\n        <xsd:element name=\"tabVisibilities\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileTabVisibility\"/>\n        <xsd:element name=\"userLicense\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"userPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileUserPermission\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileActionOverride\">\n  <xsd:sequence>\n    <xsd:element name=\"actionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formFactor\" type=\"tns:FormFactor\"/>\n    <xsd:element name=\"pageOrSobjectType\" type=\"xsd:string\"/>\n    <xsd:element name=\"recordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:ActionOverrideType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileAgentAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"agentName\" type=\"xsd:string\"/>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileApexClassAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"apexClass\" type=\"xsd:string\"/>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileApexPageAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"apexPage\" type=\"xsd:string\"/>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileApplicationVisibility\">\n  <xsd:sequence>\n    <xsd:element name=\"application\" type=\"xsd:string\"/>\n    <xsd:element name=\"default\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"visible\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileCategoryGroupVisibility\">\n  <xsd:sequence>\n    <xsd:element name=\"dataCategories\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"dataCategoryGroup\" type=\"xsd:string\"/>\n    <xsd:element name=\"visibility\" type=\"tns:CategoryGroupVisibility\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileCustomMetadataTypeAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileCustomPermissions\">\n  <xsd:sequence>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileCustomSettingAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileExternalDataSourceAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"externalDataSource\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileFieldLevelSecurity\">\n  <xsd:sequence>\n    <xsd:element name=\"editable\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"readable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileFlowAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"flow\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileGenComputingSummaryDefAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"configName\" type=\"xsd:string\"/>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileLayoutAssignment\">\n  <xsd:sequence>\n    <xsd:element name=\"layout\" type=\"xsd:string\"/>\n    <xsd:element name=\"recordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileLoginHours\">\n  <xsd:sequence>\n    <xsd:element name=\"fridayEnd\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fridayStart\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mondayEnd\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mondayStart\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"saturdayEnd\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"saturdayStart\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sundayEnd\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sundayStart\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"thursdayEnd\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"thursdayStart\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"tuesdayEnd\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"tuesdayStart\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"wednesdayEnd\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"wednesdayStart\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileLoginIpRange\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"endAddress\" type=\"xsd:string\"/>\n    <xsd:element name=\"startAddress\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileObjectPermissions\">\n  <xsd:sequence>\n    <xsd:element name=\"allowCreate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowDelete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowEdit\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowRead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"modifyAllRecords\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"object\" type=\"xsd:string\"/>\n    <xsd:element name=\"viewAllFields\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"viewAllRecords\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileRecordTypeVisibility\">\n  <xsd:sequence>\n    <xsd:element name=\"default\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"personAccountDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"recordType\" type=\"xsd:string\"/>\n    <xsd:element name=\"visible\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileServicePresenceStatusAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"servicePresenceStatus\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileTabVisibility\">\n  <xsd:sequence>\n    <xsd:element name=\"tab\" type=\"xsd:string\"/>\n    <xsd:element name=\"visibility\" type=\"tns:TabVisibility\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileUserPermission\">\n  <xsd:sequence>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"TabVisibility\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Hidden\"/>\n    <xsd:enumeration value=\"DefaultOff\"/>\n    <xsd:enumeration value=\"DefaultOn\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UiLoginFlowType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"VisualWorkflow\"/>\n    <xsd:enumeration value=\"VisualForce\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The definition of a profile in an organization with a custom app, custom object, record type, tab, and user permission is:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Profile xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <applicationVisibilities>\n        <application>PubApps__Myriad_Publishing</application>\n        <default>false</default>\n        <visible>true</visible>\n    </applicationVisibilities>\n    <custom>true</custom>\n    <objectPermissions>\n        <object>TestWeblinks__c</object>\n        <allowCreate>true</allowCreate>\n        <allowDelete>true</allowDelete>\n        <allowEdit>true</allowEdit>\n        <allowRead>true</allowRead>\n        <viewAllRecords>false</viewAllRecords>\n        <modifyAllRecords>false</modifyAllRecords>\n        <viewAllFields>false</viewAllFields>\n    </objectPermissions>\n    <recordTypeVisibilities>\n        <default>true</default>\n        <recordType>TestWeblinks__c.My First Recordtype</recordType>\n        <visible>true</visible>\n    </recordTypeVisibilities>\n    <tabVisibilities>\n        <tab>Myriad Publications</tab>\n        <visibility>DefaultOn</visibility>\n    </tabVisibilities>\n    <userPermissions>\n        <enabled>true</enabled>\n        <name>APIEnabled</name>\n    </userpermissions>\n</Profile>"
+    }
+  ]
+}

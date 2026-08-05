@@ -1,0 +1,106 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ConvIntelligenceSignalRule - Metadata API",
+  "description": "Represents the conversation intelligence signal rule. The rule triggers actions based on real-time intelligence signals from your telephony system or keywords mentioned by support reps or customers. The rule contains a set of conditions (subrules) and the filter logic used to evaluate those conditions to determine whether to trigger actions.",
+  "file_information": ".ConvIntelligenceSignalRule",
+  "directory_location": "ConvIntelligenceSignalRule",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "actionType": {
+      "type": "ConvIntelligenceActionType (enumeration of type string)",
+      "required": true,
+      "description": "The conversation intelligence signal type. Values are: AlertSupervisor–Sends an alert to the supervisor. AlertSupervisorAndAgent–Sends an alert to the rep and supervisor. LaunchFlow–Triggers an auto-launched flow. If set, also set ActionValue. LaunchNBA–Recommends the next best action to the rep."
+    },
+    "actionValue": {
+      "type": "string",
+      "description": "Action to perform based on the actionType specified. If actionType is set to LaunchFlow, this value is the developerName of the flow to be launched. For example, EmailAlert. For all other actionType values, don’t set this parameter."
+    },
+    "active": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the conversation intelligence signal rule is active (true) or inactive (false). The default value is false."
+    },
+    "channelAddressIdentifier": {
+      "type": "string",
+      "required": true,
+      "description": "ID (ChannelAddressIdentifier) of the Messaging channel or name (InternalName) of the Voice channel."
+    },
+    "channelType": {
+      "type": "string",
+      "required": true,
+      "description": "Channel type. For Messaging, possible values are: AppleBusinessChat—Represents Apple Messages for Business. Custom—Represents Bring Your Own Channel for Messaging or Bring Your Own Channel for CCaaS. EmbeddedMessaging—Represents Messaging for In-App and Web. Facebook Text WhatsApp For Voice, set this parameter to Phone."
+    },
+    "criteria": {
+      "type": "string",
+      "required": true,
+      "description": "Filter logic applied to the rule conditions (subrules). For example, ((1 AND 2) OR 3). The numbers in the formula are derived from the ConvIntelligenceSignalSubRule.order value plus 1. For example, filter logic (1 AND 2) is calculated by adding the first condition (order=0) with the second condition (order=1)."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "API name of the conversation intelligence signal rule."
+    },
+    "participantRole": {
+      "type": "ConvParticipantRole (enumeration of type string)",
+      "description": "If service is set to KeywordMatch, this value determines whether the rule applies to utterances made by reps, customers, or both roles. Possible values are: Possible values are: Agent AgentOrCustomer Customer If Service is not set to KeywordMatch, don’t set this parameter."
+    },
+    "ruleName": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the conversation intelligence signal rule."
+    },
+    "service": {
+      "type": "ConvIntelligenceService (enumeration of type string)",
+      "required": true,
+      "description": "Salesforce- or partner-provided intelligence source. For Salesforce-provided intelligence sources, set this parameter to KeywordMatch. For partner-provided intelligence sources, possible values are: KeywordMatch AmazonConnectContactLens If none of the options apply to you, contact your Salesforce representative for the service name."
+    },
+    "subrule": {
+      "type": "ConvIntelligenceSignalSubRule[]",
+      "description": "A set of intelligence rules used to measure an agent or customer’s sentiment during a voice call."
+    }
+  },
+  "sub_types": {
+    "ConvIntelligenceSignalSubRule": {
+      "operandValue": {
+        "type": "string",
+        "required": true,
+        "description": "Value of the signal type used to determine if the rule condition is met."
+      },
+      "operator": {
+        "type": "ConvIntelligenceOperator (enumeration of type string)",
+        "required": true,
+        "description": "Filter logic operator used to determine if the rule condition is met. Possible values are: Equals GreaterThan In LessThan NotEquals"
+      },
+      "order": {
+        "type": "int",
+        "required": true,
+        "description": "Order the condition appears in relation to the other conditions in the list, with zero (0) being the first condition listed. If type is set to Keyword, the maximum value is 24. For all other type values, the maximum value is 4. This value is used when applying filter logic to the rule."
+      },
+      "type": {
+        "type": "ConvIntelligenceType (enumeration of type string)",
+        "required": true,
+        "description": "Type of conversation intelligence signal used by the rule to determine whether to trigger an action. This value depends on the ConvIntelligenceSignalRule.channelType and ConvIntelligenceSignalRule.service values. If service is set to KeywordMatch, possible values are: Keyword–A word or group of words spoken or typed. If service is set to AmazonConnectContactLens, possible values are: Category–Category name defined in your telephony system. If service is set to another value, contact your Salesforce representative for the conversation intelligence signal types available for your intelligence source."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ConvIntelligenceActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"LaunchNBA\"/>\n    <xsd:enumeration value=\"LaunchFlow\"/>\n    <xsd:enumeration value=\"AlertSupervisor\"/>\n    <xsd:enumeration value=\"AlertSupervisorAndAgent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConvIntelligenceOperator\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Equals\"/>\n    <xsd:enumeration value=\"NotEquals\"/>\n    <xsd:enumeration value=\"LessThan\"/>\n    <xsd:enumeration value=\"GreaterThan\"/>\n    <xsd:enumeration value=\"In\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConvIntelligenceService\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AmazonConnectContactLens\"/>\n    <xsd:enumeration value=\"KeywordMatch\"/>\n    <xsd:enumeration value=\"CXoneAgentAssistService\"/>\n    <xsd:enumeration value=\"VonageConversationalInsights\"/>\n    <xsd:enumeration value=\"EinsteinConversationIntelligenceSignals\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConvIntelligenceSignalRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionType\" type=\"tns:ConvIntelligenceActionType\"/>\n        <xsd:element name=\"actionValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"channelAddressIdentifier\" type=\"xsd:string\"/>\n        <xsd:element name=\"channelType\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteria\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"participantRole\" minOccurs=\"0\" type=\"tns:ConvParticipantRole\"/>\n        <xsd:element name=\"ruleName\" type=\"xsd:string\"/>\n        <xsd:element name=\"service\" type=\"tns:ConvIntelligenceService\"/>\n        <xsd:element name=\"subrule\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConvIntelligenceSignalSubRule\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ConvIntelligenceSignalSubRule\">\n  <xsd:sequence>\n    <xsd:element name=\"operandValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"tns:ConvIntelligenceOperator\"/>\n    <xsd:element name=\"order\" type=\"xsd:int\"/>\n    <xsd:element name=\"type\" type=\"tns:ConvIntelligenceType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConvIntelligenceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Category\"/>\n    <xsd:enumeration value=\"Keyword\"/>\n    <xsd:enumeration value=\"AgentSentiment\"/>\n    <xsd:enumeration value=\"CustomerSentiment\"/>\n    <xsd:enumeration value=\"Intent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConvParticipantRole\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Agent\"/>\n    <xsd:enumeration value=\"Customer\"/>\n    <xsd:enumeration value=\"AgentOrCustomer\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ConvIntelligenceSignalRule component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ConvIntelligenceSignalRule xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <actionType>AlertSupervisor</actionType>\n    <active>true</active>   <channelAddressIdentifier>a12bc345-1303-44c2-866c-f30d546b58de</channelAddressIdentifier>\n    <channelType>Phone</channelType>\n    <criteria>1 OR 2</criteria>\n    <developerName>ConvIntelligenceRuleAPIName</developerName>\n    <participantRole>AgentOrCustomer</participantRole>\n    <ruleName>ConvIntelligenceRuleName</ruleName>\n    <service>KeywordMatch</service>\n    <subrule>\n        <operandValue>escalate_level_1</operandValue>\n        <operator>Equals</operator>\n        <order>0</order>\n        <type>Keyword</type>\n    </subrule>\n    <subrule>\n        <operandValue>escalate_level_2</operandValue>\n        <operator>Equals</operator>\n        <order>1</order>\n        <type>Keyword</type>\n    </subrule>\n</ConvIntelligenceSignalRule>"
+    }
+  ]
+}

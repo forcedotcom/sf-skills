@@ -1,0 +1,117 @@
+# Knowledge-Grounded Agent
+# ========================
+#
+# Minimal agent wired to an Agentforce Data Library (ADL) for grounded
+# question answering via the AnswerQuestionsWithKnowledge action.
+#
+# Replace ARFPC_<libraryId> below with the value computed from your
+# provisioned ADL: rag_feature_config_id = "ARFPC_" + libraryId.
+# See references/data-library-reference.md for provisioning.
+
+system:
+    instructions: |
+        You are a knowledge assistant for supported product and policy
+        questions. Before answering a factual question, search the knowledge
+        base via AnswerQuestionsWithKnowledge. Answer only from the returned
+        evidence. If no answer is found, say so.
+        When the current task is routing or redirection, perform that task
+        without answering the underlying request. Never make up information.
+    messages:
+        welcome: "Hi! Ask me anything about our products or policies."
+        error: "Something went wrong searching the knowledge base. Please try again."
+
+access:
+    default_agent_user: "agent.user@company.com"
+
+config:
+    developer_name: "Knowledge_Grounded_Agent"
+    agent_label: "Knowledge Grounded Agent"
+    description: "Answers customer questions grounded on an Agentforce Data Library."
+
+knowledge:
+    rag_feature_config_id: "ARFPC_<libraryId>"
+    citations_enabled: True
+    citations_url: ""
+
+start_agent agent_router:
+    label: "Agent Router"
+    description: "Welcome the user and route to the appropriate request handler."
+    reasoning:
+        instructions: ->
+            | Welcome the user. If they ask a question about products, policies, or
+              procedures, route to general_faq. If the request is off-topic or asks
+              you to do something other than answer a question, route to off_topic.
+        actions:
+            go_to_general_faq: @utils.transition to @subagent.general_faq
+            go_to_off_topic: @utils.transition to @subagent.off_topic
+
+subagent general_faq:
+    label: "General FAQ"
+    description: "Answer customer questions by searching the knowledge base."
+    reasoning:
+        instructions: ->
+            | Ask one concise clarifying question if the request is too vague
+              to search.
+            | For every substantive question, call AnswerQuestionsWithKnowledge
+              before answering.
+            | Answer only from knowledgeSummary. If it is empty, say the
+              knowledge base has no answer and offer other supported help.
+            | Include only sources and URLs returned by the action.
+        actions:
+            AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
+                with query = ...
+                with citationsUrl = ...
+                with ragFeatureConfigId = ...
+                with citationsEnabled = ...
+
+    actions:
+        AnswerQuestionsWithKnowledge:
+            description: "Answers questions about company policies, procedures, troubleshooting, or product information by searching knowledge articles. For example: 'What is your return policy?' or 'How do I fix an issue?'"
+            inputs:
+                query: string
+                    description: "Required. A string created by generative AI to be used in the knowledge article search."
+                    label: "Query"
+                    is_required: True
+                    is_user_input: True
+                citationsUrl: string = @knowledge.citations_url
+                    description: "The URL to use for citations for custom Agents."
+                    label: "Citations Url"
+                    is_required: False
+                    is_user_input: True
+                ragFeatureConfigId: string = @knowledge.rag_feature_config_id
+                    description: "The RAG Feature ID to use for grounding this copilot action invocation."
+                    label: "RAG Feature Configuration Id"
+                    is_required: False
+                    is_user_input: True
+                citationsEnabled: boolean = @knowledge.citations_enabled
+                    description: "Whether or not citations are enabled."
+                    label: "Citations Enabled"
+                    is_required: False
+                    is_user_input: True
+            outputs:
+                knowledgeSummary: object
+                    description: "A string formatted as rich text that includes a summary of the information retrieved from the knowledge articles and citations to those articles."
+                    label: "Knowledge Summary"
+                    complex_data_type_name: "lightning__richTextType"
+                    filter_from_agent: False
+                    is_displayable: True
+                citationSources: object
+                    description: "Source links for the chunks in the hydrated prompt that's used by the planner service."
+                    label: "Citation Sources"
+                    complex_data_type_name: "@apexClassType/AiCopilot__GenAiCitationInput"
+                    filter_from_agent: False
+                    is_displayable: False
+            target: "standardInvocableAction://streamKnowledgeSearch"
+            label: "Answer Questions with Knowledge"
+            require_user_confirmation: False
+            include_in_progress_indicator: True
+            progress_indicator_message: "Getting answers"
+            source: "EmployeeCopilot__AnswerQuestionsWithKnowledge"
+
+subagent off_topic:
+    label: "Off Topic"
+    description: "Politely redirect off-topic or ambiguous requests."
+    reasoning:
+        instructions: ->
+            | Explain that you can only answer questions grounded on the
+              knowledge base and offer that help.

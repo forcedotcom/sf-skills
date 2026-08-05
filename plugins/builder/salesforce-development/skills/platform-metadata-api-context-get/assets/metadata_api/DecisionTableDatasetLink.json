@@ -1,0 +1,72 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DecisionTableDatasetLink - Metadata API",
+  "description": "Represents the information about a dataset link associated with a decision table. In a dataset link, select an object for whose records, the decision table must provide an outcome. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".decisionTableDatasetLink",
+  "directory_location": "decisionTableDatasetLinks",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "decisionTableName": {
+      "type": "string",
+      "description": "The name of the associated decision table.",
+      "required": true
+    },
+    "decisionTblDatasetParameters": {
+      "type": "DecisionTblDatasetParameters",
+      "description": "Mapping between a decision table parameter and a field of the object selected in the dataset link."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the dataset link."
+    },
+    "isDefault": {
+      "type": "boolean",
+      "description": "Indicates whether a dataset link is the default dataset link for a decision table."
+    },
+    "setupName": {
+      "type": "string",
+      "description": "The name of the decision table dataset link, which appears in Setup.",
+      "required": true
+    },
+    "sourceObject": {
+      "type": "string",
+      "description": "The name of the object being evaluated.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "DecisionTblDatasetParameters": {
+      "datasetFieldName": {
+        "type": "string",
+        "description": "Name of the dataset field whose value must be compared against an Input type decision table parameter when providing the outcome.",
+        "required": true
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "The API name of the decision table field that is selected as an input or output for the decision table dataset link.",
+        "required": true
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DecisionTableDatasetLink component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DecisionTableDatasetLink xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <decisionTableName>Sample_DT</decisionTableName>\n   <decisionTblDatasetParameters>\n      <fieldName>IsDeleted</fieldName>\n      <datasetFieldName>IsDeleted</datasetFieldName>\n   </decisionTblDatasetParameters>\n   <decisionTblDatasetParameters>\n      <fieldName>LimitNumber</fieldName>\n      <datasetFieldName>CallDurationInSeconds</datasetFieldName>\n   </decisionTblDatasetParameters>\n   <decisionTblDatasetParameters>\n      <fieldName>Name</fieldName>\n      <datasetFieldName>Subject</datasetFieldName>\n   </decisionTblDatasetParameters>\n   <description>DSL created for md-common tests</description>\n   <isDefault>false</isDefault>\n   <sourceObject>Task</sourceObject>\n   <setupName>DSL Sample</setupName>\n</DecisionTableDatasetLink>"
+    },
+    {
+      "description": "The following is an example of a default DecisionTableDatasetLink component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DecisionTableDatasetLink xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <decisionTableName>Sample_DT</decisionTableName>\n   <isDefault>true</isDefault>\n   <sourceObject>WorkBadgeDefinition</sourceObject>\n   <setupName>Default DSL Sample</setupName>\n</DecisionTableDatasetLink>"
+    }
+  ]
+}

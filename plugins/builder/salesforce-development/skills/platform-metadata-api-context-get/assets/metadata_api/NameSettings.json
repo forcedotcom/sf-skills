@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "NameSettings - Metadata API",
+  "description": "Enables or disables the formal name, middle name, and suffix attributes for these person objects: Contact, Lead, Person Account, and User. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableInformalName": {
+      "type": "boolean",
+      "description": "Reserved for internal use. Available in API version 48.0 and later."
+    },
+    "enableMiddleName": {
+      "type": "boolean",
+      "description": "Indicates whether middle names are enabled (true) or disabled (false) for person objects."
+    },
+    "enableNameSuffix": {
+      "type": "boolean",
+      "description": "Indicates whether suffixes are enabled (true) or disabled (false) for person objects."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"NameSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableInformalName\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMiddleName\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNameSuffix\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows a NameSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<NameSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableMiddleName>true</enableMiddleName>\n    <enableNameSuffix>false</enableNameSuffix>\n</NameSettings>"
+    }
+  ]
+}

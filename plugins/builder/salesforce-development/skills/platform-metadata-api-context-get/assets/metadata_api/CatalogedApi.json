@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CatalogedApi - Metadata API",
+  "description": "Represents an API brought into API Catalog for Salesforce from an external source.",
+  "file_information": ".catalogedApi",
+  "directory_location": "catalogedApis",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description defined when the API is cataloged."
+    },
+    "descriptor": {
+      "type": "string",
+      "description": "The content of the API schema in JSON format."
+    },
+    "externalSourceIdentifier": {
+      "type": "string",
+      "description": "The ID of the API in the external source that it's imported from."
+    },
+    "instances": {
+      "type": "CatalogedApiInstance[]",
+      "description": "Reference to the cataloged API that this instance is specific to."
+    },
+    "label": {
+      "type": "string",
+      "description": "The API name as it appears in API Catalog.",
+      "required": true
+    },
+    "providerType": {
+      "type": "ExternalServiceRegistrationProviderType (enumeration of type string)",
+      "description": "Indicates the source of the API specification registered with API Catalog. API Catalog supports the value Anypoint for deployment and supports other values for enumeration. See information about the values in the registrationProviderType field.",
+      "required": true
+    },
+    "type": {
+      "type": "APIType (enumeration of type string)",
+      "description": "Specifies the API type. If not specified, the API type is derived based on the descriptor content. Nillable. Values are: GraphQL gRPC REST",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "CatalogedApiInstance": {
+      "accessStatus": {
+        "type": "APIInstanceAccessStatus (enumeration of type string)",
+        "description": "The access status for the API instance. Values are: Approved Deleted NoStatus NotAccessible Pending Rejected Revoked",
+        "required": true
+      },
+      "apiInstanceDescriptor": {
+        "type": "string",
+        "description": "The content of the API schema in JSON format."
+      },
+      "approvalType": {
+        "type": "APIInstanceApprovalType (enumeration of type string)",
+        "description": "The approval type for access in Anypoint Platform. Values are: AutoApproval ManualApproval NoApproval",
+        "required": true
+      },
+      "endpointType": {
+        "type": "APIInstanceEndpointType (enumeration of type string)",
+        "description": "The endpoint type to invoke the instance. Available in API version 66.0 and later. Values are: Callout Discovery"
+      },
+      "label": {
+        "type": "string",
+        "description": "The instance name as it appears in API Catalog.",
+        "required": true
+      },
+      "serviceRegistration": {
+        "type": "string",
+        "description": "The service registration in external services related to this API instance.",
+        "required": true
+      },
+      "uri": {
+        "type": "string",
+        "description": "The uniform resource identifier (URI) for the instance.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"APIInstanceAccessStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Approved\"/>\n    <xsd:enumeration value=\"Pending\"/>\n    <xsd:enumeration value=\"NoStatus\"/>\n    <xsd:enumeration value=\"NotAccessible\"/>\n    <xsd:enumeration value=\"Rejected\"/>\n    <xsd:enumeration value=\"Revoked\"/>\n    <xsd:enumeration value=\"Deleted\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"APIInstanceApprovalType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ManualApproval\"/>\n    <xsd:enumeration value=\"AutoApproval\"/>\n    <xsd:enumeration value=\"NoApproval\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"APIInstanceEndpointType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Discovery\"/>\n    <xsd:enumeration value=\"Callout\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"APIType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"REST\"/>\n    <xsd:enumeration value=\"GraphQL\"/>\n    <xsd:enumeration value=\"gRPC\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CatalogedApi\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"descriptor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSourceIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"instances\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CatalogedApiInstance\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"providerType\" type=\"tns:ExternalServiceRegistrationProviderType\"/>\n        <xsd:element name=\"type\" type=\"tns:APIType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CatalogedApiInstance\">\n  <xsd:sequence>\n    <xsd:element name=\"accessStatus\" minOccurs=\"0\" type=\"tns:APIInstanceAccessStatus\"/>\n    <xsd:element name=\"apiInstanceDescriptor\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"approvalType\" minOccurs=\"0\" type=\"tns:APIInstanceApprovalType\"/>\n    <xsd:element name=\"endpointType\" minOccurs=\"0\" type=\"tns:APIInstanceEndpointType\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"serviceRegistration\" type=\"xsd:string\"/>\n    <xsd:element name=\"uri\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ExternalServiceRegistrationProviderType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"MuleSoft\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"SchemaInferred\"/>\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"ExternalConnector\"/>\n    <xsd:enumeration value=\"CustomExternalConnector\"/>\n    <xsd:enumeration value=\"Heroku\"/>\n    <xsd:enumeration value=\"Anypoint\"/>\n    <xsd:enumeration value=\"ApexRest\"/>\n    <xsd:enumeration value=\"AgentActionOutputs\"/>\n    <xsd:enumeration value=\"IntegProcd\"/>\n    <xsd:enumeration value=\"DocumentProcessing\"/>\n    <xsd:enumeration value=\"NamedQuery\"/>\n    <xsd:enumeration value=\"ModelContextProtocol\"/>\n    <xsd:enumeration value=\"AuraEnabled\"/>\n    <xsd:enumeration value=\"ContextDef\"/>\n    <xsd:enumeration value=\"AgentToAgent\"/>\n    <xsd:enumeration value=\"AnypointPublic\"/>\n    <xsd:enumeration value=\"CodeExtension\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This XML is an example of a CatalogedApi component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CatalogedApi xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <externalSourceIdentifier>urn:ms:03ff2c74-d0ea-4eba-a536-36dfd2d0fdbb:api-project::petstore-engineering</externalSourceIdentifier>\n    <instances>\n        <accessStatus>NoStatus</accessStatus>\n        <apiInstanceDescriptor>{&quot;@type&quot;:&quot;anypointAPIInstanceDescriptor&quot;,&quot;environmentType&quot;:&quot;SANDBOX&quot;,&quot;environmentName&quot;:&quot;Sandbox&quot;,&quot;environmentId&quot;:&quot;79305d19-1d89-413f-88ec-d7a8dbd1e29d&quot;,&quot;instanceId&quot;:&quot;4051358&quot;,&quot;authenticationMethod&quot;:&quot;NO_AUTH&quot;,&quot;componentType&quot;:&quot;apiInstance&quot;,&quot;instanceOrigin&quot;:&quot;MANUAL&quot;}</apiInstanceDescriptor>\n        <approvalType>NoApproval</approvalType>\n        <label>petstore-engineering</label>\n        <serviceRegistration>PetstoreEngineeringv109C60C7C</serviceRegistration>\n        <uri>https://google.com</uri>\n    </instances>\n    <label>petstore-engineering</label>\n    <providerType>Anypoint</providerType>\n    <type>REST</type>\n</CatalogedApi>"
+    }
+  ]
+}

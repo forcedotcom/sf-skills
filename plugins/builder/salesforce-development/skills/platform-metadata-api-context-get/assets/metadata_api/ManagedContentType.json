@@ -1,0 +1,86 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ManagedContentType - Metadata API",
+  "description": "Represents the definition of custom content types for use with Salesforce CMS. Custom content types are displayed as forms with defined fields.",
+  "file_information": ".managedContentType",
+  "directory_location": "managedContentTypes",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "Describes the custom content type defined in this ManagedContentType declaration."
+    },
+    "developerName": {
+      "type": "string",
+      "description": "Unique name for the custom content type. For example: OurSpecialContent_c",
+      "required": true
+    },
+    "isMetadataContent": {
+      "type": "boolean",
+      "description": "When true, any content created from this content type is converted to metadata. Default value is false. Availabe in API version 63.0 and later."
+    },
+    "managedContentNodeTypes": {
+      "type": "ManagedContentNodeType[]",
+      "description": "Nodes included as part of this custom content type. When rendered as a form in the Digital Experiences app, each node is represented as an individual field."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Declares the name of the content type as it appears in the UI.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "ManagedContentNodeType": {
+      "helpText": {
+        "type": "string",
+        "description": "Provides assistive text in the UI, displayed as an info bubble for the field. If this field is empty, no info bubble icon or text is displayed. For example: <IMG?>"
+      },
+      "isLocalizable": {
+        "type": "boolean",
+        "description": "Declares a field as localizable and consumable by <loc MDAPI reference> (true) or not (false). Default is false. Note: NodeTypes IMG, URL, DATE, and DATETIME can’t be localized."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "description": "Declares a field as required (true) or not (false). Fields declared as required are indicated by a red asterisk. If a value isn’t added to the field in the custom content type, the form can’t be saved and a standard error is displayed. Default is false. Note: When nodeType is set to NAMEFIELD on a field, isRequired must also be set to True for that field."
+      },
+      "nodeLabel": {
+        "type": "string",
+        "description": "Declares the label for the field as it appears in the UI. In enhanced workspaces, the system generates a Title field by default. To prevent having multiple Title fields on the UI when you create a custom content type for use in an enhanced workspace, don't use Title as the label for nodeLabel.",
+        "required": true
+      },
+      "nodeName": {
+        "type": "string",
+        "description": "Unique name of the nodeType within the content type. nodeName is a simple text field that allows up to 100 alphanumeric characters and underscores. The name must begin with a letter, not include spaces, can’t have two consecutive underscores, and can’t end with an underscore. In enhanced workspaces, the system generates a Title field by default. To prevent having multiple Title fields on the UI when you create a custom content type for use in an enhanced workspace, don't use Title as the label for nodeName.",
+        "required": true
+      },
+      "nodeType": {
+        "type": "MCNodeType (enumeration of type string)",
+        "description": "Identifies the supported type of content in the node. Passed as a string. There’s a maximum of 15 node types per content type. Values are case insensitive but are returned in all capital letters as shown. Valid values are: TEXTSimple text node (max length=255 characters) MTEXTMulti-line text node (max length=2000 characters) RTERich text node (max length=65536 characters) IMG Image node Note: IMG node types can’t be localized. Set isLocalizable to false for images. URL URL node (max length=255 characters) Note: URL accepts protocol string values starting with http://, https://, mailto:, tel:, and /. Note: URL node types can’t be localized. Set isLocalizable to false for URLs. DATE Date node Note: DATE accepts dates only in the format yyyy-MM-dd. Note: DATE node types can’t be localized. Set isLocalizable to false for dates. DATETIME Datetime node Note: DATETIME accepts date and time in the format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z' (UTC datetime in ISO 8601 format). Note: DATETIME node types can’t be localized. Set isLocalizable to false for datetime notes. NAMEFIELD Note: NAMEFIELD declares the field as the name that represents the content when referenced in the UI. For example, text entered in this field displays as a list of available content in the Digital Experiences app or as a piece of content available for inclusion in a collection in an Experience Cloud site. One, and only one, nodeType in your managed content type must be declared as NAMEFIELD. NAMEFIELD is a string of 200 characters or fewer. In enhanced workspaces, the system generates a Title field by default. To prevent having multiple Title fields on the UI when you create a custom content type for use in an enhanced workspace, don't use Title as the label for nodeName or nodeLabel for the NAMEFIELD node. If you've already named nodeName Title, choose a different label for nodeLabel to prevent confusion on the content creation page. When NAMEFIELD is used, isRequired must also be set to true for the field.",
+        "required": true
+      },
+      "placeholderText": {
+        "type": "string",
+        "description": "Provides assistive text in the UI, displayed as placeholder, or ghost text, in a field before any entry is made. For example, Enter a title for your article..."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"MCNodeType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TEXT\"/>\n    <xsd:enumeration value=\"MTEXT\"/>\n    <xsd:enumeration value=\"RTE\"/>\n    <xsd:enumeration value=\"IMG\"/>\n    <xsd:enumeration value=\"NAMEFIELD\"/>\n    <xsd:enumeration value=\"URL\"/>\n    <xsd:enumeration value=\"DATETIME\"/>\n    <xsd:enumeration value=\"DATE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ManagedContentNodeType\">\n  <xsd:sequence>\n    <xsd:element name=\"helpText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isLocalizable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"nodeLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"nodeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"nodeType\" type=\"tns:MCNodeType\"/>\n    <xsd:element name=\"placeholderText\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ManagedContentType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"isMetadataContent\" minOccurs=\"0\" type=\"xsd:boolean\" nillable=\"true\"/>\n        <xsd:element name=\"managedContentNodeTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ManagedContentNodeType\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ManagedContentType component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ManagedContentType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <developerName>myContentType</developerName>\n\t<masterLabel>My Content Type</masterLabel>\n\t<description>This is the description for my content type</description>\n\t<managedContentNodeTypes>\n\t\t<nodeName>title</nodeName>\n\t\t<nodeLabel>Content Title</nodeLabel>\n\t\t<nodeType>NAMEFIELD</nodeType>\n\t\t<placeholderText>Placeholder Text for title</placeholderText>\n\t\t<helpText>Help Text for title</helpText>\n\t\t<isLocalizable>true</isLocalizable>\n\t\t<isRequired>true</isRequired>\n\t</managedContentNodeTypes>\n\t<managedContentNodeTypes>\n\t\t<nodeName>textnode</nodeName>\n\t\t<nodeLabel>Content Text</nodeLabel>\n\t\t<nodeType>TEXT</nodeType>\n\t\t<placeholderText>Placeholder Text for Content Text</placeholderText>\n\t\t<helpText>Help Text for Content Text</helpText>\n\t\t<isLocalizable>true</isLocalizable>\n\t\t<isRequired>false</isRequired>\n\t</managedContentNodeTypes>\n\t<managedContentNodeTypes>\n\t\t<nodeName>richtextnode</nodeName>\n\t\t<nodeLabel>Content RichText</nodeLabel>\n\t\t<nodeType>RTE</nodeType>\n\n\t</managedContentNodeTypes>\n\t<managedContentNodeTypes>\n\t\t<nodeName>multilinetextnode</nodeName>\n\t\t<nodeLabel>Content MultilineText</nodeLabel>\n\t\t<nodeType>MTEXT</nodeType>\n\t</managedContentNodeTypes>\n\t<managedContentNodeTypes>\n\t\t<nodeName>imagenode</nodeName>\n\t\t<nodeLabel>Content Image</nodeLabel>\n\t\t<nodeType>IMG</nodeType>\n\n\t</managedContentNodeTypes>\n</ManagedContentType>"
+    }
+  ]
+}

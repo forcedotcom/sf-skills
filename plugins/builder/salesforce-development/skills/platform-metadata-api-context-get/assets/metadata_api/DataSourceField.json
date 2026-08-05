@@ -1,0 +1,115 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataSourceField - Metadata API",
+  "description": "Represents the details of a data source field.",
+  "file_information": ".dataSourceField",
+  "directory_location": "dataSourceFields",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "datatype": {
+      "type": "string",
+      "description": "Indicates the data type of the field: text, number, or date.",
+      "required": true
+    },
+    "dateFormat": {
+      "type": "string",
+      "description": "The date format of date, time, date/time fields."
+    },
+    "definitionCreationType": {
+      "type": "DefinitionCreationType (enumeration of type string)",
+      "description": "Describes whether this object was added by the user or as part of a standard taxonomy. Available in API version 62.0 and later. Valid values are: Activation_Audience (Reserved for internal use only) ADG Activation_Audience. Available in API version 63.0 and later. Bridge Calculated_Insight CG_Audience Chunk Curated Custom Derived Directory_Table External Ml_Prediction Segment_Membership Semantic Standard System Transform Vector_Embedding"
+    },
+    "externalDataType": {
+      "type": "string",
+      "description": "The type of data in the external system. Available in API version 63.0 and later."
+    },
+    "externalName": {
+      "type": "string",
+      "description": "Name of the object in the external system. This is different from the developer name.",
+      "required": true
+    },
+    "fieldFormula": {
+      "type": "string",
+      "description": "Used for formulas."
+    },
+    "isDataRequired": {
+      "type": "boolean",
+      "description": "If true, data is required. Default value is false."
+    },
+    "isEventDate": {
+      "type": "boolean",
+      "description": "If true, an event date is required. Default value is false. Available in API version 63.0 and later."
+    },
+    "isFormula": {
+      "type": "boolean",
+      "description": "If true, a formula is required. Default value is false."
+    },
+    "isRecordModified": {
+      "type": "boolean",
+      "description": "If true, the system tracks the modification date of the record. Default value is false. Available in API version 63.0 and later."
+    },
+    "keyQualifierName": {
+      "type": "string",
+      "description": "Contains the developer name of the keyQualifier field. Available in API version 62.0 and later."
+    },
+    "length": {
+      "type": "int",
+      "description": "Length of a string column."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Field label.",
+      "required": true
+    },
+    "precision": {
+      "type": "int",
+      "description": "The total number of digits in a number including decimal points. Used for currency and for numeric accuracy."
+    },
+    "primaryIndexOrder": {
+      "type": "int",
+      "description": "If supplied, indicates that this field is part of the primary key. The number value indicates the order of attributes if it’s a compound primary key. A missing value means that this field isn’t part of the primary key."
+    },
+    "scale": {
+      "type": "int",
+      "description": "The number of digits to the right of the decimal point. Used for currency and for numeric accuracy."
+    },
+    "sequence": {
+      "type": "int",
+      "description": "The sequence of this source schema.",
+      "required": true
+    },
+    "srcKeyQualifier": {
+      "type": "string",
+      "description": "Contains a reference to the source key qualifier record. The source key is the MktDataLakeSrcKeyQualifer metadata type. Available in API version 55.0 and later."
+    },
+    "usageTag": {
+      "type": "usageTag (enumeration of type string)",
+      "description": "Indicates if the field is a key qualifier field. Available in API version 55.0 and later. Values are: KEY_QUALIFIER—The field is used as a key qualifier field. NONE—The field isn’t used as a key qualifier field."
+    },
+    "versionNumber": {
+      "type": "double",
+      "description": "The version of the data source object.",
+      "required": true
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is an example of a DataSourceObject component and its fields. You can retrieve the DataSourceField component only through its parent object, DataSourceObject.",
+      "code": "<DataSourceObject xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <dataSource>test1108</dataSource>\n    <dataSourceFields>\n        <fullName>DOB</fullName>\n        <datatype>D</datatype>\n        <externalName>DOB</externalName>\n        <isDataRequired>false</isDataRequired>\n        <masterLabel>DOB</masterLabel>\n        <sequence xsi:nil=\"true\"/>\n        <versionNumber xsi:nil=\"true\"/>\n    </dataSourceFields>\n    <externalRecordIdentifier>individuals_20200125_000000_csv</externalRecordIdentifier>\n    <masterLabel>test1108</masterLabel>\n    <objectType>Object</objectType>\n</DataSourceObject>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<types>\n        <members>test1108</members>\n        <name>DataSource</name>\n    </types>"
+    }
+  ]
+}

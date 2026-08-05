@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataSourceBundleDefinition - Metadata API",
+  "description": "Represents the bundle of streams that a user adds to a data kit.",
+  "file_information": ".dataSourceBundleDefinition",
+  "directory_location": "dataSourceBundleDefinitions",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "dataPlatform": {
+      "type": "string",
+      "required": true,
+      "description": "Indicates the connector type that the streams in the bundle belong to."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the associated data source bundle. This field is available in API version 53.0 and later."
+    },
+    "icon": {
+      "type": "string",
+      "description": "The icon used in the deployment flow. This field is available in API version 53.0 and later."
+    },
+    "isMultiDeploymentSupported": {
+      "type": "boolean",
+      "description": "Indicates if the bundle can be deployed multiple times or not. Default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Indicates the name of the bundle."
+    },
+    "bundleVersion": {
+      "type": "int",
+      "description": "Indicates the version of the bundle. This field is available in API version 63.0 and later."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataSourceBundleDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataSourceBundleDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <dataPlatform>Salesforce_Sales_and_Service_Cloud</dataPlatform>\n    <isMultiDeploymentSupported>true</isMultiDeploymentSupported>\n    <bundleVersion>1</bundleVersion> \n    <masterLabel>b2</masterLabel>\n</DataSourceBundleDefinition>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<types>\n      <members>b2</members>\n      <name>DataSourceBundleDefinition</name>\n</types>"
+    }
+  ]
+}

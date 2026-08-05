@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CareLimitType - Metadata API",
+  "description": "Defines the characteristics of limits on benefit provision.",
+  "file_information": ".careLimitType",
+  "directory_location": "careLimitTypes",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type."
+    },
+    "limitType": {
+      "type": "string",
+      "description": "Source of limit on benefit provision, such as a co-insurance requirement."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the limit type."
+    },
+    "metricType": {
+      "type": "CareLimitTypeMetricType (enumeration of type string)",
+      "description": "Metric to be used for calculating and displaying the benefit limit, such as number of visits, amount spent, or percentage of allowed expenditure.Valid values are: Amount Money Percentage Text"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CareLimitType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"limitType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"metricType\" minOccurs=\"0\" type=\"tns:CareLimitTypeMetricType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CareLimitTypeMetricType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Money\"/>\n    <xsd:enumeration value=\"Percentage\"/>\n    <xsd:enumeration value=\"Amount\"/>\n    <xsd:enumeration value=\"Text\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is an example of a CareLimitType component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CareLimitType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <limitType>test</limitType>\n    <masterLabel>test</masterLabel>\n    <metricType>Money</metricType>\n    <isProtected>false</isProtected>\n</CareLimitType>"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ProfileSessionSetting - Metadata API",
+  "description": "Represents a profile’s session settings. Use ProfileSessionSetting to retrieve the session settings for a given profile. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".profileSessionSetting",
+  "directory_location": "profileSessionSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "profile": {
+      "type": "string",
+      "description": "Name of the user profile.",
+      "required": true
+    },
+    "requiredSessionLevel": {
+      "type": "SessionSecurityLevel",
+      "description": "Session security level."
+    },
+    "sessionPersistence": {
+      "type": "boolean",
+      "description": "Beta. If true, keep users logged in to their Experience Cloud site until the session times out—even if they close their browser. Use sessionPersistence to reduce how often users must log in to their site. Applies only to the External Identity profile."
+    },
+    "sessionTimeout": {
+      "type": "int",
+      "description": "Specifies how many minutes of inactivity elapse before a user’s authenticated session times out. At the end of the session, the user must log in again. This session timeout value applies to users of the profile and overrides the org-wide timeout value. Changes to the org-wide timeout value don’t apply to users of this profile. Valid values: 0—2 Hours 15—15 Minutes 30—30 Minutes 60—1 Hour 90—90 Minutes 120—2 Hours 240—4 Hours 480—8 Hours 720—12 Hours 1440—24 Hours",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "SessionSecurityLevel": {
+      "SessionSecurityLevel": {
+        "type": "(enumeration of type string)",
+        "description": "User’s security level for the current session. The HIGH_ASSURANCE security level for this session meets the High Assurance requirements set in the org’s session settings under Session Security Levels. The STANDARD security level for this session meets the Standard requirements set in the org’s session settings under Session Security Levels. The LOW level isn’t available or used in the Salesforce UI. It’s used at the API level, but users assigned to this level experience unpredictable and reduced functionality."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProfileSessionSetting\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"externalCommunityUserIdentityVerif\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"forceLogout\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"profile\" type=\"xsd:string\"/>\n        <xsd:element name=\"requiredSessionLevel\" minOccurs=\"0\" type=\"tns:SessionSecurityLevel\"/>\n        <xsd:element name=\"sessionPersistence\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sessionTimeout\" type=\"xsd:int\"/>\n        <xsd:element name=\"sessionTimeoutWarning\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"SessionSecurityLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"LOW\"/>\n    <xsd:enumeration value=\"STANDARD\"/>\n    <xsd:enumeration value=\"HIGH_ASSURANCE\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ProfileSessionSetting component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ProfileSessionSetting xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <profile>platformportal</profile>\n    <requiredSessionLevel>HIGH_ASSURANCE</requiredSessionLevel>\n    <sessionTimeout>1440</sessionTimeout>\n</ProfileSessionSetting>"
+    }
+  ]
+}

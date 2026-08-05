@@ -1,0 +1,55 @@
+# Hello World Agent
+# The minimal viable Agentforce agent - start here!
+#
+# This template shows the minimum structure required for a working agent.
+#
+# ★ Why This Structure?
+#   - system: Sets agent personality and default messages
+#   - config: Required metadata for deployment (developer_name must be unique)
+#   - language: Locale settings (required for deployment)
+#   - start_agent: Entry point subagent (exactly one required)
+#
+# No mutable greeting flag is needed: the welcome message and surviving
+# conversation history already establish whether the conversation has begun.
+#
+# Deploy with: sf agent publish authoring-bundle --api-name Hello_World_Agent --target-org [alias]
+
+system:
+    instructions: "You are a friendly assistant. Greet users warmly and help them."
+    messages:
+        welcome: "Hello! I'm here to help. What can I do for you today?"
+        error: "I'm sorry, something went wrong. Please try again."
+
+access:
+    default_agent_user: "your.user@company.com"
+
+config:
+    developer_name: "Hello_World_Agent"
+    agent_label: "Hello World Agent"
+    description: "A minimal example agent to learn Agent Script basics"
+
+variables:
+    EndUserId: linked string
+        source: @MessagingSession.MessagingEndUserId
+        description: "Messaging End User ID"
+    RoutableId: linked string
+        source: @MessagingSession.Id
+        description: "Messaging Session ID"
+    ContactId: linked string
+        source: @MessagingEndUser.ContactId
+        description: "Contact ID"
+
+language:
+    default_locale: "en_US"
+    additional_locales: ""
+    all_additional_locales: False
+
+# Entry point subagent - this is where every conversation starts
+start_agent main:
+    label: "Main"
+    description: "Greets users and provides help"
+
+    reasoning:
+        instructions: ->
+            | Answer the user's latest request helpfully and concisely. Ask one
+              clarifying question when required information is missing.

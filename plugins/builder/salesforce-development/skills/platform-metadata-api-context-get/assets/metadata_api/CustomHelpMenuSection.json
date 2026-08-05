@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomHelpMenuSection - Metadata API",
+  "description": "Represents the section of the Lightning Experience help menu that the admin added to display custom, org-specific help resources for the org. The custom section contains help resources added by the admin. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".customHelpMenuSection",
+  "directory_location": "customHelpMenuSections",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "customHelpMenuItems": {
+      "type": "CustomHelpMenuItems[]",
+      "description": "Items included in the custom section. Specify up to 15 items."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Name of the custom section. Only one custom section can be added to the Lightning Experience help menu. Specify up to 80 characters.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "CustomHelpMenuItems": {
+      "linkURL": {
+        "type": "string",
+        "description": "The URL for the resource.",
+        "required": true
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "The name of the resource. Specify up to 100 characters.",
+        "required": true
+      },
+      "sortOrder": {
+        "type": "int",
+        "description": "The order of the item within the custom section. Valid values are 1 through 15.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomHelpMenuItem\">\n  <xsd:sequence>\n    <xsd:element name=\"linkUrl\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomHelpMenuSection\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customHelpMenuItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomHelpMenuItem\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CustomHelpMenuSection component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomHelpMenuSection xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>MyOrgCustomHelp</masterLabel>\n    <customHelpMenuItems>\n        <linkUrl>https://www.yourcompanyhelp.com/gettingstarted</linkUrl>\n        <masterLabel>Getting Started</masterLabel>\n        <sortOrder>1</sortOrder>\n    </customHelpMenuItems>\n    <customHelpMenuItems>\n        <linkUrl>https://www.yourcompanyhelp.com/features</linkUrl>\n        <masterLabel>Feature to Start Using Right Away</masterLabel>\n        <sortOrder>2</sortOrder>\n    </customHelpMenuItems>\n    <customHelpMenuItems>\n        <linkUrl>https://www.yourcompanyhelp.com/salestips</linkUrl>\n        <masterLabel>Tips for Sales Team Members</masterLabel>\n        <sortOrder>3</sortOrder>\n    </customHelpMenuItems>\n</CustomHelpMenuSection>"
+    }
+  ]
+}

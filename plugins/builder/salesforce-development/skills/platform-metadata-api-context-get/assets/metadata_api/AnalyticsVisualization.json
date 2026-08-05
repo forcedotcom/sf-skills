@@ -1,0 +1,180 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AnalyticsVisualization - Metadata API",
+  "description": "Represents a Tableau Next visualization.",
+  "file_information": ".uaviz",
+  "directory_location": "analyticsVisualizations",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "actions": {
+      "type": "AnalyticsAssetAction[]",
+      "description": "The actions for the visualization. A visualization has 0 or more actions."
+    },
+    "analyticsWorkspace": {
+      "type": "string",
+      "required": true,
+      "description": "The Tableau Next workspace the visualization belongs to."
+    },
+    "creationSource": {
+      "type": "string",
+      "description": "The creation source for the visualization."
+    },
+    "dataSource": {
+      "type": "string",
+      "required": true,
+      "description": "The data source for the visualization."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description for the visualization."
+    },
+    "fields": {
+      "type": "AnalyticsVizField[]",
+      "description": "A list of data fields for the visualization. A visualization has 0 or more fields."
+    },
+    "lastDraftModifiedDate": {
+      "type": "dateTime",
+      "description": "The date and time the workspace draft was last modified."
+    },
+    "lastPublishedDate": {
+      "type": "dateTime",
+      "description": "The date and time the workspace was last published."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the visualization."
+    },
+    "templateAssetSourceName": {
+      "type": "string",
+      "description": "If the visualization was created from a template, the name of the source visualization in the template."
+    },
+    "templateSource": {
+      "type": "string",
+      "description": "If the visualization was created from a template, the name of the source template."
+    },
+    "version": {
+      "type": "double",
+      "description": "The API version of the visualization."
+    },
+    "views": {
+      "type": "AnalyticsVizViewDef[]",
+      "description": "A list of views for the visualization. A visualization has 0 or more views."
+    },
+    "visualSpecification": {
+      "type": "base64Binary",
+      "required": true,
+      "description": "The visual specification for the visualization."
+    },
+    "workspaceAssetRelationships": {
+      "type": "AnalyticsWorkspaceAsset[]",
+      "description": "A list of analytics assets in the workspace this visualization is associated with. A visualization has 0 or more workspace asset relationships."
+    }
+  },
+  "sub_types": {
+    "AnalyticsVizField": {
+      "adHoCalc": {
+        "type": "string",
+        "description": "The expression to do an ad-hoc calculation with."
+      },
+      "analyticsVizVersion": {
+        "type": "string",
+        "description": "The version of the visualization the field is associated with."
+      },
+      "computeUsing": {
+        "type": "string",
+        "description": "The expression to compute the field value with."
+      },
+      "displayCategory": {
+        "type": "VisualizationFieldDisplayCategoryType (enumeration of type string)",
+        "description": "The display category type for the visualization field. Values are: Continuous Discrete"
+      },
+      "fieldKey": {
+        "type": "string",
+        "required": true,
+        "description": "The key for the field."
+      },
+      "fieldName": {
+        "type": "string",
+        "description": "The name of the field."
+      },
+      "function": {
+        "type": "VisualizationFieldFunctionType (enumeration of type string)",
+        "description": "The function type of the visualization field. Values are: Attr Avg Count CountD DatePartDay DatePartHour DatePartMinute DatePartMonth DatePartQuarter DatePartSecond DatePartWeek DatePartWeekDay DatePartYear DateTruncDay DateTruncHour DateTruncMinute DateTruncMonth DateTruncQuarter DateTruncSecond DateTruncWeek DateTruncYear FiscalDatePartMonth FiscalDatePartQuarter FiscalDatePartWeek FiscalDatePartYear FiscalDateTruncMonth FiscalDateTruncQuarter FiscalDateTruncWeek FiscalDateTruncYear Max Mdy Median Min My Stdev Stdevp Sum UserAgg Var Varp"
+      },
+      "hierarchyName": {
+        "type": "string",
+        "description": "The hierarchy name for the field."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the field."
+      },
+      "objectName": {
+        "type": "string",
+        "description": "The name of the data source object for the field."
+      },
+      "quickTableCalc": {
+        "type": "string",
+        "description": "The expression to do a quick table calculation with."
+      },
+      "role": {
+        "type": "VisualizationFieldRoleType (enumeration of type string)",
+        "description": "The role type of the visualization field. Values are: Dimension Measure"
+      },
+      "type": {
+        "type": "VisualizationFieldType (enumeration of type string)",
+        "description": "The type of the visualization field. Values are: Field MapPosition MeasureNames MeasureValues"
+      }
+    },
+    "AnalyticsVizViewDef": {
+      "analyticsVizVersion": {
+        "type": "string",
+        "description": "The version of the visualization the view is associated with."
+      },
+      "fullName": {
+        "type": "string",
+        "required": true,
+        "description": "The full name of the view definition."
+      },
+      "isOriginal": {
+        "type": "boolean",
+        "required": true,
+        "description": "Indicates whether the view is original (true) or not (false)."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the view definition."
+      },
+      "version": {
+        "type": "double",
+        "description": "The API version of the visualization view."
+      },
+      "viewSpecification": {
+        "type": "string",
+        "description": "The specification for the view definition."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AnalyticsActionEventType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"click\"/>\n    <xsd:enumeration value=\"select\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AnalyticsActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"recordaction\"/>\n    <xsd:enumeration value=\"flow\"/>\n    <xsd:enumeration value=\"navigate\"/>\n    <xsd:enumeration value=\"parameter\"/>\n    <xsd:enumeration value=\"filter\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"AnalyticsAssetAction\">\n  <xsd:sequence>\n    <xsd:element name=\"actionType\" type=\"tns:AnalyticsActionType\"/>\n    <xsd:element name=\"analyticsAssetVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"eventType\" type=\"tns:AnalyticsActionEventType\"/>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:double\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsVisualization\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsAssetAction\"/>\n        <xsd:element name=\"analyticsWorkspace\" type=\"xsd:string\"/>\n        <xsd:element name=\"creationSource\" minOccurs=\"0\" type=\"tns:AnalyticsVizCreationSource\"/>\n        <xsd:element name=\"dataSource\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsVizField\"/>\n        <xsd:element name=\"lastDraftModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <xsd:element name=\"lastPublishedDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateAssetSourceName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"views\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsVizViewDef\"/>\n        <xsd:element name=\"visualSpecification\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"workspaceAssetRelationships\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsWorkspaceAsset\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"AnalyticsVizCreationSource\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"AnalyticsVizField\">\n  <xsd:sequence>\n    <xsd:element name=\"adHocCalc\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"analyticsVizVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"computeUsing\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"displayCategory\" minOccurs=\"0\" type=\"tns:VisualizationFieldDisplayCategoryType\"/>\n    <xsd:element name=\"fieldKey\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"function\" minOccurs=\"0\" type=\"tns:VisualizationFieldFunctionType\"/>\n    <xsd:element name=\"hierarchyLevel\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"hierarchyName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"latitudeOrY\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"longitudeOrX\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"objectName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"positionName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"positional\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n    <xsd:element name=\"quickTableCalc\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"role\" minOccurs=\"0\" type=\"tns:VisualizationFieldRoleType\"/>\n    <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:VisualizationFieldType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsVizViewDef\">\n  <xsd:sequence>\n    <xsd:element name=\"analyticsVizVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fullName\" type=\"xsd:string\"/>\n    <xsd:element name=\"isOriginal\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"viewSpecification\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsWorkspaceAsset\">\n  <xsd:sequence>\n    <xsd:element name=\"asset\" type=\"xsd:string\"/>\n    <xsd:element name=\"assetType\" type=\"tns:AnalyticsWorkspaceAssetType\"/>\n    <xsd:element name=\"assetUsageType\" type=\"tns:AnalyticsWorkspaceAssetUsageType\"/>\n    <xsd:element name=\"metadataSourceType\" minOccurs=\"0\" type=\"tns:AnalyticsWorkspaceAssetMetadataSourceType\"/>\n    <xsd:element name=\"workspace\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetMetadataSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Promoted\"/>\n    <xsd:enumeration value=\"Reused\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AnalyticsDashboard\"/>\n    <xsd:enumeration value=\"AnalyticsVisualization\"/>\n    <xsd:enumeration value=\"SemanticModel\"/>\n    <xsd:enumeration value=\"MktDataModelObject\"/>\n    <xsd:enumeration value=\"MktCalculatedInsightObject\"/>\n    <xsd:enumeration value=\"MktDataLakeObject\"/>\n    <xsd:enumeration value=\"MktDataConnection\"/>\n    <xsd:enumeration value=\"MktDataTransformSetup\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetUsageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Created\"/>\n    <xsd:enumeration value=\"Referenced\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"VisualizationFieldDisplayCategoryType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Discrete\"/>\n    <xsd:enumeration value=\"Continuous\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"VisualizationFieldFunctionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sum\"/>\n    <xsd:enumeration value=\"Avg\"/>\n    <xsd:enumeration value=\"Median\"/>\n    <xsd:enumeration value=\"Count\"/>\n    <xsd:enumeration value=\"CountD\"/>\n    <xsd:enumeration value=\"Min\"/>\n    <xsd:enumeration value=\"Max\"/>\n    <xsd:enumeration value=\"Stdev\"/>\n    <xsd:enumeration value=\"Stdevp\"/>\n    <xsd:enumeration value=\"Var\"/>\n    <xsd:enumeration value=\"Varp\"/>\n    <xsd:enumeration value=\"UserAgg\"/>\n    <xsd:enumeration value=\"Attr\"/>\n    <xsd:enumeration value=\"DatePartYear\"/>\n    <xsd:enumeration value=\"DatePartQuarter\"/>\n    <xsd:enumeration value=\"DatePartMonth\"/>\n    <xsd:enumeration value=\"DatePartWeek\"/>\n    <xsd:enumeration value=\"DatePartWeekDay\"/>\n    <xsd:enumeration value=\"DatePartDay\"/>\n    <xsd:enumeration value=\"DatePartHour\"/>\n    <xsd:enumeration value=\"DatePartMinute\"/>\n    <xsd:enumeration value=\"DatePartSecond\"/>\n    <xsd:enumeration value=\"DateTruncYear\"/>\n    <xsd:enumeration value=\"DateTruncQuarter\"/>\n    <xsd:enumeration value=\"DateTruncMonth\"/>\n    <xsd:enumeration value=\"DateTruncWeek\"/>\n    <xsd:enumeration value=\"DateTruncDay\"/>\n    <xsd:enumeration value=\"DateTruncHour\"/>\n    <xsd:enumeration value=\"DateTruncMinute\"/>\n    <xsd:enumeration value=\"DateTruncSecond\"/>\n    <xsd:enumeration value=\"My\"/>\n    <xsd:enumeration value=\"Mdy\"/>\n    <xsd:enumeration value=\"FiscalDatePartYear\"/>\n    <xsd:enumeration value=\"FiscalDatePartQuarter\"/>\n    <xsd:enumeration value=\"FiscalDatePartMonth\"/>\n    <xsd:enumeration value=\"FiscalDatePartWeek\"/>\n    <xsd:enumeration value=\"FiscalDateTruncYear\"/>\n    <xsd:enumeration value=\"FiscalDateTruncQuarter\"/>\n    <xsd:enumeration value=\"FiscalDateTruncMonth\"/>\n    <xsd:enumeration value=\"FiscalDateTruncWeek\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"VisualizationFieldRoleType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Dimension\"/>\n    <xsd:enumeration value=\"Measure\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"VisualizationFieldType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Field\"/>\n    <xsd:enumeration value=\"MeasureNames\"/>\n    <xsd:enumeration value=\"MeasureValues\"/>\n    <xsd:enumeration value=\"MapPosition\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AnalyticsVisualization component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AnalyticsVisualization xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n  <analyticsWorkspace>My_Workspace</analyticsWorkspace>\n  <description>A visualization</description>\n  <dataSource>My_Semantic_Model</dataSource>\n  <fields>\n    <displayCategory>Discrete</displayCategory>\n    <fieldKey>Field1</fieldKey>\n    <fieldName>Lead_Source18</fieldName>\n    <objectName>Opportunity_Home</objectName>\n    <role>Dimension</role>\n     <type>Field</type>\n  </fields>\n  <fields>\n    <fieldKey>Field2</fieldKey>\n    <displayCategory>Continuous</displayCategory>\n    <fieldName>Amount</fieldName>\n    <function>Sum</function>\n    <objectName>Opportunity_Home</objectName>\n    <role>Measure</role>\n    <type>Field</type>\n  </fields>\n  <views>\n    <fullName>default</fullName>\n    <masterLabel>My_Visualization_default</masterLabel>\n    <viewSpecification>\n      {&quot;filters&quot;:[{&quot;fieldKey&quot;:&quot;Field1&quot;,&quot;filterInfos&quot;:[{&quot;isCustom&quot;:false,&quot;isExcludes&quot;:false,&quot;type&quot;:&quot;In&quot;,&quot;useAll&quot;:false,&quot;values&quot;:[&quot;NewBusiness&quot;]},{&quot;includeAllValuesWhenEmpty&quot;:true,&quot;isExcludes&quot;:false,&quot;operator&quot;:&quot;Contains&quot;,&quot;type&quot;:&quot;WildCard&quot;,&quot;value&quot;:&quot;&quot;}],&quot;isContext&quot;:false}],&quot;sorts&quot;:[{&quot;byField&quot;:&quot;Field2&quot;,&quot;fieldKey&quot;:&quot;Field1&quot;,&quot;order&quot;:&quot;Ascending&quot;,&quot;type&quot;:&quot;Nested&quot;}]}</viewSpecification>\n    <isOriginal>true</isOriginal>\n  </views>\n  <masterLabel>My_Visualization</masterLabel>\n  <version>64.0</version>\n  <templateSource></templateSource>\n  <templateAssetSourceName></templateAssetSourceName>\n  <workspaceAssetRelationships>\n    <asset xsi:nil=\"true\"/>\n    <assetType>AnalyticVisualization</assetType>\n    <assetUsageType>Created</assetUsageType>\n    <workspace>My_Workspace</workspace>\n  </workspaceAssetRelationships>\n</AnalyticsVisualization>"
+    }
+  ]
+}

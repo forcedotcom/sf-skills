@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExtlClntAppConfigurablePolicies - Metadata API",
+  "description": "Represents the policies for an external client app to disable or enable plugins.",
+  "file_information": ".ecaPlcy",
+  "directory_location": "extlClntAppPolicies",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "externalClientApplication": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the external client app associated with the plugins."
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "required": true,
+      "description": "If true, all plugins are enabled unless individually disabled. If false, all plugins are disabled. The default value is true. Available in API version 60.0 and later."
+    },
+    "isCanvasPluginEnabled": {
+      "type": "boolean",
+      "description": "If true, the Canvas app plugin is enabled. If false, the Canvas app plugin is disabled. The default value is true. Available in API version 66.0 and later."
+    },
+    "isMobilePluginEnabled": {
+      "type": "boolean",
+      "description": "If true, the Mobile plugin is enabled. If false, the Mobile plugin is disabled. The default value is true. Available in API version 63.0 and later."
+    },
+    "isNotificationPluginEnabled": {
+      "type": "boolean",
+      "description": "If true, the Notification plugin is enabled. If false, the Notification plugin is disabled. The default value is true. Available in API version 63.0 and later."
+    },
+    "isOauthPluginEnabled": {
+      "type": "boolean",
+      "description": "If true, the OAuth plugin is enabled. If false, the OAuth plugin is disabled. The default value is true. Available in API version 60.0 and later."
+    },
+    "isPushPluginEnabled": {
+      "type": "boolean",
+      "description": "If true, the Push Notification plugin is enabled. If false, the Push Notification plugin is disabled. The default value is true. Available in API version 63.0 and later."
+    },
+    "isSamlPluginEnabled": {
+      "type": "boolean",
+      "description": "If true, the SAML plugin is enabled. If false, the SAML plugin is disabled. The default value is true. Available in API version 63.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "The OAuth policies name for the external client app."
+    },
+    "startPage": {
+      "type": "ExtlClntAppStartPage (enumeration type of string)",
+      "description": "Determines which URL to use for the start page. Custom None OAuth Available in API version 63.0 and later."
+    },
+    "startUrl": {
+      "type": "string",
+      "description": "The custom URL where users are directed after they authenticate. For example, direct users to a specific page in the service provider app. Available in API version 63.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExtlClntAppConfigurablePolicies\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"isCanvasPluginEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isMobilePluginEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isNotificationPluginEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isOauthPluginEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isPushPluginEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isSamlPluginEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"startPage\" minOccurs=\"0\" type=\"tns:ExtlClntAppStartPage\"/>\n        <xsd:element name=\"startUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ExtlClntAppStartPage\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"OAuth\"/>\n    <xsd:enumeration value=\"SAML\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows an ExtlClntAppConfigurablePolicies component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExtlClntAppConfigurablePolicies xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <externalClientApplication>myeca</externalClientApplication>\n    <isEnabled>true</isEnabled>\n....<isCanvasPluginEnabled>true</isCanvasPluginEnabled>\n    <isMobilePluginEnabled>true</isMobilePluginEnabled>\n    <isNotificationPluginEnabled>true</isNotificationPluginEnabled>    \n    <isOauthPluginEnabled>true</isOauthPluginEnabled>\n    <isPushPluginEnabled>true</isPushPluginEnabled>\n    <isSamlPluginEnabled>true</isSamlPluginEnabled>\n    <label>myecapolicy</label>\n    <startPage>OAuth</startPage>\n    <startUrl>https://example.org</startUrl>\n</ExtlClntAppConfigurablePolicies>"
+    }
+  ]
+}

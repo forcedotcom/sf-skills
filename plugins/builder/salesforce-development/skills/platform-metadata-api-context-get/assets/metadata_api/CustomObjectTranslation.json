@@ -1,0 +1,319 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomObjectTranslation - Metadata API",
+  "description": "This metadata type allows you to translate custom objects for a variety of languages.",
+  "file_information": ".objectTranslation",
+  "directory_location": "objectTranslations",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "caseValues": {
+      "type": "ObjectNameCaseValue[]",
+      "description": "Different combinations of the custom object with regard to article, plural, possessive, and case."
+    },
+    "fields": {
+      "type": "CustomFieldTranslation[]",
+      "description": "A list of translations for the custom fields associated with the custom object."
+    },
+    "fieldSets": {
+      "type": "FieldSetTranslation[]",
+      "description": "A list of field set translations. Available in API version 41.0 and later."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name of the custom object and the translation language with a format of customObjectName - lang, where customObjectName is the custom object name, and lang is the translation language. Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call."
+    },
+    "gender": {
+      "type": "Gender",
+      "description": "Indicates the gender of the noun that represents the object. Used for languages where words need different treatment depending on their gender."
+    },
+    "layouts": {
+      "type": "LayoutTranslation[]",
+      "description": "A list of page layout translations."
+    },
+    "nameFieldLabel": {
+      "type": "string",
+      "description": "The label for the name field. Maximum of 80 characters."
+    },
+    "namedFilters": {
+      "type": "NamedFilterTranslation[]",
+      "description": "A list of translations for lookup filter error messages associated with the custom object. This field has been removed as of API version 30.0 and is only available in prior versions. The translation metadata associated with a lookup filter is now represented by the lookupFilter field in the CustomFieldTranslation subtype."
+    },
+    "quickActions": {
+      "type": "QuickActionTranslation[]",
+      "description": "A list of translations for actions."
+    },
+    "recordTypes": {
+      "type": "RecordTypeTranslation[]",
+      "description": "A list of record type translations."
+    },
+    "sharingReasons": {
+      "type": "SharingReasonTranslation[]",
+      "description": "A list of sharing reason translations."
+    },
+    "startsWith": {
+      "type": "StartsWith (enumeration of type string)",
+      "description": "Indicates whether the noun starts with a vowel, consonant, or is a special character. This is used for languages where words need different treatment depending on the first character."
+    },
+    "validationRules": {
+      "type": "ValidationRuleTranslation[]",
+      "description": "A list of validation rule translations."
+    },
+    "webLinks": {
+      "type": "WebLinkTranslation[]",
+      "description": "A list of web link translations."
+    },
+    "workflowTasks": {
+      "type": "WorkflowTaskTranslation[]",
+      "description": "A list of workflow task translations."
+    }
+  },
+  "sub_types": {
+    "CustomFieldTranslation": {
+      "caseValues": {
+        "type": "ObjectNameCaseValue[]",
+        "description": "Different combinations of the custom object with regard to article, plural, possessive, and case. Available in API version 29.0 and later."
+      },
+      "description": {
+        "type": "string",
+        "description": "Translation for the custom field description."
+      },
+      "gender": {
+        "type": "Gender",
+        "description": "Available in API version 29.0 and later."
+      },
+      "help": {
+        "type": "string",
+        "description": "Translation for the text that displays in the field-level help hover text for this field."
+      },
+      "label": {
+        "type": "string",
+        "description": "Translation for the label. Maximum of 40 characters."
+      },
+      "lookupFilter": {
+        "type": "LookupFilterTranslation",
+        "description": "Represents the translation metadata associated with a lookup filter. This field is available in API version 30.0 and later. LookupFilter isn’t supported on the article type object."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the field relative to the custom object; for example, MyField__c.",
+        "required": true
+      },
+      "picklistValues": {
+        "type": "PicklistValueTranslation[]",
+        "description": "List of translations for picklist values. See PicklistValue. Note: “Subject” on the Task object is a text field, not a picklist value. It can’t be retrieved via Metadata API. Translations can be provided via the Translation Workbench."
+      },
+      "relationshipLabel": {
+        "type": "string",
+        "description": "Translation for a lookup relationship label. A lookup relationship allows a field to be associated with another field. The relationship field allows users to select an option from a list of values defined by the other field. Maximum of 80 characters."
+      },
+      "startsWith": {
+        "type": "StartsWith (enumeration of type string)",
+        "description": "Indicates whether the noun starts with a vowel, consonant, or is a special character. Used for languages where words need different treatment depending on the first character. Available in API version 29.0 and later."
+      }
+    },
+    "FieldSetTranslation": {
+      "label": {
+        "type": "string",
+        "description": "Translation for the field set label. Maximum of 80 characters.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The field set name.",
+        "required": true
+      }
+    },
+    "LayoutTranslation": {
+      "layout": {
+        "type": "string",
+        "description": "The layout name.",
+        "required": true
+      },
+      "layoutType": {
+        "type": "string"
+      },
+      "sections": {
+        "type": "LayoutSectionTranslation[]",
+        "description": "An array of layout section translations."
+      }
+    },
+    "LayoutSectionTranslation": {
+      "label": {
+        "type": "string",
+        "description": "Translation for the label. Maximum of 765 characters.",
+        "required": true
+      },
+      "section": {
+        "type": "string",
+        "description": "The section name.",
+        "required": true
+      }
+    },
+    "LookupFilterTranslation": {
+      "errorMessage": {
+        "type": "string",
+        "description": "The error message that appears if the lookup filter fails."
+      },
+      "informationalMessage": {
+        "type": "string",
+        "description": "The information message displayed on the page. Use to describe things some users don't understand, such as why certain items are excluded in the lookup filter."
+      }
+    },
+    "NamedFilterTranslation": {
+      "errorMessage": {
+        "type": "string",
+        "description": "The error message that appears if the lookup filter fails."
+      },
+      "informationalMessage": {
+        "type": "string",
+        "description": "The information message displayed on the page. Use to describe things the user doesn’t understand, such as why certain items are excluded in the lookup filter."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the lookup filter. If you create this field in the user interface, a name is automatically assigned. If you create this field through Metadata API, you must include the name field.",
+        "required": true
+      }
+    },
+    "ObjectNameCaseValue": {
+      "article": {
+        "type": "Article (enumeration of type string)",
+        "description": "English has two types of articles: definite ( the ) and indefinite ( a, an ). The usage of these articles depends mainly on whether you're referring to any member of a group, or to a specific member of a group. The valid values are: Definite Indefinite None"
+      },
+      "caseType": {
+        "type": "CaseType (enumeration of type string)",
+        "description": "The case of the custom object name. The valid values are: Ablative Accusative Adessive Allative Causalfinal Dative Delative Distributive Elative Essive Essiveformal Genitive Illative Inessive Instrumental Lative Locative Nominative Objective Partitive Prepositional Subjective Sublative Superessive Termanative Translative Vocative"
+      },
+      "plural": {
+        "type": "boolean",
+        "description": "Indicates whether the value field is plural (true) or singular (false)."
+      },
+      "possessive": {
+        "type": "Possessive (enumeration of type string)",
+        "description": "The possessive case of a language is a grammatical case used to indicate a relationship of possession. The valid values are: First None Second"
+      },
+      "value": {
+        "type": "string",
+        "description": "The value or label in this grammatical context.",
+        "required": true
+      }
+    },
+    "PicklistValueTranslation": {
+      "masterLabel": {
+        "type": "string",
+        "description": "The picklist value defined on the setup page in the application. Displayed wherever a translated label isn't available.",
+        "required": true
+      },
+      "translation": {
+        "type": "string",
+        "description": "Translation for the value.",
+        "required": true
+      }
+    },
+    "QuickActionTranslation": {
+      "aspect": {
+        "type": "string",
+        "description": "Identifies which quick action label the translated text belongs to. Use this field only when you want to use different strings for the quick action's field label and informational message. Valid values are Master and InfoMessage. Available in API version 53.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "description": "Translation for the label. Maximum of 765 characters.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The quick action name.",
+        "required": true
+      }
+    },
+    "RecordTypeTranslation": {
+      "label": {
+        "type": "string",
+        "description": "Translation for the label. Maximum of 765 characters.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The record type name.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Translation for the record type description. Available in API version 42.0 and later."
+      }
+    },
+    "SharingReasonTranslation": {
+      "label": {
+        "type": "string",
+        "description": "Translation for the sharing reason.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The sharing reason name.",
+        "required": true
+      }
+    },
+    "ValidationRuleTranslation": {
+      "errorMessage": {
+        "type": "string",
+        "description": "Translation for the error message associated with the validation rule failure.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The validation rule name.",
+        "required": true
+      }
+    },
+    "WebLinkTranslation": {
+      "label": {
+        "type": "string",
+        "description": "Translation for the web link label. Maximum of 765 characters.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The web link name.",
+        "required": true
+      }
+    },
+    "WorkflowTaskTranslation": {
+      "description": {
+        "type": "string",
+        "description": "Translation for the workflow task description."
+      },
+      "name": {
+        "type": "string",
+        "description": "The workflow task name.",
+        "required": true
+      },
+      "subject": {
+        "type": "string",
+        "description": "Translation for the workflow task subject."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"Article\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Indefinite\"/>\n    <xsd:enumeration value=\"Definite\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CaseType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Nominative\"/>\n    <xsd:enumeration value=\"Accusative\"/>\n    <xsd:enumeration value=\"Genitive\"/>\n    <xsd:enumeration value=\"Dative\"/>\n    <xsd:enumeration value=\"Inessive\"/>\n    <xsd:enumeration value=\"Elative\"/>\n    <xsd:enumeration value=\"Illative\"/>\n    <xsd:enumeration value=\"Adessive\"/>\n    <xsd:enumeration value=\"Ablative\"/>\n    <xsd:enumeration value=\"Allative\"/>\n    <xsd:enumeration value=\"Essive\"/>\n    <xsd:enumeration value=\"Translative\"/>\n    <xsd:enumeration value=\"Partitive\"/>\n    <xsd:enumeration value=\"Objective\"/>\n    <xsd:enumeration value=\"Subjective\"/>\n    <xsd:enumeration value=\"Instrumental\"/>\n    <xsd:enumeration value=\"Prepositional\"/>\n    <xsd:enumeration value=\"Locative\"/>\n    <xsd:enumeration value=\"Vocative\"/>\n    <xsd:enumeration value=\"Sublative\"/>\n    <xsd:enumeration value=\"Superessive\"/>\n    <xsd:enumeration value=\"Delative\"/>\n    <xsd:enumeration value=\"Causalfinal\"/>\n    <xsd:enumeration value=\"Essiveformal\"/>\n    <xsd:enumeration value=\"Termanative\"/>\n    <xsd:enumeration value=\"Distributive\"/>\n    <xsd:enumeration value=\"Ergative\"/>\n    <xsd:enumeration value=\"Adverbial\"/>\n    <xsd:enumeration value=\"Abessive\"/>\n    <xsd:enumeration value=\"Comitative\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CustomFieldTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"caseValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ObjectNameCaseValue\"/>\n    <xsd:element name=\"gender\" minOccurs=\"0\" type=\"tns:Gender\"/>\n    <xsd:element name=\"help\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"lookupFilter\" minOccurs=\"0\" type=\"tns:LookupFilterTranslation\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"picklistValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PicklistValueTranslation\"/>\n    <xsd:element name=\"relationshipLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"startsWith\" minOccurs=\"0\" type=\"tns:StartsWith\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomObjectTranslation\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"caseValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ObjectNameCaseValue\"/>\n        <xsd:element name=\"fieldSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldSetTranslation\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomFieldTranslation\"/>\n        <xsd:element name=\"gender\" minOccurs=\"0\" type=\"tns:Gender\"/>\n        <xsd:element name=\"layouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LayoutTranslation\"/>\n        <xsd:element name=\"nameFieldLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"quickActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:QuickActionTranslation\"/>\n        <xsd:element name=\"recordTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordTypeTranslation\"/>\n        <xsd:element name=\"sharingReasons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingReasonTranslation\"/>\n        <xsd:element name=\"standardFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:StandardFieldTranslation\"/>\n        <xsd:element name=\"startsWith\" minOccurs=\"0\" type=\"tns:StartsWith\"/>\n        <xsd:element name=\"validationRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValidationRuleTranslation\"/>\n        <xsd:element name=\"webLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WebLinkTranslation\"/>\n        <xsd:element name=\"workflowTasks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowTaskTranslation\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"FieldSetTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"Gender\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Neuter\"/>\n    <xsd:enumeration value=\"Masculine\"/>\n    <xsd:enumeration value=\"Feminine\"/>\n    <xsd:enumeration value=\"AnimateMasculine\"/>\n    <xsd:enumeration value=\"ClassI\"/>\n    <xsd:enumeration value=\"ClassIII\"/>\n    <xsd:enumeration value=\"ClassV\"/>\n    <xsd:enumeration value=\"ClassVII\"/>\n    <xsd:enumeration value=\"ClassIX\"/>\n    <xsd:enumeration value=\"ClassXI\"/>\n    <xsd:enumeration value=\"ClassXIV\"/>\n    <xsd:enumeration value=\"ClassXV\"/>\n    <xsd:enumeration value=\"ClassXVI\"/>\n    <xsd:enumeration value=\"ClassXVII\"/>\n    <xsd:enumeration value=\"ClassXVIII\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LayoutSectionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"section\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"LayoutTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"layout\" type=\"xsd:string\"/>\n    <xsd:element name=\"layoutType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sections\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LayoutSectionTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"LookupFilterTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"errorMessage\" type=\"xsd:string\"/>\n    <xsd:element name=\"informationalMessage\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ObjectNameCaseValue\">\n  <xsd:sequence>\n    <xsd:element name=\"article\" minOccurs=\"0\" type=\"tns:Article\"/>\n    <xsd:element name=\"caseType\" minOccurs=\"0\" type=\"tns:CaseType\"/>\n    <xsd:element name=\"plural\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"possessive\" minOccurs=\"0\" type=\"tns:Possessive\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PicklistValueTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"translation\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"Possessive\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"First\"/>\n    <xsd:enumeration value=\"Second\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"QuickActionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"aspect\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordTypeTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SharingReasonTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"StandardFieldTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"StartsWith\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Consonant\"/>\n    <xsd:enumeration value=\"Vowel\"/>\n    <xsd:enumeration value=\"Special\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ValidationRuleTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"errorMessage\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WebLinkTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WorkflowTaskTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"subject\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This sample XML definition shows a CustomObjectTranslation for the Description__c object in German, with one custom field, Summary__c. The name and location of the file containing this definition would be objectTranslations/Description__c-de.objectTranslation.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObjectTranslation xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <caseValues>\n        <caseType>Nominative</caseType>\n        <plural>false</plural>\n        <value>Beschreibung</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Nominative</caseType>\n        <plural>true</plural>\n        <value>Beschreibungen</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Accusative</caseType>\n        <plural>false</plural>\n        <value>Beschreibung</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Accusative</caseType>\n        <plural>true</plural>\n        <value>Beschreibungen</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Genitive</caseType>\n        <plural>false</plural>\n        <value>Beschreibung</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Genitive</caseType>\n        <plural>true</plural>\n        <value>Beschreibungen</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Dative</caseType>\n        <plural>false</plural>\n        <value>Beschreibung</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Dative</caseType>\n        <plural>true</plural>\n        <value>Beschreibungen</value>\n    </caseValues>\n    <fields>\n        <label>Zusammenfassung</label>\n        <name>Summary__c</name>\n    </fields>\n    <gender>Feminine</gender>\n    <nameFieldLabel>Beschreibungen</nameFieldLabel>\n</CustomObjectTranslation>"
+    },
+    {
+      "description": "This sample XML definition shows a CustomObjectTranslation for the Account object, renaming Account to Client (Kunde) in German. The Account object has one standard field, account_number, and one custom field, Account_Code__c. The name and location of the file containing this definition would be objectTranslations/Account-de.objectTranslation.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObjectTranslation xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <caseValues>\n        <caseType>Nominative</caseType>\n        <plural>false</plural>\n        <value>Kunde</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Nominative</caseType>\n        <plural>true</plural>\n        <value>Kunden</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Accusative</caseType>\n        <plural>false</plural>\n        <value>Kunden</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Accusative</caseType>\n        <plural>true</plural>\n        <value>Kunden</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Genitive</caseType>\n        <plural>false</plural>\n        <value>Kunden</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Genitive</caseType>\n        <plural>true</plural>\n        <value>Kunden</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Dative</caseType>\n        <plural>false</plural>\n        <value>Kunden</value>\n    </caseValues>\n    <caseValues>\n        <caseType>Dative</caseType>\n        <plural>true</plural>\n        <value>Kunden</value>\n    </caseValues>\n    <fields>\n        <caseValues>\n            <caseType>Nominative</caseType>\n            <plural>false</plural>\n            <value>Kundennummer</value>\n        </caseValues>\n        <caseValues>\n            <caseType>Nominative</caseType>\n            <plural>true</plural>\n            <value>Kundennummern</value>\n        </caseValues>\n        <gender>Feminine</gender>\n        <name>account_number</name>\n    </fields>\n    <fields>\n        <label>Kunden-Code</label>\n        <name>Account_Code__c</name>\n    </fields>\n    <gender>Masculine</gender>\n</CustomObjectTranslation>"
+    }
+  ]
+}

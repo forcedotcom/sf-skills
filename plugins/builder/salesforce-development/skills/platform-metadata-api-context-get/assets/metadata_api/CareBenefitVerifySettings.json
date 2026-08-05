@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CareBenefitVerifySettings - Metadata API",
+  "description": "Represents the configuration settings for benefit verification requests.",
+  "file_information": ".careBenefitVerifySettings",
+  "directory_location": "careBenefitVerifySettings",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "codeSetType": {
+      "type": "string",
+      "description": "Specifies the code set type for the benefits verification service type codes."
+    },
+    "defaultNpi": {
+      "type": "string",
+      "description": "Default National Provider Identifier to be used in the benefits verification request."
+    },
+    "generalPlanServiceTypeCode": {
+      "type": "string",
+      "description": "Service type code for the plan benefits as a whole."
+    },
+    "isDefault": {
+      "type": "boolean",
+      "description": "Indicates whether this record is the default verification service (true) or not (false)."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the benefits verification service."
+    },
+    "organizationName": {
+      "type": "string",
+      "description": "Specifies the organization name for the benefits verification request service."
+    },
+    "serviceApexClass": {
+      "type": "string",
+      "description": "Apex class used to access the benefits verification service."
+    },
+    "serviceNamedCredential": {
+      "type": "string",
+      "description": "Credential used to access the benefits verification service."
+    },
+    "serviceTypeSourceSystem": {
+      "type": "string",
+      "description": "Service type code for the plan benefits as a whole."
+    },
+    "uriPath": {
+      "type": "string",
+      "description": "Link to payer endpoint."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CareBenefitVerifySettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"codeSetType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultNpi\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"generalPlanServiceTypeCode\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"organizationName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"serviceApexClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"serviceNamedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"serviceTypeSourceSystem\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"uriPath\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is an example of a CareBenefitVerifySettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CareBenefitVerifySettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <generalPlanServiceTypeCode>abc</generalPlanServiceTypeCode>\n    <isDefault>true</isDefault>\n    <masterLabel>test</masterLabel>\n    <serviceApexClass>TestApexClass</serviceApexClass>\n    <serviceNamedCredential>test</serviceNamedCredential>\n    <uriPath>efgh</uriPath>\n    <serviceTypeSourceSystem>Lorem ipsum dolor</serviceTypeSourceSystem>\n    <codeSetType>Code set</codeSetType>\n    <defaultNpi>Npi info</defaultNpi>\n    <organizationName>Organization name</organizationName>\n</CareBenefitVerifySettings>"
+    }
+  ]
+}

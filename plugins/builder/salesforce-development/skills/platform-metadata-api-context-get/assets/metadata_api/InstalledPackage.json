@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "InstalledPackage - Metadata API",
+  "description": "Represents a first-generation managed package to be installed or uninstalled. Deploying a newer version of a currently installed package upgrades the package. You can install up to 20 first-generation managed packages in a single deployment. To install an unlocked or second-generation managed package, use the sf package install Salesforce CLI command.",
+  "file_information": ".installedPackage",
+  "directory_location": "installedPackages",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "activateRSS": {
+      "type": "boolean",
+      "description": "Determines the state of Remote Site Settings (RSS) and Content Security Policy (CSP) at the time of installing the package and must be set to either of these values. true Keep the isActive state of any RSS or CSP in the package. false Override the isActive state of any RSS or CSP in the package and set it to false. The default value is false. Available in API version 43.0 and later.",
+      "required": true
+    },
+    "password": {
+      "type": "string",
+      "description": "Specifies the package password."
+    },
+    "securityType": {
+      "type": "string",
+      "description": "Determines user access for the installed package. Valid values are: AdminsOnly AllUsers The default value is AllUsers. Available in API version 57.0 and later."
+    },
+    "versionNumber": {
+      "type": "string",
+      "description": "The version number of the package. The version number has the format majorNumber.minorNumber.patchNumber (for example, 2.1.3 ).",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"InstalledPackage\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"activateRSS\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"password\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"securityType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"versionNumber\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example specifies a sample package to be installed or uninstalled.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n        <InstalledPackage xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n        <versionNumber>1.0</versionNumber>\n        <password>optional_password</password>\n        <securityType>AdminsOnly</securityType>\n        <activateRSS>true</activateRSS>\n        </InstalledPackage>"
+    }
+  ]
+}

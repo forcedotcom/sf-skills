@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "valuetypefield",
+    "picklistentry",
+    "wsdl_segment"
+  ],
+  "title": "DescribeValueTypeResult - Metadata API",
+  "description": "Contains information about a value type that’s useful for developers working with declarative metadata.",
+  "valuetypefield": {
+    "fields": {
+      "description": "The ValueTypeField object for the next field, if any."
+    },
+    "foreignKeyDomain": {
+      "description": "If isForeignKey is True, foreignKeyDomain is the type of object, such as Account or Opportunity."
+    },
+    "isForeignKey": {
+      "description": "True if the field is a foreign key. That means this field is the primary key in a different database table."
+    },
+    "isNameField": {
+      "description": "True if this value type field is a fullName field; otherwise False."
+    },
+    "minOccurs": {
+      "description": "1 if this field is required, 0 otherwise."
+    },
+    "name": {
+      "description": "The name of this value type field. The name is null for parent fields."
+    },
+    "picklistValues": {
+      "description": "The individual picklist values if the field is a picklist."
+    },
+    "soapType": {
+      "description": "The data type of the field, such as boolean or double."
+    },
+    "valueRequired": {
+      "description": "Indicates whether this value type field must have a value (true) or can be null (false).",
+      "required": true
+    }
+  },
+  "picklistentry": {
+    "active": {
+      "description": "True if the picklist value is active and displayed in the drop-down list for the picklist field in the user interface. False if the picklist value is inactive."
+    },
+    "defaultValue": {
+      "description": "True if the picklist value is a default value, otherwise, False."
+    },
+    "label": {
+      "description": "Display name of this item in the picklist."
+    },
+    "value": {
+      "description": "Value of this item in the picklist."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DescribeValueTypeResult\">\n  <xsd:sequence>\n    <xsd:element name=\"apiCreatable\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"apiDeletable\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"apiReadable\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"apiUpdatable\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"parentField\" minOccurs=\"0\" type=\"tns:ValueTypeField\"/>\n    <xsd:element name=\"valueTypeFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValueTypeField\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PicklistEntry\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"defaultValue\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"validFor\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ValueTypeField\">\n  <xsd:sequence>\n    <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValueTypeField\"/>\n    <xsd:element name=\"foreignKeyDomain\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"isForeignKey\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isNameField\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"minOccurs\" type=\"xsd:int\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"picklistValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PicklistEntry\"/>\n    <xsd:element name=\"soapType\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueRequired\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

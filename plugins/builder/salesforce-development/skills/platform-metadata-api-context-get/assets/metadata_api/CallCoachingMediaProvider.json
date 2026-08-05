@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CallCoachingMediaProvider - Metadata API",
+  "description": "Represents the CallCoachingMediaProvider configuration. Use CallCoachingMediaProvider to configure which providers of voice recordings that Einstein Conversation Insights can use. For example, Sales Dialer can provide voice recordings. Einstein Conversation Insights then stores and analyzes call recordings to surface insights and trends in customer conversations.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".callCoachingMediaProvider",
+  "directory_location": "CallCoachingMediaProvider",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the media provider can upload voice recordings (true) or not (false). Default value is false."
+    },
+    "providerDescription": {
+      "type": "string",
+      "description": "Description of the media provider."
+    },
+    "providerName": {
+      "type": "string",
+      "description": "Name of the media provider."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CallCoachingMediaProvider\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"providerDescription\" type=\"xsd:string\"/>\n        <xsd:element name=\"providerName\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CallCoachingMediaProvider component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CallCoachingMediaProvider xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <isActive>true</isActive>\n    <providerDescription>Salesforce telephony provider</providerDescription>\n    <providerName>Dialer</providerName>\n</CallCoachingMediaProvider>"
+    }
+  ]
+}

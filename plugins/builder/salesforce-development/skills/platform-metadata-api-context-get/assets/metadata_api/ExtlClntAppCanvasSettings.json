@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExtlClntAppCanvasSettings - Metadata API",
+  "description": "Represents an external client app’s canvas app settings.",
+  "file_information": ".ecaCanvas",
+  "directory_location": "extlClntAppCanvasSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "accessMethod": {
+      "type": "AccessMethod (enumeration of type string)",
+      "description": "Indicates how the canvas app initiates the OAuth authentication flow. The valid values are: Get—OAuth authentication is used, and the user is prompted to allow the third-party application to access their information. When you use this access method, the canvas app must initiate the OAuth authentication flow. Post—OAuth authentication is used, but when the administrator installs the canvas app, they implicitly allow access for users. Therefore, the user isn’t prompted to allow the third party to access their user information. When you use this access method, the authentication is posted directly to the canvas app URL.",
+      "required": true
+    },
+    "canvasLocationOptions": {
+      "type": "CanvasLocationOptions (enumeration of type string)[]",
+      "description": "Indicates where the canvas app can appear to the user. The valid values are: Aura—The canvas app can appear in a custom Lightning component. ChatterFeed—The canvas app can appear as a Chatter feed item. MobileNav—The canvas app can appear in a mobile card in the Salesforce mobile app. None—The canvas app can appear only in the Canvas App Previewer. PageLayout—The canvas app can appear on a page layout. When viewed in the Salesforce mobile app, the canvas app appears in the record detail page. Publisher—The canvas app can appear as a global action. Visualforce—The canvas app can appear on a Visualforce page."
+    },
+    "canvasOptions": {
+      "type": "CanvasOptions (enumeration of type string)[]",
+      "description": "Indicates whether to hide the Share button and header in the publisher for your canvas app. Valid values are: HideShare—The Share button is hidden in the publisher for the related canvas app. HideHeader—The header is hidden in the publisher for the related canvas app."
+    },
+    "canvasUrl": {
+      "type": "string",
+      "description": "The URL of the third-party app that’s exposed as a canvas app.",
+      "required": true
+    },
+    "externalClientApplication": {
+      "type": "string",
+      "description": "The name of the associated external client app.",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "The name of the app."
+    },
+    "lifeCycleHandler": {
+      "type": "string",
+      "description": "The name of the lifecycle handler Apex class."
+    },
+    "samlInitiationMethod": {
+      "type": "SamlInitiationMethod (enumeration of type string)",
+      "description": "If you’re using SAML single sign-on (SSO), indicates which provider initiates the SSO flow. IdpInitiated—Identity provider initiated. Salesforce makes the initial request to start the SSO flow. SpInitiated—Service provider initiated. The canvas app starts the SSO flow after it’s invoked. None—The canvas app isn’t using SAML SSO."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AccessMethod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Get\"/>\n    <xsd:enumeration value=\"Post\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CanvasLocationOptions\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Chatter\"/>\n    <xsd:enumeration value=\"UserProfile\"/>\n    <xsd:enumeration value=\"Visualforce\"/>\n    <xsd:enumeration value=\"Aura\"/>\n    <xsd:enumeration value=\"Publisher\"/>\n    <xsd:enumeration value=\"ChatterFeed\"/>\n    <xsd:enumeration value=\"ServiceDesk\"/>\n    <xsd:enumeration value=\"OpenCTI\"/>\n    <xsd:enumeration value=\"AppLauncher\"/>\n    <xsd:enumeration value=\"MobileNav\"/>\n    <xsd:enumeration value=\"PageLayout\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"CanvasOptions\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"HideShare\"/>\n    <xsd:enumeration value=\"HideHeader\"/>\n    <xsd:enumeration value=\"PersonalEnabled\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ExtlClntAppCanvasSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accessMethod\" minOccurs=\"0\" type=\"tns:AccessMethod\"/>\n        <xsd:element name=\"canvasLocationOptions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CanvasLocationOptions\"/>\n        <xsd:element name=\"canvasOptions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CanvasOptions\"/>\n        <xsd:element name=\"canvasUrl\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lifeCycleHandler\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"samlInitiationMethod\" minOccurs=\"0\" type=\"tns:SamlInitiationMethod\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SamlInitiationMethod\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"IdpInitiated\"/>\n    <xsd:enumeration value=\"SpInitiated\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ExtlClntAppCanvasSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExtlClntAppCanvasSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <accessMethod>Post</accessMethod>\n    <canvasUrl>https://www.example.com</canvasUrl>\n    <canvasLocationOptions>Aura</canvasLocationOptions>\n    <canvasLocationOptions>Visualforce</canvasLocationOptions>\n    <canvasOptions>HideHeader</canvasOptions>\n    <label>My external client app settings for canvas</label>\n    <samlInitiationMethod>None</samlInitiationMethod>\n    <externalClientApplication>testCanvasECA</externalClientApplication>\n</ExtlClntAppCanvasSettings>"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WaveDataflow - Metadata API",
+  "description": "Represents the WaveDataflow object in the Analytics application. This type extends the MetadataWithContent metadata type and inherits its content and fullName fields.",
+  "file_information": ".wdf",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "description": "The name of the Analytics application the dataflow is connected to. This field is available in API version 48.0 and later."
+    },
+    "dataflowType": {
+      "type": "string",
+      "description": "The type of the dataflow. Supported types are User and Prepared. The default value is User This field is available in API version 41.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The dataflow description that appears in the user interface."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The dataflow name that appears in the user interface.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WaveDataflow\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dataflowType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveDataflow component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WaveDataflow xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">    <content xsi:nil=\"true\"/>\n    <description>flow1</description>\n    <masterLabel>flow1</masterLabel>\n</WaveDataflow>"
+    }
+  ]
+}

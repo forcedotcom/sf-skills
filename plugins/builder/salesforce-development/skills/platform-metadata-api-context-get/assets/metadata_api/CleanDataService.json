@@ -1,0 +1,166 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CleanDataService - Metadata API",
+  "description": "Represents a data service that adds and updates data in standard objects.",
+  "file_information": ".cleanDataService",
+  "directory_location": "cleanDataServices",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "cleanRules": {
+      "type": "CleanRule[]",
+      "description": "A list of data integration rules",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the data service",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label for this data service. Although this value is displayed, it’s an internal label for the data service and isn’t translated.",
+      "required": true
+    },
+    "matchEngine": {
+      "type": "string",
+      "description": "A key that maps to the internal data service identifier.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "CleanRule": {
+      "bulkEnabled": {
+        "type": "boolean",
+        "description": "If this field is set to true, Salesforce applies the data integration rule to existing records whenever the rule is updated or saved.",
+        "required": true
+      },
+      "bypassTriggers": {
+        "type": "boolean",
+        "description": "If this field is set to true, Salesforce bypasses triggers when it applies the rule; otherwise, it applies triggers after it applies the rule.",
+        "required": true
+      },
+      "bypassWorkflow": {
+        "type": "boolean",
+        "description": "If this field is set to true, Salesforce bypasses workflow rules when it applies the data integration rule; otherwise, it applies workflow rules after it applies the rule.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "User-friendly text that describes the data integration rule.",
+        "required": true
+      },
+      "developerName": {
+        "type": "string",
+        "description": "This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This unique name prevents conflicts with rules from other packages that have the same masterLabel. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field.",
+        "required": true
+      },
+      "fieldMappings": {
+        "type": "FieldMapping[]",
+        "description": "A list of FieldMapping entries for the rule.",
+        "required": true
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "Label for this object. This display value is the internal label that is not translated.",
+        "required": true
+      },
+      "matchRule": {
+        "type": "string",
+        "description": "An internal label for a matching rule in the data service that’s associated with the CleanRule.",
+        "required": true
+      },
+      "sourceSobjectType": {
+        "type": "string",
+        "description": "A virtual object in the data service that is associated with the CleanRule. Specifying a non-existent object causes an error.",
+        "required": true
+      },
+      "status": {
+        "type": "string",
+        "description": "Status of the data integration rule. Valid values are Active and Inactive.",
+        "required": true
+      },
+      "targetSobjectType": {
+        "type": "string",
+        "description": "A standard object that’s the target of additions and updates specified by this CleanRule. Specifying an object that the data service does not support causes an error.",
+        "required": true
+      }
+    },
+    "FieldMapping": {
+      "developerName": {
+        "type": "string",
+        "description": "This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This unique name prevents conflicts with field mappings from other packages that have the same masterLabel. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field.",
+        "required": true
+      },
+      "fieldMappingRows": {
+        "type": "FieldMappingRow[]",
+        "description": "A list of FieldMappingRow entries. Each entry represents a field in a standard object that maps to a field in the data service.",
+        "required": true
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "Label for this object. This display value is the internal label that is not translated.",
+        "required": true
+      },
+      "SObjectType": {
+        "type": "string",
+        "description": "The standard object associated with this FieldMapping. Specifying an object that the data service does not support causes an error.",
+        "required": true
+      }
+    },
+    "FieldMappingRow": {
+      "fieldName": {
+        "type": "string",
+        "description": "The display name for the field represented by the FieldMappingRow."
+      },
+      "fieldMappingFields": {
+        "type": "FieldMappingField[]",
+        "description": "A list of FieldMappingField entries. Each entry is a field in a standard object that maps to a field in the data service.",
+        "required": true
+      },
+      "mappingOperation": {
+        "type": "string",
+        "description": "The comparison operation the data service applies when it compares the value of this FieldMappingRow to the mapped field in the object specified in SObjectType. The value of this field is AutoFill, which indicates that the data service only adds data if the object field is blank."
+      },
+      "SObjectType": {
+        "type": "string",
+        "description": "The standard object for the field mapped to the FieldMappingRow. Specifying an object that the data service does not support causes an error."
+      }
+    },
+    "FieldMappingField": {
+      "dataServiceField": {
+        "type": "string",
+        "description": "A field in the data service that is mapped to this field.",
+        "required": true
+      },
+      "dataServiceObjectName": {
+        "type": "string",
+        "description": "An object in the data service that contains the FieldMappingRow associated with this FieldMappingField. Specifying a non-existent object causes an error.",
+        "required": true
+      },
+      "priority": {
+        "type": "int",
+        "description": "Represents the priority that the data service uses when it updates the field, relative to other update rules for the same field. Valid values are 1-100.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CleanDataService\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"cleanRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CleanRule\"/>\n        <xsd:element name=\"description\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"matchEngine\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"CleanRule\">\n  <xsd:sequence>\n    <xsd:element name=\"bulkEnabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"bypassTriggers\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"bypassWorkflow\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"description\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldMapping\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"matchRule\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceSobjectType\" type=\"xsd:string\"/>\n    <xsd:element name=\"status\" type=\"tns:CleanRuleStatus\"/>\n    <xsd:element name=\"targetSobjectType\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"CleanRuleStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Inactive\"/>\n    <xsd:enumeration value=\"Active\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FieldMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"SObjectType\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldMappingRows\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldMappingRow\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FieldMappingField\">\n  <xsd:sequence>\n    <xsd:element name=\"dataServiceField\" type=\"xsd:string\"/>\n    <xsd:element name=\"dataServiceObjectName\" type=\"xsd:string\"/>\n    <xsd:element name=\"priority\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FieldMappingRow\">\n  <xsd:sequence>\n    <xsd:element name=\"SObjectType\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldMappingFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldMappingField\"/>\n    <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n    <xsd:element name=\"mappingOperation\" type=\"tns:MappingOperation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MappingOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Autofill\"/>\n    <xsd:enumeration value=\"Overwrite\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CleanDataService component for the lead standard object.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CleanDataService xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <cleanRules>\n        <bulkEnabled>false</bulkEnabled>\n        <bypassTriggers>false</bypassTriggers>\n        <bypassWorkflow>false</bypassWorkflow>\n        <description>Adds data info to leads</description>\n        <developerName>DataService_Leads_Enrichment</developerName>\n        <fieldMappings>\n            <SObjectType>DataServiceCompanyObject</SObjectType>\n            <developerName>DataService_Leads_Enrichment_InputMapping</developerName>\n            <fieldMappingRows>\n                <SObjectType>DataServiceCompanyObject</SObjectType>\n                <fieldMappingFields>\n                    <dataServiceField>Email</dataServiceField>\n                    <dataServiceObjectName>Lead</dataServiceObjectName>\n                    <priority>1</priority>\n                </fieldMappingFields>\n                <fieldName>Email</fieldName>\n                <mappingOperation>Autofill</mappingOperation>\n            </fieldMappingRows>\n            <fieldMappingRows>\n                <SObjectType>DataServiceCompanyObject</SObjectType>\n                <fieldMappingFields>\n                    <dataServiceField>Company</dataServiceField>\n                    <dataServiceObjectName>Lead</dataServiceObjectName>\n                    <priority>1</priority>\n                </fieldMappingFields>\n                <fieldName>Name</fieldName>\n                <mappingOperation>Autofill</mappingOperation>\n            </fieldMappingRows>\n            <masterLabel>DataServiceInputMapping</masterLabel>\n        </fieldMappings>\n        <fieldMappings>\n            <SObjectType>Lead</SObjectType>\n            <developerName>DataService_Leads_Enrichment_OutputMapping</developerName>\n            <fieldMappingRows>\n                <SObjectType>Lead</SObjectType>\n                <fieldMappingFields>\n                    <dataServiceField>EmployeesTotal</dataServiceField>\n                    <dataServiceObjectName>DataServiceCompanyObject</dataServiceObjectName>\n                    <priority>1</priority>\n                </fieldMappingFields>\n                <fieldName>NumberOfEmployees</fieldName>\n                <mappingOperation>Autofill</mappingOperation>\n            </fieldMappingRows>\n            <fieldMappingRows>\n                <SObjectType>Lead</SObjectType>\n                <fieldMappingFields>\n                    <dataServiceField>Revenue</dataServiceField>\n                    <dataServiceObjectName>DataServiceCompanyObject</dataServiceObjectName>\n                    <priority>1</priority>\n                </fieldMappingFields>\n                <fieldName>AnnualRevenue</fieldName>\n                <mappingOperation>Autofill</mappingOperation>\n            </fieldMappingRows>\n            <fieldMappingRows>\n                <SObjectType>Lead</SObjectType>\n                <fieldMappingFields>\n                    <dataServiceField>Industry</dataServiceField>\n                    <dataServiceObjectName>DataServiceCompanyObject</dataServiceObjectName>\n                    <priority>1</priority>\n                </fieldMappingFields>\n                <fieldName>Industry</fieldName>\n                <mappingOperation>Autofill</mappingOperation>\n            </fieldMappingRows>\n            <masterLabel>DataServiceOutputMapping</masterLabel>\n        </fieldMappings>\n        <masterLabel>Data Service Company Info for Leads</masterLabel>\n        <matchRule>DataServiceLeadAppendMatchRule</matchRule>\n        <sourceSobjectType>DataServiceCompanyObject</sourceSobjectType>\n        <status>Active</status>\n        <targetSobjectType>Lead</targetSobjectType>\n    </cleanRules>\n    <description>Data Service Companies for Leads</description>\n    <masterLabel>Data Service Companies for Leads</masterLabel>\n    <matchEngine>LeadEnrichmentMatchEngine</matchEngine>\n</CleanDataService>"
+    }
+  ]
+}

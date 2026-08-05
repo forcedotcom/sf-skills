@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DisclosureDefinitionVersion - Metadata API",
+  "description": "Represents the version information about the disclosure definition.",
+  "file_information": ".disclosureDefinitionVersion",
+  "directory_location": "disclosureDefinitionVersions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "authoringMode": {
+      "type": "AuthoringMode (enumeration of type string)",
+      "description": "Specifies the authoring mode used to launch the disclosure authoring experience. Possible values are: Microsoft 365 Word Omniscript and Microsoft 365 Word Omniscript Form"
+    },
+    "description": {
+      "type": "string",
+      "description": "The description about the disclosure definition version."
+    },
+    "disclosureDefCurrVer": {
+      "type": "string",
+      "description": "For internal use only."
+    },
+    "disclosureDefinition": {
+      "type": "string",
+      "required": true,
+      "description": "The API name of the disclosure definition associated with this version."
+    },
+    "documentTemplateGlobalKey": {
+      "type": "string",
+      "description": "The document template global key associated with the DOCX template for the disclosure definition version."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the disclosure definition version is an active version (true) or not (false). The default value is false."
+    },
+    "isCurrentVersion": {
+      "type": "boolean",
+      "description": "Indicates whether this is the current version of the disclosure definition specified in the disclosureDefinition field (true) or not (false). The default value is false."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for DisclosureDefinitionVersion, which is defined when the DisclosureDefinitionVersion is created."
+    },
+    "omniScriptCnfgApiName": {
+      "type": "string",
+      "description": "The API name of the Omniscript configuration that's associated with the disclosure definition version. This field is required only when authoringModeisn’t Microsoft 365 Word."
+    },
+    "omniScriptConfiguration": {
+      "type": "string",
+      "description": "The ID of the Omniscript configuration record. Note: The value of this field is automatically populated using the API name of the OmniScript configuration specified in the omniScriptCnfgApiName field."
+    },
+    "versionNumber": {
+      "type": "string",
+      "required": true,
+      "description": "The version of the disclosure definition published by the author."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DisclosureDefinitionVersion component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DisclosureDefinitionVersion xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>This is GRI Disclosure Definition Version</description>\n    <versionNumber>disclosure definition version number</versionNumber>\n    <isActive>false</isActive>\n    <disclosureDefinition>df10</disclosureDefinition>\n    <omniScriptConfiguration>omni script configuration</omniScriptConfiguration>\n    <omniScriptCnfgApiName>omni script config api name</omniScriptCnfgApiName>\n    <isCurrentVersion>true</isCurrentVersion>\n    <disclosureDefCurrVer>df10.Id</disclosureDefCurrVer>\n    <documentTemplateGlobalKey>document template global key</documentTemplateGlobalKey>\n    <authoringMode>OmniScriptForm</authoringMode>\n    <masterLabel>GRI</masterLabel>\n    <isProtected>false</isProtected>\n</DisclosureDefinitionVersion>"
+    }
+  ]
+}

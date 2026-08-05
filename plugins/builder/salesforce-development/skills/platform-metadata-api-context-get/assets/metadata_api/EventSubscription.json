@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EventSubscription - Metadata API",
+  "description": "Represents a subscription to an event type. Removed in API version 46.0. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".subscription",
+  "directory_location": "eventSubscriptions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "If the subscription isn’t active, it never receives any events."
+    },
+    "eventParameters": {
+      "type": "EventParameterMap[]",
+      "description": "An array of parameters that must be true for published events."
+    },
+    "eventType": {
+      "type": "string",
+      "description": "The name of the platform event.",
+      "required": true
+    },
+    "referenceData": {
+      "type": "string",
+      "description": "If the subscriber is a flow of type CustomEvent, referenceData is flowName_versionNumber. For example, Printer_Management_2.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "EventParameterMap": {
+      "parameterName": {
+        "type": "string",
+        "description": "The published event’s field name.",
+        "required": true
+      },
+      "parameterValue": {
+        "type": "string",
+        "description": "The value that must be true."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an active event subscription.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EventSubscription xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <eventType>Printer_Status__e</eventType>\n    <referenceData>Printer_Management</referenceData>\n</EventSubscription>"
+    },
+    {
+      "description": "The following is an example of an inactive event subscription that sets event parameters.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EventSubscription xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <name>MySubscription</name>\n   <active>false</active>\n   <eventParameters>\n      <parameterName>Ink_Status__c</parameterName>\n      <parameterValue>low</parameterValue> \n   </eventParameters>\n   <eventParameters>\n      <parameterName>Serial_Number__c</parameterName>\n      <parameterValue>00123456789</parameterValue>\n   </eventParameters>\n   <eventType>Printer_Status__e</eventType>\n   <referenceData>My_Event_Based_Process_1</referenceData>\n</EventSubscription>"
+    }
+  ]
+}

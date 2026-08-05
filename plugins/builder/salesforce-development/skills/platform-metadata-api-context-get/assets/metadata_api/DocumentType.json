@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DocumentType - Metadata API",
+  "description": "Represents a document type.",
+  "file_information": ".documentType",
+  "directory_location": "documentTypes",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of the DocumentType."
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": true,
+      "description": "Specifies whether the DocumentType is active."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The master label of the DocumentType. This internal label doesn’t get translated."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DocumentType\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"maximumFileSize\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"maximumFileUploadCount\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DocumentType component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DocumentType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Utility_Bill</description>\n    <isActive>true</isActive>\n    <masterLabel>Utility_Bill</masterLabel>\n</DocumentType>"
+    }
+  ]
+}

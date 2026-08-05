@@ -1,0 +1,117 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EscalationRules - Metadata API",
+  "description": "Represents case escalation rules to escalate cases automatically if they aren’t resolved within a certain time. You can access rules metadata for all applicable objects, for a specific object, or for a specific rule on a specific object.",
+  "file_information": ".escalationRules",
+  "directory_location": "escalationRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "escalationRule": {
+      "type": "EscalationRule[]",
+      "description": "Represents one escalation rule and specifies whether it’s active or not. Escalation rules are processed in the order they appear in the EscalationRules container."
+    }
+  },
+  "sub_types": {
+    "EscalationRule": {
+      "active": {
+        "type": "boolean",
+        "description": "Indicates whether the escalation rule is active (true) or not (false)."
+      },
+      "fullname": {
+        "type": "string",
+        "description": "Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. See createMetadata() to see an example of this field specified for a call. This value can't be null."
+      },
+      "ruleEntry": {
+        "type": "RuleEntry[]",
+        "description": "Contains the definitions of the rule entries in the escalation rule."
+      }
+    },
+    "RuleEntry": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "Advanced filter conditions that were specified for the rule."
+      },
+      "businessHours": {
+        "type": "string",
+        "description": "The hours when escalation actions are performed. Specify only if businessHoursSource is set to Static."
+      },
+      "businessHoursSource": {
+        "type": "BusinessHoursSourceType (enumerations of type string)",
+        "description": "Valid values are: None Case Static"
+      },
+      "criteriaItems": {
+        "type": "FilterItem",
+        "description": "The items in the list that define the assignment criteria."
+      },
+      "disableEscalationWhenModified": {
+        "type": "boolean",
+        "description": "Indicates whether the escalation is disabled when the record is modified true) or not (false)."
+      },
+      "escalationAction": {
+        "type": "EscalationAction[]",
+        "description": "The actions to perform when the escalation criteria are met."
+      },
+      "escalationStartTime": {
+        "type": "EscalationStartTimeType (enumeration of type string)",
+        "description": "Indicates the start time for the escalation. Valid values are: CaseCreation CaseLastModified"
+      },
+      "formula": {
+        "type": "string",
+        "description": "The validation formula. Specify either formula or criteriaItems, but not both fields."
+      }
+    },
+    "EscalationAction": {
+      "assignedTo": {
+        "type": "string",
+        "description": "The name of the user or queue the item is assigned to."
+      },
+      "assignedToTemplate": {
+        "type": "string",
+        "description": "Specifies the template to use for the email that is automatically sent to the new owner specified by the escalation rule. Lightning email templates aren’t packageable. We recommend using a Classic email template."
+      },
+      "assignedToType": {
+        "type": "AssignToLookupValueType (enumeration of type string)",
+        "description": "Valid values are: User Queue"
+      },
+      "minutesToEscalation": {
+        "type": "int",
+        "description": "The number of minutes until the escalation occurs."
+      },
+      "notifyCaseOwner": {
+        "type": "boolean",
+        "description": "Indicates that the owner of the case is notified when the case is escalated true) or not (false)."
+      },
+      "notifyEmail": {
+        "type": "string",
+        "description": "Specifies the email address of the user to notify."
+      },
+      "notifyTo": {
+        "type": "string",
+        "description": "Specifies the user to notify."
+      },
+      "notifyToTemplate": {
+        "type": "string",
+        "description": "Specifies the template to user for the notification email."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AssignToLookupValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"Queue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"BusinessHoursSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Case\"/>\n    <xsd:enumeration value=\"Static\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EscalationAction\">\n  <xsd:sequence>\n    <xsd:element name=\"assignedTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"assignedToTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"assignedToType\" minOccurs=\"0\" type=\"tns:AssignToLookupValueType\"/>\n    <xsd:element name=\"minutesToEscalation\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"notifyCaseOwner\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"notifyEmail\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"notifyTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"notifyToTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EscalationRule\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"ruleEntry\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RuleEntry\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EscalationRules\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"escalationRule\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EscalationRule\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"EscalationStartTimeType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CaseCreation\"/>\n    <xsd:enumeration value=\"CaseLastModified\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RuleEntry\">\n  <xsd:sequence>\n    <xsd:element name=\"assignedTo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"assignedToType\" minOccurs=\"0\" type=\"tns:AssignToLookupValueType\"/>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"businessHours\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"businessHoursSource\" minOccurs=\"0\" type=\"tns:BusinessHoursSourceType\"/>\n    <xsd:element name=\"criteriaItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n    <xsd:element name=\"disableEscalationWhenModified\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"escalationAction\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EscalationAction\"/>\n    <xsd:element name=\"escalationStartTime\" minOccurs=\"0\" type=\"tns:EscalationStartTimeType\"/>\n    <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"notifyCcRecipients\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"overrideExistingTeams\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"replyToEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"senderEmail\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"senderName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"team\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"template\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example EscalationRules component:",
+      "code": "<EscalationRules xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <escalationRule>\n        <fullName>samplerule</fullName>\n        <active>false</active>\n        <ruleEntry>\n            <businessHours>test</businessHours>\n            <businessHoursSource>Static</businessHoursSource>\n            <criteriaItems>\n                <field>Case.Description</field>\n                <operation>contains</operation>\n                <value>test</value>\n            </criteriaItems>\n            <escalationAction>\n                <assignedTo>someuser@org.com</assignedTo>\n                <assignedToTemplate>emailtemplatename</assignedToTemplate>\n                <assignedToType>User</assignedToType>\n                <minutesToEscalation>1440</minutesToEscalation>\n                <notifyCaseOwner>false</notifyCaseOwner>\n            </escalationAction>\n            <escalationStartTime>CaseLastModified</escalationStartTime>\n        </ruleEntry>\n    </escalationRule>\n</EscalationRules>"
+    }
+  ]
+}

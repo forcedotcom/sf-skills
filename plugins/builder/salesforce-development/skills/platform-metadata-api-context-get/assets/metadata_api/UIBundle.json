@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UIBundle (Beta) - Metadata API",
+  "description": "Represents a Salesforce Multi-Framework app, such as a React app.",
+  "file_information": "UIBundle components have the suffix .uibundle-meta.xml and are stored in the uiBundles/your_app folder.",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "A description of what the web application does."
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": true,
+      "description": "Specifies whether the web application is accessible (true) or not (false)."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "For internal use only."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Specifies the web-application name that appears in the UI."
+    },
+    "target": {
+      "type": "string",
+      "description": "Specifies the Salesforce target where the app is supported. Valid values are: AppLauncher: Makes the app available in the App Launcher. This is the default target if you don’t specify a value. Experience: Indicates that the app is an external-facing site or portal and makes it available in the Digital Experiences app."
+    },
+    "version": {
+      "type": "string",
+      "required": true,
+      "description": "Indicates the version of the web application."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"UIBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"target\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a UIBundle component.",
+      "code": "<UIBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>Customer Portal</masterLabel>\n    <description>Customer self-service portal built with React.</description>\n    <isActive>true</active>\n    <target>AppLauncher</target>\n    <version>1</version>\n</UIBundle>"
+    }
+  ]
+}

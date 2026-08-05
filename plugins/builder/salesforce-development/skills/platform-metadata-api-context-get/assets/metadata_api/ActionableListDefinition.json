@@ -1,0 +1,114 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ActionableListDefinition - Metadata API",
+  "description": "Represents the data source definition details associated with an actionable list.",
+  "file_information": ".actionableListDefinition",
+  "directory_location": "actionableListDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "actionableListDatasetColumns": {
+      "type": "ActionableListDatasetColumn[]",
+      "description": "The object that stores columns in a dataset associated with an actionable list."
+    },
+    "actionableListMemberStatuses": {
+      "type": "ActionableListMemberStatus[]",
+      "description": "The object that stores the status and the corresponding status icon details of an individual actionable list member."
+    },
+    "batchCalcJobDefinition": {
+      "type": "string",
+      "description": "The batch calculation job definition that's associated with the creation of an actionable list. This field is a relationship field."
+    },
+    "datasetName": {
+      "type": "string",
+      "description": "The name of the dataset that is associated with the actionable list."
+    },
+    "edgeMart": {
+      "type": "string",
+      "description": "The edgemart dataset that's associated with the actionable list. Available in API version 58.0 and later."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the actionable list definition is active (true) or not (false). The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The master label of the actionable list definition."
+    },
+    "objectName": {
+      "type": "string",
+      "required": true,
+      "description": "The object for which the actionable list is created.Possible values are organized by the API version in which they were introduced. Values are available in all versions after introduction unless noted otherwise. Possible values are: API version 60.0 and later: PersonLifeEventAPI version 60.0 and later with Insurance Managed Package: Claim InsurancePolicy Quote API version 59.0 and later with Health Cloud: CareFacilityBed CareRequest CareRequestItem CareServiceVisit CareServiceVisitPlan ClinicalServiceRequest API version 59.0 and later with Loyalty Cloud: LoyaltyProgramMember API version 59.0 and later: Case API version 58.0 and later with Automotive Cloud: Vehicle API version 58.0 and later: Asset Lead Opportunity API version 57.0 and later: Account Contact"
+    }
+  },
+  "sub_types": {
+    "ActionableListDatasetColumn": {
+      "dataDomain": {
+        "type": "DatasetColumnDataType (enumeration of type string)",
+        "description": "The data domain that is mapped to the data type of the dataset column. Possible values are: Dates Dimensions Measures"
+      },
+      "dataType": {
+        "type": "DatatableDataType (enumeration of type string)",
+        "description": "The data type of the dataset column in the actionable list. Available in API version 58.0 and later. Possible values are: Boolean Currency Date DateTime Email Location Number Percent Phone Text Url"
+      },
+      "displayOrder": {
+        "type": "int",
+        "description": "The order in which the actionable list dataset columns are displayed. Available in API version 58.0 and later."
+      },
+      "isDefault": {
+        "type": "boolean",
+        "description": "Indicates whether the dataset column is added to the actionable list by default (true) or not (false). The default value is false."
+      },
+      "isGroupedByListDefObj": {
+        "type": "boolean",
+        "description": "Indicates whether the dataset column is grouped by the object defined in the actionable list definition (true) or not (false). Available in API version 59.0 and later."
+      },
+      "IsTypeAheadSearchEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether the type-ahead search for filters is enabled (true) or not (false). Available in API version 60.0 and later."
+      },
+      "objectName": {
+        "type": "string",
+        "description": "The name of the object that's associated with the dataset column. Possible values are: API version 60.0 and later: PersonLifeEventAPI version 60.0 and later with Insurance Managed Package: Claim InsurancePolicy Quote API version 59.0 and later with Health Cloud: CareFacilityBed CareRequest CareRequestItem CareServiceVisit CareServiceVisitPlan ClinicalServiceRequest API version 59.0 and later with Loyalty Cloud: LoyaltyProgramMember API version 59.0 and later: Case API version 58.0 and later with Automotive Cloud: Vehicle API version 58.0 and later: Asset Lead Opportunity API version 57.0 and later: Account Contact"
+      },
+      "sourceColumnApiName": {
+        "type": "string",
+        "description": "The API name of the column in the source dataset."
+      },
+      "sourceFieldName": {
+        "type": "string",
+        "description": "The name of the field in the object for which the actionable list dataset is created."
+      }
+    },
+    "ActionableListMemberStatus": {
+      "iconName": {
+        "type": "string",
+        "description": "The name of the icon that's mapped to the status."
+      },
+      "status": {
+        "type": "string",
+        "description": "The status of the actionable list member."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ActionableListDatasetColumn\">\n  <xsd:sequence>\n    <xsd:element name=\"dataDomain\" minOccurs=\"0\" type=\"tns:DatasetColumnDataType\"/>\n    <xsd:element name=\"dataType\" minOccurs=\"0\" type=\"tns:DatatableDataType\"/>\n    <xsd:element name=\"displayOrder\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"isDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isGroupedByListDefObj\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isTypeAheadSearchEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"objectName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceColumnApiName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceFieldName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ActionableListDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionableListDatasetColumns\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionableListDatasetColumn\"/>\n        <xsd:element name=\"actionableListMemberStatuses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionableListMemberStatus\"/>\n        <xsd:element name=\"batchCalcJobDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"datasetName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"edgeMart\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectName\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceObjectFieldName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceObjectName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceType\" minOccurs=\"0\" type=\"tns:ActionableListSourceType\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:ActionableListType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ActionableListMemberStatus\">\n  <xsd:sequence>\n    <xsd:element name=\"iconName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"status\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ActionableListSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CrmAnalytics\"/>\n    <xsd:enumeration value=\"DataCloudPlatform\"/>\n    <xsd:enumeration value=\"Crm\"/>\n    <xsd:enumeration value=\"SalesforceObjects\"/>\n    <xsd:enumeration value=\"DataCloudDMO\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ActionableListType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"RetailStoreList\"/>\n    <xsd:enumeration value=\"HealthcareProviderList\"/>\n    <xsd:enumeration value=\"GeneralList\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DatasetColumnDataType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Dimensions\"/>\n    <xsd:enumeration value=\"Dates\"/>\n    <xsd:enumeration value=\"Measures\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"DatatableDataType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Boolean\"/>\n    <xsd:enumeration value=\"Currency\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n    <xsd:enumeration value=\"Email\"/>\n    <xsd:enumeration value=\"Location\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"Percent\"/>\n    <xsd:enumeration value=\"Phone\"/>\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Url\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ActionableListDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ActionableListDefinition\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<actionableListDatasetColumns>\n\t\t<isDefault>true</isDefault>\n\t\t<sourceFieldName>NewColumn1</sourceFieldName>\n\t</actionableListDatasetColumns>\n\t<actionableListDatasetColumns>\n\t\t<sourceColumnApiName>ApiName</sourceColumnApiName>\n\t\t<dataDomain>Dimensions</dataDomain>\n\t\t<isDefault>false</isDefault>\n\t\t<sourceFieldName>NewColumn2</sourceFieldName>\n\t\t<objectName>Account</objectName>\n\t\t<displayOrder>1</displayOrder>\n\t\t<dataType>Text</dataType>\n\t</actionableListDatasetColumns>\n\t<actionableListMemberStatuses>\n\t\t<iconName>NewMember1</iconName>\n\t\t<status>Active</status>\n\t</actionableListMemberStatuses>\n\t<isActive>true</isActive>\n\t<masterLabel>NewMember2</masterLabel>\n\t<objectName>Account</objectName>\n\t<isProtected>true</isProtected>\n\t<batchCalcJobDefinition>Test1</batchCalcJobDefinition>\n\t<datasetName>AccountDef</datasetName>\n</ActionableListDefinition>"
+    }
+  ]
+}

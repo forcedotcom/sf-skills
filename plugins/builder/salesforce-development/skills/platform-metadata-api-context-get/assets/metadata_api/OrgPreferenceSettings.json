@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OrgPreferenceSettings - Metadata API",
+  "description": "Removed in API version 48.0. Represents the unique org preference settings in a Salesforce org.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "preferences": {
+      "type": "OrganizationSettingsDetail[]",
+      "description": "The preferences associated with the org settings. In the following list of preferences, click hyperlinked preference names to go to the topic for the Settings type that contains that preference. If there is no link, the preference hasn’t been moved to another Settings type. AnalyticsSharingEnable (available in API version 40.0 and later) ApexApprovalLockUnlock AsyncSaveEnabled (available in API versions 40.0 to 46.0) ChatterEnabled CompileOnDeploy (available in API version 43.0 and later) ConsentManagementEnabled (available in API version 45.0 and later) EnhancedEmailEnabled EventLogWaveIntegEnabled LoginForensicsEnabled NetworksEnabled (available in API version 40.0 and later) NotesReservedPref01 OfflineDraftsEnabled PathAssistantsEnabled S1DesktopEnabled Note: After it is enabled, S1DesktopEnabled can’t be disabled in any version of the API. S1EncryptedStoragePref2 S1OfflinePref ScratchOrgManagementPref (available in API version 41.0 and later) SendThroughGmailPref SocialProfilesEnable Translation (available in API version 40.0 and later) VoiceEnabled Note: The VoiceEnabled preference isn’t being moved to another metadata type. If you want to use it in a scratch org in API version 48.0 and later, you can enable it as a scratch org feature."
+    }
+  },
+  "sub_types": {
+    "OrganizationSettingsDetail": {
+      "settingName": {
+        "type": "string",
+        "description": "The name of the setting. For example, “S1EncryptedStoragePref2.”"
+      },
+      "settingValue": {
+        "type": "boolean",
+        "description": "Indicates whether the setting is enabled (true) or not (false)."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a OrgPreferenceSettings component. The example shows only the preferences values that are supported but not yet available as fields on another Settings type in API version 47.0.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OrgPreferenceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <preferences>\n        <settingName>AnalyticsSharingEnable</settingName>\n        <settingValue>true</settingValue>\n    </preferences>\n    <preferences>\n        <settingName>NetworksEnabled</settingName>\n        <settingValue>true</settingValue>\n    </preferences>\n    <preferences>\n        <settingName>NotesReservedPref01</settingName>\n        <settingValue>false</settingValue>\n    </preferences>\n    <preferences>\n        <settingName>ScratchOrgManagementPref</settingName>\n        <settingValue>true</settingValue>\n    </preferences>\n    <preferences>\n        <settingName>VoiceEnabled</settingName>\n        <settingValue>false</settingValue>\n    </preferences>\n</OrgPreferenceSettings>"
+    }
+  ]
+}

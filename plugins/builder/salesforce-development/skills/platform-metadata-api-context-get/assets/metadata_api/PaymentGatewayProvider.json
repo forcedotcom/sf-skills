@@ -1,0 +1,50 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PaymentGatewayProvider - Metadata API",
+  "description": "Represents the metadata associated with a payment gateway provider. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".paymentGatewayProvider",
+  "directory_location": "paymentGatewayProviders",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "apexAdapter": {
+      "type": "string",
+      "description": "The Apex adapter class name for your payment gateway. This field is unique within your organization."
+    },
+    "comments": {
+      "type": "string",
+      "description": "Users can add comments to provide additional details about a record. Maximum of 1000 characters."
+    },
+    "gatewayType": {
+      "type": "GatewayType (enumeration of type String)",
+      "description": "Defines the payment gateway type. Adyen Braintree CyberSource Paypal Stripe"
+    },
+    "idempotencySupported": {
+      "type": "IdempotencySupportStatus (enumeration of type String)",
+      "description": "Defines whether the payment gateway ignores duplicate payment gateway calls ( Yes ) or whether it processes duplicate gateway calls ( No ). Yes No",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label of this payment gateway provider record.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"GatewayType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Stripe\"/>\n    <xsd:enumeration value=\"Paypal\"/>\n    <xsd:enumeration value=\"Adyen\"/>\n    <xsd:enumeration value=\"Braintree\"/>\n    <xsd:enumeration value=\"Cybersource\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"IdempotencySupportStatus\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"No\"/>\n    <xsd:enumeration value=\"Yes\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PaymentGatewayProvider\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"apexAdapter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"comments\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"gatewayType\" minOccurs=\"0\" type=\"tns:GatewayType\"/>\n        <xsd:element name=\"idempotencySupported\" type=\"tns:IdempotencySupportStatus\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PaymentGatewayProvider component.",
+      "code": "<PaymentGatewayProvider xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apexAdapter>SalesforceAdapter</apexAdapter>\n    <comments>Comments</comments>\n    <gatewayType>Stripe</gatewayType>\n    <idempotencySupported>Yes</idempotencySupported>\n    <masterLabel>SalesforceAdapter</masterLabel>\n</PaymentGatewayProvider>"
+    }
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "GenAiPlannerBundle - Metadata API",
+  "description": "Represents a planner for an agent or agent template. It’s a container for all the topics and actions used to interact with a large language model (LLM).",
+  "file_information": "GenAiPlannerBundle components have the suffix .genAiPlannerBundle and are stored in a subfolder for the agent in the genAiPlannerBundles folder.",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "attributeMappings": {
+      "type": "GenAiPlannerAttrMapping[]",
+      "description": "A list of action attribute mappings."
+    },
+    "botTemplate": {
+      "type": "string",
+      "description": "If this planner is used by an agent template instead of an agent, this field is the template associated with the planner."
+    },
+    "capabilities": {
+      "type": "string",
+      "description": "A set of tags associated with the agent."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description explaining the general purpose and domain of the agent."
+    },
+    "genAiFunctions": {
+      "type": "GenAiPlannerFunctionDef[]",
+      "description": "A list of agent action definitions, such as a knowledge action, that are not contained in a topic."
+    },
+    "genAiPlugins": {
+      "type": "GenAiPlannerFunctionDef[]",
+      "description": "A list of agent topic definitions."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The master label for the planner."
+    },
+    "plannerType": {
+      "type": "PlannerType (enumeration of type string)",
+      "required": true,
+      "description": "A particular approach to problem solving that is given as prompt instructions to a large language model (LLM). The supported values are: AiCopilot__AgileAppDev—Uses an iterative development strategy to assist with building applications using the LLM. This strategy prompts the LLM to generate modular, testable components based on evolving user input and context. Unlike linear workflows, it supports continuous refinement and feedback loops throughout the development process. AiCopilot__ReAct—Uses a reactive reasoning strategy to solve problems with the LLM. This strategy consists of prompting the LLM to generate the next step in response to an event and the current context. It differs from a sequential reasoning engine in that it doesn’t plan more than one step ahead of time."
+    },
+    "ruleExpressionAssignments": {
+      "type": "GenAiPlannerRuleExprAsgn[]",
+      "description": "A list of rule expression assignments."
+    },
+    "ruleExpressions": {
+      "type": "GenAiPlannerRuleExprDef[]",
+      "description": "A list of rule expressions."
+    }
+  },
+  "sub_types": {
+    "GenAiPlannerAttrMapping": {
+      "attributeName": {
+        "type": "string",
+        "required": true,
+        "description": "The attribute name in the format: Namespace.TopicName.ActionName.AttributeName."
+      },
+      "attributeType": {
+        "type": "AttributeType (enumeration of type string)",
+        "required": true,
+        "description": "The attribute type. Values are: CustomPluginFunctionAttribute—Map to a custom action input or output StandardPluginFunctionInput—Map to a standard action input StandardPluginFunctionOutput—Map output to a variable"
+      },
+      "constantValue": {
+        "type": "string",
+        "description": "Reserved for future use."
+      },
+      "mappingTargetName": {
+        "type": "string",
+        "description": "The target name for the attribute mapping."
+      },
+      "mappingType": {
+        "type": "AttributeMappingType (enumeration of type string)",
+        "required": true,
+        "description": "The target type. Values are: ActionAttribute Constant Variable ContextVariable"
+      }
+    },
+    "GenAiPlannerFunctionDef": {
+      "genAiCustomizedPlugin": {
+        "type": "GenAiLocalPlugin[]",
+        "description": "A list of custom agent topics."
+      },
+      "genAiFunctionName": {
+        "type": "string",
+        "description": "The name of the agent action."
+      },
+      "genAiPluginName": {
+        "type": "string",
+        "description": "The name of the agent topic."
+      }
+    },
+    "GenAiLocalPlugin": {
+      "aiPluginUtterances": {
+        "type": "AiPluginUtteranceDef[]",
+        "description": "A list of utterances that can be used to pick a topic during runtime."
+      },
+      "canEscalate": {
+        "type": "boolean",
+        "description": "Determines whether this topic is applicable for escalation to a rep."
+      },
+      "description": {
+        "type": "string",
+        "required": true,
+        "description": "The description of the topic."
+      },
+      "genAiFunctions": {
+        "type": "GenAiPluginFunctionDef[]",
+        "description": "A list of functions in the topic."
+      },
+      "genAiPluginInstructions": {
+        "type": "GenAiPluginInstructionDef[]",
+        "description": "A list of instructions in the topic."
+      },
+      "language": {
+        "type": "string",
+        "required": true,
+        "description": "The language of the topic."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The master label for the topic."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Represents the API name of the topic. This name must be unique across all custom and customized topics. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+      },
+      "pluginType": {
+        "type": "PluginType (enumeration of type string)",
+        "required": true,
+        "description": "Values are: Topic APICustomTopic"
+      },
+      "scope": {
+        "type": "string",
+        "description": "A specific job description for a topic."
+      }
+    },
+    "GenAiPlannerRuleExprAsgn": {
+      "ruleExpressionName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the rule expression."
+      },
+      "targetName": {
+        "type": "string",
+        "required": true,
+        "description": "The target of the assignment, which is a Namespace.TopicName.ActionName or a TopicName."
+      },
+      "targetType": {
+        "type": "string",
+        "required": true,
+        "description": "The type of the target. Values are: Function—A knowledge action Plugin—A topic PluginFunction—An action in a topic"
+      }
+    },
+    "GenAiPlannerRuleExprDef": {
+      "conditions": {
+        "type": "GenAiPlannerRuleExprCondition[]",
+        "description": "A list of conditions for a rule expression."
+      },
+      "expression": {
+        "type": "string",
+        "description": "An expression with the combined conditions."
+      },
+      "expressionLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The expression label."
+      },
+      "expressionName": {
+        "type": "string",
+        "required": true,
+        "description": "The expression name."
+      },
+      "expressionType": {
+        "type": "string",
+        "description": "The expression type. Values are: handlebars—Reserved for future use sel—Salesforce Expression Language, as used in formula fields"
+      }
+    },
+    "GenAiPlannerRuleExprCondition": {
+      "leftOperand": {
+        "type": "string",
+        "required": true,
+        "description": "The left operand in the expression."
+      },
+      "leftOperandType": {
+        "type": "GenAiAgentVariableType (enumeration of type string)",
+        "required": true,
+        "description": "The type for the left operand. Values are: Variable ContextVariable Attribute"
+      },
+      "operator": {
+        "type": "GenAiRuleExpressionOperator (enumeration of type string)",
+        "required": true,
+        "description": "The operator in the expression. Values are: equal greaterThan greaterThanOrEqual lessThan lessThanOrEqual notEqual isEmpty isNotEmpty"
+      },
+      "rightOperandValue": {
+        "type": "string",
+        "description": "The value for the right operand."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AiPlannerSurfOtbdRouteDef\">\n  <xsd:sequence>\n    <xsd:element name=\"escalationMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"outboundRouteName\" type=\"xsd:string\"/>\n    <xsd:element name=\"outboundRouteType\" type=\"tns:OutboundRouteType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AiPlannerSurfaceDef\">\n  <xsd:sequence>\n    <xsd:element name=\"adaptiveResponseAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"callRecordingAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"outboundRouteConfigs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiPlannerSurfOtbdRouteDef\"/>\n    <xsd:element name=\"surface\" type=\"xsd:string\"/>\n    <xsd:element name=\"surfaceType\" type=\"tns:SurfaceType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AiPlannerVoiceAvatarDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"context\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"imageUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"replicaKey\" minOccurs=\"0\" type=\"tns:AvatarReplicaKeyType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AiPlannerVoiceDef\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"additionalConfigs\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"inboundFillerWordsBool\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"inboundKeywords\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"inboundModel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"languageCode\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"outboundFillerSentences\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"outboundModel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"outboundSimilarity\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"outboundSpeedNum\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"outboundStability\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"outboundStyleExaggeration\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"outboundVoice\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"pronunciationDict\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"voiceAvatarDef\" minOccurs=\"0\" type=\"tns:AiPlannerVoiceAvatarDef\"/>\n        <xsd:element name=\"voiceIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AiPluginUtteranceDef\">\n  <xsd:sequence>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"language\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"utterance\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"AttributeMappingType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ActionAttribute\"/>\n    <xsd:enumeration value=\"Constant\"/>\n    <xsd:enumeration value=\"Variable\"/>\n    <xsd:enumeration value=\"ContextVariable\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AttributeType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CustomPluginFunctionAttribute\"/>\n    <xsd:enumeration value=\"StandardPluginFunctionInput\"/>\n    <xsd:enumeration value=\"StandardPluginFunctionOutput\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AvatarReplicaKeyType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"custom\"/>\n    <xsd:enumeration value=\"rose\"/>\n    <xsd:enumeration value=\"daniel\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExpressionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"sel\"/>\n    <xsd:enumeration value=\"handlebars\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"GenAiAgentVariableType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Variable\"/>\n    <xsd:enumeration value=\"ContextVariable\"/>\n    <xsd:enumeration value=\"Attribute\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"GenAiFunction\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"invocationTarget\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"invocationTargetType\" type=\"tns:PlannerFunctionInvocableTargetType\"/>\n        <xsd:element name=\"isConfirmationRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isIncludeInProgressIndicator\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"language\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"localDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"mappingAttributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerAttr\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"progressIndicatorMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiLocalPlugin\">\n  <xsd:sequence>\n    <xsd:element name=\"aiPluginUtterances\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiPluginUtteranceDef\"/>\n    <xsd:element name=\"canEscalate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"description\" type=\"xsd:string\"/>\n    <xsd:element name=\"genAiFunctions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginFunctionDef\"/>\n    <xsd:element name=\"genAiPluginInstructions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginInstructionDef\"/>\n    <xsd:element name=\"language\" type=\"xsd:string\"/>\n    <xsd:element name=\"localDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"pluginType\" type=\"tns:PluginType\"/>\n    <xsd:element name=\"scope\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerAttr\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameterName\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameterType\" type=\"tns:PlannerAttrMappingType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerAttrMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"attributeName\" type=\"xsd:string\"/>\n    <xsd:element name=\"attributeType\" type=\"tns:AttributeType\"/>\n    <xsd:element name=\"constantValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mappingTargetName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mappingType\" type=\"tns:AttributeMappingType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"agentGraph\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"agentGraphRef\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"agentScript\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"attributeMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerAttrMapping\"/>\n        <xsd:element name=\"botTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"capabilities\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"genAiFunctions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerFunctionDef\"/>\n        <xsd:element name=\"genAiPlugins\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerFunctionDef\"/>\n        <xsd:element name=\"localActionLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerFunctionDef\"/>\n        <xsd:element name=\"localTopicLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerFunctionDef\"/>\n        <xsd:element name=\"localTopics\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlugin\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"plannerActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiFunction\"/>\n        <xsd:element name=\"plannerSurfaces\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiPlannerSurfaceDef\"/>\n        <xsd:element name=\"plannerType\" type=\"tns:PlannerType\"/>\n        <xsd:element name=\"ruleExpressionAssignments\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerRuleExprAsgn\"/>\n        <xsd:element name=\"ruleExpressions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerRuleExprDef\"/>\n        <xsd:element name=\"voiceDefinition\" minOccurs=\"0\" type=\"tns:AiPlannerVoiceDef\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerFunctionDef\">\n  <xsd:sequence>\n    <xsd:element name=\"genAiCustomizedPlugin\" minOccurs=\"0\" type=\"tns:GenAiLocalPlugin\"/>\n    <xsd:element name=\"genAiFunctionName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"genAiPluginName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerRuleExprAsgn\">\n  <xsd:sequence>\n    <xsd:element name=\"ruleExpressionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetName\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetType\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerRuleExprCondition\">\n  <xsd:sequence>\n    <xsd:element name=\"leftOperand\" type=\"xsd:string\"/>\n    <xsd:element name=\"leftOperandType\" type=\"tns:GenAiAgentVariableType\"/>\n    <xsd:element name=\"operator\" type=\"tns:GenAiRuleExpressionOperator\"/>\n    <xsd:element name=\"rightOperandValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerRuleExprDef\">\n  <xsd:sequence>\n    <xsd:element name=\"conditions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerRuleExprCondition\"/>\n    <xsd:element name=\"expression\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"expressionLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"expressionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"expressionType\" minOccurs=\"0\" type=\"tns:ExpressionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlugin\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aiPluginUtterances\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiPluginUtteranceDef\"/>\n        <xsd:element name=\"canEscalate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"genAiFunctions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginFunctionDef\"/>\n        <xsd:element name=\"genAiPluginInstructions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginInstructionDef\"/>\n        <xsd:element name=\"language\" type=\"xsd:string\"/>\n        <xsd:element name=\"localActionLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginFunctionDef\"/>\n        <xsd:element name=\"localActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiFunction\"/>\n        <xsd:element name=\"localDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"pluginType\" type=\"tns:PluginType\"/>\n        <xsd:element name=\"scope\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPluginFunctionDef\">\n  <xsd:sequence>\n    <xsd:element name=\"functionName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPluginInstructionDef\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"language\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"GenAiRuleExpressionOperator\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"OutboundRouteType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"OmniChannelFlow\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PlannerAttrMappingType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"input\"/>\n    <xsd:enumeration value=\"output\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PlannerFunctionInvocableTargetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"apex\"/>\n    <xsd:enumeration value=\"flow\"/>\n    <xsd:enumeration value=\"standardInvocableAction\"/>\n    <xsd:enumeration value=\"generatePromptResponse\"/>\n    <xsd:enumeration value=\"externalService\"/>\n    <xsd:enumeration value=\"quickAction\"/>\n    <xsd:enumeration value=\"createCatalogItemRequest\"/>\n    <xsd:enumeration value=\"api\"/>\n    <xsd:enumeration value=\"apexRest\"/>\n    <xsd:enumeration value=\"cdpMlPrediction\"/>\n    <xsd:enumeration value=\"externalConnector\"/>\n    <xsd:enumeration value=\"slack\"/>\n    <xsd:enumeration value=\"namedQuery\"/>\n    <xsd:enumeration value=\"executeIntegrationProcedure\"/>\n    <xsd:enumeration value=\"auraEnabled\"/>\n    <xsd:enumeration value=\"mcpTool\"/>\n    <xsd:enumeration value=\"runExpressionSet\"/>\n    <xsd:enumeration value=\"retriever\"/>\n    <xsd:enumeration value=\"stub\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PlannerType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AiCopilot__SequentialPlannerIntentClassifier\"/>\n    <xsd:enumeration value=\"AiCopilot__ReAct\"/>\n    <xsd:enumeration value=\"AiCopilot__AgileAppDev\"/>\n    <xsd:enumeration value=\"Atlas__ConcurrentMultiAgentOrchestration\"/>\n    <xsd:enumeration value=\"SentOS__SearchAgent\"/>\n    <xsd:enumeration value=\"Atlas__VoiceAgent\"/>\n    <xsd:enumeration value=\"BYOP__waiiplanner\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"PluginType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Topic\"/>\n    <xsd:enumeration value=\"APICustomTopic\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"SurfaceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Messaging\"/>\n    <xsd:enumeration value=\"NextGenChat\"/>\n    <xsd:enumeration value=\"ServiceEmail\"/>\n    <xsd:enumeration value=\"Telephony\"/>\n    <xsd:enumeration value=\"UnifiedEmail\"/>\n    <xsd:enumeration value=\"CustomerWebClient\"/>\n    <xsd:enumeration value=\"Test\"/>\n    <xsd:enumeration value=\"Slack\"/>\n    <xsd:enumeration value=\"Custom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s an example of a GenAiPlannerBundle component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<GenAiPlannerBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <attributeMappings>\n        attributeName>SvcCopilotTmpl__CaseManagement.SvcCopilotTmpl__CreateCaseEnhancedData.verifiedCustomerID</attributeName>\n        <attributeType>StandardPluginFunctionInput</attributeType>\n        <mappingTargetName>VerifiedCustomerId</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__CaseManagement.SvcCopilotTmpl__GetCasesForVerifiedContact.verifiedContactID</attributeName>\n        <attributeType>StandardPluginFunctionInput</attributeType>\n        <mappingTargetName>VerifiedCustomerId</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__CaseManagement.SvcCopilotTmpl__GetCaseByVerifiedCaseNumber.verifiedContactID</attributeName>\n        <attributeType>StandardPluginFunctionInput</attributeType>\n        <mappingTargetName>VerifiedCustomerId</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__ServiceCustomerVerification.SvcCopilotTmpl__SendEmailVerificationCode.authenticationKey</attributeName>\n        <attributeType>StandardPluginFunctionOutput</attributeType>\n        <mappingTargetName>authenticationKey</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__ServiceCustomerVerification.SvcCopilotTmpl__SendEmailVerificationCode.customerId</attributeName>\n        <attributeType>StandardPluginFunctionOutput</attributeType>\n        <mappingTargetName>customerId</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__ServiceCustomerVerification.SvcCopilotTmpl__SendEmailVerificationCode.customerType</attributeName>\n        <attributeType>StandardPluginFunctionOutput</attributeType>\n        <mappingTargetName>customerType</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__ServiceCustomerVerification.SvcCopilotTmpl__VerifyCustomer.authenticationKey</attributeName>\n        <attributeType>StandardPluginFunctionInput</attributeType>\n        <mappingTargetName>authenticationKey</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__ServiceCustomerVerification.SvcCopilotTmpl__VerifyCustomer.customerId</attributeName>\n        <attributeType>StandardPluginFunctionInput</attributeType>\n        <mappingTargetName>customerId</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__ServiceCustomerVerification.SvcCopilotTmpl__VerifyCustomer.customerType</attributeName>\n        <attributeType>StandardPluginFunctionInput</attributeType>\n        <mappingTargetName>customerType</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__ServiceCustomerVerification.SvcCopilotTmpl__VerifyCustomer.isVerified</attributeName>\n        <attributeType>StandardPluginFunctionOutput</attributeType>\n        <mappingTargetName>isVerified</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__ServiceCustomerVerification.SvcCopilotTmpl__VerifyCustomer.customerId</attributeName>\n        <attributeType>StandardPluginFunctionOutput</attributeType>\n        <mappingTargetName>VerifiedCustomerId</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__AccountManagement.SvcCopilotTmpl__ResetSecurePassword.verifiedContactID</attributeName>\n        <attributeType>StandardPluginFunctionInput</attributeType>\n        <mappingTargetName>VerifiedCustomerId</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <attributeMappings>\n        <attributeName>SvcCopilotTmpl__AccountManagement.SvcCopilotTmpl__UpdateVerifiedContact.verifiedContactID</attributeName>\n        <attributeType>StandardPluginFunctionInput</attributeType>\n        <mappingTargetName>VerifiedCustomerId</mappingTargetName>\n        <mappingType>Variable</mappingType>\n    </attributeMappings>\n    <description>Deliver personalized customer interactions with an autonomous AI agent. Agentforce Service Agent intelligently supports your customers with common inquiries and escalates complex issues.</description>\n    <genAiFunctions>\n        <genAiFunctionName>EmployeeCopilot__AnswerQuestionsWithKnowledge</genAiFunctionName>\n    </genAiFunctions>\n    <genAiPlugins>\n        <genAiPluginName>SvcCopilotTmpl__AccountManagement</genAiPluginName>\n    </genAiPlugins>\n    <genAiPlugins>\n        <genAiPluginName>SvcCopilotTmpl__CaseManagement</genAiPluginName>\n    </genAiPlugins>\n    <genAiPlugins>\n        <genAiPluginName>SvcCopilotTmpl__Escalation</genAiPluginName>\n    </genAiPlugins>\n    <genAiPlugins>\n        <genAiPluginName>SvcCopilotTmpl__GeneralFAQ</genAiPluginName>\n    </genAiPlugins>\n    <genAiPlugins>\n        <genAiPluginName>SvcCopilotTmpl__ServiceCustomerVerification</genAiPluginName>\n    </genAiPlugins>\n    <masterLabel>ASA Template Base</masterLabel>\n    <plannerType>AiCopilot__ReAct</plannerType>\n    <ruleExpressionAssignments>\n        <ruleExpressionName>Verified_User</ruleExpressionName>\n        <targetName>SvcCopilotTmpl__AccountManagement</targetName>\n        <targetType>Plugin</targetType>\n    </ruleExpressionAssignments>\n    <ruleExpressionAssignments>\n        <ruleExpressionName>Verified_User</ruleExpressionName>\n        <targetName>SvcCopilotTmpl__CaseManagement</targetName>\n        <targetType>Plugin</targetType>\n    </ruleExpressionAssignments>\n    <ruleExpressions>\n        <conditions>\n            <leftOperand>isVerified</leftOperand>\n            <leftOperandType>Variable</leftOperandType>\n            <operator>equal</operator>\n            <rightOperandValue>true</rightOperandValue>\n        </conditions>\n        <expression>Verified_User</expression>\n        <expressionLabel>Verified User</expressionLabel>\n        <expressionName>Verified_User</expressionName>\n        <expressionType>sel</expressionType>\n    </ruleExpressions>\n</GenAiPlannerBundle>"
+    }
+  ]
+}

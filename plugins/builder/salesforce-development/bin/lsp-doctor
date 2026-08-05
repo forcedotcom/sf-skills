@@ -1,0 +1,12 @@
+#!/bin/bash
+# lsp-doctor — support/onboarding diagnostic for the SFDX Agent LSP host.
+# Thin wrapper that delegates to the bundled Node entrypoint (built from
+# node-src/src/doctor/index.ts). Verifies the committed bundles exist, the
+# vendored apex-ls artifacts resolve, the org-schema cache is parseable, and
+# each LSP child can spawn — then exits 0 (healthy) or 1 (any check failed).
+#
+# Flags: --json (machine-readable report), --no-spawn (skip child-spawn probes).
+set -e
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export CLAUDE_PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$DIR/.." && pwd)}"
+exec node "$DIR/lsp-doctor.bundled.js" "$@"

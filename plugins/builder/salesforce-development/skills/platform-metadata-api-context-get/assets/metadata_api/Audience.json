@@ -1,0 +1,172 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Audience - Metadata API",
+  "description": "Represents the audience in an Experience Builder site. An audience consists of different types of criteria, where the audience can be assigned and used for targeting in a site. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".audience",
+  "directory_location": "audience",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "audienceName": {
+      "type": "string",
+      "description": "The name of the audience.",
+      "required": true
+    },
+    "container": {
+      "type": "string",
+      "description": "The name of the site or org that contains the audience.",
+      "required": true
+    },
+    "criteria": {
+      "type": "AudienceCriteria",
+      "description": "Criteria in an audience. This field is available in API version 47.0 and later.",
+      "required": true
+    },
+    "criterion": {
+      "type": "AudienceCriterion[]",
+      "description": "Removed. List of criteria in an audience. This field is available in API version 44.0–46.0. In API version 47.0 and later, use criteria instead."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the audience."
+    },
+    "formula": {
+      "type": "string",
+      "description": "Formula used to determine the audience. This field is available in API version 45.0 and later."
+    },
+    "formulaFilterType": {
+      "type": "FormulaFilterType(enumeration of type string)",
+      "description": "Indicates the audience’s formula type. Valid values are AllCriteriaMatch AnyCriterionMatches CustomLogicMatches (available in API version 45.0 and later)"
+    },
+    "isDefaultAudience": {
+      "type": "boolean",
+      "description": "Indicates whether the audience is the default audience (true) or not (false). This field is available and required in API version 48.0. In API version 49.0 and later, this field is optional. The default audience file name is of format Default_Network Name.audience."
+    },
+    "targets": {
+      "type": "PersonalizationTargetInfos",
+      "description": "Targets for the audience. This field is available in API version 47.0 and later."
+    }
+  },
+  "sub_types": {
+    "AudienceCriteria": {
+      "criterion": {
+        "type": "AudienceCriterion[]",
+        "description": "List of criteria for an audience. An audience can have up to 100 criteria."
+      }
+    },
+    "AudienceCriterion": {
+      "criteriaNumber": {
+        "type": "int",
+        "description": "The number associated with the criterion in a formula, for example (1 AND 2) OR 3. This field is available in API version 45.0 and later."
+      },
+      "criterionValue": {
+        "type": "AudienceCriteriaValue",
+        "description": "The value of the criterion."
+      },
+      "operator": {
+        "type": "AudienceCriterionOperator(enumeration of type string)",
+        "description": "The operator associated with this criterion. Valid values are: Equal NotEqual GreaterThan GreaterThanOrEqual LessThan LessThanOrEqual Contains StartsWith Includes (available in API version 45.0 and later) NotIncludes (available in API version 45.0 and later)"
+      },
+      "type": {
+        "type": "AudienceCriterionType(enumeration of type string)",
+        "description": "Valid values are: GeoLocation Domain Profile FieldBased Permission (available in API version 45.0 and later) Default (available in API version 47.0 and later) Audience (available in API version 53.0 and later) For a list of AudienceCriteriaValue fields that you can use with each AudienceCriterion type field value, see this table.",
+        "required": true
+      }
+    },
+    "AudienceCriteriaValue": {
+      "audienceDeveloperName": {
+        "type": "string",
+        "description": "Developer name of the audience. This field is available in API version 53.0 and later. You can use this field only when the value of the AudienceCriterion type field is Audience."
+      },
+      "city": {
+        "type": "string",
+        "description": "City of a user. You can use this field only when the value of the AudienceCriterion type field is GeoLocation."
+      },
+      "country": {
+        "type": "string",
+        "description": "Country of a user. You can use this field only when the value of the AudienceCriterion type field is GeoLocation."
+      },
+      "domain": {
+        "type": "string",
+        "description": "Domain of a user. You can use this field only when the value of the AudienceCriterion type field is Domain."
+      },
+      "entityField": {
+        "type": "string",
+        "description": "Field of an object. You can use this field only when the value of the AudienceCriterion type field is FieldBased."
+      },
+      "entityType": {
+        "type": "string",
+        "description": "Type of object. You can use this field only when the value of the AudienceCriterion type field is FieldBased."
+      },
+      "fieldValue": {
+        "type": "string",
+        "description": "Value of a field. You can use this field only when the value of the AudienceCriterion type field is FieldBased."
+      },
+      "isEnabled": {
+        "type": "string",
+        "description": "Indicates whether the permission is enabled (true) or not (false) for a user. This field is available in API version 45.0 and later. You can use this field used only when the value of the AudienceCriterion type field is Permission."
+      },
+      "permissionName": {
+        "type": "string",
+        "description": "Valid API name of a standard user or custom permission. This field is available in API version 45.0 and later. You can use this field only when the value of the AudienceCriterion type field is Permission."
+      },
+      "permissionType": {
+        "type": "string",
+        "description": "Type of permission. Valid values are Standard and Custom. This field is available in API version 45.0 and later. You can use this field only when the value of the AudienceCriterion type field is Permission."
+      },
+      "profile": {
+        "type": "string",
+        "description": "Profile of a user. You can use this field only when the value of the AudienceCriterion type field is Profile."
+      },
+      "subdivision": {
+        "type": "string",
+        "description": "Subdivision of a user. You can use this field only when the value of the AudienceCriterion type field is GeoLocation."
+      }
+    },
+    "PersonalizationTargetInfos": {
+      "target": {
+        "type": "PersonalizationTargetInfo[]",
+        "description": "List of targets for an audience."
+      }
+    },
+    "PersonalizationTargetInfo": {
+      "groupName": {
+        "type": "string",
+        "description": "Group name of the target. Groups bundle related target and audience pairs. You can have up to 2,000 groups and 500 targets per group. To determine the target group name, see https://developer.salesforce.com/docs/atlas.en-us.communities_dev.meta/communities_dev/communities_dev_personalization_names.htm in the Experience Cloud Developer Guide.",
+        "required": true
+      },
+      "priority": {
+        "type": "int",
+        "description": "Priority of the target. Within a group, priority determines which target is returned when the user matches more than one audience."
+      },
+      "targetType": {
+        "type": "string",
+        "description": "Type of target, indicating the nature of the data being targeted. Supported values include: ExperienceVariation (API version 47.0 and later) NavigationLinkSet (API version 49.0 and later) Report (API version 49.0 and later) Dashboard (API version 49.0 and later) You can have up to 2,500 ExperienceVariation targets and 25,000 record targets. For more information on the ExperienceVariation target type, see ExperienceBundle.",
+        "required": true
+      },
+      "targetValue": {
+        "type": "string",
+        "description": "Value of the target, which is the developer name of the experience variation, such as ContactSupport_ContactSupportForCalifornia_Page for a page variation. To determine the target developer name, see https://developer.salesforce.com/docs/atlas.en-us.communities_dev.meta/communities_dev/communities_dev_personalization_names.htm in the Experience Cloud Developer Guide.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Audience\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"audienceName\" type=\"xsd:string\"/>\n        <xsd:element name=\"container\" type=\"xsd:string\"/>\n        <xsd:element name=\"criteria\" type=\"tns:AudienceCriteria\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"formulaFilterType\" minOccurs=\"0\" type=\"tns:FormulaFilterType\"/>\n        <xsd:element name=\"isDefaultAudience\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AudienceCriteria\">\n  <xsd:sequence>\n    <xsd:element name=\"criterion\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AudienceCriterion\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AudienceCriteriaValue\">\n  <xsd:sequence>\n    <xsd:element name=\"city\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"country\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"domain\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"entityField\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"entityType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isEnabled\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"permissionName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"permissionType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"profile\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"subdivision\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AudienceCriterion\">\n  <xsd:sequence>\n    <xsd:element name=\"criteriaNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"criterionValue\" minOccurs=\"0\" type=\"tns:AudienceCriteriaValue\"/>\n    <xsd:element name=\"operator\" minOccurs=\"0\" type=\"tns:AudienceCriterionOperator\"/>\n    <xsd:element name=\"type\" type=\"tns:AudienceCriterionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"AudienceCriterionOperator\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Equal\"/>\n    <xsd:enumeration value=\"NotEqual\"/>\n    <xsd:enumeration value=\"GreaterThan\"/>\n    <xsd:enumeration value=\"GreaterThanOrEqual\"/>\n    <xsd:enumeration value=\"LessThan\"/>\n    <xsd:enumeration value=\"LessThanOrEqual\"/>\n    <xsd:enumeration value=\"Contains\"/>\n    <xsd:enumeration value=\"StartsWith\"/>\n    <xsd:enumeration value=\"Includes\"/>\n    <xsd:enumeration value=\"NotIncludes\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AudienceCriterionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Default\"/>\n    <xsd:enumeration value=\"Profile\"/>\n    <xsd:enumeration value=\"FieldBased\"/>\n    <xsd:enumeration value=\"GeoLocation\"/>\n    <xsd:enumeration value=\"Domain\"/>\n    <xsd:enumeration value=\"Permission\"/>\n    <xsd:enumeration value=\"Audience\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FormulaFilterType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AllCriteriaMatch\"/>\n    <xsd:enumeration value=\"AnyCriterionMatches\"/>\n    <xsd:enumeration value=\"CustomLogicMatches\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an Audience component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Audience xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <audienceName>Audience Metadata</audienceName>\n    <container>Customer</container>\n    <criteria>\n        <criterion>\n            <criteriaNumber>1</criteriaNumber>\n            <criterionValue>\n                <country>United States</country>\n                <subdivision>Nevada</subdivision>\n            </criterionValue>\n            <operator>Equal</operator>\n            <type>GeoLocation</type>\n        </criterion>\n        <criterion>\n            <criteriaNumber>2</criteriaNumber>\n            <criterionValue>\n                <profile>customer community user</profile>\n            </criterionValue>\n            <operator>Equal</operator>\n            <type>Profile</type>\n        </criterion>\n        <criterion>\n            <criteriaNumber>3</criteriaNumber>\n            <criterionValue>\n                <domain>sampledomain.example.com</domain>\n            </criterionValue>\n            <operator>Equal</operator>\n            <type>Domain</type>\n        </criterion>\n        <criterion>\n            <criteriaNumber>4</criteriaNumber>\n            <criterionValue>\n                <entityField>Manager.Profile.CreatedBy.Contact.MailingCountry</entityField>\n                <entityType>User</entityType>\n                <fieldValue>USA</fieldValue>\n            </criterionValue>\n            <operator>StartsWith</operator>\n            <type>FieldBased</type>\n        </criterion>\n        <criterion>\n            <criteriaNumber>5</criteriaNumber>\n            <criterionValue>\n                <entityField>RecordTypeId</entityField>\n                <entityType>CollaborationGroup</entityType>\n                <fieldValue>CollaborationGroup.Group_RT2</fieldValue>\n            </criterionValue>\n            <operator>Equal</operator>\n            <type>FieldBased</type>\n        </criterion>\n        <criterion>\n            <criteriaNumber>6</criteriaNumber>\n            <criterionValue>\n                <isEnabled>true</isEnabled>\n                <permissionName>ManageUsers</permissionName>\n                <permissionType>Standard</permissionType>\n            </criterionValue>\n            <operator>Equal</operator>\n            <type>Permission</type>\n        </criterion>\n        <criterion>\n            <criteriaNumber>7</criteriaNumber>\n            <criterionValue>\n                <isEnabled>false</isEnabled>\n                <permissionName>NamespaceXYZ__CustomPermABC</permissionName>\n                <permissionType>Custom</permissionType>\n            </criterionValue>\n            <operator>Equal</operator>\n            <type>Permission</type>\n        </criterion>\n        <criterion>\n            <criteriaNumber>8</criteriaNumber>\n            <criterionValue>\n                <audienceDeveloperName>Audience1</audienceDeveloperName>\n            </criterionValue>\n            <operator>Equal</operator>\n            <type>Audience</type>\n        </criterion>\n    </criteria>\n    <formula>1 AND (2 OR 3 OR 4 OR 5 OR 6 OR 7) AND 8</formula>\n    <formulaFilterType>CustomLogicMatches</formulaFilterType>\n    <isDefaultAudience>false</isDefaultAudience>\n    <targets>\n        <target>\n            <groupName>c194d79c-5c6b-4c6a-8d14-0e7042564355$#$Branding</groupName>\n            <priority>1</priority>\n            <targetType>ExperienceVariation</targetType>\n            <targetValue>Customer_Service_testBrandingSet_Branding</targetValue>\n        </target>\n    </targets>\n</Audience>"
+    }
+  ]
+}

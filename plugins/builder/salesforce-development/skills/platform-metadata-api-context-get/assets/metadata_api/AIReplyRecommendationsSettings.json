@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AIReplyRecommendationsSettings - Metadata API",
+  "description": "Represents the metadata used to manage settings for Einstein Reply Recommendations. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAIReplyRecommendations": {
+      "type": "boolean",
+      "description": "If true (default), Einstein Reply Recommendations is enabled. If false, it is disabled."
+    },
+    "enableGenReplyRecommendations": {
+      "type": "boolean",
+      "description": "If true (default), Einstein Service Replies is enabled. If false, it is disabled. Available in API version 58.0 or later."
+    },
+    "enableServiceEinsteinGPTGrounding": {
+      "type": "boolean",
+      "description": "If true (default), Service AI Grounding is enabled. If false, it is disabled. Available in API version 58.0 or later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AIReplyRecommendationsSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAIReplyRecommendations\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGenReplyRecommendations\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableServiceEinsteinGPTGrounding\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableServiceRepliesAutoTranslate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableServiceRepliesCapabilityForSA\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableServiceRepliesPause\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"hideSRPostButton\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example aireplyrecommendations.settings metadata file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AIReplyRecommendationsSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableAIReplyRecommendations>true</enableAIReplyRecommendations>\n</AIReplyRecommendationsSettings>"
+    }
+  ]
+}

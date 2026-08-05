@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LiveChatDeployment - Metadata API",
+  "description": "Represents the configuration settings for a specific Chat deployment, such as the branding image for the deployment and whether or not chat transcripts are automatically saved.",
+  "file_information": ".liveChatDeployment",
+  "directory_location": "liveChatDeployments",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "brandingImage": {
+      "type": "string",
+      "description": "Specifies the branding image for the deployment."
+    },
+    "connectionTimeoutDuration": {
+      "type": "int",
+      "description": "Indicates the amount of time before the chat times out, in seconds."
+    },
+    "ConnectionWarningDuration": {
+      "type": "int",
+      "description": "Indicates the amount of time before a time-out warning is displayed to the agent, in seconds."
+    },
+    "displayQueuePosition": {
+      "type": "boolean",
+      "description": "(Pilot) Determines whether a customer’s queue position is displayed in a standard chat window while the customer waits for an agent to respond to the chat request (true) or not (false). This field is available as a pilot in API version 32.0. To enable this field, contact Salesforce."
+    },
+    "domainWhiteList": {
+      "type": "LiveChatDeploymentDomainWhiteList",
+      "description": "Specifies the list of domains that can host the deployment."
+    },
+    "enablePrechatApi": {
+      "type": "boolean",
+      "description": "Indicates whether or not the pre-chat API is enabled for the deployment (true) or not (false)."
+    },
+    "enableTranscriptSave": {
+      "type": "boolean",
+      "description": "Indicates whether chat transcripts are automatically saved after a chat ends (true) or not (false)."
+    },
+    "label": {
+      "type": "string",
+      "description": "Specifies the name of the deployment."
+    },
+    "mobileBrandingImage": {
+      "type": "string",
+      "description": "Specifies the branding image for the deployment that appears when customers access the deployment on a mobile device."
+    },
+    "site": {
+      "type": "string",
+      "description": "Specifies the site that hosts the images for the deployment. You must have the CustomDomain permission enabled in your organization before you can use a Salesforce site with Chat."
+    },
+    "windowTitle": {
+      "type": "string",
+      "description": "Specifies the title of the window associated with the deployment."
+    }
+  },
+  "sub_types": {
+    "LiveChatDeploymentDomainWhiteList": {
+      "domain": {
+        "type": "string",
+        "description": "Specifies a domain that can host the deployment."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LiveChatDeployment\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"brandingImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"connectionTimeoutDuration\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"connectionWarningDuration\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"displayQueuePosition\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"domainWhiteList\" minOccurs=\"0\" type=\"tns:LiveChatDeploymentDomainWhitelist\"/>\n        <xsd:element name=\"enablePrechatApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTranscriptSave\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"mobileBrandingImage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"site\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"windowTitle\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"LiveChatDeploymentDomainWhitelist\">\n  <xsd:sequence>\n    <xsd:element name=\"domain\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample of a liveChatDeployment file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LiveChatDeployment xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>My Deployment 1</label>\n    <brandingImage>pkb_image_bannerBg</brandingImage>\n    <mobileBrandingImage>pkb_image_bgBottom</mobileBrandingImage>\n    <domainWhiteList>\n        <domain>mydomain</domain>\n        <domain>test</domain>\n    </domainWhiteList>\n    <enableTranscriptSave>true</enableTranscriptSave>\n    <site>GL_Knowledge_Base</site>\n    <windowTitle>My window title</windowTitle>\n</LiveChatDeployment>"
+    }
+  ]
+}

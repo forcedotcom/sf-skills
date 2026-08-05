@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FilesConnectSettings - Metadata API",
+  "description": "Represents the settings that modify the Files Connect feature.This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableContentHubAllowed": {
+      "type": "boolean",
+      "description": "Indicates whether Files Connect is enabled (true) or not (false)."
+    },
+    "enableContentHubCvtLinksAllowed": {
+      "type": "boolean",
+      "description": "Indicates whether the ability to link conversions in the feed publisher is enabled (true) or not (false) for Google Drive and Quip links."
+    },
+    "enableContentHubEOSearchLayout": {
+      "type": "boolean",
+      "description": "Indicates whether the external object’s search layout can be used in Global Search (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FilesConnectSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableContentHubAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentHubCvtLinksAllowed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableContentHubEOSearchLayout\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a FilesConnectSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FilesConnectSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableContentHubAllowed>false</enableCurrencyEffectiveDates>\n    <enableContentHubCvtLinksAllowed>false</enableCurrencySymbolWithMultiCurrency>\n    <enableContentHubEOSearchLayout>false</enableMultiCurrency>\n</FilesConnectSettings>"
+    }
+  ]
+}

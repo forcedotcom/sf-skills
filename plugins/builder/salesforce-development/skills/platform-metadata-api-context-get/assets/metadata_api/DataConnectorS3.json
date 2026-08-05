@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataConnectorS3 - Metadata API",
+  "description": "Represents the connection information specific to Amazon S3.",
+  "file_information": ".s3DataConnector",
+  "directory_location": "s3DataConnectors",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "fileNameWildcard": {
+      "type": "string",
+      "description": "Optional. File or Wildcard (*) to be used when finding files."
+    },
+    "importFromDirectory": {
+      "type": "string",
+      "description": "Path from the directory to where files are located.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The UI name for the S3 data connector.",
+      "required": true
+    },
+    "s3BucketName": {
+      "type": "string",
+      "description": "Optional. The Amazon S3 Name of the Bucket."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataConnectorS3 component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n    <DataConnectorS3 xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fileNameWildcard>*.csv</fileNameWildcard>\n    <importFromDirectory>c360-subset-lheader/</importFromDirectory>\n    <masterLabel>Person</masterLabel>\n    <s3BucketName>bucketeer-aa32faea-8431-4635-8a1d-b323a2d66c7c</s3BucketName>\n    </DataConnectorS3>"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SearchLayouts - Metadata API",
+  "description": "Represents the metadata associated with the search layouts for an object. You can customize which fields to display for users in search results, search filter fields, lookup dialogs, and recent record lists on tab home pages. You can access SearchLayouts only by accessing its encompassing CustomObject.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "customTabListAdditionalFields": {
+      "type": "string[]",
+      "description": "The list of fields displayed in the Recent Object Name list view for an object."
+    },
+    "excludedStandardButtons": {
+      "type": "string[]",
+      "description": "The list of standard buttons excluded from the search layout."
+    },
+    "listViewButtons": {
+      "type": "string[]",
+      "description": "The list of buttons available in list views for an object. This field is equivalent to the Buttons Displayed value in the Object Name List View in the related list of the object detail page in the UI."
+    },
+    "lookupDialogsAdditionalFields": {
+      "type": "string[]",
+      "description": "The list of fields displayed in a lookup dialog for the object. Salesforce objects often include one or more lookup fields that allow users to associate two records together in a relationship. For example, a contact record includes an Account lookup field that represents the relationship between the contact and the organization with which the contact is associated. A lookup search dialog helps you search for the record associated with the one being edited. Lookup filter fields allow you to filter your lookup search by a customized list of fields in the object. This field is equivalent to the Lookup Dialogs related list on the object detail page in the UI."
+    },
+    "lookupFilterFields": {
+      "type": "string[]",
+      "description": "The list of fields that can be used to filter enhanced lookups for an object. Enhanced lookups are optionally enabled by your administrator. This field is equivalent to the Lookup Filter Fields related list on the object detail page in the application user interface."
+    },
+    "lookupPhoneDialogsAdditionalFields": {
+      "type": "string[]",
+      "description": "The list of phone-related fields displayed in a lookup dialog for the object. This list enables integration of the fields with a softphone dial pad. This field is equivalent to the Lookup Phone Dialogs related list on the object detail page in the application user interface."
+    },
+    "massQuickActions": {
+      "type": "string[]",
+      "description": "The list of actions that you can use to perform mass quick action on records. Use this field to add an existing create or update action. You can perform mass quick actions on custom objects and all standard objects that support quick actions and have a search layout in Lightning Experience. This includes but isn’t limited to cases, leads, accounts, campaigns, contacts, opportunities, and work orders."
+    },
+    "searchFilterFields": {
+      "type": "string[]",
+      "description": "The list of fields that can be used to filter a search for the object. This field is equivalent to the Search Filter Fields related list on the object detail page in the application user interface."
+    },
+    "searchResultsAdditionalFields": {
+      "type": "string[]",
+      "description": "The list of fields displayed in a search result for the object. This field is equivalent to the Search Results related list on the object detail page in the application user interface."
+    },
+    "searchResultsCustomButtons": {
+      "type": "string[]",
+      "description": "The list of custom buttons available in a search result for the object. The actions associated with the buttons can be applied to any of the records returned in the search result."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomObject\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionOverride\"/>\n        <xsd:element name=\"allowInChatterGroups\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"articleTypeChannelDisplay\" minOccurs=\"0\" type=\"tns:ArticleTypeChannelDisplay\"/>\n        <xsd:element name=\"businessProcesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BusinessProcess\"/>\n        <xsd:element name=\"compactLayoutAssignment\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"compactLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CompactLayout\"/>\n        <xsd:element name=\"customHelp\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHelpPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customSettingsType\" minOccurs=\"0\" type=\"tns:CustomSettingsType\"/>\n        <xsd:element name=\"deploymentStatus\" minOccurs=\"0\" type=\"tns:DeploymentStatus\"/>\n        <xsd:element name=\"deprecated\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableActivities\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBulkApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataTranslation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDivisions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedLookup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeeds\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLicensing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePublishStatusTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReports\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSearch\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableStreamingApi\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enrichments\" minOccurs=\"0\" type=\"tns:MetadataEnrichments\"/>\n        <xsd:element name=\"eventType\" minOccurs=\"0\" type=\"tns:PlatformEventType\"/>\n        <xsd:element name=\"externalDataSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalRepository\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalSharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"fieldSets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldSet\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"gender\" minOccurs=\"0\" type=\"tns:Gender\"/>\n        <xsd:element name=\"historyRetentionPolicy\" minOccurs=\"0\" type=\"tns:HistoryRetentionPolicy\"/>\n        <xsd:element name=\"household\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"indexes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Index\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"listViews\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ListView\"/>\n        <xsd:element name=\"mktDataLakeAttributes\" minOccurs=\"0\" type=\"tns:MktDataLakeAttributes\"/>\n        <xsd:element name=\"mktDataModelAttributes\" minOccurs=\"0\" type=\"tns:MktDataModelAttributes\"/>\n        <xsd:element name=\"nameField\" minOccurs=\"0\" type=\"tns:CustomField\"/>\n        <xsd:element name=\"pluralLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"profileSearchLayouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProfileSearchLayouts\"/>\n        <xsd:element name=\"publishBehavior\" minOccurs=\"0\" type=\"tns:PlatformEventPublishBehavior\"/>\n        <xsd:element name=\"recordTypeTrackFeedHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypeTrackHistory\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"recordTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordType\"/>\n        <xsd:element name=\"searchLayouts\" minOccurs=\"0\" type=\"tns:SearchLayouts\"/>\n        <xsd:element name=\"sharingModel\" minOccurs=\"0\" type=\"tns:SharingModel\"/>\n        <xsd:element name=\"sharingReasons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingReason\"/>\n        <xsd:element name=\"sharingRecalculations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SharingRecalculation\"/>\n        <xsd:element name=\"startsWith\" minOccurs=\"0\" type=\"tns:StartsWith\"/>\n        <xsd:element name=\"validationRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ValidationRule\"/>\n        <xsd:element name=\"visibility\" minOccurs=\"0\" type=\"tns:SetupObjectVisibility\"/>\n        <xsd:element name=\"webLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WebLink\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SearchLayouts\">\n  <xsd:sequence>\n    <xsd:element name=\"customTabListAdditionalFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"excludedStandardButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"listViewButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"lookupDialogsAdditionalFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"lookupFilterFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"lookupPhoneDialogsAdditionalFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"massQuickActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"searchFilterFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"searchResultsAdditionalFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"searchResultsCustomButtons\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample definition of object’s search layout is shown..",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n                <CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n                . . .\n                <searchLayouts>\n                <listViewButtons>New</listViewButtons>\n                <listViewButtons>Accept</listViewButtons>\n                <listViewButtons>ChangeOwner</listViewButtons>\n                <lookupDialogsAdditionalFields>firstQuote__c</lookupDialogsAdditionalFields>\n                <lookupDialogsAdditionalFields>finalQuote__c</lookupDialogsAdditionalFields>\n                <massQuickActions>Create_MQA_Contact</massQuickActions>\n                <searchResultsAdditionalFields>CREATEDBY_USER</searchResultsAdditionalFields>\n                </searchLayouts>\n                . . .\n                </CustomObject>"
+    }
+  ]
+}

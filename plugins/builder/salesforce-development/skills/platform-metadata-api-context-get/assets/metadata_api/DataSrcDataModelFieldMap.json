@@ -1,0 +1,69 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataSrcDataModelFieldMap - Metadata API",
+  "description": "Represents the mappings between source data lake object (DLO) fields and target data model object (DMO) fields.",
+  "file_information": ".dataSrcDataModelFieldMap",
+  "directory_location": "dataSrcDataModelFieldMaps",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "filterApplied": {
+      "type": "boolean",
+      "description": "Indicates whether a filter is applied to a DLO-to-DMO field mapping (true) or not (false). Available in API version 60.0 and later."
+    },
+    "filterOperationType": {
+      "type": "string",
+      "description": "Required when filterApplied is true. The comparison operator used when filtering the DLO-to-DMO field mapping. Available in API version 60.0 and later.",
+      "required": true
+    },
+    "filterValue": {
+      "type": "string",
+      "description": "Required when filterApplied is true. The value used for filtering the DLO-to-DMO field mapping. Available in API version 60.0 and later.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for DataSrcDataModelFieldMap, which is defined when the DataSrcDataModelFieldMap is created."
+    },
+    "sourceField": {
+      "type": "string",
+      "required": true,
+      "description": "The developer name of the DLO field."
+    },
+    "targetField": {
+      "type": "string",
+      "required": true,
+      "description": "The developer name of the DMO field."
+    },
+    "templateVersion": {
+      "type": "int",
+      "description": "The version number of the field mapping template. Available in API version 61.0 and later."
+    },
+    "versionNumber": {
+      "type": "double",
+      "required": true,
+      "description": "The version number of the DataSrcDataModelFieldMap."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataSrcDataModelFieldMap component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataSrcDataModelFieldMap xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <filterApplied>true</filterApplied>\n    <filterOperationType>equals</filterOperationType>\n    <filterValue>Active</filtervalue>\n    <masterLabel>DataSrcDataModel26</masterLabel>\n    <sourceField>Account1.LastModifiedDate__c</sourceField>\n    <targetField>ssot__Account__dlm.ssot__LastModifiedDate__c</targetField>\n    <tepmlateVersion>2</templateVersion>\n    <versionNumber>1.0</versionNumber>\n</DataSrcDataModelFieldMap>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<types>\n        <members>DataSrcDataModel26</members>\n        <name>DataSrcDataModelFieldMap</name>\n</types>"
+    }
+  ]
+}

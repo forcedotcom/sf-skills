@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PartyDataModelSettings - Metadata API",
+  "description": "Represents an organization’s party data model settings, including options around the Individual object and consent enablement. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAutoSelectIndividualOnMerge": {
+      "type": "boolean",
+      "description": "Indicates whether the most recently modified data privacy record for the Individual is retained when merging lead, contact, and person accounts (true) or users must manually determine which data privacy record to retain during the merge process (false). This field has a default value of false."
+    },
+    "enableConsentManagement": {
+      "type": "boolean",
+      "description": "Indicates whether data protection details are available in records (true) or not (false). This has a default value of true. Note: Setting this field to false purges all data protection details, such as privacy preferences and stored consent forms."
+    },
+    "enableIndividualAutoCreate": {
+      "type": "boolean",
+      "description": "Deprecated in API version 48.0 and removed in API version 49.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PartyDataModelSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAutoSelectIndividualOnMerge\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableConsentManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableIndividualAutoCreate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PartyDataModelSettings",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PartyDataModelSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableAutoSelectIndividualOnMerge>true</enableAutoSelectIndividualOnMerge>\n    <enableConsentManagementEnabled>true</enableConsentManagementEnabled>\n</PartyDataModelSettings>"
+    }
+  ]
+}

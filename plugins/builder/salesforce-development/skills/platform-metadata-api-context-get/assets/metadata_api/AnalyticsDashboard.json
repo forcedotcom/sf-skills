@@ -1,0 +1,369 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AnalyticsDashboard - Metadata API",
+  "description": "Represents a Tableau Next dashboard.",
+  "file_information": ".uadash",
+  "directory_location": "analyticsDashboards",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "analyticsWorkspace": {
+      "type": "string",
+      "required": true,
+      "description": "The Tableau Next workspace the dashboard belongs to."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the dashboard."
+    },
+    "lastDraftModifiedDate": {
+      "type": "dateTime",
+      "description": "The date the dashboard draft was last modified."
+    },
+    "lastPublishedDate": {
+      "type": "dateTime",
+      "description": "The date the dashboard was last published."
+    },
+    "layouts": {
+      "type": "AnalyticsDashboardLayout[]",
+      "description": "The layouts for the dashboard. A dashboard has 0 or more layouts."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the dashboard."
+    },
+    "style": {
+      "type": "string",
+      "description": "The style of the dashboard. This is a JSON string. Example: {\"widgetStyle\":{\"backgroundColor\":\"#ffffff\",\"borderEdges\":[],\"borderColor\":\"#cccccc\",\"borderWidth\":1,\"borderRadius\":0}}"
+    },
+    "templateAssetSourceName": {
+      "type": "string",
+      "description": "If the dashboard was created from a template, the name of the source dashboard in the template."
+    },
+    "templateSource": {
+      "type": "string",
+      "description": "If the dashboard was created from a template, the name of the source template."
+    },
+    "version": {
+      "type": "double",
+      "description": "The API version of the dashboard."
+    },
+    "widgets": {
+      "type": "AnalyticsDashboardWidget[]",
+      "description": "A list of widgets in the dashboard. A dashboard has 0 or more widgets."
+    },
+    "workspaceAssetRelationships": {
+      "type": "AnalyticsWorkspaceAsset[]",
+      "description": "A list of analytics assets in the workspace this dashboard is associated with. A dashboard has 0 or more workspace asset relationships."
+    }
+  },
+  "sub_types": {
+    "AnalyticsDashboardLayout": {
+      "analyticsDashboard": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the dashboard the layout is associated with."
+      },
+      "analyticsDashboardVersion": {
+        "type": "string",
+        "description": "The version of the dashboard the layout is associated with."
+      },
+      "columnCount": {
+        "type": "string",
+        "description": "The number of columns in the layout."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the layout."
+      },
+      "layoutName": {
+        "type": "string",
+        "description": "The name of the layout."
+      },
+      "maxWidth": {
+        "type": "string",
+        "description": "The max width of the layout, in pixels."
+      },
+      "pages": {
+        "type": "AnalyticsDashboardPage[]",
+        "description": "The pages to display for this dashboard layout. A layout has 0 or more pages."
+      },
+      "rowHeight": {
+        "type": "string",
+        "description": "The row height for layout rows."
+      },
+      "style": {
+        "type": "string",
+        "description": "The style for the layout. This is a JSON string. Example: {\"backgroundColor\":\"#ffffff\",\"gutterColor\":\"#f3f3f3\",\"cellSpacingX\":8,\"cellSpacingY\":8"
+      },
+      "version": {
+        "type": "double",
+        "description": "The API version of the dashboard layout."
+      }
+    },
+    "AnalyticsDashboardPage": {
+      "index": {
+        "type": "int",
+        "description": "The index of the page in the dashboard. An index of 0 is the first page of the dashboard. No index is required if there is only the default page of the dashboard."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the dashboard page."
+      },
+      "pageName": {
+        "type": "string",
+        "description": "The generated unique ID for the dashboard page."
+      },
+      "pageWidgets": {
+        "type": "AnalyticsDashPageWidget[]",
+        "description": "A list of dashboard page widgets. A page has 0 or more page widgets."
+      }
+    },
+    "AnalyticsDashPageWidget": {
+      "analyticsDashboardWidget": {
+        "type": "string",
+        "required": true,
+        "description": "The name of dashboard widget, defined in the list of widgets for the dashboard."
+      },
+      "colspan": {
+        "type": "string",
+        "description": "The column span for the widget on the page. This is a numeric value."
+      },
+      "column": {
+        "type": "string",
+        "description": "The column the widget is placed in on the page. This is a numeric value."
+      },
+      "row": {
+        "type": "string",
+        "description": "The row the widget is placed in on the page. This is a numeric value."
+      },
+      "rowspan": {
+        "type": "string",
+        "description": "The row span for the widget on the page. This is a numeric value."
+      }
+    },
+    "AnalyticsDashboardWidget": {
+      "analyticsDashboard": {
+        "type": "string",
+        "required": true,
+        "description": "The API name of the dashboard the widget is associated with."
+      },
+      "buttonWidgetDefs": {
+        "type": "AnalyticsButtonWidgetDef[]",
+        "description": "The definition for a button widget type. A dashboard has 0 or more button widgets. Required for button widget."
+      },
+      "containerWidgetDefs": {
+        "type": "AnalyticsContainerWidgetDef[]",
+        "description": "The definition for a container widget type. A dashboard has 0 or more container widgets. Required for container widget."
+      },
+      "dynamicTokens": {
+        "type": "AnlytDshbrdWdgtDynamicTkn[]",
+        "description": "The definition for a dynamic widget token. A dashboard has 0 or more dynamic tokens."
+      },
+      "filterWidgetDefs": {
+        "type": "AnalyticsFilterWidgetDef[]",
+        "description": "The definition for a filter widget type. A dashboard has 0 or more filter widgets. Required for filter widget."
+      },
+      "imageWidgetDefs": {
+        "type": "AnalyticsImageWidgetDef[]",
+        "description": "The definition for a image widget type. A dashboard has 0 or more image widgets. Required for image widget."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the widget."
+      },
+      "metricWidgetDefs": {
+        "type": "AnalyticsMetricWidgetDef[]",
+        "description": "The definition for a metric widget type. A dashboard has 0 or more metric widgets. Required for metric widget."
+      },
+      "parameterWidgetDefs": {
+        "type": "AnalyticsParamWidgetDef[]",
+        "description": "The definition for a parameter widget type. A dashboard has 0 or more paramet widgets. Required for parameter widget."
+      },
+      "textWidgetDefs": {
+        "type": "AnalyticsTextWidgetDef[]",
+        "description": "The definition for a text widget type. A dashboard has 0 or more text widgets. Required for text widget."
+      },
+      "type": {
+        "type": "AnalyticsWidgetType (enumeration of type string)",
+        "required": true,
+        "description": "The widget type.Values are: button container extension filter image metric parameter text summary visualization"
+      },
+      "vizWidgetDefs": {
+        "type": "AnalyticsVizWidgetDef[]",
+        "description": "The definition for a visualization widget type. A dashboard has 0 or more visualization widgets. Required for visualization widget."
+      },
+      "widgetActions": {
+        "type": "AnalyticsAssetAction[]",
+        "description": "The actions for the widget. A widget has 0 or more text widgets."
+      },
+      "widgetName": {
+        "type": "string",
+        "description": "The API name of the widget. Use this for the analyticsDashboardWidget value in AnalyticsDashPageWidget."
+      }
+    },
+    "AnalyticsAssetAction": {
+      "actionType": {
+        "type": "AnalyticsActionType (enumeration of type string)",
+        "required": true,
+        "description": "The action type. Values are: flow navigate parameter recordaction"
+      },
+      "analyticsAssetVerson": {
+        "type": "string",
+        "optional": true,
+        "description": "The version of the Analytics asset the action is associated with."
+      },
+      "eventType": {
+        "type": "AnalyticsActionEventType (enumeration of type string)",
+        "required": true,
+        "description": "The action event type. Values are: click select"
+      },
+      "parameters": {
+        "type": "string",
+        "description": "The parameter for the action. This is a JSON string. Example: {\"destination\":{\"type\":\"url\",\"target\":\"www.salesforce.com\"}}"
+      },
+      "version": {
+        "type": "double",
+        "description": "The API version of the action."
+      }
+    },
+    "AnalyticsButtonWidgetDef": {
+      "parameters": {
+        "type": "string",
+        "description": "The parameters for the button widget. This is a JSON String.Example: {\"text\":\"Button\",\"alignmentX\":\"center\",\"alignmentY\":\"center\",\"fontSize\":16}"
+      }
+    },
+    "AnalyticsContainerWidgetDef": {
+      "parameters": {
+        "type": "string",
+        "description": "The parameters for the container widget. This is a JSON String.Example: {\"widgetStyle\":{\"backgroundColor\":\"#1295FF\",\"borderEdges\":[]}}"
+      }
+    },
+    "AnlytDshbrdWdgtDynamicTkn": {
+      "description": {
+        "type": "string",
+        "description": "The description for the dynamic token."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the dynamic token."
+      },
+      "source": {
+        "type": "string",
+        "description": "The source object of the dynamic token."
+      },
+      "tokenName": {
+        "type": "string",
+        "description": "The name of the dynamic token."
+      },
+      "tokenSpec": {
+        "type": "string",
+        "description": "The specification for the dynamic token."
+      },
+      "type": {
+        "type": "AnalyticsDynamicTokenType",
+        "description": "The type of dynamic token. Valid values include query and insights."
+      }
+    },
+    "AnalyticsFilterWidgetDef": {
+      "initialValues": {
+        "type": "string",
+        "description": "The initial values for the filter."
+      },
+      "parameters": {
+        "type": "string",
+        "description": "The parameters for the filter widget. This is a JSON String.Example: {\"receiveFilterSource\":{\"filterMode\":\"all\",\"widgetIds\":[]},\"filterOption\":{\"objectName\":\"Account\",\"fieldName\":\"Account_Id\",\"dataType\":\"Text\",\"selectionType\":\"multiple\"},\"isLabelHidden\":false}"
+      },
+      "source": {
+        "type": "string",
+        "description": "The data source to apply the filter to."
+      }
+    },
+    "AnalyticsImageWidgetDef": {
+      "parameters": {
+        "type": "string",
+        "description": "The parameters for the image widget. This is a JSON String."
+      },
+      "source": {
+        "type": "string",
+        "description": "The data source the image is associated with."
+      }
+    },
+    "AnalyticsMetricWidgetDef": {
+      "parameters": {
+        "type": "string",
+        "description": "The parameters for the filter widget. This is a JSON String.Example: {\"metricOption\":{\"layout\":{\"componentVisibility\":{\"details\":true,\"title\":true,\"value\":true,\"comparison\":true,\"chart\":true,\"insights\":false}},\"sdmApiName\":\"AccountModel\",\"sdmId\":\"2SMxx0000004CFUGA2\"},\"receiveFilterSource\":{\"filterMode\":\"all\",\"widgetIds\":[]}}"
+      },
+      "semanticModel": {
+        "type": "string",
+        "description": "The semantic model the metric is associated with."
+      },
+      "source": {
+        "type": "string",
+        "description": "The data source the metric is associated with."
+      },
+      "sourceDeprecated": {
+        "type": "string",
+        "description": "Present if the data source the metric is associated with is deprecated."
+      },
+      "version": {
+        "type": "double",
+        "description": "The API version of the metric."
+      }
+    },
+    "AnalyticsParamWidgetDef": {
+      "initialValues": {
+        "type": "string",
+        "description": "The initial values for the parameters."
+      },
+      "parameters": {
+        "type": "string",
+        "description": "The parameters for the filter widget. This is a JSON String.Example: {\"parameterName\":\"AccountParameter_prm\",\"isLabelHidden\":false}"
+      },
+      "source": {
+        "type": "string",
+        "description": "The data source the parameters are associated with."
+      }
+    },
+    "AnalyticsTextWidgetDef": {
+      "parameters": {
+        "type": "string",
+        "description": "The parameters for the filter widget. This is a JSON String.Example: {\"content\":[{\"attributes\":{\"color\":\"#000000\",\"size\":\"12px\"},\"insert\":\"full dashboard\"},{\"attributes\":{\"align\":\"left\"},\"insert\":\"\\n\"}]}"
+      }
+    },
+    "AnalyticsVizWidgetDef": {
+      "analyticsVisualization": {
+        "type": "string",
+        "description": "The API name of the visualization."
+      },
+      "analyticsVizVersion": {
+        "type": "string",
+        "description": "The version of the visualization."
+      },
+      "parameters": {
+        "type": "string",
+        "description": "The parameters for the filter widget. This is a JSON String.Example: {\"legendPosition\":\"Right\",\"receiveFilterSource\":{\"filterMode\":\"all\",\"widgetIds\":[]}}"
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AnalyticsActionEventType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"click\"/>\n    <xsd:enumeration value=\"select\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AnalyticsActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"recordaction\"/>\n    <xsd:enumeration value=\"flow\"/>\n    <xsd:enumeration value=\"navigate\"/>\n    <xsd:enumeration value=\"parameter\"/>\n    <xsd:enumeration value=\"filter\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"AnalyticsAssetAction\">\n  <xsd:sequence>\n    <xsd:element name=\"actionType\" type=\"tns:AnalyticsActionType\"/>\n    <xsd:element name=\"analyticsAssetVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"eventType\" type=\"tns:AnalyticsActionEventType\"/>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:double\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsButtonWidgetDef\">\n  <xsd:sequence>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsContainerWidgetDef\">\n  <xsd:sequence>\n    <xsd:element name=\"backgroundSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsDashPageWidget\">\n  <xsd:sequence>\n    <xsd:element name=\"analyticsDashboardWidget\" type=\"xsd:string\"/>\n    <xsd:element name=\"colspan\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"column\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"row\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"rowspan\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsDashboard\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"analyticsWorkspace\" type=\"xsd:string\"/>\n        <xsd:element name=\"backgroundSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customConfig\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lastDraftModifiedDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <xsd:element name=\"lastPublishedDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <xsd:element name=\"layouts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsDashboardLayout\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"style\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateAssetSourceName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateSource\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"widgets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsDashboardWidget\"/>\n        <xsd:element name=\"workspaceAssetRelationships\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsWorkspaceAsset\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsDashboardLayout\">\n  <xsd:sequence>\n    <xsd:element name=\"analyticsDashboard\" type=\"xsd:string\"/>\n    <xsd:element name=\"analyticsDashboardVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"columnCount\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"layoutName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"maxWidth\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"pages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsDashboardPage\"/>\n    <xsd:element name=\"rowHeight\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"style\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:double\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsDashboardPage\">\n  <xsd:sequence>\n    <xsd:element name=\"index\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"pageName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"pageWidgets\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsDashPageWidget\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsDashboardWidget\">\n  <xsd:sequence>\n    <xsd:element name=\"analyticsDashboard\" type=\"xsd:string\"/>\n    <xsd:element name=\"analyticsDashboardVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"buttonWidgetDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsButtonWidgetDef\"/>\n    <xsd:element name=\"containerWidgetDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsContainerWidgetDef\"/>\n    <xsd:element name=\"dynamicTokens\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnlytDshbrdWdgtDynamicTkn\"/>\n    <xsd:element name=\"filterWidgetDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsFilterWidgetDef\"/>\n    <xsd:element name=\"imageWidgetDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsImageWidgetDef\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"metricWidgetDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsMetricWidgetDef\"/>\n    <xsd:element name=\"parameterWidgetDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsParamWidgetDef\"/>\n    <xsd:element name=\"textWidgetDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsTextWidgetDef\"/>\n    <xsd:element name=\"type\" type=\"tns:AnalyticsWidgetType\"/>\n    <xsd:element name=\"vizWidgetDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsVizWidgetDef\"/>\n    <xsd:element name=\"widgetActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsAssetAction\"/>\n    <xsd:element name=\"widgetName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"AnalyticsDynamicTokenType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"query\"/>\n    <xsd:enumeration value=\"insights\"/>\n    <xsd:enumeration value=\"reference\"/>\n    <xsd:enumeration value=\"metric\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"AnalyticsFilterWidgetDef\">\n  <xsd:sequence>\n    <xsd:element name=\"initialValues\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsImageWidgetDef\">\n  <xsd:sequence>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsMetricWidgetDef\">\n  <xsd:sequence>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"semanticModel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceDeprecated\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:double\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsParamWidgetDef\">\n  <xsd:sequence>\n    <xsd:element name=\"initialValues\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsTextWidgetDef\">\n  <xsd:sequence>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsVizWidgetDef\">\n  <xsd:sequence>\n    <xsd:element name=\"analyticsVisualization\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"analyticsVizVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"parameters\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"AnalyticsWidgetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"visualization\"/>\n    <xsd:enumeration value=\"text\"/>\n    <xsd:enumeration value=\"filter\"/>\n    <xsd:enumeration value=\"parameter\"/>\n    <xsd:enumeration value=\"button\"/>\n    <xsd:enumeration value=\"metric\"/>\n    <xsd:enumeration value=\"container\"/>\n    <xsd:enumeration value=\"image\"/>\n    <xsd:enumeration value=\"extension\"/>\n    <xsd:enumeration value=\"summary\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"AnalyticsWorkspaceAsset\">\n  <xsd:sequence>\n    <xsd:element name=\"asset\" type=\"xsd:string\"/>\n    <xsd:element name=\"assetType\" type=\"tns:AnalyticsWorkspaceAssetType\"/>\n    <xsd:element name=\"assetUsageType\" type=\"tns:AnalyticsWorkspaceAssetUsageType\"/>\n    <xsd:element name=\"metadataSourceType\" minOccurs=\"0\" type=\"tns:AnalyticsWorkspaceAssetMetadataSourceType\"/>\n    <xsd:element name=\"workspace\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetMetadataSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Promoted\"/>\n    <xsd:enumeration value=\"Reused\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AnalyticsDashboard\"/>\n    <xsd:enumeration value=\"AnalyticsVisualization\"/>\n    <xsd:enumeration value=\"SemanticModel\"/>\n    <xsd:enumeration value=\"MktDataModelObject\"/>\n    <xsd:enumeration value=\"MktCalculatedInsightObject\"/>\n    <xsd:enumeration value=\"MktDataLakeObject\"/>\n    <xsd:enumeration value=\"MktDataConnection\"/>\n    <xsd:enumeration value=\"MktDataTransformSetup\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetUsageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Created\"/>\n    <xsd:enumeration value=\"Referenced\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"AnlytDshbrdWdgtDynamicTkn\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"tokenName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"tokenSpec\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:AnalyticsDynamicTokenType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AnalyticsDashboard component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AnalyticsDashboard xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <analyticsWorkspace>My_Workspace</analyticsWorkspace>\n    <description>A dashboard</description>\n    <layouts>\n        <analyticsDashboard>My_Dashboard</analyticsDashboard>\n        <columnCount>36</columnCount>\n        <layoutName>default</layoutName>\n        <maxWidth>1200</maxWidth>\n        <label>layoutLabel</label>\n        <pages>\n            <index>0</index>\n            <label>Page 1</label>\n            <pageName>e412bc11-d43b-4fba-ab44-b31bb842b49a</pageName>\n            <pageWidgets>\n                <analyticsDashboardWidget>visualization_1</analyticsDashboardWidget>\n                <colspan>11</colspan>\n                <column>1</column>\n                <row>2</row>\n                <rowspan>10</rowspan>\n            </pageWidgets>\n            <pageWidgets>\n                <analyticsDashboardWidget>button_1</analyticsDashboardWidget>\n                <colspan>9</colspan>\n                <column>13</column>\n                <row>8</row>\n                <rowspan>2</rowspan>\n            </pageWidgets>\n            <pageWidgets>\n                <analyticsDashboardWidget>container_1</analyticsDashboardWidget>\n                <colspan>11</colspan>\n                <column>23</column>\n                <row>2</row>\n                <rowspan>10</rowspan>\n            </pageWidgets>\n            <pageWidgets>\n                <analyticsDashboardWidget>text_2</analyticsDashboardWidget>\n                <colspan>9</colspan>\n                <column>13</column>\n                <row>5</row>\n                <rowspan>2</rowspan>\n            </pageWidgets>\n            <pageWidgets>\n                <analyticsDashboardWidget>metric_1</analyticsDashboardWidget>\n                <colspan>11</colspan>\n                <column>1</column>\n                <row>13</row>\n                <rowspan>10</rowspan>\n            </pageWidgets>\n            <pageWidgets>\n                <analyticsDashboardWidget>list_4</analyticsDashboardWidget>\n                <colspan>9</colspan>\n                <column>13</column>\n                <row>13</row>\n                <rowspan>2</rowspan>\n            </pageWidgets>\n            <pageWidgets>\n                <analyticsDashboardWidget>list_1</analyticsDashboardWidget>\n                <colspan>9</colspan>\n                <column>13</column>\n                <row>2</row>\n                <rowspan>2</rowspan>\n            </pageWidgets>\n        </pages>\n        <rowHeight>24</rowHeight>\n        <style>{&quot;backgroundColor&quot;:&quot;#ffffff&quot;,&quot;gutterColor&quot;:&quot;#f3f3f3&quot;,&quot;cellSpacingX&quot;:8,&quot;cellSpacingY&quot;:8}</style>\n    </layouts>\n    <masterLabel>My Dashboard</masterLabel>\n    <style>{&quot;widgetStyle&quot;:{&quot;backgroundColor&quot;:&quot;#ffffff&quot;,&quot;borderEdges&quot;:[],&quot;borderColor&quot;:&quot;#cccccc&quot;,&quot;borderWidth&quot;:1,&quot;borderRadius&quot;:0}}</style>\n    <version>64.0</version>\n    <widgets>\n        <analyticsDashboard>My_Dashboard</analyticsDashboard>\n        <type>visualization</type>\n        <vizWidgetDefs>\n            <analyticsVisualization>New_Visualization</analyticsVisualization>\n            <parameters>{&quot;legendPosition&quot;:&quot;Right&quot;,&quot;receiveFilterSource&quot;:{&quot;filterMode&quot;:&quot;all&quot;,&quot;widgetIds&quot;:[]}}</parameters>\n        </vizWidgetDefs>\n        <widgetName>visualization_1</widgetName>\n    </widgets>\n    <widgets>\n        <analyticsDashboard>My_Dashboard</analyticsDashboard>\n        <buttonWidgetDefs>\n            <parameters>{&quot;text&quot;:&quot;Button&quot;,&quot;alignmentX&quot;:&quot;center&quot;,&quot;alignmentY&quot;:&quot;center&quot;,&quot;fontSize&quot;:16}</parameters>\n        </buttonWidgetDefs>\n        <type>button</type>\n        <widgetActions>\n            <actionType>navigate</actionType>\n            <eventType>click</eventType>\n            <parameters>{&quot;destination&quot;:{&quot;type&quot;:&quot;url&quot;,&quot;target&quot;:&quot;www.salesforce.com&quot;}}</parameters>\n            <version>63.0</version>\n        </widgetActions>\n        <widgetName>button_1</widgetName>\n    </widgets>\n    <widgets>\n        <analyticsDashboard>My_Dashboard</analyticsDashboard>\n        <containerWidgetDefs>\n            <parameters>{&quot;widgetStyle&quot;:{&quot;backgroundColor&quot;:&quot;#1295FF&quot;,&quot;borderEdges&quot;:[]}}</parameters>\n        </containerWidgetDefs>\n        <type>container</type>\n        <widgetName>container_1</widgetName>\n    </widgets>\n    <widgets>\n        <analyticsDashboard>My_Dashboard</analyticsDashboard>\n        <textWidgetDefs>\n            <parameters>{&quot;content&quot;:[{&quot;attributes&quot;:{&quot;color&quot;:&quot;#000000&quot;,&quot;size&quot;:&quot;12px&quot;},&quot;insert&quot;:&quot;full dashboard&quot;},{&quot;attributes&quot;:{&quot;align&quot;:&quot;left&quot;},&quot;insert&quot;:&quot;\\n&quot;}]}</parameters>\n        </textWidgetDefs>\n        <type>text</type>\n        <widgetName>text_2</widgetName>\n    </widgets>\n    <widgets>\n        <analyticsDashboard>My_Dashboard</analyticsDashboard>\n        <metricWidgetDefs>\n            <parameters>{&quot;metricOption&quot;:{&quot;layout&quot;:{&quot;componentVisibility&quot;:{&quot;details&quot;:true,&quot;title&quot;:true,&quot;value&quot;:true,&quot;comparison&quot;:true,&quot;chart&quot;:true,&quot;insights&quot;:false}},&quot;sdmApiName&quot;:&quot;AccountModel&quot;,&quot;sdmId&quot;:&quot;2SMxx0000004CFUGA2&quot;},&quot;receiveFilterSource&quot;:{&quot;filterMode&quot;:&quot;all&quot;,&quot;widgetIds&quot;:[]}}</parameters>\n            <source>AccountMetric_mtc</source>\n        </metricWidgetDefs>\n        <type>metric</type>\n        <widgetName>metric_1</widgetName>\n    </widgets>\n    <widgets>\n        <analyticsDashboard>My_Dashboard</analyticsDashboard>\n        <filterWidgetDefs>\n            <initialValues>null</initialValues>\n            <parameters>{&quot;receiveFilterSource&quot;:{&quot;filterMode&quot;:&quot;all&quot;,&quot;widgetIds&quot;:[]},&quot;filterOption&quot;:{&quot;objectName&quot;:&quot;Account&quot;,&quot;fieldName&quot;:&quot;Account_Id&quot;,&quot;dataType&quot;:&quot;Text&quot;,&quot;selectionType&quot;:&quot;multiple&quot;},&quot;isLabelHidden&quot;:false}</parameters>\n            <source>AccountModel</source>\n        </filterWidgetDefs>\n        <label>Account Id</label>\n        <type>filter</type>\n        <widgetName>list_4</widgetName>\n    </widgets>\n    <widgets>\n        <analyticsDashboard>My_Dashboard</analyticsDashboard>\n        <label>AccountParameter</label>\n        <parameterWidgetDefs>\n            <initialValues>null</initialValues>\n            <parameters>{&quot;parameterName&quot;:&quot;AccountParameter_prm&quot;,&quot;isLabelHidden&quot;:false}</parameters>\n            <source>AccountModel</source>\n        </parameterWidgetDefs>\n        <type>parameter</type>\n        <widgetName>list_1</widgetName>\n    </widgets>\n    <templateSource></templateSource>\n    <templateAssetSourceName></templateAssetSourceName>\n    <workspaceAssetRelationships>\n        <asset xsi:nil=\"true\"/>\n        <assetType>AnalyticsDashboard</assetType>\n        <assetUsageType>Created</assetUsageType>\n        <workspace>My_Workspace</workspace>\n    </workspaceAssetRelationships>\n</AnalyticsDashboard>"
+    }
+  ]
+}

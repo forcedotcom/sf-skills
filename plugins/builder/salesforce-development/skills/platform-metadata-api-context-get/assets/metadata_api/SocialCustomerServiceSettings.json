@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SocialCustomerServiceSettings - Metadata API",
+  "description": "Represents Social Customer Service settings such as how to format inbound content from social posts to cases. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "caseSubjectOption": {
+      "type": "CaseSubjectOption (enumeration of type string)",
+      "description": "Specifies an option from which inbound social content is formatted to appear in case records’ Case Subject field. Valid values are: SocialPostSource SocialPostContent BuildCustom",
+      "required": true
+    },
+    "enableAllFBResponseAccounts": {
+      "type": "boolean",
+      "description": "Indicates whether responses from all Facebook managed accounts are enabled. If this setting is disabled, responses to a Facebook post can only be sent from the account that the original customer post was directed to. The default value is true. Available in API version 56.0 and later."
+    },
+    "enableSocialApprovals": {
+      "type": "boolean",
+      "description": "Indicates whether social approvals are enabled. To learn more, see Enable Social Post Approvals.The default value is false. Available in API version 47.0 and later."
+    },
+    "enableSocialCaseAssignmentRules": {
+      "type": "boolean",
+      "description": "Indicates whether case assignment rules are enabled. Use case assignment rules to determine how cases are assigned to users or put into queues as they are created. The default value is false. Available in API version 47.0 and later."
+    },
+    "enableSocialCustomerService": {
+      "type": "boolean",
+      "description": "Indicates whether to enable the Social Customer Service feature. The default value is false. Available in API version 47.0 and later."
+    },
+    "enableSocialPersonaHistoryTracking": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Social Persona history tracking. History tracking helps identify who made what changes when, and for differentiating between automatic and manual changes. The default value is false. Available in API version 47.0 and later."
+    },
+    "enableSocialPostHistoryTracking": {
+      "type": "boolean",
+      "description": "Indicates whether to enable Social Post history tracking. History tracking helps identify who made what changes when, and for differentiating between automatic and manual changes. The default value is false. Available in API version 47.0 and later."
+    },
+    "enableSocialReceiveParentPost": {
+      "type": "boolean",
+      "description": "Indicates whether to use the original social post that initiated the case as the parent record. The default value is false. Available in API version 47.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"CaseSubjectOption\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SocialPostSource\"/>\n    <xsd:enumeration value=\"SocialPostContent\"/>\n    <xsd:enumeration value=\"BuildCustom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SocialCustomerServiceSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"caseSubjectOption\" type=\"tns:CaseSubjectOption\"/>\n        <xsd:element name=\"enableAllFBResponseAccounts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInboundProcessingConcurrency\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSocialApprovals\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSocialCaseAssignmentRules\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSocialCustomerService\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSocialPersonaHistoryTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSocialPostHistoryTracking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSocialReceiveParentPost\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample of a SocialCustomerServiceSettings.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SocialCustomerServiceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <caseSubjectOption>SocialPostSource</caseSubjectOption>\n    <enableSocialApprovals>true</enableSocialApprovals>\n    <enableSocialCaseAssignmentRules>false</enableSocialCaseAssignmentRules>\n    <enableSocialCustomerService>true</enableSocialCustomerService>\n    <enableSocialPersonaHistoryTracking>false</enableSocialPersonaHistoryTracking>\n    <enableSocialPostHistoryTracking>false</enableSocialPostHistoryTracking>\n    <enableSocialReceiveParentPost>true</enableSocialReceiveParentPost>\n</SocialCustomerServiceSettings>"
+    }
+  ]
+}

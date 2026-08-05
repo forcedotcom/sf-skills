@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ActionsSettings - Metadata API",
+  "description": "Represents an org’s actions settings for default quick actions, multi-dimensional publisher, and third-party actions. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableDefaultQuickActionsOn": {
+      "type": "boolean",
+      "description": "Indicates whether default quick actions are created in the org (true, the default setting) or not (false)."
+    },
+    "enableMdpEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether multi-dimensional publisher is enabled (true, the default setting) or not (false)."
+    },
+    "enableThirdPartyActions": {
+      "type": "boolean",
+      "description": "Indicates whether third-party actions are displayed in the multi-dimensional publisher (true) or not (false, the default setting)."
+    },
+    "enableOfflineWebLinks": {
+      "type": "boolean",
+      "description": "Indicates whether a button or link is available offline (true), or if it's only available online (false, the default setting)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ActionsSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableDefaultQuickActionsOn\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMdpEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOfflineWebLinks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableThirdPartyActions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ActionsSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ActionsSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<DefaultQuickActionsOn>true</DefaultQuickActionsOn>\n\t<MdpEnabled>true</MdpEnabled>\n\t<ThirdPartyActions>true</ThirdPartyActions>\n</ActionsSettings>"
+    }
+  ]
+}

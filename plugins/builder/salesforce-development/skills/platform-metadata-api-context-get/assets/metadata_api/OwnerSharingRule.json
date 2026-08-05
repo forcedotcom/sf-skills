@@ -1,0 +1,206 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "directory_location",
+    "fields",
+    "sub_types"
+  ],
+  "title": "OwnerSharingRule - Metadata API",
+  "description": "Represents an ownership-based sharing rule. OwnerSharingRule enables you to share records owned by a set of users with another set, using rules that specify the access level of the target user group. This component is removed as of API version 33.0 and is available in earlier versions only.",
+  "directory_location": "SharingRules",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "sharedFrom": {
+      "type": "SharedTo",
+      "description": "Specifies the record owners.",
+      "required": true
+    },
+    "sharedTo": {
+      "type": "SharedTo",
+      "description": "Specifies who the record should be shared with.",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component."
+    }
+  },
+  "sub_types": {
+    "AccountOwnerSharingRule": {
+      "accountAccessLevel": {
+        "type": "ShareAccessLevelNoNone (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role has to the account. The possible values are: Read Edit All",
+        "required": true
+      },
+      "caseAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role has to cases associated with the account. The possible values are: None Read Edit",
+        "required": true
+      },
+      "contactAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role has to contacts associated with the account. The possible values are: None Read Edit",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters.This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      },
+      "opportunityAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role is granted for any associated opportunity. The possible values are: None Read Edit",
+        "required": true
+      }
+    },
+    "CampaignOwnerSharingRule": {
+      "campaignAccessLevel": {
+        "type": "ShareAccessLevelNoNone (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role is granted for a campaign. The possible values are: Read Edit All"
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters.This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface."
+      }
+    },
+    "CaseOwnerSharingRule": {
+      "caseAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role is granted for a case. The possible values are: Read Edit",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters.This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "ContactOwnerSharingRule": {
+      "contactAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role is granted for a contact. The possible values are: Read Edit",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters.This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "LeadOwnerSharingRule": {
+      "leadAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role is granted for a lead. The possible values are: Read Edit",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters.This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Required. Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "OpportunityOwnerSharingRule": {
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters.This field is available in API version 29.0 and later."
+      },
+      "opportunityAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role is granted for an opportunity. The possible values are: Read Edit",
+        "required": true
+      }
+    },
+    "AccountTerritorySharingRule": {
+      "accountAccessLevel": {
+        "type": "ShareAccessLevelNoNone (enumeration of type string)",
+        "description": "A value that represents the level of access that a Territory or TerritoryAndSubordinates group is granted for an account territory. The possible values are: Read Edit All",
+        "required": true
+      },
+      "caseAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that a Territory or TerritoryAndSubordinates group is granted for all child cases to an account. The possible values are: None Read Edit",
+        "required": true
+      },
+      "contactAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that a Territory or TerritoryAndSubordinates group is granted for all related contacts on an account. The possible values are: None Read Edit",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters.This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      },
+      "opportunityAccessLevel": {
+        "type": "ShareAccessLevelNoAll (enumeration of type string)",
+        "description": "A value that represents the level of access that a Territory or TerritoryAndSubordinates group is granted for all opportunities associated with an account. The possible values are: None Read Edit",
+        "required": true
+      }
+    },
+    "CustomObjectOwnerSharingRule": {
+      "accessLevel": {
+        "type": "string",
+        "description": "A value that represents the level of access that a group or role is granted to a custom object. The possible values are: Read Edit All",
+        "required": true
+      },
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters. This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      }
+    },
+    "UserMembershipSharingRule": {
+      "description": {
+        "type": "string",
+        "description": "Represents the description of the sharing rule. Maximum of 1000 characters.This field is available in API version 29.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name for the sharing rule. Corresponds to Label in the user interface.",
+        "required": true
+      },
+      "userAccessLevel": {
+        "type": "ShareAccessLevelReadEdit (enumeration of type string)",
+        "description": "A value that represents the level of access that a group or role is granted for a user. The possible values are: Read Edit",
+        "required": true
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SvcCatalogFulfillmentFlow - Metadata API",
+  "description": "Represents the flow associated with a specific catalog item in the Service Catalog.",
+  "file_information": ".fulfillmentFlow",
+  "directory_location": "svcCatalogFulfillmentFlows",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "required": true,
+      "description": "Free-text description of the fulfillment flow."
+    },
+    "flow": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the flow represented by this SvcCatalogFulfillmentFlow."
+    },
+    "icon": {
+      "type": "string",
+      "description": "Represents the details of an icon."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value. This value currently has no impact."
+    },
+    "items": {
+      "type": "SvcCatalogFulfillFlowItem[]",
+      "description": "The list of variables in the flow that can accept a value as input."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The primary label for the fulfillment flow record."
+    }
+  },
+  "sub_types": {
+    "SvcCatalogFulfillFlowItem": {
+      "catalogInputVariable": {
+        "type": "string",
+        "required": true,
+        "description": "The FlowVariable the fulfillment flow property represents."
+      },
+      "displayType": {
+        "type": "PropertyDisplayType (enumeration of type string)",
+        "description": "The display options available. Values are: Checkbox Date (available in API version 59.0 and later) DateTime (available in API version 59.0 and later) Lookup Number Picklist Queue (available in API version 57.0 and later) Text"
+      },
+      "fieldDefinition": {
+        "type": "string",
+        "description": "The name of a field in the object provided in objectLookupDomain that specifies the value for this variable. If displayType is Picklist, this value must be the name of a picklist field. If displayType is Lookup and fieldLookupDomain is FieldDefinition, this value must be the name of a relationship field."
+      },
+      "fieldLookupDomain": {
+        "type": "string",
+        "description": "The name of a standard or custom object that specifies the domain of that lookup or picklist. This value is relevant only if displayType is Lookup or Picklist."
+      },
+      "isAdditionalQuestionsInputVariable": {
+        "type": "boolean",
+        "description": "Determines if this variable accepts input for all additional questions that were asked to a user. This value can only be true if the displayType for this item is Text. Only one item per SvcCatalogFulfillmentFlow component can set this attribute to true."
+      },
+      "isRequired": {
+        "type": "boolean",
+        "description": "Determines if the field is required for the related fulfillment flow to be executed."
+      },
+      "lookupDomainFieldType": {
+        "type": "string",
+        "description": "This value specifies the fields for the object specified by objectLookupDomain that are displayed in the Catalog Builder by type. This value is only relevant if displayType is Lookup and fieldLookupDomain is FieldDefinition."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "The primary label for the fulfillment flow record."
+      },
+      "objectLookupDomain": {
+        "type": "string",
+        "description": "The name of a custom or standard object. If displayType is Lookup or Picklist, this value filters the available options to a specific object."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PropertyDisplayType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Lookup\"/>\n    <xsd:enumeration value=\"Picklist\"/>\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Checkbox\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"Queue\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"SvcCatalogFulfillFlowItem\">\n  <xsd:sequence>\n    <xsd:element name=\"catalogInputVariable\" type=\"xsd:string\"/>\n    <xsd:element name=\"displayType\" minOccurs=\"0\" type=\"tns:PropertyDisplayType\"/>\n    <xsd:element name=\"fieldDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fieldLookupDomain\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isAdditionalQuestionsInputVariable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"lookupDomainFieldType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"objectLookupDomain\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SvcCatalogFulfillmentFlow\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" type=\"xsd:string\"/>\n        <xsd:element name=\"flow\" type=\"xsd:string\"/>\n        <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"items\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SvcCatalogFulfillFlowItem\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SvcCatalogFulfillmentFlow component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SvcCatalogFulfillmentFlow xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Creates a Case record related to the Contact belonging to the current User. If this will be used by Users without related Contacts, provide an Account Id below. This Account Id will be used instead of a Contact.</description>\n    <flow>Create_Case_by_Record_Type</flow>\n    <isProtected>false</isProtected>\n    <items>\n        <catalogInputVariable>Input_RecordTypeApiName</catalogInputVariable>\n        <displayType>Text</displayType>\n        <isAdditionalQuestionsInputVariable>false</isAdditionalQuestionsInputVariable>\n        <isRequired>true</isRequired>\n        <masterLabel>Record Type Developer Name</masterLabel>\n    </items>\n    <items>\n        <catalogInputVariable>Input_AccountId</catalogInputVariable>\n        <displayType>Lookup</displayType>\n        <fieldDefinition>AccountId</fieldDefinition>\n        <fieldLookupDomain>Account</fieldLookupDomain>\n        <isAdditionalQuestionsInputVariable>false</isAdditionalQuestionsInputVariable>\n        <isRequired>false</isRequired>\n        <masterLabel>(Optional) Related Account</masterLabel>\n        <objectLookupDomain>Contact</objectLookupDomain>\n    </items>\n    <items>\n        <catalogInputVariable>Input_Origin</catalogInputVariable>\n        <displayType>Picklist</displayType>\n        <fieldDefinition>Origin</fieldDefinition>\n        <isAdditionalQuestionsInputVariable>false</isAdditionalQuestionsInputVariable>\n        <isRequired>true</isRequired>\n        <masterLabel>Case Origin</masterLabel>\n        <objectLookupDomain>Case</objectLookupDomain>\n    </items>\n    <items>\n        <catalogInputVariable>Input_Priority</catalogInputVariable>\n        <displayType>Picklist</displayType>\n        <fieldDefinition>Priority</fieldDefinition>\n        <isAdditionalQuestionsInputVariable>false</isAdditionalQuestionsInputVariable>\n        <isRequired>false</isRequired>\n        <masterLabel>Case Priority</masterLabel>\n        <objectLookupDomain>Case</objectLookupDomain>\n    </items>\n    <items>\n        <catalogInputVariable>Input_Status</catalogInputVariable>\n        <displayType>Picklist</displayType>\n        <fieldDefinition>Status</fieldDefinition>\n        <isAdditionalQuestionsInputVariable>false</isAdditionalQuestionsInputVariable>\n        <isRequired>true</isRequired>\n        <masterLabel>Case Status</masterLabel>\n        <objectLookupDomain>Case</objectLookupDomain>\n    </items>\n    <items>\n        <catalogInputVariable>Input_Subject</catalogInputVariable>\n        <displayType>Text</displayType>\n        <isAdditionalQuestionsInputVariable>false</isAdditionalQuestionsInputVariable>\n        <isRequired>true</isRequired>\n        <masterLabel>Case Subject</masterLabel>\n    </items>\n    <items>\n        <catalogInputVariable>Input_Description</catalogInputVariable>\n        <displayType>Text</displayType>\n        <isAdditionalQuestionsInputVariable>true</isAdditionalQuestionsInputVariable>\n        <isRequired>false</isRequired>\n        <masterLabel>Case Description</masterLabel>\n    </items>\n    <masterLabel>Create Case by Record Type</masterLabel>\n</SvcCatalogFulfillmentFlow>"
+    }
+  ]
+}

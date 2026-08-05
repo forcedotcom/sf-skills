@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DynamicFormsSettings - Metadata API",
+  "description": "Represents the settings related to Dynamic Forms.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableFormsOnMobile": {
+      "type": "boolean",
+      "description": "Determines whether an org has Dynamic Forms for Mobile (Beta) enabled (true) or not (false). Note: This feature is a Beta Service. Customer may opt to try such Beta Service in its sole discretion. Any use of the Beta Service is subject to the applicable Beta Services Terms provided at Agreements and Terms."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DynamicFormsSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableFormsOnMobile\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DynamicFormsSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DynamicFormsSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableFormsOnMobile>true</enableFormsOnMobile>\n</DynamicFormsSettings>"
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Territory2Settings - Metadata API",
+  "description": "Represents an org’s Territory2 settings. Use Territory2 settings to set the access level that Sales Territories users have to records associated with sales territories, and to enable features. The standard record access settings apply to accounts and opportunities. With Private default internal access for contacts or cases, you can also set access for those records.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "defaultAccountAccessLevel": {
+      "type": "string",
+      "description": "Sets the default level of access that users have to account records in territories: view and edit accounts assigned to territories or view, edit, transfer, and delete accounts assigned to territories."
+    },
+    "defaultCaseAccessLevel": {
+      "type": "string",
+      "description": "Sets the default level of access that users have to case records in territories: view and edit accounts assigned to territories or view, edit, transfer, and delete accounts assigned to territories."
+    },
+    "defaultContactAccessLevel": {
+      "type": "string",
+      "description": "Sets the default level of access that users have to contact records in territories: view and edit accounts assigned to territories or view, edit, transfer, and delete accounts assigned to territories."
+    },
+    "defaultOpportunityAccessLevel": {
+      "type": "string",
+      "description": "Sets the default level of access that users have to opportunity records in territories: view and edit accounts assigned to territories or view, edit, transfer, and delete accounts assigned to territories."
+    },
+    "enableTerritoryManagement2": {
+      "type": "boolean",
+      "description": "Enables and disables Sales Territories only. If true, Sales Territories is enabled. If false (default), Enterprise Territory Management isn’t enabled. Enabling and disabling Sales Territories is exclusive of all other operations, and the field value must be true before other territory-management operations can run. Available in API version 47.0 and later."
+    },
+    "opportunityFilterSettings": {
+      "type": "Territory2SettingsOpportunityFilter",
+      "description": "Optional. Specifies an Apex class to assign territories to opportunities and whether you want to run it when an opportunity is created. Available in API version 34.0 and later."
+    },
+    "showTM2EnabledBanner": {
+      "type": "boolean",
+      "description": "If true, a success banner appears on the Territory Settings page in Setup. Available in API version 49.0 and later."
+    },
+    "supportedObjects": {
+      "type": "Territory2SupportedObject[]",
+      "description": "Sets the user access levels of all objects that support territory assignments in the org. Available in API version 57.0 and later."
+    },
+    "t2ForecastAccessLevel": {
+      "type": "string",
+      "description": "Sets the access level that users in a parent territory get to the opportunities assigned to its child territories, regardless of who owns the opportunities. Valid values are: View Edit Available in API version 49.0 and later."
+    },
+    "tm2BypassRealignAccInsert": {
+      "type": "boolean",
+      "description": "If true, account assignment rules don’t run during account insert jobs. Available in API version 53.0 and later."
+    },
+    "tm2EnableUserAssignmentLog": {
+      "type": "boolean",
+      "description": "If true, when a user is assigned to a territory, the assignment action is logged. Available in API version 57.0 and later."
+    }
+  },
+  "sub_types": {
+    "Territory2SettingsOpportunityFilter": {
+      "apexClassName": {
+        "type": "string",
+        "description": "Represents the Apex class name."
+      },
+      "enableFilter": {
+        "type": "boolean",
+        "description": "If true, the Apex class is used to assign territories to opportunities."
+      },
+      "runMultiThreaded": {
+        "type": "boolean",
+        "required": true,
+        "description": "If true, the Apex class runs by using multithreading, which can improve performance. Set this value to true only if you’re assigning opportunity or opportunity product splits, and your Apex code can run with multithreading. This field has a default value of false. Available in API version 62.0 and later."
+      },
+      "runOnCreate": {
+        "type": "boolean",
+        "description": "If true, the Apex class runs automatically every time a user creates an opportunity."
+      }
+    },
+    "Territory2SupportedObject": {
+      "defaultAccessLevel": {
+        "type": "string",
+        "required": true,
+        "description": "The default user access level as permitted by the organization’s sharing settings. Valid values are: Read Edit Transfer All"
+      },
+      "objectType": {
+        "type": "string",
+        "required": true,
+        "description": "The only supported object type is Lead."
+      },
+      "state": {
+        "type": "string",
+        "required": true,
+        "description": "Valid values are: Disabled Enabled"
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Territory2Settings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"defaultAccountAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultCaseAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultContactAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultOpportunityAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"enableTerritoryManagement2\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"opportunityFilterSettings\" minOccurs=\"0\" type=\"tns:Territory2SettingsOpportunityFilter\"/>\n        <xsd:element name=\"showTM2EnabledBanner\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"supportedObjects\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Territory2SupportedObject\"/>\n        <xsd:element name=\"t2ForecastAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"tm2BypassRealignAccInsert\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"tm2EnableUserAssignmentLog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2SettingsOpportunityFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"apexClassName\" type=\"xsd:string\" nillable=\"true\"/>\n    <xsd:element name=\"enableFilter\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"runMultiThreaded\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"runOnCreate\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2SupportedObject\">\n  <xsd:sequence>\n    <xsd:element name=\"defaultAccessLevel\" type=\"xsd:string\"/>\n    <xsd:element name=\"objectType\" type=\"xsd:string\"/>\n    <xsd:element name=\"state\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows the definition of a Territory2Settings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Territory2Settings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <defaultAccountAccessLevel>Owner</defaultAccountAccessLevel>\n    <defaultOpportunityAccessLevel>Read</defaultOpportunityAccessLevel>\n    <defaultCaseAccessLevel>None</defaultCaseAccessLevel>\n    <defaultContactAccessLevel>Edit</defaultContactAccessLevel>\n    <enableTerritoryManagement2>true</enableTerritoryManagement2>\n    <showTM2EnabledBanner>true</showTM2EnabledBanner>\n    <supportedObjects>\n       <defaultAccessLevel>Read</defaultAccessLevel>\n       <state>Disabled</state>\n       <objectType>Lead</objectType>\n    </supportedObjects>\n    <tm2EnableUserAssignmentLog>true</tm2EnableUserAssignmentLog>\n    <t2ForecastAccessLevel>View</t2ForecastAccessLevel>\n</Territory2Settings>"
+    }
+  ]
+}

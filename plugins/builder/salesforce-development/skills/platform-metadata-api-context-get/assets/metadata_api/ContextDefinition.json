@@ -1,0 +1,340 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ContextDefinition - Metadata API",
+  "description": "Represents the details of a context definition that describe the relationship between the node structures within a context.",
+  "file_information": ".contextDefinition",
+  "directory_location": "contextDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "canBeReferenceDefinition": {
+      "type": "boolean",
+      "description": "Indicates whether the context definition can be referred by other context definitions (true) or not (false). Available in API version 63.0 and later. The default value is false."
+    },
+    "clonedFrom": {
+      "type": "string",
+      "description": "The name of the context definition that's used to clone the current context definition."
+    },
+    "contextDefinitionReferences": {
+      "type": "ContextDefinitionReference[]",
+      "description": "References of the context definition."
+    },
+    "contextDefinitionVersions": {
+      "type": "ContextDefinitionVersion[]",
+      "description": "Version of the context definition."
+    },
+    "contextTtl": {
+      "type": "int",
+      "description": "Duration to persist the data, which is loaded in the run-time context instances created by this context definition, in the cache. The default value is 10 minutes."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the context definition."
+    },
+    "hasSystemTags": {
+      "type": "boolean",
+      "description": "Indicates whether the context definition has system tags (true) or not (false). Available in API version 63.0 and later. The default value is false."
+    },
+    "inheritedFrom": {
+      "type": "string",
+      "description": "Name of the parent context definition that's used to derive the current context definition."
+    },
+    "inheritedFromVersion": {
+      "type": "string",
+      "description": "Version number of the parent definition that's used to derive the current context definition."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Auto-generated value that doesn’t impact the behavior of the metadata type."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "User-friendly name for the context definition, which is defined when the context definition is created."
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Name of the context definition."
+    }
+  },
+  "sub_types": {
+    "ContextDefinitionReference": {
+      "inheritedFrom": {
+        "type": "string",
+        "description": "ID of the parent context definition reference that's used to derive the current context definition reference."
+      },
+      "referenceContextDefinition": {
+        "type": "string",
+        "required": true,
+        "description": "ID or name of the referred context definition."
+      }
+    },
+    "ContextDefinitionVersion": {
+      "contextMappings": {
+        "type": "ContextMapping[]",
+        "description": "Mapping of attributes and nodes to related objects."
+      },
+      "contextNodes": {
+        "type": "ContextNode[]",
+        "description": "Details of the structure of the nodes within the context."
+      },
+      "endDate": {
+        "type": "string",
+        "description": "Date and time when the context definition version becomes inactive."
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "Indicates whether the context definition version is active (true) or not (false). The default value is false."
+      },
+      "startDate": {
+        "type": "string",
+        "required": true,
+        "description": "Date and time when the context definition version becomes active."
+      },
+      "versionNumber": {
+        "type": "int",
+        "required": true,
+        "description": "Version number of the context definition."
+      }
+    },
+    "ContextMapping": {
+      "contextMappingIntents": {
+        "type": "ContextMappingIntent[]",
+        "description": "Purpose associated to a context mapping."
+      },
+      "contextNodeMappings": {
+        "type": "ContextNodeMapping[]",
+        "description": "Mapping of the node in the context and values in the input schema."
+      },
+      "default": {
+        "type": "boolean",
+        "description": "Indicates whether the mapping for a context definition version is default (true) or not (false). The default value is false."
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of the context mapping."
+      },
+      "inheritedFrom": {
+        "type": "string",
+        "description": "Name of the parent mapping that's used to derive the current mapping."
+      },
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the context mapping."
+      }
+    },
+    "ContextMappingIntent": {
+      "mappingIntent": {
+        "type": "ContextMappingIntentType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the purpose that's used to identify the type of context mapping required. Valid values are: hydration association persistence translation"
+      }
+    },
+    "ContextNodeMapping": {
+      "contextAttributeMappings": {
+        "type": "ContextAttributeMapping[]",
+        "description": "Mapping of the attribute defined in the context and the values in the related objects."
+      },
+      "contextNode": {
+        "type": "string",
+        "description": "Context node record associated with the context node mapping."
+      },
+      "contextNodeAttrDictionaries": {
+        "type": "ContextNodeAttrDictionary[]",
+        "description": "Facilitates relationships between context node mapping and context dictionary. Additionally, it records the relationship between context node and context dictionary."
+      },
+      "inheritedFrom": {
+        "type": "string",
+        "description": "Name of the parent context node mapping that's used to derive the current context node mapping."
+      },
+      "mappedContextDefinition": {
+        "type": "string",
+        "description": "API name of the context definition for existing context-to-context mappings."
+      },
+      "object": {
+        "type": "string",
+        "description": "Name of the object used for the mapping."
+      }
+    },
+    "ContextAttributeMapping": {
+      "contextAttrHydrationDetails": {
+        "type": "ContextAttrHydrationDetail[]",
+        "description": "Details of the SOQL (database) queries that fetch data for a chosen attribute from the input schema."
+      },
+      "contextAttribute": {
+        "type": "string",
+        "description": "Context attribute record associated with the context attribute mapping."
+      },
+      "contextInputAttributeName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the input attribute."
+      },
+      "ctxAttrHydrationCtxs": {
+        "type": "CtxAttrHydrationCtx[]",
+        "description": "Query that fetches data for a chosen attribute from the input schema for context-to-context mapping."
+      },
+      "inheritedFrom": {
+        "type": "string",
+        "description": "Name of the parent context attribute mapping that's used to derive the current context attribute mapping."
+      }
+    },
+    "ContextAttrHydrationDetail": {
+      "contextAttrHydrationDetails": {
+        "type": "ContextAttrHydrationDetail[]",
+        "description": "Details of the query that fetches the data for the specific query attribute."
+      },
+      "inheritedFrom": {
+        "type": "string",
+        "description": "Name of the parent context attribute hydration detail that's used to derive the current context attribute hydration detail."
+      },
+      "objectName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the object used for the attribute hydration detail."
+      },
+      "queryAttribute": {
+        "type": "string",
+        "required": true,
+        "description": "The SOQL query that is the source of the hydration."
+      }
+    },
+    "CtxAttrHydrationCtx": {
+      "contextQueryAttribute": {
+        "type": "string",
+        "required": true,
+        "description": "Attribute in context definition that's the source of context hydration."
+      },
+      "inheritedFrom": {
+        "type": "string",
+        "description": "Name of the parent context attribute hydration detail that's used to derive the current context attribute."
+      }
+    },
+    "ContextNodeAttrDictionary": {
+      "contextAttrDictIdentifier": {
+        "type": "string",
+        "required": true,
+        "description": "Developer name of the context attribute dictionary."
+      },
+      "contextNodeTagPrefix": {
+        "type": "string",
+        "required": true,
+        "description": "Tag prefix of the context node that's used to create the unique identifier of the parent context node."
+      }
+    },
+    "ContextNode": {
+      "canonicalNode": {
+        "type": "string",
+        "description": "Canonical node that's associated with the context node."
+      },
+      "contextAttributes": {
+        "type": "ContextAttribute[]",
+        "description": "Details of the attribute used to describe the context node."
+      },
+      "contextNodeAttrDictionaries": {
+        "type": "ContextNodeAttrDictionary[]",
+        "description": "Facilitates relationships between context node and context dictionary. Additionally, it records the relationship between context node and context dictionary."
+      },
+      "contextTags": {
+        "type": "ContextTag[]",
+        "description": "Unique identifier of the attribute or node."
+      },
+      "displayName": {
+        "type": "string",
+        "description": "Display name of the context node."
+      },
+      "inheritedFrom": {
+        "type": "string",
+        "description": "Name of the parent context node that's used to derive the current context node."
+      },
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the context node."
+      },
+      "transposable": {
+        "type": "boolean",
+        "description": "Indicates whether the data in the Context Node record can be converted to field names (true) or not (false). The default value is false."
+      }
+    },
+    "ContextAttribute": {
+      "contextTags": {
+        "type": "ContextTag[]",
+        "description": "Shortened name of the attribute or node."
+      },
+      "dataType": {
+        "type": "ContextAttributeDataType (enumeration of type string)",
+        "required": true,
+        "description": "Type of data that's stored in the context attribute. Valid values are: boolean currency date datetime number percent picklist reference string selfreference—Available in API version 63.0 and later."
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of the context attribute."
+      },
+      "displayName": {
+        "type": "string",
+        "description": "Display name of the context attribute."
+      },
+      "domainSet": {
+        "type": "string",
+        "description": "List of node references to show the parent-child relationship between the nodes in a definition."
+      },
+      "fieldType": {
+        "type": "ContextAttributeFieldType (enumeration of type string)",
+        "required": true,
+        "description": "List of node references to depict the parent-child relation between the nodes in a definition. Valid values are: aggregate input inputoutput output"
+      },
+      "inheritedFrom": {
+        "type": "string",
+        "description": "Name of the parent attribute that's used to derive the current attribute."
+      },
+      "key": {
+        "type": "boolean",
+        "description": "Indicates whether the attribute is a key attribute in the node (true) or not (false). The default value is false."
+      },
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the context attribute."
+      },
+      "transient": {
+        "type": "boolean",
+        "description": "Indicates if an attribute is skipped in context persistence (true) or not (false). Available in API version 63.0 and later. The default value is false."
+      },
+      "value": {
+        "type": "boolean",
+        "description": "Indicates whether the attribute identifies as a value in a node (true) or not (false). The default value is false."
+      }
+    },
+    "ContextTag": {
+      "title": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the context tag."
+      },
+      "inheritedFrom": {
+        "type": "string",
+        "description": "Name of the parent context tag that's used to derive the current context tag."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ContextDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ContextDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fullName>Test</fullName>\n    <contextDefinitionVersions>\n        <contextMappings>\n            <contextNodeMappings>\n                <contextNodeAttrDictionaries>\n                    <contextAttrDictIdentifier>Context Attribute Dictionary Name</contextAttrDictIdentifier>\n                    <contextNodeTagPrefix>Context Node Tag Prefix</contextNodeTagPrefix>\n                </contextNodeAttrDictionaries>\n                <contextAttributeMappings>\n                    <contextAttrHydrationDetails>\n                        <objectName>CustomAccount__c</objectName>\n                        <queryAttribute>Name</queryAttribute>\n                        <inheritedFrom>StandardDefinition/version/CustomAccountMapping/Praneeth/AccountName/hydrationInfo-1</inheritedFrom>\n                    </contextAttrHydrationDetails>\n                    <ctxAttrHydrationCtxs>\n                        <contextQueryAttribute>StandardDefinition</contextQueryAttribute>\n                        <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth/AccountName/ctxToCtxhydrationInfo-1</inheritedFrom>\n                    </ctxAttrHydrationCtxs>\n                    <contextAttribute>AccountName</contextAttribute>\n                    <contextInputAttributeName>AccountName</contextInputAttributeName>\n                    <inheritedFrom>StandardDefinition/version/CustomAccountMapping/Praneeth/AccountName</inheritedFrom>\n                </contextAttributeMappings>\n                <contextAttributeMappings>\n                    <contextAttrHydrationDetails>\n                        <objectName>CustomAccount__c</objectName>\n                        <queryAttribute>CustomAccountName__c</queryAttribute>\n                        <inheritedFrom>StandardDefinition/version/CustomAccountMapping/Praneeth/CustomAccountName/hydrationInfo-1</inheritedFrom>\n                    </contextAttrHydrationDetails>\n                    <ctxAttrHydrationCtxs>\n                        <contextQueryAttribute>StandardDefinition</contextQueryAttribute>\n                        <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth/AccountName/ctxToCtxhydrationInfo-1</inheritedFrom>\n                    </ctxAttrHydrationCtxs>\n                    <contextAttribute>CustomAccountName</contextAttribute>\n                    <contextInputAttributeName>CustomAccountName</contextInputAttributeName>\n                    <inheritedFrom>StandardDefinition/version/CustomAccountMapping/Praneeth/CustomAccountName</inheritedFrom>\n                </contextAttributeMappings>\n                <contextNode>Praneeth</contextNode>\n                <object>CustomAccount__c</object>\n                <inheritedFrom>StandardDefinition/version/CustomAccountMapping/Praneeth</inheritedFrom>\n                <mappedContextDefinition>CustomContextDefinition</mappedContextDefinition>\n            </contextNodeMappings>\n            <contextMappingIntents>\n                <mappingIntent>hydration</mappingIntent>\n            </contextMappingIntents>\n            <default>true</default>\n            <title>CustomAccountMapping</title>\n            <inheritedFrom>StandardDefinition/version/CustomAccountMapping</inheritedFrom>\n        </contextMappings>\n        <contextMappings>\n            <contextNodeMappings>\n                <contextNodeAttrDictionaries>\n                    <contextAttrDictIdentifier>Context Attribute Dictionary Name</contextAttrDictIdentifier>\n                    <contextNodeTagPrefix>Context Node Tag Prefix</contextNodeTagPrefix>\n                </contextNodeAttrDictionaries>\n                <contextAttributeMappings>\n                    <contextAttrHydrationDetails>\n                        <objectName>Account</objectName>\n                        <queryAttribute>Name</queryAttribute>\n                        <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth/CustomAccountName/AccountName/hydrationInfo-1</inheritedFrom>\n                    </contextAttrHydrationDetails>\n                    <ctxAttrHydrationCtxs>\n                        <contextQueryAttribute>StandardDefinition</contextQueryAttribute>\n                        <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth/AccountName/ctxToCtxhydrationInfo-1</inheritedFrom>\n                    </ctxAttrHydrationCtxs>\n                    <contextAttribute>AccountName</contextAttribute>\n                    <contextInputAttributeName>AccountName</contextInputAttributeName>\n                    <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth/CustomAccountName/AccountName</inheritedFrom>\n                </contextAttributeMappings>\n                <contextAttributeMappings>\n                    <contextAttrHydrationDetails>\n                        <objectName>Account</objectName>\n                        <queryAttribute>CustomAccountName__c</queryAttribute>\n                        <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth/CustomAccountName/hydrationInfo-1</inheritedFrom>\n                    </contextAttrHydrationDetails>\n                    <ctxAttrHydrationCtxs>\n                        <contextQueryAttribute>StandardDefinition</contextQueryAttribute>\n                        <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth/AccountName/ctxToCtxhydrationInfo-1</inheritedFrom>\n                    </ctxAttrHydrationCtxs>\n                    <contextAttribute>CustomAccountName</contextAttribute>\n                    <contextInputAttributeName>CustomAccountName</contextInputAttributeName>\n                    <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth/CustomAccountName</inheritedFrom>\n                </contextAttributeMappings>\n                <contextNode>Praneeth</contextNode>\n                <object>Account</object>\n                <inheritedFrom>StandardDefinition/version/AccountMapping/Praneeth</inheritedFrom>\n                <mappedContextDefinition>CustomContextDefinition</mappedContextDefinition>\n            </contextNodeMappings>\n             <contextMappingIntents>\n                <mappingIntent>persistence</mappingIntent>\n             </contextMappingIntents>\n            <description>Account Mapping</description>\n            <default>false</default>\n            <title>AccountMapping</title>\n            <inheritedFrom>StandardDefinition/version/AccountMapping</inheritedFrom>\n        </contextMappings>\n        <contextNodes>\n            <contextNodeAttrDictionaries>\n                <contextAttrDictIdentifier>Context Attribute Dictionary Name</contextAttrDictIdentifier>\n                <contextNodeTagPrefix>Context Node Tag Prefix</contextNodeTagPrefix>\n            </contextNodeAttrDictionaries>\n            <contextAttributes>\n                <contextTags>\n                    <title>AccountName</title>\n                    <inheritedFrom>StandardDefinition/version/Praneeth/AccountName/AccountName</inheritedFrom>\n                </contextTags>\n                <dataType>string</dataType>\n                <fieldType>inputoutput</fieldType>\n                <key>false</key>\n                <title>AccountName</title>\n                <displayName>AccountName</displayName>\n                <description>Test Description</description>\n                <value>false</value>\n                <inheritedFrom>StandardDefinition/version/Praneeth/AccountName</inheritedFrom>\n            </contextAttributes>\n            <contextAttributes>\n                <dataType>string</dataType>\n                <fieldType>inputoutput</fieldType>\n                <key>false</key>\n                <title>CustomAccountName</title>\n                <value>false</value>\n                <displayName>CustomAccountName</displayName>\n                <description>Test Description</description>\n                <inheritedFrom>StandardDefinition/version/Praneeth/CustomAccountName</inheritedFrom>\n            </contextAttributes>\n            <contextTags>\n                <title>Praneeth</title>\n                <inheritedFrom>StandardDefinition/version/Praneeth/Praneeth</inheritedFrom>\n            </contextTags>\n            <title>Praneeth</title>\n            <transposable>false</transposable>\n            <inheritedFrom>StandardDefinition/version/Praneeth</inheritedFrom>\n            <canonicalNode></canonicalNode>\n            <displayName>Praneeth</displayName>\n        </contextNodes>\n        <endDate>2097-05-10 00:00:00</endDate>\n        <startDate>2023-05-10 00:00:00</startDate>\n        <versionNumber>1</versionNumber>\n        <isActive>true</isActive>\n    </contextDefinitionVersions>\n    <description>Test Description</description>\n    <contextTtl>10</contextTtl>\n    <inheritedFrom>StandardDefinition</inheritedFrom>\n    <inheritedFromVersion>1.0</inheritedFromVersion>\n    <clonedFrom>OriginalDefinition</clonedFrom>\n    <isProtected>false</isProtected>\n    <masterLabel>Test Label</masterLabel>\n    <title>TestTitle</title>\n    <displayName>TestTitle</displayName>\n</ContextDefinition>"
+    }
+  ]
+}

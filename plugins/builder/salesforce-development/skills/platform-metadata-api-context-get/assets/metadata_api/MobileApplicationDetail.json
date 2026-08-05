@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "MobileApplicationDetail - Metadata API",
+  "description": "Represents the packaging attributes for a mobile connected app. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".MobileApplicationDetail",
+  "directory_location": "MobileApplicationDetails",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "applicationBinaryFile": {
+      "type": "base64",
+      "description": "Base 64-encoded binary data file for the mobile app."
+    },
+    "applicationBinaryFileName": {
+      "type": "string",
+      "description": "Filename for the mobile app binary data file."
+    },
+    "applicationBundleIdentifier": {
+      "type": "string",
+      "description": "iOS apps only: the unique application bundle identifier."
+    },
+    "applicationFileLength": {
+      "type": "int",
+      "description": "The length of the mobile app binary data file."
+    },
+    "applicationIconFile": {
+      "type": "string",
+      "description": "iOS apps only: the application icon."
+    },
+    "applicationIconFileName": {
+      "type": "string",
+      "description": "iOS apps only: the application icon filename."
+    },
+    "applicationInstallUrl": {
+      "type": "string",
+      "description": "URL to install the mobile app."
+    },
+    "devicePlatform": {
+      "type": "DevicePlatformType (enumeration of type string)",
+      "description": "Platform that supports the mobile app. The valid values are: android ios",
+      "required": true
+    },
+    "deviceType": {
+      "type": "string",
+      "description": "Supported device type for mobile app. The valid values are: minitablet phone tablet"
+    },
+    "minimumOsVersion": {
+      "type": "string",
+      "description": "Minimum OS version required to install the mobile app."
+    },
+    "privateApp": {
+      "type": "boolean",
+      "description": "Specifies whether the mobile app is private (true) or not (false)."
+    },
+    "version": {
+      "type": "string",
+      "description": "Version number of the mobile app.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"DevicePlatformType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ios\"/>\n    <xsd:enumeration value=\"android\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MobileApplicationDetail\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"applicationBinaryFile\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"applicationBinaryFileName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"applicationBundleIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"applicationFileLength\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"applicationIconFile\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"applicationIconFileName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"applicationInstallUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"devicePlatform\" type=\"tns:DevicePlatformType\"/>\n        <xsd:element name=\"deviceType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"minimumOsVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"privateApp\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"version\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

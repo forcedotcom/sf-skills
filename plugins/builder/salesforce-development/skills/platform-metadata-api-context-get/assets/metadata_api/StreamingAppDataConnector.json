@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "StreamingAppDataConnector - Metadata API",
+  "description": "Represents the connection information specific to Web and Mobile Connectors.",
+  "file_information": ".streamingAppDataConnector",
+  "directory_location": "streamingAppDataConnectors",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "appIdentifier": {
+      "type": "string",
+      "required": true,
+      "description": "The unique app identifier (UUID)."
+    },
+    "dataConnectorType": {
+      "type": "DataConnectorType (enumeration of type string)",
+      "required": true,
+      "description": "The value of the field is restricted to SteamingApp.Possible values are: DataCloud StreamingApp"
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The display name of the connector."
+    },
+    "streamingAppDataConnectorType": {
+      "type": "StreamingAppDataConnectorType (enumeration of type string)",
+      "required": true,
+      "description": "The type of connector.Possible values are: MobileApp WebApp"
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a StreamingAppDataConnector component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<StreamingAppDataConnector xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <appIdentifier>61826b62-6b90-49ff-8259</appIdentifier>\n    <dataConnectorType>StreamingApp</dataConnectorType>\n    <masterLabel>My Web Application</masterLabel>\n    <streamingAppDataConnectorType>WebApp</streamingAppDataConnectorType>\n</StreamingAppDataConnector>"
+    }
+  ]
+}

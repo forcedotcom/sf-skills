@@ -1,0 +1,162 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "externaldatasrcdescriptors_for_salesforce_connect_adapter_for_amazon_dynamodb_and_for_amazon_athena",
+    "sub_types",
+    "wsdl_segment"
+  ],
+  "title": "ExternalDataSource - Metadata API",
+  "description": "Represents the metadata associated with an external data source. Create external data sources to manage connection details for integration with data and content that are stored outside your Salesforce org.",
+  "file_information": ".dataSource",
+  "directory_location": "dataSources",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "authProvider": {
+      "type": "string",
+      "description": "The authentication provider represented by the AuthProvider component."
+    },
+    "certificate": {
+      "type": "string",
+      "description": "If you specify a certificate, your Salesforce org supplies it when establishing each two-way SSL connection with the external system. The certificate is used for digital signatures, which verify that requests are coming from your Salesforce org. Tip: For best performance, verify that your remote HTTPS encrypted sites have OCSP (Online Certificate Status Protocol) stapling turned on."
+    },
+    "customConfiguration": {
+      "type": "string",
+      "description": "A string of configuration parameters that are specific to the external data source’s type. customConfiguration for Salesforce Connect—Cross-Org Adapter customConfiguration for Salesforce Connect—OData 2.0 or 4.0 Adapter customConfiguration for Salesforce Connect—Custom Adapter"
+    },
+    "customHttpHeaders": {
+      "type": "CustomHttpHeaders[]",
+      "description": "Represents custom HTTP headers used with OData 2.0 or OData 4.0 connectors. Available in API version 43.0 or later."
+    },
+    "endpoint": {
+      "type": "string",
+      "description": "The URL of the external system, or if that URL is defined in a named credential, the named credential URL. Corresponds to the URL in the user interface. A named credential URL contains the scheme callout:, the name of the named credential, and an optional path. For example: callout:My_Named_Credential/some_path. You can append a query string to a named credential URL. Use a question mark (?) as the separator between the named credential URL and the query string. For example: callout:My_Named_Credential/some_path?format=json."
+    },
+    "externalDataSrcDescriptors": {
+      "type": "ExternalDataSrcDescriptors[]",
+      "description": "Represents schema descriptors for an external data source used with the Salesforce Connect adapter for Amazon DynamoDB (available in API version 55.0 or later) or Amazon Athena (available in API version 56.0 or later)."
+    },
+    "isWritable": {
+      "type": "boolean",
+      "description": "Allows the Lightning Platform and users in this org to create, update, and delete records for external objects associated with the external data source. The external object data is stored outside the org. By default, external objects are read-only. Corresponds to Writable External Objects in the user interface. Available in API version 35.0 and later. However, with the cross-org adapter for Salesforce Connect, you can set this field to true only in API version 39.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "A name for the external data source. The label is displayed in the Salesforce user interface, such as in list views. Examples include Acme Team Marketing Site or Acme SharePoint."
+    },
+    "namedCredential": {
+      "type": "string",
+      "description": "Represents the definition of the referenced named credential for an external data source of the type Amazon DynamoDB or Amazon Athena."
+    },
+    "oauthRefreshToken": {
+      "type": "string",
+      "description": "The OAuth refresh token. Used to obtain a new access token for an end user when a token expires."
+    },
+    "oauthScope": {
+      "type": "string",
+      "description": "Specifies the scope of permissions to request for the access token. Corresponds to the Scope in the user interface."
+    },
+    "oauthToken": {
+      "type": "string",
+      "description": "The access token issued by the external system."
+    },
+    "password": {
+      "type": "string",
+      "description": "The password your org uses to access the external system. Make sure that the credentials you use have adequate privileges to access the external system, perform searches, return data, and return information about the external system’s metadata."
+    },
+    "principalType": {
+      "type": "ExternalPrincipalType (enumeration of type string)",
+      "description": "Determines whether you're using one set or multiple sets of credentials to access the external system. Corresponds to Identity Type in the user interface. The valid values are: Anonymous PerUser NamedUser"
+    },
+    "protocol": {
+      "type": "AuthenticationProtocol (enumeration of type string)",
+      "description": "The authentication protocol that’s required to access the external system. The valid values are: NoAuthentication Oauth Password For cloud-based Files Connect external systems, select Oauth 2.0. For on-premises systems, select Password Authentication. For Simple URL data sources, select No Authentication."
+    },
+    "repository": {
+      "type": "string",
+      "description": "Used for SharePoint Online. If metadata isn't accessible, use this field to create tables and default table fields."
+    },
+    "type": {
+      "type": "ExternalDataSourceType (enumeration of type string)",
+      "description": "For Salesforce Connect, specifies the adapter that connects to the external system. The valid values are: AmazonAthena—Amazon Athena AmazonDynamoDB—Amazon DynamoDB OData—OData 2.0 adapter OData4—OData 4.0 adapter SfdcOrg—cross-org adapter ApexClassId—DataSource.Provider class that defines the custom adapter created via the Apex Connector Framework For Files Connect, specifies the data source type. The valid values are: ContentHubSharepoint—SharePoint 2010 or 2013 ContentHubSharepointOffice365—SharePoint Online ContentHubSharepointOneDrive—OneDrive for Business ContentHubGDrive—Google Drive ContenHubIsotope—Isotope If Chatter is enabled, you can also specify SimpleURL to access data hosted on a web server that doesn’t require authentication. outgoingemail—A data source used for sending an email through a quick action. For Digital Lending Configurator, the valid value is: AFPPAttribute—The data source name for the Application Form Product Proposal Attribute virtual object. For the federated search external data source type, the valid value is: OpenSearch For Transaction Management in Revenue Cloud, the valid values are: ASPAttribute—The data source name for the Asset State Period Attribute virtual object. Available in API version 63.0 and later. OIAttribute—The data source name for the Order Item Attribute virtual object. Available in API version 63.0 and later. QLIAttribute—The data source name for the Quote Line Item Attribute virtual object. Available in API version 63.0 and later. For SalesAgreement in Manufacturing Cloud, the valid values are: SAPAttribute—The data source name for the SalesAgreement Product Attribute virtual object. Available in API version 60.0 and later. These values are reserved for internal use: AssetAttribute ClaimAttributeDS ClaimItemAttributeDS CryptoTrEnvChgLogSnp CtrtGrpPlnAttr CtrtGrpPlnGrpClsAttr FAAttribute FLAttribute IAItemProdtAttr Identity InsPolicyAttribute IPAAttribute IPCAttribute IPCvrBnftAttribute IPPAttribute SdbOvenPODataSource Wrapper",
+      "required": true
+    },
+    "username": {
+      "type": "string",
+      "description": "The user name that your org uses to access the external system. Make sure that the credentials you use have adequate privileges to access the external system, perform searches, return data, and return information about the external system’s metadata."
+    },
+    "version": {
+      "type": "string",
+      "description": "Reserved for future use."
+    }
+  },
+  "externaldatasrcdescriptors_for_salesforce_connect_adapter_for_amazon_dynamodb_and_for_amazon_athena": {
+    "customObject": {
+      "type": "string",
+      "description": "If set, the external object associated with the descriptor."
+    },
+    "descriptor": {
+      "type": "string",
+      "description": "The descriptor document that contains the metadata information.",
+      "required": true
+    },
+    "descriptorVersion": {
+      "type": "string",
+      "description": "If the external system supports schema versioning for the data source, the optional descriptor document version tracks the external system's schema version. Several descriptors with different document versions can be active."
+    },
+    "developerName": {
+      "type": "string",
+      "description": "The unique name of the child-level setup entity.",
+      "required": true
+    },
+    "externalDataSource": {
+      "type": "string",
+      "description": "The name of the external data source associated with the descriptor.",
+      "required": true
+    },
+    "subtype": {
+      "type": "ExternalDataSrcDescSubtype (enumeration of type string)",
+      "description": "The subtype of the descriptor. Values are: SchemaTableMetadata— Used to cache information about the external system. SchemaTableQualifiers— Used to customize the data retrieval query to the external system.",
+      "required": true
+    },
+    "systemVersion": {
+      "type": "int",
+      "description": "The version that defines the descriptor format and provides compatibility with descriptor formats between Salesforce releases.",
+      "required": true
+    },
+    "type": {
+      "type": "ExternalDataSrcDescType (enumeration of type string)",
+      "description": "The type of the descriptor. Valid value: Schema",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "CustomHttpHeaders": {
+      "description": {
+        "type": "string",
+        "description": "A text description of the header field’s purpose."
+      },
+      "headerFieldName": {
+        "type": "string",
+        "description": "Name of the header field. The name must contain at least one alphanumeric character or underscore. It can also include these characters: ! # $ % & ' * + -. ^ _ ` | ~.",
+        "required": true
+      },
+      "headerFieldValue": {
+        "type": "string",
+        "description": "A formula that resolves to the value for the header. The values in the formula must evaluate to a string. If the formula resolves to null and an empty string, the header isn’t sent.",
+        "required": true
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "Indicates whether the custom HTTP header is available to use (true) or unavailable (false)."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"AuthenticationProtocol\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"NoAuthentication\"/>\n    <xsd:enumeration value=\"Oauth\"/>\n    <xsd:enumeration value=\"Password\"/>\n    <xsd:enumeration value=\"AwsSv4\"/>\n    <xsd:enumeration value=\"Jwt\"/>\n    <xsd:enumeration value=\"JwtExchange\"/>\n    <xsd:enumeration value=\"Custom\"/>\n    <xsd:enumeration value=\"Basic\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CustomHttpHeader\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"headerFieldName\" type=\"xsd:string\"/>\n    <xsd:element name=\"headerFieldValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExternalDataSource\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"authProvider\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"certificate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customConfiguration\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customHttpHeaders\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomHttpHeader\"/>\n        <xsd:element name=\"endpoint\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalDataSrcDescriptors\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExternalDataSrcDescriptor\"/>\n        <xsd:element name=\"isWritable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthRefreshToken\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthScope\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"oauthToken\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"password\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"principalType\" type=\"tns:ExternalPrincipalType\"/>\n        <xsd:element name=\"protocol\" type=\"tns:AuthenticationProtocol\"/>\n        <xsd:element name=\"repository\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:ExternalDataSourceType\"/>\n        <xsd:element name=\"username\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"version\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ExternalDataSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AFPPAttribute\"/>\n    <xsd:enumeration value=\"AmazonAthena\"/>\n    <xsd:enumeration value=\"AmazonDynamoDb\"/>\n    <xsd:enumeration value=\"ASPAttribute\"/>\n    <xsd:enumeration value=\"AssetAttribute\"/>\n    <xsd:enumeration value=\"CIAttribute\"/>\n    <xsd:enumeration value=\"ClaimAttributeDS\"/>\n    <xsd:enumeration value=\"ClaimItemAttributeDS\"/>\n    <xsd:enumeration value=\"contentHubItem\"/>\n    <xsd:enumeration value=\"CtrtGrpPlnAttr\"/>\n    <xsd:enumeration value=\"CtrtGrpPlnGrpClsAttr\"/>\n    <xsd:enumeration value=\"Datacloud\"/>\n    <xsd:enumeration value=\"Datajourney\"/>\n    <xsd:enumeration value=\"FAAttribute\"/>\n    <xsd:enumeration value=\"FLAttribute\"/>\n    <xsd:enumeration value=\"GraphQl\"/>\n    <xsd:enumeration value=\"IAItemProdtAttr\"/>\n    <xsd:enumeration value=\"Identity\"/>\n    <xsd:enumeration value=\"InsPolicyAttribute\"/>\n    <xsd:enumeration value=\"IPAAttribute\"/>\n    <xsd:enumeration value=\"IPCAttribute\"/>\n    <xsd:enumeration value=\"IPCvrBnftAttribute\"/>\n    <xsd:enumeration value=\"IPPAttribute\"/>\n    <xsd:enumeration value=\"OData\"/>\n    <xsd:enumeration value=\"OData4\"/>\n    <xsd:enumeration value=\"OData401\"/>\n    <xsd:enumeration value=\"OIAttribute\"/>\n    <xsd:enumeration value=\"OISAttribute\"/>\n    <xsd:enumeration value=\"OpenSearch\"/>\n    <xsd:enumeration value=\"outgoingemail\"/>\n    <xsd:enumeration value=\"QLIAttribute\"/>\n    <xsd:enumeration value=\"SAPAttribute\"/>\n    <xsd:enumeration value=\"SciApi\"/>\n    <xsd:enumeration value=\"SelectableEmailAddressView\"/>\n    <xsd:enumeration value=\"SfdcOrg\"/>\n    <xsd:enumeration value=\"SimpleURL\"/>\n    <xsd:enumeration value=\"Snowflake\"/>\n    <xsd:enumeration value=\"TrailheadEditWithId\"/>\n    <xsd:enumeration value=\"usermobileconfig\"/>\n    <xsd:enumeration value=\"usrconnectionstatus\"/>\n    <xsd:enumeration value=\"Wrapper\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExternalDataSrcDescSubtype\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"SchemaTableQualifiers\"/>\n    <xsd:enumeration value=\"SchemaTableMetadata\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ExternalDataSrcDescType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Schema\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ExternalDataSrcDescriptor\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"customObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"descriptor\" type=\"xsd:string\"/>\n        <xsd:element name=\"descriptorVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalDataSource\" type=\"xsd:string\"/>\n        <xsd:element name=\"subtype\" type=\"tns:ExternalDataSrcDescSubtype\"/>\n        <xsd:element name=\"systemVersion\" type=\"xsd:int\"/>\n        <xsd:element name=\"type\" type=\"tns:ExternalDataSrcDescType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ExternalPrincipalType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Anonymous\"/>\n    <xsd:enumeration value=\"PerUser\"/>\n    <xsd:enumeration value=\"NamedUser\"/>\n    <xsd:enumeration value=\"NamedCustomPrincipal\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

@@ -1,0 +1,147 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EntitlementProcess - Metadata API",
+  "description": "Represents the settings for an entitlement process.",
+  "file_information": ".entitlementProcess",
+  "directory_location": "entitlementProcesses",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "Indicates whether the entitlement process is active (true) or not (false)."
+    },
+    "businessHours": {
+      "type": "string",
+      "description": "The business hours that apply to the entitlement process. This field is available in API version 30.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the entitlement process."
+    },
+    "entryStartDateField": {
+      "type": "string",
+      "description": "For milestone processes on which a case enters the process based on a custom date/time field on the case, specifies which date and time are used. Valid values are: SlaStartDate (entitlement process start date) CreatedDate (date case was opened) ClosedDate (date case was closed) LastModifiedDate (date case was last modified) StopStartDate (date case was stopped)"
+    },
+    "exitCriteriaBooleanFilter": {
+      "type": "string",
+      "description": "For milestone processes on which a case exits the process when custom criteria are met, and for which filter logic is added, specifies that logic."
+    },
+    "exitCriteriaFilterItems": {
+      "type": "FilterItem[]",
+      "description": "For milestone processes on which a case exits the process when custom criteria are met, specifies those criteria."
+    },
+    "exitCriteriaFormula": {
+      "type": "string",
+      "description": "For milestone processes on which a case exits the process when a custom formula evaluates to true, specifies that formula."
+    },
+    "isVersionDefault": {
+      "type": "boolean",
+      "description": "Indicates whether the entitlement process is the default version (true) or not (false). This field is available in API version 28.0 and later."
+    },
+    "milestones": {
+      "type": "EntitlementProcessMilestoneItem[]",
+      "description": "Represents a milestone on the entitlement process."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the entitlement process as it displays in the user interface."
+    },
+    "SObjectType": {
+      "type": "string",
+      "description": "Indicates the type of record that the entitlement process can run on."
+    },
+    "versionMaster": {
+      "type": "string",
+      "description": "Identifies the sequence of versions to which this entitlement process belongs. This field’s contents can be any value as long as it’s identical among all versions of the entitlement process. This field is available in API version 28.0 and later."
+    },
+    "versionNotes": {
+      "type": "string",
+      "description": "The description of the entitlement process version. This field is available in API version 28.0 and later."
+    },
+    "versionNumber": {
+      "type": "int",
+      "description": "The version number of the entitlement process. Must be 1 or greater. This field is available in API version 28.0 and later."
+    }
+  },
+  "sub_types": {
+    "EntitlementProcessMilestoneItem": {
+      "businessHours": {
+        "type": "string",
+        "description": "The business hours that apply to the milestone. This field is available in API version 30.0 and later."
+      },
+      "criteriaBooleanFilter": {
+        "type": "string",
+        "description": "For milestones that apply only when criteria are met and for which filter logic is added, specifies that logic."
+      },
+      "milestoneCompletionCriteria": {
+        "type": "string",
+        "description": "The criteria to be met for the milestone to be marked complete."
+      },
+      "milestoneCriteriaFilterItems": {
+        "type": "FilterItem[]",
+        "description": "For milestones that apply only when criteria are met, specifies those criteria."
+      },
+      "milestoneCriteriaFormula": {
+        "type": "string",
+        "description": "For milestones that apply only when a formula evaluates to true, specifies that formula."
+      },
+      "milestoneName": {
+        "type": "string",
+        "description": "The name of the milestone."
+      },
+      "minutesCustomClass": {
+        "type": "string",
+        "description": "The name of the Apex class that is used to calculate the trigger time. This field is available in API version 30.0 and later."
+      },
+      "minutesToComplete": {
+        "type": "int",
+        "description": "The number of minutes from when the case enters the entitlement process that the milestone occurs."
+      },
+      "successActions": {
+        "type": "WorkflowActionReference[]",
+        "description": "The actions triggered when the milestone is completed."
+      },
+      "timeTriggers": {
+        "type": "EntitlementProcessMilestoneTimeTrigger[]",
+        "description": "The time triggers on an entitlement process milestone."
+      },
+      "useCriteriaStartTime": {
+        "type": "boolean",
+        "description": "When the milestone starts: when the milestone criteria are met (true) or when the case enters the entitlement process (false)."
+      }
+    },
+    "EntitlementProcessMilestoneTimeTrigger": {
+      "actions": {
+        "type": "WorkflowActionReference[]",
+        "description": "The actions to take when the time trigger is reached, if, at that time, the milestone isn’t completed."
+      },
+      "timeLength": {
+        "type": "int",
+        "description": "The length of time between the time trigger activation and the milestone target completion date. This length of time can be a negative or positive value. Negative values indicate that the target completion date hasn’t yet arrived and correspond to warning time triggers. Positive values indicate that the target completion date has passed and correspond to violation time triggers."
+      },
+      "workflowTimeTriggerUnit": {
+        "type": "MilestoneTimeUnits (enumeration of type string)",
+        "description": "Specifies the type of unit used to determine when a workflow is triggered. Valid values are: Minutes Hours Days"
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EntitlementProcess\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"SObjectType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"active\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"businessHours\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"entitlementRules\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EntitlementRule\"/>\n        <xsd:element name=\"entryStartDateField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"exitCriteriaBooleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"exitCriteriaFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n        <xsd:element name=\"exitCriteriaFormula\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isRecordTypeApplied\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isVersionDefault\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"milestones\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EntitlementProcessMilestoneItem\"/>\n        <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"recordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"versionMaster\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"versionNotes\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"versionNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EntitlementProcessMilestoneItem\">\n  <xsd:sequence>\n    <xsd:element name=\"agreementType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"businessHours\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteriaBooleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isDisplayedOnLinkedEntity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"milestoneCompletionCriteria\" minOccurs=\"0\" type=\"tns:MilestoneCompletionCriteria\"/>\n    <xsd:element name=\"milestoneCriteriaFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n    <xsd:element name=\"milestoneCriteriaFormula\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"milestoneName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"milestonePauseCriteria\" minOccurs=\"0\" type=\"tns:MilestonePauseCriteria\"/>\n    <xsd:element name=\"minutesCustomClass\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"minutesToComplete\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"successActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowActionReference\"/>\n    <xsd:element name=\"timeTriggers\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EntitlementProcessMilestoneTimeTrigger\"/>\n    <xsd:element name=\"useCriteriaStartTime\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EntitlementProcessMilestoneTimeTrigger\">\n  <xsd:sequence>\n    <xsd:element name=\"actions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WorkflowActionReference\"/>\n    <xsd:element name=\"timeLength\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"workflowTimeTriggerUnit\" type=\"tns:MilestoneTimeUnits\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"EntitlementRule\">\n  <xsd:sequence>\n    <xsd:element name=\"criteriaBooleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteriaFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n    <xsd:element name=\"entitlementName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"order\" minOccurs=\"0\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FilterItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"operation\" type=\"tns:FilterOperation\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"valueField\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FilterOperation\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"equals\"/>\n    <xsd:enumeration value=\"notEqual\"/>\n    <xsd:enumeration value=\"lessThan\"/>\n    <xsd:enumeration value=\"greaterThan\"/>\n    <xsd:enumeration value=\"lessOrEqual\"/>\n    <xsd:enumeration value=\"greaterOrEqual\"/>\n    <xsd:enumeration value=\"contains\"/>\n    <xsd:enumeration value=\"notContain\"/>\n    <xsd:enumeration value=\"startsWith\"/>\n    <xsd:enumeration value=\"includes\"/>\n    <xsd:enumeration value=\"excludes\"/>\n    <xsd:enumeration value=\"within\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MilestoneCompletionCriteria\">\n  <xsd:sequence>\n    <xsd:element name=\"criteriaBooleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteriaObjectName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"criteriaObjectType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"milestoneCriteriaFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n    <xsd:element name=\"milestoneCriteriaFormula\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MilestonePauseCriteria\">\n  <xsd:sequence>\n    <xsd:element name=\"criteriaBooleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"milestoneCriteriaFilterItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FilterItem\"/>\n    <xsd:element name=\"milestoneCriteriaFormula\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MilestoneTimeUnits\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Minutes\"/>\n    <xsd:enumeration value=\"Hours\"/>\n    <xsd:enumeration value=\"Days\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"WorkflowActionReference\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:WorkflowActionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"WorkflowActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"FieldUpdate\"/>\n    <xsd:enumeration value=\"KnowledgePublish\"/>\n    <xsd:enumeration value=\"Task\"/>\n    <xsd:enumeration value=\"Alert\"/>\n    <xsd:enumeration value=\"Send\"/>\n    <xsd:enumeration value=\"OutboundMessage\"/>\n    <xsd:enumeration value=\"FlowAction\"/>\n    <xsd:enumeration value=\"FlowAutomation\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "Here’s a sample entitlement process.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EntitlementProcess xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <description>eppersone</description>\n    <entryStartDateField>SlaStartDate</entryStartDateField>\n    <exitCriteriaBooleanFilter>1 OR 2</exitCriteriaBooleanFilter>\n    <exitCriteriaFilterItems>\n        <field>Case.IsClosed</field>\n        <operation>equals</operation>\n        <value>true</value>\n    </exitCriteriaFilterItems>\n    <exitCriteriaFilterItems>\n        <field>Case.Description</field>\n        <operation>startsWith</operation>\n        <value>foo</value>\n    </exitCriteriaFilterItems>\n    <milestones>\n        <milestoneName>m1</milestoneName>\n        <minutesToComplete>1</minutesToComplete>\n        <successActions>\n            <name>emailBob</name>\n            <type>Alert</type>\n        </successActions>\n        <timeTriggers>\n            <actions>\n                <name>emailAlice</name>\n                <type>Alert</type>\n            </actions>\n            <actions>\n                <name>setEscalateToTrue</name>\n                <type>FieldUpdate</type>\n            </actions>\n            <timeLength>1</timeLength>\n            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>\n        </timeTriggers>\n        <timeTriggers>\n            <actions>\n                <name>setStopToTrue</name>\n                <type>FieldUpdate</type>\n            </actions>\n            <timeLength>2</timeLength>\n            <workflowTimeTriggerUnit>Minutes</workflowTimeTriggerUnit>\n        </timeTriggers>\n        <useCriteriaStartTime>false</useCriteriaStartTime>\n    </milestones>\n    <milestones>\n        <milestoneCriteriaFilterItems>\n            <field>Case.Priority</field>\n            <operation>equals</operation>\n            <value>High</value>\n        </milestoneCriteriaFilterItems>\n        <milestoneName>m2</milestoneName>\n        <minutesToComplete>120</minutesToComplete>\n        <useCriteriaStartTime>true</useCriteriaStartTime>\n        <successActions>\n            <name>emailBob</name>\n            <type>Alert</type>\n        </successActions>\n    </milestones>\n</EntitlementProcess>"
+    }
+  ]
+}

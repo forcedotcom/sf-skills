@@ -1,0 +1,120 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "UserAccessPolicy - Metadata API",
+  "description": "Represents a user access policy.",
+  "file_information": ".useraccesspolicy",
+  "directory_location": "useraccesspolicies",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "booleanFilter": {
+      "type": "string",
+      "required": true,
+      "description": "The logic that determines how your user criteria filters are applied in the user access policy. For example, if you have two user access policy filters with the sortOrder equal to 1 and 2, respectively, the booleanFilter can be 1 AND 2 or 1 OR 2."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the user access policy."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for the user access policy, which is defined when the user access policy is created."
+    },
+    "order": {
+      "type": "int",
+      "description": "Indicates the order for which active policy is applied when a user meets the criteria for multiple policies. Must be an integer from 0 to 10,000. Only the active policy with the lowest order value is applied. This field is required only if the status field is set to Active. Available in API version 61.0 and later."
+    },
+    "status": {
+      "type": "UserAccessPolicyStatus (enumeration of type string)",
+      "required": true,
+      "description": "The status of the user access policy. Values are: Active Completed Design Failed Migrate Testing Updating If you deploy a policy with a status of Active, the status is changed to Design. A Salesforce admin can then set the status to Active by automating the policy in Setup."
+    },
+    "triggerType": {
+      "type": "UserAccessPolicyTriggerType (enumeration of type string)",
+      "description": "The type of user record trigger for which this user access policy runs. Values are: Create—The user access policy runs when a user who matches the policy criteria is created. CreateAndUpdate—The user access policy runs when a user who matches the policy criteria is either created or updated. Update—The user access policy runs when a user who matches the policy criteria is updated."
+    },
+    "userAccessPolicyActions": {
+      "type": "UserAccessPolicyAction[]",
+      "description": "The actions applied by the user access policy to grant access to or revoke access from an access mechanism."
+    },
+    "userAccessPolicyFilters": {
+      "type": "UserAccessPolicyFilter[]",
+      "description": "The filters used to define the users that the user access policy is applied to."
+    }
+  },
+  "sub_types": {
+    "UserAccessPolicyAction": {
+      "action": {
+        "type": "UserAccessPolicyActionType (enumeration of type string)",
+        "required": true,
+        "description": "Indicates whether the user access policy grants or revokes the target access mechanism. Values are: Grant Revoke"
+      },
+      "target": {
+        "type": "string",
+        "required": true,
+        "description": "Developer name of the access mechanism that the user access policy applies."
+      },
+      "type": {
+        "type": "UserAccessPolicyActionTargetType (enumeration of type string)",
+        "required": true,
+        "description": "The type of access mechanism that the user access policy applies. Values are: Group PackageLicense PermissionSet PermissionSetGroup PermissionSetLicense Queue"
+      }
+    },
+    "UserAccessPolicyFilter": {
+      "columnName": {
+        "type": "string",
+        "description": "If type is set to User, this is the user field that your user criteria filter is based on. If you set type to any value other than User, then this field isn’t used."
+      },
+      "operation": {
+        "type": "UserAccessPolicyFilterOperation (enumeration of type string)",
+        "required": true,
+        "description": "The operator of the user criteria filter. Values are: equals equalsIgnoreCase—Available in API version 59.0 and later. in— Available in API version 58.0 and later. includes—Available in API version 59.0 and later. notEquals Select in if you want to reference multiple profiles or roles in the same user criteria filter via the target field."
+      },
+      "sortOrder": {
+        "type": "int",
+        "required": true,
+        "description": "The numeric reference used to identify the specific user criteria filter."
+      },
+      "target": {
+        "type": "string",
+        "required": true,
+        "description": "If type is set to User, then set this field to User as well. If type is set to any other value, then set this field to the developer name of the specific resource used in the user criteria filter."
+      },
+      "type": {
+        "type": "UserAccessPolicyFilterTargetType (enumeration of type string)",
+        "required": true,
+        "description": "The type of resource that the user criteria filter is based on. Values are: Group PackageLicense PermissionSet PermissionSetGroup PermissionSetLicense Profile Queue User UserRole"
+      },
+      "value": {
+        "type": "string",
+        "description": "If type is set to User, this field is the value of the user field specified in columnName that your user filter is operating on. If you set type to any value other than User, then this field isn’t used."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a UserAccessPolicy component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<UserAccessPolicy xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <booleanFilter>1 AND 2</booleanFilter>\n    <description>Policy to assign Sales Rep PSG to active Sales Reps.</description>\n    <masterLabel>Sales Rep Migration</masterLabel>\n    <order>3</order>\n    <status>Design</status>\n    <triggerType>CreateAndUpdate</triggerType>\n    <userAccessPolicyActions>\n        <action>Grant</action>\n        <target>SalesRepPSG</target>\n        <type>PermissionSetGroup</type>\n    </userAccessPolicyActions>\n    <userAccessPolicyFilters>\n        <operation>equals</operation>\n        <sortOrder>1</sortOrder>\n        <target>SalesRepCustomProfile</target>\n        <type>Profile</type>\n    </userAccessPolicyFilters>\n    <userAccessPolicyFilters>\n        <columnName>IsActive</columnName>\n        <operation>equals</operation>\n        <sortOrder>2</sortOrder>\n        <target>User</target>\n        <type>User</type>\n        <value>true</value>\n    </userAccessPolicyFilters>\n</UserAccessPolicy>"
+    },
+    {
+      "description": "To reference multiple profiles or roles, in UserAccessPolicyFilter, set the operator field to in. Then, reference the resources’ developer names in the target field, separated by commas.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<UserAccessPolicy xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <booleanFilter>1</booleanFilter>\n    <description>Policy to remove AMER Sales group from employees with one of two roles</description>\n    <masterLabel>Remove AMER Sales Group</masterLabel>\n    <status>Design</status>\n    <userAccessPolicyActions>\n        <action>Revoke</action>\n        <target>AMERSalesPublicGroup</target>\n        <type>Group</type>\n    </userAccessPolicyActions>\n    <userAccessPolicyFilters>\n        <operation>in</operation>\n        <sortOrder>1</sortOrder>\n        <target>SalesOps,InsideSalesRep</target>\n        <type>UserRole</type>\n    </userAccessPolicyFilters>\n</UserAccessPolicy>"
+    }
+  ]
+}

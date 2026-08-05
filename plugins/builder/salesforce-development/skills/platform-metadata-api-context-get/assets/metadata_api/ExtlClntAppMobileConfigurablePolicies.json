@@ -1,0 +1,34 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ExtlClntAppMobileConfigurablePolicies - Metadata API",
+  "description": "Represents an external client app’s mobile policies configuration.",
+  "file_information": ".ecaMobilePlcy",
+  "directory_location": "extlClntAppMobilePolicies",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "externalClientApplication": {
+      "type": "string",
+      "description": "The name of the associated external client app.",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the external client app’s mobile policies configuration."
+    },
+    "screenLockTimeout": {
+      "type": "ScreenLockTimeout (enumeration of type string)",
+      "description": "When isScreenLockEnabled is true in the associated ExtlClntAppMobileSettings metadata type, screenLockTimeout represents the amount of time after which the mobile app locks and requires the app user to reauthenticate. Valid values include: Never One (1 minute) Five (5 minutes) Ten (10 minutes) Thirty (30 minutes) Sixty (60 minutes) OneTwenty (120 minutes) OneEighty (180 minutes) TwoForty (240 minutes)"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExtlClntAppMobileConfigurablePolicies\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"screenLockTimeout\" type=\"tns:ScreenLockTimeout\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ScreenLockTimeout\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Never\"/>\n    <xsd:enumeration value=\"One\"/>\n    <xsd:enumeration value=\"Five\"/>\n    <xsd:enumeration value=\"Ten\"/>\n    <xsd:enumeration value=\"Thirty\"/>\n    <xsd:enumeration value=\"Sixty\"/>\n    <xsd:enumeration value=\"OneTwenty\"/>\n    <xsd:enumeration value=\"OneEighty\"/>\n    <xsd:enumeration value=\"TwoForty\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```"
+}

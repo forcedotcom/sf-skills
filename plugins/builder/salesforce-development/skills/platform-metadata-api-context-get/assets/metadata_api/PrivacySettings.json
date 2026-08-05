@@ -1,0 +1,80 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PrivacySettings - Metadata API",
+  "description": "Represents an organization’s settings for data privacy and consent management. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "authorizationCaptureBrowser": {
+      "type": "boolean",
+      "description": "Indicates whether browser information is captured during authorization consent capture (true) or not (false). The default value is false. Available in API version 59.0 and later."
+    },
+    "authorizationCaptureEmail": {
+      "type": "boolean",
+      "description": "Indicates whether email address is captured during authorization consent capture (true) or not (false). The default value is false. Available in API version 59.0 and later."
+    },
+    "authorizationCaptureIp": {
+      "type": "boolean",
+      "description": "Indicates whether IP address is captured during authorization consent capture (true) or not (false). The default value is false. Available in API version 59.0 and later."
+    },
+    "authorizationCaptureLocation": {
+      "type": "boolean",
+      "description": "Indicates whether location information is captured during authorization consent capture (true) or not (false). The default value is false. Available in API version 59.0 and later."
+    },
+    "authorizationCustomSharing": {
+      "type": "boolean",
+      "description": "Indicates whether custom sharing is enabled for authorization consent records (true) or not (false). The default value is false. Available in API version 59.0 and later."
+    },
+    "authorizationCustomSharingPCU": {
+      "type": "boolean",
+      "description": "Indicates whether custom sharing for authorization consent records uses permission-based access control (true) or not (false). The default value is false. Available in API version 62.0 and later."
+    },
+    "authorizationLockingAndVersioning": {
+      "type": "boolean",
+      "description": "Indicates whether locking and versioning is enabled for authorization consent records (true) or not (false). The default value is false. Available in API version 59.0 and later."
+    },
+    "enableConfigurableUserPIIActive": {
+      "type": "boolean",
+      "description": "Indicates whether configurable user PII (Personally Identifiable Information) classification is active (true) or not (false). The default value is false. Available in API version 59.0 and later."
+    },
+    "enableConsentAuditTrail": {
+      "type": "boolean",
+      "description": "Reserved for future use."
+    },
+    "enableConsentEventStream": {
+      "type": "boolean",
+      "description": "Allows orgs to stream consent changes to the party data model via platform events. This field has a default value of false. Available in API version 47.0 and later."
+    },
+    "enableDefaultMetadataValues": {
+      "type": "boolean",
+      "description": "Indicates whether a default data sensitivity value is applied to all contacts, leads, person accounts, and users (true) or not (false). This field has a default value of false. Available in API version 47.0 and later."
+    },
+    "enableSalesforceArchive": {
+      "type": "boolean",
+      "description": "Indicates whether Salesforce Archive is enabled for privacy-related data archival (true) or not (false). The default value is false. Available in API version 61.0 and later."
+    },
+    "useUmaDefaultConsentRecs": {
+      "type": "boolean",
+      "description": "Indicates whether a Preference Manager setup in Privacy Center uses default Marketing Cloud consent parameters and features. This field has a default value of false. Available in API version 58.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PrivacySettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"authorizationCaptureBrowser\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"authorizationCaptureEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"authorizationCaptureIp\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"authorizationCaptureLocation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"authorizationCustomSharing\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"authorizationCustomSharingPCU\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"authorizationLockingAndVersioning\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableConfigurableUserPIIActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableConsentAuditTrail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableConsentEventStream\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDefaultMetadataValues\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSalesforceArchive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useUmaDefaultConsentRecs\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PrivacySettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PrivacySettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableDefaultMetadataValues>false</enableDefaultMetadataValues>\n</PrivacySettings>"
+    }
+  ]
+}

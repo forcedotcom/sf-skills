@@ -1,0 +1,26 @@
+# Code Analyzer Configuration — LWC-focused Project
+#
+# This file contains ONLY overrides. Code Analyzer's built-in defaults
+# handle everything else. Only add entries here that intentionally
+# change behavior for your project.
+#
+# Usage:
+#   Place at project root as code-analyzer.yml
+#   Validate: sf code-analyzer config --config-file code-analyzer.yml
+
+# Exclude non-project files and test infrastructure
+ignores:
+  files:
+    - "**/node_modules/**"
+    - "**/.sfdx/**"
+    - "**/.sf/**"
+    - "**/jest-mocks/**"
+    - "**/__tests__/**"
+    - "**/*.min.js"
+
+# Engine tuning
+engines:
+  # ESLint: opt-in to use project's existing ESLint config
+  # (built-in default is false — Code Analyzer uses its own base configs)
+  eslint:
+    auto_discover_eslint_config: true

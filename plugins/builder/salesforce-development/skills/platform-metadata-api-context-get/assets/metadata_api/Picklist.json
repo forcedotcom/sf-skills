@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Picklist (Including Dependent Picklist) - Metadata API",
+  "description": "Deprecated. Represents a picklist (or dependent picklist) definition for a custom field in a custom object or a custom or standard field in a standard object, such as an account.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "controllingField": {
+      "type": "string",
+      "description": "The fullName of the controlling field if controllingField is a dependent picklist. A dependent picklist works in conjunction with a controlling picklist or checkbox to filter the available options. The value chosen in the controlling field affects the values available in the dependent field. This field is available in API version 14.0 and later."
+    },
+    "picklistValues": {
+      "type": "PicklistValue[]",
+      "description": "Represents a set of values for a picklist.",
+      "required": true
+    },
+    "restrictedPicklist": {
+      "type": "boolean",
+      "description": "Indicates whether the picklist’s value list is restricted. With a restricted picklist, only an admin can add or change values; users can’t load or remove values through the API. By default this value is false. This field is available in API version 37.0 and later."
+    },
+    "sorted": {
+      "type": "boolean",
+      "description": "Indicates whether values are sorted (true), or not (false). By default this value is false."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following sample shows usage for picklists, including dependent picklists, in a custom object. The isAmerican__c checkbox controls the list of manufacturers shown in the manufacturer__c picklist. The manufacturer__c checkbox in turn controls the list of models shown in the model__c picklist.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <deploymentStatus>Deployed</deploymentStatus>\n    <enableActivities>true</enableActivities>\n    <fields>\n        <fullName>isAmerican__c</fullName>\n        <defaultValue>false</defaultValue>\n        <label>American Only</label>\n        <type>Checkbox</type>\n    </fields>\n    <fields>\n        <fullName>manufacturer__c</fullName>\n        <label>Manufacturer</label>\n        <picklist>\n            <controllingField>isAmerican__c</controllingField>\n            <picklistValues>\n                <fullName>Chrysler</fullName>\n                <controllingFieldValues>checked</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Ford</fullName>\n                <controllingFieldValues>checked</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Honda</fullName>\n                <controllingFieldValues>unchecked</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Toyota</fullName>\n                <controllingFieldValues>unchecked</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <sorted>false</sorted>\n        </picklist>\n        <type>Picklist</type>\n    </fields>\n    <fields>\n        <fullName>model__c</fullName>\n        <label>Model</label>\n        <picklist>\n            <controllingField>manufacturer__c</controllingField>\n            <picklistValues>\n                <fullName>Mustang</fullName>\n                <controllingFieldValues>Ford</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Taurus</fullName>\n                <controllingFieldValues>Ford</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>PT Cruiser</fullName>\n                <controllingFieldValues>Chrysler</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Pacifica</fullName>\n                <controllingFieldValues>Chrysler</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Accord</fullName>\n                <controllingFieldValues>Honda</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Civic</fullName>\n                <controllingFieldValues>Honda</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Prius</fullName>\n                <controllingFieldValues>Toyota</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Camry</fullName>\n                <controllingFieldValues>Toyota</controllingFieldValues>\n                <default>false</default>\n            </picklistValues>\n            <sorted>false</sorted>\n        </picklist>\n        <type>Picklist</type>\n    </fields>\n....\n</CustomObject>"
+    },
+    {
+      "description": "The following sample shows usage for the standard Stage field in opportunities.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomObject xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fields>\n        <fullName>StageName</fullName>\n        <picklist>\n            <picklistValues>\n                <fullName>Prospecting</fullName>\n                <default>false</default>\n                <forecastCategory>Pipeline</forecastCategory>\n                <probability>10</probability>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Qualification</fullName>\n                <default>false</default>\n                <forecastCategory>Pipeline</forecastCategory>\n                <probability>10</probability>\n            </picklistValues>\n            <picklistValues>\n                <fullName>Needs Analysis</fullName>\n                <default>false</default>\n                <forecastCategory>Pipeline</forecastCategory>\n                <probability>20</probability>\n            </picklistValues>\n            ...\n        </picklist>\n    </fields>\n<CustomObject>"
+    }
+  ]
+}

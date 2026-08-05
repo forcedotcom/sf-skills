@@ -1,0 +1,541 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "sfdc_cms__apppage_folder",
+    "sfdc_cms__brandingset_folder",
+    "sfdc_cms__languagesettings_folder",
+    "sfdc_cms__route_folder",
+    "sfdc_cms__site_folder",
+    "sfdc_cms__theme_folder",
+    "sfdc_cms__themelayout_folder",
+    "sfdc_cms__view_folder"
+  ],
+  "title": "DigitalExperienceBundle: Site Workspace Bundle and Folders - Metadata API",
+  "description": "DigitalExperienceBundle uses the site workspace type to organize data for enhanced LWR sites in a content-focused, text-based code structure.",
+  "sfdc_cms__apppage_folder": {
+    "currentThemeId": {
+      "type": "content link",
+      "description": "Represents the apiName of the site’s active theme."
+    },
+    "headMarkup": {
+      "type": "string",
+      "description": "Allows the addition of custom markup to the site's main page <head> tag. Similar to using Experience Builder | Setting | Advanced | Head Markup. See Salesforce Help for markup guidance."
+    },
+    "isLockerServiceEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Lightning Locker is enabled (true) or not (false). The default value is true."
+    },
+    "isRelaxedCSPLevel": {
+      "type": "boolean",
+      "description": "Controls the ability to run scripts and controls script access to third-party hosts. The default is false. A false value sets a strict CSP security level, and blocks access to inline scripts and all hosts. A true value sets a relaxed CSP security level, and permits access to inline scripts and allowed hosts. To learn more, see Select a Security Level in Experience Builder Sites."
+    },
+    "templateName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique developer name of the template. Valid values are: talon-template-byo—Represents the Build Your Own (LWR) template microsite-template-marketing—Represents the Microsite template"
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the label of the appPage."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the content type. The only allowed value is sfdc_cms__appPage."
+    }
+  },
+  "sfdc_cms__brandingset_folder": {
+    "brandingSetType": {
+      "type": "enumeration of type string",
+      "description": "Represents whether the color palette stored in the branding set is for the entire site or a specific section. You can’t change one branding set type to another. Valid values are: APP—The branding set applies to the entire site. There can be only one branding set of this type. SCOPED—A SCOPED branding set can be applied only to a section component."
+    },
+    "definitionName": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the name for the branding set used in the site or template’s theme. There are two standard templates that have unique naming: Build Your Own (LWR) uses talon-template-byo:branding Microsite uses microsite-template-marketing:branding"
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the label of the brandingSet content item. The maximum length is 100 characters. The title must be unique within the space’s brandingSet content items."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the content type. The only supported value is sfdc_cms__brandingSet."
+    },
+    "values": {
+      "type": "object (map)",
+      "required": true,
+      "description": "Represents a map of branding values that can be applied to a site."
+    }
+  },
+  "sfdc_cms__languagesettings_folder": {
+    "defaultLocale": {
+      "type": "string",
+      "description": "Represents the default locale for a workspace. The language listed here is the default fallback language for all of the workspace’s languageTypes."
+    },
+    "languages": {
+      "type": "languageType[]",
+      "required": true,
+      "description": "Represents the languages available in the space. Each languageType contains values related to that particular language."
+    },
+    "languageType.fallbacklocale": {
+      "type": "string",
+      "description": "Represents the locale to use when no content is available for the selected locale. For example, if a site visitor chooses Japanese from the language selector but there’s no content for that page in Japanese, content is displayed in the fallback locale. The fallbackLocale's isAuthoringOnly value must be false. Only one level of fallback is allowed. Here are examples for a workspace with a locale of en_US, and with Spanish, French, and Finnish as supported locales. Not allowed: Spanish falls back to French, and French falls back to Finnish. This configuration includes two levels of fallback. Allowed: Spanish falls back to French, and French falls back to English. en_US is the workspace’s default. Allowed: Spanish falls back to French, and French has no fallback. This property is displayed only if the languageType.fallbackLocale is different from the workspace’s default locale."
+    },
+    "languageType.isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the language is active (true) or inactive (false). The only supported value is true."
+    },
+    "languageType.isAuthoringOnly": {
+      "type": "boolean",
+      "description": "Indicates whether the language is scoped only to authoring workspace (true) or not (false). The default value is false. When set to true, the languageType and its associated translations aren’t visible to site visitors. When set to false, site visitors can see the languageType and its associated translations."
+    },
+    "languageType.label": {
+      "type": "string",
+      "required": true,
+      "description": "Defines the display label for a language. The display label appears in any language selector components that you add to your site and in the language selector in Experience Builder. The default value is the locale name. For example, if languageType.locale=fr, then languageType.label=French."
+    },
+    "languageType.locale": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the languageCode appended with the countryCode, separated by an underscore. For example, en_US indicates a languageCode of English, and a countryCode of United States. Defines the locale, or geographic region, of a language. Locales determine the display format for date and time, user names, address, and commas and periods in numbers. Each languageType.locale and languageType.label combination can be used only one time per workspace."
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the label of the content item."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the content type. The only allowed value is sfdc_cms__languageSettings."
+    }
+  },
+  "sfdc_cms__route_folder": {
+    "activeViewId": {
+      "type": "content link",
+      "required": true,
+      "description": "Represents the apiName of the route’s active view. Must reference an existing view in the same workspace."
+    },
+    "configurationTags": {
+      "type": "string[]",
+      "description": "Represents the configuration tags for the route. The only allowed value is all-in-static-site. Note: Don’t edit this property, because it’s an internal property."
+    },
+    "pageAccess": {
+      "type": "enumeration of type string",
+      "description": "Identifies the status of a route as public or private. When set to the default value UseParent, the status of the site determines the status of the route. This value isn’t editable from the user interface for routes that are always private. Valid values are: UseParent Public RequiresLogin Note: You can change the pageAccess value only if the site is authenticated."
+    },
+    "routeType": {
+      "type": "string",
+      "required": true,
+      "description": "Identifies the type of route. The routeType value must be unique within a workspace. This value must match the viewType value in the corresponding view content item."
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the label of the route."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the content type. The only supported value is sfdc_cms__route."
+    },
+    "urlPrefix": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the base URL for the route."
+    }
+  },
+  "sfdc_cms__site_folder": {
+    "authenticationType": {
+      "type": "enumeration of type string",
+      "required": true,
+      "description": "Indicates whether guest users have access to the site. Valid values are: AUTHENTICATED—The site isn’t public. Only authenticated users can access the site after logging in. AUTHENTICATED_WITH_PUBLIC_ACCESS_ENABLED—The site is an authenticated site, but the Public can access the site checkbox is enabled in Experience Builder in Settings | General. Guest users can access the site. UNAUTHENTICATED—The unauthenticated site is publicly available to anyone on the web, and doesn’t support login or authentication. UNAUTHENTICATED is a legacy value. We recommend using AUTHENTICATED_WITH_PUBLIC_ACCESS_ENABLED access to allow guest user access."
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the label of the content item."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the content type. The only allowed value is sfdc_cms__site."
+    }
+  },
+  "sfdc_cms__theme_folder": {
+    "activeBrandingSetId": {
+      "type": "content link",
+      "required": true,
+      "description": "Represents the apiName of the site’s active branding set. Must reference an existing brandingSet with a type of APP in the same workspace."
+    },
+    "definitionName": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the definition name of a theme. Must match the template’s theme definition name."
+    },
+    "layouts": {
+      "type": "layout[]",
+      "required": true,
+      "description": "Represents an array of the theme layouts available in the workspace and provides details about each theme layout. The template and features used in the workspace determine which layouts are required. For example, the ServiceNotAvailable layout is required if the site includes a Service Not Available page."
+    },
+    "layouts.layoutId": {
+      "type": "content link",
+      "required": true,
+      "description": "Represents the apiName of an available theme layout. Must refer to an existing theme layout in the same workspace."
+    },
+    "layouts.layoutType": {
+      "type": "string",
+      "description": "Represents the name of the theme layout specified in Experience Builder. An inner theme layout is required. The inner theme layout is applied by default to all of a site’s pages except for login pages."
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the name of the theme."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the content type. The only allowed value is sfdc_cms__theme."
+    }
+  },
+  "sfdc_cms__themelayout_folder": {
+    "children": {
+      "type": "regionType[]",
+      "description": "Represents individual regions within a layout."
+    },
+    "component": {
+      "type": "componentType",
+      "required": true,
+      "description": "Contains the layout details for this theme layout in regions and components."
+    },
+    "componentType.attributes": {
+      "type": "map",
+      "description": "A map of design attribute values used by the component definition to render the definition."
+    },
+    "componentType.attributes.dxpStyle": {
+      "type": "map",
+      "description": "Lets you define visibility, padding, and margin values for a component. Visibility controls whether the component is visible on desktop, tablet, and mobile versions of your site. Margin and padding are map types that contain string properties for top, right, bottom, and left spacing. Padding controls space within a component. Margin controls space around the outside of a component. Units for margin and padding can be px, rem, or %, and all four spacing values must use the same unit. This field is available in API version 57.0 and later."
+    },
+    "componentType.children": {
+      "type": "regionType[]",
+      "description": "Represents regions within a component."
+    },
+    "componentType.definition": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the name of the Lightning Web Component (LWC) using the format namespace:componentName. Must be one of the theme layouts defined as part of the default theme, or use the target lightningCommunity__Theme_Layout. The default theme layouts differ per theme. For example, the Build Your Own (BYO) template uses the BYO theme, with the allowed theme layouts community_byo:scopedHeaderandFooter and community_layout:simpleThemeLayout."
+    },
+    "componentType.id": {
+      "type": "UUID",
+      "required": true,
+      "description": "Represents the UUID of a component."
+    },
+    "componentType.scopedBrandingSetId": {
+      "type": "content link",
+      "description": "Represents the brandingSet that applies to this component. The brandingSet must be of type SCOPED. This property is applicable only if the component’s definitionName is community_layout:section."
+    },
+    "componentType.customCssClasses": {
+      "type": "string",
+      "description": "Represents the custom CSS classes applied to the host element of the component. Must be a space-delimited list of valid CSS classes. This field is available in API version 59.0 and later."
+    },
+    "componentType.title": {
+      "type": "string",
+      "description": "Represents a component variation name. Available in API version 59.0 and later."
+    },
+    "componentType.type": {
+      "type": "string",
+      "required": true,
+      "description": "Allowed values are: component mutationComponent"
+    },
+    "componentType.variations": {
+      "type": "componentType[]",
+      "description": "Represents a component variation within a component. Available in API version 59.0 and later."
+    },
+    "componentVariationType.rule": {
+      "type": "rule type",
+      "description": "A visibility rule associated with a component variation. Available in API version 59.0 and later."
+    },
+    "componentVariationType.variationId": {
+      "type": "string",
+      "description": "The unique ID of a component variation. Available in API version 59.0 and later."
+    },
+    "contentOperations": {
+      "type": "contentOperationType",
+      "description": "A content operation of the variation or visibility type."
+    },
+    "contentOperationsType.operations": {
+      "type": "operationsType[]",
+      "description": "Component visibility operation."
+    },
+    "expressionCriteriaType.criterionNumber": {
+      "type": "integer",
+      "description": "The sequence number of an expression criteria. Available in API version 59.0 and later."
+    },
+    "expressionCriteriaType.operator": {
+      "type": "string",
+      "description": "Operator of the criteria or condition in a visibility rule. Supported operators are: EQUAL NE: Does not equal CONTAINS NC: Does not contain LT: Less than GT: Greater than LE: Less than or equal to GE: Greater than or equal to StartsWith"
+    },
+    "expressionCriteriaType.resource": {
+      "type": "string",
+      "description": "The resource of the criteria or condition in a visibility rule."
+    },
+    "expressionCriteriaType.value": {
+      "type": "object",
+      "description": "The value of the criteria or condition in a visibility rule. The value can be number, boolean, or string."
+    },
+    "operationsType.isActive": {
+      "type": "boolean",
+      "description": "When true, the visibility operation is active."
+    },
+    "operationsType.isHiddenOnOperationSuccess": {
+      "type": "boolean",
+      "description": "When true, the component is hidden when the operation is successful."
+    },
+    "operationsType.rule": {
+      "type": "RuleType",
+      "description": "The component visibility rule."
+    },
+    "operationsType.ruleToVariationList": {
+      "type": "componentVariationType[]",
+      "description": "Variation rules associated with a specific component ID. Only 15 variations are allowed in one ruleToVariationList, which means only 15 variations can correspond to a specific targetId. Available in API version 59.0 and later."
+    },
+    "operationsType.targetId": {
+      "type": "string",
+      "description": "The component ID where the visibility rule is applied."
+    },
+    "regionType.children": {
+      "type": "componentType[]",
+      "description": "Represents individual components within the region."
+    },
+    "regionType.id": {
+      "type": "UUID",
+      "required": true,
+      "description": "Represents the UUID of a region."
+    },
+    "regionType.name": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the name of the region."
+    },
+    "regionType.title": {
+      "type": "string",
+      "description": "Represents the label for a region."
+    },
+    "regionType.type": {
+      "type": "string",
+      "required": true,
+      "description": "region is the only allowed value."
+    },
+    "regionType.variations": {
+      "type": "componentType[]",
+      "description": "Represents a component variation within a region. Available in API version 59.0 and later."
+    },
+    "ruleType.criteriaType": {
+      "type": "string",
+      "description": "The condition or criteria type of the rule. Allowed values include AllCriteriaMatch and AnyCriterionMatches."
+    },
+    "ruleType.customFormula": {
+      "type": "string",
+      "description": "A custom formula created from expression criteria for a visibility rule. Available in API version 59.0 and later."
+    },
+    "ruleType.description": {
+      "type": "string",
+      "description": "The description of a visibility rule."
+    },
+    "ruleType.expressionCriteria": {
+      "type": "expressionCriteriaType[]",
+      "description": "The expression criteria of a visibility rule."
+    },
+    "ruleType.name": {
+      "type": "string",
+      "description": "The name of a visibility rule."
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the label of the content item."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the content type. The only allowed value is sfdc_cms__themeLayout."
+    }
+  },
+  "sfdc_cms__view_folder": {
+    "children": {
+      "type": "regionType[]",
+      "description": "Represents individual regions within a view."
+    },
+    "component": {
+      "type": "componentType",
+      "required": true,
+      "description": "Represents the view layout and contains regions and components that help render a view."
+    },
+    "componentType.attributes": {
+      "type": "map",
+      "description": "A map of design attribute values used by the component definition to render the definition."
+    },
+    "componentType.attributes.dxpStyle": {
+      "type": "map",
+      "description": "Lets you define visibility, padding, and margin values for a component. Visibility controls whether the component is visible on desktop, tablet, and mobile versions of your site. Margin and padding are map types that contain string properties for top, right, bottom, and left spacing. Padding controls space within a component. Margin controls space around the outside of a component. Units for margin and padding can be px, rem, or %, and all four spacing values must use the same unit. This field is available in API version 57.0 and later."
+    },
+    "componentType.children": {
+      "type": "regionType[]",
+      "description": "Represents regions within a component."
+    },
+    "componentType.definition": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the name of the Lightning Web Component (LWC) in the format namespace:componentName."
+    },
+    "componentType.id": {
+      "type": "UUID",
+      "required": true,
+      "description": "Represents the UUID of a component."
+    },
+    "componentType.scopedBrandingSetId": {
+      "type": "content link",
+      "description": "Represents the brandingSet that applies to this component. The brandingSet must be of type SCOPED. This property is applicable only if the component’s definitionName is community_layout:section."
+    },
+    "componentType.customCssClasses": {
+      "type": "string",
+      "description": "Represents the custom CSS classes applied to the host element of the component. Must be a space-delimited list of valid CSS classes. This field is available in API version 59.0 and later."
+    },
+    "componentType.title": {
+      "type": "string",
+      "description": "Represents a component variation name. Available in API version 59.0 and later."
+    },
+    "componentType.type": {
+      "type": "string",
+      "required": true,
+      "description": "Allowed values are: component mutationComponent"
+    },
+    "componentType.variations": {
+      "type": "componentType[]",
+      "description": "Represents a component variation within a component. Available in API version 59.0 and later."
+    },
+    "componentVariationType.rule": {
+      "type": "rule type",
+      "description": "A visibility rule associated with a component variation. Available in API version 59.0 and later."
+    },
+    "componentVariationType.variationId": {
+      "type": "string",
+      "description": "The unique ID of a component variation. Available in API version 59.0 and later."
+    },
+    "contentOperations": {
+      "type": "contentOperationType",
+      "description": "A content operation of the variation or visibility type."
+    },
+    "expressionCriteriaType.criterionNumber": {
+      "type": "integer",
+      "description": "The sequence number of an expression criteria. Available in API version 59.0 and later."
+    },
+    "contentOperationsType.operations": {
+      "type": "operationsType[]",
+      "description": "Component visibility operation."
+    },
+    "expressionCriteriaType.operator": {
+      "type": "string",
+      "description": "Operator of the criteria or condition in a visibility rule. Supported operators are: EQUAL NE: Does not equal CONTAINS NC: Does not contain LT: Less than GT: Greater than LE: Less than or equal to GE: Greater than or equal to StartsWith"
+    },
+    "expressionCriteriaType.resource": {
+      "type": "string",
+      "description": "The resource of the criteria or condition in a visibility rule."
+    },
+    "expressionCriteriaType.value": {
+      "type": "object",
+      "description": "The value of the criteria or condition in a visibility rule. The value can be number, boolean, or string."
+    },
+    "operationsType.isActive": {
+      "type": "boolean",
+      "description": "When true, the visibility operation is active."
+    },
+    "operationsType.isHiddenOnOperationSuccess": {
+      "type": "boolean",
+      "description": "When true, the component is hidden when the operation is successful."
+    },
+    "operationsType.rule": {
+      "type": "RuleType",
+      "description": "The component visibility rule."
+    },
+    "operationsType.ruleToVariationList": {
+      "type": "componentVariationType[]",
+      "description": "Variation rules associated with a specific component ID. Only 15 variations are allowed in one ruleToVariationList, which means only 15 variations can correspond to a specific targetId. Available in API version 59.0 and later."
+    },
+    "operationsType.targetId": {
+      "type": "string",
+      "description": "The component ID where the visibility rule is applied."
+    },
+    "regionType.children": {
+      "type": "componentType[]",
+      "description": "Represents individual components within the region."
+    },
+    "regionType.id": {
+      "type": "UUID",
+      "required": true,
+      "description": "Represents the UUID of a region."
+    },
+    "regionType.name": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the name of the region."
+    },
+    "regionType.title": {
+      "type": "string",
+      "description": "Represents the label for a region."
+    },
+    "regionType.type": {
+      "type": "string",
+      "required": true,
+      "description": "region is the only allowed value."
+    },
+    "regionType.variations": {
+      "type": "componentType[]",
+      "description": "Represents a component variation within a region. Available in API version 59.0 and later."
+    },
+    "ruleType.criteriaType": {
+      "type": "string",
+      "description": "The condition or criteria type of the rule. Allowed values include AllCriteriaMatch and AnyCriterionMatches."
+    },
+    "ruleType.customFormula": {
+      "type": "string",
+      "description": "A custom formula created from expression criteria for a visibility rule. Available in API version 59.0 and later."
+    },
+    "ruleType.description": {
+      "type": "string",
+      "description": "The description of a visibility rule."
+    },
+    "ruleType.expressionCriteria": {
+      "type": "expressionCriteriaType[]",
+      "description": "The expression criteria of a visibility rule."
+    },
+    "ruleType.name": {
+      "type": "string",
+      "description": "The name of a visibility rule."
+    },
+    "themeLayoutType": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the apiName of the view’s active theme layout. Must reference an existing theme layout in the same workspace."
+    },
+    "title": {
+      "type": "string",
+      "description": "Represents the name of the view. Limited to 80 characters. Note: We recommend keeping the title value and the pageTitle value in sync. If you update either value for a view, ensure that you manually update the other value in the same content.json file to match."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the content type. The only allowed value is sfdc_cms__view."
+    },
+    "viewType": {
+      "type": "string",
+      "required": true,
+      "description": "Identifies the type of view. The viewType value must be unique within a workspace. This value must match the routeType value in the corresponding route content item."
+    }
+  }
+}

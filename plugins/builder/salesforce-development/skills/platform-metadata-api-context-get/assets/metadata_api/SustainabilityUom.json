@@ -1,0 +1,61 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SustainabilityUom - Metadata API",
+  "description": "Represents the unit of measure (UOM) values for custom fuel types in an org. Track fuel consumption and emission results with the flexibility to add custom fuel types and UOM values.",
+  "file_information": ".sustainabilityUom",
+  "directory_location": "sustainabilityUoms",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of the unit of measure."
+    },
+    "isProductUom": {
+      "type": "boolean",
+      "description": "Indicates whether the unit of measure is for a product that the company has procured in its supply chain operations (true) or not (false). The default value is false."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "isStationaryAssetUom": {
+      "type": "boolean",
+      "description": "Indicates whether the unit of measure is used in the stationary asset calculations (true) or (false). The default value is false."
+    },
+    "isVehicleAssetUom": {
+      "type": "boolean",
+      "description": "Indicates whether the unit of measure is used in the vehicle asset calculations (true) or (false). The default value is false."
+    },
+    "isWasteUom": {
+      "type": "boolean",
+      "description": "Indicates whether the unit of measure is used in the generated material waste calculations (true) or (false). The default value is false. This field is available in API version 65.0 and later."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The label assigned to this object."
+    },
+    "unitType": {
+      "type": "UnitType (enumeration of type string)",
+      "required": true,
+      "description": "The type of unit used for conversions or calculations. Values are: Energy Other Volume Weight"
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SustainabilityUom component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SustainabilityUom xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <description>Weight in Grams</description>\n   <isProductUom>true</isProductUom>\n   <isProtected>false</isProtected>\n   <isStationaryAssetUom>false</isStationaryAssetUom>\n   <isVehicleAssetUom>false</isVehicleAssetUom>\n   <isWasteUom>true</isWasteUom>\n   <masterLabel>Grams</masterLabel>\n   <unitType>Weight</unitType>\n</SustainabilityUom>"
+    }
+  ]
+}

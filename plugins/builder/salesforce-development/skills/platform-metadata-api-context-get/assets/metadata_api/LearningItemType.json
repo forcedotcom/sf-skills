@@ -1,0 +1,65 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LearningItemType - Metadata API",
+  "description": "Represents a custom exercise type that an Enablement user takes in an Enablement program in the Guidance Center. A custom exercise type also requires a corresponding LearningItem record for the Guidance Center and corresponding EnblProgramTaskDefinition and EnblProgramTaskSubCategory records for when admins create a program in Program Builder.",
+  "file_information": ".learningItemType",
+  "directory_location": "learningItemTypes",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "apexEvaluationHandler": {
+      "type": "string",
+      "description": "The ID of the Apex class that specifies how progress and completion of the custom exercise is assessed when users take the program in the Guidance Center."
+    },
+    "apexSerializerDeserializer": {
+      "type": "string",
+      "description": "The ID of the Apex class that specifies how data related to the custom exercise type is retrieved and deployed with change sets or managed packages."
+    },
+    "customField": {
+      "type": "string",
+      "required": true,
+      "description": "The programmatic name of a custom lookup field on the LearningItem object that references the custom object used with this custom exercise. For example, if a custom exercise type shows a screen flow, maybe the custom object’s name is ScreenFlow_Object__c and the custom field on LearningItem is named ScreenFlow_Field__c. For details, see Implement Custom Exercise Types for Enablement Programs in the Sales Programs and Partner Tracks with Enablement Developer Guide. This field is unique within your organization."
+    },
+    "customObject": {
+      "type": "string",
+      "required": true,
+      "description": "The programmatic name of the custom object used with this custom exercise. For example, if a custom exercise type shows a screen flow, maybe the custom object’s name is ScreenFlow_Field__c. For details, see Implement Custom Exercise Types for Enablement Programs in the Sales Programs and Partner Tracks with Enablement Developer Guide. This field is unique within your organization."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The unique programmatic name for the LearningItemType record."
+    },
+    "icon": {
+      "type": "string",
+      "required": true,
+      "description": "The icon to use for the custom exercise type in the Guidance Center. Use the format iconType:iconName, where the values correspond to icon categories and names from the Salesforce Lightning Design System. iconType is the type of icon, such as standard or doctype. iconName is the icon name, such as flow or slide. For example, to use the Standard type Flow icon, this value is standard:flow."
+    },
+    "lightningComponentDefinition": {
+      "type": "string",
+      "required": true,
+      "description": "The ID of the Lightning Web Component used to show the custom exercise’s content when a user opens the exercise in the Guidance Center. This field sets the value of the LightningComponentName field on the LearningItemType object."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for the LearningItemType, which is defined when it’s created."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a LearningItemType component for a custom exercise type that shows a screen flow.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LearningItemType xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apexEvaluationHandler>ScreenFlowEvaluationHandler</apexEvaluationHandler>\n    <apexSerializerDeserializer>ScreenFlowSerializerDeserializer</apexSerializerDeserializer>\n    <customField>ScreenFlow_Field__c</customField>\n    <customObject>ScreenFlow_Object__c</customObject>\n    <developerName>ScreenFlowLearningItemType</developerName>\n    <icon>standard:flow</icon>\n    <lightningComponentDefinition>screenFlowViewer</lightningComponentDef>\n    <masterLabel>Screen Flow Exercise</masterLabel>\n</LearningItemType>"
+    }
+  ]
+}

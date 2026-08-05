@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "IndustriesUnifiedInventorySettings - Metadata API",
+  "description": "Represents the settings for Industries Unified Inventory.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableBatchManagement": {
+      "type": "Boolean",
+      "description": "Indicates whether the batch-based inventory management features are enabled (true) or not (false). Within Life Sciences Cloud, this is a core component of the Unified Inventory Extension Entities, supporting Sample Inventory use cases. When enabled, it provides access to the entities ProductionBatch, ProductBatchItem, and InventoryCntProdtBatchItem."
+    },
+    "enableInventoryCount": {
+      "type": "Boolean",
+      "description": "Indicates whether the Inventory Count is enabled (true) or not (false). The Inventory Count provides the ability to manage inventory count processes by planning inventory counts, counting inventory at designated locations, and tracking count results."
+    },
+    "enableProductInventoryOperations": {
+      "type": "Boolean",
+      "description": "Indicates whether the Product Inventory Operations that provides the capabilities to perform various actions related to managing product inventory is enabled (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"IndustriesUnifiedInventorySettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableBatchManagement\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInventoryCount\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableProductInventoryOperations\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an IndustriesUnifiedInventorySettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<IndustriesUnifiedInventorySettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableBatchManagement>true</enableBatchManagement>\n    <enableInventoryCount>true</enableInventoryCount>\n    <enableProductInventoryOperations>true</enableProductInventoryOperations>\n</IndustriesUnifiedInventorySettings>"
+    }
+  ]
+}

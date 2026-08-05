@@ -1,0 +1,68 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LanguageSettings - Metadata API",
+  "description": "Represents an organization’s language settings. Language settings control end-user language selection, locale formats, and translation options. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCanadaIcuFormat": {
+      "type": "boolean",
+      "description": "Indicates whether the ICU format is enabled for the en_CA locale (true) or not (false). This field has a default value of true for orgs created in API version 47.0 and later. Orgs created prior to API version 47.0 have a default of false."
+    },
+    "enableDataTranslation": {
+      "type": "boolean",
+      "description": "Indicates whether data translation is enabled (true) or not (false). This field has a default value of false. This field is available in API version 49.0 and later."
+    },
+    "enableEndUserLanguages": {
+      "type": "boolean",
+      "description": "Indicates whether end-user languages are enabled (true) or not (false). This field has a default value of false."
+    },
+    "enableICULocaleDateFormat": {
+      "type": "boolean",
+      "description": "Indicates whether date and currency are formatted with the International Components for Unicode (true) or not (false). This field has a default value of true for orgs created in API version 47.0 and later. Orgs created prior to API version 47.0 have a default of false. See Go Global with New International Locale Formats for more information."
+    },
+    "enableLanguageExtensionPackage": {
+      "type": "boolean",
+      "description": "Indicates whether the org has enabled language extension packages (true) or not (false). Language extension packages contain translations of components in other packages. This field has a default value of false. This field is available in API version 58.0 and later. Note: enableLanguageExtensionPackage (beta) is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "enableLocaleInsensitiveFiltering": {
+      "type": "boolean",
+      "description": "Indicates whether users can filter query results, regardless of the locale or language associated with the user (true) or if they can’t filter results (false). This field has a default value of false. This field is available in API version 56.0 and later."
+    },
+    "enableLocalNamesForStdObjects": {
+      "type": "boolean",
+      "description": "Indicates whether local name fields can be defined for standard objects (true) or not (false). This field has a default value of false. This field is available in API version 48.0 and later."
+    },
+    "enablePlatformLanguages": {
+      "type": "boolean",
+      "description": "Indicates whether platform-only languages are enabled (true) or not (false). This field has a default value of false. Setting this field to true also sets enableEndUserLanguages true."
+    },
+    "enableTranslationWorkbench": {
+      "type": "boolean",
+      "description": "Indicates whether the Translation Workbench is enabled (true) or not (false). This field has a default value of false."
+    },
+    "useLanguageFallback": {
+      "type": "boolean",
+      "description": "Indicates whether translation follows the language fallback rule (true) or returns the primary label (false). This field has a default value of true."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LanguageSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCanadaIcuFormat\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDataTranslation\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEndUserLanguages\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableICULocaleDateFormat\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLanguageExtensionPackage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLocalNamesForStdObjects\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableLocaleInsensitiveFiltering\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePlatformLanguages\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTranslationWorkbench\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTranslationWorkbenchConnectAPI\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"useLanguageFallback\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a LanguageSettings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LanguageSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableCanadaIcuFormat>true</enableCanadaIcuFormat>\n    <enableDataTranslation>false</enableDataTranslation>\n    <enableEndUserLanguages>true</enableEndUserLanguages>\n    <enableICULocaleDateFormat>true</enableICULocaleDateFormat>\n    <enableLocalNamesForStdObjects>false</enableLocalNamesForStdObjects>\n    <enablePlatformLanguages>false</enablePlatformLanguages>\n    <enableTranslationWorkbench>true</enableTranslationWorkbench>\n    <useLanguageFallback>true</useLanguageFallback>\n</LanguageSettings>"
+    }
+  ]
+}

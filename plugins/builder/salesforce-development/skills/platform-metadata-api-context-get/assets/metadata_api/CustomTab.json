@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CustomTab - Metadata API",
+  "description": "Represents a custom tab. Custom tabs let you display custom object data or other web content in Salesforce. When you add a custom tab to an app in Salesforce Classic, it appears as a tab. When you add a custom tab to an app in Lightning Experience, it appears as an item in the app’s navigation bar and in the App Launcher. When a tab displays a custom object, the tab name is the same as the custom object name. For page, s-control, or URL tabs, the name is arbitrary.",
+  "file_information": ".tab",
+  "directory_location": "tabs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "actionOverrides": {
+      "type": "ActionOverride[]",
+      "description": "A list of the action overrides that are assigned to the tab. Only one override is allowed per formFactor for a given tab. This field is available in API version 37.0 and later."
+    },
+    "auraComponent": {
+      "type": "string",
+      "description": "The name of the Aura component to display in this tab. Only one of these fields can have a value set: auraComponent customObject flexiPage lwcComponent page scontrol url"
+    },
+    "customObject": {
+      "type": "boolean",
+      "description": "Indicates whether this tab is for a custom object (true) or not (false). If set to true, the name of the tab matches the name of the custom object. Only one of these fields can have a value set: auraComponent customObject flexiPage lwcComponent page scontrol url"
+    },
+    "description": {
+      "type": "string",
+      "description": "The optional description text for the tab."
+    },
+    "flexiPage": {
+      "type": "string",
+      "description": "The name of the Lightning page to display in this tab. Only one of these fields can have a value set: auraComponent customObject flexiPage lwcComponent page scontrol url"
+    },
+    "frameHeight": {
+      "type": "int",
+      "description": "The height, in pixels of the tab frame. Required for s-control and page tabs."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name of the tab. The value of this field depends on the type of tab, and the API version. For custom object tabs, the fullName is the developer-assigned name of the custom object (MyCustomObject__c, for example). For custom object tabs, this name must be the same as the custom object name, and customObject must be set to true. For web tabs, the fullName is the developer-assigned name of the tab (MyWebTab, for example). The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component."
+    },
+    "hasSidebar": {
+      "type": "boolean",
+      "description": "Indicates if the tab displays the sidebar panel."
+    },
+    "icon": {
+      "type": "string",
+      "description": "The optional reference to the image document for the tab if the tab isn’t using one of the standard tab styles. This field is available in API version 14.0."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label of the tab, for web tabs only."
+    },
+    "lwcComponent": {
+      "type": "string",
+      "description": "The name of the Lightning web component to display in this tab. Only one of these fields can have a value set: auraComponent customObject flexiPage lwcComponent page scontrol url"
+    },
+    "motif": {
+      "type": "string",
+      "description": "The tab style for the color scheme and icon for the custom tab. For example, “'Custom70: Handsaw,” is the handsaw icon. Valid Values for this field are: Custom1:Heart, Custom2:Fan, Custom3:Sun, Custom4:Hexagon, Custom5:Leaf, Custom6:Triangle, Custom7:Square, Custom8:Diamond, Custom9:Lightning, Custom10:Moon, Custom11:Star, Custom12:Circle, Custom13:Box, Custom14:Hands, Custom15:People, Custom16:Bank, Custom17:Sack, Custom18:Form, Custom19:Wrench, Custom20:Airplane, Custom21:Computer, Custom22:Telephone, Custom23:Envelope, Custom24:Building, Custom25:Alarmclock, Custom26:Flag, Custom27:Laptop, Custom28:Cellphone, Custom29:PDA, Custom30:Radardish, Custom31:Car, Custom32:Factory, Custom33:Desk, Custom34:Insect, Custom35:Microphone, Custom36:Train, Custom37:Bridge, Custom38:Camera, Custom39:Telescope, Custom40:Creditcard, Custom41:Cash, Custom42:Treasurechest, Custom43:Jewel, Custom44:Hammer, Custom45:Ticket, Custom46:Stamp, Custom47:Knight, Custom48:Trophy, Custom49:CD/DVD, Custom50:Bigtop, Custom51:Apple, Custom52:Balls, Custom53:Bell, Custom54:Boat, Custom55:Books, Custom56:Bottle, Custom57:BuildingBlock, Custom58:Caduceus, Custom59:Can, Custom60:Umbrella, Custom61:Castle, Custom62:Chalkboard, Custom63:Chip, Custom64:Compass, Custom65:Cup, Custom66:Dice, Custom67:Gears, Custom68:Globe, Custom69:Guitar, Custom70:Handsaw, Custom71:Headset, Custom72:Helicopter, Custom73:HighwaySign, Custom74:HotAirBalloon, Custom75:IPPhone, Custom76:Keys, Custom77:Locked, Custom78:Map, Custom79:MeasuringTape, Custom80:Motorcycle, Custom81:MusicalNote, Custom82:Whistle, Custom83:Pencil, Custom84:Presenter, Custom85:RealEstateSign, Custom86:RedCross, Custom87:Safe, Custom88:Sailboat, Custom89:Saxophone, Custom90:Scales, Custom91:Shield, Custom92:Ship, Custom93:ShoppingCart, Custom94:Stethoscope, Custom95:Stopwatch, Custom96:StreetSign, Custom97:Thermometer, Custom98:Truck, Custom99:TVCRT, Custom100:TVWidescreen.",
+      "required": true
+    },
+    "page": {
+      "type": "string",
+      "description": "The name of the Visualforce page to display in this tab. Only one of these fields can have a value set: auraComponent customObject flexiPage lwcComponent page scontrol url"
+    },
+    "scontrol": {
+      "type": "string",
+      "description": "The name of the s-control to display in this tab. Only one of these fields can have a value set: auraComponent customObject flexiPage lwcComponent page scontrol url"
+    },
+    "splashPageLink": {
+      "type": "string",
+      "description": "The custom link used as the introductory splash page when users click the tab. References a HomePageComponent."
+    },
+    "url": {
+      "type": "string",
+      "description": "The URL for the external web-page to embed in this tab. Only one of these fields can have a value set: auraComponent customObject flexiPage lwcComponent page scontrol url"
+    },
+    "urlEncodingKey": {
+      "type": "Encoding (enumeration of type string)",
+      "description": "The default encoding setting is Unicode: UTF-8. Change it if you’re passing information to a URL that requires data in a different format. This option is available when the value URL is selected in the tab type."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ActionOverride\">\n  <xsd:sequence>\n    <xsd:element name=\"actionName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"comment\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formFactor\" minOccurs=\"0\" type=\"tns:FormFactor\"/>\n    <xsd:element name=\"skipRecordTypeSelect\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:ActionOverrideType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ActionOverrideType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Default\"/>\n    <xsd:enumeration value=\"Standard\"/>\n    <xsd:enumeration value=\"Scontrol\"/>\n    <xsd:enumeration value=\"Visualforce\"/>\n    <xsd:enumeration value=\"Flexipage\"/>\n    <xsd:enumeration value=\"LightningComponent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"CustomTab\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ActionOverride\"/>\n        <xsd:element name=\"auraComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customObject\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"flexiPage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"frameHeight\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"hasSidebar\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lwcComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"motif\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"scontrol\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"splashPageLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"url\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"urlEncodingKey\" minOccurs=\"0\" type=\"tns:Encoding\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"Encoding\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"UTF-8\"/>\n    <xsd:enumeration value=\"ISO-8859-1\"/>\n    <xsd:enumeration value=\"Shift_JIS\"/>\n    <xsd:enumeration value=\"ISO-2022-JP\"/>\n    <xsd:enumeration value=\"EUC-JP\"/>\n    <xsd:enumeration value=\"ks_c_5601-1987\"/>\n    <xsd:enumeration value=\"Big5\"/>\n    <xsd:enumeration value=\"GB2312\"/>\n    <xsd:enumeration value=\"Big5-HKSCS\"/>\n    <xsd:enumeration value=\"x-SJIS_0213\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FormFactor\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Small\"/>\n    <xsd:enumeration value=\"Medium\"/>\n    <xsd:enumeration value=\"Large\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a tab:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CustomTab xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Myriad Publishing</description>\n    <frameHeight>600</frameHeight>\n    <motif>Custom53: Bell</motif>\n    <url>https://www.example.com</url>\n    <urlEncodingKey>UTF-8</urlEncodingKey>\n</CustomTab>"
+    }
+  ]
+}

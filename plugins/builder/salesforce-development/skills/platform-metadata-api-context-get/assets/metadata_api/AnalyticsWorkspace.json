@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AnalyticsWorkspace - Metadata API",
+  "description": "Represents a Tableau Next workspace.",
+  "file_information": ".analtyicsWorkspace",
+  "directory_location": "analyticsWorkspaces",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The workspace description."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the workspace."
+    },
+    "workspaceAssetRelationships": {
+      "type": "AnalyticsWorkspaceAsset[]",
+      "description": "The workspace assets associated with the workspace. A workspace has 1 or more assets."
+    }
+  },
+  "sub_types": {
+    "AnalyticsWorkspaceAsset": {
+      "asset": {
+        "type": "string",
+        "required": true,
+        "description": "The name of workspace asset"
+      },
+      "assetType": {
+        "type": "AnalyticsWorkspaceAssetType (enumeration of type string)",
+        "required": true,
+        "description": "The workspace asset typeValues are: AnalyticsDashboard (Tableau Next Dashboard) AnalyticsVisualization (Tableau Next Visualization) MktCalculatedInsightObject (Data 360 Calculated Insight Object) MktDataConnection (Data 360 Connection) MktDataLakeObject (Data 360 Data Lake Object) MktDataModelObject (Data 360 Data Model Object) SemanticModel (Semantic Model)"
+      },
+      "assetUsageType": {
+        "type": "AnalyticsWorkspaceAssetUsageType (enumeration of type string)",
+        "required": true,
+        "description": "The workspace asset usage type.Values are: Created Referenced"
+      },
+      "metadataSourceType": {
+        "type": "AnalyticsWorkspaceAssetMetadataSourceType (enumeration of type string)",
+        "description": "The workspace asset metadata source type.Values are: Promoted Reused"
+      },
+      "workspace": {
+        "type": "string",
+        "required": true,
+        "description": "The workspace the asset belongs to."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AnalyticsWorkspace\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"workspaceAssetRelationships\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AnalyticsWorkspaceAsset\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"AnalyticsWorkspaceAsset\">\n  <xsd:sequence>\n    <xsd:element name=\"asset\" type=\"xsd:string\"/>\n    <xsd:element name=\"assetType\" type=\"tns:AnalyticsWorkspaceAssetType\"/>\n    <xsd:element name=\"assetUsageType\" type=\"tns:AnalyticsWorkspaceAssetUsageType\"/>\n    <xsd:element name=\"metadataSourceType\" minOccurs=\"0\" type=\"tns:AnalyticsWorkspaceAssetMetadataSourceType\"/>\n    <xsd:element name=\"workspace\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetMetadataSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Promoted\"/>\n    <xsd:enumeration value=\"Reused\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"AnalyticsDashboard\"/>\n    <xsd:enumeration value=\"AnalyticsVisualization\"/>\n    <xsd:enumeration value=\"SemanticModel\"/>\n    <xsd:enumeration value=\"MktDataModelObject\"/>\n    <xsd:enumeration value=\"MktCalculatedInsightObject\"/>\n    <xsd:enumeration value=\"MktDataLakeObject\"/>\n    <xsd:enumeration value=\"MktDataConnection\"/>\n    <xsd:enumeration value=\"MktDataTransformSetup\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"AnalyticsWorkspaceAssetUsageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Created\"/>\n    <xsd:enumeration value=\"Referenced\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AnalyticsWorkspace component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n  <AnalyticsWorkspace xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <description>An example for Analytics Workspace</description>\n  <masterLabel>Analytics Workspace</masterLabel>\n  <workspaceAssetRelationships>\n  \t  <asset>My Test Dashboard</asset>\n  \t  <assetType>AnalyticsDashboard</assetType>\n  \t  <assetUsageType>Created</assetUsageType>\n  \t  <metadataSourceType>Promoted</metadataSourceType>\n  \t  <workspace>Analytics Workspace</workspace>\n  </workspaceAssetRelationships>\n</AnalyticsWorkspace>"
+    }
+  ]
+}

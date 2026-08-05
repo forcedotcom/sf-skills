@@ -1,0 +1,215 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AIUsecaseDefinition - Metadata API",
+  "description": "Represents a collection of fields in your Salesforce org used to define a machine learning use case and get real-time predictions.",
+  "file_information": ".aiUsecaseDefinitions",
+  "directory_location": "aiUsecaseDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "aiUsecaseFieldMappings": {
+      "type": "AIUsecaseFieldMapping[]",
+      "description": "The field mappings for the use case definition. Each use case definition can have multiple field mappings."
+    },
+    "aiUsecaseModels": {
+      "type": "AIUsecaseModel[]",
+      "description": "The models for the use case definition. Each use case definition can have multiple use case models."
+    },
+    "creatorType": {
+      "type": "CreatorType (enumeration of type string)",
+      "required": true,
+      "description": "The type of user who created the use case definition that's used by AI Accelerator. Valid values are: INTERNAL_USER SALESFORCE_ADMIN Available in API version 57.0 and later."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for the use case definition, which is defined when the use case definition is created."
+    },
+    "maximumInsightCount": {
+      "type": "int",
+      "description": "The maximum number of insights returned by the scoring response."
+    },
+    "maximumRecommendationCount": {
+      "type": "int",
+      "description": "The maximum number of recommendations returned by the Next Best Action Strategy."
+    },
+    "maximumSuggestionCount": {
+      "type": "int",
+      "description": "The maximum number of suggestions returned by the scoring response."
+    },
+    "primaryResponseObject": {
+      "type": "string",
+      "description": "The primary object in which the scoring response is stored based on the specified field mapping."
+    },
+    "recommendationResponseObject": {
+      "type": "string",
+      "description": "The recommendation response object associated with the use case definition."
+    },
+    "recommendationSource": {
+      "type": "RcmdSourceType (enumeration of type string)",
+      "description": "The tool or platform that generates recommendations. Valid values are: Next_Best_Action_Flow None Available in API version 57.0 and later."
+    },
+    "secondaryResponseObject": {
+      "type": "string",
+      "description": "The object in which the scoring response is stored based on the specified field mapping."
+    },
+    "shouldSaveFeatures": {
+      "type": "boolean",
+      "description": "Indicates whether to save the features extracted for the scoring request (true) or not (false). The default value is false."
+    },
+    "shouldSaveInsights": {
+      "type": "boolean",
+      "description": "Indicates whether to save the prediction insights that are used to generate the score (true) or not (false). The default value is false."
+    },
+    "shouldSaveRecommendation": {
+      "type": "boolean",
+      "description": "Indicates whether to save the recommendation (true) or not (false). The default value is false."
+    },
+    "shouldSaveRequestResponse": {
+      "type": "boolean",
+      "description": "Indicates whether to save the request response (true) or not (false). The default value is false."
+    },
+    "shouldSaveScore": {
+      "type": "boolean",
+      "description": "Indicates whether to save the prediction score (true) or not (false). The default value is false."
+    },
+    "shouldSaveSuggestions": {
+      "type": "boolean",
+      "description": "Indicates whether to save the suggestions for improving the prediction score (true) or not (false). The default value is false."
+    },
+    "suggestionImpactMinimumPct": {
+      "type": "int",
+      "description": "The minimum eligible percentage for improving the existing prediction score based on the suggestions. Suggestions with an impact greater than the specified percentage on the score are displayed on the prediction scorecard."
+    },
+    "usecaseName": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the use case definition."
+    }
+  },
+  "sub_types": {
+    "AIUsecaseFieldMapping": {
+      "developerName": {
+        "type": "string",
+        "description": "The unique name for the field mapping in the use case definition. Required. The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name."
+      },
+      "mappedFieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the field where the scoring response is stored."
+      },
+      "mappedFieldType": {
+        "type": "MappedFieldType (enumeration of type string)",
+        "required": true,
+        "description": "The type of the mapped field. Valid values are: FEATURE PREDICTION_SCORE INSIGHT SUGGESTION SECONDARY_RESPONSE_RECORD_ID RECOMMENDATION_RESPONSE_RECORD_ID RECOMMENDATION The default value is FEATURE."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "A user-friendly name for the use case field mapping, which is defined when the field mapping is created."
+      },
+      "responseFieldName": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the response object’s field that’s mapped to the field storing the score."
+      },
+      "responseObject": {
+        "type": "string",
+        "required": true,
+        "description": "The object whose field is mapped to the field storing the score. It’s either the PrimaryResponseObject or the SecondaryResponseObject specified in the AIUsecaseDefinition object."
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "description": "The sequence number for the information stored in the field mapping."
+      }
+    },
+    "AIUsecaseModel": {
+      "aiFeatureExtractors": {
+        "type": "AIFeatureExtractor[]",
+        "description": "The AI feature extractors to retrieve the input data."
+      },
+      "defaultFeatureExtractor": {
+        "type": "AIFeatureExtractor",
+        "description": "The default AI feature extractor to retrieve the input data."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "The unique name for the use case model. Required. The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "A user-friendly name for the use case model, which is defined when the use case model is created."
+      },
+      "predictionDefinition": {
+        "type": "string",
+        "required": true,
+        "description": "The unique identifier of the prediction definition that’s related to the use case model. This identifier can be an external ID. If you use Einstein Discovery to create models, the predictionDefinition field stores the developer name of the record."
+      },
+      "predictionPlatform": {
+        "type": "PredictionPlatform (enumeration of type string)",
+        "required": true,
+        "description": "The platform on which the machine learning model is created and deployed. Valid values are: Data_Cloud Default—For internal use only. Einstein_Discovery Einstein_on_Data_Cloud—Available in API version 63.0 and later. The default value is Einstein_Discovery. Available in API version 57.0 and later."
+      }
+    },
+    "AIFeatureExtractor": {
+      "batchInputSourceIdentifier": {
+        "type": "string",
+        "description": "The identifier of the input source of the features computed by batch jobs, which can be used by a model for generating predictions. Available in API version 57.0 and later."
+      },
+      "batchInputSourceInformation": {
+        "type": "string",
+        "description": "The information about the batch input source, including query parameters, objects, field mappings, and filter criteria. Available in API version 63.0 and later."
+      },
+      "batchInputSourceType": {
+        "type": "BatchInputSourceType (enumeration of type string)",
+        "description": "The input source of the features computed in batch jobs. Possible values are: CRMA Data Cloud The default value is CRMA."
+      },
+      "className": {
+        "type": "string",
+        "required": true,
+        "description": "The ID of the Apex class created for the feature extractor."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "The unique name for the feature extractor. Required. The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name."
+      },
+      "extractorType": {
+        "type": "ExtractorType (enumeration of type string)",
+        "required": true,
+        "description": "The type of the feature extractor. Valid values are: APEX JAVA HYBRID The default value is APEX."
+      },
+      "featureInputType": {
+        "type": "string",
+        "required": true,
+        "description": "The type of feature input that’s used in generating predictions. Valid values are: Realtime_Input Sample_Input Batch_Input Batch_And_Realtime_Input Available in API version 57.0 and later."
+      },
+      "inputContext": {
+        "type": "string",
+        "description": "The JSON file with features that act as context for the feature extractor. This data can also include the data in the uploaded CSV file. Available in API version 57.0 and later."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "A user-friendly name for the feature extractor, which is defined when the feature extractor is created."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AIUsecaseDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AIUsecaseDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <aiUsecaseFieldMappings>\n        <developerName>DevNamee1</developerName>\n        <mappedFieldName>Name</mappedFieldName>\n        <mappedFieldType>INSIGHT</mappedFieldType>\n        <masterLabel>DevName</masterLabel>\n        <responseFieldName>AnnualRevenue</responseFieldName>\n        <responseObject>Lead</responseObject>\n        <sequenceNumber>2</sequenceNumber>\n    </aiUsecaseFieldMappings>\n    <aiUsecaseFieldMappings>\n        <developerName>DevNamee2</developerName>\n        <mappedFieldName>Value</mappedFieldName>\n        <mappedFieldType>INSIGHT</mappedFieldType>\n        <masterLabel>DevName</masterLabel>\n        <responseFieldName>Id</responseFieldName>\n        <responseObject>Account</responseObject>\n        <sequenceNumber>2</sequenceNumber>\n    </aiUsecaseFieldMappings>\n    <aiUsecaseFieldMappings>\n        <developerName>DevNamee3</developerName>\n        <mappedFieldName>Score</mappedFieldName>\n        <mappedFieldType>PREDICTION_SCORE</mappedFieldType>\n        <masterLabel>DevName</masterLabel>\n        <responseFieldName>Company</responseFieldName>\n        <responseObject>Lead</responseObject>\n    </aiUsecaseFieldMappings>\n    <aiUsecaseFieldMappings>\n        <developerName>DevNamee4</developerName>\n        <mappedFieldName>RecordId</mappedFieldName>\n        <mappedFieldType>SECONDARY_RESPONSE_RECORD_ID</mappedFieldType>\n        <masterLabel>DevName</masterLabel>\n        <responseFieldName>Address</responseFieldName>\n        <responseObject>Lead</responseObject>\n        <joinFieldInformation>joinFieldInformation</joinFieldInformation>\n    </aiUsecaseFieldMappings>\n    <aiUsecaseFieldMappings>\n        <developerName>DevName5</developerName>\n        <mappedFieldName>DevName4</mappedFieldName>\n        <mappedFieldType>PREDICTION_SCORE_INPUT</mappedFieldType>\n        <masterLabel>DevName</masterLabel>\n        <responseFieldName>Address</responseFieldName>\n        <responseObject>Lead_Dmo</responseObject>\n        <joinFieldInformation>{\"recordIdField\":\"Value2\",\"recordIdObject\":\"Value1\",\"recordJoinRelation\":\"Value3\"}</joinFieldInformation>\n    </aiUsecaseFieldMappings>\n    <aiUsecaseFieldMappings>\n        <developerName>DevName6</developerName>\n        <mappedFieldName>DevName5</mappedFieldName>\n        <mappedFieldType>PREDICTION_SCORE_INPUT</mappedFieldType>\n        <masterLabel>DevName</masterLabel>\n        <responseFieldName>Address</responseFieldName>\n        <responseObject>Lead_Dmo</responseObject>\n        <joinFieldInformation>{\"recordIdField\":\"Value2\",\"recordIdObject\":\"Value1\",\"recordJoinRelation\":\"Value3\"}</joinFieldInformation>\n        <additionalFieldInformation>{\"customPredictionAttributes\":[{\"id\":1,\"fieldLabel\":\"Label 1\",\"sourceField\":\"Total_Spend_c__c\"},{\"id\":2,\"fieldLabel\":\"Label 2\",\"sourceField\":\"Predicted_Churned2_recommendation_impact__c\"}]}</additionalFieldInformation>\n        <customPredictionLabel>%%SCORE%%</customPredictionLabel>\n    </aiUsecaseFieldMappings>\n    <aiUsecaseModels>\n        <aiFeatureExtractors>\n            <className>01pxx0000004X2CAAU</className>\n            <extractorType>APEX</extractorType>\n            <developerName>DevNamee2</developerName>\n            <masterLabel>DevName</masterLabel>\n            <featureInputType>Realtime_Input</featureInputType>\n            <inputContext>\"{columnNames=[column1, column2], rawData=[S, 315090]}\"</inputContext>\n            <batchInputSourceIdentifier>DatasetName</batchInputSourceIdentifier>\n            <batchInputSourceType>CRMA</batchInputSourceType>\n            <batchInputSourceInformation>{\"streamingTransformName\":\"SDT_Name\",\"recordIdField\":\"fieldname\",\"featureFieldsMapping\":{\"feature1\":\"field1\",\"feature2\":\"field2\"},\"streaminTransformLabel\":\"SDT_Label\",\"batchInputSourceLabel\":\"DMO_Label\"}</batchInputSourceInformation>\n        </aiFeatureExtractors>\n        <defaultFeatureExtractor>\n            <className>01pxx0000004X0aAAE</className>\n            <extractorType>APEX</extractorType>\n            <developerName>DevNamee1</developerName>\n            <masterLabel>DevName</masterLabel>\n            <featureInputType>Realtime_Input</featureInputType>\n            <inputContext>\"{columnNames=[column1, column2], rawData=[S, 315090]}\"</inputContext>\n            <batchInputSourceIdentifier>DatasetName</batchInputSourceIdentifier>\n            <batchInputSourceType>CRMA</batchInputSourceType>\n            <batchInputSourceInformation>{\"streamingTransformName\":\"SDT_Name\",\"recordIdField\":\"fieldname\",\"featureFieldsMapping\":{\"feature1\":\"field1\",\"feature2\":\"field2\"},\"streaminTransformLabel\":\"SDT_Label\",\"batchInputSourceLabel\":\"DMO_Label\"}</batchInputSourceInformation>\n        </defaultFeatureExtractor>\n        <developerName>DevNamee1</developerName>\n        <masterLabel>DevName</masterLabel>\n        <predictionDefinition>PredictionDefinitionD</predictionDefinition>\n        <predictionPlatform>Einstein_Discovery</predictionPlatform>\n        <arePredctGenInRealTime>true</arePredctGenInRealTime>\n    </aiUsecaseModels>\n    <aiUsecaseModels>\n        <developerName>DevNamee2</developerName>\n        <masterLabel>DevName</masterLabel>\n        <predictionDefinition>PredictionDefinitionBA</predictionDefinition>\n        <predictionPlatform>Einstein_Discovery</predictionPlatform>\n        <arePredctGenInRealTime>true</arePredctGenInRealTime>\n    </aiUsecaseModels>\n    <aiUsecaseModels>\n        <developerName>DevNamee3</developerName>\n        <masterLabel>DevName</masterLabel>\n        <predictionDefinition>PredictionDefinitionCA</predictionDefinition>\n        <predictionPlatform>Einstein_Discovery</predictionPlatform>\n        <arePredctGenInRealTime>true</arePredctGenInRealTime>\n    </aiUsecaseModels>\n    <aiUsecaseModels>\n        <developerName>DevName4</developerName>\n        <masterLabel>DevName</masterLabel>\n        <predictionDefinition>Model1</predictionDefinition>\n        <predictionPlatform>Data_Cloud</predictionPlatform>\n        <arePredctGenInRealTime>false</arePredctGenInRealTime>\n    </aiUsecaseModels>\n    <aiUsecaseModels>\n        <developerName>DevName5</developerName>\n        <masterLabel>DevName</masterLabel>\n        <predictionDefinition>Model1</predictionDefinition>\n        <predictionPlatform>Einstein_on_Data_Cloud</predictionPlatform>\n        <arePredctGenInRealTime>false</arePredctGenInRealTime>\n    </aiUsecaseModels>\n    <masterLabel>DevName</masterLabel>\n    <maximumInsightCount>3</maximumInsightCount>\n    <maximumSuggestionCount>3</maximumSuggestionCount>\n    <maximumRecommendationCount>3</maximumRecommendationCount>\n    <primaryResponseObject>Lead</primaryResponseObject>\n    <secondaryResponseObject>Account</secondaryResponseObject>\n    <recommendationResponseObject>Contact</recommendationResponseObject>\n    <shouldSaveFeatures>true</shouldSaveFeatures>\n    <shouldSaveInsights>true</shouldSaveInsights>\n    <shouldSaveRecommendation>false</shouldSaveRecommendation>\n    <shouldSaveRequestResponse>false</shouldSaveRequestResponse>\n    <shouldSaveScore>true</shouldSaveScore>\n    <shouldSaveSuggestions>true</shouldSaveSuggestions>\n    <suggestionImpactMinimumPct>50</suggestionImpactMinimumPct>\n    <usecaseName>FTestSampleMLUsecase</usecaseName>\n    <recommendationSource>Next_Best_Action_Flow</recommendationSource>\n    <creatorType>INTERNAL_USER</creatorType>\n</AIUsecaseDefinition>"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LightningComponentBundle - Metadata API",
+  "description": "Represents a Lightning web component bundle. A bundle contains Lightning web component resources.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "ai": {
+      "type": "base64Binary",
+      "description": "An internal AI description of the Lightning web component. This description is supported only in orgs that have Setup with Agentforce enabled. This description enables Agentforce to analyze the component for inclusion in agent-generated Lightning pages. For more information, see Configure a Component for Use in Setup with Agentforce. <ai> <description>AI component description Example: The component enables users to add and style text content for dashboards, supporting features such as hyperlinks, bullet points, and text alignment. Ideal for adding formatted text sections such as instructions</description> <property name=\"prop1\" aiDescription=\"AI description for prop1\"/> <property name=\"prop2\" aiDescription=\"AI description for prop2\"/> </ai> Available in API version 66.0 and later."
+    },
+    "apiVersion": {
+      "type": "double",
+      "description": "A double value that binds the component to a Salesforce API version."
+    },
+    "capabilities": {
+      "type": "Capabilities[]",
+      "description": "A list of capabilities. A capability is something that a component can do, as opposed to a target, which defines where you can use a component. Available in API version 48.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "A user-facing description of the Lightning web component. This description appears in list views, like the list of Lightning Components in Setup, and as a tooltip in the builders like Lightning App Builder and Experience Builder."
+    },
+    "isExplicitImport": {
+      "type": "boolean",
+      "description": "Indicates whether imports between files are done explicitly by the developer (true) or implicitly by the framework (false)."
+    },
+    "isExposed": {
+      "type": "boolean",
+      "description": "If true, the component is available to other namespaces. If true and a targets value is also provided, the component is available to Salesforce builders such as Lightning App Builder and Experience Builder. If false, the component isn't available to builders and other namespaces."
+    },
+    "lwcResources": {
+      "type": "LwcResources[]",
+      "description": "A list of resources inside a bundle."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The component title that appears in the list view."
+    },
+    "targetConfigs": {
+      "type": "base64Binary",
+      "description": "Configurations for each target. Each target is a Lightning page type. For example, this configuration allows a Lightning web component to be used on a Contact record page in Lightning App Builder. <targetConfigs> <targetConfig targets=\"lightning__RecordPage\"> <objects> <object>Contact</object> </objects> </targetConfig> </targetConfigs>"
+    },
+    "targets": {
+      "type": "Targets[]",
+      "description": "A list of targets where the Lightning web component can be used, such as in Lightning App Builder or Experience Builder sites."
+    }
+  },
+  "sub_types": {
+    "Capabilities": {
+      "capability": {
+        "type": "string",
+        "description": "Specifies something that a component can do. Valid values are: lightningCommunity__RelaxedCSP lightning__dynamicComponent lightning__ServerRenderable lightning__ServerRenderableWithHydration lightning__ServiceCloudVoiceToolkitApi"
+      }
+    },
+    "LwcResources": {
+      "lwcResource": {
+        "type": "LwcResource",
+        "description": "A resource inside a LightningComponentBundle."
+      }
+    },
+    "LwcResource": {
+      "filePath": {
+        "type": "string",
+        "description": "The file path of a resource.",
+        "required": true
+      },
+      "source": {
+        "type": "base64Binary",
+        "description": "The content of a resource.",
+        "required": true
+      }
+    },
+    "Targets": {
+      "target": {
+        "type": "string",
+        "description": "Specifies the type of Lightning page the component can be added to in the builders, such as in Lightning App Builder, Experience Builder, Flow Builder, or Document Builder. For valid values, see XML Configuration File Elements: target."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Capabilities\">\n  <xsd:sequence>\n    <xsd:element name=\"capability\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"LightningComponentBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"ai\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"apiVersion\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"capabilities\" minOccurs=\"0\" type=\"tns:Capabilities\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isExplicitImport\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isExposed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"lwcResources\" minOccurs=\"0\" type=\"tns:LwcResources\"/>\n        <xsd:element name=\"masterLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"runtimeNamespace\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetConfigs\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n        <xsd:element name=\"targets\" minOccurs=\"0\" type=\"tns:Targets\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"LwcResource\">\n  <xsd:sequence>\n    <xsd:element name=\"filePath\" type=\"xsd:string\"/>\n    <xsd:element name=\"source\" type=\"xsd:base64Binary\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"LwcResources\">\n  <xsd:sequence>\n    <xsd:element name=\"lwcResource\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:LwcResource\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Targets\">\n  <xsd:sequence>\n    <xsd:element name=\"target\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example shows the directory structure in the zip file of one component with a name of hello.",
+      "code": "lwc\n    hello\n        hello.html\n        hello.js\n        hello.js-meta.xml"
+    },
+    {
+      "description": "Content of hello.html:",
+      "code": "<template>\n\n    <lightning-card title=\"Hello\" icon-name=\"custom:custom14\">\n        <div class=\"slds-m-around_medium\">\n            Hello, {greeting}!\n        </div>\n    </lightning-card>\n\n</template>"
+    },
+    {
+      "description": "Content of hello.js:",
+      "code": "import { LightningElement } from 'lwc';\n\nexport default class Hello extends LightningElement {\n    greeting = 'World';\n}"
+    },
+    {
+      "description": "Content of hello.js-meta.xml",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningComponentBundle xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <apiVersion>45.0</apiVersion>\n    <isExposed>true</isExposed>\n    <targets>\n        <target>lightning__AppPage</target>\n        <target>lightning__RecordPage</target>\n        <target>lightning__HomePage</target>\n    </targets>\n</LightningComponentBundle>"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AccountIntelligenceSettings - Metadata API",
+  "description": "Represents an org’s Account Intelligence settings. These settings control features that make it easy for sales reps to create accounts, see relevant news articles, and add logos to account records. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAccountLogos": {
+      "type": "boolean",
+      "description": "Indicates whether your sales reps can see available company logos (true) or not (false). The logos are for US-based companies only. The default value is false. enableAutomatedAccountFields must be true to use this setting."
+    },
+    "enableAutomatedAccountFields": {
+      "type": "boolean",
+      "description": "Indicates whether Automated Account Fields is enabled (true) or not (false). The default value is false."
+    },
+    "enableNewsStories": {
+      "type": "boolean",
+      "description": "Indicates whether News is enabled (true) or not (false). The default value is false. enableAutomatedAccountFields must be true to use this setting."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccountIntelligenceSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAccountLogos\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAutomatedAccountFields\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNewsStories\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the AccountIntelligence.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountIntelligenceSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableAccountLogos>true</enableAccountLogos>\n\t<enableAutomatedAccountFields>true</enableAutomatedAccountFields>\n\t<enableNewsStories>true</enableNewsStories>\n</AccountIntelligenceSettings>"
+    }
+  ]
+}

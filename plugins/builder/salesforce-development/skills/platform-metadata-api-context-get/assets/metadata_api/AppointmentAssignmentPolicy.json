@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AppointmentAssignmentPolicy - Metadata API",
+  "description": "Represents the information about a resource assignment rule. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".policy",
+  "directory_location": "appointmentSchedulingPolicies",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the appointment assignment policy.",
+      "required": true
+    },
+    "policyApplicableDuration": {
+      "type": "string",
+      "description": "The frequency at which the utilization of service resources is calculated. Valid values are: Monthly ParameterBased Weekly",
+      "required": true
+    },
+    "policyType": {
+      "type": "string",
+      "description": "The type of appointment assignment policy. Valid value is: loadBalancing",
+      "required": true
+    },
+    "utilizationFactor": {
+      "type": "string",
+      "description": "Specifies the count type for the resource utilization. Valid values are: NumberOfAppointments TotalAppointmentDuration",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AppointmentAssignmentPolicy\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"policyApplicableDuration\" type=\"tns:PolicyApplicableDuration\"/>\n        <xsd:element name=\"policyType\" type=\"tns:AssignmentPolicyType\"/>\n        <xsd:element name=\"utilizationFactor\" type=\"tns:UtilizationFactor\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"AssignmentPolicyType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"loadBalancing\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PolicyApplicableDuration\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ParameterBased\"/>\n    <xsd:enumeration value=\"Monthly\"/>\n    <xsd:enumeration value=\"Weekly\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UtilizationFactor\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TotalAppointmentDuration\"/>\n    <xsd:enumeration value=\"NumberOfAppointments\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an appointmentAssignmentPolicy component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AppointmentAssignmentPolicy xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <masterLabel>loadBalancing Assignment Policy</masterLabel>\n   <policyType>loadBalancing</policyType>\n   <policyApplicableDuration>Weekly</policyApplicableDuration>\n   <utilizationFactor>TotalAppointmentDuration</utilizationFactor>\n</AppointmentAssignmentPolicy>"
+    }
+  ]
+}

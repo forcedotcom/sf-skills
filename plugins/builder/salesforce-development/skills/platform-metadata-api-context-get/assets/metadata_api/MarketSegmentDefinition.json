@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MarketSegmentDefinition - Metadata API",
+  "description": "Represents the field values for MarketSegmentDefinition. MarketSegmentDefinition is used to store the exportable metadata of a segment, such as segment criteria and other attributes. Developers can create segment definition packages, pass segment definition in the form of data build tool (DBT), and publish it on AppExchange for subscriber organizations to install and instantiate these segments.",
+  "file_information": ".marketSegmentDefinition",
+  "directory_location": "marketSegmentDefinitions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "additionalMetadata": {
+      "type": "string",
+      "description": "An XML clob to hold name value pairs for storing additional metadata. Not applicable for DBT type segment."
+    },
+    "excludeCriteria": {
+      "type": "string",
+      "description": "Holds the JSON exclude criteria for UI based segments. Not applicable for DBT or Lookalike segments."
+    },
+    "includeCriteria": {
+      "type": "string",
+      "description": "An XML wrapped in a CDATA section that captures DBT definition. Only single model DBT is supported."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Display name of the field value."
+    },
+    "segmentOn": {
+      "type": "string",
+      "description": "Required when segmentType is UI. Points to relevant MktDataModelObject entity instance. Must be a valid developerName for an MktDataModelObject instance of Profile type.",
+      "required": true
+    },
+    "segmentType": {
+      "type": "MarketSegmentType (enumeration of type string)",
+      "required": true,
+      "description": "Type of the segment to be created. Only DBT is supported via API. Values are: DBT Lookalike UI EinsteinGPTSegmentsUI"
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MarketSegmentDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MarketSegmentDefinition>\n    <segmentType>DBT</segmentType>\n    <includeCriteria>\n    <![CDATA[\n        <DbtPipeline>\n            <models>\n                <model>\n                    <name>m1</name>\n                    <sql>select ssot__Individual__dlm.ssot__Id__c from ssot__Individual__dlm</sql>\n                </model>\n            </models>\n        </DbtPipeline>\n        ]]>\n    </includeCriteria>\n    <masterLabel>msd2_simple</masterLabel>\n</MarketSegmentDefinition>"
+    },
+    {
+      "description": "The following is an example package.xml that references the previous definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<ns2:Package xmlns:ns2=\"http://soap.sforce.com/2006/04/metadata\">\n    <types>\n        <members>*</members>\n        <name>MarketSegmentDefinition</name>\n    </types>\n    <version>55.0</version>\n</ns2:Package>"
+    }
+  ]
+}

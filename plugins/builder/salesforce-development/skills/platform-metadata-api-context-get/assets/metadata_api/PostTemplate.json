@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PostTemplate - Metadata API",
+  "description": "Represents the metadata associated with an approval post template for Approvals in Chatter. With approval post templates, you can customize the information included in approval request posts that appear in Chatter feeds. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".postTemplate",
+  "directory_location": "postTemplates",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "default": {
+      "type": "boolean",
+      "description": "Specifies whether this is the default post template for the given object. When set to true, this post template is used by approval processes that are associated with the same object and don’t specify a post template. When an object has no default post template, each of its approval processes uses the system default post template, unless the approval process specifies its own post template.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description of the post template."
+    },
+    "fields": {
+      "type": "string[]",
+      "description": "An array of up to four fields to include in approval request posts. If the approval object is a detail object in a master-detail relationship, Owner isn’t available for approval page layouts or approval post templates.",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "Name of the post template. This non-unique label is different from the unique name of the post template.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PostTemplate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"default\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PostTemplate component: <?xml version=\"1.0\" encoding=\"UTF-8\"?> <Package xmlns=\"http://soap.sforce.com/2006/04/metadata\"> <types> <members>Lead.leadtemplate</members> <name>PostTemplate</name> </types> <version>29.0</version> </Package>",
+      "code": "<PostTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <default>false</default>\n    <fields>NumberOfEmployees</fields>\n    <fields>NumberofLocations__c</fields>\n    <fields>PartnerAccount</fields>\n    <fields>LeadCustomFieldNumber__c</fields>\n    <label>My Lead Post Template</label>\n</PostTemplate>"
+    }
+  ]
+}

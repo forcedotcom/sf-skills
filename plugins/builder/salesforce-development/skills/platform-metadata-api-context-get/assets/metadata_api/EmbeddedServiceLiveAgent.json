@@ -1,0 +1,141 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EmbeddedServiceLiveAgent - Metadata API",
+  "description": "Represents a setup node for creating an embedded chat deployment. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".EmbeddedServiceLiveAgent",
+  "directory_location": "EmbeddedServiceLiveAgent",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "avatarImg": {
+      "type": "string",
+      "description": "Avatar image for this embedded chat deployment."
+    },
+    "customPrechatComponent": {
+      "type": "string",
+      "description": "The custom Lightning Component that’s used for the pre-chat page in this embedded chat deployment."
+    },
+    "embeddedServiceConfig": {
+      "type": "string",
+      "description": "The name of the embedded service configuration node.",
+      "required": true
+    },
+    "embeddedServiceQuickActions": {
+      "type": "EmbeddedServiceQuickAction",
+      "description": "The quick action used by the pre-chat form."
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Indicates whether this embedded chat deployment is enabled (true).",
+      "required": true
+    },
+    "fontSize": {
+      "type": "EmbeddedServiceFontSize (enumeration of type string)",
+      "description": "The font size for the text in the embedded chat window. One of the following values: Small Medium Large",
+      "required": true
+    },
+    "headerBackgroundImg": {
+      "type": "string",
+      "description": "Header background image for this embedded chat window. Removed in API version 49.0."
+    },
+    "isOfflineCaseEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether offline support is enabled for this embedded chat deployment. Available in API version 43.0 and later."
+    },
+    "isQueuePositionEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether queue position (displaying the chat visitor’s place in line while they wait for an agent) is enabled for this embedded chat deployment. Available in API version 43.0 and later."
+    },
+    "liveAgentChatUrl": {
+      "type": "string",
+      "description": "The rest endpoint for chats."
+    },
+    "liveAgentContentUrl": {
+      "type": "string",
+      "description": "The rest endpoint for cChat content."
+    },
+    "liveChatButton": {
+      "type": "string",
+      "description": "Reference to a chat button created in Chat setup.",
+      "required": true
+    },
+    "liveChatDeployment": {
+      "type": "string",
+      "description": "Reference to a deployment created in Chat setup.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Name of the embedded chat deployment.",
+      "required": true
+    },
+    "offlineCaseBackgroundImg": {
+      "type": "string",
+      "description": "Offline support case form background image for this embedded chat window. Available in API version 43.0 and later."
+    },
+    "prechatBackgroundImg": {
+      "type": "string",
+      "description": "Pre-chat background image for this embedded chat window."
+    },
+    "prechatEnabled": {
+      "type": "string",
+      "description": "Indicates whether the embedded chat pre-chat form is enabled for this deployment.",
+      "required": true
+    },
+    "prechatJson": {
+      "type": "string",
+      "description": "JSON object of all the fields of the selected pre-chat form in Chat setup."
+    },
+    "scenario": {
+      "type": "EmbeddedServiceScenario (enumeration of type string)",
+      "description": "The scenario for the embedded chat window that determines which objects to relate to the chat. One of the following values: Sales Service Basic",
+      "required": true
+    },
+    "smallCompanyLogoImg": {
+      "type": "string",
+      "description": "Company logo image for this embedded chat window."
+    },
+    "waitingStateBackgroundImg": {
+      "type": "string",
+      "description": "Chat waiting image for this embedded chat window."
+    }
+  },
+  "sub_types": {
+    "EmbeddedServiceQuickAction": {
+      "embeddedServiceLiveAgent": {
+        "type": "string",
+        "description": "Reference to the embedded chat deployment."
+      },
+      "order": {
+        "type": "int",
+        "description": "Order in which this quick action appears in the embedded chat pre-chat form."
+      },
+      "quickActionDefinition": {
+        "type": "string",
+        "description": "Reference to a quick action."
+      },
+      "quickActionType": {
+        "type": "EmbeddedServiceQuickActionType (enumeration of type string)",
+        "description": "Quick action type. One of the following values: Prechat–Pre-chat OfflineCase–Offline support (Cases) Available in API version 43.0 and later."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"EmbeddedServiceFontSize\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Small\"/>\n    <xsd:enumeration value=\"Medium\"/>\n    <xsd:enumeration value=\"Large\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"EmbeddedServiceLiveAgent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"avatarImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"embeddedServiceConfig\" type=\"xsd:string\"/>\n        <xsd:element name=\"embeddedServiceQuickActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:EmbeddedServiceQuickAction\"/>\n        <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"fontSize\" type=\"tns:EmbeddedServiceFontSize\"/>\n        <xsd:element name=\"isOfflineCaseEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isQueuePositionEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"liveAgentChatUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"liveAgentContentUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"liveChatButton\" type=\"xsd:string\"/>\n        <xsd:element name=\"liveChatDeployment\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"offlineCaseBackgroundImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"prechatBackgroundImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"prechatEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"prechatJson\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"scenario\" type=\"tns:EmbeddedServiceScenario\"/>\n        <xsd:element name=\"smallCompanyLogoImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"waitingStateBackgroundImg\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"EmbeddedServiceQuickAction\">\n  <xsd:sequence>\n    <xsd:element name=\"embeddedServiceLiveAgent\" type=\"xsd:string\"/>\n    <xsd:element name=\"order\" type=\"xsd:int\"/>\n    <xsd:element name=\"quickActionDefinition\" type=\"xsd:string\"/>\n    <xsd:element name=\"quickActionType\" minOccurs=\"0\" type=\"tns:EmbeddedServiceQuickActionType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"EmbeddedServiceQuickActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Prechat\"/>\n    <xsd:enumeration value=\"OfflineCase\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"EmbeddedServiceScenario\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sales\"/>\n    <xsd:enumeration value=\"Service\"/>\n    <xsd:enumeration value=\"Basic\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EmbeddedServiceLiveAgent file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EmbeddedServiceLiveAgent xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <avatarImg>https://google.com/avatar.png</avatarImg>\n    <customPrechatComponent>auraCustomPrechat</customPrechatComponent>\n    <embeddedServiceConfig>EswConfig001</embeddedServiceConfig>\n    <embeddedServiceQuickActions>\n        <embeddedServiceLiveAgent>EmbeddedServiceLiveAgent_Parent04Ixx0000000001EAA_15ec5bd2971</embeddedServiceLiveAgent>\n        <order>1</order>\n        <quickActionDefinition>Snapins_Contact_QuickAction_08hRM000000001h</quickActionDefinition>\n    </embeddedServiceQuickActions>\n    <embeddedServiceQuickActions>\n        <embeddedServiceLiveAgent>EmbeddedServiceLiveAgent_Parent04Ixx0000000001EAA_15ec5bd2971</embeddedServiceLiveAgent>\n        <order>1</order>\n        <quickActionDefinition>Snapins_Case_OfflineCaseQuickAction_08hRM000000001h</quickActionDefinition>\n        <quickActionType>OfflineCase</quickActionType>\n    </embeddedServiceQuickActions>\n    <embeddedServiceQuickActions>\n        <embeddedServiceLiveAgent>EmbeddedServiceLiveAgent_Parent04Ixx0000000001EAA_15ec5bd2971</embeddedServiceLiveAgent>\n        <order>2</order>\n        <quickActionDefinition>Snapins_Case_QuickAction_08hRM000000001h</quickActionDefinition>\n    </embeddedServiceQuickActions>\n    <enabled>true</enabled>\n    <fontSize>Medium</fontSize>\n    <headerBackgroundImg>https://google.com/headerBackgroundImg.png</headerBackgroundIm>\n    <isOfflineCaseEnabled>true</isOfflineCaseEnabled>\n    <isQueuePositionEnabled>true</isQueuePositionEnabled>\n    <liveChatButton>chatButton01</liveChatButton>\n    <liveChatDeployment>liveAgentDeployment01</liveChatDeployment>\n    <masterLabel>EmbeddedServiceLiveAgent_Parent04Ixx0000000001EAA_15ec5bd2971</masterLabel>\n    <offlineCaseBackgroundImg>https://google.com/offlineCaseBackgroundImg.png</offlineCaseBackgroundImg>\n    <prechatBackgroundImg>https://google.com/prechatBackgroundImg.png</prechatBackgroundImg>\n    <prechatEnabled>true</prechatEnabled>\n    <scenario>Service</scenario>\n    <smallCompanyLogoImg>https://google.com/smallCompanyLogoImg.png</smallCompanyLogoImg>\n    <waitingStateBackgroundImg>https://google.com/waitingImage.png</waitingStateBackgroundImg>\n</EmbeddedServiceLiveAgent>"
+    }
+  ]
+}

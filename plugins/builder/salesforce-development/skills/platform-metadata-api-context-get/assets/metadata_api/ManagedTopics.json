@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ManagedTopics - Metadata API",
+  "description": "Represents navigational and featured topics managed in an Experience Cloud site.",
+  "file_information": ".managedTopics",
+  "directory_location": "managedTopics",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "ManagedTopic": {
+      "type": "ManagedTopic",
+      "description": "Represents a specific navigational or featured topic."
+    }
+  },
+  "sub_types": {
+    "ManagedTopic": {
+      "name": {
+        "type": "string",
+        "description": "The topic name."
+      },
+      "managedTopicType": {
+        "type": "string",
+        "description": "The topic type: “Navigational” or “Featured”"
+      },
+      "topicDescription": {
+        "type": "string",
+        "description": "An optional description of topic contents. This field is accessible only via the API; there is no corollary in the user interface."
+      },
+      "parentName": {
+        "type": "string",
+        "description": "The name of a parent topic for which this topic is a child. Child topics are accessible from the subtopics section of the parent topic page and their feeds are added to the parent topic feed. Only navigational topics support parent-child relationships."
+      },
+      "position": {
+        "type": "int",
+        "description": "The placement of this topic relative to others of the same type. The results differ depending on topic type: For top-level navigational topics, position arranges the Topics menu in the Experience Cloud site. For child navigational topics, it arranges sibling topics in the subtopics section. For featured topics, it arranges topic thumbnail images on the Experience Cloud site home page. Enter a number between 0 and 24. (The maximum amount of navigational or featured topics is 25.)"
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ManagedTopic\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"managedTopicType\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentName\" type=\"xsd:string\"/>\n        <xsd:element name=\"position\" type=\"xsd:int\"/>\n        <xsd:element name=\"topicDescription\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ManagedTopics\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"managedTopic\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ManagedTopic\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows the ManagedTopics component itself:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ManagedTopics>\n    <ManagedTopic>\n        <name>Running</name>\n        <managedTopicType>Navigational</managedTopicType>\n        <topicDescription>Training advice</topicDescription>\n        <parentName></parentName>\n        <position>0</position>\n    </ManagedTopic>\n    <ManagedTopic>\n        <name>Hiking</name>\n        <managedTopicType>Navigational</managedTopicType>\n        <topicDescription>Routes and gear</topicDescription>\n        <parentName></parentName>\n        <position>1</position>\n    </ManagedTopic>\n        <ManagedTopic>\n            <name>Trails</name>\n            <managedTopicType>Navigational</managedTopicType>\n            <topicDescription>Maps for local favorites</topicDescription>\n            <parentName>Hiking</parentName>\n            <position>0</position>\n        </ManagedTopic>\n        <ManagedTopic>\n            <name>Backpacks</name>\n            <managedTopicType>Navigational</managedTopicType>\n            <topicDescription>Recommended models</topicDescription>\n            <parentName>Hiking</parentName>\n            <position>1</position>\n        </ManagedTopic>\n    <ManagedTopic>\n        <name>Footwear</name>\n        <managedTopicType>Featured</managedTopicType>\n        <topicDescription>Suggested types for each sport</topicDescription>\n        <parentName></parentName>\n        <position>0</position>\n    </ManagedTopic>\n    <ManagedTopic>\n        <name>Conditioning</name>\n        <managedTopicType>Featured</managedTopicType>\n        <topicDescription>How to get fit for any activity</topicDescription>\n        <parentName></parentName>\n        <position>1</position>\n    </ManagedTopic>\n</ManagedTopics>"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "GenAiPluginInstructionDef - Metadata API",
+  "description": "Represents a topic instruction.",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "required": true,
+      "description": "Description of the topic instruction."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "Represents the API name of the topic instruction. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "language": {
+      "type": "string",
+      "required": true,
+      "description": "The language of the topic instruction."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The master label for the topic instruction."
+    },
+    "sortOrder": {
+      "type": "integer",
+      "description": "A numerical value used to determine the order the instructions will be executed in."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"GenAiLocalPlugin\">\n  <xsd:sequence>\n    <xsd:element name=\"aiPluginUtterances\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiPluginUtteranceDef\"/>\n    <xsd:element name=\"canEscalate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"description\" type=\"xsd:string\"/>\n    <xsd:element name=\"genAiFunctions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginFunctionDef\"/>\n    <xsd:element name=\"genAiPluginInstructions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginInstructionDef\"/>\n    <xsd:element name=\"language\" type=\"xsd:string\"/>\n    <xsd:element name=\"localDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"pluginType\" type=\"tns:PluginType\"/>\n    <xsd:element name=\"scope\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerBundle\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"agentGraph\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"agentGraphRef\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"agentScript\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"attributeMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerAttrMapping\"/>\n        <xsd:element name=\"botTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"capabilities\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"genAiFunctions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerFunctionDef\"/>\n        <xsd:element name=\"genAiPlugins\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerFunctionDef\"/>\n        <xsd:element name=\"localActionLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerFunctionDef\"/>\n        <xsd:element name=\"localTopicLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerFunctionDef\"/>\n        <xsd:element name=\"localTopics\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlugin\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"plannerActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiFunction\"/>\n        <xsd:element name=\"plannerSurfaces\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiPlannerSurfaceDef\"/>\n        <xsd:element name=\"plannerType\" type=\"tns:PlannerType\"/>\n        <xsd:element name=\"ruleExpressionAssignments\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerRuleExprAsgn\"/>\n        <xsd:element name=\"ruleExpressions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPlannerRuleExprDef\"/>\n        <xsd:element name=\"voiceDefinition\" minOccurs=\"0\" type=\"tns:AiPlannerVoiceDef\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlannerFunctionDef\">\n  <xsd:sequence>\n    <xsd:element name=\"genAiCustomizedPlugin\" minOccurs=\"0\" type=\"tns:GenAiLocalPlugin\"/>\n    <xsd:element name=\"genAiFunctionName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"genAiPluginName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPlugin\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aiPluginUtterances\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiPluginUtteranceDef\"/>\n        <xsd:element name=\"canEscalate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n        <xsd:element name=\"genAiFunctions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginFunctionDef\"/>\n        <xsd:element name=\"genAiPluginInstructions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginInstructionDef\"/>\n        <xsd:element name=\"language\" type=\"xsd:string\"/>\n        <xsd:element name=\"localActionLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiPluginFunctionDef\"/>\n        <xsd:element name=\"localActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GenAiFunction\"/>\n        <xsd:element name=\"localDeveloperName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"pluginType\" type=\"tns:PluginType\"/>\n        <xsd:element name=\"scope\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"source\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"GenAiPluginInstructionDef\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"language\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

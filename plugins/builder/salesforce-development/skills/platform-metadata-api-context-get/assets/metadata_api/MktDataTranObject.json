@@ -1,0 +1,99 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types"
+  ],
+  "title": "MktDataTranObject - Metadata API",
+  "description": "An entity that is used to deliver (aka transport) information from the source to a target (target will be called a landing entity).This can be the schema of a file, API, Event, or other means of transporting data, such as SubscriberFile1.csv, or SubscriberCDCEvent.",
+  "file_information": ".mktDataTranObject",
+  "directory_location": "mktDataTranObjects",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "connector": {
+      "type": "string",
+      "description": "Data 360 connector name that allows you to connect the data source to Data 360.",
+      "required": true
+    },
+    "creationType": {
+      "type": "DefinitionCreationType",
+      "description": "Describe whether this object was added as the result of the Customer or as part of a Standard Taxonomy. Valid values available in API version 62.0 and later are: ADG Calculated_Insight CG_Audience Chunk Directory_Table External Semantic Transform Vector_Embedding",
+      "required": true
+    },
+    "dataSource": {
+      "type": "string",
+      "description": "Your reference to the data source from which the data originated (source of that data such as the name of a CRM Org. Example: MC Enterprise.",
+      "required": true
+    },
+    "dataSourceObject": {
+      "type": "string",
+      "description": "Represents the object name from where the data is sourced. Example: ecommerce-OrderItem.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The UI name for the Data Transport Object.",
+      "required": true
+    },
+    "objectCategory": {
+      "type": "string",
+      "description": "Reference to the Object Category. For Transport, these are Profile, Engagement, or Other.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "MktDataTranField": {
+      "creationType": {
+        "type": "DefinitionCreationType",
+        "description": "Optional: Was this object added as a result of the Customer, part of a Standard Taxonomy. Valid values available in API version 62.0 and later are: ADG Calculated_Insight CG_Audience Chunk Directory_Table External Semantic Transform Vector_Embedding"
+      },
+      "datatype": {
+        "type": "string",
+        "description": "Phone, currency, number, or other assigned type.",
+        "required": true
+      },
+      "dateFormat": {
+        "type": "string",
+        "description": "Optional: The Date format of date, time, date/time fields in this Transport field."
+      },
+      "externalName": {
+        "type": "string",
+        "description": "Optional. Name of the object in the external system (different from Developer Name)."
+      },
+      "isDataRequired": {
+        "type": "boolean",
+        "description": "Optional. If true, data is required for this field."
+      },
+      "length": {
+        "type": "int",
+        "description": "Optional. Length of a string column"
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "Optional? Field label."
+      },
+      "precision": {
+        "type": "int",
+        "description": "Optional. Used for currency and numeric accuracy."
+      },
+      "primaryIndexOrder": {
+        "type": "int",
+        "description": "Optional. If supplied, indicates this field is part of the primary key where the number value (starting at 1) indicates the order of attributes if this happens to be a compound primary key. Missing value means this field is not part of the primary key."
+      },
+      "scale": {
+        "type": "int",
+        "description": "Optional. Used for currency and numeric accuracy."
+      },
+      "sequence": {
+        "type": "int",
+        "description": "Optional. The sequence of this source schema."
+      }
+    }
+  }
+}

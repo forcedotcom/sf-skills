@@ -1,0 +1,40 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "HomePageLayout - Metadata API",
+  "description": "Represents the metadata associated with a home page layout. You can customize home page layouts and assign the layouts to users based on their user profile.",
+  "file_information": ".homePageLayout",
+  "directory_location": "homePageLayouts",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "fullName": {
+      "type": "string",
+      "description": "The name can only contain characters, letters, and the underscore (_) character. The name must start with a letter, and can’t end with an underscore or contain two consecutive underscore characters. Inherited from the Metadata component, this field isn’t defined in the WSDL for this component. It must be specified when creating, updating, or deleting. See create() to see an example of this field specified for a call."
+    },
+    "narrowComponents": {
+      "type": "string[]",
+      "description": "The list of elements in the narrow column on the left side of the home page."
+    },
+    "wideComponents": {
+      "type": "string[]",
+      "description": "The list of elements in the wide column on the right side of the home page."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"HomePageLayout\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"narrowComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"wideComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a home page layout. See Declarative Metadata Sample Definition and Declarative Metadata Sample Definition for related samples.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<HomePageLayout xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <narrowComponents>google</narrowComponents>\n</HomePageLayout>"
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "QuickAction - Metadata API",
+  "description": "Represents a specified create or update quick action for an object that then becomes available in the Chatter publisher. For example, you can create an action that, on the detail page of an account, allows a user to create a contact related to that account from the Chatter feed on that page. QuickAction can be created on objects that permit custom fields.",
+  "file_information": ".quickAction",
+  "directory_location": "quickActions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "canvas": {
+      "type": "string",
+      "description": "If the custom action invokes a Canvas app, the app name. Returns the fully qualified name of the Canvas app in the format <namespace>__<dev_name>, if the quick action type is Canvas; otherwise, returns null. This field is available in API version 29.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the action."
+    },
+    "fieldOverrides": {
+      "type": "FieldOverride[]",
+      "description": "The specific field that can be overridden within a QuickAction."
+    },
+    "flowDefinition": {
+      "type": "string",
+      "description": "If the custom action invokes a flow, this field represents the API name of the flow. Otherwise, this field is null."
+    },
+    "height": {
+      "type": "int",
+      "description": "If a custom action is created, this field represents the height in pixels of the action pane."
+    },
+    "icon": {
+      "type": "string",
+      "description": "The icon used to identify the action. API version 32.0 and later returns different icons than in earlier API versions."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Indicates whether this component is protected (true) or not (false). Protected components cannot be linked to or referenced by components created in the installing organization."
+    },
+    "label": {
+      "type": "string",
+      "description": "Identifies the action and displays to users. Also the default identifier used for the API and managed packages."
+    },
+    "lightningComponent": {
+      "type": "string",
+      "description": "If the custom action invokes a Lightning component, this field represents the fully qualified name of the component. Otherwise, this field is null. Available in API version 38.0 and later."
+    },
+    "optionsCreateFeedItem": {
+      "type": "boolean",
+      "description": "Indicates whether successful completion of the action creates a feed item (true) or not (false). Applies only to Create Record, Update Record, and Log a Call quick action types. Available in API version 36.0 and later.",
+      "required": true
+    },
+    "page": {
+      "type": "string",
+      "description": "If the custom action invokes a Visualforce page, this field identifies the page."
+    },
+    "quickActionLayout": {
+      "type": "QuickActionLayout",
+      "description": "The layout of fields on the action."
+    },
+    "quickActionParameter": {
+      "type": "QuickActionParameter[]",
+      "description": "The input and output of the quick action. Available in API version 63.0 and later."
+    },
+    "standardLabel": {
+      "type": "QuickActionLabel (enumeration of type string)",
+      "description": "Specifies the standard label to use for the action. The valid values are: AddRecord AddMember ChangeDueDate ChangePriority ChangeStatus CreateNew CreateNewRecordType (For example, a label with something like “Create New Idea”) Defer EditDescription EnrollInProgram (Available in API versions 46.0 and later only if the org has Health Cloud enabled) Escalate EscalateToRecord Forward (Available in API version 42.0 and later) LogACall LogANote ModifyAppointment (Available in API version 47.0 and later) New (A new record) NewChild (A new child record) NewChildRecordType NewRecordType (For example, a label with something like “New Idea”) OfferFeedback PatientDetails (Available in API version 57.0 and later if the org has Health Cloud enabled) PerformCount (Available in API version 63.0 and later.) Quick (A quick record) QuickRecordType RelocateAsset (Available in API version 63.0 and later) ReplaceAsset (Available in API version 63.0 and later) Reply (Available in API version 42.0 and later) ReplyAll (Available in API version 42.0 and later) RequestFeedback SendEmail (This value is available in API version 31.0 and later.) Update"
+    },
+    "successMessage": {
+      "type": "string",
+      "description": "The message that displays to the user upon successful completion of the action. Available in API version 36.0 and later."
+    },
+    "targetObject": {
+      "type": "string",
+      "description": "The object for which the action is created and performed. For example, you can create an action that, on the detail page of an account, allows a user to create a contact related to that account from the Chatter feed on that page. QuickAction can be created on objects that permit custom fields. In this case, Contact is the targetObject."
+    },
+    "targetParentField": {
+      "type": "string",
+      "description": "The parent object type of the action. Links the target object to the parent object. For example, use Account if the target object is Contact and the parent object is Account."
+    },
+    "targetRecordType": {
+      "type": "string",
+      "description": "Specifies which record type to create. Valid values are: Business Account Person Account Master"
+    },
+    "type": {
+      "type": "QuickActionType (enumeration of type string)",
+      "description": "The type of quick action. Valid values are: Canvas Create Flow (This value is available as a Beta in API version 41.0 and later) LightningComponent (This value is available in API version 38.0 and later.) LogACall Post SendEmail (This value is available in API version 31.0 and later.) SocialPost Update VisualforcePage",
+      "required": true
+    },
+    "width": {
+      "type": "int",
+      "description": "If a custom action is created, this field represents the width in pixels of the action pane."
+    }
+  },
+  "sub_types": {
+    "FieldOverride": {
+      "field": {
+        "type": "string",
+        "description": "The name of the field to allow predefined values on.",
+        "required": true
+      },
+      "formula": {
+        "type": "string",
+        "description": "Specifies the formula to use when setting a field’s predefined value. Supported for single-select picklists as of API version 43.0."
+      },
+      "literalValue": {
+        "type": "string",
+        "description": "Supported for picklists only. Specifies the literal value of the field defined from values in the picklist. Corresponds to the Specific Value field in the predefined value UI."
+      }
+    },
+    "QuickActionLayout": {
+      "layoutSectionStyle": {
+        "type": "LayoutSectionStyle (enumeration of type string)",
+        "description": "The type of layout structure used. The valid values are: TwoColumnsTopToBottom TwoColumnsLeftToRight OneColumn CustomLinks",
+        "required": true
+      },
+      "quickActionLayoutColumns": {
+        "type": "QuickActionLayoutColumn[]",
+        "description": "Specifies columns in a QuickActionLayout."
+      }
+    },
+    "QuickActionLayoutColumn": {
+      "quickActionLayoutItems": {
+        "type": "QuickActionLayoutItem []",
+        "description": "Specifies row items in a QuickActionLayoutColumn."
+      }
+    },
+    "QuickActionLayoutItem": {
+      "emptySpace": {
+        "type": "boolean",
+        "description": "Controls if this layout item is a blank space (true) or not (false)."
+      },
+      "field": {
+        "type": "string",
+        "description": "Represents a specific field in QuickActionLayoutItem."
+      },
+      "uiBehavior": {
+        "type": "UiBehavior (enumeration of type string)",
+        "description": "Specifies user input behavior for specific fields in QuickActionLayoutItem. The valid values are: Edit Required Readonly"
+      }
+    },
+    "QuickActionParameter": {
+      "name": {
+        "type": "string",
+        "description": "Name of the parameter.",
+        "required": true
+      },
+      "type": {
+        "type": "QuickActionParameterType (enumeration of type string)",
+        "description": "Input is the only valid value.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "Represents the value associated with the given parameter name."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"ActionSubtype\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ScreenAction\"/>\n    <xsd:enumeration value=\"Action\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"FieldOverride\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"formula\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"literalValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"LayoutSectionStyle\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TwoColumnsTopToBottom\"/>\n    <xsd:enumeration value=\"TwoColumnsLeftToRight\"/>\n    <xsd:enumeration value=\"OneColumn\"/>\n    <xsd:enumeration value=\"CustomLinks\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QuickAction\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"actionSubtype\" minOccurs=\"0\" type=\"tns:ActionSubtype\"/>\n        <xsd:element name=\"canvas\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"fieldOverrides\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldOverride\"/>\n        <xsd:element name=\"flowDefinition\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lightningComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"lightningWebComponent\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"optionsCreateFeedItem\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"page\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"quickActionLayout\" minOccurs=\"0\" type=\"tns:QuickActionLayout\"/>\n        <xsd:element name=\"quickActionSendEmailOptions\" minOccurs=\"0\" type=\"tns:QuickActionSendEmailOptions\"/>\n        <xsd:element name=\"standardLabel\" minOccurs=\"0\" type=\"tns:QuickActionLabel\"/>\n        <xsd:element name=\"successMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetObject\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetParentField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetRecordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" type=\"tns:QuickActionType\"/>\n        <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"QuickActionLabel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"LogACall\"/>\n    <xsd:enumeration value=\"LogANote\"/>\n    <xsd:enumeration value=\"New\"/>\n    <xsd:enumeration value=\"NewRecordType\"/>\n    <xsd:enumeration value=\"Update\"/>\n    <xsd:enumeration value=\"NewChild\"/>\n    <xsd:enumeration value=\"NewChildRecordType\"/>\n    <xsd:enumeration value=\"CreateNew\"/>\n    <xsd:enumeration value=\"CreateNewRecordType\"/>\n    <xsd:enumeration value=\"SendEmail\"/>\n    <xsd:enumeration value=\"QuickRecordType\"/>\n    <xsd:enumeration value=\"Quick\"/>\n    <xsd:enumeration value=\"EditDescription\"/>\n    <xsd:enumeration value=\"Defer\"/>\n    <xsd:enumeration value=\"ChangeDueDate\"/>\n    <xsd:enumeration value=\"ChangePriority\"/>\n    <xsd:enumeration value=\"ChangeStatus\"/>\n    <xsd:enumeration value=\"SocialPost\"/>\n    <xsd:enumeration value=\"Escalate\"/>\n    <xsd:enumeration value=\"EscalateToRecord\"/>\n    <xsd:enumeration value=\"OfferFeedback\"/>\n    <xsd:enumeration value=\"RequestFeedback\"/>\n    <xsd:enumeration value=\"AddRecord\"/>\n    <xsd:enumeration value=\"AddMember\"/>\n    <xsd:enumeration value=\"Reply\"/>\n    <xsd:enumeration value=\"ReplyAll\"/>\n    <xsd:enumeration value=\"Forward\"/>\n    <xsd:enumeration value=\"ScheduleAppointment\"/>\n    <xsd:enumeration value=\"EnrollInProgram\"/>\n    <xsd:enumeration value=\"ModifyAppointment\"/>\n    <xsd:enumeration value=\"PatientDetails\"/>\n    <xsd:enumeration value=\"AcceptBroadcast\"/>\n    <xsd:enumeration value=\"SelectCoverage\"/>\n    <xsd:enumeration value=\"SummarizeCase\"/>\n    <xsd:enumeration value=\"AssetHierarchy\"/>\n    <xsd:enumeration value=\"PartReturnRequest\"/>\n    <xsd:enumeration value=\"PerformCount\"/>\n    <xsd:enumeration value=\"ViewCoverage\"/>\n    <xsd:enumeration value=\"Quip\"/>\n    <xsd:enumeration value=\"SendConversationMessage\"/>\n    <xsd:enumeration value=\"NewQuote\"/>\n    <xsd:enumeration value=\"LaunchDataCapture\"/>\n    <xsd:enumeration value=\"RelocateAsset\"/>\n    <xsd:enumeration value=\"ReplaceAsset\"/>\n    <xsd:enumeration value=\"CloseCase\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"QuickActionLayout\">\n  <xsd:sequence>\n    <xsd:element name=\"layoutSectionStyle\" type=\"tns:LayoutSectionStyle\"/>\n    <xsd:element name=\"quickActionLayoutColumns\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:QuickActionLayoutColumn\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QuickActionLayoutColumn\">\n  <xsd:sequence>\n    <xsd:element name=\"quickActionLayoutItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:QuickActionLayoutItem\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QuickActionLayoutItem\">\n  <xsd:sequence>\n    <xsd:element name=\"emptySpace\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"field\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"uiBehavior\" minOccurs=\"0\" type=\"tns:UiBehavior\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"QuickActionSendEmailOptions\">\n  <xsd:sequence>\n    <xsd:element name=\"defaultEmailTemplateName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"ignoreDefaultEmailTemplateSubject\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"QuickActionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Create\"/>\n    <xsd:enumeration value=\"VisualforcePage\"/>\n    <xsd:enumeration value=\"Post\"/>\n    <xsd:enumeration value=\"SendEmail\"/>\n    <xsd:enumeration value=\"LogACall\"/>\n    <xsd:enumeration value=\"SocialPost\"/>\n    <xsd:enumeration value=\"Canvas\"/>\n    <xsd:enumeration value=\"Update\"/>\n    <xsd:enumeration value=\"LightningComponent\"/>\n    <xsd:enumeration value=\"LightningWebComponent\"/>\n    <xsd:enumeration value=\"Flow\"/>\n    <xsd:enumeration value=\"MobileExtension\"/>\n    <xsd:enumeration value=\"Quip\"/>\n    <xsd:enumeration value=\"SendConversationMessage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"UiBehavior\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Edit\"/>\n    <xsd:enumeration value=\"Required\"/>\n    <xsd:enumeration value=\"Readonly\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a QuickAction component:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<QuickAction xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>testActionDefinitionTypesCreateTask</description>\n    <label>testActionDefinitionTypesCreateTask</label>\n    <optionsCreateFeedItem>true</optionsCreateFeedItem>\n    <quickActionLayout>\n        <layoutSectionStyle>TwoColumnsLeftToRight</layoutSectionStyle>\n        <quickActionLayoutColumns>\n            <quickActionLayoutItems>\n                <emptySpace>false</emptySpace>\n                <field>OwnerId</field>\n                <uiBehavior>Required</uiBehavior>\n            </quickActionLayoutItems>\n            <quickActionLayoutItems>\n                <emptySpace>false</emptySpace>\n                <field>WhoId</field>\n                <uiBehavior>Edit</uiBehavior>\n            </quickActionLayoutItems>\n            <quickActionLayoutItems>\n                <emptySpace>false</emptySpace>\n                <field>WhatId</field>\n                <uiBehavior>Edit</uiBehavior>\n            </quickActionLayoutItems>\n            <quickActionLayoutItems>\n                <emptySpace>false</emptySpace>\n                <field>ActivityDate</field>\n                <uiBehavior>Edit</uiBehavior>\n            </quickActionLayoutItems>\n            <quickActionLayoutItems>\n                <emptySpace>false</emptySpace>\n                <field>Subject</field>\n                <uiBehavior>Edit</uiBehavior>\n            </quickActionLayoutItems>\n            <quickActionLayoutItems>\n                <emptySpace>false</emptySpace>\n                <field>Status</field>\n                <uiBehavior>Required</uiBehavior>\n            </quickActionLayoutItems>\n            <quickActionLayoutItems>\n                <emptySpace>false</emptySpace>\n                <field>Priority</field>\n                <uiBehavior>Required</uiBehavior>\n            </quickActionLayoutItems>\n        </quickActionLayoutColumns>\n        <quickActionLayoutColumns/>\n    </quickActionLayout>\n    <successMessage>This is a success message</successMessage>\n    <targetObject>Task</targetObject>\n    <targetParentField>What</targetParentField>\n    <type>Create</type>\n</QuickAction>"
+    }
+  ]
+}

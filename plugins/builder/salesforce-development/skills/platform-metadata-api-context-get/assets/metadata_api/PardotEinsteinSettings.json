@@ -1,0 +1,36 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PardotEinsteinSettings - Metadata API",
+  "description": "Represents PardotEinsteinSettings. Use these settings to learn what factors drive your campaign performance, and get the best possible engagement score for your prospects. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableCampaignInsight": {
+      "type": "boolean",
+      "description": "Indicates whether Einstein Campaign Insights is enabled (true) or not (false). Einstein Campaign Insights helps you understand what factors drive campaign performance. The default value is false."
+    },
+    "enableEngagementScore": {
+      "type": "boolean",
+      "description": "Indicates whether Einstein Behavior Scoring is enabled (true) or not (false). Einstein Behavior Scoring identifies prospects whose behavior suggests that they are ready to buy, and scores them based on Einstein’s engagement model. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"PardotEinsteinSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableCampaignInsight\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEngagementScore\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the PardotEinstein.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PardotEinsteinSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableCampaignInsight>true</enableCampaignInsight>\n\t<enableEngagementScore>true</enableEngagementScore>\n</PardotEinsteinSettings>"
+    }
+  ]
+}

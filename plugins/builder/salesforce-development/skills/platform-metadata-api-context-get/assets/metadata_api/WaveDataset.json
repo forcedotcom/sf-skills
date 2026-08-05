@@ -1,0 +1,50 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WaveDataset - Metadata API",
+  "description": "Represents the WaveDataset object in the Analytics application. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".wds",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "description": "The internal name of the application.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The dataset description that appears in the user interface."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The user interface label name of the dataset.",
+      "required": true
+    },
+    "templateAssetSourceName": {
+      "type": "string",
+      "description": "Links the dataset to the template used to create it. Null for assets not created from a template."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the dataset. Dataset types include Default, Live, StagedData, and Trended."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveDataset\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateAssetSourceName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveDataset component.",
+      "code": "<WaveDataset>\n    <application>SharedApp</application>\n    <description>description</description>\n    <masterLabel>datasetLabel</masterLabel>\n    <type>Default</type>\n</WaveDataset>"
+    }
+  ]
+}

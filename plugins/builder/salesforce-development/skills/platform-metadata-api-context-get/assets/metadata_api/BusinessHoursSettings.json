@@ -1,0 +1,175 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BusinessHoursSettings - Metadata API",
+  "description": "Represents the metadata used to manage settings for business hours and holidays in entitlements, entitlement templates, campaigns, and cases. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "businessHours": {
+      "type": "BusinessHoursEntry[]",
+      "description": "Represents the application of business hours to entitlements, entitlement templates, campaigns, and cases."
+    },
+    "holidays": {
+      "type": "Holidays[]",
+      "description": "Represents a holiday and its usage in businessHours."
+    }
+  },
+  "sub_types": {
+    "BusinessHoursEntry": {
+      "timeZoneId": {
+        "type": "string",
+        "description": "The time zone for the time that defines business hours."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the business hours. This name should be unique."
+      },
+      "active": {
+        "type": "string",
+        "description": "Indicates whether the business hours are active."
+      },
+      "default": {
+        "type": "string",
+        "description": "Indicates whether the business hours are used as the default business hours."
+      },
+      "mondayStartTime": {
+        "type": "string",
+        "description": "Start time for the business hours on Monday. Uses the format HH:mm:ss.SSSZ."
+      },
+      "mondayEndTime": {
+        "type": "string",
+        "description": "End time for the business hours on Monday. Uses the format HH:mm:ss.SSSZ. The value 00:00:00.000Z specifies midnight on Monday."
+      },
+      "tuesdayStartTime": {
+        "type": "string",
+        "description": "Start time for the business hours on Tuesday. Uses the format HH:mm:ss.SSSZ."
+      },
+      "tuesdayEndTime": {
+        "type": "string",
+        "description": "End time for the business hours on Tuesday. Uses the format HH:mm:ss.SSSZ. The value 00:00:00.000Z specifies midnight on Tuesday."
+      },
+      "wednesdayStartTime": {
+        "type": "string",
+        "description": "Start time for the business hours on Wednesday. Uses the format HH:mm:ss.SSSZ."
+      },
+      "wednesdayEndTime": {
+        "type": "string",
+        "description": "End time for the business hours on Wednesday. Uses the format HH:mm:ss.SSSZ. The value 00:00:00.000Z specifies midnight on Wednesday."
+      },
+      "thursdayStartTime": {
+        "type": "string",
+        "description": "Start time for the business hours on Thursday. Uses the format HH:mm:ss.SSSZ."
+      },
+      "thursdayEndTime": {
+        "type": "string",
+        "description": "End time for the business hours on Thursday. Uses the format HH:mm:ss.SSSZ. The value 00:00:00.000Z specifies midnight on Thursday."
+      },
+      "fridayStartTime": {
+        "type": "string",
+        "description": "Start time for the business hours on Friday. Uses the format HH:mm:ss.SSSZ."
+      },
+      "fridayEndTime": {
+        "type": "string",
+        "description": "End time for the business hours on Friday. Uses the format HH:mm:ss.SSSZ. The value 00:00:00.000Z specifies midnight on Friday."
+      },
+      "saturdayStartTime": {
+        "type": "string",
+        "description": "Start time for the business hours on Saturday. Uses the format HH:mm:ss.SSSZ."
+      },
+      "saturdayEndTime": {
+        "type": "string",
+        "description": "End time for the business hours on Saturday. Uses the format HH:mm:ss.SSSZ. The value 00:00:00.000Z specifies midnight on Saturday."
+      },
+      "sundayStartTime": {
+        "type": "string",
+        "description": "Start time for the business hours on Sunday. Uses the format HH:mm:ss.SSSZ."
+      },
+      "sundayEndTime": {
+        "type": "string",
+        "description": "End time for the business hours on Sunday. Uses the format HH:mm:ss.SSSZ. The value 00:00:00.000Z specifies midnight on Sunday."
+      }
+    },
+    "Holidays": {
+      "name": {
+        "type": "string",
+        "description": "Name of the holiday. This name does not have to be unique."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the holiday."
+      },
+      "isRecurring": {
+        "type": "string",
+        "description": "Indicates whether the holiday is recurring."
+      },
+      "activityDate": {
+        "type": "string",
+        "description": "The date of the holiday. Use for non-recurring holidays. Uses the format HH:mm:ss.SSSZ."
+      },
+      "recurrenceStartDate": {
+        "type": "string",
+        "description": "The date the holiday starts recurring. Uses the format yyyy-mm-dd."
+      },
+      "recurrenceEndDate": {
+        "type": "string",
+        "description": "The date the holiday stops recurring. Uses the format yyyy-mm-dd. Optional."
+      },
+      "startTime": {
+        "type": "string",
+        "description": "The start time on the date of the holiday. Uses the format HH:mm:ss.SSSZ. startTime and endTime must be both null or both not null. If they are both null, indicates the whole day."
+      },
+      "endTime": {
+        "type": "string",
+        "description": "The end time on the date of the holiday. Uses the format HH:mm:ss.SSSZ. startTime and endTime must be both null or both not null. If they are both null, indicates the whole day."
+      },
+      "recurrenceType": {
+        "type": "string",
+        "description": "The recurrence type of the holiday. Valid values are: RecursDaily, RecursEveryWeekday, RecursMonthly, RecursMonthlyNth, RecursWeekly, RecursYearly, RecursYealyNth."
+      },
+      "recurrenceInterval": {
+        "type": "string",
+        "description": "The interval of weeks, months, or years the holiday recurs."
+      },
+      "recurrenceDayOfWeek": {
+        "type": "string",
+        "description": "The day of week the holiday recurs. Valid values: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday."
+      },
+      "recurrenceDayOfMonth": {
+        "type": "string",
+        "description": "The day of month the holiday recurs. Valid values: integers 1-31."
+      },
+      "recurrenceInstance": {
+        "type": "string",
+        "description": "Valid values: First, Second, Third, Fourth, Last. Only used for recurrenceType RecursMonthlyNth and RecursYearlyNth. For example, if the recurenceInstance value is First, the holiday recurs on the first Monday of the month every 3 months."
+      },
+      "recurrenceMonthOfYear": {
+        "type": "string",
+        "description": "Valid values: January, February, March, April, May, June, July, August, September, October, November, December."
+      },
+      "businessHours": {
+        "type": "string",
+        "description": "The name of the business hours setting that applies to this holiday."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"BusinessHoursEntry\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"default\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"fridayEndTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"fridayStartTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"mondayEndTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"mondayStartTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"saturdayEndTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"saturdayStartTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"sundayEndTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"sundayStartTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"thursdayEndTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"thursdayStartTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"timeZoneId\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"tuesdayEndTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"tuesdayStartTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"wednesdayEndTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <xsd:element name=\"wednesdayStartTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"BusinessHoursSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"businessHours\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BusinessHoursEntry\"/>\n        <xsd:element name=\"holidays\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Holiday\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Holiday\">\n  <xsd:sequence>\n    <xsd:element name=\"activityDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n    <xsd:element name=\"businessHours\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"endTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n    <xsd:element name=\"isRecurring\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"recurrenceDayOfMonth\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"recurrenceDayOfWeek\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"recurrenceDayOfWeekMask\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"recurrenceEndDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n    <xsd:element name=\"recurrenceInstance\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"recurrenceInterval\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"recurrenceMonthOfYear\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"recurrenceStartDate\" minOccurs=\"0\" type=\"xsd:date\"/>\n    <xsd:element name=\"recurrenceType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"startTime\" minOccurs=\"0\" type=\"xsd:time\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example businesshours.settings metadata file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BusinessHoursSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <businessHours>\n        <active>true</active>\n        <default>true</default>\n        <fridayEndTime>00:00:00.000Z</fridayEndTime>\n        <fridayStartTime>00:00:00.000Z</fridayStartTime>\n        <mondayEndTime>00:00:00.000Z</mondayEndTime>\n        <mondayStartTime>00:00:00.000Z</mondayStartTime>\n        <name>Default</name>\n        <saturdayEndTime>00:00:00.000Z</saturdayEndTime>\n        <saturdayStartTime>00:00:00.000Z</saturdayStartTime>\n        <sundayEndTime>00:00:00.000Z</sundayEndTime>\n        <sundayStartTime>00:00:00.000Z</sundayStartTime>\n        <thursdayEndTime>00:00:00.000Z</thursdayEndTime>\n        <thursdayStartTime>00:00:00.000Z</thursdayStartTime>\n        <timeZoneId>America/Los_Angeles</timeZoneId>\n        <tuesdayEndTime>00:00:00.000Z</tuesdayEndTime>\n        <tuesdayStartTime>00:00:00.000Z</tuesdayStartTime>\n        <wednesdayEndTime>00:00:00.000Z</wednesdayEndTime>\n        <wednesdayStartTime>00:00:00.000Z</wednesdayStartTime>\n    </businessHours>\n    <businessHours>\n        <active>true</active>\n        <default>false</default>\n        <fridayEndTime>00:00:00.000Z</fridayEndTime>\n        <fridayStartTime>00:00:00.000Z</fridayStartTime>\n        <mondayEndTime>15:00:00.000Z</mondayEndTime>\n        <mondayStartTime>09:00:00.000Z</mondayStartTime>\n        <name>bh1</name>\n        <saturdayEndTime>00:00:00.000Z</saturdayEndTime>\n        <saturdayStartTime>00:00:00.000Z</saturdayStartTime>\n        <sundayEndTime>00:00:00.000Z</sundayEndTime>\n        <sundayStartTime>00:00:00.000Z</sundayStartTime>\n        <thursdayEndTime>17:00:00.000Z</thursdayEndTime>\n        <thursdayStartTime>10:50:00.000Z</thursdayStartTime>\n        <timeZoneId>America/Los_Angeles</timeZoneId>\n        <tuesdayEndTime>13:00:00.000Z</tuesdayEndTime>\n        <tuesdayStartTime>09:00:00.000Z</tuesdayStartTime>\n        <wednesdayEndTime>15:00:00.000Z</wednesdayEndTime>\n        <wednesdayStartTime>09:00:00.000Z</wednesdayStartTime>\n    </businessHours>\n    <holidays>\n        <activityDate>2013-09-02</activityDate>\n        <businessHours>Default</businessHours>\n        <businessHours>bh1</businessHours>\n        <isRecurring>false</isRecurring>\n        <name>Labor Day</name>\n    </holidays>\n    <holidays>\n        <businessHours>bh1</businessHours>\n        <isRecurring>true</isRecurring>\n        <name>Christmas</name>\n        <recurrenceDayOfMonth>25</recurrenceDayOfMonth>\n        <recurrenceMonthOfYear>December</recurrenceMonthOfYear>\n        <recurrenceStartDate>2013-12-25</recurrenceStartDate>\n        <recurrenceType>RecursYearly</recurrenceType>\n    </holidays>\n</BusinessHoursSettings>"
+    }
+  ]
+}

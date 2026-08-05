@@ -1,0 +1,43 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "GlobalPicklist - Metadata API",
+  "description": "Represents a global picklist, or the set of shared picklist values that custom picklist fields can use. In contrast, the custom picklist fields that are based on a global picklist are of type CustomValue. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".globalPicklist",
+  "directory_location": "globalPicklist",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "It’s useful to state the global picklist’s purpose, and which objects it’s intended for. Limit: 255 characters."
+    },
+    "globalPicklistValues": {
+      "type": "GlobalPicklistValue[]",
+      "description": "Requires at least one value. The list of values, or “picklist value set,” that’s defined for a global picklist. The picklist value set is inherited by any custom picklist field that’s based on that global picklist. Each value is of type GlobalPicklistValue. A global picklist can have up to 1,000 total values, including inactive values."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "A global picklist’s name, which is defined when the global picklist is created. Appears as Label in the user interface.",
+      "required": true
+    },
+    "sorted": {
+      "type": "string",
+      "description": "Indicates whether a global picklist’s value set is sorted in alphabetical order. By default this value is false."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This Territories.globalPicklist is an example of a GlobalPicklist component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<GlobalPicklist xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>Updated:This is a basic global picklist</description>\n    <globalPicklistValues>\n        <fullName>Northwest</fullName>\n        <default>false</default>\n    </globalPicklistValues>\n    <globalPicklistValues>\n        <fullName>Northeast</fullName>\n        <default>false</default>\n    </globalPicklistValues>\n    <globalPicklistValues>\n        <fullName>South</fullName>\n        <default>true</default>\n    </globalPicklistValues>\n    <globalPicklistValues>\n        <fullName>Southwest</fullName>\n        <default>false</default>\n        <isActive>false</isActive>\n    </globalPicklistValues>\n    <masterLabel>Territories</masterLabel>\n    <sorted>true</sorted>\n</GlobalPicklist>"
+    }
+  ]
+}

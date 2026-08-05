@@ -1,0 +1,112 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Territory2 - Metadata API",
+  "description": "Represents the metadata associated with a sales territory. This type extends the Metadata metadata type and inherits its fullName field. Available if Sales Territories has been enabled.",
+  "file_information": ".territory2",
+  "directory_location": "territories",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "accountAccessLevel": {
+      "type": "string",
+      "description": "Specifies whether users in this territory can access accounts that are assigned to this territory and are otherwise inaccessible. Valid values are: Read Edit All If your organization’s sharing model for accounts is Public Read/Write, valid values are only Edit and All. If no value is set for this field, this field value uses the default access level that is specified in Territory2Settings as permitted by the organization’s sharing settings."
+    },
+    "caseAccessLevel": {
+      "type": "string",
+      "description": "Specifies whether users in this territory can access cases that are assigned to this territory and are otherwise inaccessible. Valid values are: None Read Edit Specify no value if your organization’s sharing model for cases/opportunities is Public Read/Write. If no value is set for this field, this field value uses the default access level that is specified in Territory2Settings as permitted by the organization’s sharing settings."
+    },
+    "contactAccessLevel": {
+      "type": "string",
+      "description": "Specifies whether users in this territory can access contacts that are assigned to this territory and are otherwise inaccessible. Valid values are: None Read Edit Specify no value if your organization’s sharing model for contacts is Public Read/Write or Controlled By Parent."
+    },
+    "customFields": {
+      "type": "FieldValue",
+      "description": "Values for custom fields defined on the Territory2 object and used by this territory. Their metadata is captured separately in CustomObject. Note the following: Territory2 and Territory2Model objects do not handle values for Text Area (Long), Text Area (Rich), and text-encrypted custom fields. Fields are referenced using their API names. Compound field types like Location appear as their constituent column fields. For example, nnn_Latitude__s, nnn_Longitude__s where “nnn” is the field name and the suffixes are the geolocation components. Values of required custom fields are enforced during the deploy() operation."
+    },
+    "description": {
+      "type": "string",
+      "description": "A description of the territory."
+    },
+    "name": {
+      "type": "string",
+      "description": "The user interface label for the territory.",
+      "required": true
+    },
+    "objectAccessLevels": {
+      "type": "Territory2AccessLevel",
+      "description": "Represents the user access levels of an object associated to a territory. Available in API version 57.0 and later."
+    },
+    "opportunityAccessLevel": {
+      "type": "string",
+      "description": "Specifies whether users in this territory can access opportunities that are assigned to this territory and are otherwise inaccessible. Valid values are: None Read Edit Specify no value if your organization’s sharing model for cases/opportunities is Public Read/Write. If no value is set for this field, this field value uses the default access level that is specified in Territory2Settings as permitted by the organization’s sharing settings."
+    },
+    "parentTerritory": {
+      "type": "string",
+      "description": "The name of the territory’s parent. When you specify the parent territory, use the developer name. Do not use the “fully qualified” name. Custom fields with no values are retrieved with values of type: <value xsi:nil=\"true\"/>. You can also use <value xsi:nil=\"true\"/> syntax to remove existing values in custom fields."
+    },
+    "ruleAssociations": {
+      "type": "Territory2RuleAssociation[]",
+      "description": "Represents an object assignment rule and its association to a territory. Use the developer name of the rule."
+    },
+    "territory2Type": {
+      "type": "string",
+      "description": "The territory type that the territory belongs to.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "FieldValue": {
+      "name": {
+        "type": "string",
+        "description": "The user interface label for the territory.",
+        "required": true
+      },
+      "value": {
+        "type": "any type",
+        "description": "The value of the field, which can also be null. The field type is specified in the XML and depends on the field value."
+      }
+    },
+    "Territory2AccessLevel": {
+      "accessLevel": {
+        "type": "string",
+        "description": "Valid values are: Read Edit Transfer All If your organization’s sharing model for accounts is Public Read/Write, valid values are only Edit and All. If no value is set for this field, this field value uses the default access level that is specified in Territory2Settings as permitted by the organization’s sharing settings.",
+        "required": true
+      },
+      "objectType": {
+        "type": "string",
+        "description": "The type of object associated to the territory. For example, Lead.",
+        "required": true
+      }
+    },
+    "Territory2RuleAssociation": {
+      "inherited": {
+        "type": "boolean",
+        "description": "Indicates whether the rule is inherited from a parent territory (true) or local to the current territory (false). Rule inheritance flows from the parent territory where the rule is created to the rule’s descendent territories, if any, in the territory model hierarchy. A local rule is created within a single territory and affects that territory only.",
+        "required": true
+      },
+      "ruleName": {
+        "type": "string",
+        "description": "The name of a rule associated with the territory. It isn’t necessary to fully qualify ruleName because Metadata API assumes that the rule belongs to the same model as the territory.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FieldValue\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:anyType\" nillable=\"true\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accountAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"caseAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"contactAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"customFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FieldValue\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectAccessLevels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Territory2AccessLevel\"/>\n        <xsd:element name=\"opportunityAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentTerritory\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"ruleAssociations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:Territory2RuleAssociation\"/>\n        <xsd:element name=\"territory2Type\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2AccessLevel\">\n  <xsd:sequence>\n    <xsd:element name=\"accessLevel\" type=\"xsd:string\"/>\n    <xsd:element name=\"objectType\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Territory2RuleAssociation\">\n  <xsd:sequence>\n    <xsd:element name=\"inherited\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"ruleName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows the definition of a Territory2 component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Territory2 xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n    <name>USA</name>\n    <description>United States sales</description>\n    <accountAccessLevel>Edit</accountAccessLevel>\n    <opportunityAccessLevel>Read</opportunityAccessLevel>\n    <caseAccessLevel>Edit</caseAccessLevel>\n    <contactAccessLevel>Edit</contactAccessLevel>\n    <parentTerritory>Worldwide_Sales</parentTerritory>\n    <territory2Type>Geo</territory2Type>\n    <objectAccessLevels>\n        <accessLevel>All</accessLevel>\n        <objectType>Lead</objectType>\n    </objectAccessLevels>\n    <ruleAssociations>\n        <ruleName>AccRule1</name>\n        <inherited>True</inherited>\n     </ruleAssociations>\n     <ruleAssociations>\n        <ruleName>AccRule2</name>\n        <inherited>False</inherited>\n     </ruleAssociations>\n     <customFields>\n        <name>Activation_DateTime__c</name>\n        <value xsi:type=\"xsd:dateTime\">2014-07-16T05:05:00.000Z</value>\n     </customFields>\n     <customFields>\n        <name>AutoNumber__c</name>\n        <value xsi:type=\"xsd:string\">T# 000001</value>\n     </customFields>\n     <customFields>\n        <name>DeactivationDate__c</name>\n        <value xsi:type=\"xsd:date\">2016-07-12</value>\n     </customFields>\n     <customFields>\n        <name>External_Id__c</name>\n        <value xsi:type=\"xsd:string\">AB2345</value>\n     </customFields>\n     <customFields>\n        <name>ManagersPhone__c</name>\n        <value xsi:nil=\"true\"/>\n     </customFields>\n</Territory2>"
+    }
+  ]
+}

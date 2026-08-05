@@ -1,0 +1,121 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ContentAsset - Metadata API",
+  "description": "Represents the metadata for creating an asset file. Asset files enable a Salesforce file to be used for org setup and configuration purposes. This type extends the MetadataWithContent metadata type and inherits its content and fullName fields.",
+  "file_information": ".asset",
+  "directory_location": "contentassets",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "format": {
+      "type": "ContentAssetFormat (enumeration of type string)",
+      "description": "Describes the format of the asset file. Valid values are: Original—A single asset file version. ZippedVersions—Contains multiple versions of the asset file."
+    },
+    "isVisibleByExternalUsers": {
+      "type": "boolean",
+      "description": "Indicates whether unauthenticated users can see the asset file (true) or not (false). If not specified, the default value is false. This field is available in API version 44.0 and later."
+    },
+    "language": {
+      "type": "string",
+      "description": "The language of the asset file label.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for the asset file record, which displays in Setup.",
+      "required": true
+    },
+    "originNetwork": {
+      "type": "string",
+      "description": "For deploys, the name of the Experience Cloud site the file is assigned upon creation. For retrievals, the name of the Experience Cloud site the file is assigned to appears in the field value. If null, the file wasn’t assigned to an Experience Cloud site."
+    },
+    "relationships": {
+      "type": "ContentAssetRelationships",
+      "description": "The list of ContentAssetLinks that describe whether the asset file can be shared with the org."
+    },
+    "versions": {
+      "type": "ContentAssetVersions",
+      "description": "Captures basic information about the file version included the asset metadata. Typically the file has only one version.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "ContentAssetRelationships": {
+      "emailTemplate": {
+        "type": "ContentAsset[]",
+        "description": "An array of email templates the content asset is related to. This field is available in API version 51.0 and later."
+      },
+      "insightsApplication": {
+        "type": "ContentAsset[]",
+        "description": "An array of the insights applications that use the content asset. This field is available in API version 39.0 and later."
+      },
+      "network": {
+        "type": "ContentAsset[]",
+        "description": "An array of networks that use the content asset. This field is available in API version 39.0 and later."
+      },
+      "organization": {
+        "type": "ContentAsset[]",
+        "description": "Stores information about sharing the asset file with the org. Maps to ContentDocumentLink. This field is available in API version 39.0 and later."
+      },
+      "workspace": {
+        "type": "ContentAsset[]",
+        "description": "An array of workspaces and libraries that own or share the content asset. This field is available in API version 39.0 and later."
+      }
+    },
+    "ContentAssetLink": {
+      "access": {
+        "type": "ContentAssetAccess (enumeration of type string)",
+        "description": "The permission granted to the user of the shared file, determined by the permission the user already has. Valid values are: VIEWER COLLABORATOR INFERRED",
+        "required": true
+      },
+      "isManagingWorkspace": {
+        "type": "boolean",
+        "description": "Indicates whether the content asset resides in the workspace or not. When true, the content asset resides in the workspace. If not specified, the default value is false. This field is available in API version 39.0 and later."
+      },
+      "name": {
+        "type": "string",
+        "description": "Reserved for future use."
+      }
+    },
+    "ContentAssetVersions": {
+      "version": {
+        "type": "ContentAssetVersion[]",
+        "description": "A list of file versions for the asset."
+      }
+    },
+    "ContentAssetVersion": {
+      "number": {
+        "type": "string",
+        "description": "The version number. This field is based on, or sets, the ContentVersion.",
+        "required": true
+      },
+      "pathOnClient": {
+        "type": "string",
+        "description": "Describes the original filename of the file. This field maps to ContentVersion.PathOnClient. It provides the data for the ContentVersion Title field.",
+        "required": true
+      },
+      "zipEntry": {
+        "type": "string",
+        "description": "If the asset file has more than one version, format is ZippedVersions. In this case, zipEntry is the name of the file within the zip. If the asset file has only one version, this field is empty."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ContentAsset\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"format\" minOccurs=\"0\" type=\"tns:ContentAssetFormat\"/>\n        <xsd:element name=\"isVisibleByExternalUsers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"language\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"originNetwork\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"relationships\" minOccurs=\"0\" type=\"tns:ContentAssetRelationships\"/>\n        <xsd:element name=\"versions\" type=\"tns:ContentAssetVersions\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ContentAssetAccess\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"VIEWER\"/>\n    <xsd:enumeration value=\"COLLABORATOR\"/>\n    <xsd:enumeration value=\"INFERRED\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ContentAssetFormat\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Original\"/>\n    <xsd:enumeration value=\"ZippedVersions\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ContentAssetLink\">\n  <xsd:sequence>\n    <xsd:element name=\"access\" type=\"tns:ContentAssetAccess\"/>\n    <xsd:element name=\"isManagingWorkspace\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ContentAssetRelationships\">\n  <xsd:sequence>\n    <xsd:element name=\"emailTemplate\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContentAssetLink\"/>\n    <xsd:element name=\"insightsApplication\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContentAssetLink\"/>\n    <xsd:element name=\"network\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContentAssetLink\"/>\n    <xsd:element name=\"organization\" minOccurs=\"0\" type=\"tns:ContentAssetLink\"/>\n    <xsd:element name=\"workspace\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContentAssetLink\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ContentAssetVersion\">\n  <xsd:sequence>\n    <xsd:element name=\"number\" type=\"xsd:string\"/>\n    <xsd:element name=\"pathOnClient\" type=\"xsd:string\"/>\n    <xsd:element name=\"zipEntry\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ContentAssetVersions\">\n  <xsd:sequence>\n    <xsd:element name=\"version\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContentAssetVersion\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ContentAsset component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ContentAsset xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <masterLabel>some asset</masterLabel>\n    <relationships>\n        <organization>\n            <access>VIEWER</access>\n        </organization>\n    </relationships>\n    <versions>\n        <version>\n            <number>1</number>\n            <pathOnClient>some asset.txt</pathOnClient>\n        </version>\n    </versions>\n</ContentAsset>"
+    }
+  ]
+}

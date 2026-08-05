@@ -1,0 +1,48 @@
+#!/bin/bash
+# lsp-precheck — PreToolUse pre-deploy diagnostics gate for the SFDX Agent suite.
+# Thin wrapper that delegates to the bundled Node entrypoint (built from
+# node-src/src/precheck/main.ts). Runs Apex diagnostics on the .cls/.trigger
+# files a `sf project deploy` will push and emits a PreToolUse decision.
+#
+# FAIL-OPEN: any error allows the deploy. Mode via SFDX_LSP_DEPLOY_GATE
+# (off|warn|block, default warn). See docs/lsp-integration.md and issue #48.
+set -e
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export CLAUDE_PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$DIR/.." && pwd)}"
+
+# Self-gate on the command before paying a Node cold-start. Some Claude Code builds
+# ignore the plugin.json `if:` matcher and fire every PreToolUse Bash hook on every
+# command; capture stdin and fail open (allow) unless it's a `sf project deploy
+# start`/`validate` (the diagnostics-relevant forms this hook is scoped to in
+# plugin.json), then hand the SAME payload to the bundled entrypoint. The regex is
+# whitespace-flexible and case-insensitive, mirroring the matchers in sf_context.py:
+# a single-space substring test would miss `sf  project  deploy start` (skipping the
+# precheck). Quoted spans are stripped first so a merely QUOTED mention of the phrase
+# (e.g. `grep -r "sf project deploy start" .`) no longer over-fires the precheck and
+# pays a needless Node cold-start (#1030 adversarial review): sf-deploy-gate's matcher
+# is quote-aware, and this mirrors that intent cheaply. A real invocation never quotes
+# the deploy verb, so stripping quotes cannot hide a genuine deploy from diagnostics.
+# (An UNquoted arg mention like `echo sf project deploy start` can still over-fire —
+# that only costs a cold-start and the precheck itself fails open, so full command-
+# position parsing isn't worth porting into this thin wrapper.)
+INPUT="$(cat 2>/dev/null || true)"
+if ! command -v python3 &> /dev/null; then
+  echo "lsp-precheck: python3 not found on PATH — skipping deploy self-gate check and diagnostics, failing open (see README Requirements)" >&2
+  echo '{"continue": true}'
+  exit 0
+fi
+IS_DEPLOY=$(printf '%s' "$INPUT" | python3 -c "
+import json, re, sys
+try:
+    cmd = json.load(sys.stdin).get('tool_input', {}).get('command', '')
+except Exception:
+    cmd = ''
+q2, q1 = chr(34), chr(39)
+unquoted = re.sub(q2 + '[^' + q2 + ']*' + q2 + '|' + q1 + '[^' + q1 + ']*' + q1, ' ', cmd)
+print('true' if re.search(r'\bsf\s+project\s+deploy\s+(start|validate)\b', unquoted, re.IGNORECASE) else 'false')
+" 2>/dev/null || echo "false")
+if [ "$IS_DEPLOY" != "true" ]; then
+  echo '{"continue": true}'
+  exit 0
+fi
+printf '%s' "$INPUT" | node "$DIR/lsp-precheck.bundled.js" "$@"

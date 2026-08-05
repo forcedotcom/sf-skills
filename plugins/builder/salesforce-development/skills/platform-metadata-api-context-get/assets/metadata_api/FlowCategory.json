@@ -1,0 +1,51 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FlowCategory - Metadata API",
+  "description": "Represents a list of flows that are grouped by category. Flows aren’t added directly to a Lightning Bolt Solution. Instead, add the category the flows are in to the Lightning Bolt Solution. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".flowCategory",
+  "directory_location": "flowCategories",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of this flow category."
+    },
+    "flowCategoryItems": {
+      "type": "FlowCategoryItems[]",
+      "description": "The list of flows in this flow category."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for this flow category, which appears in Setup.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "FlowCategoryItems": {
+      "flow": {
+        "type": "string",
+        "description": "The name of the flow.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FlowCategory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"flowCategoryItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowCategoryItems\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"FlowCategoryItems\">\n  <xsd:sequence>\n    <xsd:element name=\"flow\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a FlowCategory component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FlowCategory xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <flowCategoryItems>\n        <flow>PausableFlow</flow>\n    </flowCategoryItems>\n    <flowCategoryItems>\n        <flow>BankingFlow</flow>\n    </flowCategoryItems>\n    <masterLabel>updateBenefits</masterLabel>\n        <description>All the update benefits.</description>\n</FlowCategory>"
+    }
+  ]
+}

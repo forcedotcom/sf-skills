@@ -1,0 +1,78 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EmbeddedServiceBranding - Metadata API",
+  "description": "Represents the branding for each Embedded Service deployment. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".EmbeddedServiceBranding",
+  "directory_location": "EmbeddedServiceBranding",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "contrastInvertedColor": {
+      "type": "string",
+      "description": "Accent branding color used in the embedded component, displayed as a hexadecimal value. Changes made to this field in the API aren’t reflected in the embedded component."
+    },
+    "contrastPrimaryColor": {
+      "type": "string",
+      "description": "Accent branding color used in the embedded component, displayed as a hexadecimal value."
+    },
+    "embeddedServiceConfig": {
+      "type": "string",
+      "description": "The Embedded Service configuration that this branding applies to.",
+      "required": true
+    },
+    "font": {
+      "type": "string",
+      "description": "Font used in the text of the embedded component."
+    },
+    "height": {
+      "type": "int",
+      "description": "Height of the embedded component. Available in API version 43.0 and later."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The name of the Embedded Service configuration node.",
+      "required": true
+    },
+    "navBarColor": {
+      "type": "string",
+      "description": "Color used for the header in the embedded component, displayed as a hexadecimal value."
+    },
+    "navBarTextColor": {
+      "type": "string",
+      "description": "Color used for the text and icons in the header in the embedded component, displayed as a hexadecimal value. Available in API version 49.0 and later."
+    },
+    "primaryColor": {
+      "type": "string",
+      "description": "Primary branding color used in the embedded component, displayed as a hexadecimal value."
+    },
+    "secondaryColor": {
+      "type": "string",
+      "description": "Secondary branding color used in the embedded component, displayed as a hexadecimal value."
+    },
+    "secondaryNavBarColor": {
+      "type": "string",
+      "description": "Secondary branding color used for the header in the embedded component, displayed as a hexadecimal value. It applies to the header in the chat feature when it's trying to reconnect because of lost internet connection. Available in API version 49.0 and later."
+    },
+    "width": {
+      "type": "int",
+      "description": "Width of the embedded component. Available in API version 43.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EmbeddedServiceBranding\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"contrastInvertedColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"contrastPrimaryColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"embeddedServiceConfig\" type=\"xsd:string\"/>\n        <xsd:element name=\"font\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"height\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"navBarColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"navBarTextColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"primaryColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"secondaryColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"secondaryNavBarColor\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"width\" minOccurs=\"0\" type=\"xsd:int\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EmbeddedServiceBranding file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EmbeddedServiceBranding xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <contrastInvertedColor>#ffffff</contrastInvertedColor>\n    <contrastPrimaryColor>#333333</contrastPrimaryColor>\n    <embeddedServiceConfig>EswConfig001</embeddedServiceConfig>\n    <font>Salesforce Sans</font>\n    <height>498</height>\n    <masterLabel>EmbeddedServiceBranding_Parent04IRM000000002a_16033cd2c16</masterLabel>\n    <navBarColor>#222222</navBarColor>\n    <primaryColor>#222222</primaryColor>\n    <secondaryColor>#005290</secondaryColor>\n    <width>320</width>\n</EmbeddedServiceBranding>"
+    }
+  ]
+}

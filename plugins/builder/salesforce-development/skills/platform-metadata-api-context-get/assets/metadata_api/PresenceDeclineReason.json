@@ -1,0 +1,32 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PresenceDeclineReason - Metadata API",
+  "description": "Represents an Omni-Channel decline reason that agents can select when declining work requests. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".presenceDeclineReason",
+  "directory_location": "presenceDeclineReasons",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "label": {
+      "type": "string",
+      "description": "The label for the decline reason."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PresenceDeclineReason\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PresenceDeclineReason component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PresenceDeclineReason xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>Incorrect queue</label>\n</PresenceDeclineReason>"
+    }
+  ]
+}

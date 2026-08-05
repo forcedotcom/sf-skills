@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LightningExperienceTheme - Metadata API",
+  "description": "Represents the details of a custom theme, including the BrandingSet. Themes enable admins to specify configurable attributes, such as three colors and five images. The colors and some of the images override SLDS token values and influence the generation of app.css.",
+  "file_information": ".lightningExperienceTheme",
+  "directory_location": "lightningExperienceThemes",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "defaultBrandingSet": {
+      "type": "string",
+      "description": "The ID of the BrandingSet properties associated with this LightningExperienceTheme.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The optional description text of this LightningExperienceTheme. Limited to 1000 characters."
+    },
+    "designSystemVersion": {
+      "type": "LightningDesignSystemVersion (enumeration of type string)",
+      "description": "Represents the version of Salesforce Lightning Design System (SLDS) on which the theme is built. Valid values are: SLDS_v1 SLDS_v2 If you don’t define a value, the default value is SLDS_v1. Available in API version 64.0 and later."
+    },
+    "isDarkModeEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether individual users can enable dark mode (true) or not (false) for this LightningExperienceTheme. The default value is false. Available for custom SLDS 2 themes in select editions. See Salesforce Cosmos Theme and SLDS 2 Availability. Available in API version 65.0 and later. Note: Dark mode is a pilot or beta service that is subject to the Beta Services Terms at Agreements - Salesforce.com or a written Unified Pilot Agreement if executed by Customer, and applicable terms in the Product Terms Directory. Use of this pilot or beta service is at the Customer's sole discretion."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The label for this LightningExperienceTheme, which displays in Setup. Limited to 70 characters.",
+      "required": true
+    },
+    "shouldOverrideLoadingImage": {
+      "type": "boolean",
+      "description": "If true, the LightningExperienceTheme overrides the splash screen image."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:simpleType name=\"LightningDesignSystemVersion\">\n  <xsd:restriction base=\"xsd:string\"/>\n</xsd:simpleType>\n<xsd:complexType name=\"LightningExperienceTheme\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"defaultBrandingSet\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"designSystemVersion\" minOccurs=\"0\" type=\"tns:LightningDesignSystemVersion\"/>\n        <xsd:element name=\"isDarkModeEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"shouldOverrideLoadingImage\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a LightningExperienceTheme component. See BrandingSet for an example of the BrandingSet component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LightningExperienceTheme xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <defaultBrandingSet>SummerCelebrationBrand</defaultBrandingSet>\n    <description>Theme for summer celebration week.</description>\n    <masterLabel>Summer Celebration</masterLabel>\n    <shouldOverrideLoadingImage>false</shouldOverrideLoadingImage>\n</LightningExperienceTheme>"
+    }
+  ]
+}

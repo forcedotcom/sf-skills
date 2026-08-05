@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ExternalAIModel - Metadata API",
+  "description": "Represents the state of a given model for an Einstein for Service feature, such as Einstein Reply Recommendations.",
+  "file_information": ".externalAIModel",
+  "directory_location": "externalAIModels",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "applicationSourceType": {
+      "type": "ApplicationSourceType (enumeration of type string)",
+      "description": "The target application for the configuration. Valid values are: REPLY_RECOMMENDATION— Einstein Reply Recommendations ARTICLE_RECOMMENDATION— Einstein Article Recommendations UTTERANCE_RECOMMENDATION— Einstein Bot utterances FAQ— Einstein Bot frequently asked questions",
+      "required": true
+    },
+    "externalModelKey": {
+      "type": "string",
+      "description": "Unique key which identifies external model corresponding this applicationType",
+      "required": true
+    },
+    "externalModelStatus": {
+      "type": "ExternalModelStatus (enumeration of type string)",
+      "description": "The current state of a given model. Valid values are: DISABLED ENABLED PAUSED",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "description": "A reference to the configuration.",
+      "required": true
+    },
+    "threshold": {
+      "type": "double",
+      "description": "Threshold override value for this model. Nillable."
+    },
+    "trainingJobName": {
+      "type": "string",
+      "description": "Training job path corresponding to the given model. Nillable."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ExternalAIModel component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ExternalAIModel xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <applicationSourceType>REPLY_RECOMMENDATION</applicationSourceType>\n    <externalModelKey>0f16dea6-b886-44df-9cfa-4d96b51d6594</externalModelKey>\n    <externalModelStatus>ENABLED</externalModelStatus>\n    <name>SR1601228426202</name>\n    <threshold>0.9</threshold>\n    <trainingJobName>TestJob</trainingJobName>\n</ExternalAIModel>"
+    }
+  ]
+}

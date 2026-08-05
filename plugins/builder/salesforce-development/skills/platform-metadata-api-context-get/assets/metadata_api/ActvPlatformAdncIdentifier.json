@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ActvPlatformAdncIdentifier - Metadata API",
+  "description": "Represents the information about the identifiers to be activated, such as Email, Phone, Mobile Advertiser (MAID) ID, and Over-the-top (OTT) ID.",
+  "file_information": ".actvPlatformAdncIdentifier",
+  "directory_location": "actvPlatformAdncIdentifiers",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "activationPlatform": {
+      "type": "string",
+      "required": true,
+      "description": "Reference to the ActivationPlatform metadata type.Reference to ActivationPlatform."
+    },
+    "identifierHashMethod": {
+      "type": "ActivationPlatformIdentifierHashMethod (enumeration of type string)",
+      "description": "The hash method of the identifier type. The supported hash method for Email and Phone is SHA256. The supported hash method for MAID and OTT is NONE."
+    },
+    "identifierType": {
+      "type": "ActivationPlatformIdentifierType (enumeration of type string)",
+      "required": true,
+      "description": "The type of identifier to be activated.Valid values are: EMAIL MAID OTT PHONE"
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the identifier."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an ActvPlatformAdncIdentifier component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ActvPlatformAdncIdentifier xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <activationPlatform>APlatform</activationPlatform>\n    <identifierHashMethod>SHA256</identifierHashMethod>\n    <identifierType>EMAIL</identifierType>\n    <masterLabel>EmailIdentifier</masterLabel>\n</ActvPlatformAdncIdentifier>"
+    }
+  ]
+}

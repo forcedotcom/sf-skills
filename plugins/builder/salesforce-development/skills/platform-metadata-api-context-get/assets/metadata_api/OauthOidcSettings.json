@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OauthOidcSettings - Metadata API",
+  "description": "Represents org settings for disabling OAuth OpenID Connect authorization flows.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "agentAuthLinking": {
+      "type": "boolean",
+      "description": "For internal use only."
+    },
+    "blockOAuthUnPwFlow": {
+      "type": "boolean",
+      "description": "Indicates whether the username-password flow is blocked (true) or not blocked (false). The default value is false."
+    },
+    "blockOAuthUsrAgtFlow": {
+      "type": "boolean",
+      "description": "Indicates whether the user-agent flow is blocked (true) or not blocked (false). The default value is false."
+    },
+    "enableHdlessFgtPswFlow": {
+      "type": "boolean",
+      "description": "For internal use only."
+    },
+    "isPkceRequired": {
+      "type": "boolean",
+      "description": "Indicates whether the OAuth 2.0 Proof Key for Code Exchange (PKCE) security extension is required for variations of the OAuth authorization code flow that access this org (true) or not (false). This setting requires PKCE for all supported variations of the authorization code flow, including the web server flow, the Authorization Code and Credentials Flow, and their derivatives. The default value is false. This field is available in API version 59.0 and later."
+    },
+    "oAuthCdCrdtFlowEnable": {
+      "type": "boolean",
+      "description": "Indicates whether the Authorization Code and Credentials Flow is enabled (true) or blocked (false). The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OauthOidcSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"agentAuthLinking\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"blockOAuthUnPwFlow\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"blockOAuthUsrAgtFlow\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isPkceRequired\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"oAuthCdCrdtFlowEnable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the OauthOidcSettings file.",
+      "code": "<?xml version=“1.0” encoding=“UTF-8\"?>\n<OauthOidcSettings xmlns=“http://soap.sforce.com/2006/04/metadata”>\n    <blockOAuthUnPwFlow>true</blockOAuthUnPwFlow>\n    <blockOAuthUsrAgtFlow>true</blockOAuthUsrAgtFlow>\n    <oAuthCdCrdtFlowEnable>false</oAuthCdCrdtFlowEnable>\n</OauthOidcSettings>"
+    }
+  ]
+}

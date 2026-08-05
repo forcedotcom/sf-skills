@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Group - Metadata API",
+  "description": "Represents a set of public groups, which can have users, roles, and other groups.",
+  "file_information": ".group",
+  "directory_location": "groups",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description for the group. Available in API version 62.0 and later."
+    },
+    "doesIncludeBosses": {
+      "type": "boolean",
+      "description": "Indicates whether records shared with users in this group are also shared with users higher in the role hierarchy (true) or not (false). This field corresponds to the Grant Access Using Hierarchies checkbox on the group’s detail page. Available in API version 18.0 and later.",
+      "required": true
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component. Corresponds to Group Name in the user interface."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the group. Corresponds to Label in the user interface.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Group\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"doesIncludeBosses\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a group.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Group xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <doesIncludeBosses>true</doesIncludeBosses>\n    <fullName>admin</fullName>\n    <name>test</name>\n</Group>"
+    }
+  ]
+}

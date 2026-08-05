@@ -1,0 +1,92 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ChatterSettings - Metadata API",
+  "description": "Represents an org’s settings for their Chatter instance when Chatter is enabled for the org. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "allowChatterGroupArchiving": {
+      "type": "boolean",
+      "description": "Indicates whether manual and automatic group archiving are allowed on all Chatter groups (true) or aren’t allowed (false). In Setup, allowChatterGroupArchiving equates to the Chatter setting Allow Group Archiving."
+    },
+    "allowRecordsInChatterGroup": {
+      "type": "boolean",
+      "description": "Indicates whether records can be associated with groups (true), or not (false). If groups already have record data, setting this field to false doesn’t delete it. In Setup, allowRecordsInChatterGroup equates to the Chatter setting Allow Records in Groups."
+    },
+    "allowSharingInChatterGroup": {
+      "type": "boolean",
+      "description": "Removed. The setting of this field has no effect on the org. Available in API version 47.0 only."
+    },
+    "enableApprovalRequest": {
+      "type": "boolean",
+      "description": "Indicates whether Approvals in Chatter are enabled for the org. When the value is true, users see approval requests as posts in Chatter feeds. Users can update their own Chatter feeds settings to opt out of receiving approval requests as Chatter posts. When the value is false, approval requests aren’t posted to Chatter. The default value is false. In Setup, enableApprovalRequest equates to the Chatter setting Allow Approvals."
+    },
+    "enableCaseFeedRelativeTimestamps": {
+      "type": "boolean",
+      "description": "In Case feeds, indicates whether to use relative (true) or absolute (false) date and time stamp formats on Case feed items. When the value is true, Case feed items show a relative timestamp (for example, 10m ago ). When the value is true, users can hover over the relative timestamp to see the absolute. When the value is false, Case feed items show an absolute timestamp (for example, January 7, 2020 at 12:15PM ). When you change this setting, all timestamps in Case feeds reflect that change. The default value is true. This field is available in API version 48.0 and later. In Setup, enableCaseFeedRelativeTimestamps equates to the Chatter setting Show relative timestamp."
+    },
+    "enableChatter": {
+      "type": "boolean",
+      "description": "Indicates whether Chatter is enabled for your org (true) or not (false)."
+    },
+    "enableChatterEmoticons": {
+      "type": "boolean",
+      "description": "Indicates whether the automatic conversion of text characters, such as :), into a graphic emoticon is allowed in Chatter (true) or isn’t allowed (false). In Setup, enableChatter equates to the Chatter setting Allow Emoticons."
+    },
+    "enableFeedEdit": {
+      "type": "boolean",
+      "description": "Indicates whether qualified users can edit feed posts and comments (true) or not (false). Qualified users include: The author of the post or comment The person who owns the record that was posted to or commented on The Chatter or site moderator In Setup, enableFeedEdit equates to the Chatter setting Allow users to edit posts and comments."
+    },
+    "enableFeedPinning": {
+      "type": "boolean",
+      "description": "Indicates whether to allow the pinning of posts in a feed (true) or not (false). When set to true : Authorized users can pin posts to the top of the feed. The feed supports up to three pinned posts. Pinned posts stay pinned until they’re unpinned. After post pinning is enabled, authorized users include admins and group owners and managers. Admins can also assign post pinning permission through permission sets or user profiles. In Setup, enableFeedPinning equates to the Chatter setting Allow post pinning."
+    },
+    "enableFeedsDraftPosts": {
+      "type": "boolean",
+      "description": "Indicates whether draft posts are automatically saved every seven seconds (true) or not (false). When set to true : Adds the My Drafts feed to the Chatter tab Saves draft posts automatically every seven seconds Makes drafts available in the My Drafts feed When the user posts the entry, the draft is automatically removed from the My Drafts feed. In Setup, enableFeedsDraftPosts equates to the Chatter setting Allow draft posts."
+    },
+    "enableFeedsRichText": {
+      "type": "boolean",
+      "description": "Indicates whether to use the Rich Text Editor in the Chatter Publisher (true) or not (false). The rich text editor supports text formats, inline images, hyperlinks, and, when enabled for the org, code snippets. In Setup, enableFeedsRichText equates to the Chatter setting Allow users to compose rich text posts."
+    },
+    "enableInviteCsnUsers": {
+      "type": "boolean",
+      "description": "Indicates whether a licensed user can invite customers to private groups that the licensed user owns or manages (true) or not (false). When the value is set to true, licensed users can invite customers who are from outside org email domains. Invited customers can see information only in the groups that they're invited to. They can interact only with members of those groups. In Setup, enableInviteCsnUsers equates to the Chatter setting Allow customer invitations."
+    },
+    "enableOutOfOfficeEnabledPref": {
+      "type": "boolean",
+      "description": "Indicates whether to add an Out of Office setting to a user profile page (true), or to omit it (false). When the value is set to true, this option adds a control to user profile pages for setting a personal out-of-office message. In Setup, enableOutOfOfficeEnabledPref equates to the Chatter setting Users can set Out of Office message."
+    },
+    "enableRichLinkPreviewsInFeed": {
+      "type": "boolean",
+      "description": "Indicates whether to convert links in posts into embedded videos, images, and article previews (true) or not to convert the links (false). In Setup, enableRichLinkPreviewsInFeed equates to the Chatter setting Allow Rich Link Previews."
+    },
+    "enableTodayRecsInFeed": {
+      "type": "boolean",
+      "description": "Indicates whether to allow the posting of recommendations for using the Salesforce Today app in users’ feeds (true) or not (false). When set to true, automatically posts recommendations for using the Salesforce Today app in users’ feeds. In Setup, enableTodayRecsInFeed equates to the Chatter setting Allow Today Recommendations."
+    },
+    "unlistedGroupsEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether to allow the creation of unlisted groups (true) or to prevent their creation (false). When the value is set to true, users can create unlisted groups. Unlisted groups don’t appear on the Groups list page. Membership in unlisted groups is by invitation only. In Setup, unlistedGroupsEnabled equates to the Chatter setting Enable Unlisted Groups."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ChatterSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"allowChatterGroupArchiving\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"allowRecordsInChatterGroup\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableApprovalRequest\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCaseFeedRelativeTimestamps\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatter\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableChatterEmoticons\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeedEdit\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeedPinning\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeedsDraftPosts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFeedsRichText\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableInviteCsnUsers\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOutOfOfficeEnabledPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRichLinkPreviewsInFeed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTodayRecsInFeed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"unlistedGroupsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a Chatter.settings file.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <ChatterSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <allowChatterGroupArchiving>true</allowChatterGroupArchiving>\n     <allowRecordsInChatterGroup>true</allowRecordsInChatterGroup>\n     <enableApprovalRequest>true</enableApprovalRequest>\n     <enableChatter>true</enableChatter>\n     <enableChatterEmoticons>true</enableChatterEmoticons>\n     <enableFeedEdit>true</enableFeedEdit>\n     <enableFeedsDraftPosts>false</enableFeedsDraftPosts>\n     <enableFeedsRichText>true</enableFeedsRichText>\n     <enableInviteCsnUsers>true</enableInviteCsnUsers>\n     <enableOutOfOfficeEnabledPref>false</enableOutOfOfficeEnabledPref>\n     <enableRichLinkPreviewsInFeed>true</enableRichLinkPreviewsInFeed>\n     <enableTodayRecsInFeed>true</enableTodayRecsInFeed>\n     <unlistedGroupsEnabled>true</unlistedGroupsEnabled>\n </ChatterSettings>"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MobileSecurityPolicy - Metadata API",
+  "description": "Represents a mobile app security policy on the Salesforce mobile app with Enhanced Mobile App Security enabled. For a full description of each policy, see Enable and Configure Mobile App Security Policies.",
+  "file_information": ".mobileSecurityPolicy",
+  "directory_location": "mobileSecurityPolicies",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "effectiveDate": {
+      "type": "dateTime",
+      "description": "The date that a mobile security policy is enforced."
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the mobile security policy is enabled. The default value is false, which means that the policy is disabled."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for MobileSecurityPolicy, which is defined when the MobileSecurityPolicy component is created."
+    },
+    "mobilePlatform": {
+      "type": "MobileSecurityMobilePlatform (enumeration of type string)",
+      "description": "The mobile operating system of the mobile security policy. Values are: Android iOS"
+    },
+    "mobileSecurityAssignment": {
+      "type": "string",
+      "description": "The name of the mobile security assignment associated with the mobile security policy. See MobileSecurityAssignment."
+    },
+    "ruleValue": {
+      "type": "string",
+      "required": true,
+      "description": "The value of the mobile security policy rule."
+    },
+    "ruleValueType": {
+      "type": "MobileSecurityPolicyRuleValueType (enumeration of type string)",
+      "required": true,
+      "description": "The type of mobile security policy rule. Values are: Boolean Text TextList"
+    },
+    "severityLevel": {
+      "type": "MobileSecurityPolicySeverityLevel (enumeration of type string)",
+      "required": true,
+      "description": "The severity level of a mobile security policy. Values are: Critical— Wipes app data and logs user out Error—Blocks access to the app until the issue is resolved, but doesn’t log user out Info— Blocks prohibited action or logs user action and informs user Warn—Notifies the user of the violation and recommends how to resolve, but user is able to continue using the app"
+    },
+    "type": {
+      "type": "MobileSecurityPolicyType (enumeration of type string)",
+      "required": true,
+      "description": "The type of mobile security policy. Values are: AllowedDeviceList Block3dTouch BlockCalendar BlockCamera BlockContacts BlockCustomKeyboard BlockFileBackup BlockMicrophone BlockOsSharing BlockedDeviceList BrowserUriScheme CheckBiometric DevicePasscode DisableUrlCaching JailbrokenDevice LogCertPin LogEmail LogPhonecall LogPolicyResult LogScreenshot LogTextmessage LogoutAfterRestart LogoutOnBiometricChange MalwareDetection ManInMiddle MaxOffline MaximumAppVersion MaximumOsVersion MinimumAppVersion MinimumOsVersion MinimumSecurityPatchVersion MininumAppVersion PhonecallUriScheme Screenshot"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"MobileSecurityMobilePlatform\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Android\"/>\n    <xsd:enumeration value=\"iOS\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"MobileSecurityPolicy\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"effectiveDate\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <xsd:element name=\"isEnabled\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"mobilePlatform\" minOccurs=\"0\" type=\"tns:MobileSecurityMobilePlatform\"/>\n        <xsd:element name=\"mobileSecurityAssignment\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"ruleValue\" type=\"xsd:string\"/>\n        <xsd:element name=\"ruleValueType\" type=\"tns:MobileSecurityPolicyRuleValueType\"/>\n        <xsd:element name=\"severityLevel\" type=\"tns:MobileSecurityPolicySeverityLevel\"/>\n        <xsd:element name=\"type\" type=\"tns:MobileSecurityPolicyType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"MobileSecurityPolicyRuleValueType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Boolean\"/>\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"TextList\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"MobileSecurityPolicySeverityLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Warn\"/>\n    <xsd:enumeration value=\"Error\"/>\n    <xsd:enumeration value=\"Critical\"/>\n    <xsd:enumeration value=\"Info\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"MobileSecurityPolicyType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"JailbrokenDevice\"/>\n    <xsd:enumeration value=\"MinimumOsVersion\"/>\n    <xsd:enumeration value=\"MaximumOsVersion\"/>\n    <xsd:enumeration value=\"MinimumSecurityPatchVersion\"/>\n    <xsd:enumeration value=\"ManInMiddle\"/>\n    <xsd:enumeration value=\"MinimumAppVersion\"/>\n    <xsd:enumeration value=\"MininumAppVersion\"/>\n    <xsd:enumeration value=\"MaximumAppVersion\"/>\n    <xsd:enumeration value=\"DevicePasscode\"/>\n    <xsd:enumeration value=\"BlockedDeviceList\"/>\n    <xsd:enumeration value=\"BlockCustomKeyboard\"/>\n    <xsd:enumeration value=\"BlockFileBackup\"/>\n    <xsd:enumeration value=\"Block3dTouch\"/>\n    <xsd:enumeration value=\"Screenshot\"/>\n    <xsd:enumeration value=\"LogScreenshot\"/>\n    <xsd:enumeration value=\"LogEmail\"/>\n    <xsd:enumeration value=\"LogPhonecall\"/>\n    <xsd:enumeration value=\"LogTextmessage\"/>\n    <xsd:enumeration value=\"LogPolicyResult\"/>\n    <xsd:enumeration value=\"BlockMicrophone\"/>\n    <xsd:enumeration value=\"BlockCamera\"/>\n    <xsd:enumeration value=\"MalwareDetection\"/>\n    <xsd:enumeration value=\"DisableUrlCaching\"/>\n    <xsd:enumeration value=\"MaxOffline\"/>\n    <xsd:enumeration value=\"LogoutAfterRestart\"/>\n    <xsd:enumeration value=\"LogoutOnBiometricChange\"/>\n    <xsd:enumeration value=\"BlockOsSharing\"/>\n    <xsd:enumeration value=\"BrowserUriScheme\"/>\n    <xsd:enumeration value=\"CheckBiometric\"/>\n    <xsd:enumeration value=\"BlockContacts\"/>\n    <xsd:enumeration value=\"BlockCalendar\"/>\n    <xsd:enumeration value=\"PhonecallUriScheme\"/>\n    <xsd:enumeration value=\"AllowedDeviceList\"/>\n    <xsd:enumeration value=\"LogCertPin\"/>\n    <xsd:enumeration value=\"BlockEditingMenu\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a MobileSecurityPolicy component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MobileSecurityPolicy xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <effectiveDate>2022-08-09T22:04:56.000Z</effectiveDate>\n    <isEnabled>true</isEnabled>\n    <isProtected>false</isProtected>\n    <masterLabel>MyMobileSecurityPolicy</masterLabel>\n    <mobileSecurityAssignment>MyMobileSecurityAssignment</mobileSecurityAssignment>\n    <ruleValue>true</ruleValue>\n    <ruleValueType>Boolean</ruleValueType>\n    <severityLevel>info</severityLevel>\n    <type>BlockCalendar</type>\n    <mobilePlatform>Android</mobilePlatform>\n</MobileSecurityPolicy>"
+    }
+  ]
+}

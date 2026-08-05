@@ -1,0 +1,45 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "FuelTypeSustnUom - Metadata API",
+  "description": "Represents a mapping between the custom fuel types and their corresponding unit of measure (UOM) values defined by a customer in an org.",
+  "file_information": ".fuelTypeSustnUom",
+  "directory_location": "fuelTypeSustnUoms",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "fuelType": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the fuel type that’s mapped to the unit of measure. Possible values are: AutogasLPG Biodiesel Biomass CityGas CompressedNaturalGasCNG Cooling Diesel Electricity Ethanol FuelOil Gasoline Heat HeavyOil ITElectricity JetFuel Kerosene LightOil LiquidNaturalGasLNG MobileDiesel NaturalGas Propane Refrigerant Steam"
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t impact the behavior of the metadata type. The default value is false."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "A user-friendly name for FuelTypeSustnUom, which is defined when the FuelTypeSustnUom is created."
+    },
+    "unitOfMeasure": {
+      "type": "string",
+      "required": true,
+      "description": "The unit of measure that’s mapped to the fuel type.Possible values are: 1000m3 GJ GWh Kiloliters Liters MJ MMBtu MWh Therms Tonnes UkGallons UsGallons ccf kG kWh kcal lbs longTons m3 shortTons"
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a FuelTypeSustnUom component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<FuelTypeSustnUom xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fuelType>FuelOil</fuelType>\n    <isProtected>false</isProtected>\n    <masterLabel>FuelOil_Liters</masterLabel>\n    <unitOfMeasure>Liters</unitOfMeasure>\n</FuelTypeSustnUom>"
+    }
+  ]
+}

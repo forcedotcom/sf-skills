@@ -1,0 +1,46 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WaveComponent - Metadata API",
+  "description": "Represents the WaveComponent object in the Analytics application. This type extends the MetadataWithContent metadata type and inherits its content and fullName fields.",
+  "file_information": ".wcomp",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "description": "The internal name of the application.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The component description that appears in the user interface."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The component name that appears in the user interface.",
+      "required": true
+    },
+    "templateAssetSourceName": {
+      "type": "string",
+      "description": "Links the component to the template used to create it. Null for assets not created from a template."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"MetadataWithContent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"content\" minOccurs=\"0\" type=\"xsd:base64Binary\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WaveComponent\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:WaveDashboard\">\n      <xsd:sequence/>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WaveDashboard\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:MetadataWithContent\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" type=\"xsd:string\"/>\n        <xsd:element name=\"dateVersion\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateAssetSourceName\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveComponent component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WaveComponent xmlns=\"http://soap.sforce.com/2006/04/metadata\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n    <content xsi:nil=\"true\"/>\n    <application>dev__app</application>\n    <masterLabel>Component1</masterLabel>\n    <description>Component description</description>\n</WaveComponent>"
+    }
+  ]
+}

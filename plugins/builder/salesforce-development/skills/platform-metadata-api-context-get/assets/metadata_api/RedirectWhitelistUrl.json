@@ -1,0 +1,26 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "RedirectWhitelistUrl - Metadata API",
+  "description": "Represents a trusted URL that’s excluded from redirection restrictions when the redirectionWarning or redirectBlockModeEnabled field on the SessionSettings Metadata type is set to true. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".redirectWhitelistUrl",
+  "directory_location": "redirectWhitelistUrls",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "url": {
+      "type": "string",
+      "description": "The trusted URL. These formats are accepted: example.com, *.example.com, and https://example.com. The host section of the URL can include an asterisk (*) as a wildcard. Otherwise, the URL cannot be malformed. Examples of malformed URLs that fail a syntax check are malformed^url.example.com, and https://{subdomain}.example.com. To add a URL based on parameters, build the URL before you add it to this Metadata Type.",
+      "required": true
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RedirectWhitelistUrl\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"url\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```"
+}

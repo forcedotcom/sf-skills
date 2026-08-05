@@ -1,0 +1,303 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ForecastingSettings - Metadata API",
+  "description": "Represents the Forecasts settings options. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "displayCurrency": {
+      "type": "DisplayCurrency (enumeration of type string)",
+      "description": "Removed. The currency for displaying forecasts; either the organization's corporate currency or each forecast owner's personal currency setting. The selected currency is the default used in forecasts and selected in setup. The selection must be one of the currencies enabled for use in the organization, and only one selection is allowed. The default is CORPORATE. The valid values are: CORPORATE PERSONAL Available in API version 28.0 to 46.0. In API version 47.0 and later, use defaultToPersonalCurrency."
+    },
+    "defaultToPersonalCurrency": {
+      "type": "boolean",
+      "description": "If multicurrency is enabled, this field indicates whether the user’s personal currency is used in forecasts. If true (default), the user’s personal currency is used. If false, the corporate currency is used. Available in API version 47.0 and later."
+    },
+    "enableForecasts": {
+      "type": "boolean",
+      "description": "Indicates if Salesforce Forecasting is enabled or not. Set to true to enable and false to disable the functionality. Disabling Forecasts can result in data loss. Refer to Salesforce Help before disabling any functionality."
+    },
+    "forecastingCategoryMappings": {
+      "type": "ForecastingCategoryMapping[]",
+      "description": "A list of mappings associating forecast types with forecast rollups. As of Spring ’20 and later, only standard users with the View All Forecasts or Allow Forecasting permission or delegated forecast manager status can access this subtype."
+    },
+    "forecastingDisplayedFamilySettings": {
+      "type": "ForecastingDisplayedFamilySettings[]",
+      "description": "The product families chosen to allow forecasting on in Lightning Experience. This field is available in API version 40.0 and later."
+    },
+    "forecastingSubmissionSettings": {
+      "type": "ForecastingSubmissionSettings",
+      "description": "The submission options for forecasts. Available in API version 62.0 and later."
+    },
+    "forecastingTypeSettings": {
+      "type": "ForecastingTypeSettings[]",
+      "description": "A list of forecast types. For field values, see ForecastingTypeSettings. The maximum number of forecast types is four."
+    },
+    "globalAdjustmentsSettings": {
+      "type": "AdjustmentsSettings[]",
+      "description": "The adjustment options for forecasts. Available in API version 53.0 and later. In API version 52.0 and earlier, use the adjustmentsSettings field on ForecastingTypeSettings."
+    },
+    "globalForecastRangeSettings": {
+      "type": "ForecastRangeSettings[]",
+      "description": "The default periods and range selections in forecasts. Available in API version 53.0 and later. In API version 52.0 and earlier, use the forecastRangeSettings field on ForecastingTypeSettings."
+    },
+    "globalQuotasSettings": {
+      "type": "QuotasSettings[]",
+      "description": "Enables or disables quotas in Salesforce Forecasting. Available in API version 53.0 and later. In API version 52.0 and earlier, use the quotasSettings field on ForecastingTypeSettings."
+    }
+  },
+  "sub_types": {
+    "ForecastingCategoryMapping": {
+      "forecastingItemCategoryApiName": {
+        "type": "string",
+        "description": "This field specifies the API name of the rollup type. The valid values are: openpipeline bestcaseforecast commitforecast pipelineonly bestcaseonly commitonly closedonly omittedonly customcategory",
+        "required": true
+      },
+      "weightedSourceCategories": {
+        "type": "WeightedSourceCategory[]",
+        "description": "This field can occur more than one time when specifying more than one forecast category to include in the rollup type. Each occurrence contains two subfields that specify a forecast category to include in the forecast rollup type and its weight. Some rollup types include more than one forecast category. This list shows the forecast categories that are included in each rollup type. Rollup: openpipeline, Forecast categories: pipeline, best case, commit Rollup: bestcaseforecast, Forecast categories: best case, commit, closed Rollup: commitforecast, Forecast categories: commit, closed Rollup: pipelineonly, Forecast categories: pipeline Rollup: bestcaseonly, Forecast categories: best case Rollup: commitonly, Forecast categories: commit Rollup: closedonly, Forecast categories: closed Rollup: omittedonly, Forecast categories: omitted Rollup: customcategory, Forecast categories: custom category"
+      }
+    },
+    "ForecastingDisplayedFamilySettings": {
+      "productFamily": {
+        "type": "string",
+        "description": "The product family available to forecast on. Each product family is unique."
+      }
+    },
+    "ForecastingSubmissionSettings": {
+      "allowForecastingSubmissions": {
+        "type": "boolean",
+        "description": "Indicates whether forecast submissions are allowed in forecasts.",
+        "required": true
+      }
+    },
+    "ForecastingTypeSettings": {
+      "active": {
+        "type": "boolean",
+        "description": "Indicates whether the forecast type specified in the name field is active. Setting the active field to false purges all forecasting data, adjustments, and quotas for the forecast type. When active is set to true, some values on the Forecasts tab don’t appear immediately. An in-process con appears to indicate that the values are being calculated.",
+        "required": true
+      },
+      "adjustmentsSettings": {
+        "type": "AdjustmentsSettings",
+        "description": "Removed. This field enables or disables the adjustments option in forecasts. In API version 53.0 and later, use globalAdjustmentsSettings."
+      },
+      "displayedCategoryApiNames": {
+        "type": "string",
+        "description": "This read-only field appears four times to specify the four forecast rollup categories displayed in the Forecasts tab, for either cumulative forecast rollups, or individual forecast category rollups. Always use the same 4 values for both displayedCategoryApiNames and forecastedCategoryApiNames. Valid values for organizations using cumulative forecast rollups: openpipeline bestcaseforecast commitforecast closedonly Valid values for organizations using individual forecast category rollups: pipelineonly bestcaseonly commitonly closedonly"
+      },
+      "forecastedCategoryApiNames": {
+        "type": "string",
+        "description": "This field appears four times to specify the four forecast rollup categories used in the organization, for either cumulative forecast rollups, or individual forecast category rollups. Valid values for organizations using cumulative forecast rollups: openpipeline bestcaseforecast commitforecast closedonly customcategory Valid values for organizations using individual forecast category rollups: pipelineonly bestcaseonly commitonly closedonly customcategory Changing from one set of four values to the other changes the organization setting for Enable Cumulative Forecast Rollups in Setup. If this field is omitted, the setting isn’t changed."
+      },
+      "forecastingDateType": {
+        "type": "ForecastingDateType (enumeration of type string)",
+        "description": "The date type that forecast amounts are based on. Valid values are: OpportunityCloseDate (default) ProductDate ScheduleDate OLIMeasureCloseDateOnly ProductDateOnly ScheduleDateOnly OpportunityCustomDate (Available in API version 57.0 and later) OLIMeasureOppCustomDateOnly (Available in API version 57.0 and later) Available in API version 42.0 and later. In API version 42.0 only, date types are read only and available only via API.",
+        "required": true
+      },
+      "forecastRangeSettings": {
+        "type": "ForecastRangeSettings",
+        "description": "Removed. The default periods and range selections in forecasts. In API version 53.0 and later, use globalForecastRangeSettings."
+      },
+      "hasProductFamily": {
+        "type": "boolean",
+        "description": "Indicates whether the forecasting type has product family forecasts enabled. Available in API version 41.0 and later.",
+        "required": true
+      },
+      "isAmount": {
+        "type": "boolean",
+        "description": "This read-only field indicates whether the forecast type is based on revenue amounts. The value of isAmount is always the opposite of the value of isQuantity.",
+        "required": true
+      },
+      "isAvailable": {
+        "type": "boolean",
+        "description": "This read-only field indicates whether the forecast type can currently be used in the organization. For example, the revenue splits forecast type can’t be used in an organization that doesn’t have Opportunity Splits enabled.",
+        "required": true
+      },
+      "isQuantity": {
+        "type": "boolean",
+        "description": "This read-only field indicates whether the forecast type is based on product quantities. The value of isQuantity is always the opposite of the value of isAmount.",
+        "required": true
+      },
+      "managerAdjustableCategoryApiNames": {
+        "type": "string",
+        "description": "This read-only field appears twice to specify the two forecast rollup categories that forecast managers can adjust in the organization for either cumulative forecast rollups or individual forecast category rollups. This field can only be used when the enableAdjustments field contains a value of true. If both the managerAdjustableCategoryApiNames and ownerAdjustableCategoryApiNames fields are being used, they must contain the same two values. Their values must also be consistent with the values of the enableAdjustments and enableOwnerAdjustments fields. Valid values for organizations using cumulative forecast rollups: bestcaseforecast commitforecast Valid values for organizations using individual forecast category rollups: bestcaseonly commitonly"
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "This read-only field indicates the UI label for the forecast type.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the forecast type. Each forecast type requires a specific string. Using ForecastingSettings, you can activate only these forecast types. LineItemQuantityProductDate: Product Families - Quantity by product date. Available in API versions 47.0 and later. LineItemQuantityScheduleDate: Product Families - Quantity by schedule date. Available in API versions 47.0 and later. LineItemRevenueProductDate: Product Families - Revenue by product date. Available in API versions 47.0 and later. LineItemRevenueScheduleDate: Product Families - Revenue by schedule date. Available in API versions 47.0 and later. OpportunityLineItemQuantity: Product Families - Quantity. OpportunityLineItemRevenue: Product Families - Revenue. OpportunityOverlayRevenue: Opportunity Overlay Splits - Revenue. OpportunityQuantity: Opportunities - Quantity. OpportunityQuantityProductDate: Opportunities - Quantity by product date. Available in API versions 43.0 and later. OpportunityQuantityScheduleDate: Opportunities - Quantity by schedule date. Available in API versions 43.0 and later. OpportunityRevenue: Opportunities - Revenue. OpportunityRevenueProductDate: Opportunities - Revenue by product date. Available in API versions 43.0 and later. OpportunityRevenueScheduleDate: Opportunities - Revenue by schedule date. Available in API versions 43.0 and later. OpportunitySplitRevenue: Opportunity Revenue Splits - Revenue. Territory_Model_NameN: Territories, where Territory_Model_Name is the name of your active territory model in the API. Territory_Model_Name can be followed by N, an auto-generated number that distinguishes between territory forecast types. Available in API versions 44.0 and later. Territory_Model_NameN_ProductFamily: Deprecated. Territories - Product Families, where Territory_Model_Name is the name of your active territory model in the API and can be followed by N, an auto-generated number that distinguishes between territory forecast types. Available in API versions 45.0 and 46.0. For territory models created in API version 47.0 and later, Territory_Model_NameN is used. The name of a custom opportunity split type that has been enabled as a forecast type. Custom split types are based on currency fields, which can contain revenue amounts only. To create and manage other forecast types in API version 52.0 and later, use ForecastingSourceDefinition, ForecastingType, and ForecastingTypeSource.",
+        "required": true
+      },
+      "opportunityListFieldsLabelMappings": {
+        "type": "OpportunityListFieldsLabelMapping",
+        "description": "A read-only list of the API names and UI labels for all fields on the Opportunity object."
+      },
+      "opportunityListFieldsSelectedSettings": {
+        "type": "OpportunityListFieldsSelectedSettings",
+        "description": "The fields selected to appear in the opportunity pane of the forecast page for the forecast type. One of the selected fields must be Opportunity Name. You can select up to 15 fields.",
+        "required": true
+      },
+      "opportunityListFieldsUnselectedSettings": {
+        "type": "OpportunityListFieldsUnselectedSettings",
+        "description": "The fields not selected to appear in the opportunity pane of the forecast page for the forecast type.",
+        "required": true
+      },
+      "opportunitySplitName": {
+        "type": "string",
+        "description": "Indicates whether the forecasting type has a split type, and if so, the name of the split type. Available in API version 41.0 and later."
+      },
+      "ownerAdjustableCategoryApiNames": {
+        "type": "string",
+        "description": "This read-only field appears twice to specify the two forecast rollup categories that forecast owners can adjust in the organization, for either cumulative forecast rollups, or individual forecast category rollups. This field can only be used when the enableOwnerAdjustments field contains a value of true. If both the managerAdjustableCategoryApiNames and ownerAdjustableCategoryApiNames fields are being used, they must contain the same two values. Their values must also be consistent with the values of the enableAdjustments and enableOwnerAdjustments fields. Valid values for organizations using cumulative forecast rollups: bestcaseforecast commitforecast Valid values for organizations using individual forecast category rollups: bestcaseonly commitonly"
+      },
+      "quotasSettings": {
+        "type": "QuotasSettings",
+        "description": "Removed. This field enables or disables the quota option in forecasts. In API version 53.0 and later, use globalQuotasSettings."
+      },
+      "territory2ModelName": {
+        "type": "string",
+        "description": "Indicates whether the forecasting type has a Territory2 model, and if so, the name of the Territory2 model. Available in API version 41.0 and later."
+      }
+    },
+    "AdjustmentsSettings": {
+      "allowExpandedColumns": {
+        "type": "boolean",
+        "description": "Set to true to show separate columns on the forecasts page for each adjustable forecast category and false to show adjustments when a user hovers over a forecast category. All forecast types must contain the same allowExpandedColumns value.",
+        "required": true
+      },
+      "enableAdjustments": {
+        "type": "boolean",
+        "description": "Set to true to enable manager adjustments and false to disable them. All forecast types must contain the same enableAdjustments value. Disabling adjustments results in adjustment data being purged.",
+        "required": true
+      },
+      "enableOwnerAdjustments": {
+        "type": "boolean",
+        "description": "Set to true to enable owner adjustments for forecasts and false to disable them. All forecast types must contain the same enableOwnerAdjustments value. Disabling adjustments results in forecast adjustment data being purged.",
+        "required": true
+      }
+    },
+    "ForecastingGroup": {
+      "developerName": {
+        "type": "string",
+        "description": "The API name that identifies the forecast group.",
+        "required": true
+      },
+      "forecastingGroupItems": {
+        "type": "ForecastingGroupItem",
+        "description": "The picklist values for the forecast type. Possible values include the picklist values defined in groupField.",
+        "required": true
+      },
+      "groupField": {
+        "type": "string",
+        "description": "The field name of the custom picklist used as a group. Possible values include custom, single-selection picklists available in sourceObject.",
+        "required": true
+      },
+      "masterLabel": {
+        "type": "string",
+        "description": "This read-only field indicates the UI label for the forecast group.",
+        "required": true
+      },
+      "sourceObject": {
+        "type": "string",
+        "description": "The source object for the picklist for the forecast group. Possible values include: Opportunity OpportunityLineItem Product2",
+        "required": true
+      }
+    },
+    "ForecastingGroupItem": {
+      "displayPosition": {
+        "type": "int",
+        "description": "Indicates the display order of the values on the forecasts page.",
+        "required": true
+      },
+      "sourceAPIValue": {
+        "type": "string",
+        "description": "The API name is that’s derived from the group value.",
+        "required": true
+      }
+    },
+    "ForecastRangeSettings": {
+      "beginning": {
+        "type": "int",
+        "description": "Indicates the beginning month or quarter to display by default.",
+        "required": true
+      },
+      "displaying": {
+        "type": "int",
+        "description": "Indicates the number of months or quarters to display by default. The maximum number of months is 12 and quarters is 8.",
+        "required": true
+      },
+      "periodType": {
+        "type": "PeriodTypes (enumeration of type string)",
+        "description": "Indicates what type of period to use. Valid values are: Month Quarter Week Year",
+        "required": true
+      }
+    },
+    "OpportunityListFieldsLabelMapping": {
+      "field": {
+        "type": "string",
+        "description": "The API name of the Opportunity field.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "The UI label of the Opportunity field.",
+        "required": true
+      }
+    },
+    "OpportunityListFieldsSelectedSettings": {
+      "field": {
+        "type": "string",
+        "description": "Specifies names of fields to display in the opportunity pane."
+      }
+    },
+    "OpportunityListFieldsUnselectedSettings": {
+      "field": {
+        "type": "string",
+        "description": "Specifies names of fields not displayed in the opportunity pane."
+      }
+    },
+    "QuotasSettings": {
+      "showQuotas": {
+        "type": "boolean",
+        "description": "Set to true to enable quotas. All forecast types must contain the same showQuotas field value.",
+        "required": true
+      }
+    },
+    "WeightedSourceCategory": {
+      "sourceCategoryApiName": {
+        "type": "string",
+        "description": "Specifies the API name of a forecast category to include in the rollup type. The valid values are. pipeline best case commit closed omitted customcategory",
+        "required": true
+      },
+      "weight": {
+        "type": "double",
+        "description": "Specifies the weight given to the forecast category when calculating the forecast for the rollup type. The only supported value is 1.0.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AdjustmentsSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"allowExpandedColumns\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableAdjustments\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"enableOwnerAdjustments\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastRangeSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"beginning\" type=\"xsd:int\"/>\n    <xsd:element name=\"displaying\" type=\"xsd:int\"/>\n    <xsd:element name=\"periodType\" type=\"tns:PeriodTypes\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastingCategoryMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"forecastingItemCategoryApiName\" type=\"xsd:string\"/>\n    <xsd:element name=\"weightedSourceCategories\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WeightedSourceCategory\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ForecastingDateType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"OpportunityCloseDate\"/>\n    <xsd:enumeration value=\"ProductDate\"/>\n    <xsd:enumeration value=\"ScheduleDate\"/>\n    <xsd:enumeration value=\"OLIMeasureCloseDateOnly\"/>\n    <xsd:enumeration value=\"ProductDateOnly\"/>\n    <xsd:enumeration value=\"ScheduleDateOnly\"/>\n    <xsd:enumeration value=\"OpportunityCustomDate\"/>\n    <xsd:enumeration value=\"OLIMeasureOppCustomDateOnly\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ForecastingDisplayedFamilySettings\">\n  <xsd:sequence>\n    <xsd:element name=\"productFamily\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastingSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"defaultToPersonalCurrency\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableForecasts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"forecastingCategoryMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ForecastingCategoryMapping\"/>\n        <xsd:element name=\"forecastingDisplayedFamilySettings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ForecastingDisplayedFamilySettings\"/>\n        <xsd:element name=\"forecastingSubmissionSettings\" type=\"tns:ForecastingSubmissionSettings\"/>\n        <xsd:element name=\"forecastingTypeSettings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ForecastingTypeSettings\"/>\n        <xsd:element name=\"globalAdjustmentsSettings\" type=\"tns:AdjustmentsSettings\"/>\n        <xsd:element name=\"globalForecastRangeSettings\" type=\"tns:ForecastRangeSettings\"/>\n        <xsd:element name=\"globalQuotasSettings\" type=\"tns:QuotasSettings\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastingSubmissionSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"allowForecastingSubmissions\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ForecastingTypeSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"displayedCategoryApiNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"forecastedCategoryApiNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"forecastingDateType\" type=\"tns:ForecastingDateType\"/>\n    <xsd:element name=\"hasProductFamily\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isAmount\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isAvailable\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isQuantity\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"managerAdjustableCategoryApiNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"opportunityListFieldsLabelMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:OpportunityListFieldsLabelMapping\"/>\n    <xsd:element name=\"opportunityListFieldsSelectedSettings\" type=\"tns:OpportunityListFieldsSelectedSettings\"/>\n    <xsd:element name=\"opportunityListFieldsUnselectedSettings\" type=\"tns:OpportunityListFieldsUnselectedSettings\"/>\n    <xsd:element name=\"opportunitySplitName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"ownerAdjustableCategoryApiNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"territory2ModelName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OpportunityListFieldsLabelMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OpportunityListFieldsSelectedSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"OpportunityListFieldsUnselectedSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PeriodTypes\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Month\"/>\n    <xsd:enumeration value=\"Quarter\"/>\n    <xsd:enumeration value=\"Week\"/>\n    <xsd:enumeration value=\"Year\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"QuotasSettings\">\n  <xsd:sequence>\n    <xsd:element name=\"showQuotas\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WeightedSourceCategory\">\n  <xsd:sequence>\n    <xsd:element name=\"sourceCategoryApiName\" type=\"xsd:string\"/>\n    <xsd:element name=\"weight\" type=\"xsd:double\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ForecastingSettings component that enables the Opportunity-Revenue forecast type, adjustments, owner adjustments, and quotas, and changes forecast range settings:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ForecastingSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <defaultToPersonalCurrency>false</defaultToPersonalCurrency>\n    <enableForecasts>true</enableForecasts>    \n    <globalAdjustmentsSettings>\n        <enableAdjustments>true</enableAdjustments>\n        <enableOwnerAdjustments>true</enableOwnerAdjustments>\n    </globalAdjustmentsSettings>\n    <globalForecastRangeSettings>\n        <beginning>1</beginning>\n        <displaying>6</displaying>\n        <periodType>Month</periodType>\n    </globalForecastRangeSettings>\n    <globalQuotasSettings>\n        <showQuotas>true</showQuotas>\n    </globalQuotasSettings>\n    <forecastingCategoryMappings>\n        <forecastingItemCategoryApiName>commitonly</forecastingItemCategoryApiName>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>commit</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n    </forecastingCategoryMappings>\n    <forecastingCategoryMappings>\n        <forecastingItemCategoryApiName>closedonly</forecastingItemCategoryApiName>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>closed</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n    </forecastingCategoryMappings>\n    <forecastingCategoryMappings>\n        <forecastingItemCategoryApiName>openpipeline</forecastingItemCategoryApiName>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>most likely</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>commit</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>pipeline</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>best case</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n    </forecastingCategoryMappings>\n    <forecastingCategoryMappings>\n        <forecastingItemCategoryApiName>omittedonly</forecastingItemCategoryApiName>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>omitted</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n    </forecastingCategoryMappings>\n    <forecastingCategoryMappings>\n        <forecastingItemCategoryApiName>bestcaseforecast</forecastingItemCategoryApiName>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>most likely</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>commit</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>closed</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>best case</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n    </forecastingCategoryMappings>\n    <forecastingCategoryMappings>\n        <forecastingItemCategoryApiName>pipelineonly</forecastingItemCategoryApiName>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>pipeline</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n    </forecastingCategoryMappings>\n    <forecastingCategoryMappings>\n        <forecastingItemCategoryApiName>commitforecast</forecastingItemCategoryApiName>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>closed</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>commit</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n    </forecastingCategoryMappings>\n    <forecastingCategoryMappings>\n        <forecastingItemCategoryApiName>bestcaseonly</forecastingItemCategoryApiName>\n        <weightedSourceCategories>\n            <sourceCategoryApiName>best case</sourceCategoryApiName>\n            <weight>1.0</weight>\n        </weightedSourceCategories>\n    </forecastingCategoryMappings>\n    <forecastingTypeSettings>\n\t<name>OpportunityRevenue</name>\n        <active>true</active>    \n        <hasProductFamily>false</hasProductFamily>\n        <isAmount>true</isAmount>\n        <isAvailable>true</isAvailable>\n        <isQuantity>false</isQuantity>\n        <managerAdjustableCategoryApiNames>commitonly</managerAdjustableCategoryApiNames>\n        <managerAdjustableCategoryApiNames>bestcaseonly</managerAdjustableCategoryApiNames>\n        <masterLabel>Opportunities</masterLabel>\n\t<displayedCategoryApiNames>closedonly</displayedCategoryApiNames>\n        <displayedCategoryApiNames>commitonly</displayedCategoryApiNames>\n        <displayedCategoryApiNames>bestcaseonly</displayedCategoryApiNames>\n        <displayedCategoryApiNames>pipelineonly</displayedCategoryApiNames>\n        <forecastedCategoryApiNames>commitonly</forecastedCategoryApiNames>\n        <forecastedCategoryApiNames>closedonly</forecastedCategoryApiNames>\n        <forecastedCategoryApiNames>pipelineonly</forecastedCategoryApiNames>\n        <forecastedCategoryApiNames>bestcaseonly</forecastedCategoryApiNames>\n        <forecastingDateType>OpportunityCloseDate</forecastingDateType>\n        <opportunityListFieldsSelectedSettings>\n            <field>OPPORTUNITY.NAME</field>\n        </opportunityListFieldsSelectedSettings>\n    </forecastingTypeSettings>\n</ForecastingSettings>"
+    }
+  ]
+}

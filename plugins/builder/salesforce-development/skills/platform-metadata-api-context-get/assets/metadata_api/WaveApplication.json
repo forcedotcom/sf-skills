@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WaveApplication - Metadata API",
+  "description": "Represents the Analytics application. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".wapp",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "assetIcon": {
+      "type": "string",
+      "description": "The icon that represents the Analytics application."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description that appears in the user interface."
+    },
+    "folder": {
+      "type": "string",
+      "description": "The internal api name of the folder or application."
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "The user interface label name of the folder or application."
+    },
+    "shares": {
+      "type": "FolderShare",
+      "description": "The folder sharing rules."
+    },
+    "templateOrigin": {
+      "type": "string",
+      "description": "The internal (unique) name of the template used to create the application. This field is blank if the application wasn’t created from a template."
+    },
+    "templateVersion": {
+      "type": "string",
+      "description": "The version assigned to the application template by the template's creator. This field is blank if the application wasn’t created from a template."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"FolderShare\">\n  <xsd:sequence>\n    <xsd:element name=\"accessLevel\" type=\"tns:FolderShareAccessLevel\"/>\n    <xsd:element name=\"sharedTo\" type=\"xsd:string\"/>\n    <xsd:element name=\"sharedToType\" type=\"tns:FolderSharedToType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"FolderShareAccessLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"View\"/>\n    <xsd:enumeration value=\"EditAllContents\"/>\n    <xsd:enumeration value=\"Manage\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"FolderSharedToType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Group\"/>\n    <xsd:enumeration value=\"Role\"/>\n    <xsd:enumeration value=\"RoleAndSubordinates\"/>\n    <xsd:enumeration value=\"RoleAndSubordinatesInternal\"/>\n    <xsd:enumeration value=\"Manager\"/>\n    <xsd:enumeration value=\"ManagerAndSubordinatesInternal\"/>\n    <xsd:enumeration value=\"Organization\"/>\n    <xsd:enumeration value=\"Territory\"/>\n    <xsd:enumeration value=\"TerritoryAndSubordinates\"/>\n    <xsd:enumeration value=\"AllPrmUsers\"/>\n    <xsd:enumeration value=\"User\"/>\n    <xsd:enumeration value=\"PartnerUser\"/>\n    <xsd:enumeration value=\"AllCspUsers\"/>\n    <xsd:enumeration value=\"CustomerPortalUser\"/>\n    <xsd:enumeration value=\"PortalRole\"/>\n    <xsd:enumeration value=\"PortalRoleAndSubordinates\"/>\n    <xsd:enumeration value=\"ChannelProgramGroup\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveApplication\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"assetIcon\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"folder\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"shares\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FolderShare\"/>\n        <xsd:element name=\"templateOrigin\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"templateVersion\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveApplication component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>  \n<WaveApplication xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n  <assetIcon>/analytics/wave/web/proto/images/app/icons/11.png</assetIcon>\n  <description>Application that shows my sales</description>\n  <folder>edit</folder>\n  <masterLabel>Sales Application</masterLabel>\n  <shares>\n   <accessLevel>EditAllContents</accessLevel>\n   <sharedTo>shareswith@org.ee</sharedTo>\n   <sharedToType>User</sharedToType>\n  </shares>\n</WaveApplication>"
+    }
+  ]
+}

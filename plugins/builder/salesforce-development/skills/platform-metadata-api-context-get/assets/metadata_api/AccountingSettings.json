@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AccountingSettings - Metadata API",
+  "description": "Represents the settings for the Accounting Subledger feature.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description",
+    "reserved_for_internal_use"
+  ],
+  "fields": {
+    "enableAccountingSubledger": {
+      "type": "boolean",
+      "description": "Indicates whether Transaction Journal creation is enabled for the organization (true) or not (false)."
+    },
+    "enableAslDataCloud": {
+      "type": "boolean",
+      "description": "Requires Data Cloud and Accounting Subledger access. Indicates whether Data Cloud Runtime for Accounting Subledger feature is enabled for the organization (true) or not (false). This field is available in API version 66.0 and later."
+    },
+    "enableFinancePeriod": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "enablePaymentMethodAdjust": {
+      "type": "boolean",
+      "description": "Indicates whether changes to the Payment Method generate adjustments on Transaction Journal records (true) or not (false)."
+    },
+    "enableScheduledJob": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "enableSkipReversalLogicEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether Skip Reversal Logic is enabled (true) or not (false)."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccountingSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAccountingSubledger\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAslDataCloud\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableFinancePeriod\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePaymentMethodAdjust\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableScheduledJob\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSkipReversalLogic\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AccountingSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountingSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableAccountingSubledger>true</enableAccountingSubledger>\n\t<enableAslDataCloud>true</enableAslDataCloud>\n\t<enablePaymentMethodAdjust>true</enablePaymentMethodAdjust>\n\t<enableSkipReversalLogicEnabled>false</enableSkipReversalLogicEnabled>\n</AccountingSettings>"
+    }
+  ]
+}

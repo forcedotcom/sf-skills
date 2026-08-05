@@ -1,0 +1,119 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Letterhead - Metadata API",
+  "description": "Represents formatting options for the letterhead in an email template. A letterhead defines the logo, page color, and text settings for your HTML email templates. Use letterheads to ensure a consistent look and feel in your company’s emails.",
+  "file_information": ".letter",
+  "directory_location": "letterhead",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "available": {
+      "type": "boolean",
+      "description": "Indicates whether this letterhead can be used (true) or not (false), for example, in an email template.",
+      "required": true
+    },
+    "backgroundColor": {
+      "type": "string",
+      "description": "The background color, in hexadecimal, for example #FF6600.",
+      "required": true
+    },
+    "bodyColor": {
+      "type": "string",
+      "description": "The body color in hexadecimal.",
+      "required": true
+    },
+    "bottomLine": {
+      "type": "LetterheadLine (enumeration of type string)",
+      "description": "The style for the bottom line. Valid style values include: color. The color of the line in hexadecimal, as a string value. height. The height of the line, as an int value.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "Text description of how this letterhead differs from other letterheads."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The internal name of the letterhead, based on the name, but with white spaces and special characters escaped out for validity."
+    },
+    "footer": {
+      "type": "LetterheadHeaderFooter",
+      "description": "The style for the footer.",
+      "required": true
+    },
+    "header": {
+      "type": "LetterheadHeaderFooter",
+      "description": "The style for the header.",
+      "required": true
+    },
+    "middleLine": {
+      "type": "LetterheadLine",
+      "description": "The style for the middle border line in your letterhead. Valid style values include: color. The color of the line in hexadecimal, as a string value. height. The height of the line, as an int value.",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the letterhead.",
+      "required": true
+    },
+    "topLine": {
+      "type": "LetterheadLine",
+      "description": "The style for the top horizontal line below the header. Valid style values include: color. The color of the line in hexadecimal, as a string value. height. The height of the line, as an int value.",
+      "required": true
+    }
+  },
+  "sub_types": {
+    "LetterheadHeaderFooter": {
+      "backgroundColor": {
+        "type": "string",
+        "description": "The background color of the header or footer in hexadecimal format.",
+        "required": true
+      },
+      "height": {
+        "type": "DashboardComponent[]",
+        "description": "The height of the header or footer.",
+        "required": true
+      },
+      "horizontalAlignment": {
+        "type": "LetterheadHorizontalAlignment (enumeration of type string)",
+        "description": "The horizontal alignment of the header or footer. Valid values are: None Left Center Right"
+      },
+      "logo": {
+        "type": "string",
+        "description": "The logo which is a reference to a document, for example MyFolder/MyDocument.gif."
+      },
+      "verticalAlignment": {
+        "type": "LetterheadVerticalAlignment (enumeration of type string)",
+        "description": "The vertical alignment of the header or footer. Valid values are: None Top Middle Bottom"
+      }
+    },
+    "LetterheadLine": {
+      "color": {
+        "type": "string",
+        "description": "The color of the line in hexadecimal format.",
+        "required": true
+      },
+      "height": {
+        "type": "int",
+        "description": "The height of the line.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Letterhead\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"available\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"backgroundColor\" type=\"xsd:string\"/>\n        <xsd:element name=\"bodyColor\" type=\"xsd:string\"/>\n        <xsd:element name=\"bottomLine\" type=\"tns:LetterheadLine\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"footer\" type=\"tns:LetterheadHeaderFooter\"/>\n        <xsd:element name=\"header\" type=\"tns:LetterheadHeaderFooter\"/>\n        <xsd:element name=\"middleLine\" type=\"tns:LetterheadLine\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"topLine\" type=\"tns:LetterheadLine\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"LetterheadHeaderFooter\">\n  <xsd:sequence>\n    <xsd:element name=\"backgroundColor\" type=\"xsd:string\"/>\n    <xsd:element name=\"height\" type=\"xsd:int\"/>\n    <xsd:element name=\"horizontalAlignment\" minOccurs=\"0\" type=\"tns:LetterheadHorizontalAlignment\"/>\n    <xsd:element name=\"logo\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"verticalAlignment\" minOccurs=\"0\" type=\"tns:LetterheadVerticalAlignment\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"LetterheadHorizontalAlignment\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Left\"/>\n    <xsd:enumeration value=\"Center\"/>\n    <xsd:enumeration value=\"Right\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"LetterheadLine\">\n  <xsd:sequence>\n    <xsd:element name=\"color\" type=\"xsd:string\"/>\n    <xsd:element name=\"height\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"LetterheadVerticalAlignment\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Top\"/>\n    <xsd:enumeration value=\"Middle\"/>\n    <xsd:enumeration value=\"Bottom\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Letterhead xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <available>true</available>\n    <backgroundColor>#CCCCCC</backgroundColor>\n    <bodyColor>#33FF33</bodyColor>\n    <bottomLine>\n        <color>#3333FF</color>\n        <height>5</height>\n    </bottomLine>\n    <description>INITIAL</description>\n    <footer>\n        <backgroundColor>#FFFFFF</backgroundColor>\n        <height>100</height>\n        <horizontalAlignment>Left</horizontalAlignment>\n        <verticalAlignment>Top</verticalAlignment>\n    </footer>\n    <header>\n        <backgroundColor>#FFFFFF</backgroundColor>\n        <height>100</height>\n        <horizontalAlignment>Left</horizontalAlignment>\n        <verticalAlignment>Top</verticalAlignment>\n    </header>\n    <middleLine>\n        <color>#AAAAFF</color>\n        <height>5</height>\n    </middleLine>\n    <name>SimpleLetterheadLabel</name>\n    <topLine>\n        <color>#FF99FF</color>\n        <height>5</height>\n    </topLine>\n</Letterhead>"
+    }
+  ]
+}

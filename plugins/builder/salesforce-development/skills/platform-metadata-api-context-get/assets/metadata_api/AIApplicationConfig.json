@@ -1,0 +1,53 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields"
+  ],
+  "title": "AIApplicationConfig - Metadata API",
+  "description": "Additional prediction information related to an AI application. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".aiapplicationconfig",
+  "directory_location": "aiApplicationConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "aiApplicationDeveloperName": {
+      "type": "string",
+      "description": "Represents the AIApplication to which AIApplicationConfig belongs. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Available in API version 51.0 and later.",
+      "required": true
+    },
+    "applicationId": {
+      "type": "string",
+      "description": "The ID of the parent AI application.",
+      "required": true
+    },
+    "developerName": {
+      "type": "string",
+      "description": "Represents the name of the application config. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "insightReasonEnabled": {
+      "type": "boolean",
+      "description": "When true, generates the predictors, or field values, that were used to generate the prediction value.",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Label that identifies the AI application configuration throughout the Salesforce user interface.",
+      "required": true
+    },
+    "rank": {
+      "type": "int",
+      "description": "Reserved for future use.",
+      "required": true
+    },
+    "scoringMode": {
+      "type": "AIScoringMode (enumeration of type string)",
+      "description": "Frequency with which the prediction scores are written back. Valid values are: Batch OnDemand Streaming",
+      "required": true
+    }
+  }
+}

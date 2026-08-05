@@ -1,0 +1,120 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SearchCustomization - Metadata API",
+  "description": "Represents the configuration of search settings created in Search Manager. The configuration includes the search channel, searchable objects and fields, and rules to filter search results.",
+  "file_information": ".searchCustomization",
+  "directory_location": "searchCustomizations",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "channel": {
+      "type": "string",
+      "required": true,
+      "description": "The search channel that the configuration applies to."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the configuration."
+    },
+    "objectOverride": {
+      "type": "SearchCustomizationObjectOverride[]",
+      "description": "A list of object configurations."
+    },
+    "objectToAlwaysSearch": {
+      "type": "string[]",
+      "description": "A list of the objects that are always searched for the user profile if the search channel is Einstein Global Search Bar."
+    },
+    "profile": {
+      "type": "string",
+      "description": "Specifies user profile if the search channel is Einstein Global Search Bar."
+    },
+    "selectedObject": {
+      "type": "string[]",
+      "description": "A list of the objects that are selected in the configuration if the search channel is LWR Experience Sites."
+    },
+    "selectedProfile": {
+      "type": "string[]",
+      "description": "Specifies all user profiles that are associated with a Search configuration if the search channel is Einstein Global Search Bar. This field is available in API version 62.0 and later."
+    }
+  },
+  "sub_types": {
+    "SearchCustomizationObjectOverride": {
+      "fieldOverride": {
+        "type": "SearchCustomizationFieldOverride[]",
+        "description": "A list of field configurations."
+      },
+      "objectApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The API name of the object that the configuration is applied to."
+      },
+      "rule": {
+        "type": "SearchCustomizationRule[]",
+        "description": "A list of rules applied to filter search results."
+      },
+      "searchable": {
+        "type": "boolean",
+        "description": "Indicates whether the object is searchable (true) or not (false)."
+      }
+    },
+    "SearchCustomizationFieldOverride": {
+      "fieldApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The API name of the field that the configuration is applied to."
+      },
+      "searchable": {
+        "type": "boolean",
+        "required": true,
+        "description": "Indicates whether the field is searchable (true) or not (false)."
+      }
+    },
+    "SearchCustomizationRule": {
+      "fieldApiName": {
+        "type": "string",
+        "required": true,
+        "description": "The field that the rule applies to."
+      },
+      "operator": {
+        "type": "string",
+        "required": true,
+        "description": "The operator for the rule."
+      },
+      "ruleValue": {
+        "type": "SearchCustomizationRuleValue[]",
+        "description": "A list of rule values."
+      }
+    },
+    "SearchCustomizationRuleValue": {
+      "targetObjectApiName": {
+        "type": "string",
+        "description": "The API name of the target object, in case the rule applies to a lookup field."
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "The value of the rule."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchCustomization\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"channel\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectOverride\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchCustomizationObjectOverride\"/>\n        <xsd:element name=\"objectToAlwaysSearch\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"selectedObject\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"selectedProfile\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"SearchCustomizationExplicitFilter\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldPath\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchCustomizationFieldOverride\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldApiName\" type=\"xsd:string\"/>\n    <xsd:element name=\"searchable\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchCustomizationObjectOverride\">\n  <xsd:sequence>\n    <xsd:element name=\"explicitFilter\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchCustomizationExplicitFilter\"/>\n    <xsd:element name=\"fieldOverride\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchCustomizationFieldOverride\"/>\n    <xsd:element name=\"objectApiName\" type=\"xsd:string\"/>\n    <xsd:element name=\"rule\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchCustomizationRule\"/>\n    <xsd:element name=\"searchable\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchCustomizationRule\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldApiName\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"xsd:string\"/>\n    <xsd:element name=\"ruleValue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:SearchCustomizationRuleValue\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"SearchCustomizationRuleValue\">\n  <xsd:sequence>\n    <xsd:element name=\"targetObjectApiName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a SearchCustomization component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SearchCustomization xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <channel>GlobalSearch</channel>\n    <masterLabel>My_Standard_User_Configuration</masterLabel>\n    <objectOverride>\n        <fieldOverride>\n            <fieldApiName>Description</fieldApiName>\n            <searchable>false</searchable>\n        </fieldOverride>\n        <fieldOverride>\n            <fieldApiName>Rating</fieldApiName>\n            <searchable>true</searchable>\n        </fieldOverride>\n        <objectApiName>Account</objectApiName>\n        <rule>\n            <fieldApiName>My_Custom_Field__c</fieldApiName>\n            <operator>ne</operator>\n            <ruleValue>\n                <value>Other</value>\n            </ruleValue>\n        </rule>\n        <rule>\n            <fieldApiName>Rating</fieldApiName>\n            <operator>in</operator>\n            <ruleValue>\n                <value>Hot</value>\n            </ruleValue>\n            <ruleValue>\n                <value>Warm</value>\n            </ruleValue>\n        </rule>\n    </objectOverride>\n    <objectOverride>\n        <objectApiName>Asset</objectApiName>\n        <searchable>false</searchable>\n    </objectOverride>\n    <objectOverride>\n        <objectApiName>Contact</objectApiName>\n        <rule>\n            <fieldApiName>AccountId</fieldApiName>\n            <operator>ne</operator>\n            <ruleValue>\n                <targetObjectApiName>Account</targetObjectApiName>\n                <value>A Company</value>\n            </ruleValue>\n        </rule>\n        <rule>\n            <fieldApiName>DoNotCall</fieldApiName>\n            <operator>eq</operator>\n            <ruleValue>\n                <value>false</value>\n            </ruleValue>\n        </rule>\n    </objectOverride>\n    <objectToAlwaysSearch>Account</objectToAlwaysSearch>\n    <objectToAlwaysSearch>Contact</objectToAlwaysSearch>\n    <objectToAlwaysSearch>My_Custom_Object__c</objectToAlwaysSearch>\n    <objectToAlwaysSearch>Product2</objectToAlwaysSearch>\n    <profile>standard</profile>\n</SearchCustomization>"
+    }
+  ]
+}

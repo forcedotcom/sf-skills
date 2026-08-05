@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AutomatedContactsSettings - Metadata API",
+  "description": "Represents an org’s Einstein Automated Contacts settings. These settings let you find new contacts and opportunity contact roles. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableAddContactAutomatically": {
+      "type": "boolean",
+      "description": "Indicates whether new contacts are automatically added from external email accounts (such as Microsoft and Google) to Salesforce (true) or not (false). The default value is false. enableAddContactWithSuggestion must be true to use this setting. Note: When this feature is enabled, users do not see new contacts as suggestions. The contacts are added automatically."
+    },
+    "enableAddContactRoleAutomatically": {
+      "type": "boolean",
+      "description": "Indicates whether opportunity contact roles from external accounts are automatically added to Salesforce (true) or not (false). The default value is false. Note: When this feature is enabled, users do not see new contact roles as suggestions. The contact roles are added automatically."
+    },
+    "enableAddContactRoleWithSuggestion": {
+      "type": "boolean",
+      "description": "Indicates whether opportunity contact roles from external accounts are suggested as new Salesforce opportunity contact roles (true) or not (false). The default value is true."
+    },
+    "enableAddContactWithSuggestion": {
+      "type": "boolean",
+      "description": "Indicates whether new contacts from external accounts (such as Microsoft and Google) are suggested as new Salesforce contacts (true) or not (false). The default value is true. enableAddContactRoleWithSuggestion must be true to use this setting."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AutomatedContactsSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableAddContactAutomatically\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAddContactRoleAutomatically\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAddContactRoleWithSuggestion\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAddContactWithSuggestion\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the AutomatedContactsSettings.settings file:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AutomatedContactsSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<enableAddContactAutomatically>true</enableAddContactAutomatically>\n\t<enableAddContactRoleAutomatically>true</enableAddContactRoleAutomatically>\n\t<enableAddContactRoleWithSuggestion>true</enableAddContactRoleWithSuggestion>\n\t<enableAddContactWithSuggestion>true</enableAddContactWithSuggestion>\n\n</AutomatedContactsSettings>"
+    }
+  ]
+}

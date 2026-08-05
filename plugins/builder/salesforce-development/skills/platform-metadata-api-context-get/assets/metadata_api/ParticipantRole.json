@@ -1,0 +1,48 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ParticipantRole - Metadata API",
+  "description": "Represents details, such as the name and associated default access level, for a role that a participant can have in the context of a parent record.",
+  "file_information": ".participantRole",
+  "directory_location": "participantRoles",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "defaultAccessLevel": {
+      "type": "picklist",
+      "required": true,
+      "description": "The default sharing access granted to the participant role. Valid values are: Edit—Read/Write None Read—Read Only"
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether the participant role is activated."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name for the participant role."
+    },
+    "parentObject": {
+      "type": "string",
+      "required": true,
+      "description": "The parent object for the participant role. Valid values are: Account BudgetAvailable in API version 59.0 and later. IndividualApplicationAvailable in API version 59.0 and later. InteractionAvailable in API version 52.0 and later. InteractionSummary Available in API version 51.0 and later. FinancialDealAvailable in API version 52.0 and later. FundingAwardAvailable in API version 59.0 and later. FundingOpportunity Opportunity Team Available in API version 58.0 and later. Custom objects"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ParticipantRole\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"defaultAccessLevel\" type=\"tns:ParticipantRoleAccessLevel\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentObject\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ParticipantRoleAccessLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Read\"/>\n    <xsd:enumeration value=\"Edit\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ParticipantRole component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ParticipantRole xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <defaultAccessLevel>Read</defaultAccessLevel>\n    <isActive>true</isActive>\n    <masterLabel>Advisor</masterLabel>\n    <parentObject>Account</parentObject>\n</ParticipantRole>"
+    }
+  ]
+}

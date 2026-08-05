@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EinsteinGptSettings - Metadata API",
+  "description": "Represents settings for Einstein Generative AI features in an org. This type extends the Metadata metadata type and inherits its fullName field",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "disableAIProvAWSBedrock": {
+      "type": "boolean",
+      "description": "Indicates whether AWS Bedrock is turned off and access to its models are blocked. The default value is false."
+    },
+    "disableAIProvAzureOpenAI": {
+      "type": "boolean",
+      "description": "Indicates whether Azure OpenAI is turned off and access to its models are blocked. The default value is false."
+    },
+    "disableAIProvOpenAI": {
+      "type": "boolean",
+      "description": "Indicates whether OpenAI is turned off and access to its models are blocked. The default value is false."
+    },
+    "disableAIProvVertexGemini": {
+      "type": "boolean",
+      "description": "Indicates whether Vertex AI (Google) is turned off and access to its models are blocked. The default value is false."
+    },
+    "disableAIProviderRegionFallback": {
+      "type": "boolean",
+      "description": "Indicates whether the fallback of Azure OpenAI requests outside the model endpoint region for your org is turned off. The default value is false."
+    },
+    "enableAIModelBeta": {
+      "type": "boolean",
+      "description": "Indicates whether to turn on beta models for Einstein generative AI features. The default value is false."
+    },
+    "enableEinsteinGptAllowUnsafePTInputChanges": {
+      "type": "boolean",
+      "description": "Reserved for internal use."
+    },
+    "enableEinsteinGptGlobalLangSupport": {
+      "type": "boolean",
+      "description": "Indicates whether to turn on global languages with prompt templates. The default value is false."
+    },
+    "enableEinsteinGptPlatform": {
+      "type": "boolean",
+      "description": "Indicates whether to turn on generative AI features across Salesforce. The default value is false."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EinsteinGptSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"disableAIProvAWSBedrock\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"disableAIProvAzureOpenAI\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"disableAIProvOpenAI\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"disableAIProvVertexGemini\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"disableAIProviderRegionFallback\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAIModelBeta\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDeployOnlyActivePromptTemplateVersion\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinGPTDeployPromptTemplatesAsActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinGptAllowUnsafePTInputChanges\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinGptGlobalLangSupport\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEinsteinGptPlatform\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableEnhancedPromptSecurity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enablePBJinjaSyntaxBeta\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an EinsteinGptSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EinsteinGptSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableEinsteinGptGlobalLangSupport>true</einsteinAgentRecommendations>\n    <enableEinsteinGptPlatform>true</reRunAttributeBasedRules>\n</EinsteinGptSettings>"
+    }
+  ]
+}

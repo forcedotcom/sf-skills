@@ -1,0 +1,81 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataCategoryGroup - Metadata API",
+  "description": "Represents a data category group.",
+  "file_information": ".datacategorygroup",
+  "directory_location": "datacategorygroups",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "description": "The status of the category group. Indicates whether this category group is active, (true), or not active (false).",
+      "required": true
+    },
+    "dataCategory": {
+      "type": "DataCategory",
+      "description": "The top-level category within the data category group.",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the data category group."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The unique name of the data category group. When creating a data category group, the fullName field and the file name (without its suffix) must match.The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component.",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "Label that represents the object in Salesforce.",
+      "required": true
+    },
+    "objectUsage": {
+      "type": "ObjectUsage",
+      "description": "The objects that are associated with the data category group."
+    }
+  },
+  "sub_types": {
+    "DataCategory": {
+      "dataCategory": {
+        "type": "DataCategory[]",
+        "description": "A recursive list of sub data categories. For example, a list of countries within a continent. You can create up to 100 categories in a data category group and have up to 5 levels in a data category group hierarchy."
+      },
+      "label": {
+        "type": "string",
+        "description": "Label for the data category throughout the Salesforce user interface.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The developer name of the data category used as a unique identifier for API access. The name can only contain characters, letters, and the underscore (_) character, must start with a letter, and cannot end with an underscore or contain two consecutive underscore characters. Important: The value for this field is defined once and cannot be changed later. Warning: If you deploy a category group that already exists in an organization, any category that is not defined in the XML file is permanently removed from your organization. For more information see Usage.",
+        "required": true
+      }
+    },
+    "ObjectUsage": {
+      "object": {
+        "type": "string[]",
+        "description": "A list of the object names that can be associated with the data category group. Valid values are: KnowledgeArticleVersion—to associate articles. See \"Modify Default Category Group Assignments for Articles\" in the Salesforce online help for more information on data category groups association to articles. Question—to associate questions. You can associate the Question object with at most one category group. Warning: If you deploy a category group that already exists in an organization, any object association that is not defined in the XML file is permanently removed from your organization. Ensure that your XML file specifies all the records associated with your category group in the organization. For more information see Usage."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DataCategory\">\n  <xsd:sequence>\n    <xsd:element name=\"dataCategory\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataCategory\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DataCategoryGroup\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"active\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"dataCategory\" type=\"tns:DataCategory\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectUsage\" minOccurs=\"0\" type=\"tns:ObjectUsage\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ObjectUsage\">\n  <xsd:sequence>\n    <xsd:element name=\"object\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This sample is the definition of the Geography data category group and its data categories:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataCategoryGroup xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <label>Geography</label>\n   <description>Geography structure of service center locations</description>\n   <fullName>geo</fullName>\n\n   <dataCategory> <name>WW</name> <label>Worldwide</label>\n      <dataCategory> <name>AMER</name> <label>North America</label>\n         <dataCategory>\n             <name>USA</name>\n             <label>United States of America</label>\n         </dataCategory> \n         <dataCategory>\n             <name>CAN</name>\n             <label>Canada</label>\n         </dataCategory>\n         <dataCategory>\n             <name>MEX</name>\n             <label>Mexico</label>\n         </dataCategory>\n      </dataCategory> \n      <dataCategory> <name>EMEA</name> <label>Europe, Middle East, Africa</label> \n         <dataCategory>\n             <name>FR</name>\n             <label>France</label>\n         </dataCategory> \n         <dataCategory>\n             <name>SP</name>\n             <label>Spain</label>\n        </dataCategory>\n         <dataCategory>\n            <name>UK</name>\n            <label>United-Kingdom</label>\n         </dataCategory>\n      </dataCategory>\n      <dataCategory>\n          <name>APAC</name>\n          <label>Asia</label>\n      </dataCategory>\n   </dataCategory>\n\n   <objectUsage>\n      <object>KnowledgeArticleVersion </object>\n   <objectUsage>\n</DataCategoryGroup>"
+    }
+  ]
+}

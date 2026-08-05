@@ -1,0 +1,139 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "MarketingAppExtension - Metadata API",
+  "description": "Represents an integration with a third-party app or service that is used to work with prospects.",
+  "file_information": ".marketingappextension",
+  "directory_location": "marketingappextensions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "description": {
+      "type": "string",
+      "description": "The description of the extension for internal reference. Appears in the UI."
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "This field makes data for a Marketing App Extension available to use in Account Engagement automations. Label is Active in Automations. The default value is false. Appears in the UI."
+    },
+    "isProtected": {
+      "type": "boolean"
+    },
+    "marketingAppExtActions": {
+      "type": "MarketingAppExtAction[]",
+      "description": "This field is a related list of associated external actions."
+    },
+    "marketingAppExtActivities": {
+      "type": "MarketingAppExtActivity[]",
+      "description": "This field is a related list of associated external prospect activities."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "Label for the MarketingAppExtension. In the UI, this field is Extension Name."
+    }
+  },
+  "sub_types": {
+    "MarketingAppExtActivity": {
+      "description": {
+        "type": "string",
+        "description": "The description of the activity for internal reference. Appears in the UI."
+      },
+      "endpointUrl": {
+        "type": "string",
+        "description": "A sample endpoint that can be used to help connect the activity type to a third-party app. Appears in the UI."
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "This field makes data for the Activity Type available to use in Account Engagement automations. Label is Active in Automations. The default value is false. Appears in the UI."
+      },
+      "isProtected": {
+        "type": "boolean"
+      },
+      "marketingAppExtension": {
+        "type": "string",
+        "required": true,
+        "description": "The Marketing App Extension associated with the activity."
+      },
+      "masterLabel": {
+        "type": "string",
+        "required": true,
+        "description": "Label for the MarketingAppExtActivity. In the UI, this field is Activity Name."
+      }
+    },
+    "MarketingAppExtAction": {
+      "actionName": {
+        "type": "string",
+        "description": "The name of the action for internal use. Appears in the UI."
+      },
+      "actionParams": {
+        "type": "string",
+        "description": "The parameters for the invocable action. Appears in the UI."
+      },
+      "actionSchema": {
+        "type": "string",
+        "description": "The JSON schema for the invocable action. Appears in the UI."
+      },
+      "actionSelector": {
+        "type": "string",
+        "description": "Invocable action selector. Appears in the UI."
+      },
+      "apiName": {
+        "type": "string",
+        "description": "This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is automatically generated, but you can supply your own value if you create the record using the API. Appears in the UI."
+      },
+      "Description": {
+        "type": "string",
+        "description": "The description of the action for internal reference. Appears in the UI."
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "This field makes data for the Action Type available to use in Engagement Studio Label is Active in Automations. The default value is false. Appears in the UI."
+      },
+      "isProtected": {
+        "type": "boolean"
+      },
+      "marketingAppExtension": {
+        "type": "string",
+        "required": true,
+        "description": "The Marketing App Extension associated with the action."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This example retrieves all Activity Types associated with the MarketingAppExtension component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MarketingAppExtension xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>VidLand extension for US region</description>\n    <isActive>true</isActive>\n    <marketingAppExtActivities>\n        <fullName>user_attended</fullName>\n        <description>User attended activity capture for VidLand</description>\n        <isActive>true</isActive>\n        <marketingAppExtension>VidLand_US</marketingAppExtension>\n        <masterLabel>user attended</masterLabel>\n    </marketingAppExtActivities>\n    <marketingAppExtActivities>\n        <fullName>user_registered</fullName>\n        <description>User registered activity capture for VidLand</description>\n        <isActive>true</isActive>\n        <marketingAppExtension>VidLand_US</marketingAppExtension>\n        <masterLabel>user registered</masterLabel>\n    </marketingAppExtActivities>\n    <masterLabel>VidLand_US</masterLabel>\n</MarketingAppExtension>"
+    },
+    {
+      "description": "This example package.xml references the previous definition.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n~ Copyright 2021 Salesforce, Inc.\n~ All Rights Reserved\n~ Company Confidential\n-->\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<types>\n<members>VidLand_US</members>\n<name>MarketingAppExtension</name>\n</types>\n</Package>"
+    },
+    {
+      "description": "This example retrieves a specific Activity Type from the associated MarketingAppExtension component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MarketingAppExtension xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <description>VidLand extension for US region</description>\n    <isActive>true</isActive>\n    <marketingAppExtActivities>\n        <fullName>user_attended</fullName>\n        <description>User attended activity capture for VidLand</description>\n        <isActive>true</isActive>\n        <marketingAppExtension>VidLand_US</marketingAppExtension>\n        <masterLabel>user attended</masterLabel>\n    </marketingAppExtActivities>\n    <masterLabel>VidLand_US</masterLabel>\n</MarketingAppExtension>"
+    },
+    {
+      "description": "This example package.xml references the previous definition.",
+      "code": "<<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n~ Copyright 2021 salesforce.com, inc.\n~ All Rights Reserved\n~ Company Confidential\n-->\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<types>\n<members>VidLand_US.user_attended</members>\n<name>MarketingAppExtActivity</name>\n</types>\n<types>\n<members>VidLand_US</members>\n<name>MarketingAppExtension</name>\n</types>\n</Package>"
+    },
+    {
+      "description": "This example retrieves a specific action associated the MarketingAppExtension component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<MarketingAppExtension xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fullName>VidLand_US</fullName>\n    <description>VidLand extension for US region</description>\n    <isActive>true</isActive>\n    <marketingAppExtActions>\n        <marketingAppExtension>VidLand_US</marketingAppExtension>\n        <apiName>register_user</apiName>\n        <isActive>true</isActive>\n        <description>Register User for VidLand</description>>\n        <actionSelector>VidLand_Register_User</actionSelector>\n        <actionSchema>\n\t\t\t<![CDATA[\n   \t\t\t\t{\n\t\"properties\": {\n\t  \"UserId\": {\n\t\t\"type\": \"string\",\n\t\t\"title\": \"\"\n\t  },\n\t  \"WebinarId\": {\n\t\t\"type\": \"string\",\n\t\t\"value\": \"webinarIdXYZ\"\n\t  }\n\t},\n\t\"view\": {\n\t  \"components\": [{\n\t\t\"definition\": \"lightning/control\",\n\t\t\"scope\": \"#/properties/UserId\"\n\t  }]\n\t},\n\t\"required\": [\n\t  \"UserId\",\n\t  \"WebinarId\",\n\t  \"From\",\n\t  \"Body\"\n\t]\n  }\n\t\t\t]]>\n        </actionSchema>\n        <actionParams>\n        <![CDATA[\n   \t\t\t\t{\n\t\"isStandard\": false,\n    \"type\": \"apex\"\n  }\n\t\t\t]]>\n        </actionParams>\n        <actionName>Register User</actionName>\n    </marketingAppExtActions>\n    <masterLabel>VidLand US</masterLabel>\n</MarketingAppExtension>"
+    },
+    {
+      "description": "This example package.xml references the previous definition.",
+      "code": "<<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!--\n~ Copyright 2021 salesforce.com, inc.\n~ All Rights Reserved\n~ Company Confidential\n-->\n<Package xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n<types>\n<members>VidLand_US</members>\n<name>MarketingAppExtension</name>\n</types>\n</Package>"
+    }
+  ]
+}

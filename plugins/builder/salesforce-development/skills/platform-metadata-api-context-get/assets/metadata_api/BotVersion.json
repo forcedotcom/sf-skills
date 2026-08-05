@@ -1,0 +1,667 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "BotVersion - Metadata API",
+  "description": "Represents the configuration details for a specific Einstein Bot version, including dialogs and variables.",
+  "file_information": ".bot",
+  "directory_location": "bot",
+  "fields_columns": [
+    "type",
+    "description",
+    "reserved_for_internal_use",
+    "required"
+  ],
+  "fields": {
+    "botDialogGroups": {
+      "type": "BotDialogGroup[]",
+      "description": "The list of dialog groups in this bot version."
+    },
+    "botDialogs": {
+      "type": "BotDialog[]",
+      "description": "The list of dialogs in this bot version."
+    },
+    "company": {
+      "type": "string",
+      "reserved_for_internal_use": true
+    },
+    "conversationGoals": {
+      "type": "ConversationDefinitionGoal[]",
+      "description": "The list of goals in this bot verion. Available in API version 57.0 and later."
+    },
+    "conversationPlanner": {
+      "type": "ConversationDefinitionPlanner[]",
+      "description": "Represents the API name of the Agent planner service GenAiPlanner. Available in API version 60.0 and later."
+    },
+    "conversationSystemDialogs": {
+      "type": "ConversationSystemDialog[]",
+      "description": "A system function assigned to a dialog. Available in API version 48.0 and later."
+    },
+    "conversationVariables": {
+      "type": "ConversationVariable[]",
+      "description": "A container that stores a specific piece of data collected from the customer. You can use variables within dialog actions as both inputs and outputs. Available in API version 44.0 and later."
+    },
+    "copilotPrimaryLangauge": {
+      "type": "Language (enumeration of type string)",
+      "description": "Represents the primary language of a Copilot or Agent."
+    },
+    "copilotSecondaryLanguages": {
+      "type": "string",
+      "reserved_for_internal_use": true
+    },
+    "entryDialog": {
+      "type": "string",
+      "required": true,
+      "description": "A reference to the first dialog that the bot presents to your customer. For example, Welcome."
+    },
+    "initialIntentDetectionEnabled": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "intentDisambiguationEnabled": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "intentThreshold": {
+      "type": "double",
+      "description": "Specifies how strictly a user message must match with a bot intent. Valid values are between 1 and 5, where 1 is the least strict and 5 is the most strict. To turn on this feature, contact Salesforce Customer Support. This field is available in API version 63.0 and later."
+    },
+    "intentV3Enabled": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "knowledgeActionEnabled": {
+      "type": "boolean",
+      "description": "Indicates whether a knowledge action is enabled. The default value is false."
+    },
+    "knowledgeFallbackEnabled": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "mainMenuDialog": {
+      "type": "string",
+      "description": "A reference to the dialog identified as the main menu dialog. For example, Main Menu."
+    },
+    "nlpProviders": {
+      "type": "ConversationDefinitionNlpProvider[]",
+      "description": "Defines the language provider which is used for a particular language. Available in API version 49.0 and later."
+    },
+    "responseDelayMilliseconds": {
+      "type": "int",
+      "description": "An optional default or custom delay after every bot response to simulate typing."
+    },
+    "role": {
+      "type": "string",
+      "reserved_for_internal_use": true
+    },
+    "surfacesEnabled": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "toneType": {
+      "type": "GenAiBotToneType (enumeration of type string)",
+      "description": "The tone of the bot. Valid values are: Casual Formal Neutral"
+    }
+  },
+  "sub_types": {
+    "BotDialogGroup": {
+      "description": {
+        "type": "string",
+        "description": "A description of the bot dialog group."
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "This unique name prevents conflicts with other dialog groups associated with the same bot version. This name can contain only underscores and alphanumeric characters. The name must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "A label that identifies the dialog group throughout the Salesforce user interface."
+      }
+    },
+    "BotDialog": {
+      "botDialogGroup": {
+        "type": "string",
+        "description": "The bot dialog group that contains this bot dialog."
+      },
+      "botSteps": {
+        "type": "BotStep[]",
+        "description": "A list of steps that are executed as part of the dialog."
+      },
+      "description": {
+        "type": "string",
+        "description": "A description of the bot dialog."
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "This unique name prevents conflicts with other dialogs associated with the same bot version. This name can contain only underscores and alphanumeric characters. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Note: Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+      },
+      "isPlaceholderDialog": {
+        "type": "boolean",
+        "description": "In a bot block, indicates whether a dialog is a placeholder (true) or not (false). In a bot template or bot version not associated with a bot block, this field is read-only and the value is false. Available in API version 58.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "A label that identifies the dialog throughout the Salesforce user interface."
+      },
+      "mlIntent": {
+        "type": "string",
+        "required": true,
+        "description": "A label that identifies the dialog throughout the Salesforce user interface. The name of the intent associated with a dialog."
+      },
+      "mlIntentTrainingEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether Einstein is turned on to train an intent model for the dialog intent (true) or turned off for the exact match option (false). The default value is false. Available in API version 46.0 and later."
+      },
+      "showInFooterMenu": {
+        "type": "boolean",
+        "description": "Indicates whether to show this dialog in the Bot Options menu. The default value is false."
+      }
+    },
+    "BotStep": {
+      "booleanFilter": {
+        "type": "string",
+        "description": "This field is reserved for future use."
+      },
+      "botInvocation": {
+        "type": "BotInvocation",
+        "description": "Bot Invocation used by a BotStep of type Invocation."
+      },
+      "botMessages": {
+        "type": "BotMessage[]",
+        "description": "List of bot messages used by a BotStep of type Message."
+      },
+      "botNavigation": {
+        "type": "BotNavigation",
+        "description": "Bot Navigation used by a BotStep of type Navigation."
+      },
+      "botStepConditions": {
+        "type": "BotStepCondition[]",
+        "description": "List of BotStep conditions associated with a BotStep of type Group."
+      },
+      "botSteps": {
+        "type": "BotStep[]",
+        "description": "List of BotSteps associated to a Bot Step of type Group."
+      },
+      "botVariableOperation": {
+        "type": "BotVariableOperation[]",
+        "description": "Bot Variable Operation used by a BotStep of type VariableOperation."
+      },
+      "conditionLogicType": {
+        "type": "ConversationDefinitionLogicalOperatorType (enumeration of type string)",
+        "description": "Represents the type of conditional logic used by a BotStep. Values are: And Or Available in API version 58.0 and later."
+      },
+      "conversationRecordLookup": {
+        "type": "ConversationRecordLookup[]",
+        "description": "A lookup action to the Conversation record. Available in API version 46.0 and later."
+      },
+      "conversationStepGoalMappings": {
+        "type": "ConversationDefinitionStepGoalMapping[]",
+        "description": "The API name of a goal used by a BotStep of type GoalStep. Available in API version 57.0 and later."
+      },
+      "conversationSystemMessage": {
+        "type": "ConversationSystemMessage[]",
+        "description": "System messages that represent an action for a BotStep, such as transferring to an agent or ending a chat. Available in API version 46.0 and later."
+      },
+      "messageDefinition": {
+        "type": "ConversationDefinitionRichMessage[]",
+        "description": "List of configuration details used by a BotStep that references a messaging component. Available in API version 54.0 and later."
+      },
+      "stepIdentifier": {
+        "type": "string",
+        "description": "A unique key that identifies a step within a dialog. It is used to link translated labels to labels within the step. This field is recommended for all step records and is required for translated step labels. Available in API version 53.0 and later.If a step is created via the UI, the stepIdentifier is automatically generated. If a step is created via API, the stepIdentifier must be provided. The stepIdentifier can contain letters, numbers, dashes, and underscores, up to 255 characters."
+      },
+      "type": {
+        "type": "BotStepType (enumeration of type string)",
+        "required": true,
+        "description": "Values are: GoalStep (Available in API version 57.0 and later.) Group Invocation Message Navigation RecordLookup (Available in API version 48.0 and later.) RichMessage (Available in API version 54.0 and later.) SystemMessage VariableOperation Wait"
+      }
+    },
+    "BotInvocation": {
+      "invocationActionName": {
+        "type": "string",
+        "description": "The name of the invocable action used by a Bot Invocation."
+      },
+      "invocationActionType": {
+        "type": "ConversationInvocableTargetType (enumeration of type string)",
+        "description": "Available dialog action types are:Values are: apex externalService (Available in API version 53.0 and later.) flow logFeedback (Available in API version 51.0 and later.) logGoalAchieved (Deprecated in API version 57.0 and later.) standardInvocableAction"
+      },
+      "invocationMappings": {
+        "type": "BotInvocationMapping[]",
+        "description": "List of Bot Invocation Mappings for a Bot Invocation."
+      }
+    },
+    "BotInvocationMapping": {
+      "parameterName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of an Input/Output parameter of the parent Bot Invocation target."
+      },
+      "recordName": {
+        "type": "string",
+        "description": "Name of the record that is used as part of an Invocation mapping. Available in API version 54.0 and later."
+      },
+      "type": {
+        "type": "BotInvocationMappingType (enumeration of type string)",
+        "required": true,
+        "description": "Values are: Input Output"
+      },
+      "value": {
+        "type": "string",
+        "description": "Literal value to be assigned to the specified parameter."
+      },
+      "variableName": {
+        "type": "string",
+        "description": "Name of the Bot Variable that is used as part of an Invocation mapping."
+      },
+      "variableType": {
+        "type": "ConversationVariableType (enumeration of type string)",
+        "description": "This field relates to the type of variable used in this invocation mapping.Values are: ContextVariable ConversationVariable PageContextVariable"
+      }
+    },
+    "BotMessage": {
+      "message": {
+        "type": "string",
+        "required": true,
+        "description": "Message to display as part of an outgoing message from the bot to the customer."
+      },
+      "messageIdentifier": {
+        "type": "string",
+        "description": "A unique key that identifies a message within a dialog. It is used to link translated labels to labels within the message. This field is recommended for all message records and is required for translated message labels. Available in API version 53.0 and later.If a message is created via the UI, the messageIdentifier is automatically generated. If a message is created via API, the messageIdentifier must be provided. messageIdentifier can contain letters, numbers, dashes, and underscores, up to 255 characters."
+      }
+    },
+    "BotNavigation": {
+      "botNavigationLinks": {
+        "type": "BotNavigationLink[]",
+        "description": "List of Bot Navigation links associated with a Bot Navigation of type Call or Redirect."
+      },
+      "type": {
+        "type": "BotNavigationType (enumeration of type string)",
+        "required": true,
+        "description": "Values are: Call Redirect TransferToAgent"
+      }
+    },
+    "BotNavigationLink": {
+      "label": {
+        "type": "string",
+        "description": "Label displayed when more than one Bot Navigation Link is available under a Bot Navigation of type Redirect. The target dialog label is used when no label is provided."
+      },
+      "targetBotDialog": {
+        "type": "string",
+        "description": "Name of the target dialog to be called as part of this Bot Navigation Link."
+      },
+      "targetVariable": {
+        "type": "string",
+        "description": "In the Redirect to Dialog Rule Action, the ID of the target object variable to be called as part of this Bot Navigation link. Available in API version 57.0 and later."
+      },
+      "targetVariableType": {
+        "type": "ConversationVariableType (enumeration of type string)",
+        "description": "In the Redirect to Dialog Rule Action, the type of variable referred to in targetVariable. Available in API version 57.0 and later.Values are: ContextVariable ConversationVariable PageContextVariable"
+      }
+    },
+    "BotStepCondition": {
+      "leftOperandName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the variable used as the left side of the condition operation."
+      },
+      "leftOperandType": {
+        "type": "ConversationVariableType (enumeration of type string)",
+        "required": true,
+        "description": "Type of the variable used as the left side of the condition operation.Values are: ContextVariable ConversationVariable PageContextVariable"
+      },
+      "operatorType": {
+        "type": "BotStepConditionOperatorType (enumeration of type string)",
+        "required": true,
+        "description": "Values are: Equals GreaterThan (Available in API version 47.0 and later.) GreaterThanOrEqualTo (Available in API version 47.0 and later.) IsNotSet IsSet LessThan (Available in API version 47.0 and later.) LessThanOrEqualTo (Available in API version 47.0 and later.) NotEquals"
+      },
+      "rightOperandValue": {
+        "type": "string",
+        "description": "Value that is used as the right side of the condition operation. This value is ignored when using IsSet and IsNotSet operators."
+      }
+    },
+    "BotVariableOperation": {
+      "askCollectIfSet": {
+        "type": "boolean",
+        "description": "If true, the bot runs a Bot Variable Operation of type Collect regardless of whether the variable already has a value. When a value exists for a variable, the bot asks the user for the relevant information, and the bot overwrites the existing value with the user-provided value. If false, the bot skips variables with an existing value and maintains the existing value. The default is false. Available in API version 51.0 and later."
+      },
+      "autoSelectIfSingleChoice": {
+        "type": "boolean",
+        "description": "If true, the bot automatically selects the answer in the conversation flow when only one button choice is available in a Bot Variable Operation of type Collect and a quickReplyType value of Dynamic. If false, the bot presents the single button choice and waits for the user’s response. The default is false. Available in API version 51.0 and later."
+      },
+      "botInvocation": {
+        "type": "BotInvocation",
+        "description": "Bot Invocation used to provide Dynamic choices by a Bot Variable Operation of type Collect and quickReplyType of Dynamic."
+      },
+      "botMessages": {
+        "type": "BotMessage[]",
+        "description": "List of Bot Messages used as prompt messages by a Bot Variable Operation of type Collect."
+      },
+      "botQuickReplyOptions": {
+        "type": "BotQuickReplyOption[]",
+        "description": "List of static choice options used by a Bot Variable Operation of type Collect and quickReplyType of Static."
+      },
+      "botVariableOperands": {
+        "type": "BotVariableOperand[]",
+        "description": "List of Bot Variable Operands associated with a Bot Variable of type Set or Unset."
+      },
+      "ignoreIntentRecognition": {
+        "type": "boolean",
+        "description": "If true the bot requires a response to a Question dialog step. The bot doesn't perform intent recognition for any user messages that do not fit the entity requirements. The bot repeats the question until the customer's response fits the entity requirements. Available in API version 63.0 and later."
+      },
+      "invalidInputBotNavigation": {
+        "type": "BotNavigation",
+        "description": "Bot Navigation used by a Bot Variable Operation of type Collect. This navigation is executed when the associated Bot Invocation doesn’t return any options."
+      },
+      "messageDefinition": {
+        "type": "ConversationDefinitionRichMessage",
+        "description": "Configuration details that reference a messaging component. Outputs are used by a Bot Variable Operation of type Set. Available in API version 58.0 and later."
+      },
+      "optionalCollect": {
+        "type": "boolean",
+        "description": "If true, the bot asks the repair attempts once and then moves on to the next dialog step. The default value is false. Available in API version 48.0 and later."
+      },
+      "quickReplyOptionTemplate": {
+        "type": "string",
+        "description": "Formula template used to resolve a label for Dynamic choice options of type Object."
+      },
+      "quickReplyType": {
+        "type": "BotQuickReplyType (enumeration of type string)",
+        "description": "Values are: Dynamic Static"
+      },
+      "quickReplyWidgetType": {
+        "type": "BotWidgetType (enumeration of type string)",
+        "description": "Values are: Buttons Menu"
+      },
+      "retryMessages": {
+        "type": "BotMessage[]",
+        "description": "In Conversation Repair, the messages assigned to repair attempts. Available in API version 48.0 and later."
+      },
+      "sourceVariableName": {
+        "type": "string",
+        "description": "Name of the source VariableName used in the variable operation. Available in API version 47.0 and later."
+      },
+      "sourceVariableType": {
+        "type": "ConversationVariableType (enumeration of type string)",
+        "description": "This name defines the data type of VariableName used in the variable operation.Values are: ContextVariable ConversationVariable PageContextVariable"
+      },
+      "successMessages": {
+        "type": "BotMessage[]",
+        "description": "In a File dialog step, the message displayed to the customer as part of type CollectAttachment to confirm a successful file upload. Available in API version 57.0 and later."
+      },
+      "type": {
+        "type": "BotVariableOperationType (enumeration of type string)",
+        "required": true,
+        "description": "Values are: Collect CollectAttachment (Available in API version 57.0 and later.) Set SetConversationLanguage (Available in API version 53.0 and later.) Unset"
+      },
+      "variableOperationIdentifier": {
+        "type": "string",
+        "description": "A unique key that identifies a variable operation within a dialog. It is used to link translated labels to labels within the variable operation. This field is recommended for all variable operation records and is required for translated variable operation labels. Available in API version 53.0 and later.If a variable operation is created via the UI, the variableOperationIdentifier is automatically generated. If a variable operation is created via API, the variableOperationIdentifier must be provided. variableOperationIdentifier can contain letters, numbers, dashes, and underscores, up to 255 characters."
+      }
+    },
+    "BotQuickReplyOption": {
+      "literalValue": {
+        "type": "string",
+        "required": true,
+        "description": "Value to be displayed as a menu or button choice to your customer."
+      },
+      "quickReplyOptionIdentifier": {
+        "type": "string",
+        "description": "A unique key that identifies a quick reply option within a dialog. It is used to link translated labels to labels within the quick reply option. This field is recommended for all quick reply option records and is required for translated quick reply option labels. Available in API version 53.0 and later.If a quick reply option is created via the UI, the quickReplyOptionIdentifier is automatically generated. If a message is created via API, the quickReplyOptionIdentifier must be provided. quickReplyOptionIdentifier can contain letters, numbers, dashes, and underscores, up to 255 characters."
+      }
+    },
+    "BotVariableOperand": {
+      "disableAutoFill": {
+        "type": "boolean",
+        "description": "Disables auto-fill behavior for a bot variable under a bot variable operation of type Collect."
+      },
+      "sourceName": {
+        "type": "string",
+        "description": "Name of the source CustomField or MlSlotClass used in the variable operation."
+      },
+      "sourceType": {
+        "type": "ConversationVariableOperandSourceType (enumeration of type string)",
+        "description": "Values are: BotDefinition (Available in API version 46.0 and later.) ContextVariable (Available in API version 45.0 and later.) ConversationVariable FlowDefinition (Available in API version 52.0 and later.) MlSlotClass Queue (Available in API version 46.0 and later.) StandardConversationVariable StandardMlSlotClass Value"
+      },
+      "sourceValue": {
+        "type": "string",
+        "description": "Literal value used as the source for this variable operation."
+      },
+      "targetName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the target variable used in the variable operation."
+      },
+      "targetType": {
+        "type": "ConversationVariableType (enumeration of type string)",
+        "required": true,
+        "description": "Type of the target used in the variable operation.Values are: ContextVariable ConversationVariable PageContextVariable"
+      }
+    },
+    "ConversationRecordLookup": {
+      "SObjectType": {
+        "type": "string",
+        "required": true,
+        "description": "Specifies the SObjectType of the ID stored in a bot variable."
+      },
+      "conditions": {
+        "type": "ConversationRecordLookupCondition[]",
+        "description": "The conditions associated with this lookup. Available in API version 51.0 and later."
+      },
+      "filterLogic": {
+        "type": "string",
+        "description": "The logical operator that connects the conditions.Values are: And Or Available in API version 51.0 and later."
+      },
+      "lookupFields": {
+        "type": "ConversationRecordLookupField[]",
+        "description": "Definition of the fields that are used for this lookup."
+      },
+      "maxLookupResults": {
+        "type": "int",
+        "required": true,
+        "description": "The maximum number of records to return (1-3)."
+      },
+      "sortFieldName": {
+        "type": "string",
+        "description": "The name of the field used to sort the lookup results. Available in API version 51.0 and later."
+      },
+      "sortOrder": {
+        "type": "SortOrder (enumeration of type string)",
+        "description": "The display order of the lookup results.Values are: Asc Desc Available in API version 51.0 and later."
+      },
+      "sourceVariableName": {
+        "type": "string",
+        "description": "The input for this lookup operation."
+      },
+      "sourceVariableType": {
+        "type": "ConversationVariableType (enumeration of type string)",
+        "description": "Type of the target used in the variable operation.Values are: ContextVariable ConversationVariable PageContextVariable"
+      },
+      "targetVariableName": {
+        "type": "string",
+        "required": true,
+        "description": "The variable that holds the results of this lookup."
+      }
+    },
+    "ConversationRecordLookupCondition": {
+      "leftOperand": {
+        "type": "string",
+        "required": true,
+        "description": "Field on which the condition operation takes place."
+      },
+      "operatorType": {
+        "type": "string",
+        "required": true,
+        "description": "The operator applied to the leftOperand.Values are: Equals NotEquals IsSet IsNotSet GreaterThan LessThan GreaterThanOrEqualTo LessThanOrEqualTo"
+      },
+      "rightOperandName": {
+        "type": "string",
+        "description": "The name of the variable to compare against."
+      },
+      "rightOperandType": {
+        "type": "ConversationVariableType (enumeration of type string)",
+        "description": "The type of the variable to compare against.Values are: ContextVariable ConversationVariable PageContextVariable"
+      },
+      "rightOperandValue": {
+        "type": "string",
+        "description": "The custom value to compare against. This value is ignored when using IsSet and IsNotSet operators."
+      },
+      "sortOrder": {
+        "type": "int",
+        "required": true,
+        "description": "Order in which the conditions are applied."
+      }
+    },
+    "ConversationRecordLookupField": {
+      "fieldName": {
+        "type": "string",
+        "required": true,
+        "description": "Defines the field names used in the Conversation Lookup function."
+      }
+    },
+    "ConversationDefinitionStepGoalMapping": {
+      "goalName": {
+        "type": "string",
+        "description": "The API name of the goal."
+      }
+    },
+    "ConversationSystemMessage": {
+      "systemMessageMappings": {
+        "type": "ConversationSystemMessageMapping",
+        "description": "Defines the type of system message to be sent."
+      },
+      "type": {
+        "type": "ConversationSystemMessageType (enumeration of type string)",
+        "required": true,
+        "description": "This field defines the values available for a system message.Values are: EndChat Transfer"
+      }
+    },
+    "ConversationSystemMessageMapping": {
+      "mappingType": {
+        "type": "ConversationMappingType (enumeration of type string)",
+        "required": true,
+        "description": "Defines the type of mapping used in the record.Values are: Input Output"
+      },
+      "parameterType": {
+        "type": "ConversationSystemMessageParamType (enumeration of type string)",
+        "required": true,
+        "description": "Defines the type of parameter the value is mapped to.Values are: Transfer"
+      },
+      "variableName": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the variable that contains the value passed to the system message."
+      }
+    },
+    "ConversationDefinitionRichMessage": {
+      "messageDefinitionMappings": {
+        "type": "BotInvocationMapping[]",
+        "description": "List of mappings for referencing a messaging component. Includes any input parameters and their values. Optionally, specifies the conversation variable for storing any outputs.Input parameter values can be either static values or references to conversation or context variables."
+      },
+      "messageDefinitionName": {
+        "type": "string",
+        "required": true,
+        "description": "The API name of the messaging component referenced by the bot."
+      }
+    },
+    "ConversationDefinitionGoal": {
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "A unique name that prevents conflicts with other goals associated with the same bot version. This name can contain only underscores and alphanumeric characters. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "A label that identifies the goal throughout the Salesforce user interface. This label can contain only underscores and alphanumeric characters. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+      }
+    },
+    "ConversationDefinitionPlanner": {
+      "genAiPlannerName": {
+        "type": "string",
+        "description": "The name of an agent planner service that uses a large language model (LLM) and a reasoning strategy to decompose a given task into smaller subtasks, identify the most suitable actions for each subtask, and invoke them."
+      }
+    },
+    "ConversationSystemDialog": {
+      "dialog": {
+        "type": "string",
+        "description": "The dialog name triggered when this system event fires."
+      },
+      "type": {
+        "type": "ConversationSystemDialogType (enumeration of type string)",
+        "description": "The type of system event. Required. Valid values are: Disambiguation (Reserved for Future Use) DisambiguationFailed (Reserved for Future Use) ErrorHandling KnowledgeAction (Available in API version 60.0.) KnowledgeFallback (Available in API version 51.0.) TransferFailed"
+      }
+    },
+    "ConversationVariable": {
+      "collectionType": {
+        "type": "ConversationVariableCollectionType (enumeration of type string)",
+        "description": "This field defines whether a variable is designated as a List Variable. Valid value is List."
+      },
+      "dataType": {
+        "type": "ConversationVariableCollectionType (enumeration of type string)",
+        "required": true,
+        "description": "Valid values are: Boolean Currency Date DateTime Id (available in API 45.0 and later.) Object Number Text"
+      },
+      "description": {
+        "type": "string",
+        "description": "A description of this variable. This value may be used by the Agentforce planner service. Available in API version 63.0 and later."
+      },
+      "developerName": {
+        "type": "string",
+        "required": true,
+        "description": "This name can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Only users with View DeveloperName OR View Setup and Configuration permission can view, group, sort, and filter this field."
+      },
+      "includeInPrompt": {
+        "type": "boolean",
+        "description": "Indicates whether the variable is injected into the prompt sent to the Agentforce model. If true, the variable appears in the Included Fields section of the UI. Note: The default variables Id, EndUserId, and EndUserLanguage always appear in the Included Fields section of the UI, regardless of their value of includeInPrompt. We recommend that you don't change the value of includeInPrompt for these default variables, as changing the value can prevent your agent from accessing important session data. Available in API version 63.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "required": true,
+        "description": "Label that identifies a variable throughout the Salesforce user interface."
+      },
+      "SObjectType": {
+        "type": "string",
+        "description": "Specifies the SObjectType of the ID stored in a bot variable. Valid values are: BotDefinition Queue"
+      },
+      "visibility": {
+        "type": "ConversationVariableVisibilityType (enumeration of type string)",
+        "required": true,
+        "description": "Determines which components can set this variable. If the visibility is internal, the variable can only be set by action outputs. If the visibility is external, the variable can also be set by the API. Valid values are: internal external"
+      }
+    },
+    "ConversationDefinitionNlpProvider": {
+      "language": {
+        "type": "Language",
+        "required": true,
+        "description": "The language assigned to a bot version."
+      },
+      "nlpProviderName": {
+        "type": "string",
+        "description": "If nlpProviderType is EinsteinAI, this field is blank. If Apex, this field holds the Apex class name of the service."
+      },
+      "nlpProviderType": {
+        "type": "ConversationDefinitionNlpProviderType (enumeration of type string)",
+        "required": true,
+        "description": "Default value is EinsteinAi. Valid values are: EinsteinAi Apex"
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AiAgentFieldLevelRecordAccess\">\n  <xsd:sequence>\n    <xsd:element name=\"accessLevel\" minOccurs=\"0\" type=\"tns:AiAgentRecordAccessLevel\"/>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"object\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"AiAgentRecordAccessLevel\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ReadWrite\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Bot\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"agentDSLEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"agentTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"agentType\" minOccurs=\"0\" type=\"tns:GenAiAgentType\"/>\n        <xsd:element name=\"botMlDomain\" minOccurs=\"0\" type=\"tns:LocalMlDomain\"/>\n        <xsd:element name=\"botSource\" minOccurs=\"0\" type=\"tns:BotSourceType\"/>\n        <xsd:element name=\"botUser\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"botVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotVersion\"/>\n        <xsd:element name=\"contextVariables\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationContextVariable\"/>\n        <xsd:element name=\"conversationChannelProviders\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationDefinitionChannelProvider\"/>\n        <xsd:element name=\"defaultOutboundFlow\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"logPrivateConversationData\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"pageContextVariables\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PageContextVariable\"/>\n        <xsd:element name=\"richContentEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"sessionTimeout\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"tns:BotType\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"BotDialog\">\n  <xsd:sequence>\n    <xsd:element name=\"botDialogGroup\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"botSteps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotStep\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"isPlaceholderDialog\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"mlIntent\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"mlIntentTrainingEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showInFooterMenu\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotDialogGroup\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotInvocation\">\n  <xsd:sequence>\n    <xsd:element name=\"invocationActionName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"invocationActionType\" minOccurs=\"0\" type=\"tns:ConversationInvocableTargetType\"/>\n    <xsd:element name=\"invocationMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotInvocationMapping\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotInvocationMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"parameterName\" type=\"xsd:string\"/>\n    <xsd:element name=\"recordName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:BotInvocationMappingType\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"variableName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"variableType\" minOccurs=\"0\" type=\"tns:ConversationVariableType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"BotInvocationMappingType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Input\"/>\n    <xsd:enumeration value=\"Output\"/>\n    <xsd:enumeration value=\"Error\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"BotMessage\">\n  <xsd:sequence>\n    <xsd:element name=\"message\" type=\"xsd:string\"/>\n    <xsd:element name=\"messageIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotNavigation\">\n  <xsd:sequence>\n    <xsd:element name=\"botNavigationLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotNavigationLink\"/>\n    <xsd:element name=\"type\" type=\"tns:BotNavigationType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotNavigationLink\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetBotDialog\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetVariable\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetVariableType\" minOccurs=\"0\" type=\"tns:ConversationVariableType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"BotNavigationType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Call\"/>\n    <xsd:enumeration value=\"Redirect\"/>\n    <xsd:enumeration value=\"TransferToAgent\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"BotQuickReplyOption\">\n  <xsd:sequence>\n    <xsd:element name=\"literalValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"quickReplyOptionIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"BotQuickReplyType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Static\"/>\n    <xsd:enumeration value=\"Dynamic\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"BotStep\">\n  <xsd:sequence>\n    <xsd:element name=\"booleanFilter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"botInvocation\" minOccurs=\"0\" type=\"tns:BotInvocation\"/>\n    <xsd:element name=\"botMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotMessage\"/>\n    <xsd:element name=\"botNavigation\" minOccurs=\"0\" type=\"tns:BotNavigation\"/>\n    <xsd:element name=\"botStepConditions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotStepCondition\"/>\n    <xsd:element name=\"botSteps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotStep\"/>\n    <xsd:element name=\"botVariableOperation\" minOccurs=\"0\" type=\"tns:BotVariableOperation\"/>\n    <xsd:element name=\"conditionLogicType\" minOccurs=\"0\" type=\"tns:ConversationDefinitionLogicalOperatorType\"/>\n    <xsd:element name=\"conversationRecordLookup\" minOccurs=\"0\" type=\"tns:ConversationRecordLookup\"/>\n    <xsd:element name=\"conversationStepGoalMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationDefinitionStepGoalMapping\"/>\n    <xsd:element name=\"conversationSystemMessage\" minOccurs=\"0\" type=\"tns:ConversationSystemMessage\"/>\n    <xsd:element name=\"messageDefinition\" minOccurs=\"0\" type=\"tns:ConversationDefinitionRichMessage\"/>\n    <xsd:element name=\"stepIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:BotStepType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotStepCondition\">\n  <xsd:sequence>\n    <xsd:element name=\"leftOperandName\" type=\"xsd:string\"/>\n    <xsd:element name=\"leftOperandType\" type=\"tns:ConversationVariableType\"/>\n    <xsd:element name=\"operatorType\" type=\"tns:BotStepConditionOperatorType\"/>\n    <xsd:element name=\"rightOperandValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"BotStepConditionOperatorType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Equals\"/>\n    <xsd:enumeration value=\"NotEquals\"/>\n    <xsd:enumeration value=\"IsSet\"/>\n    <xsd:enumeration value=\"IsNotSet\"/>\n    <xsd:enumeration value=\"GreaterThan\"/>\n    <xsd:enumeration value=\"LessThan\"/>\n    <xsd:enumeration value=\"GreaterThanOrEqualTo\"/>\n    <xsd:enumeration value=\"LessThanOrEqualTo\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"BotStepType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Navigation\"/>\n    <xsd:enumeration value=\"Invocation\"/>\n    <xsd:enumeration value=\"VariableOperation\"/>\n    <xsd:enumeration value=\"Message\"/>\n    <xsd:enumeration value=\"Wait\"/>\n    <xsd:enumeration value=\"Group\"/>\n    <xsd:enumeration value=\"SystemMessage\"/>\n    <xsd:enumeration value=\"RecordLookup\"/>\n    <xsd:enumeration value=\"RichMessage\"/>\n    <xsd:enumeration value=\"GoalStep\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"BotVariableOperand\">\n  <xsd:sequence>\n    <xsd:element name=\"disableAutoFill\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"sourceName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceType\" minOccurs=\"0\" type=\"tns:ConversationVariableOperandSourceType\"/>\n    <xsd:element name=\"sourceValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetName\" type=\"xsd:string\"/>\n    <xsd:element name=\"targetType\" type=\"tns:ConversationVariableType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotVariableOperation\">\n  <xsd:sequence>\n    <xsd:element name=\"askCollectIfSet\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"autoSelectIfSingleChoice\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"botInvocation\" minOccurs=\"0\" type=\"tns:BotInvocation\"/>\n    <xsd:element name=\"botMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotMessage\"/>\n    <xsd:element name=\"botQuickReplyOptions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotQuickReplyOption\"/>\n    <xsd:element name=\"botVariableOperands\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotVariableOperand\"/>\n    <xsd:element name=\"ignoreIntentRecognition\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"invalidInputBotNavigation\" minOccurs=\"0\" type=\"tns:BotNavigation\"/>\n    <xsd:element name=\"messageDefinition\" minOccurs=\"0\" type=\"tns:ConversationDefinitionRichMessage\"/>\n    <xsd:element name=\"optionalCollect\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"quickReplyOptionTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"quickReplyType\" minOccurs=\"0\" type=\"tns:BotQuickReplyType\"/>\n    <xsd:element name=\"quickReplyWidgetType\" minOccurs=\"0\" type=\"tns:BotWidgetType\"/>\n    <xsd:element name=\"retryMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotMessage\"/>\n    <xsd:element name=\"sourceVariableName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceVariableType\" minOccurs=\"0\" type=\"tns:ConversationVariableType\"/>\n    <xsd:element name=\"successMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotMessage\"/>\n    <xsd:element name=\"type\" type=\"tns:BotVariableOperationType\"/>\n    <xsd:element name=\"variableOperationIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"BotVariableOperationType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Set\"/>\n    <xsd:enumeration value=\"Unset\"/>\n    <xsd:enumeration value=\"Collect\"/>\n    <xsd:enumeration value=\"SetConversationLanguage\"/>\n    <xsd:enumeration value=\"CollectAttachment\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"BotVersion\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aiAgentFieldLevelRecordAccesses\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiAgentFieldLevelRecordAccess\"/>\n        <xsd:element name=\"articleAnswersGPTEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"botDialogGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotDialogGroup\"/>\n        <xsd:element name=\"botDialogs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotDialog\"/>\n        <xsd:element name=\"citationsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"company\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"conversationDefinitionPlanners\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationDefinitionPlanner\"/>\n        <xsd:element name=\"conversationGoals\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationDefinitionGoal\"/>\n        <xsd:element name=\"conversationSystemDialogs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationSystemDialog\"/>\n        <xsd:element name=\"conversationVariables\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationVariable\"/>\n        <xsd:element name=\"copilotPrimaryLanguage\" minOccurs=\"0\" type=\"tns:Language\"/>\n        <xsd:element name=\"copilotSecondaryLanguages\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"defaultStdObjForContactIdFltrEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"entryDialog\" type=\"xsd:string\"/>\n        <xsd:element name=\"initialIntentDetectionEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"intentDisambiguationEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"intentThreshold\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <xsd:element name=\"intentV3Enabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isScriptCompatibleAgent\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"knowledgeActionEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"knowledgeFallbackEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"mainMenuDialog\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"nlpProviders\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationDefinitionNlpProvider\"/>\n        <xsd:element name=\"responseDelayMilliseconds\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"role\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"smallTalkEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"staticPromptsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"stopRecPrompts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"stopWelcomePrompts\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"surfacesEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"toneType\" minOccurs=\"0\" type=\"tns:GenAiBotToneType\"/>\n        <xsd:element name=\"welcomeRecommendations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WelcomeRecommendation\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"BotWidgetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Menu\"/>\n    <xsd:enumeration value=\"Buttons\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationDataType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Text\"/>\n    <xsd:enumeration value=\"Number\"/>\n    <xsd:enumeration value=\"Boolean\"/>\n    <xsd:enumeration value=\"Object\"/>\n    <xsd:enumeration value=\"Date\"/>\n    <xsd:enumeration value=\"DateTime\"/>\n    <xsd:enumeration value=\"Currency\"/>\n    <xsd:enumeration value=\"Id\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationDefinitionGoal\">\n  <xsd:sequence>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationDefinitionLogicalOperatorType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"And\"/>\n    <xsd:enumeration value=\"Or\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationDefinitionNlpProvider\">\n  <xsd:sequence>\n    <xsd:element name=\"language\" minOccurs=\"0\" type=\"tns:Language\"/>\n    <xsd:element name=\"nlpProviderName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"nlpProviderType\" type=\"tns:ConversationDefinitionNlpProviderType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationDefinitionNlpProviderType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"EinsteinAi\"/>\n    <xsd:enumeration value=\"Apex\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationDefinitionPlanner\">\n  <xsd:sequence>\n    <xsd:element name=\"genAiPlannerName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationDefinitionRichMessage\">\n  <xsd:sequence>\n    <xsd:element name=\"executionType\" minOccurs=\"0\" type=\"tns:ConversationMessageExecutionType\"/>\n    <xsd:element name=\"messageDefinitionMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotInvocationMapping\"/>\n    <xsd:element name=\"messageDefinitionName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationDefinitionStepGoalMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"goalName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationInvocableTargetType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"apex\"/>\n    <xsd:enumeration value=\"flow\"/>\n    <xsd:enumeration value=\"standardInvocableAction\"/>\n    <xsd:enumeration value=\"logFeedback\"/>\n    <xsd:enumeration value=\"externalService\"/>\n    <xsd:enumeration value=\"logGoalAchieved\"/>\n    <xsd:enumeration value=\"logDisambiguation\"/>\n    <xsd:enumeration value=\"quickAction\"/>\n    <xsd:enumeration value=\"api\"/>\n    <xsd:enumeration value=\"botAction\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMappingType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Input\"/>\n    <xsd:enumeration value=\"Output\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationMessageExecutionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Sync\"/>\n    <xsd:enumeration value=\"Async\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationRecordLookup\">\n  <xsd:sequence>\n    <xsd:element name=\"SObjectType\" type=\"xsd:string\"/>\n    <xsd:element name=\"conditions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationRecordLookupCondition\"/>\n    <xsd:element name=\"filterLogic\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"lookupFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationRecordLookupField\"/>\n    <xsd:element name=\"maxLookupResults\" type=\"xsd:int\"/>\n    <xsd:element name=\"sortFieldName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" minOccurs=\"0\" type=\"tns:SortOrder\"/>\n    <xsd:element name=\"sourceVariableName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sourceVariableType\" minOccurs=\"0\" type=\"tns:ConversationVariableType\"/>\n    <xsd:element name=\"targetVariableName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationRecordLookupCondition\">\n  <xsd:sequence>\n    <xsd:element name=\"leftOperand\" type=\"xsd:string\"/>\n    <xsd:element name=\"operatorType\" type=\"xsd:string\"/>\n    <xsd:element name=\"rightOperandName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"rightOperandType\" minOccurs=\"0\" type=\"tns:ConversationVariableType\"/>\n    <xsd:element name=\"rightOperandValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortOrder\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationRecordLookupField\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationSystemDialog\">\n  <xsd:sequence>\n    <xsd:element name=\"dialog\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:ConversationSystemDialogType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationSystemDialogType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"TransferFailed\"/>\n    <xsd:enumeration value=\"ErrorHandling\"/>\n    <xsd:enumeration value=\"KnowledgeFallback\"/>\n    <xsd:enumeration value=\"Disambiguation\"/>\n    <xsd:enumeration value=\"DisambiguationFailed\"/>\n    <xsd:enumeration value=\"KnowledgeAction\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationSystemMessage\">\n  <xsd:sequence>\n    <xsd:element name=\"systemMessageMappings\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationSystemMessageMapping\"/>\n    <xsd:element name=\"type\" type=\"tns:ConversationSystemMessageType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationSystemMessageMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"mappingType\" type=\"tns:ConversationMappingType\"/>\n    <xsd:element name=\"parameterType\" type=\"tns:ConversationSystemMessageParamType\"/>\n    <xsd:element name=\"variableName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationSystemMessageParamType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Transfer\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationSystemMessageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Transfer\"/>\n    <xsd:enumeration value=\"EndChat\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"ConversationVariable\">\n  <xsd:sequence>\n    <xsd:element name=\"SObjectType\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"collectionType\" minOccurs=\"0\" type=\"tns:ConversationVariableCollectionType\"/>\n    <xsd:element name=\"dataType\" type=\"tns:ConversationDataType\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"includeInPrompt\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"visibility\" minOccurs=\"0\" type=\"tns:ConversationVariableVisibilityType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ConversationVariableCollectionType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"List\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationVariableOperandSourceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"StandardConversationVariable\"/>\n    <xsd:enumeration value=\"ConversationVariable\"/>\n    <xsd:enumeration value=\"ContextVariable\"/>\n    <xsd:enumeration value=\"MlSlotClass\"/>\n    <xsd:enumeration value=\"StandardMlSlotClass\"/>\n    <xsd:enumeration value=\"Value\"/>\n    <xsd:enumeration value=\"BotDefinition\"/>\n    <xsd:enumeration value=\"Queue\"/>\n    <xsd:enumeration value=\"FlowDefinition\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationVariableType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ConversationVariable\"/>\n    <xsd:enumeration value=\"ContextVariable\"/>\n    <xsd:enumeration value=\"PageContextVariable\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"ConversationVariableVisibilityType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Internal\"/>\n    <xsd:enumeration value=\"External\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"GenAiBotToneType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Casual\"/>\n    <xsd:enumeration value=\"Neutral\"/>\n    <xsd:enumeration value=\"Formal\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"Language\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"en_US\"/>\n    <xsd:enumeration value=\"de\"/>\n    <xsd:enumeration value=\"es\"/>\n    <xsd:enumeration value=\"fr\"/>\n    <xsd:enumeration value=\"it\"/>\n    <xsd:enumeration value=\"ja\"/>\n    <xsd:enumeration value=\"sv\"/>\n    <xsd:enumeration value=\"ko\"/>\n    <xsd:enumeration value=\"zh_TW\"/>\n    <xsd:enumeration value=\"zh_CN\"/>\n    <xsd:enumeration value=\"pt_BR\"/>\n    <xsd:enumeration value=\"nl_NL\"/>\n    <xsd:enumeration value=\"da\"/>\n    <xsd:enumeration value=\"th\"/>\n    <xsd:enumeration value=\"fi\"/>\n    <xsd:enumeration value=\"ru\"/>\n    <xsd:enumeration value=\"es_MX\"/>\n    <xsd:enumeration value=\"no\"/>\n    <xsd:enumeration value=\"hu\"/>\n    <xsd:enumeration value=\"pl\"/>\n    <xsd:enumeration value=\"cs\"/>\n    <xsd:enumeration value=\"tr\"/>\n    <xsd:enumeration value=\"in\"/>\n    <xsd:enumeration value=\"ro\"/>\n    <xsd:enumeration value=\"vi\"/>\n    <xsd:enumeration value=\"uk\"/>\n    <xsd:enumeration value=\"iw\"/>\n    <xsd:enumeration value=\"el\"/>\n    <xsd:enumeration value=\"bg\"/>\n    <xsd:enumeration value=\"en_GB\"/>\n    <xsd:enumeration value=\"ar\"/>\n    <xsd:enumeration value=\"sk\"/>\n    <xsd:enumeration value=\"pt_PT\"/>\n    <xsd:enumeration value=\"hr\"/>\n    <xsd:enumeration value=\"sl\"/>\n    <xsd:enumeration value=\"fr_CA\"/>\n    <xsd:enumeration value=\"ka\"/>\n    <xsd:enumeration value=\"sr\"/>\n    <xsd:enumeration value=\"sh\"/>\n    <xsd:enumeration value=\"en_AU\"/>\n    <xsd:enumeration value=\"en_MY\"/>\n    <xsd:enumeration value=\"en_IN\"/>\n    <xsd:enumeration value=\"en_PH\"/>\n    <xsd:enumeration value=\"en_CA\"/>\n    <xsd:enumeration value=\"ro_MD\"/>\n    <xsd:enumeration value=\"bs\"/>\n    <xsd:enumeration value=\"mk\"/>\n    <xsd:enumeration value=\"lv\"/>\n    <xsd:enumeration value=\"lt\"/>\n    <xsd:enumeration value=\"et\"/>\n    <xsd:enumeration value=\"sq\"/>\n    <xsd:enumeration value=\"sh_ME\"/>\n    <xsd:enumeration value=\"mt\"/>\n    <xsd:enumeration value=\"ga\"/>\n    <xsd:enumeration value=\"eu\"/>\n    <xsd:enumeration value=\"cy\"/>\n    <xsd:enumeration value=\"is\"/>\n    <xsd:enumeration value=\"cac\"/>\n    <xsd:enumeration value=\"quc\"/>\n    <xsd:enumeration value=\"cak\"/>\n    <xsd:enumeration value=\"ms\"/>\n    <xsd:enumeration value=\"tl\"/>\n    <xsd:enumeration value=\"lb\"/>\n    <xsd:enumeration value=\"rm\"/>\n    <xsd:enumeration value=\"hy\"/>\n    <xsd:enumeration value=\"hi\"/>\n    <xsd:enumeration value=\"ur\"/>\n    <xsd:enumeration value=\"bn\"/>\n    <xsd:enumeration value=\"de_AT\"/>\n    <xsd:enumeration value=\"de_CH\"/>\n    <xsd:enumeration value=\"ta\"/>\n    <xsd:enumeration value=\"ar_DZ\"/>\n    <xsd:enumeration value=\"ar_BH\"/>\n    <xsd:enumeration value=\"ar_EG\"/>\n    <xsd:enumeration value=\"ar_IQ\"/>\n    <xsd:enumeration value=\"ar_JO\"/>\n    <xsd:enumeration value=\"ar_KW\"/>\n    <xsd:enumeration value=\"ar_LB\"/>\n    <xsd:enumeration value=\"ar_LY\"/>\n    <xsd:enumeration value=\"ar_MA\"/>\n    <xsd:enumeration value=\"ar_OM\"/>\n    <xsd:enumeration value=\"ar_QA\"/>\n    <xsd:enumeration value=\"ar_SA\"/>\n    <xsd:enumeration value=\"ar_SD\"/>\n    <xsd:enumeration value=\"ar_SY\"/>\n    <xsd:enumeration value=\"ar_TN\"/>\n    <xsd:enumeration value=\"ar_AE\"/>\n    <xsd:enumeration value=\"ar_YE\"/>\n    <xsd:enumeration value=\"zh_SG\"/>\n    <xsd:enumeration value=\"zh_HK\"/>\n    <xsd:enumeration value=\"en_HK\"/>\n    <xsd:enumeration value=\"en_IE\"/>\n    <xsd:enumeration value=\"en_SG\"/>\n    <xsd:enumeration value=\"en_ZA\"/>\n    <xsd:enumeration value=\"fr_BE\"/>\n    <xsd:enumeration value=\"fr_LU\"/>\n    <xsd:enumeration value=\"fr_CH\"/>\n    <xsd:enumeration value=\"de_BE\"/>\n    <xsd:enumeration value=\"de_LU\"/>\n    <xsd:enumeration value=\"it_CH\"/>\n    <xsd:enumeration value=\"nl_BE\"/>\n    <xsd:enumeration value=\"es_AR\"/>\n    <xsd:enumeration value=\"es_BO\"/>\n    <xsd:enumeration value=\"es_CL\"/>\n    <xsd:enumeration value=\"es_CO\"/>\n    <xsd:enumeration value=\"es_CR\"/>\n    <xsd:enumeration value=\"es_DO\"/>\n    <xsd:enumeration value=\"es_EC\"/>\n    <xsd:enumeration value=\"es_SV\"/>\n    <xsd:enumeration value=\"es_GT\"/>\n    <xsd:enumeration value=\"es_HN\"/>\n    <xsd:enumeration value=\"es_NI\"/>\n    <xsd:enumeration value=\"es_PA\"/>\n    <xsd:enumeration value=\"es_PY\"/>\n    <xsd:enumeration value=\"es_PE\"/>\n    <xsd:enumeration value=\"es_PR\"/>\n    <xsd:enumeration value=\"es_US\"/>\n    <xsd:enumeration value=\"es_UY\"/>\n    <xsd:enumeration value=\"es_VE\"/>\n    <xsd:enumeration value=\"ca\"/>\n    <xsd:enumeration value=\"af\"/>\n    <xsd:enumeration value=\"sw\"/>\n    <xsd:enumeration value=\"zu\"/>\n    <xsd:enumeration value=\"xh\"/>\n    <xsd:enumeration value=\"te\"/>\n    <xsd:enumeration value=\"ml\"/>\n    <xsd:enumeration value=\"kn\"/>\n    <xsd:enumeration value=\"mr\"/>\n    <xsd:enumeration value=\"gu\"/>\n    <xsd:enumeration value=\"pa\"/>\n    <xsd:enumeration value=\"en_NZ\"/>\n    <xsd:enumeration value=\"mi\"/>\n    <xsd:enumeration value=\"my\"/>\n    <xsd:enumeration value=\"fa\"/>\n    <xsd:enumeration value=\"km\"/>\n    <xsd:enumeration value=\"am\"/>\n    <xsd:enumeration value=\"kk\"/>\n    <xsd:enumeration value=\"ht\"/>\n    <xsd:enumeration value=\"sm\"/>\n    <xsd:enumeration value=\"haw\"/>\n    <xsd:enumeration value=\"zh_MY\"/>\n    <xsd:enumeration value=\"ru_LT\"/>\n    <xsd:enumeration value=\"ru_PL\"/>\n    <xsd:enumeration value=\"ru_AM\"/>\n    <xsd:enumeration value=\"ru_KZ\"/>\n    <xsd:enumeration value=\"ru_KG\"/>\n    <xsd:enumeration value=\"ru_BY\"/>\n    <xsd:enumeration value=\"ru_MD\"/>\n    <xsd:enumeration value=\"ru_UA\"/>\n    <xsd:enumeration value=\"en_AE\"/>\n    <xsd:enumeration value=\"en_BE\"/>\n    <xsd:enumeration value=\"en_CY\"/>\n    <xsd:enumeration value=\"en_DE\"/>\n    <xsd:enumeration value=\"en_IL\"/>\n    <xsd:enumeration value=\"en_IT\"/>\n    <xsd:enumeration value=\"en_NL\"/>\n    <xsd:enumeration value=\"en_MT\"/>\n    <xsd:enumeration value=\"en_ES\"/>\n    <xsd:enumeration value=\"en_PL\"/>\n    <xsd:enumeration value=\"en_DK\"/>\n    <xsd:enumeration value=\"en_SE\"/>\n    <xsd:enumeration value=\"en_NO\"/>\n    <xsd:enumeration value=\"en_FR\"/>\n    <xsd:enumeration value=\"en_HU\"/>\n    <xsd:enumeration value=\"en_CZ\"/>\n    <xsd:enumeration value=\"en_SK\"/>\n    <xsd:enumeration value=\"en_RO\"/>\n    <xsd:enumeration value=\"en_CH\"/>\n    <xsd:enumeration value=\"en_AL\"/>\n    <xsd:enumeration value=\"en_AD\"/>\n    <xsd:enumeration value=\"en_AG\"/>\n    <xsd:enumeration value=\"en_AT\"/>\n    <xsd:enumeration value=\"en_BS\"/>\n    <xsd:enumeration value=\"en_BB\"/>\n    <xsd:enumeration value=\"en_BZ\"/>\n    <xsd:enumeration value=\"en_BA\"/>\n    <xsd:enumeration value=\"en_BG\"/>\n    <xsd:enumeration value=\"en_HR\"/>\n    <xsd:enumeration value=\"en_DM\"/>\n    <xsd:enumeration value=\"en_EE\"/>\n    <xsd:enumeration value=\"en_FI\"/>\n    <xsd:enumeration value=\"en_GI\"/>\n    <xsd:enumeration value=\"en_GR\"/>\n    <xsd:enumeration value=\"en_GD\"/>\n    <xsd:enumeration value=\"en_GY\"/>\n    <xsd:enumeration value=\"en_IS\"/>\n    <xsd:enumeration value=\"en_JM\"/>\n    <xsd:enumeration value=\"en_JP\"/>\n    <xsd:enumeration value=\"en_LV\"/>\n    <xsd:enumeration value=\"en_LI\"/>\n    <xsd:enumeration value=\"en_LT\"/>\n    <xsd:enumeration value=\"en_LU\"/>\n    <xsd:enumeration value=\"en_MC\"/>\n    <xsd:enumeration value=\"en_ME\"/>\n    <xsd:enumeration value=\"en_MK\"/>\n    <xsd:enumeration value=\"en_PT\"/>\n    <xsd:enumeration value=\"en_RS\"/>\n    <xsd:enumeration value=\"en_SI\"/>\n    <xsd:enumeration value=\"en_KR\"/>\n    <xsd:enumeration value=\"en_KN\"/>\n    <xsd:enumeration value=\"en_LC\"/>\n    <xsd:enumeration value=\"en_VC\"/>\n    <xsd:enumeration value=\"en_TW\"/>\n    <xsd:enumeration value=\"en_TH\"/>\n    <xsd:enumeration value=\"en_TT\"/>\n    <xsd:enumeration value=\"en_TR\"/>\n    <xsd:enumeration value=\"nl_SR\"/>\n    <xsd:enumeration value=\"fr_HT\"/>\n    <xsd:enumeration value=\"de_LI\"/>\n    <xsd:enumeration value=\"es_AD\"/>\n    <xsd:enumeration value=\"sv_FI\"/>\n    <xsd:enumeration value=\"el_CY\"/>\n    <xsd:enumeration value=\"fr_MA\"/>\n    <xsd:enumeration value=\"kl\"/>\n    <xsd:enumeration value=\"ji\"/>\n    <xsd:enumeration value=\"hmn\"/>\n    <xsd:enumeration value=\"eo\"/>\n    <xsd:enumeration value=\"iw_EO\"/>\n    <xsd:enumeration value=\"eo_US\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"SortOrder\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Asc\"/>\n    <xsd:enumeration value=\"Desc\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"WelcomeRecommendation\">\n  <xsd:sequence>\n    <xsd:element name=\"staticUtterance\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a BotVersion.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Bot xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <botMlDomain>\n        <label>Astros Pizza</label>\n        <mlIntents>\n            <developerName>New_Order</developerName>\n            <label>New Order</label>\n            <mlIntentUtterances>\n                <utterance>Today is pie day so I want pie</utterance>\n            </mlIntentUtterances>\n        </mlIntents>\n        <mlSlotClasses>\n            <developerName>Size</developerName>\n            <extractionType>Value</extractionType>\n            <label>Size</label>\n            <mlSlotClassValues>\n                <synonymGroup>\n                    <languages>en_US</languages>\n                    <terms>Big</terms>\n                    <terms>Extra Large</terms>\n                    <terms>X-Large</terms>\n                    <terms>Grande</terms>\n                    <terms>Huge</terms>\n                </synonymGroup>\n                <value>Large</value>\n            </mlSlotClassValues>\n        </mlSlotClasses>\n        <name>Astros_Pizza_ld1</name>\n    </botMlDomain>\n    <botVersions>\n        <fullName>v1</fullName>\n        <botDialogGroups>\n            <developerName>Order_Management</developerName>\n            <label>Order Management</label>\n        </botDialogGroups>\n        <botDialogs>\n            <botDialogGroup>Order_Management</botDialogGroup>\n            <botSteps>\n                <botMessages>\n                    <message>🍕🍕🍕Pizza Time! 🍕🍕🍕</message>\n                    <messageIdentifier>Greeting_Message</messageIdentifier>\n                </botMessages>\n                <stepIdentifier>Greeting</stepIdentifier>\n                <type>Message</type>\n            </botSteps>\n            <botSteps>\n                <botStepConditions>\n                    <leftOperandName>Verified_User</leftOperandName>\n                    <leftOperandType>ConversationVariable</leftOperandType>\n                    <operatorType>Equals</operatorType>\n                    <rightOperandValue>false</rightOperandValue>\n                </botStepConditions>\n                <botSteps>\n                    <botNavigation>\n                        <botNavigationLinks>\n                            <targetBotDialog>Customer_Verification</targetBotDialog>\n                        </botNavigationLinks>\n                        <type>Call</type>\n                    </botNavigation>\n                    <stepIdentifier>Call_Customer_Verification</stepIdentifier>\n                    <type>Navigation</type>\n                </botSteps>\n                <stepIdentifier>Verify_User</stepIdentifier>\n                <type>Group</type>\n            </botSteps>\n            <botSteps>\n                <botStepConditions>\n                    <leftOperandName>Location</leftOperandName>\n                    <leftOperandType>ConversationVariable</leftOperandType>\n                    <operatorType>IsNotSet</operatorType>\n                </botStepConditions>\n                <botSteps>\n                    <botNavigation>\n                        <botNavigationLinks>\n                            <targetBotDialog>Select_Location</targetBotDialog>\n                        </botNavigationLinks>\n                        <type>Call</type>\n                    </botNavigation>\n                    <stepIdentifier>Call_Select_Location</stepIdentifier>\n                    <type>Navigation</type>\n                </botSteps>\n                <stepIdentifier>Set_Location</stepIdentifier>\n                <type>Group</type>\n            </botSteps>\n            <botSteps>\n                <botVariableOperation>\n                    <botInvocation>\n                        <invocationActionName>CreateOrderService</invocationActionName>\n                        <invocationActionType>apex</invocationActionType>\n                        <invocationMappings>\n                            <parameterName>customer</parameterName>\n                            <type>Input</type>\n                            <variableName>Contact</variableName>\n                            <variableType>ConversationVariable</variableType>\n                        </invocationMappings>\n                        <invocationMappings>\n                            <parameterName>location</parameterName>\n                            <type>Input</type>\n                            <variableName>Location</variableName>\n                            <variableType>ConversationVariable</variableType>\n                        </invocationMappings>\n                        <invocationMappings>\n                            <parameterName>output</parameterName>\n                            <type>Output</type>\n                            <variableName>Pizza_Order</variableName>\n                            <variableType>ConversationVariable</variableType>\n                        </invocationMappings>\n                    </botInvocation>\n                    <type>Set</type>\n                    <variableOperationIdentifier>Set_Order</variableOperationIdentifier>\n                </botVariableOperation>\n                <stepIdentifier>Create_Order</stepIdentifier>\n                <type>VariableOperation</type>\n            </botSteps>\n            <botSteps>\n                <botMessages>\n                    <message>Perfect, let&apos;s work on your order from our {!Location.Name} location</message>\n                    <messageIdentifier>Start_Order_Message</messageIdentifier>\n                </botMessages>\n                <stepIdentifier>Start_Order</stepIdentifier>\n                <type>Message</type>\n            </botSteps>\n            <botSteps>\n                <messageDefinition>\n                    <messageDefinitionName>Astros_Pizza_Menu</messageDefinitionName>\n                </messageDefinition>\n                <stepIdentifier>36e5a7cb-50c4-4279-aa06-1217eba1bf62</stepIdentifier>\n                <type>RichMessage</type>\n            </botSteps>\n            <botSteps>\n                <botNavigation>\n                    <botNavigationLinks>\n                        <targetBotDialog>Add_Items_to_Order</targetBotDialog>\n                    </botNavigationLinks>\n                    <type>Redirect</type>\n                </botNavigation>\n                <stepIdentifier>Proceed_To_Add_Items</stepIdentifier>\n                <type>Navigation</type>\n            </botSteps>\n            <developerName>New_Order</developerName>\n            <label>New Order</label>\n            <mlIntent>New_Order</mlIntent>\n            <showInFooterMenu>false</showInFooterMenu>\n        </botDialogs>\n        <conversationVariables>\n            <dataType>Object</dataType>\n            <developerName>Contact</developerName>\n            <label>Contact</label>\n        </conversationVariables>\n        <conversationVariables>\n            <dataType>Text</dataType>\n            <developerName>Delivery_Address</developerName>\n            <label>Delivery Address</label>\n        </conversationVariables>\n        <conversationVariables>\n            <dataType>Object</dataType>\n            <developerName>Pizza_Order</developerName>\n            <label>Pizza Order</label>\n        </conversationVariables>\n        <entryDialog>Welcome</entryDialog>\n        <mainMenuDialog>Main_Menu</mainMenuDialog>\n    </botVersions>\n    <label>Astro&apos;s Pizza</label>\n</Bot>"
+    }
+  ]
+}

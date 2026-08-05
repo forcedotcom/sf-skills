@@ -1,0 +1,66 @@
+# Focused Agent Template
+# The filename is retained for compatibility; the recommended focused-agent
+# shape is one start_agent execution block with no router or subagent blocks.
+# Copy this file to your AiAuthoringBundle directory and rename it to match
+# your agent's developer_name. Replace all placeholder values with real ones.
+
+system:
+    instructions: |
+        Describe the agent's durable persona, safety rules, and scope here.
+        Handle the focused task defined below. Redirect unrelated requests
+        briefly, and transfer only when the user explicitly asks for a human.
+    messages:
+        welcome: "Hello! How can I help you today?"
+        error: "Sorry, it looks like something has gone wrong."
+
+access:
+    default_agent_user: "username@identifier.org"
+
+config:
+    developer_name: "Agent_API_Name"
+    agent_label: "Agent Display Name"
+    description: "Description of the agent's focused purpose"
+    # agent_type: "AgentforceServiceAgent" for customer-facing (requires access.default_agent_user)
+    #             "AgentforceEmployeeAgent" for internal (remove the access block)
+    agent_type: "AgentforceServiceAgent"
+
+language:
+    default_locale: "en_US"
+    additional_locales: ""
+    all_additional_locales: False
+
+start_agent main:
+    label: "Main Handler"
+    description: "Describe the single focused objective this agent handles"
+
+    actions:
+        do_action:
+            description: "Describe what this action does"
+            label: "Action Display Name"
+            target: "apex://ClassName"
+            inputs:
+                input_param: string
+                    description: "Describe this parameter"
+                    label: "Parameter Display Name"
+                    is_required: True
+            outputs:
+                output_field: string
+                    label: "Output Display Name"
+                    description: "Describe this output"
+                    is_displayable: True
+                    filter_from_agent: False
+
+    reasoning:
+        instructions: ->
+            | Handle only the focused objective described for this agent.
+            | Use the task action when the user supplies the required input.
+            | If required input is missing, ask one concise clarifying question.
+            | If the request is outside scope, redirect to the focused objective.
+            | If the user explicitly asks for a human, transfer without also
+              attempting the underlying task.
+
+        actions:
+            do_action: @actions.do_action
+                with input_param = ...
+            escalate_to_human: @utils.escalate
+                description: "Transfer only when the user explicitly requests a human"

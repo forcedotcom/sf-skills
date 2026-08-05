@@ -1,0 +1,567 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "WaveXmd - Metadata API",
+  "description": "Represents the WaveXmd object in the Analytics application. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".xmd",
+  "directory_location": "wave",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "description": "The name of the Analytics application the XMD is associated with. Available in API version 43.0 and later."
+    },
+    "dataset": {
+      "type": "string",
+      "description": "Specifies the dataset associated with this XMD.",
+      "required": true
+    },
+    "datasetConnector": {
+      "type": "string",
+      "description": "The name of the connector source for the dataset."
+    },
+    "datasetFullyQualifiedName": {
+      "type": "string",
+      "description": "Specifies the fully qualified name of the dataset version associated with this XMD."
+    },
+    "dates": {
+      "type": "WaveXmdDate",
+      "description": "List of dates, with formatting information."
+    },
+    "dimensions": {
+      "type": "WaveXmdDimension",
+      "description": "List of dimensions, with formatting information."
+    },
+    "measures": {
+      "type": "WaveXmdMeasure",
+      "description": "List of measures, with formatting information."
+    },
+    "organizations": {
+      "type": "WaveXmdOrganization",
+      "description": "List of organizations, for multi-organization support."
+    },
+    "origin": {
+      "type": "string",
+      "description": "The origin of the dataset version."
+    },
+    "type": {
+      "type": "string",
+      "description": "The XMD type. Valid values are: System User Main Asset Available in API version 43.0 and later."
+    },
+    "waveVisualization": {
+      "type": "string",
+      "description": "The visualization behavior for Analytics assets. Valid values are: dashboard lens Available in API version 43.0 and later."
+    }
+  },
+  "sub_types": {
+    "WaveXmdDate": {
+      "alias": {
+        "type": "string",
+        "description": "Alias of the Date column.",
+        "required": true
+      },
+      "compact": {
+        "type": "boolean",
+        "description": "Indicates whether the date is displayed in compact form (true) or not (false)."
+      },
+      "dateFieldDay": {
+        "type": "string",
+        "description": "The day field."
+      },
+      "dateFieldEpochDay": {
+        "type": "string",
+        "description": "The epoch day field."
+      },
+      "dateFieldEpochSecond": {
+        "type": "string",
+        "description": "The epoch second field."
+      },
+      "dateFieldFiscalMonth": {
+        "type": "string",
+        "description": "The fiscal month field."
+      },
+      "dateFieldFiscalQuarter": {
+        "type": "string",
+        "description": "The fiscal quarter field."
+      },
+      "dateFieldFiscalWeek": {
+        "type": "string",
+        "description": "The fiscal week field."
+      },
+      "dateFieldFiscalYear": {
+        "type": "string",
+        "description": "The fiscal year field."
+      },
+      "dateFieldFullYear": {
+        "type": "string",
+        "description": "The full year field."
+      },
+      "dateFieldHour": {
+        "type": "string",
+        "description": "The hour field."
+      },
+      "dateFieldMinute": {
+        "type": "string",
+        "description": "The minute field."
+      },
+      "dateFieldMonth": {
+        "type": "string",
+        "description": "The month field."
+      },
+      "dateFieldQuarter": {
+        "type": "string",
+        "description": "The quarter field."
+      },
+      "dateFieldSecond": {
+        "type": "string",
+        "description": "The second field."
+      },
+      "dateFieldWeek": {
+        "type": "string",
+        "description": "The week field."
+      },
+      "dateFieldYear": {
+        "type": "string",
+        "description": "The year field."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the date column."
+      },
+      "firstDayOfWeek": {
+        "type": "int",
+        "description": "Represents the first day of the week.",
+        "required": true
+      },
+      "fiscalMonthOffset": {
+        "type": "int",
+        "description": "Offset number of months for the fiscal year in relation to the calendar year.",
+        "required": true
+      },
+      "isYearEndFiscalYear": {
+        "type": "boolean",
+        "description": "Indicates whether the year end is the fiscal year (true) or not (false)."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label of the date column."
+      },
+      "showInExplorer": {
+        "type": "boolean",
+        "description": "Indicates whether the date is displayed in the explorer (true) or not (false)."
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of date. Valid values are: Date—A legacy date type. Available when the time zone isn’t enabled. DateOnly—A date type without an associated time. Available when the time zone is enabled. DateTime—A date type that contains both date and time parts. Available when the time zone is enabled.",
+        "required": true
+      }
+    },
+    "WaveXmdDimension": {
+      "conditionalFormatting": {
+        "type": "WaveXmdFormattingProperty",
+        "description": "The conditional formatting property for the dimension. Available in API version 43.0 and later."
+      },
+      "customActions": {
+        "type": "WaveXmdDimensionCustomAction",
+        "description": "Custom actions linked to this dimension."
+      },
+      "customActionsEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether the dimension has custom actions enabled (true) or not (false)."
+      },
+      "dateFormat": {
+        "type": "string",
+        "description": "The format used for a date that is a dimension."
+      },
+      "defaultAction": {
+        "type": "string",
+        "description": "The default action assigned to a dimension. An action for a dimension can be openSfdcRecord, openActionsMenu, none, or a valid API name with dot notation like Global.LogACall or FeedItem.Post."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the dimension."
+      },
+      "field": {
+        "type": "string",
+        "description": "The field name of the dimension (used in queries).",
+        "required": true
+      },
+      "fullyQualifiedName": {
+        "type": "string",
+        "description": "The fully qualified name of the dimension."
+      },
+      "imageTemplate": {
+        "type": "string",
+        "description": "The image template."
+      },
+      "isDerived": {
+        "type": "boolean",
+        "description": "Indicates whether the dimension is derived (true) or not (false).",
+        "required": true
+      },
+      "isMultiValue": {
+        "type": "boolean",
+        "description": "Indicates whether the dimension is multi-value (true) or not (false)."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the dimension."
+      },
+      "linkTemplate": {
+        "type": "string",
+        "description": "The template for formatting a link."
+      },
+      "linkTemplateEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether the dimension has link templates enabled (true) or not (false)."
+      },
+      "linkTooltip": {
+        "type": "string",
+        "description": "The tooltip to be displayed for links."
+      },
+      "members": {
+        "type": "WaveXmdDimensionMember",
+        "description": "The member overrides for a dimension."
+      },
+      "origin": {
+        "type": "string",
+        "description": "The origin of this dimension."
+      },
+      "recordDisplayFields": {
+        "type": "WaveXmdRecordDisplayLookup",
+        "description": "Ordered list of dimensions. The list defines the default order in which to display the dimensions in the user interface."
+      },
+      "recordIdField": {
+        "type": "string",
+        "description": "The record ID for this dimension."
+      },
+      "recordOrganizationIdField": {
+        "type": "string",
+        "description": "The record organization ID for this dimension."
+      },
+      "salesforceActions": {
+        "type": "WaveXmdDimensionSalesforceAction",
+        "description": "Salesforce actions linked to this dimension."
+      },
+      "salesforceActionsEnabled": {
+        "type": "boolean",
+        "description": "Indicates whether the dimension has Salesforce actions enabled (true) or not (false)."
+      },
+      "showDetailsDefaultFieldIndex": {
+        "type": "int",
+        "description": "Default order in which to show the dimensions in the user interface."
+      },
+      "showInExplorer": {
+        "type": "boolean",
+        "description": "Indicates whether the dimension is displayed in the explorer (true) or not (false)."
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      }
+    },
+    "WaveXmdFormattingProperty": {
+      "formattingBins": {
+        "type": "WaveXmdFormattingBin",
+        "description": "The formatting bins for this property."
+      },
+      "formattingPredicates": {
+        "type": "WaveXmdFormattingPredicate",
+        "description": "The formatting predicates for this property."
+      },
+      "property": {
+        "type": "string",
+        "description": "The property name.",
+        "required": true
+      },
+      "referenceField": {
+        "type": "string",
+        "description": "The reference field for this property.",
+        "required": true
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      },
+      "type": {
+        "type": "string",
+        "description": "The property type.",
+        "required": true
+      }
+    },
+    "WaveXmdFormattingBin": {
+      "bin": {
+        "type": "string",
+        "description": "The formatting bin.",
+        "required": true
+      },
+      "formatValue": {
+        "type": "string",
+        "description": "The format value for the bin.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the bin.",
+        "required": true
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      }
+    },
+    "WaveXmdFormattingPredicate": {
+      "formatValue": {
+        "type": "string",
+        "description": "The format value for the predicate.",
+        "required": true
+      },
+      "operator": {
+        "type": "string",
+        "description": "The operator for the predicate.",
+        "required": true
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "The value for the predicate.",
+        "required": true
+      }
+    },
+    "WaveXmdDimensionCustomAction": {
+      "customActionName": {
+        "type": "string",
+        "description": "The name of this custom action.",
+        "required": true
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the action is enabled for a specific dimension (true) or not (false).",
+        "required": true
+      },
+      "icon": {
+        "type": "string",
+        "description": "The icon for the action."
+      },
+      "method": {
+        "type": "string",
+        "description": "The method for the action."
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      },
+      "target": {
+        "type": "string",
+        "description": "The target for the action."
+      },
+      "tooltip": {
+        "type": "string",
+        "description": "The tooltip for the action."
+      },
+      "url": {
+        "type": "string",
+        "description": "The URL for the action."
+      }
+    },
+    "WaveXmdDimensionMember": {
+      "color": {
+        "type": "string",
+        "description": "The color for the member."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the member. Note: Multi-line text isn't supported"
+      },
+      "member": {
+        "type": "string",
+        "description": "The member value.",
+        "required": true
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      }
+    },
+    "WaveXmdRecordDisplayLookup": {
+      "recordDisplayField": {
+        "type": "string",
+        "description": "The field to display.",
+        "required": true
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      }
+    },
+    "WaveXmdDimensionSalesforceAction": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Indicates whether the action is enabled for a specific dimension (true) or not (false).",
+        "required": true
+      },
+      "salesforceActionName": {
+        "type": "string",
+        "description": "The name of the action.",
+        "required": true
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      }
+    },
+    "WaveXmdMeasure": {
+      "conditionalFormatting": {
+        "type": "WaveXmdFormattingProperty",
+        "description": "The conditional formatting for the measure. Available in API version 43.0 and later."
+      },
+      "currencies": {
+        "type": "WaveXmdMeasure[]",
+        "description": "The list of currency formats for multiple currencies. Use this field to set the format for each currency used in the dataset."
+      },
+      "currencyCode": {
+        "type": "String",
+        "description": "The default currency code for the dataset."
+      },
+      "dateFormat": {
+        "type": "string",
+        "description": "The format used for a date that is a measure."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the measure."
+      },
+      "field": {
+        "type": "string",
+        "description": "The field name of the measure (used in queries).",
+        "required": true
+      },
+      "formatCustomFormat": {
+        "type": "string",
+        "description": "The original (XMD 1.1) format array as a single string."
+      },
+      "formatDecimalDigits": {
+        "type": "int",
+        "description": "The number of digits displayed after the decimal place."
+      },
+      "formatDecimalSeparator": {
+        "type": "string",
+        "description": "The custom separator for the decimal place. Available in API version 48.0 and later."
+      },
+      "formatIsNegativeParens": {
+        "type": "boolean",
+        "description": "Indicates whether to display negative numbers with parentheses, rather than a minus sign (true) or not (false)."
+      },
+      "formatPrefix": {
+        "type": "string",
+        "description": "The prefix placed before the field value."
+      },
+      "formatSuffix": {
+        "type": "string",
+        "description": "The suffix placed after the field value."
+      },
+      "formatThousandsSeparator": {
+        "type": "string",
+        "description": "The custom separator for the thousands place. Available in API version 48.0 and later."
+      },
+      "formatUnit": {
+        "type": "string",
+        "description": "The unit string for the measure. For example, ' cm '."
+      },
+      "formatUnitMultiplier": {
+        "type": "double",
+        "description": "The multiplier for the unit."
+      },
+      "fullyQualifiedName": {
+        "type": "string",
+        "description": "The fully qualified name of the measure."
+      },
+      "isDerived": {
+        "type": "boolean",
+        "description": "Indicates whether the measure is derived (true) or not (false).",
+        "required": true
+      },
+      "isMultiCurrency": {
+        "type": "boolean",
+        "description": "Indicates whether multiple currencies are available for this dataset (true) or not (false)."
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the measure."
+      },
+      "origin": {
+        "type": "string",
+        "description": "The origin of the measure."
+      },
+      "showDetailsDefaultFieldIndex": {
+        "type": "int",
+        "description": "Default order in which to show the measures in the user interface."
+      },
+      "showInExplorer": {
+        "type": "boolean",
+        "description": "Indicates whether the measure is displayed in the explorer (true) or not (false)."
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      }
+    },
+    "WaveXmdOrganization": {
+      "instanceUrl": {
+        "type": "string",
+        "description": "The instance URL for the organization.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "The label for the organization.",
+        "required": true
+      },
+      "organizationIdentifier": {
+        "type": "string",
+        "description": "The ID of the organization.",
+        "required": true
+      },
+      "sortIndex": {
+        "type": "int",
+        "description": "The index value the system assigns to indicate where the item appears in a list.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmd\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dataset\" type=\"xsd:string\"/>\n        <xsd:element name=\"datasetConnector\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"datasetFullyQualifiedName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"dates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdDate\"/>\n        <xsd:element name=\"dimensions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdDimension\"/>\n        <xsd:element name=\"measures\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdMeasure\"/>\n        <xsd:element name=\"organizations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdOrganization\"/>\n        <xsd:element name=\"origin\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"waveVisualization\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdDate\">\n  <xsd:sequence>\n    <xsd:element name=\"alias\" type=\"xsd:string\"/>\n    <xsd:element name=\"compact\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"dateFieldDay\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldEpochDay\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldEpochSecond\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldFiscalMonth\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldFiscalQuarter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldFiscalWeek\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldFiscalYear\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldFullYear\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldHour\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldMinute\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldMonth\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldQuarter\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldSecond\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldWeek\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFieldYear\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"firstDayOfWeek\" type=\"xsd:int\"/>\n    <xsd:element name=\"fiscalMonthOffset\" type=\"xsd:int\"/>\n    <xsd:element name=\"isYearEndFiscalYear\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"showInExplorer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdDimension\">\n  <xsd:sequence>\n    <xsd:element name=\"conditionalFormatting\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdFormattingProperty\"/>\n    <xsd:element name=\"customActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdDimensionCustomAction\"/>\n    <xsd:element name=\"customActionsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"dateFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"defaultAction\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"fullyQualifiedName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"imageTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isDerived\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isMultiValue\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"linkTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"linkTemplateEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"linkTooltip\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"members\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdDimensionMember\"/>\n    <xsd:element name=\"origin\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"recordDisplayFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdRecordDisplayLookup\"/>\n    <xsd:element name=\"recordIdField\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"recordOrganizationIdField\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"salesforceActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdDimensionSalesforceAction\"/>\n    <xsd:element name=\"salesforceActionsEnabled\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"showDetailsDefaultFieldIndex\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"showInExplorer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdDimensionCustomAction\">\n  <xsd:sequence>\n    <xsd:element name=\"customActionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"icon\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"method\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n    <xsd:element name=\"target\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"tooltip\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"url\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdDimensionMember\">\n  <xsd:sequence>\n    <xsd:element name=\"color\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"member\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdDimensionSalesforceAction\">\n  <xsd:sequence>\n    <xsd:element name=\"enabled\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"salesforceActionName\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdFormattingBin\">\n  <xsd:sequence>\n    <xsd:element name=\"bin\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdFormattingPredicate\">\n  <xsd:sequence>\n    <xsd:element name=\"formatValue\" type=\"xsd:string\"/>\n    <xsd:element name=\"operator\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdFormattingProperty\">\n  <xsd:sequence>\n    <xsd:element name=\"formattingBins\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdFormattingBin\"/>\n    <xsd:element name=\"formattingPredicates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdFormattingPredicate\"/>\n    <xsd:element name=\"property\" type=\"xsd:string\"/>\n    <xsd:element name=\"referenceField\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n    <xsd:element name=\"type\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdMeasure\">\n  <xsd:sequence>\n    <xsd:element name=\"conditionalFormatting\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdFormattingProperty\"/>\n    <xsd:element name=\"currencies\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:WaveXmdMeasure\"/>\n    <xsd:element name=\"currencyCode\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dateFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatCustomFormat\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatDecimalDigits\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"formatDecimalSeparator\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatIsNegativeParens\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"formatPrefix\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatSuffix\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatThousandsSeparator\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatUnit\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"formatUnitMultiplier\" minOccurs=\"0\" type=\"xsd:double\"/>\n    <xsd:element name=\"fullyQualifiedName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"isDerived\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"isMultiCurrency\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"origin\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"showDetailsDefaultFieldIndex\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"showInExplorer\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdOrganization\">\n  <xsd:sequence>\n    <xsd:element name=\"instanceUrl\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"organizationIdentifier\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"WaveXmdRecordDisplayLookup\">\n  <xsd:sequence>\n    <xsd:element name=\"recordDisplayField\" type=\"xsd:string\"/>\n    <xsd:element name=\"sortIndex\" type=\"xsd:int\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a WaveXmd component for an Asset XMD belonging to a dashboard.",
+      "code": "<WaveXmd>\n    <dataset xsi:nil=\"true\"/>\n    <dimesions>\n        <conditionalFormatting>\n            <formattingBins>\n                <bin>*</bin>\n                <formatValue>#FFFFFF</formatValue>\n                <label xsi:nil=\"true\"/>\n                <sortIndex>0</sortIndex>\n            </formattingBins>\n            <formattingBins>\n                <bin>0</bin>\n                <formatValue>#000000</formatValue>\n                <label xsi:nil=\"true\"/>\n                <sortIndex>1</sortIndex>\n            </formattingBins>\n            <property>chartColor</property>\n            <referenceField>count</referenceField>\n            <sortIndex xsi:nil=\"true\"/>\n            <type>multiple</type>\n        </conditionalFormatting>\n        <field>all_1.ALL</field>\n        <isDerived>false</isDerived>\n        <sortIndex>0</sortIndex>\n    </dimensions>\n    <measures>\n        <conditionalFormatting>\n            <formattingBins>\n                <bin>*</bin>\n                <formatValue>#FFFFFF</formatValue>\n                <label xsi:nil=\"true\"/>\n                <sortIndex>0</sortIndex>\n            </formattingBins>\n            <formattingBins>\n                <bin>0</bin>\n                <formatValue>#000000</formatValue>\n                <label xsi:nil=\"true\"/>\n                <sortIndex>1</sortIndex>\n            </formattingBins>\n            <property>chartColor</property>\n            <referenceField>count</referenceField>\n            <sortIndex xsi:nil=\"true\"/>\n            <type>multiple</type>\n        </conditionalFormatting>\n        <field>all_1.count</field>\n        <formatCustomFormat>[&quot;#,###.##%&quot;,1]</formatCustomFormat>\n        <isDerived>false</isDerived>\n        <sortIndex>0</sortIndex>\n    </measures>\n    <type>Asset</type>\n    <waveVisualization>dashboard</waveVisualization>\n</WaveXmd>"
+    }
+  ]
+}

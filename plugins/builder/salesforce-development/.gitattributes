@@ -1,0 +1,29 @@
+# Line-ending policy (W-23480678). The bash shebang scripts below must stay
+# LF-terminated: on a Windows checkout with autocrlf=true they would otherwise
+# acquire CRLF and fail at runtime with `bad interpreter: /bin/bash^M`. The
+# vendored bundles opt back out via `-text` further down (later rules win).
+* text=auto
+*.sh text eol=lf
+
+# Extensionless bash wrappers (no *.sh match) — pin LF explicitly.
+scripts/sf-context     text eol=lf
+scripts/sf-deploy-gate text eol=lf
+bin/lsp-precheck       text eol=lf
+bin/lsp-doctor         text eol=lf
+
+# Vendored / generated Salesforce LSP runtime (Phase 4).
+#
+# These are prebuilt, vendored artifacts — never hand-edited. Mark them
+# `linguist-generated` so they collapse in diffs and are excluded from language
+# stats, and `-text` so git commits exactly the bytes as produced (no EOL
+# normalization) — the host spawns them by fixed path and the bytes must match.
+
+# apex-ls language-server bundles (two ~9MB single-file JS artifacts).
+vendor/apex-ls/dist/server.node.js    linguist-generated=true -diff -text
+vendor/apex-ls/dist/worker.platform.js linguist-generated=true -diff -text
+
+# esbuild host + SOQL + precheck/doctor bundles.
+bin/sf-lsp-host.bundled.js  linguist-generated=true -diff -text
+bin/soql-lsp.bundled.js     linguist-generated=true -diff -text
+bin/lsp-precheck.bundled.js linguist-generated=true -diff -text
+bin/lsp-doctor.bundled.js   linguist-generated=true -diff -text

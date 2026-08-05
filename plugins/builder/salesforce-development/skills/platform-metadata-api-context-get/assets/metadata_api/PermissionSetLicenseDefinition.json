@@ -1,0 +1,58 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "PermissionSetLicenseDefinition (Developer Preview) - Metadata API",
+  "description": "Represents the definition of a custom permission set license, which entitles specified features in a package.",
+  "file_information": ".permissionSetLicenseDefinition",
+  "directory_location": "permissionSetLicenseDefinitions",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "customPermissions": {
+      "type": "PermissionSetLicenseDefinitionCustomPermission",
+      "description": "An array of licensed custom permissions included in the permission set license definition."
+    },
+    "isSupplementLicense": {
+      "type": "boolean",
+      "description": "Indicates whether the custom permission set license is a supplement license (true) or a foundation license (false). The default value is false. This field is available in API version 55.0 and later."
+    },
+    "label": {
+      "type": "string",
+      "description": "The name of the permission set license definition.",
+      "required": true
+    },
+    "licenseExpirationPolicy": {
+      "type": "LicenseExpirationPolicy (enumeration of type string)",
+      "description": "The license expiration policy of the custom permission set license. Valid values are: BlockNamespaceAccess—Package access is blocked for existing users when all custom permission set licenses expire. This is the default value. AllowNamespaceAccess—Package access isn’t blocked for existing users when all custom permission set licenses expire. This field is available in API version 55.0 and later."
+    },
+    "userLicenseRestrictions": {
+      "type": "string",
+      "description": "The user license categories that can be assigned the custom permission set license. If no user license categories are specified, all users can be assigned the license. Possible values include: ${communities} ${communitiesLogin} ${customerCommunities} ${customerCommunitiesLogin} ${internal} ${partnerCommunity} ${partnerCommunityLogin} ${platform} For more information, see User License Restriction Categories (Developer Preview). This field is available in API version 55.0 and later."
+    }
+  },
+  "sub_types": {
+    "PermissionSetLicenseDefinitionCustomPermission": {
+      "name": {
+        "type": "string",
+        "description": "Label of the licensed custom permission. This field must be a reference to a CustomPermission that has the isLicensed field set to true."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PermissionSetLicenseDefinition\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"componentAccess\" type=\"tns:PsldComponentAccess\"/>\n        <xsd:element name=\"customObjects\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PermissionSetLicenseDefinitionCustomObject\"/>\n        <xsd:element name=\"customPermissions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PermissionSetLicenseDefinitionCustomPermission\"/>\n        <xsd:element name=\"defaultTrialLengthInDays\" type=\"xsd:int\"/>\n        <xsd:element name=\"defaultTrialLicenseCount\" type=\"xsd:int\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"userLicenseRestrictions\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"PermissionSetLicenseDefinitionCustomObject\">\n  <xsd:sequence>\n    <xsd:element name=\"allowCreate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowDelete\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowRead\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"allowUpdate\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PermissionSetLicenseDefinitionCustomPermission\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"PsldComponentAccess\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"None\"/>\n    <xsd:enumeration value=\"Namespace\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a PermissionSetLicenseDefinition component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PermissionSetLicenseDefinition xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <customPermissions>>\n        <name>AccessReportsPerm</name>\n    </customPermissions>\n    <isSupplementLicense>false</isSupplementLicense>\n    <licenseExpirationPolicy>BlockNamespaceAccess</licenseExpirationPolicy>\n    <label>ExampleFeatureLicenseDefinition</label>\n    <userLicenseRestrictions>${internal}</userLicenseRestrictions>\n</PermissionSetLicenseDefinition>"
+    }
+  ]
+}

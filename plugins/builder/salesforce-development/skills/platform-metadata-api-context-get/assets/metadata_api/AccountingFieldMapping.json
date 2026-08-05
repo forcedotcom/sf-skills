@@ -1,0 +1,70 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AccountingFieldMapping - Metadata API",
+  "description": "Represents the accounting field mappings to organize your data and bring it to ledger entry records.",
+  "file_information": ".accountingFieldMapping",
+  "directory_location": "accountingFieldMappings",
+  "fields_columns": [
+    "type",
+    "required",
+    "description",
+    "reserved_for_internal_use"
+  ],
+  "fields": {
+    "accountingModelConfig": {
+      "type": "string",
+      "required": true,
+      "description": "Record ID of the AccountingModelConfig record that the Field Mapping is associated with."
+    },
+    "isForAllocationType": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "isForPaymentType": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "isForTransactionType": {
+      "type": "boolean",
+      "reserved_for_internal_use": true
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "Indicates whether this component is protected (true) or not protected (false).Default value is false."
+    },
+    "mappingBehavior": {
+      "type": "MappingBehaviorType (enumeration of type string)",
+      "required": true,
+      "description": "Specifies how the target’s field data is mapped from the source field only when the journal entry is created. When set to CurrentValue, Subledger reverses and replaces journal entries whose value differs from the value in sourceField.Valid values are: CurrentValue PointInTime"
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for AccountingFieldMapping, which is defined when the AccountingFieldMapping is created."
+    },
+    "sourceField": {
+      "type": "string",
+      "description": "The API name of the field on the source object that is mapped to the target field."
+    },
+    "targetField": {
+      "type": "string",
+      "required": true,
+      "description": "The API name of the field on the Transaction Journal record for this mapping."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AccountingFieldMapping\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"accountingModelConfig\" type=\"xsd:string\"/>\n        <xsd:element name=\"isForAllocationType\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isForPaymentType\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isForTransactionType\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"mappingBehavior\" type=\"tns:MappingBehaviorType\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetField\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"MappingBehaviorType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"PointInTime\"/>\n    <xsd:enumeration value=\"CurrentValue\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AccountingFieldMapping component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccountingFieldMapping xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<accountingModelConfig>ModelConfigOne</accountingModelConfig>\n\t<fullName>FieldMappingOne</fullName>\n\t<masterLabel>FieldMappingOne</masterLabel>\n\t<isForAllocationType>true</isForAllocationType>\n\t<isForPaymentType>true</isForPaymentType>\n\t<isForTransactionType>true</isForTransactionType>\n\t<mappingBehavior>PointInTime</mappingBehavior>\n\t<sourceField>TransactionJournal.MappingTargetOne__c</sourceField>\n\t<targetField>MappingTargetOne__c</targetField>\n\t<isProtected>false</isProtected>\n</AccountingFieldMapping>"
+    }
+  ]
+}

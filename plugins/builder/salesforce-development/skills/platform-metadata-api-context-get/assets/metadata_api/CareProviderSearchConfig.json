@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CareProviderSearchConfig - Metadata API",
+  "description": "Represents the information about the fields that appear in care provider search results. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".careProviderSearchConfig",
+  "directory_location": "careProviderSearchConfigs",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether this configuration is active (true) or not (false)."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t currently impact the behavior of the metadata type."
+    },
+    "mappedObject": {
+      "type": "ProviderSearchObjectMapping (enumeration of type string)",
+      "description": "Indicates mapped objects. Possible values are; HealthCarePractitionerFacility HealthCareProvider",
+      "required": true
+    },
+    "masterLabel": {
+      "type": "string",
+      "description": "Name of the care provider.",
+      "required": true
+    },
+    "sourceField": {
+      "type": "string",
+      "description": "API name of the field that is copied to the target object."
+    },
+    "targetField": {
+      "type": "string",
+      "description": "API name of the field to copy the data to."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CareProviderSearchConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"mappedObject\" type=\"tns:ProviderSearchObjectMapping\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"sourceField\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"targetField\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"ProviderSearchObjectMapping\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"HealthcareProvider\"/>\n    <xsd:enumeration value=\"HealthcarePractitionerFacility\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a CareProviderSearchConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CareProviderSearchConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <sourceField>Test1__c</sourceField>\n    <targetField>Test1__c</targetField>\n    <mappedObject>HealthcareProvider</mappedObject>\n    <isProtected>false</isProtected>\n    <isActive>true</isActive>\n    <masterLabel>testlabel</masterLabel>\n</CareProviderSearchConfig>"
+    }
+  ]
+}

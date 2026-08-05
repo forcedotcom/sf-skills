@@ -1,0 +1,97 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "VirtualVisitConfig - Metadata API",
+  "description": "Represents an external video provider configuration, which relays events from Salesforce to the provider.",
+  "file_information": ".virtualVisitConfig",
+  "directory_location": "VirtualVisitConfigs",
+  "fields_columns": [
+    "type",
+    "description",
+    "properties",
+    "required"
+  ],
+  "fields": {
+    "comprehendServiceType": {
+      "type": "VirtualVisitComprehendServiceType (enumeration of type string)",
+      "description": "Specifies the type of service used to convert speech into text or to analyze the converted speech text.Valid values are: ComprehendMedicalService ComprehendService"
+    },
+    "developerName": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The unique name of the object in the API. This name can contain only underscores and alphanumeric characters, and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object’s name in a managed package and the changes are reflected in a subscriber’s organization. Label is Record Type Name. This field is automatically generated, but you can supply your own value if you create the record using the API."
+    },
+    "experienceCloudSiteUrl": {
+      "type": "string",
+      "description": "The URL of the Digital Experience site where the Video Call component is available to portal or guest users."
+    },
+    "externalMsgServiceIdentifier": {
+      "type": "string",
+      "description": "For internal use only."
+    },
+    "externalRoleIdentifier": {
+      "type": "string",
+      "description": "The ID of the role that's used to allow users to join a video call and to grant them temporary access to certain functions needed to participate in the call."
+    },
+    "externalUserIdentifier": {
+      "type": "string",
+      "description": "For internal use only."
+    },
+    "fullName": {
+      "type": "string",
+      "properties": "Create, Group, Nillable",
+      "description": "The full name of the VirtualVisitConfig type in Metadata API. The full name can include a namespace prefix. Query this field only if the query result contains no more than one record. Otherwise, an error is returned. If more than one record exists, use multiple queries to retrieve the records. This limit protects performance."
+    },
+    "isProtected": {
+      "type": "boolean",
+      "description": "An auto-generated value that doesn’t currently impact the behavior of the metadata type."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for VirtualVisitConfig, which is defined when the VirtualVisitConfig is created."
+    },
+    "messagingRegion": {
+      "type": "string",
+      "description": "The region where the waiting room and messaging channel data is processed and stored. Available in API version 57.0 and later."
+    },
+    "namedCredential": {
+      "type": "string",
+      "description": "The named credential record used to authenticate and authorize a video call vendor’s account."
+    },
+    "storageBucketName": {
+      "type": "string",
+      "description": "The name of the storage bucket that stores the meeting transcript."
+    },
+    "usageType": {
+      "type": "VirtualVisitUsageType (enumeration of type string)",
+      "description": "The name of the Salesforce feature for which the video call configuration record is created.Valid values are: CHIME ENTITY_DETECTION INTELLIGENT_FORM_READER KEY_PHRASE_EXTRACTION SENTIMENT_ANALYSIS"
+    },
+    "videoCallApptTypeValue": {
+      "type": "string",
+      "description": "The default Appointment Type picklist values from the Service Appointment object that represent a video appointment type. Use semicolons to separate multiple values."
+    },
+    "videoControlRegion": {
+      "type": "string",
+      "description": "The region where API calls related to Video Calls are made. Available in API version 57.0 and later."
+    },
+    "visitRegion": {
+      "type": "VirtualVisitVisitRegion (enumeration of type string)",
+      "description": "The region where the Video Call audio and video data is processed.Valid values are: af-south-1 ap-east-1 ap-northeast-1 ap-northeast-2 ap-northeast-3 ap-south-1 ap-southeast-1 ap-southeast-2 ca-central-1 eu-central-1 eu-north-1 eu-south-1 eu-west-1 eu-west-2 eu-west-3 me-south-1 sa-east-1 us-east-1 us-east-2 us-west-1 us-west-2"
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"VirtualVisitComprehendServiceType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"ComprehendService\"/>\n    <xsd:enumeration value=\"ComprehendMedicalService\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"VirtualVisitConfig\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"comprehendServiceType\" minOccurs=\"0\" type=\"tns:VirtualVisitComprehendServiceType\"/>\n        <xsd:element name=\"experienceCloudSiteUrl\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalMsgServiceIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalRoleIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"externalUserIdentifier\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isProtected\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"messagingRegion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"namedCredential\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"storageBucketName\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"usageType\" minOccurs=\"0\" type=\"tns:VirtualVisitUsageType\"/>\n        <xsd:element name=\"videoCallApptTypeValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"videoControlRegion\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"visitRegion\" minOccurs=\"0\" type=\"tns:VirtualVisitVisitRegion\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"VirtualVisitUsageType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"CHIME\"/>\n    <xsd:enumeration value=\"INTELLIGENT_FORM_READER\"/>\n    <xsd:enumeration value=\"SENTIMENT_ANALYSIS\"/>\n    <xsd:enumeration value=\"KEY_PHRASE_EXTRACTION\"/>\n    <xsd:enumeration value=\"ENTITY_DETECTION\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:simpleType name=\"VirtualVisitVisitRegion\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"us-east-1\"/>\n    <xsd:enumeration value=\"us-east-2\"/>\n    <xsd:enumeration value=\"us-west-1\"/>\n    <xsd:enumeration value=\"us-west-2\"/>\n    <xsd:enumeration value=\"af-south-1\"/>\n    <xsd:enumeration value=\"ap-east-1\"/>\n    <xsd:enumeration value=\"ap-south-1\"/>\n    <xsd:enumeration value=\"ap-northeast-1\"/>\n    <xsd:enumeration value=\"ap-northeast-2\"/>\n    <xsd:enumeration value=\"ap-northeast-3\"/>\n    <xsd:enumeration value=\"ap-southeast-1\"/>\n    <xsd:enumeration value=\"ap-southeast-2\"/>\n    <xsd:enumeration value=\"ca-central-1\"/>\n    <xsd:enumeration value=\"eu-central-1\"/>\n    <xsd:enumeration value=\"eu-west-1\"/>\n    <xsd:enumeration value=\"eu-west-2\"/>\n    <xsd:enumeration value=\"eu-west-3\"/>\n    <xsd:enumeration value=\"eu-south-1\"/>\n    <xsd:enumeration value=\"eu-north-1\"/>\n    <xsd:enumeration value=\"me-south-1\"/>\n    <xsd:enumeration value=\"sa-east-1\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is an example of a VirtualVisitConfig component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n <VirtualVisitConfig xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n     <usageType>CHIME</usageType>\n     <visitRegion>us-east-1</visitRegion>\n     <masterLabel>vvconfig1</masterLabel>\n     <experienceCloudSiteUrl>videocall_c@testcloudurl.com</experienceCloudSiteUrl>\n     <namedCredential>SampleNamedCredential</namedCredential>\n     <comprehendServiceType>ComprehendService</comprehendServiceType>\n     <storageBucketName>comprehendbucket</storageBucketName>\n     <isProtected>false</isProtected>\n </VirtualVisitConfig>"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+# LLM-Controlled Actions Pattern
+# =================================
+#
+# A complete, read-only catalog agent that contrasts:
+# - deterministic action execution in a lifecycle hook; and
+# - model-chosen action execution from reasoning.actions.
+#
+# Use deterministic `run` only when execution is required whenever its
+# containing hook is reached. Put optional, intent-dependent actions in
+# `reasoning.actions` so the model can choose whether to invoke them.
+#
+# This example intentionally exposes no action that changes money, records,
+# access, commitments, or other external state. UI confirmation and prose
+# instructions alone are not sufficient guards for consequential actions.
+
+system:
+    instructions: |
+        You are a public product-catalog assistant. Help users discover products
+        and check current availability. Use the read-only actions before making
+        claims about catalog matches or availability. Treat action results as
+        the source of truth, and say when a lookup returns no result or fails.
+        Ask only for information required by the requested lookup.
+    messages:
+        welcome: "Hello! I can help you search the catalog or check product availability."
+        error: "I couldn't retrieve the requested catalog information. Please try again."
+
+config:
+    developer_name: "LLM_Controlled_Actions"
+    agent_label: "Catalog Action Patterns"
+    description: "Demonstrates deterministic hooks and model-chosen read-only actions"
+
+access:
+    default_agent_user: "agent@company.salesforce.com"
+
+variables:
+    service_notice: mutable string = ""
+        description: "Trusted notice refreshed before every turn; the hook owns and overwrites it, and reasoning reads only the current-turn value"
+
+language:
+    default_locale: "en_US"
+
+start_agent catalog_assistance:
+    label: "Catalog Assistance"
+    description: "Searches a public catalog and checks current product availability"
+
+    actions:
+        get_service_notice:
+            description: "Returns the current public catalog service notice for this locale"
+            inputs:
+                locale: string
+                    description: "Locale for the service notice"
+            outputs:
+                notice: string
+                    description: "Current service notice, or an empty string when none applies"
+            target: "flow://Get_Catalog_Service_Notice"
+
+        search_catalog:
+            description: "Searches the public catalog; choose this for product discovery, not for current availability"
+            inputs:
+                query: string
+                    description: "Product name, category, or features requested by the user"
+            outputs:
+                matches: string
+                    description: "Current catalog matches returned by the search"
+                    is_displayable: True
+            target: "flow://Search_Public_Catalog"
+
+        check_availability:
+            description: "Checks current public availability; choose this when the user asks whether or where a product is available"
+            inputs:
+                product: string
+                    description: "Product name or identifier to check"
+                postal_code: string
+                    description: "Postal code where availability should be checked"
+            outputs:
+                availability: string
+                    description: "Current availability returned by the inventory service"
+                    is_displayable: True
+            target: "flow://Check_Public_Availability"
+
+    # service_notice lifecycle:
+    # - owner: catalog_assistance
+    # - writer: this before_reasoning hook and get_service_notice output
+    # - reader: the current turn's reasoning instructions
+    # - reset: empty before each refresh
+    # - expiry: the next reasoning turn
+    # - correction: the next trusted refresh replaces the current notice
+    # - cancellation: no reset is needed because the notice neither gates nor
+    #   changes an action
+    # Deterministic refresh is justified by external freshness ordering.
+    before_reasoning:
+        set @variables.service_notice = ""
+        run @actions.get_service_notice
+            with locale="en_US"
+            set @variables.service_notice = @outputs.notice
+
+    reasoning:
+        instructions: ->
+            | Help with the user's current public-catalog request.
+            | The service notice refreshed for this turn is:
+            | {!@variables.service_notice}
+            |
+            | Mention that notice only when it is relevant.
+            | Use catalog_search for product discovery.
+            | Use availability_lookup only for current availability.
+            | If a required lookup value is absent, ask for that value instead
+              of invoking an action with a guess.
+
+        # Model-chosen: these read-only actions are available to reasoning, but
+        # execute only when the user's current request calls for them.
+        actions:
+            catalog_search: @actions.search_catalog
+                with query=...
+
+            availability_lookup: @actions.check_availability
+                with product=...
+                with postal_code=...

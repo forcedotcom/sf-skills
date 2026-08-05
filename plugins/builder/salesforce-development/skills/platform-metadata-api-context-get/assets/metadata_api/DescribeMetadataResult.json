@@ -1,0 +1,31 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "describemetadataobject",
+    "wsdl_segment"
+  ],
+  "title": "DescribeMetadataResult - Metadata API",
+  "description": "Contains information about the organization that is useful for developers working with declarative metadata.",
+  "describemetadataobject": {
+    "childXmlNames": {
+      "description": "List of child sub-components for this component."
+    },
+    "directoryName": {
+      "description": "The name of the directory in the.zip file that contains this component."
+    },
+    "inFolder": {
+      "description": "Indicates whether the component is in a folder (true) or not (false). For example, documents, email templates and reports are stored in folders."
+    },
+    "metaFile": {
+      "description": "Indicates whether the component requires an accompanying metadata file. For example, documents, classes, and s-controls are components that require an additional metadata file."
+    },
+    "suffix": {
+      "description": "The file suffix for this component."
+    },
+    "xmlName": {
+      "description": "The name of the root element in the metadata file for this component. This name also appears in the Packages > types > name field in the manifest file package.xml."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DescribeMetadataObject\">\n  <xsd:sequence>\n    <xsd:element name=\"childXmlNames\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n    <xsd:element name=\"directoryName\" type=\"xsd:string\"/>\n    <xsd:element name=\"inFolder\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"metaFile\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"suffix\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"xmlName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DescribeMetadataResult\">\n  <xsd:sequence>\n    <xsd:element name=\"metadataObjects\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DescribeMetadataObject\"/>\n    <xsd:element name=\"organizationNamespace\" type=\"xsd:string\"/>\n    <xsd:element name=\"partialSaveAllowed\" type=\"xsd:boolean\"/>\n    <xsd:element name=\"testRequired\" type=\"xsd:boolean\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

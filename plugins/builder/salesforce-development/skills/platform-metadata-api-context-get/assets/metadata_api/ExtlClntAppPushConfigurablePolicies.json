@@ -1,0 +1,35 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment"
+  ],
+  "title": "ExtlClntAppPushConfigurablePolicies - Metadata API",
+  "description": "Represents an external client app’s push notification policies configuration.",
+  "file_information": ".ecaPushPlcy",
+  "directory_location": "extlClntAppPushPolicies",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "externalClientApplication": {
+      "type": "string",
+      "description": "The name of the associated external client app.",
+      "required": true
+    },
+    "isFullContent": {
+      "type": "boolean",
+      "description": "Indicates if push notifications display the full notification title and body text (true). When set to false, standard notifications display a generic message and custom notifications display only the notification title.",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "description": "Label for the external client app’s push notification policies configuration."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ExtlClntAppPushConfigurablePolicies\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"externalClientApplication\" type=\"xsd:string\"/>\n        <xsd:element name=\"isFullContent\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```"
+}

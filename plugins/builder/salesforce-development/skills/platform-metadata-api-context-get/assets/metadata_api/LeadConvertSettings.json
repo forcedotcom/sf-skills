@@ -1,0 +1,71 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "LeadConvertSettings - Metadata API",
+  "description": "Represents an organization’s custom field mappings for lead conversion. Custom fields can be mapped from Leads to Accounts, Contacts, and Opportunities. Options for creating opportunities during lead conversion can also be specified. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".LeadConvertSetting",
+  "directory_location": "LeadConvertSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "allowOwnerChange": {
+      "type": "boolean",
+      "description": "Indicates whether to include the Record Owner field in the Convert Lead dialog box (true) or not (false)."
+    },
+    "objectMapping": {
+      "type": "ObjectMapping[]",
+      "description": "A set of custom field mappings between objects. Up to three objectMapping types can be declared—one each for account, contact, and opportunity."
+    },
+    "opportunityCreationOptions": {
+      "type": "VisibleOrRequired (enumeration of type string)",
+      "description": "This field determines whether the Opportunity field is visible or required in the Convert Lead dialog box.Values are: VisibleOptional—The Opportunity field is included in the dialog box but not required. A new opportunity is created if the user enters an opportunity name. This is the default value. VisibleRequired—The Opportunity field is included in the dialog box and is required. A new opportunity is created based on the name the user enters. NotVisible—The Opportunity field is not included in the dialog box. No opportunity is created."
+    }
+  },
+  "sub_types": {
+    "ObjectMapping": {
+      "inputObject": {
+        "type": "string",
+        "required": true,
+        "description": "The name of the object type containing the source fields for mapping. The value is always Lead."
+      },
+      "mappingFields": {
+        "type": "ObjectMappingField[]",
+        "description": "A set of input and output field names of the custom fields to be mapped."
+      },
+      "outputObject": {
+        "type": "string",
+        "required": true,
+        "description": "The object type receiving data during lead conversion. Account Contact Opportunity"
+      }
+    },
+    "ObjectMappingField": {
+      "inputField": {
+        "type": "string",
+        "required": true,
+        "description": "The name of a custom lead field supplying source data during lead conversion."
+      },
+      "outputField": {
+        "type": "string",
+        "required": true,
+        "description": "The name of a custom account, contact, or opportunity field that will receive data from source field named in the accompanying inputField entry."
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"LeadConvertSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"allowOwnerChange\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"objectMapping\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ObjectMapping\"/>\n        <xsd:element name=\"opportunityCreationOptions\" minOccurs=\"0\" type=\"tns:VisibleOrRequired\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ObjectMapping\">\n  <xsd:sequence>\n    <xsd:element name=\"inputObject\" type=\"xsd:string\"/>\n    <xsd:element name=\"mappingFields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ObjectMappingField\"/>\n    <xsd:element name=\"outputObject\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ObjectMappingField\">\n  <xsd:sequence>\n    <xsd:element name=\"inputField\" type=\"xsd:string\"/>\n    <xsd:element name=\"outputField\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"VisibleOrRequired\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"VisibleOptional\"/>\n    <xsd:enumeration value=\"VisibleRequired\"/>\n    <xsd:enumeration value=\"NotVisible\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of the LeadConvertSettings type:",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LeadConvertSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <allowOwnerChange>false</allowOwnerChange>\n    <objectMapping>\n        <inputObject>Lead</inputObject>\n        <mappingFields>\n            <inputField>custom_lead_field_1</inputField>\n            <outputField>custom_account_field_1</outputField>\n        </mappingFields>\n        <mappingFields>\n            <inputField>custom_lead_field_2</inputField>\n            <outputField>custom_account_field_2</outputField>\n        </mappingFields>\n        <mappingFields>\n            <inputField>custom_lead_field_3</inputField>\n            <outputField>custom_account_field_3</outputField>\n        </mappingFields>\n        <outputObject>Account</outputObject>\n    </objectMapping>\n    <objectMapping>\n        <inputObject>Lead</inputObject>\n        <mappingFields>\n            <inputField>custom_lead_field_4</inputField>\n            <outputField>custom_opportunity_field_1</outputField>\n        </mappingFields>\n        <outputObject>Opportunity</outputObject>\n    </objectMapping>\n    <opportunityCreationOptions>VisibleOptional</opportunityCreationOptions>\n</LeadConvertSettings>"
+    }
+  ]
+}

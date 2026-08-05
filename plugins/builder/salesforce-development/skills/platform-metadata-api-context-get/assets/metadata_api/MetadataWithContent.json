@@ -1,0 +1,24 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "MetadataWithContent - Metadata API",
+  "description": "MetadataWithContent is the base type for all metadata types that contain content, such as documents or email templates. It extends Metadata. You can’t edit this object.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "content": {
+      "type": "base64Binary",
+      "description": "Base 64-encoded binary data. Before making an API call, client applications must encode the binary attachment data as base64. Upon receiving a response, client applications must decode the base64 data to binary. This conversion is handled for you by a SOAP client."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The name of the component. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. Inherited from the Metadata component, this field isn’t defined in the WSDL for this component. It must be specified when creating, updating, or deleting. See create() to see an example of this field specified for a call.",
+      "required": true
+    }
+  }
+}

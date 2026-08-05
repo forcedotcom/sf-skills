@@ -1,0 +1,117 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "AssessmentQuestion - Metadata API",
+  "description": "Represents the container object that stores the questions required for an assessment.",
+  "file_information": ".AssessmentQuestion",
+  "directory_location": "AssessmentQuestions",
+  "fields_columns": [
+    "type",
+    "description",
+    "required"
+  ],
+  "fields": {
+    "assessmentQuestionVersion": {
+      "type": "AssessmentQuestionVersion",
+      "description": "The object that stores the question versions for the assessment questions."
+    },
+    "dataType": {
+      "type": "string",
+      "required": true,
+      "description": "The data type of the assessment question."
+    },
+    "developerName": {
+      "type": "string",
+      "required": true,
+      "description": "The developer name of the assessment question. Can contain only underscores and alphanumeric characters and must be unique in your org. It must begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores."
+    },
+    "displayTextCategory": {
+      "type": "string",
+      "description": "Specifies the category of the display text when the data type is Text Block."
+    },
+    "formulaResponseDataType": {
+      "type": "string",
+      "description": "Specifies the data type of the question response calculated by a formula."
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the record."
+    },
+    "questionCategory": {
+      "type": "string",
+      "required": true,
+      "description": "Stores the question category."
+    },
+    "relatedQuestion": {
+      "type": "string",
+      "description": "Specifies the related question. Used to define a question hierarchy."
+    }
+  },
+  "sub_types": {
+    "AssessmentQuestionVersion": {
+      "additionalInformation": {
+        "type": "string",
+        "description": "The additional details for a UI element, such as the disclosure text."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description for the assessment question. This text isn’t rendered on the assessment."
+      },
+      "guidanceInformation": {
+        "type": "string",
+        "description": "The guidance for the assessment question."
+      },
+      "helpText": {
+        "type": "string",
+        "description": "The text that's added as an info bubble in the UI element related to the assessment question."
+      },
+      "isActive": {
+        "type": "boolean",
+        "required": true,
+        "description": "Indicates whether the current version of the assessment question is set to active (true) or not (false). The default value is false."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the assessment question version record."
+      },
+      "optionSourceResponseValue": {
+        "type": "boolean",
+        "description": "Indicates whether the response value source for an assessment question is configured as custom (true) or sObject in the OmniStudio designer (false). The default value is false."
+      },
+      "questionText": {
+        "type": "string",
+        "required": true,
+        "description": "The assessment question text. Contains the label for the assessment question that appears on the assessment."
+      },
+      "responseValues": {
+        "type": "string",
+        "description": "Holds the values to be defined in the picklist, multiselect picklist, or radio buttons."
+      },
+      "status": {
+        "type": "string",
+        "required": true,
+        "description": "Status of the assessment question version. Possible values are Draft, Active, or Archived."
+      },
+      "versionNumber": {
+        "type": "int",
+        "required": true,
+        "description": "The assessment question version number."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of an AssessmentQuestion component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AssessmentQuestion\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<assessmentQuestionVersion>\n\t\t<additionalInformation>ParentQuestionDevName AI</additionalInformation>\n\t\t<description>ParentQuestionDevName Desc</description>\n\t\t<helpText>ParentQuestionDevName HT</helpText>\n\t\t<isActive>true</isActive>\n\t\t<name>ParentQuestionDevName</name>\n\t\t<optionSourceResponseValue>true</optionSourceResponseValue>\n\t\t<questionText>ParentQuestionDevName Text</questionText>\n\t\t<status>Active</status>\n\t\t<versionNumber>1</versionNumber>\n\t</assessmentQuestionVersion>\n\t<dataType>DateTime</dataType>\n\t<developerName>ParentQuestionDevName</developerName>\n\t<name>ParentQuestionDevName</name>\n\t<questionCategory>Demographic</questionCategory>\n</AssessmentQuestion>"
+    }
+  ]
+}

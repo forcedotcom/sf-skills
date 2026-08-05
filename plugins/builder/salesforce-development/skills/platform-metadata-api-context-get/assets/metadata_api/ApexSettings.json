@@ -1,0 +1,96 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ApexSettings - Metadata API",
+  "description": "Represents Apex-related org settings. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "DefaultQueueableDelay": {
+      "type": "integer",
+      "description": "Indicates the admin-controlled minimum delay (in seconds) that applies to all enqueued jobs that were scheduled without a delay parameter. The minimum delay is one second and the maximum is 600 seconds. The default behavior, when the setting is omitted, is no delay in scheduling enqueued jobs."
+    },
+    "enableAggregateCodeCoverageOnly": {
+      "type": "boolean",
+      "description": "Indicates whether aggregate (not detailed) totals are tracked for Apex test coverage data (true) or not (false). The default value is false."
+    },
+    "enableApexAccessRightsPref": {
+      "type": "boolean",
+      "description": "Deprecated."
+    },
+    "enableApexApprovalLockUnlock": {
+      "type": "boolean",
+      "description": "Indicates whether approval process lock and unlock operations from Apex code are allowed (true) or not (false). The default value is false."
+    },
+    "enableApexCtrlImplicitWithSharingPref": {
+      "type": "boolean",
+      "description": "Indicates whether the Use with sharing for @AuraEnabled Apex Controllers with Implicit Sharing critical update is activated (true) or not (false). For more details, see the Winter ’20 Release Notes."
+    },
+    "enableApexPropertyGetterPref": {
+      "type": "boolean",
+      "description": "Indicates whether the Enforce Access Modifiers on Apex Properties in Lightning Component Markup critical update is activated (true) or not (false). For more details, see the Winter ’20 Release Notes."
+    },
+    "enableAuraApexCtrlAuthUserAccessCheckPref": {
+      "type": "boolean",
+      "description": "Indicates whether the Restrict Access to @AuraEnabled Apex Methods for Authenticated Users Based on User Profile critical update is activated (true) or not (false). For more details, see the Winter ’20 Release Notes."
+    },
+    "enableAuraApexCtrlGuestUserAccessCheckPref": {
+      "type": "boolean",
+      "description": "Indicates whether the Restrict Access to @AuraEnabled Apex Methods for Guest and Portal Users Based on User Profile critical update is activated (true) or not (false). For more details, see the Winter ’20 Release Notes."
+    },
+    "enableCompileOnDeploy": {
+      "type": "boolean",
+      "description": "Indicates whether Apex code is automatically recompiled (true) or not (false). When set to true, code is recompiled before completing a metadata deployment, change set deployment, package installation, or package upgrade. For production orgs and full sandboxes, the default value is true. For all other orgs, the default value is false. Note: This setting can’t be disabled in production orgs."
+    },
+    "enableDisableParallelApexTesting": {
+      "type": "boolean",
+      "description": "Indicates whether Apex tests are serially executed (true) or not (false). The default value is false. Note: Even when parallel testing is enabled by setting this value to false, tests that are run during deployments are always run serially."
+    },
+    "enableDebugLogsDuringDeployment": {
+      "type": "boolean",
+      "description": "Indicates whether debug logs are enabled during metadata deployment (true) or not (false), in conjunction with an active debug log trace flag. If this setting is true but the trace flag is not active, debug logs are not enabled during metadata deployment. The default value is false. Note: Enabling the debug log in the DebuggingHeader overrides this setting."
+    },
+    "enableGaplessTestAutoNum": {
+      "type": "boolean",
+      "description": "Indicates whether autonumbering gaps are prevented by Apex test executions not incrementing autonumber fields for non-test records (true) or not (false). The default value is true."
+    },
+    "enableMngdCtrlActionAccessPref": {
+      "type": "boolean",
+      "description": "Indicates whether the Disable Access to Non-global Apex Controller Methods in Managed Packages critical update is activated (true) or not (false). For more details, see the Winter ’20 Release Notes."
+    },
+    "enableNonCertifiedApexMdCrud": {
+      "type": "boolean",
+      "description": "Indicates whether Apex classes can access metadata, public or protected, through classes in the Metadata namespace (true) or not (false). The default value is false."
+    },
+    "enableRestrictCommunityExecAnon": {
+      "type": "boolean",
+      "description": "Indicates whether guest users are restricted from executing anonymous Apex. The restriction applies regardless of whether the Author Apex permission is set. The default value is true."
+    },
+    "enableSecureNoArgConstructorPref": {
+      "type": "boolean",
+      "description": "Not used. Critical update is automatically enforced. See Restrict Reflective Access to Non-Global Constructors in Packages (Critical Update)."
+    },
+    "enableTestSetupSkipTestResults": {
+      "type": "boolean",
+      "description": "Indicates whether Apex test results are generated for @TestSetup methods (false) or not (true). Available in API version 61.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ApexSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"defaultQueueableDelay\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"enableAggregateCodeCoverageOnly\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableApexAccessRightsPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableApexApprovalLockUnlock\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableApexCtrlImplicitWithSharingPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableApexPropertyGetterPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAsyncApexElasticExecutions\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAuraApexCtrlAuthUserAccessCheckPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableAuraApexCtrlGuestUserAccessCheckPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableBlockPackagedApexExecAnon\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableCompileOnDeploy\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDebugLogsDuringDeployment\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableDisableParallelApexTesting\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableGaplessTestAutoNum\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableMngdCtrlActionAccessPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNonCertifiedApexMdCrud\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableRestrictCommunityExecAnon\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableSecureNoArgConstructorPref\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableTestSetupSkipTestResults\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of ApexSettings components.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ApexSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n   <enableDisableParallelApexTesting>true</enableDisableParallelApexTesting>\n</ApexSettings>"
+    }
+  ]
+}

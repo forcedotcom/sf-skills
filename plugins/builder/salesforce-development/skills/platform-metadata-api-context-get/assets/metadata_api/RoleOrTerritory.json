@@ -1,0 +1,57 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "RoleOrTerritory - Metadata API",
+  "description": "Represents the common base type and valid values for role or territory.",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "caseAccessLevel": {
+      "type": "string",
+      "description": "Specifies whether a user can access other users’ cases that are associated with accounts the user owns. Valid values are: Read Edit None This field is not visible if your organization’s sharing model for cases is Public Read/Write. If no value is set for this field, this field value uses the default access level that is specified in the Manage Territory page in Setup."
+    },
+    "contactAccessLevel": {
+      "type": "string",
+      "description": "Specifies whether a user can access other users’ contacts that are associated with accounts the user owns. Valid values are: Read Edit None This field is not visible if your organization’s sharing model for contacts is Public Read/Write or Controlled by Parent. If no value is set for this field, this field value uses the default access level that is specified in the Manage Territory page in Setup."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the role or territory."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The unique identifier for API access. The fullName can contain only underscores and alphanumeric characters. It must be unique, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. This field is inherited from the Metadata component."
+    },
+    "mayForecastManagerShare": {
+      "type": "boolean",
+      "description": "Indicates whether the forecast manager can manually share their own forecast."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the role or territory.",
+      "required": true
+    },
+    "opportunityAccessLevel": {
+      "type": "string",
+      "description": "Specifies whether a user can access other users’ opportunities that are associated with accounts the user owns. Valid values are: Read Edit None This field is not visible if your organization’s sharing model for opportunities is Public Read/Write. If no value is set for this field, this field value uses the default access level that is specified in the Manage Territory page in Setup."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Role\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:RoleOrTerritory\">\n      <xsd:sequence>\n        <xsd:element name=\"parentRole\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"RoleOrTerritory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"caseAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"contactAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"mayForecastManagerShare\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"name\" type=\"xsd:string\"/>\n        <xsd:element name=\"opportunityAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Territory\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:RoleOrTerritory\">\n      <xsd:sequence>\n        <xsd:element name=\"accountAccessLevel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"parentTerritory\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is the definition of a role.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Role xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <caseAccessLevel>Edit</caseAccessLevel>\n    <contactAccessLevel>Edit</contactAccessLevel>\n    <description>Sample Role</description>\n    <mayForecastManagerShare>false</mayForecastManagerShare>\n    <name>R22</name>\n    <opportunityAccessLevel>Read</opportunityAccessLevel>\n</Role>"
+    },
+    {
+      "description": "The following is the definition of a territory.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Territory xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <accountAccessLevel>Edit</accountAccessLevel>\n    <caseAccessLevel>Edit</caseAccessLevel>\n    <contactAccessLevel>Edit</contactAccessLevel>\n    <description>Sample Territory</description>\n    <mayForecastManagerShare>false</mayForecastManagerShare>\n    <name>T22name</name>\n    <opportunityAccessLevel>Read</opportunityAccessLevel>\n</Territory>"
+    }
+  ]
+}

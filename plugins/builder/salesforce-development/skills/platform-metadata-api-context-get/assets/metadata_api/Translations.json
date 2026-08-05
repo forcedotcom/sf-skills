@@ -1,0 +1,976 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "Translations - Metadata API",
+  "description": "Metadata type that enables work with translations for various supported languages. The ability to translate component labels is part of the Translation Workbench.",
+  "file_information": ".translation",
+  "directory_location": "objectTranslations",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "aiCoachAgentScnrDefs": {
+      "type": "AiCoachAgentScnrDefTranslation[]",
+      "description": "A list of AI Coach agent scenario definition translations. Available in API version 64.0 and later."
+    },
+    "botBlocks": {
+      "type": "BotBlockTranslation[]",
+      "description": "A list of bot block translations. Available in API version 59.0 and later."
+    },
+    "botTemplates": {
+      "type": "BotTemplateTranslation[]",
+      "description": "A list of bot template translations. Available in API version 59.0 and later."
+    },
+    "bots": {
+      "type": "BotTranslation[]",
+      "description": "A list of bot translations. Available in API version 53.0 and later."
+    },
+    "conversationMessageDefinitions": {
+      "type": "ConversationMessageDefinitionTranslation[]",
+      "description": "A list of conversation message definition translations. Available in API version 61.0 and later."
+    },
+    "customApplications": {
+      "type": "CustomApplicationTranslation[]",
+      "description": "A list of custom application translations."
+    },
+    "customLabels": {
+      "type": "CustomLabelTranslation[]",
+      "description": "A list of custom label translations."
+    },
+    "customPageWebLinks": {
+      "type": "CustomPageWebLinkTranslation[]",
+      "description": "A list of translations for web links defined in a home page component."
+    },
+    "customTabs": {
+      "type": "CustomTabTranslation[]",
+      "description": "A list of custom tab translations."
+    },
+    "dataConnectors": {
+      "type": "DataConnectorTranslation[]",
+      "description": "A list of data connector translations. Available in API version 64.0 and later."
+    },
+    "desFieldTemplateMessages": {
+      "type": "ExplainabilityMsgTemplateFieldTranslation[]",
+      "description": "A list of admin-configured explainability message templates."
+    },
+    "flowDefinitions": {
+      "type": "FlowDefinitionTranslation[]",
+      "description": "A list of flow translations. Only Flow and AutolaunchedFlow types are supported for translation. This field is available in API version 41.0 and later."
+    },
+    "identityVerificationCustomFieldLabels": {
+      "type": "IdentityVerificationFieldTranslation",
+      "description": "A list of identity verification translation fields. This field is available in API version 54.0 and later."
+    },
+    "fullName": {
+      "type": "string",
+      "description": "The language code. For example, de for German. Inherited from Metadata, this field is defined in the WSDL for this metadata type. It must be specified when creating, updating, or deleting. For an example of this field specified for a call, see createMetadata().",
+      "required": true
+    },
+    "globalPicklists": {
+      "type": "GlobalPicklistTranslation[]",
+      "description": "A list of global picklist translations. A global picklist’s value set is inherited by all the custom picklist fields that are based on it. This field is available in API version 37.0 only and is removed from later versions."
+    },
+    "pipelineInspMetricConfigs": {
+      "type": "PipelineInspMetricConfigTranslation",
+      "description": "A list of translations of Pipeline Inspection forecast category metric settings. This field is available in API version 57.0 and later."
+    },
+    "productSpecificationTypes": {
+      "type": "ProductSpecificationTypeTranslation",
+      "description": "A list of product specification type translations. This field is available in API version 66.0 and later."
+    },
+    "prompts": {
+      "type": "PromptTranslation",
+      "description": "A list of In-App Guidance prompt translations. This field is available in API version 48.0 and later."
+    },
+    "quickActions": {
+      "type": "GlobalQuickActionTranslation[]",
+      "description": "A list of global rather than object-specific quick actions."
+    },
+    "recordAlertCategories": {
+      "type": "RecordAlertCategoryTranslation[]",
+      "description": "A list of record alert category translations. Available in API version 66.0 and later."
+    },
+    "recordAlertTemplates": {
+      "type": "RecordAlertTemplateTranslation[]",
+      "description": "A list of record alert template translations. Available in API version 66.0 and later."
+    },
+    "reportTypes": {
+      "type": "ReportTypeTranslation[]",
+      "description": "A list of report type translations."
+    },
+    "scontrols": {
+      "type": "ScontrolTranslation[]",
+      "description": "A list of s-control translations."
+    },
+    "svcCatalogItemAttributes": {
+      "type": "ServiceProcessAttributeTranslation[]",
+      "description": "A list of service catalog item attribute translations. Available in API version 64.0 and later."
+    },
+    "svcCatalogItemGroups": {
+      "type": "ServiceProcessItemGroupTranslation[]",
+      "description": "A list of service catalog item group translations. Available in API version 64.0 and later."
+    },
+    "timelineObjectDefinitions": {
+      "type": "TimelineObjectDefinitionTranslation[]",
+      "description": "A list of timeline object definition translations. Available in API version 66.0 and later."
+    }
+  },
+  "sub_types": {
+    "AiCoachAgentScnrDefTranslation": {
+      "description": {
+        "type": "string",
+        "description": "The description of the coaching scenario."
+      },
+      "label": {
+        "type": "string",
+        "description": "The title of the coaching scenario."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the coaching scenario.",
+        "required": true
+      },
+      "infoMessage": {
+        "type": "string",
+        "description": "The instructions that the rep has to follow before starting the coaching session."
+      }
+    },
+    "BotBlockTranslation": {
+      "botBlockVersions": {
+        "type": "BotBlockVersionTranslation[]",
+        "description": "A list of bot block version translations."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The name of the bot block.",
+        "required": true
+      }
+    },
+    "BotBlockVersionTranslation": {
+      "botDialogs": {
+        "type": "BotDialogTranslation[]",
+        "description": "A list of bot dialog translations for the bot block version."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The name of the bot block version.",
+        "required": true
+      }
+    },
+    "BotTemplateTranslation": {
+      "botDialogs": {
+        "type": "BotDialogTranslation[]",
+        "description": "A list of bot dialog translations for the bot template."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The name of the bot template.",
+        "required": true
+      }
+    },
+    "BotTranslation": {
+      "botVersions": {
+        "type": "BotVersionTranslation[]",
+        "description": "A list of bot version translations."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "Name of the bot. The fullName for the translation must match the fullName inherited by the original Bot type.",
+        "required": true
+      }
+    },
+    "BotVersionTranslation": {
+      "botDialogs": {
+        "type": "BotDialogTranslation[]",
+        "description": "A translated list of dialogs in this bot version."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "Name of a bot version. The fullName for the translation must match the fullName inherited by the original BotVersion type.",
+        "required": true
+      }
+    },
+    "BotDialogTranslation": {
+      "botSteps": {
+        "type": "BotStepTranslation[]",
+        "description": "A translated list of steps that are executed as part of the dialog."
+      },
+      "developerName": {
+        "type": "string",
+        "description": "This unique name prevents conflicts with other dialogs associated with the same bot version. The developerName for the translation must match the developerName on the original BotDialog subtype of BotVersion.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "A translated label that identifies the dialog throughout the Salesforce user interface."
+      }
+    },
+    "BotStepTranslation": {
+      "botMessages": {
+        "type": "BotMessageTranslation[]",
+        "description": "A translated list of bot messages used by a BotStep of type Message."
+      },
+      "botSteps": {
+        "type": "BotStepTranslation[]",
+        "description": "A translated list of bot steps associated with a BotStep of type Group."
+      },
+      "botVariableOperation": {
+        "type": "BotVariableOperationTranslation",
+        "description": "A translated bot variable operation used by a BotStep of type VariableOperation."
+      },
+      "stepIdentifier": {
+        "type": "string",
+        "description": "A unique key that identifies a step within a dialog. This key is used to link translated labels to labels within the step. This field is recommended for all step records and is required for translated step labels. The stepIdentifier for the translation must match the stepIdentifier on the original BotStep subtype of BotVersion.",
+        "required": true
+      },
+      "type": {
+        "type": "BotStepType (enumeration of type string)",
+        "description": "Valid values are: Navigation Invocation VariableOperation Message Wait Group RecordLookup (Available in API version 48.0 and later.) The type for the translation must match the type on the original BotStep subtype of BotVersion.",
+        "required": true
+      }
+    },
+    "BotMessageTranslation": {
+      "message": {
+        "type": "string",
+        "description": "A translated message to display as part of an outgoing message from the bot to the customer."
+      },
+      "messageIdentifier": {
+        "type": "string",
+        "description": "A unique key that identifies a message within a dialog. This key is used to link translated labels to labels within the message. This field is recommended for all message records and is required for translated message labels. The messageIdentifier for the translation must match the messageIdentifier on the original BotMessage subtype of BotVersion.",
+        "required": true
+      }
+    },
+    "BotVariableOperationTranslation": {
+      "botMessages": {
+        "type": "BotMessageTranslation[]",
+        "description": "A translated list of bot messages used as prompt messages by a BotVariableOperation of type Collect."
+      },
+      "botQuickReplyOptions": {
+        "type": "BotQuickReplyOptionTranslation[]",
+        "description": "A translated list of static choice options used by a BotVariableOperation of type Collect and quickReplyType of Static."
+      },
+      "quickReplyOptionTemplate": {
+        "type": "string",
+        "description": "A translated formula template used to resolve a label for Dynamic choice options of type Object."
+      },
+      "retryMessages": {
+        "type": "BotMessageTranslation[]",
+        "description": "In Conversation Repair, the translated messages assigned to repair attempts."
+      },
+      "successMessages": {
+        "type": "BotMessageTranslation[]",
+        "description": "In a File dialog step, the translated message displayed to the customer as part of type CollectAttachment to confirm a successful file upload. Available in API version 57.0 and later."
+      },
+      "type": {
+        "type": "BotVariableOperationType (enumeration of type string)",
+        "description": "Valid values are: Set Unset Collect SetConversationLanguage",
+        "required": true
+      },
+      "variableOperationIdentifier": {
+        "type": "string",
+        "description": "A unique key that identifies a variable operation within a dialog. This key is used to link translated labels to labels within the variable operation. This field is recommended for all variable operation records and is required for translated variable operation labels. The variableOperationIdentifier for the translation must match the variableOperationIdentifier on the original BotVariableOperation subtype of BotVersion.",
+        "required": true
+      }
+    },
+    "BotQuickReplyOptionTranslation": {
+      "literalValue": {
+        "type": "string",
+        "description": "A translated value to be displayed as a menu or button choice to your customer."
+      },
+      "quickReplyOptionIdentifier": {
+        "type": "string",
+        "description": "A unique key that identifies a quick reply option within a dialog. This key is used to link translated labels to labels within the quick reply option. This field is recommended for all quick reply option records and is required for translated quick reply option labels. The quickReplyOptionIdentifier for the translation must match the quickReplyOptionIdentifier on the original BotQuickReplyOption subtype of BotVersion.",
+        "required": true
+      }
+    },
+    "CustomApplicationTranslation": {
+      "description": {
+        "type": "string",
+        "description": "Description text for the application translation."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated custom application name. Maximum of 765 characters."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the custom application.",
+        "required": true
+      }
+    },
+    "CustomLabelTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated custom label name. Maximum of 765 characters.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The custom label name.",
+        "required": true
+      }
+    },
+    "CustomPageWebLinkTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated web link.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the web link.",
+        "required": true
+      }
+    },
+    "CustomTabTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated custom tab name.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The custom tab name.",
+        "required": true
+      }
+    },
+    "ExplainabilityMsgTemplateFieldTranslation": {
+      "description": {
+        "type": "string",
+        "description": "The explainability message field description."
+      },
+      "label": {
+        "type": "string",
+        "description": "A user-friendly name for ExplainabilityMsgTemplateFieldTranslation."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the decision explanation message for a specified step element type.",
+        "required": true
+      },
+      "templateMessage": {
+        "type": "string",
+        "description": "The message associated with the template for a specific expression set step type."
+      }
+    },
+    "FlowDefinitionTranslation": {
+      "flows": {
+        "type": "FlowTranslation[]",
+        "description": "A list of flow version translations for the flow definition."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The API name for the flow definition.",
+        "required": true
+      },
+      "label": {
+        "type": "string",
+        "description": "A translated label for the flow definition. By default, flow definitions inherit the label of the active flow version. If you provide a label here, the definition label no longer inherits changes to the active version label."
+      }
+    },
+    "FlowTranslation": {
+      "choices": {
+        "type": "FlowChoiceTranslation[]",
+        "description": "A list of choice translations for the flow version."
+      },
+      "fullName": {
+        "type": "string",
+        "description": "The API name for the flow version. A unique name for the flow that contains only underscores and alphanumeric characters. The name must be unique across the org, begin with a letter, not include spaces, not end with an underscore, and not contain two consecutive underscores. To deploy or retrieve a version, you can specify the version number. For example, sampleFlow-3 specifies version 3 of the flow whose unique name is sampleFlow. If you don't specify a version number, the flow is the latest version. In API version 43.0 and earlier, this field included the version number. In API version 44 and later, this field no longer includes the version number."
+      },
+      "label": {
+        "type": "string",
+        "description": "A translated label for the flow version."
+      },
+      "orchestrationStages": {
+        "type": "FlowOrchestrationStageTranslation",
+        "description": "A list of orchestration stage translations for the flow version. Available in API version 63.0 and later."
+      },
+      "orchestrationSteps": {
+        "type": "FlowOrchestrationStepTranslation",
+        "description": "A list of orchestration step translations for the flow version. Available in API version 63.0 and later."
+      },
+      "screens": {
+        "type": "FlowScreenTranslation[]",
+        "description": "A list of screen translations for the flow version."
+      },
+      "stages": {
+        "type": "FlowStageTranslation[]",
+        "description": "A list of stage translations for the flow version. Available in API version 43.0 and later."
+      }
+    },
+    "FlowChoiceTranslation": {
+      "choiceText": {
+        "type": "string",
+        "description": "A translated label for the choice."
+      },
+      "name": {
+        "type": "string",
+        "description": "A unique name for the choice.",
+        "required": true
+      },
+      "userInput": {
+        "type": "FlowChoiceUserInputTranslation",
+        "description": "A translated choice input for the choice."
+      }
+    },
+    "FlowChoiceUserInputTranslation": {
+      "promptText": {
+        "type": "string",
+        "description": "A translated label for the choice input."
+      },
+      "validationRule": {
+        "type": "FlowInputValidationRuleTranslation",
+        "description": "A translated validation rule for the choice input."
+      }
+    },
+    "FlowInputValidationRuleTranslation": {
+      "errorMessage": {
+        "type": "string",
+        "description": "A translated error message for the validation rule."
+      }
+    },
+    "FlowOrchestrationStageTranslation": {
+      "name": {
+        "type": "string",
+        "description": "The unique name of the orchestration stage translation.",
+        "required": true
+      },
+      "stageLabel": {
+        "type": "string",
+        "description": "A translated label for the orchestration stage."
+      }
+    },
+    "FlowOrchestrationStepTranslation": {
+      "name": {
+        "type": "string",
+        "description": "The unique name of the orchestration step translation.",
+        "required": true
+      },
+      "stepLabel": {
+        "type": "string",
+        "description": "A translated label for the orchestration step."
+      }
+    },
+    "FlowScreenTranslation": {
+      "backButtonLabel": {
+        "type": "string",
+        "description": "A translated label for the Back button. Available in API version 54.0 and later."
+      },
+      "fields": {
+        "type": "FlowScreenFieldTranslation[]",
+        "description": "A list of screen component translations for the screen."
+      },
+      "helpText": {
+        "type": "string",
+        "description": "Translated help text for the screen."
+      },
+      "name": {
+        "type": "string",
+        "description": "An API name for the screen.",
+        "required": true
+      },
+      "nextOrFinishButtonLabel": {
+        "type": "string",
+        "description": "A translated label for the Next or Finish button. Available in API version 54.0 and later."
+      },
+      "pauseButtonLabel": {
+        "type": "string",
+        "description": "A translated label for the Pause button. Available in API version 54.0 and later."
+      },
+      "pausedText": {
+        "type": "string",
+        "description": "A translated pause confirmation message for the screen."
+      }
+    },
+    "FlowScreenFieldTranslation": {
+      "fieldText": {
+        "type": "string",
+        "description": "A translated label for the screen component."
+      },
+      "helpText": {
+        "type": "string",
+        "description": "Translated help text for the screen component."
+      },
+      "inputParameters": {
+        "type": "FlowInputParameterTranslation",
+        "description": "Reserved for internal use."
+      },
+      "name": {
+        "type": "string",
+        "description": "An API name for the screen component.",
+        "required": true
+      },
+      "validationRule": {
+        "type": "FlowInputValidationRuleTranslation",
+        "description": "Translated validation rule for the screen component."
+      }
+    },
+    "FlowInputParameterTranslation": {
+      "name": {
+        "type": "string",
+        "description": "Reserved for internal use."
+      },
+      "value": {
+        "type": "FlowFerovTranslation",
+        "description": "Reserved for internal use."
+      }
+    },
+    "FlowFerovTranslation": {
+      "complexValues": {
+        "type": "FlowComplexLiteralTranslation",
+        "description": "Reserved for internal use."
+      },
+      "stringValues": {
+        "type": "string",
+        "description": "Reserved for internal use."
+      }
+    },
+    "FlowComplexLiteralTranslation": {
+      "customAspectKey": {
+        "type": "string",
+        "description": "Reserved for internal use."
+      },
+      "value": {
+        "type": "string",
+        "description": "Reserved for internal use."
+      }
+    },
+    "FlowStageTranslation": {
+      "label": {
+        "type": "string",
+        "description": "A translated label for the stage."
+      },
+      "name": {
+        "type": "string",
+        "description": "An API name for the stage.",
+        "required": true
+      }
+    },
+    "FlowTextTemplateTranslation": {
+      "name": {
+        "type": "string",
+        "description": "Unique name for the text template.",
+        "required": true
+      },
+      "text": {
+        "type": "string",
+        "description": "Translated text for the text template."
+      }
+    },
+    "IdentityVerificationFieldTranslation": {
+      "customFieldLabel": {
+        "type": "string",
+        "description": "The custom label for the field that contains the verification data."
+      },
+      "description": {
+        "type": "string",
+        "description": "The identity verification field description."
+      },
+      "label": {
+        "type": "string",
+        "description": "A user-friendly name for IdentityVerificationFieldTranslation."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the identity verification field.",
+        "required": true
+      }
+    },
+    "TimelineObjectDefinitionTranslation": {
+      "label": {
+        "type": "string",
+        "description": "Translated label for the timeline object definition."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the timeline object definition.",
+        "required": true
+      }
+    },
+    "GlobalPicklistTranslation": {
+      "name": {
+        "type": "string",
+        "description": "Represents the name of a global picklist to be translated.",
+        "required": true
+      },
+      "picklistValues": {
+        "type": "PicklistValueTranslation[]",
+        "description": "A list of picklist values from global picklists to be translated."
+      }
+    },
+    "GlobalQuickActionTranslation": {
+      "aspect": {
+        "type": "string",
+        "description": "Identifies which quick action label the translated text belongs to. Use this field only when you want to use different strings for the quick action’s field label and informational message. Valid values are Master and InfoMessage. Available in API version 53.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated quick action name, globally.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The quick action name.",
+        "required": true
+      }
+    },
+    "PipelineInspMetricConfigTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated Pipeline Inspection metric configuration name.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the Pipeline Inspection metric configuration.",
+        "required": true
+      }
+    },
+    "ProductSpecificationTypeTranslation": {
+      "description": {
+        "type": "string",
+        "description": "The translated product specification type description."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated product specification type name."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the product specification type.",
+        "required": true
+      }
+    },
+    "PromptTranslation": {
+      "description": {
+        "type": "string",
+        "description": "The prompt description."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated prompt name."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the prompt.",
+        "required": true
+      },
+      "promptVersions": {
+        "type": "PromptVersionTranslation",
+        "description": "A list of the prompt version translations."
+      }
+    },
+    "PromptVersionTranslation": {
+      "actionButtonLabel": {
+        "type": "string",
+        "description": "The label for the prompt’s action button."
+      },
+      "actionButtonLink": {
+        "type": "string",
+        "description": "The URL for the prompt’s action button."
+      },
+      "body": {
+        "type": "string",
+        "description": "The body text of the prompt."
+      },
+      "description": {
+        "type": "string",
+        "description": "The prompt description."
+      },
+      "dismissButtonLabel": {
+        "type": "string",
+        "description": "The label for the floating prompt’s dismiss button."
+      },
+      "header": {
+        "type": "string",
+        "description": "The header for the docked prompt."
+      },
+      "imageAltText": {
+        "type": "string",
+        "description": "The alt text for a prompt’s image. Available in API version 53.0 and later."
+      },
+      "imageLink": {
+        "type": "string",
+        "description": "The URL for a prompt’s image. Available in API version 53.0 and later."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated prompt name."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the prompt.",
+        "required": true
+      },
+      "title": {
+        "type": "string",
+        "description": "The title of the prompt."
+      },
+      "videoLink": {
+        "type": "string",
+        "description": "The URL for the docked prompt’s video."
+      }
+    },
+    "ReportTypeTranslation": {
+      "description": {
+        "type": "string",
+        "description": "The translated report type description."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated report type name."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the report type.",
+        "required": true
+      },
+      "sections": {
+        "type": "ReportTypeSectionTranslation[]",
+        "description": "A list of report type section translations."
+      }
+    },
+    "ReportTypeSectionTranslation": {
+      "columns": {
+        "type": "ReportTypeColumnTranslation[]",
+        "description": "A list of report type column translations."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated report type section name."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the report type section.",
+        "required": true
+      }
+    },
+    "ReportTypeColumnTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated report type column name.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The report type column name.",
+        "required": true
+      }
+    },
+    "ScontrolTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated s-control name.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the s-control.",
+        "required": true
+      }
+    },
+    "ConversationMessageDefinitionTranslation": {
+      "constantValueTranslations": {
+        "type": "ConversationMessageConstantValueTranslation[]",
+        "description": "A list of conversation message constant value translations."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated label for the conversation message definition.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the conversation message definition.",
+        "required": true
+      }
+    },
+    "ConversationMessageConstantValueTranslation": {
+      "name": {
+        "type": "string",
+        "description": "The name of the conversation message constant value.",
+        "required": true
+      },
+      "value": {
+        "type": "string",
+        "description": "The translated constant value.",
+        "required": true
+      }
+    },
+    "DataConnectorTranslation": {
+      "attributes": {
+        "type": "DataConnectorAttributeTranslation[]",
+        "description": "A list of data connector attribute translations."
+      },
+      "description": {
+        "type": "string",
+        "description": "The translated description for the data connector."
+      },
+      "errors": {
+        "type": "DataConnectorErrorTranslation[]",
+        "description": "A list of data connector error translations."
+      },
+      "help": {
+        "type": "string",
+        "description": "The translated help text for the data connector."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated label for the data connector."
+      },
+      "language": {
+        "type": "string",
+        "description": "The language for the data connector translation."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the data connector."
+      }
+    },
+    "DataConnectorAttributeTranslation": {
+      "errorMessage": {
+        "type": "string",
+        "description": "The translated error message for the attribute."
+      },
+      "infoMessage": {
+        "type": "string",
+        "description": "The translated info message for the attribute."
+      },
+      "inputLabel": {
+        "type": "string",
+        "description": "The translated input label for the attribute."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated label for the attribute.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the attribute.",
+        "required": true
+      },
+      "options": {
+        "type": "DataConnectorAttributeOptTranslation[]",
+        "description": "A list of data connector attribute option translations."
+      }
+    },
+    "DataConnectorAttributeOptTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated label for the attribute option.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the attribute option.",
+        "required": true
+      }
+    },
+    "DataConnectorErrorTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated label for the error.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the error.",
+        "required": true
+      }
+    },
+    "RecordAlertCategoryTranslation": {
+      "description": {
+        "type": "string",
+        "description": "The translated description for the record alert category."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated label for the record alert category.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the record alert category.",
+        "required": true
+      }
+    },
+    "RecordAlertTemplateTranslation": {
+      "description": {
+        "type": "string",
+        "description": "The translated description for the record alert template."
+      },
+      "label": {
+        "type": "string",
+        "description": "The translated label for the record alert template."
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the record alert template.",
+        "required": true
+      },
+      "subject": {
+        "type": "string",
+        "description": "The translated subject for the record alert template."
+      }
+    },
+    "ServiceProcessAttributeTranslation": {
+      "label": {
+        "type": "string",
+        "description": "The translated label for the service process attribute.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the service process attribute.",
+        "required": true
+      },
+      "serviceProcessName": {
+        "type": "string",
+        "description": "The name of the service process.",
+        "required": true
+      }
+    },
+    "ServiceProcessItemGroupTranslation": {
+      "groupName": {
+        "type": "string",
+        "description": "The name of the service process item group.",
+        "required": true
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the service process item group translation.",
+        "required": true
+      },
+      "serviceProcessName": {
+        "type": "string",
+        "description": "The name of the service process.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"AiCoachAgentScnrDefTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"userGuidance\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotBlockTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"botBlockVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotBlockVersionTranslation\"/>\n    <xsd:element name=\"fullName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotBlockVersionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"botDialogs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotDialogTranslation\"/>\n    <xsd:element name=\"fullName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotDialogTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"botSteps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotStepTranslation\"/>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotMessageTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"message\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"messageIdentifier\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotQuickReplyOptionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"literalValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"quickReplyOptionIdentifier\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotStepTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"botMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotMessageTranslation\"/>\n    <xsd:element name=\"botSteps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotStepTranslation\"/>\n    <xsd:element name=\"botVariableOperation\" minOccurs=\"0\" type=\"tns:BotVariableOperationTranslation\"/>\n    <xsd:element name=\"stepIdentifier\" type=\"xsd:string\"/>\n    <xsd:element name=\"type\" type=\"tns:BotStepType\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"BotStepType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Navigation\"/>\n    <xsd:enumeration value=\"Invocation\"/>\n    <xsd:enumeration value=\"VariableOperation\"/>\n    <xsd:enumeration value=\"Message\"/>\n    <xsd:enumeration value=\"Wait\"/>\n    <xsd:enumeration value=\"Group\"/>\n    <xsd:enumeration value=\"SystemMessage\"/>\n    <xsd:enumeration value=\"RecordLookup\"/>\n    <xsd:enumeration value=\"RichMessage\"/>\n    <xsd:enumeration value=\"GoalStep\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"BotTemplateTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"botDialogs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotDialogTranslation\"/>\n    <xsd:element name=\"fullName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"botVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotVersionTranslation\"/>\n    <xsd:element name=\"fullName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"BotVariableOperationTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"botMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotMessageTranslation\"/>\n    <xsd:element name=\"botQuickReplyOptions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotQuickReplyOptionTranslation\"/>\n    <xsd:element name=\"quickReplyOptionTemplate\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"retryMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotMessageTranslation\"/>\n    <xsd:element name=\"successMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotMessageTranslation\"/>\n    <xsd:element name=\"type\" type=\"tns:BotVariableOperationType\"/>\n    <xsd:element name=\"variableOperationIdentifier\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:simpleType name=\"BotVariableOperationType\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Set\"/>\n    <xsd:enumeration value=\"Unset\"/>\n    <xsd:enumeration value=\"Collect\"/>\n    <xsd:enumeration value=\"SetConversationLanguage\"/>\n    <xsd:enumeration value=\"CollectAttachment\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"BotVersionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"botDialogs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotDialogTranslation\"/>\n    <xsd:element name=\"fullName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ContextDefinitionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageConstantValueTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ConversationMessageDefinitionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"constantValueTranslations\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageConstantValueTranslation\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomApplicationTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomLabelTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomPageWebLinkTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"CustomTabTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardComponentTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"footer\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DashboardTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DataConnectorAttributeOptTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DataConnectorAttributeTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"errorMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"infoMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"inputLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"options\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorAttributeOptTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DataConnectorErrorTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"DataConnectorTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"attributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorAttributeTranslation\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"errors\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorErrorTranslation\"/>\n    <xsd:element name=\"help\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"language\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ExplainabilityMsgTemplateFieldTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"templateMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowChoiceTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"choiceText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"userInput\" minOccurs=\"0\" type=\"tns:FlowChoiceUserInputTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowChoiceUserInputTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"promptText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"validationRule\" minOccurs=\"0\" type=\"tns:FlowInputValidationRuleTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowComplexLiteralTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"customAspectKey\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowCustomErrorMessageTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"developerName\" type=\"xsd:string\"/>\n    <xsd:element name=\"errorMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"field\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowDefinitionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"flows\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTranslation\"/>\n    <xsd:element name=\"fullName\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowFerovTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"complexValues\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowComplexLiteralTranslation\"/>\n    <xsd:element name=\"stringValue\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowInputParameterTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"value\" type=\"tns:FlowFerovTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowInputValidationRuleTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"errorMessage\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowOrchestrationStageTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"stageLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowOrchestrationStepTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"stepLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowScreenFieldTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"fieldText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"helpText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"inputParameters\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowInputParameterTranslation\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"validationRule\" minOccurs=\"0\" type=\"tns:FlowInputValidationRuleTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowScreenTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"backButtonLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"fields\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowScreenFieldTranslation\"/>\n    <xsd:element name=\"helpText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"nextOrFinishButtonLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"pauseButtonLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"pausedText\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowStageTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTextTemplateTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"text\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"FlowTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"choices\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowChoiceTranslation\"/>\n    <xsd:element name=\"customErrorMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowCustomErrorMessageTranslation\"/>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"orchestrationStages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowOrchestrationStageTranslation\"/>\n    <xsd:element name=\"orchestrationSteps\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowOrchestrationStepTranslation\"/>\n    <xsd:element name=\"screens\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowScreenTranslation\"/>\n    <xsd:element name=\"stages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowStageTranslation\"/>\n    <xsd:element name=\"textTemplates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowTextTemplateTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"GlobalQuickActionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"aspect\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"IdentityVerificationFieldTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"customFieldLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PipelineInspMetricConfigTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ProductSpecificationTypeTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PromptTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"promptVersions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PromptVersionTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"PromptVersionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"actionButtonLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"actionButtonLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"body\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"dismissButtonLabel\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"header\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"imageAltText\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"imageLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"stepNumber\" minOccurs=\"0\" type=\"xsd:int\"/>\n    <xsd:element name=\"title\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"videoLink\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordAlertCategoryTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"RecordAlertTemplateTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"subject\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportTypeColumnTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportTypeSectionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"columns\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportTypeColumnTranslation\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ReportTypeTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"sections\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportTypeSectionTranslation\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ScontrolTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ServiceProcessAttributeTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"serviceProcessName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"ServiceProcessItemGroupTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"groupName\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n    <xsd:element name=\"serviceProcessName\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"TimelineObjectDefinitionTranslation\">\n  <xsd:sequence>\n    <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n    <xsd:element name=\"name\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Translations\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"aiCoachAgentScnrDefs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:AiCoachAgentScnrDefTranslation\"/>\n        <xsd:element name=\"botBlocks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotBlockTranslation\"/>\n        <xsd:element name=\"botTemplates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotTemplateTranslation\"/>\n        <xsd:element name=\"bots\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:BotTranslation\"/>\n        <xsd:element name=\"contextDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ContextDefinitionTranslation\"/>\n        <xsd:element name=\"conversationMessageDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ConversationMessageDefinitionTranslation\"/>\n        <xsd:element name=\"customApplications\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomApplicationTranslation\"/>\n        <xsd:element name=\"customLabels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomLabelTranslation\"/>\n        <xsd:element name=\"customPageWebLinks\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomPageWebLinkTranslation\"/>\n        <xsd:element name=\"customTabs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:CustomTabTranslation\"/>\n        <xsd:element name=\"dashboardComponents\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardComponentTranslation\"/>\n        <xsd:element name=\"dashboards\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DashboardTranslation\"/>\n        <xsd:element name=\"dataConnectors\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:DataConnectorTranslation\"/>\n        <xsd:element name=\"desFieldTemplateMessages\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ExplainabilityMsgTemplateFieldTranslation\"/>\n        <xsd:element name=\"flowDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:FlowDefinitionTranslation\"/>\n        <xsd:element name=\"identityVerificationCustomFieldLabels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:IdentityVerificationFieldTranslation\"/>\n        <xsd:element name=\"pipelineInspMetricConfigs\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PipelineInspMetricConfigTranslation\"/>\n        <xsd:element name=\"productSpecificationTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ProductSpecificationTypeTranslation\"/>\n        <xsd:element name=\"prompts\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:PromptTranslation\"/>\n        <xsd:element name=\"quickActions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:GlobalQuickActionTranslation\"/>\n        <xsd:element name=\"recordAlertCategories\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordAlertCategoryTranslation\"/>\n        <xsd:element name=\"recordAlertTemplates\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:RecordAlertTemplateTranslation\"/>\n        <xsd:element name=\"reportTypes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportTypeTranslation\"/>\n        <xsd:element name=\"reports\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ReportTranslation\"/>\n        <xsd:element name=\"scontrols\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ScontrolTranslation\"/>\n        <xsd:element name=\"svcCatalogItemAttributes\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ServiceProcessAttributeTranslation\"/>\n        <xsd:element name=\"svcCatalogItemGroups\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ServiceProcessItemGroupTranslation\"/>\n        <xsd:element name=\"timelineObjectDefinitions\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:TimelineObjectDefinitionTranslation\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is an example of an ExplainabilityMsgTemplateFieldTranslation component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Translations xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <desFieldTemplateMessages>\n        <description>Calc Blitz Message</description>\n        <label>CALBLITZ</label>\n        <name>CALBLITZ</name>\n        <templateMessage>CALBLITZ</templateMessage>\n    </desFieldTemplateMessages>\n</Translations>"
+    },
+    {
+      "description": "This is an example of an IdentityVerificationFieldTranslation component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Translations\n    xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <identityVerificationCustomFieldLabels>\n        <description>Telefono Numero</description>\n        <label>Telefono Numero</label>\n        <name>Sample93Phone</name>\n    </identityVerificationCustomFieldLabels>\n    <identityVerificationCustomFieldLabels>\n        <description>Nombre de la Cuenta</description>\n        <label>Nombre de la Cuenta</label>\n        <name>Sample93Account</name>\n    </identityVerificationCustomFieldLabels>\n    <identityVerificationCustomFieldLabels>\n        <name>Sample93PostalCode</name>\n    </identityVerificationCustomFieldLabels>\n    <identityVerificationCustomFieldLabels>\n        <name>Sample93AccountName</name>\n        <description>Nombre</description>\n        <label>Nombre</label>\n    </identityVerificationCustomFieldLabels>\n</Translations>"
+    },
+    {
+      "description": "This sample XML definition shows a translations component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Translations xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <customApplications>\n    <label>Angebot-Manager</label>\n        <name>Quote Manager</name>\n    </customApplications>\n    <customLabels>\n    <label>Dieses ist ein manuelles Angebot</label>\n        <name>quoteManual</name>\n    </customLabels>\n</Translations>"
+    }
+  ]
+}

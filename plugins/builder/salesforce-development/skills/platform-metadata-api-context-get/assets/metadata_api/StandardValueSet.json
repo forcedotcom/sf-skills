@@ -1,0 +1,41 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "StandardValueSet - Metadata API",
+  "description": "Represents the set of values in a standard picklist field. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".standardValueSet",
+  "directory_location": "standardValueSets",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "groupingStringEnum": {
+      "type": "string",
+      "description": "Groups picklist and enumerated values. For example, for the picklist values of the Status field on the Service Appointment object, Done and Finished can both have a grouping string of Completed. Available in API version 41.0 and later."
+    },
+    "sorted": {
+      "type": "boolean",
+      "description": "Indicates whether a global value set is sorted in alphabetical order. By default, this value is false.",
+      "required": true
+    },
+    "standardValue": {
+      "type": "StandardValue[]",
+      "description": "Defines each value in a standard picklist’s value set. The groupingString value is available in API version 38.0 and later. When you deploy a StandardValueSet, this array must contain at least one picklist value. Otherwise, you receive an error. Note: When setting standardValue on Record Types, including person account record types, new picklist values loaded into your organization through the Metadata API don’t display in the picklist UI by default. For users to see the new values, go to the Record Types list for the object containing the picklist field, click Edit, and add the new value to the Selected Fields list."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CustomValue\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"color\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"default\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"label\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"ForecastCategories\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"Omitted\"/>\n    <xsd:enumeration value=\"Pipeline\"/>\n    <xsd:enumeration value=\"BestCase\"/>\n    <xsd:enumeration value=\"MostLikely\"/>\n    <xsd:enumeration value=\"Forecast\"/>\n    <xsd:enumeration value=\"Closed\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"StandardValue\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:CustomValue\">\n      <xsd:sequence>\n        <xsd:element name=\"allowEmail\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"closed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"converted\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"cssExposed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"forecastCategory\" minOccurs=\"0\" type=\"tns:ForecastCategories\"/>\n        <xsd:element name=\"groupingString\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"highPriority\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"probability\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"reverseRole\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"reviewed\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"won\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"StandardValueSet\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"groupingStringEnum\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"sorted\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"standardValue\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:StandardValue\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following example shows a StandardValueSet component that’s defined as the Stage standard picklist on a customized opportunity object.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<StandardValueSet xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <fullName>OpportunityStage</fullName> <!-- Enum name -->\n    <standardValue>\n       <fullName>Closed Abandoned</fullName>\n    </standardValue>\n    <standardValue>\n       <fullName>Closed Won</fullName>\n    </standardValue>\n    <standardValue>\n       <fullName>Closed Lost</fullName>\n    </standardValue>\n</StandardValueSet>\n\n<CustomObject>\n    <fullName>Opportunity</fullName>\n    <fields>\n       <fullName>StageName</fullName> <!-- field name -->\n       <label>Stage</label>\n       <type>Picklist</type>\n    </fields>\n    <label>ObjectWithValueSet</label>\n    <pluralLabel>ObjectWithValueSet</pluralLabel>\n    <sharingModel>ReadWrite</sharingModel>\n</CustomObject>"
+    }
+  ]
+}

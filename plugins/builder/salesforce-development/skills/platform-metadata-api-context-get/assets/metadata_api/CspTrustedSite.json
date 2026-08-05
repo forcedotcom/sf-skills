@@ -1,0 +1,82 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "CspTrustedSite - Metadata API",
+  "description": "Represents a trusted URL. For each CspTrustedSite component, you can specify Content Security Policy (CSP) directives and permissions policy directives. Each CSP directive allows Lightning components, third-party APIs, and WebSocket connections to access a resource type from the trusted URL. If the Permissions-Policy HTTP header is enabled, each permissions policy directive grants the trusted URL access to a browser feature. In API version 58.0 and earlier, CspTrustedSite components included only CSP directives and were referred to as CSP Trusted Sites.",
+  "file_information": ".cspTrustedSite",
+  "directory_location": "cspTrustedSites",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "canAccessCamera": {
+      "type": "boolean",
+      "description": "Indicates whether this CspTrustedSite can access the user’s camera (true) or not (false). The default value is false. This field takes effect only when the enablePermissionsPolicy field equals true and the grantCameraAccess field equals TrustedUrls in the SecuritySettings metadata API type. This field is available in API version 59.0 and later."
+    },
+    "canAccessMicrophone": {
+      "type": "boolean",
+      "description": "Indicates whether this CspTrustedSite can access the user’s microphone (true) or not (false). The default value is false. This field takes effect only when the enablePermissionsPolicy field equals true and the grantMicrophoneAccess field equals TrustedUrls in the SecuritySettings metadata API type. This field is available in API version 59.0 and later."
+    },
+    "context": {
+      "type": "CspTrustedSiteContext (enumeration of type string)",
+      "description": "Declares the scope of the CSP directives for this trusted URL. All—Apply the CSP directives to all supported context types. Communities—Apply the CSP directives to Experience Builder sites only. FieldServiceMobileExtension—Apply the CSP directives to the Field Service Mobile Extensions only. This value is available in API version 47.0 and later. LEX—Apply the CSP directives to Lightning Experience pages only. LightningOut—Reserved for future use. Available in API version 64.0 and later VisualForce—Apply the CSP directives to custom Visualforce pages only. This value is available in API version 55.0 and later. For custom Visualforce pages, content is restricted to trusted URLs only if the page’s cspHeader attribute is set to true. This field is available in API version 44.0 and later."
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of this trusted URL."
+    },
+    "endpointUrl": {
+      "type": "string",
+      "description": "The URL for this CspTrustedSite. This field must include a domain name and can include a port. For example, https://example.com or https://example.com:8080. To reduce repetition, you can use the wildcard character * (asterisk). For example, *.example.com. For a third-party API, the URL must begin with https://. For example, https://example.com. For a WebSocket connection, the URL must begin with wss://. For example, wss://example.com. Otherwise, the URL cannot be malformed. Examples of malformed URLs that fail a syntax check are malformed^url.example.com, and https://{subdomain}.example.com. Before February 2025, it was possible to save a malformed URL. Malformed URLs are excluded from generated CSP HTTP headers. To keep your Trusted URLs list accurate, remove any malformed entries. You can use an Apex class to find all malformed URLs. See the knowledge article, Identify Malformed Trusted URLs. To add an EndpointUrl based on parameters, build the URL before you add it to this Metadata Type.",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "description": "Indicates whether this CspTrustedSite is active (true) or not (false). The default value is true.",
+      "required": true
+    },
+    "isApplicableToConnectSrc": {
+      "type": "boolean",
+      "description": "Indicates whether Lightning components, third-party APIs, and WebSocket connections can load URLs using script interfaces from this trusted URL (true) or not (false). This field has a default value of false. This field is available in API version 48.0 and later."
+    },
+    "isApplicableToFontSrc": {
+      "type": "boolean",
+      "description": "Indicates whether Lightning components, third-party APIs, and WebSocket connections can load fonts from this trusted URL (true) or not (false). This field has a default value of false. This field is available in API version 48.0 and later."
+    },
+    "isApplicableToFrameSrc": {
+      "type": "boolean",
+      "description": "Indicates whether Lightning components, third-party APIs, and WebSocket connections can load resources contained in <iframe> elements from this trusted URL (true) or not (false). This field has a default value of false.This field is available in API version 48.0 and later."
+    },
+    "isApplicableToImgSrc": {
+      "type": "boolean",
+      "description": "Indicates whether Lightning components, third-party APIs, and WebSocket connections can load images from this trusted URL (true) or not (false). This field has a default value of false. This field is available in API version 48.0 and later."
+    },
+    "isApplicableToMediaSrc": {
+      "type": "boolean",
+      "description": "Indicates whether Lightning components, third-party APIs, and WebSocket connections can load audio and video from this trusted URL (true) or not (false). This field has a default value of false. In API version 59.0 and later, for each trusted URL, at least one CSPTrustedSite starting with isApplicable or canAccess must be set to true. In API version 50.0 to 58.0, if all isApplicable fields are false, the isApplicableToImgSrc field is set to true. In API version 49.0 and earlier, if all isApplicable fields are false, these fields all default to true. This field is available in API version 48.0 and later."
+    },
+    "isApplicableToStyleSrc": {
+      "type": "boolean",
+      "description": "Indicates whether Lightning components, third-party APIs, and WebSocket connections can load style sheets from this trusted URL (true) or not (false). This field has a default value of false. This field is available in API version 48.0 and later."
+    },
+    "mobileExtension": {
+      "type": "string",
+      "description": "Reserved for future use."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"CspTrustedSite\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"canAccessCamera\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"canAccessMicrophone\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"context\" minOccurs=\"0\" type=\"tns:CspTrustedSiteContext\"/>\n        <xsd:element name=\"description\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"endpointUrl\" type=\"xsd:string\"/>\n        <xsd:element name=\"isActive\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isApplicableToConnectSrc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isApplicableToFontSrc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isApplicableToFrameSrc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isApplicableToImgSrc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isApplicableToMediaSrc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"isApplicableToStyleSrc\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"mobileExtension\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:simpleType name=\"CspTrustedSiteContext\">\n  <xsd:restriction base=\"xsd:string\">\n    <xsd:enumeration value=\"All\"/>\n    <xsd:enumeration value=\"LEX\"/>\n    <xsd:enumeration value=\"Communities\"/>\n    <xsd:enumeration value=\"FieldServiceMobileExtension\"/>\n    <xsd:enumeration value=\"LightningOut\"/>\n    <xsd:enumeration value=\"VisualForce\"/>\n  </xsd:restriction>\n</xsd:simpleType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample XML definition of a trusted site is shown below.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CspTrustedSite xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <canAccessCamera>false</canAccessCamera>\n    <canAccessMicrophone>true</canAccessMicrophone>\n    <description>Used for Lightning component callout to mapping web service</description>\n    <context>LEX</context>\n    <endpointUrl>https://www.maptestsite.net/</endpointUrl>\n    <isActive>true</isActive>\n    <isApplicableToConnectSrc>true</isApplicableToConnectSrc>\n    <isApplicableToFontSrc>true</isApplicableToFontSrc>\n    <isApplicableToFrameSrc>false</isApplicableToFrameSrc>\n    <isApplicableToImgSrc>true</isApplicableToImgSrc>\n    <isApplicableToMediaSrc>false</isApplicableToMediaSrc>\n    <isApplicableToStyleSrc>true</isApplicableToStyleSrc>\n</CspTrustedSite>"
+    }
+  ]
+}

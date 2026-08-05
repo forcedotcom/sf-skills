@@ -1,0 +1,63 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "ChannelLayout - Metadata API",
+  "description": "Represents the metadata associated with a communication channel layout. Communication channel layouts let admins share article content inline into communication channels (for example, in email publishers, Experience Builder sites, or social media publishers). Admins can create a list of fields for an article type or record type that they want to share for each communication channel. You can customize the order of the fields.",
+  "file_information": ".channelLayout",
+  "directory_location": "channelLayouts",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "doesExcludeFieldLabels": {
+      "type": "boolean",
+      "description": "Indicates whether field labels are excluded from the field contents in the communication channels where this layout applies (true) or not (false). The default is false, meaning field labels are inserted. Available when Lightning Knowledge is enabled in API version 48.0 and later."
+    },
+    "doesExcludeFiles": {
+      "type": "boolean",
+      "description": "Indicates whether related files are left off emails (true) or attached to emails (false). The default is false, meaning related files are attached. Available when Lightning Knowledge is enabled in API version 48.0 and later."
+    },
+    "enabledChannels": {
+      "type": "string[]",
+      "description": "The communication channels where this layout applies. In API version 32.0 to 46.0, the only valid value is Email. When Lightning Knowledge is enabled in API version 47.0 and later, Chat, Messaging, and Social are added valid values."
+    },
+    "label": {
+      "type": "string",
+      "description": "The label for this configuration.",
+      "required": true
+    },
+    "layoutItems": {
+      "type": "ChannelLayoutItem[]",
+      "description": "The article fields contained in the layout. The order here determines the field order."
+    },
+    "recordType": {
+      "type": "string",
+      "description": "The name of the record type that the channel layout applies to. The default is the primary record type. Available in API version 41.0 and later."
+    }
+  },
+  "sub_types": {
+    "ChannelLayoutItem": {
+      "field": {
+        "type": "string",
+        "description": "Name of the field. The format is ArticleTypeName. FieldName or, in Lightning Knowledge, KnowledgeBaseName. FieldName.",
+        "required": true
+      }
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"ChannelLayout\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"doesExcludeFieldLabels\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"doesExcludeFiles\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enabledChannels\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"xsd:string\"/>\n        <xsd:element name=\"label\" type=\"xsd:string\"/>\n        <xsd:element name=\"layoutItems\" minOccurs=\"0\" maxOccurs=\"unbounded\" type=\"tns:ChannelLayoutItem\"/>\n        <xsd:element name=\"recordType\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"ChannelLayoutItem\">\n  <xsd:sequence>\n    <xsd:element name=\"field\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a ChannelLayout component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ChannelLayout xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <label>Layout for Email</label>\n    <layoutItems>\n        <field>Knowledge.Question</field>\n    </layoutItems>\n    <layoutItems>\n        <field>Knowledge.Answer</field>\n    </layoutItems>\n    <enabledChannels>Email</enabledChannels>\n    <enabledChannels>Social</enabledChannels>\n    <enabledChannels>Chat</enabledChannels>\n    <doesExcludeFiles>false</doesExcludeFiles>\n    <doesExcludeFieldLabels>true</doesExcludeFieldLabels>\n</ChannelLayout>"
+    }
+  ]
+}

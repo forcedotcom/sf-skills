@@ -1,0 +1,62 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DataObjectSearchIndexConf - Metadata API",
+  "description": "Represents the source Data 360 data model object (DMO) for Search Answers and holds the search index that Search Answers uses when searching DMO records.",
+  "file_information": ".dataObjectSearchIndexConf",
+  "directory_location": "dataObjectSearchIndexConfs",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "application": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the app that the Search Answers index is associated with."
+    },
+    "channel": {
+      "type": "string",
+      "description": "The search channel that the Search Answers configuration applies to."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the Search Answers configuration."
+    },
+    "nameFieldReference": {
+      "type": "string",
+      "required": true,
+      "description": "The name field of the DMO selected as a source for Search Answers."
+    },
+    "objectReference": {
+      "type": "string",
+      "required": true,
+      "description": "The DMO that the Search Answers configuration applies to."
+    },
+    "retriever": {
+      "type": "string",
+      "description": "The retriever that accesses the Search Answers indexed data."
+    },
+    "searchIndex": {
+      "type": "string",
+      "required": true,
+      "description": "The name of the search index mapped to the DMO."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"DataObjectSearchIndexConf\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"application\" type=\"xsd:string\"/>\n        <xsd:element name=\"channel\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"masterLabel\" type=\"xsd:string\"/>\n        <xsd:element name=\"nameFieldReference\" type=\"xsd:string\"/>\n        <xsd:element name=\"objectReference\" type=\"xsd:string\"/>\n        <xsd:element name=\"retriever\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"searchIndex\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DataObjectSearchIndexConf component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DataObjectSearchIndexConf xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n\t<application>SearchAnswers</application>\n\t<channel>SharedIndex</channel>\n\t<masterLabel>SearchAnswers</masterLabel>\n\t<nameFieldReference>Name__c</nameFieldReference>\n\t<objectReference>Account__dlm</objectReference>\n\t<searchIndex>searchAnswersIndex</searchIndex>\n</DataObjectSearchIndexConf>"
+    }
+  ]
+}

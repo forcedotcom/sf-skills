@@ -1,0 +1,180 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "SalesAgreementSettings - Metadata API",
+  "description": "Represents settings that control the display of agreement terms metrics in sales agreements and the calculation of the actual quantity of products in sales agreements. These settings also control the approval of sales agreements.",
+  "file_information": ".salesAgreementSetting",
+  "directory_location": "salesAgreementSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "actualsCalculationMode": {
+      "type": "ActualsCalculationMode(enumeration of type string)",
+      "description": "Source from which the actual ordered quantity of a product in a sales agreement is calculated. Valid values are: DataProcessingEngine—Available in API version 63.0 and later. Manual: Default Orders OrdersThroughContracts",
+      "required": true
+    },
+    "arePredfndStatusValOveride": {
+      "type": "boolean",
+      "description": "Indicates whether predefined status validations are overridden (true) or not (false) when the Override Predefined Status Validations feature is enabled. The default value is false. Available in API version 65.0 and later."
+    },
+    "decimalScale": {
+      "type": "int",
+      "description": "Number of decimal places applied to values in sales agreements. Available in API version 62.0 and later.",
+      "required": true
+    },
+    "displayGroups": {
+      "type": "AdvAcctFrcstDisplayGroup",
+      "description": "Represents information about the groups for the advanced account forecast set measures or dimensions. Available in API version 56.0 and later."
+    },
+    "displayedAgreementTermsMetrics": {
+      "type": "string",
+      "description": "Metrics that are selected for display in the sales agreement terms in the specified sequence. There can be a maximum of 10 comma-separated metric names in this list.",
+      "required": true
+    },
+    "futureActCalcSchedules": {
+      "type": "int",
+      "description": "Number of future schedules to include in actuals calculations in the sales agreement. Available in API version 63.0 and later.",
+      "required": true
+    },
+    "measureDefinitions": {
+      "type": "AdvAcctForecastMeasureDef",
+      "description": "Represents information about the measures to be displayed in the advanced account forecasts grid for the forecast set. Available in API version 56.0 and later."
+    },
+    "objectMapping": {
+      "type": "ObjectMapping",
+      "description": "Foreign key to ObjectMapping that maps fields from the input object of SalesAgreementSettings to fields in the output object of SalesAgreementSettings."
+    },
+    "primaryNotifEmailAddress": {
+      "type": "string",
+      "description": "The email address to which notifications are sent."
+    },
+    "renewalPeriodDayCount": {
+      "type": "int",
+      "description": "The number of days before the end date of a sales agreement from when the agreement can be renewed. Available in API version 50.0 and later."
+    },
+    "secondaryNotifEmailAddress": {
+      "type": "string",
+      "description": "The second email address to which notifications are sent."
+    }
+  },
+  "sub_types": {
+    "AdvAcctFrcstDisplayGroup": {
+      "advAcctFrcstDisplayGroupName": {
+        "type": "string",
+        "description": "Name of the advanced account forecast display group.",
+        "required": true
+      },
+      "displayGroupItems": {
+        "type": "AdvAcctFrcstDplyGroupItem",
+        "description": "Represents information about the items associated with a display group for an advanced account forecast set."
+      },
+      "displayGroupType": {
+        "type": "AdvAcctFrcstDisplayGroupType(enumeration of type string)",
+        "description": "Category for the display group. Possible values are: MEASURE"
+      },
+      "isDefault": {
+        "type": "boolean",
+        "description": "Indicates whether the display group is the default group (true) or not (false). The default value is false."
+      },
+      "userProfileName": {
+        "type": "string",
+        "description": "Profile for which the display group is applicable."
+      }
+    },
+    "AdvAcctFrcstDplyGroupItem": {
+      "advAcctFrcstDplyGroupItemName": {
+        "type": "string",
+        "description": "Name of the advanced account forecast display group item.",
+        "required": true
+      },
+      "displayOrder": {
+        "type": "string",
+        "description": "Display order of the display group item.",
+        "required": true
+      },
+      "measureReferenceName": {
+        "type": "string",
+        "description": "Name of the measure associated with the display group item."
+      }
+    },
+    "AdvAcctForecastMeasureDef": {
+      "advAcctForecastMeasureDefName": {
+        "type": "string",
+        "description": "Name for the measure.",
+        "required": true
+      },
+      "aggregationType": {
+        "type": "AdvAcctFcstAggregationType(enumeration of type string)",
+        "description": "Type of aggregation used for calculating advanced account forecast values. Possible values are: AVERAGE MAXIMUM MINIMUM SUM",
+        "required": true
+      },
+      "computationMethod": {
+        "type": "AdvAcctFcstComputationMethodenumeration of type string)",
+        "description": "Method used for calculating advanced account forecast values. Possible values are: CUSTOM DATA_PROCESSING_ENGINE_DEFINITION FORMULA",
+        "required": true
+      },
+      "forecastDataMeasureName": {
+        "type": "string",
+        "description": "Field of the facts object used for this measure.",
+        "required": true
+      },
+      "forecastMeasureName": {
+        "type": "string",
+        "description": "Name for the measure to show on UI.",
+        "required": true
+      },
+      "forecastMeasureType": {
+        "type": "AdvAcctFcstMeasureType(enumeration of type string)",
+        "description": "Measure type used for the generated advanced forecast values. Possible values are: QUANTITY REVENUE",
+        "required": true
+      },
+      "isAdjustmentTracked": {
+        "type": "boolean",
+        "description": "Indicates whether the adjustments made to the advanced account forecast values for this metric are tracked (true) or not (false). The default value is false."
+      }
+    },
+    "ObjectMapping": {
+      "inputObject": {
+        "type": "string",
+        "description": "The input object for the SalesAgreementSettings. SalesAgreementProductSchedule is the input object for the SalesAgreementSettings.",
+        "required": true
+      },
+      "mappingFields": {
+        "type": "ObjectMappingField",
+        "description": "The mapping of source object fields to target object fields for SalesAgreementSettings."
+      },
+      "outputObject": {
+        "type": "string",
+        "description": "The output object for the SalesAgreementSettings. SalesAgreementProduct is the output object for the SalesAgreementSettings.",
+        "required": true
+      }
+    },
+    "ObjectMappingField": {
+      "inputField": {
+        "type": "string",
+        "description": "Field in the object specified by the inputObject field in ObjectMapping. This field is mapped to the field in outputField, which is a field in the object specified by the outputObject field in ObjectMapping.",
+        "required": true
+      },
+      "outputField": {
+        "type": "string",
+        "description": "Field in the object specified by the outputObject field in ObjectMapping. This field is mapped to the field name in inputField, which is a field in the object specified by the inputObject field in ObjectMapping.",
+        "required": true
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of SalesAgreementSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<SalesAgreementSettings\n\txmlns=\"http://soap.sforce.com/2006/04/metadata\"\n\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\t<actualsCalculationMode>Orders</actualsCalculationMode>\n\t<arePredfndStatusValOveride>false</arePredfndStatusValOveride>\n      <decimalScale>0.2</decimalScale>\n\t<displayGroups>\n\t\t<advAcctFrcstDisplayGroupName>Test Measure Group</advAcctFrcstDisplayGroupName>\n\t\t<displayGroupItems>\n\t\t\t<advAcctFrcstDplyGroupItemName>PlannedQuantity</advAcctFrcstDplyGroupItemName>\n\t\t\t<displayOrder>1</displayOrder>\n\t\t\t<measureReferenceName>PlannedQuantity</measureReferenceName>\n\t\t</displayGroupItems>\n\t\t<displayGroupType>MEASURE</displayGroupType>\n\t\t<isDefault>false</isDefault>\n\t\t<userProfileName xsi:nil=\"true\"/>\n\t</displayGroups>\n\t<displayedAgreementTermsMetrics>PlannedQuantity,ActualQuantity,SalesPrice,DiscountPercentage,DerivedPlannedAmount</displayedAgreementTermsMetrics>\n      <futureActCalcSchedules>10</futureActCalcSchedules>\n\t<isOnlyApprovalProcessUsed>false</isOnlyApprovalProcessUsed>\n\t<measureDefinitions>\n\t\t<advAcctForecastMeasureDefName>PlannedQuantity</advAcctForecastMeasureDefName>\n\t\t<aggregationType>MINIMUM</aggregationType>\n\t\t<computationMethod>DATA_PROCESSING_ENGINE_DEFINITION</computationMethod>\n\t\t<forecastDataMeasureName>PlannedQuantity</forecastDataMeasureName>\n\t\t<forecastMeasureName>PlannedQuantity</forecastMeasureName>\n\t\t<forecastMeasureType>QUANTITY</forecastMeasureType>\n\t\t<isAdjustmentTracked>true</isAdjustmentTracked>\n\t</measureDefinitions>\n\t<secondaryNotifEmailAddress>abc@domain.com</secondaryNotifEmailAddress>\n\t<primaryNotifEmailAddress>abc@domain.com</primaryNotifEmailAddress>\n\t<renewalPeriodDayCount>50</renewalPeriodDayCount>\n\t<objectMapping>\n\t\t<inputObject>SalesAgreementProductSchedule</inputObject>\n\t\t<mappingFields>\n\t\t\t<inputField>SAPS1__c</inputField>\n\t\t\t<outputField>SAP1__c</outputField>\n\t\t</mappingFields>\n\t\t<outputObject>SalesAgreementProduct</outputObject>\n\t</objectMapping>\n</SalesAgreementSettings>"
+    }
+  ]
+}

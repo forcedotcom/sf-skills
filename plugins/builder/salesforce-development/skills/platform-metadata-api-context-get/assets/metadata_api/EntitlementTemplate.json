@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "EntitlementTemplate - Metadata API",
+  "description": "Represents an entitlement template. Entitlement templates are predefined terms of customer support that you can quickly add to products. For example, you can create entitlement templates for Web or phone support so that users can easily add entitlements to products offered to customers.",
+  "file_information": ".entitlementTemplate",
+  "directory_location": "entitlementTemplates",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "businessHours": {
+      "type": "string",
+      "description": "The entitlement's supported business hours."
+    },
+    "casesPerEntitlement": {
+      "type": "int",
+      "description": "The total number of cases the entitlement supports."
+    },
+    "entitlementProcess": {
+      "type": "string",
+      "description": "The entitlement process associated with the entitlement. Entitlement processes are timelines that include all the steps (milestones) that your support team must complete to resolve cases. Each process includes logic to determine how to enforce the correct service level for your customers."
+    },
+    "isPerIncident": {
+      "type": "boolean",
+      "description": "true if entitlements created from this template service a limited number of cases; false otherwise."
+    },
+    "term": {
+      "type": "int",
+      "description": "The number of days the entitlement is in effect."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of entitlement, such as Web or phone support."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"EntitlementTemplate\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"businessHours\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"casesPerEntitlement\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"entitlementProcess\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <xsd:element name=\"isPerIncident\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"term\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <xsd:element name=\"type\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n<xsd:complexType name=\"Metadata\">\n  <xsd:sequence>\n    <xsd:element name=\"fullName\" minOccurs=\"0\" type=\"xsd:string\"/>\n  </xsd:sequence>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "A sample XML definition of an entitlement template is shown below.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<EntitlementTemplate xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <businessHours>AlternateBusinessHours</businessHours>\n    <casesPerEntitlement>12</casesPerEntitlement>\n    <entitlementProcess>Process1</entitlementProcess>\n    <isPerIncident>true</isPerIncident>\n    <term>33</term>\n    <type>Phone Support</type>\n</EntitlementTemplate>"
+    }
+  ]
+}

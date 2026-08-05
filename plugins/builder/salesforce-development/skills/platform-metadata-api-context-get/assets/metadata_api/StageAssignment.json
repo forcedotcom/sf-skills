@@ -1,0 +1,113 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "sub_types",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "StageAssignment - Metadata API",
+  "description": "Represents a collection of fields to automatically assign stage definitions to records based on rule criteria.",
+  "file_information": ".stageAssignment",
+  "directory_location": "stageAssignments",
+  "fields_columns": [
+    "type",
+    "required",
+    "description"
+  ],
+  "fields": {
+    "active": {
+      "type": "boolean",
+      "required": true,
+      "description": "Indicates whether the stage assignment rule is active (true) or not (false). The default value is true. Active rules are evaluated when determining stage definition assignments."
+    },
+    "description": {
+      "type": "string",
+      "description": "Description for the stage assignment rule."
+    },
+    "masterLabel": {
+      "type": "string",
+      "required": true,
+      "description": "A user-friendly name for the stage assignment rule, which is defined when the metadata component is created."
+    },
+    "referenceObject": {
+      "type": "string",
+      "required": true,
+      "description": "Reference object that's associated with the stage assignment rule. This is the API name of the Salesforce object for which the stage assignment rule applies (for example, ApplicationForm or Order)."
+    },
+    "referenceObjectRecordType": {
+      "type": "string",
+      "description": "Record type of a reference object that's associated with the stage assignment rule. When specified, the assignment rule applies only to records of the specified record type."
+    },
+    "ruleCriteria": {
+      "type": "StgAssignmentRuleCriteria[]",
+      "description": "Collection of rule criteria to determine stage definition assignment. Rules are evaluated in priority order, and the first matching rule determines which stage definition is assigned to the record."
+    },
+    "stageDefinition": {
+      "type": "string",
+      "description": "Default stage definition to assign when no rule criteria match. This provides a fallback assignment when none of the defined rule criteria evaluate to true."
+    }
+  },
+  "sub_types": {
+    "StgAssignmentRuleCriteria": {
+      "condition": {
+        "type": "StgAssignmentRuleCond[]",
+        "description": "Collection of conditions to evaluate for this rule criteria. You can combine multiple conditions by using the criteriaType field to determine the overall evaluation result."
+      },
+      "criteriaType": {
+        "type": "StageCriteriaType (enumeration of type string)",
+        "required": true,
+        "description": "Specifies the criteria type that's used to evaluate the rule conditions. Valid values are: AND CUSTOMLOGIC OR"
+      },
+      "logicalExpression": {
+        "type": "string",
+        "description": "Formula to specify custom logic for evaluating conditions. It's used when criteriaType is set to CUSTOMLOGIC."
+      },
+      "name": {
+        "type": "string",
+        "required": true,
+        "description": "Name of the rule criteria."
+      },
+      "priority": {
+        "type": "int",
+        "required": true,
+        "description": "Priority order for evaluating this rule criteria when multiple criteria are defined. Rules are evaluated in ascending priority order where lower numbers have higher priority. For example, a rule with priority 1 is evaluated before a rule with priority 2. The first rule that evaluates to true determines the stage definition assignment."
+      },
+      "stageDefinition": {
+        "type": "string",
+        "required": true,
+        "description": "Stage definition to assign when this rule criteria matches. This must be the API name of a valid StageDefinition for the same reference object."
+      }
+    },
+    "StgAssignmentRuleCond": {
+      "fieldName": {
+        "type": "string",
+        "required": true,
+        "description": "API name of the field to evaluate for this condition."
+      },
+      "operator": {
+        "type": "StageConditionOperator (enumeration of type string)",
+        "required": true,
+        "description": "Operator that's used to evaluate the field value. Valid values are: Contains DoesNotContain Equals GreaterOrEqual GreaterThan LessOrEqual LessThan NotEqualTo StartsWith"
+      },
+      "sequenceNumber": {
+        "type": "int",
+        "required": true,
+        "description": "Specifies the sequence number of this condition for reference in logical expressions. The sequence number is used in the logicalExpression field to create custom boolean logic. For example, a condition with sequenceNumber 1 is referenced as \"1\" in the expression \"1 AND 2\"."
+      },
+      "value": {
+        "type": "string",
+        "required": true,
+        "description": "Defines the value to compare against the field value. The value is specified as a string regardless of the field type. For example, numeric values are specified as \"10000\", dates as \"2025-10-27\", and text values as \"Approved\"."
+      }
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a StageAssignment component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<StageAssignment xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <active>true</active>\n    <description>Assigns stage definitions to applications based on amount</description>\n    <masterLabel>Application Stage Assignment</masterLabel>\n    <referenceObject>ApplicationForm</referenceObject>\n    <ruleCriteria>\n        <name>High Value Applications</name>\n        <priority>1</priority>\n        <criteriaType>AND</criteriaType>\n        <condition>\n            <fieldName>Amount</fieldName>\n            <operator>GreaterThan</operator>\n            <sequenceNumber>1</sequenceNumber>\n            <value>10000</value>\n        </condition>\n        <condition>\n            <fieldName>Status</fieldName>\n            <operator>Equals</operator>\n            <sequenceNumber>2</sequenceNumber>\n            <value>Approved</value>\n        </condition>\n        <stageDefinition>Premium_Application_Stages</stageDefinition>\n    </ruleCriteria>\n    <ruleCriteria>\n        <name>Standard Applications</name>\n        <priority>2</priority>\n        <criteriaType>AND</criteriaType>\n        <condition>\n            <fieldName>Amount</fieldName>\n            <operator>LessOrEqual</operator>\n            <sequenceNumber>1</sequenceNumber>\n            <value>10000</value>\n        </condition>\n        <stageDefinition>Standard_Application_Stages</stageDefinition>\n    </ruleCriteria>\n    <stageDefinition>Basic_Application_Stages</stageDefinition>\n</StageAssignment>"
+    }
+  ]
+}

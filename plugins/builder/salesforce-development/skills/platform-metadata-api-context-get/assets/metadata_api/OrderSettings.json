@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "wsdl_segment",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "OrderSettings - Metadata API",
+  "description": "Represents order settings.",
+  "file_information": ".settings",
+  "directory_location": "settings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "enableEnhancedCommerceOrders": {
+      "type": "boolean",
+      "description": "Indicates whether enhanced commerce orders are enabled for the org (true) or not (false). This preference is available only in orgs with the Salesforce Order Management license. Default value is false. Available in API versions 48.0 and later."
+    },
+    "enableNegativeQuantity": {
+      "type": "boolean",
+      "description": "Indicates whether users in the org can add order products with quantities of less than zero (true) or not (false). To enable this preference, enableOrders must be set to true."
+    },
+    "enableOptionalPricebook": {
+      "type": "boolean",
+      "description": "Indicates whether users in the org can create orders without price books (true) or not (false). For more information, see Enable Orders Without Price Books in Salesforce Help."
+    },
+    "enableOrderEvents": {
+      "type": "boolean",
+      "description": "Indicates whether order events are enabled for the org (true) or not (false). For more information, see OrderStatusChangedEvent in the Platform Events Developer Guide."
+    },
+    "enableOrders": {
+      "type": "boolean",
+      "description": "Indicates whether orders are enabled for the org (true) or not (false)."
+    },
+    "enableOrderWithMultiplePriceBooks": {
+      "type": "boolean",
+      "description": "Indicates whether users in the org can create orders containing order items that refer to multiple price books (true) or not (false). Available in API version 60.0 and later. To enable this preference, enableOrders and enableEnhancedCommerceOrders must be set to true. This field helps to offer different pricing structures for various customer segments, regions, or promotional periods."
+    },
+    "enableReductionOrders": {
+      "type": "boolean",
+      "description": "Indicates whether reduction orders are enabled for the org (true) or not (false). For more information, see Reduction Orders in Salesforce Help. To enable this preference, enableOrders must be set to true."
+    },
+    "enableZeroQuantity": {
+      "type": "boolean",
+      "description": "Indicates whether users in the org can add order products with quantities of zero (true) or not (false). Default value is false. To enable this preference, enableOrders must be set to true. Available in API version 42.0 and later."
+    }
+  },
+  "wsdl_segment": "```xml\n<xsd:complexType name=\"OrderSettings\">\n  <xsd:complexContent>\n    <xsd:extension base=\"tns:Metadata\">\n      <xsd:sequence>\n        <xsd:element name=\"enableEnhancedCommerceOrders\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableNegativeQuantity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOptionalPricebook\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOrderEvents\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOrderWithMultiplePriceBooks\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableOrders\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableReductionOrders\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <xsd:element name=\"enableZeroQuantity\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n      </xsd:sequence>\n    </xsd:extension>\n  </xsd:complexContent>\n</xsd:complexType>\n```",
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "This is a sample OrderSettings component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<OrderSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\">\n    <enableNegativeQuantity>false</enableNegativeQuantity>\n    <enableZeroQuantity>false</enableZeroQuantity>\n    <enableOrders>true</enableOrders>\n    <enableReductionOrders>true</enableReductionOrders>\n    <enableEnhancedCommerceOrders>true</enableEnhancedCommerceOrders>\n    <enableOptionalPricebook>false</enableOptionalPricebook>\n    <enableOrderEvents>false</enableOrderEvents>\n    <enableOrderWithMultiplePriceBooks>false</enableOrderWithMultiplePriceBooks>\n</OrderSettings>"
+    }
+  ]
+}

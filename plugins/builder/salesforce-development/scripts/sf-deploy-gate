@@ -1,0 +1,521 @@
+#!/bin/bash
+# sf-deploy-gate — Pre-deploy/destructive-action safety gate for the salesforce-development plugin.
+#
+# Commands:
+#   prod-check   - Block deploys/quicks targeting a Production org without explicit confirmation
+#                  (PreToolUse hook on `sf project deploy start|quick|cancel`)
+#   destructive  - Warn before destructive operations (PreToolUse on `sf project delete`)
+#   auto-deploy  - Opt-in (SFDX_AUTO_DEPLOY=1) deploy of a just-saved source file to a
+#                  NON-production org (PostToolUse on Edit/Write under force-app/**).
+#                  No-ops silently on prod/unknown orgs or when the feature is off.
+#   classify     - Read `sf org display --json` output on stdin and print the org bucket
+#                  (production|sandbox|scratch|trial|devhub|unknown). Pure function, no
+#                  network — used by the gate and by the offline classification test.
+
+set -uo pipefail
+
+# --- Org classification ------------------------------------------------------
+# Pure classifier: reads `sf org display --json` shape on stdin, prints one bucket.
+# Kept as a standalone python block so it can be exercised offline with fixtures
+# (see test/classify.test.sh) without a live org.
+#
+# Buckets: production | sandbox | scratch | trial | devhub | unknown
+# Only `production` is gated; everything else is a non-prod target.
+classify_org_json() {
+  python3 -c "
+import json, sys
+try:
+    data = json.load(sys.stdin).get('result', {})
+except Exception:
+    print('unknown'); sys.exit(0)
+
+# No usable org info (empty result, or no host and no flags) → unknown.
+# The gate only blocks on 'production', so unknown fails open (allow), matching
+# the pre-#259 behavior of never blocking when org info can't be resolved.
+if not data or (
+    not (data.get('instanceUrl') or '')
+    and not data.get('isSandbox')
+    and not data.get('isScratch')
+    and not data.get('isDevHub')
+):
+    print('unknown'); sys.exit(0)
+
+is_sandbox = bool(data.get('isSandbox'))
+is_scratch = bool(data.get('isScratch'))
+is_devhub  = bool(data.get('isDevHub'))
+instance   = (data.get('instanceUrl') or '').lower()
+# Trials carry an expiration date in sf org display output.
+has_trial_exp = bool(data.get('trialExpirationDate'))
+
+# Sandbox host markers: My Domain sandboxes embed '--<sbname>'; classic uses test.salesforce.com.
+is_sandbox_host = 'test.salesforce.com' in instance or '--' in instance
+
+# Trial / dev-edition host markers. These are NOT production even when
+# isSandbox/isScratch come back null (so the booleans above are False) AND the
+# host has no '--' sandbox marker — the exact gap that mis-classified OrgFarm
+# trials as production (see issue #259).
+TRIAL_HOST_MARKERS = (
+    'orgfarm-',                      # OrgFarm-provisioned trials/dev orgs
+    '.pc-rnd.',                      # internal pc-rnd dev hosts
+    '.develop.my.salesforce.com',    # Developer Edition / trial My Domain hosts
+    '.scratch.my.salesforce.com',    # scratch My Domain hosts (belt-and-suspenders)
+)
+is_trial_host = has_trial_exp or any(m in instance for m in TRIAL_HOST_MARKERS)
+
+# Order matters: explicit scratch/sandbox signals win, then trial hosts, then
+# DevHub (treated non-prod, preserving prior behavior), else production.
+if is_scratch:
+    print('scratch')
+elif is_sandbox or is_sandbox_host:
+    print('sandbox')
+elif is_trial_host:
+    print('trial')
+elif is_devhub:
+    print('devhub')
+else:
+    print('production')
+"
+}
+
+# Detect a destructive-changes deploy. A `sf project deploy` carrying a
+# destructiveChanges manifest (via --manifest or the dedicated
+# --pre/--post-destructive-changes flags) has the same blast radius as
+# `sf project delete`, but reaches the gate as an ordinary deploy (#407).
+# Echoes "true" when the command is a destructive deploy, "false" otherwise.
+is_destructive_deploy() {
+  python3 -c "
+import json, sys
+try:
+    cmd = json.loads(sys.argv[1]).get('tool_input', {}).get('command', '')
+except Exception:
+    cmd = ''
+# The dedicated flags are unambiguous; a bare 'destructivechanges' substring
+# also catches '--manifest destructiveChanges.xml' and pre/post manifest paths.
+markers = ('--pre-destructive-changes', '--post-destructive-changes', 'destructivechanges')
+print('true' if any(m in cmd.lower() for m in markers) else 'false')
+" "$INPUT" 2>/dev/null
+}
+
+# Echoes "true" when the executed command ACTUALLY INVOKES the given sf subcommand
+# spec (e.g. "sf project deploy start|quick" — the last word may be an a|b
+# alternation), "false" otherwise. Used to SELF-GATE the deploy/delete gates: some
+# Claude Code builds ignore the plugin.json `if:` matcher and fire every PreToolUse
+# Bash hook on every command, so without this a plain `cd`/`ls` would trigger org
+# classification (two `sf` calls) and print a spurious "Deploy gate ... allowing" line.
+#
+# Matching is quote- and command-position-aware, NOT a raw regex/substring over the
+# whole command line (#1030 review): a plain search matched a merely QUOTED mention
+# like `grep -r "sf project deploy start" .`, wrongly classifying an org and even
+# denying the grep. Instead the line is tokenized with shlex (honoring quotes) and
+# split on shell operators (& | ; < > ( )); the spec must match the FIRST executable
+# token of a segment (after skipping leading VAR=val assignments), with argv[0]
+# normalized to its basename minus a .cmd/.exe/.bat suffix. This still gates the
+# real invocations the old regex caught — `sf  project   deploy start` (arbitrary
+# spacing, mirroring sf_context.py's `\bsf\s+project\s+...`) and
+# `CONFIRM_PROD=1 sf project deploy start` — while ignoring quoted/argument mentions.
+# On an unparseable line (unbalanced quotes) it fails safe toward matching via a
+# collapsed-substring check so a genuine deploy can't slip the gate.
+#
+# Two under-match bypasses the first shlex pass still allowed were closed in a
+# #1030-review follow-up: (a) shlex's default commenters='#' truncated the line at
+# an unquoted '#', dropping a trailing '&& sf project deploy start' — commenters is
+# now cleared; (b) a heredoc-delivered deploy ('bash <<EOF\\nsf project deploy
+# start\\nEOF') tokenizes with the delimiter word shielding the real command — the
+# scan now also runs per physical line so the deploy is seen in command position.
+command_matches() {
+  python3 -c "
+import json, re, shlex, sys
+try:
+    cmd = json.loads(sys.argv[1]).get('tool_input', {}).get('command', '')
+except Exception:
+    cmd = ''
+
+spec = [set(p.split('|')) if '|' in p else p for p in sys.argv[2].split()]
+
+def _basename(tok):
+    base = tok.replace(chr(92), '/').rsplit('/', 1)[-1].lower()
+    for ext in ('.cmd', '.exe', '.bat'):
+        if base.endswith(ext):
+            base = base[:-len(ext)]
+    return base
+
+# Shell wrappers / control keywords that can precede the real command in a
+# segment. A prod deploy wrapped as \`command sf ...\`, \`time sf ...\`, \`env sf ...\`
+# or \`if ...; then sf ...; fi\` still EXECUTES the deploy, so it must still be gated
+# (#1030 review): skip these (and leading VAR=val assignments) before matching the
+# first executable token. NOTE: only bare wrapper forms are unwrapped — a wrapper
+# carrying its own flags (\`sudo -u u sf ...\`, \`nice -n 10 sf ...\`) is not, and the
+# plugin.json \`if:\` matcher also won't fire on a wrapped form; so this is
+# defense-in-depth for builds that run every Bash hook, not a complete seal.
+#
+# KNOWN RESIDUAL (adversarial verification, #1030) — deliberately out of scope. The
+# matcher models bash command-line LEXING (quotes incl. \$'...'/\$ double-quote,
+# operators, line continuation) but NOT EXPANSION or EXECUTION, so these still run a
+# prod deploy/delete while the self-gate allows:
+#   - expansion: \`sf project deploy \$V\`, \`... \${x:-start}\` — resolving shell
+#     variables is undecidable in general;
+#   - execution via an interpreter/evaluator: \`eval '...'\`, \`sh -c '...'\`,
+#     \`bash <<< '...'\`, backtick/\$() substitution, brace group \`{ sf ...; }\`, \`xargs\`
+#     — would need to recursively re-parse the delivered string, and risks re-gating
+#     legitimate quoted MENTIONS (the over-match the tokenizer was hardened to avoid);
+#   - flag-carrying / unlisted wrappers: \`timeout 60 sf ...\`, \`nice -n 10 sf ...\` (see
+#     the NOTE above) and leading redirections \`>f sf ...\`.
+# All are also outside the plugin.json \`if:\` prefix matcher and have no ergonomic
+# reason to appear. Chasing arbitrary shell obfuscation with string matching is
+# unwinnable; the real prod-deploy control is the skill-first workflow + org
+# classification, not this self-gate.
+_WRAPPERS = {'command', 'exec', 'builtin', 'time', 'env', 'nohup', 'setsid', 'sudo', 'nice'}
+_CONTROL = {'if', 'elif', 'while', 'until', 'then', 'else', 'do'}  # condition (if/elif/while/until) + body (then/else/do); a deploy used as a control condition still executes
+def _seg_matches(tokens):
+    i = 0
+    while i < len(tokens):
+        t = tokens[i]
+        if re.match('^[A-Za-z_][A-Za-z0-9_]*=', t):
+            i += 1
+        elif _basename(t) in _WRAPPERS or _basename(t) in _CONTROL:
+            i += 1
+        else:
+            break
+    exe = tokens[i:]
+    if len(exe) < len(spec):
+        return False
+    exe = [_basename(exe[0])] + exe[1:]
+    for tok, want in zip(exe, spec):
+        if isinstance(want, set):
+            if tok not in want:
+                return False
+        elif tok != want:
+            return False
+    return True
+
+# Scan ONE text blob for the spec in first-command position. Tokenize with shlex
+# (quote-aware), then split on shell operators and require the spec at the first
+# executable token of a segment. Two shlex-vs-bash LEXING gaps are normalized first
+# so a plain command-position deploy can't diverge from what the shell actually runs
+# (#1030 review + adversarial verification):
+#   - commenters is cleared, so a bare '#' is NOT read as a comment that truncates the
+#     line (else 'curl http://x/a#b && sf project deploy start' would lose the deploy);
+#   - the leading '\$' of bash ANSI-C (dollar-single-quote) and locale (dollar-double-
+#     quote) quoting is stripped: bash removes it when building argv (so \$'start' runs
+#     as start), while shlex keeps the token as '\$start' and would miss the match.
+# chr() spells the '\$' and quote characters to avoid this shell heredoc's own quoting.
+# This mirrors bash command-line LEXING (quote removal + the caller's line-continuation
+# join) only — NOT expansion (\$var, \${x:-start}) or execution (eval / sh -c / \`...\`),
+# which are the documented KNOWN RESIDUAL above.
+def _scan(text):
+    text = text.replace(chr(36) + chr(39), chr(39)).replace(chr(36) + chr(34), chr(34))
+    try:
+        lex = shlex.shlex(text, posix=True, punctuation_chars=True)
+        lex.whitespace_split = True
+        lex.commenters = ''
+        tokens = list(lex)
+    except ValueError:
+        # Unbalanced quotes etc. → fail safe toward matching (collapsed substring).
+        flat = ' '.join(text.lower().split())
+        words = sys.argv[2].split()
+        head = ' '.join(words[:-1])
+        return any((head + ' ' + alt).strip() in flat for alt in words[-1].split('|'))
+    punct = set('();<>|&')
+    seg = []
+    for t in tokens:
+        if not t.strip():
+            continue  # defensive: never let a whitespace-only token join a segment
+        if all(c in punct for c in t):
+            if seg and _seg_matches(seg):
+                return True
+            seg = []
+        else:
+            seg.append(t)
+    return bool(seg and _seg_matches(seg))
+
+# Strip bash line continuations (backslash-newline) FIRST: bash deletes the
+# backslash+newline pair when reading the line, joining tokens even MID-WORD
+# ('del\<nl>ete' -> 'delete', 'deploy \<nl>start' -> 'deploy start'), so we must too
+# or the spec words split apart and the deploy slips the gate. Then scan the joined
+# command AND each physical line: shlex(whitespace_split) flattens newlines, so a
+# heredoc body ('bash <<EOF\nsf project deploy start\nEOF') tokenizes with the
+# delimiter word ('EOF') shielding the real first command; the per-line scan restores
+# that 'sf ...' to first-command position, and running it on the continuation-joined
+# text also catches a deploy split across heredoc-body lines. Over-matching a multi-
+# line QUOTED string that merely contains the phrase just triggers a safe org
+# classification — the fail-safe direction for a deploy guard.
+cleaned = cmd.replace(chr(92) + chr(10), '')
+matched = _scan(cleaned) or any(_scan(line) for line in cleaned.splitlines() if line.strip())
+
+print('true' if matched else 'false')
+" "$INPUT" "$1" 2>/dev/null
+}
+
+# True (exit 0) if ANY argument contains a cmd.exe metacharacter. Mirrors the
+# Python resolver's _CMD_ARG_METACHARACTERS set so the two guards don't diverge:
+# & | < > ^ % " ! ( ) and CR/LF. Checked per-argument (not the joined "$*").
+_has_cmd_metachars() {
+  local a
+  for a in "$@"; do
+    case "$a" in
+      *'&'*|*'|'*|*'<'*|*'>'*|*'^'*|*'%'*|*'"'*|*'!'*|*'('*|*')'*|*$'\n'*|*$'\r'*)
+        return 0 ;;
+    esac
+  done
+  return 1
+}
+
+# Cross-platform `sf` invocation (WIN-026). This gate shells out to `sf` from
+# bash; on Windows `sf` is a `sf.cmd` batch shim that Git Bash won't resolve as a
+# bare `sf` and that cmd.exe must actually run. Mirror the Python resolver
+# (scripts/sf_context.py resolve_executable/build_command): find the real path
+# (trying the .cmd/.exe variants), and for a .cmd/.bat shim run it through COMSPEC.
+# Passing separate argv words preserves argv boundaries, but that is NOT enough
+# for injection safety on a batch shim — cmd.exe re-parses its command line — so
+# we REFUSE metacharacter args (fail closed) via _has_cmd_metachars rather than
+# attempt cmd quoting. On POSIX this resolves to a plain `sf` on PATH and execs it
+# directly, leaving macOS/Linux behavior (and the stubbed offline tests)
+# unchanged. Kept bash 3.2-compatible (macOS default) — no lowercase expansion.
+sf_cli() {
+  local bin=""
+  if bin=$(command -v sf 2>/dev/null); then :
+  elif bin=$(command -v sf.cmd 2>/dev/null); then :
+  elif bin=$(command -v sf.exe 2>/dev/null); then :
+  else
+    return 127
+  fi
+  case "$bin" in
+    *.cmd|*.CMD|*.bat|*.BAT)
+      if _has_cmd_metachars "$@"; then
+        echo "sf-deploy-gate: refusing to run batch shim with shell metacharacters in args" >&2
+        return 1
+      fi
+      MSYS_NO_PATHCONV=1 "${COMSPEC:-cmd.exe}" /c "$bin" "$@"
+      ;;
+    *)
+      "$bin" "$@"
+      ;;
+  esac
+}
+
+# Resolve target-org from CLI command args first, fall back to config.
+extract_target_org_from_command() {
+  python3 -c "
+import json, re, sys
+try:
+    data = json.loads(sys.argv[1])
+    cmd = data.get('tool_input', {}).get('command', '')
+    m = re.search(r'--target-org[= ]([\\S]+)', cmd) or re.search(r'-o[= ]([\\S]+)', cmd)
+    print(m.group(1) if m else '')
+except Exception:
+    pass
+" "$INPUT" 2>/dev/null
+}
+
+# Extract the edited/written file path from a PostToolUse Edit/Write/MultiEdit
+# payload (tool_input.file_path). Falls back to the CLAUDE_TOOL_INPUT_FILE_PATH
+# env var (set by some Claude Code versions) when stdin carries no path.
+get_edited_file() {
+  python3 -c "
+import json, sys
+try:
+    ti = json.loads(sys.argv[1]).get('tool_input', {})
+    print(ti.get('file_path') or ti.get('filePath') or '')
+except Exception:
+    pass
+" "$INPUT" 2>/dev/null
+}
+
+get_default_org() {
+  sf_cli config get target-org --json 2>/dev/null | python3 -c "
+import json, sys
+try:
+    data = json.load(sys.stdin)
+    for r in data.get('result', []):
+        if r.get('name') == 'target-org':
+            print(r.get('value', ''))
+            break
+except Exception:
+    pass
+" 2>/dev/null
+}
+
+# Print the bucket for a given org alias by piping live org info through the classifier.
+get_org_bucket() {
+  local org_alias="$1"
+  sf_cli org display --target-org "$org_alias" --json 2>/dev/null | classify_org_json
+}
+
+# All emissions carry this source tag so a denial is never misattributed to
+# Claude Code's auto-mode classifier (the two gates have overlapping symptoms —
+# see the guard-rail note in README.md). If you see this prefix, it was THIS
+# plugin's deploy gate, which fires only on `sf project deploy|delete`.
+GATE_TAG="[salesforce-development · deploy-gate]"
+
+deny() {
+  local reason="$1"
+  python3 -c "
+import json, sys
+print(json.dumps({
+    'hookSpecificOutput': {
+        'hookEventName': 'PreToolUse',
+        'permissionDecision': 'deny',
+        'permissionDecisionReason': sys.argv[1] + ' ' + sys.argv[2]
+    }
+}))
+" "$GATE_TAG" "$reason"
+  exit 0
+}
+
+# Allow the action, surfacing the classification decision so the org bucket is
+# visible to the developer (issue #259 acceptance: "state the classification aloud").
+allow() {
+  local note="${1:-}"
+  if [ -n "$note" ]; then
+    python3 -c "
+import json, sys
+print(json.dumps({'continue': True, 'systemMessage': sys.argv[1] + ' ' + sys.argv[2]}))
+" "$GATE_TAG" "$note"
+  else
+    echo '{"continue": true}'
+  fi
+  exit 0
+}
+
+# Only dispatch when executed directly. When sourced (e.g. by the offline guard
+# test to unit-test _has_cmd_metachars), define the functions but don't read
+# stdin or run a command.
+if [ "${BASH_SOURCE[0]}" != "${0}" ]; then
+  return 0 2>/dev/null || true
+fi
+
+COMMAND="${1:-prod-check}"
+
+# Preflight: org classification and JSON I/O below all shell out to python3.
+# If it's missing, fail open rather than let every "python3 -c" call below
+# break silently — this matches the existing "unresolvable org info -> unknown
+# -> allow" behavior (see classify_org_json), just triggered by a missing
+# interpreter instead of missing org data.
+if ! command -v python3 &> /dev/null; then
+  echo "sf-deploy-gate: python3 not found on PATH — skipping org classification, failing open (see README Requirements)" >&2
+  if [ "$COMMAND" = "classify" ]; then
+    echo "unknown"
+  else
+    echo '{"continue": true, "systemMessage": "'"$GATE_TAG"' python3 not found — org classification skipped, allowing."}'
+  fi
+  exit 0
+fi
+
+# Read PreToolUse input from stdin (Claude Code passes the tool args in JSON).
+# `classify` reads org JSON on stdin instead, so only slurp here for the hook commands.
+if [ "$COMMAND" != "classify" ]; then
+  INPUT=$(cat 2>/dev/null || echo '{}')
+fi
+
+case "$COMMAND" in
+  classify)
+    # Pure classifier path: org JSON on stdin → bucket on stdout. No network.
+    classify_org_json
+    ;;
+
+  prod-check)
+    # Self-gate: only classify/gate an actual prod-MUTATING deploy — start/quick,
+    # matching the plugin.json `if:` scope. A check-only `sf project deploy validate`
+    # is safe against prod and must NOT be denied here. Whitespace-flexible so
+    # `sf  project  deploy start` can't slip the gate (see command_matches).
+    [ "$(command_matches 'sf project deploy start|quick')" = "true" ] || allow
+    TARGET_ORG=$(extract_target_org_from_command)
+    if [ -z "$TARGET_ORG" ]; then
+      TARGET_ORG=$(get_default_org)
+    fi
+
+    if [ -z "$TARGET_ORG" ]; then
+      deny "No target org configured. Run 'sf config set target-org <alias>' before deploying."
+    fi
+
+    BUCKET=$(get_org_bucket "$TARGET_ORG")
+    IS_DESTRUCTIVE=$(is_destructive_deploy)
+
+    # A destructive-changes deploy to Production is gated exactly like
+    # `sf project delete` — no CONFIRM_PROD override, route to the skill that
+    # validates first and requires confirmation (#407).
+    if [ "$BUCKET" = "production" ] && [ "$IS_DESTRUCTIVE" = "true" ]; then
+      deny "BLOCKED: destructive deploy (destructiveChanges manifest) against Production org '${TARGET_ORG}'. This DELETES metadata and has the same blast radius as 'sf project delete'. Use 'platform-destructive-deploy' skill which validates first and requires explicit confirmation."
+    fi
+
+    # Detect explicit-confirmation flags the user may have set in the command itself.
+    HAS_CONFIRMATION=$(python3 -c "
+import json, sys
+try:
+    data = json.loads(sys.argv[1])
+    cmd = data.get('tool_input', {}).get('command', '')
+    print('true' if any(t in cmd for t in ['--I-CONFIRM-PROD', 'CONFIRM_PROD=1']) else 'false')
+except Exception:
+    print('false')
+" "$INPUT" 2>/dev/null)
+
+    if [ "$BUCKET" = "production" ] && [ "$HAS_CONFIRMATION" != "true" ]; then
+      deny "BLOCKED: target org '${TARGET_ORG}' appears to be a Production org. Production deploys must be explicitly confirmed by the developer. Recommended workflow:
+1. Use 'platform-deploy-validate' skill to validate (returns a 10-day job ID)
+2. Use 'platform-quick-deploy' skill which gates with explicit user confirmation
+Or, to override this hook, prepend 'CONFIRM_PROD=1' to your command (NOT recommended)."
+    fi
+
+    # Non-prod destructive deploys are advised, not blocked (parity with the
+    # `destructive` subcommand's non-prod path).
+    if [ "$IS_DESTRUCTIVE" = "true" ]; then
+      allow "Deploy gate: target org '${TARGET_ORG}' classified as ${BUCKET} — non-production. ⚠️ This is a DESTRUCTIVE deploy (destructiveChanges manifest) — it deletes metadata. The 'platform-destructive-deploy' skill validates the deletion set first; allowing on a non-prod org."
+    fi
+
+    allow "Deploy gate: target org '${TARGET_ORG}' classified as ${BUCKET} — non-production, allowing deploy."
+    ;;
+
+  destructive)
+    # Self-gate: only gate an actual delete (any `sf project delete` form, matching
+    # the plugin.json `if:` scope). Whitespace-flexible (see command_matches).
+    [ "$(command_matches 'sf project delete')" = "true" ] || allow
+    TARGET_ORG=$(extract_target_org_from_command)
+    [ -z "$TARGET_ORG" ] && TARGET_ORG=$(get_default_org)
+
+    if [ -z "$TARGET_ORG" ]; then
+      deny "No target org configured."
+    fi
+
+    BUCKET=$(get_org_bucket "$TARGET_ORG")
+
+    if [ "$BUCKET" = "production" ]; then
+      deny "BLOCKED: destructive operation against Production org '${TARGET_ORG}'. Use 'platform-destructive-deploy' skill which validates first and requires confirmation."
+    fi
+
+    allow "Deploy gate: target org '${TARGET_ORG}' classified as ${BUCKET} — non-production, allowing destructive op."
+    ;;
+
+  auto-deploy)
+    # Opt-in convenience: after a source file under force-app/ is saved, deploy
+    # just that file to a NON-production org. Off unless SFDX_AUTO_DEPLOY=1.
+    # Fails safe — never deploys to production or to an org we can't classify.
+    [ "${SFDX_AUTO_DEPLOY:-}" != "1" ] && exit 0
+
+    FILE=$(get_edited_file)
+    [ -z "$FILE" ] && exit 0
+
+    ORG="${SFDX_AUTO_DEPLOY_ORG:-}"
+    [ -z "$ORG" ] && ORG=$(get_default_org)
+    [ -z "$ORG" ] && exit 0
+
+    BUCKET=$(get_org_bucket "$ORG")
+    # Never auto-deploy to production; fail safe on unknown/unresolved orgs.
+    if [ "$BUCKET" = "production" ] || [ "$BUCKET" = "unknown" ]; then
+      exit 0
+    fi
+
+    RESULT=$(sf_cli project deploy start --source-dir "$FILE" --target-org "$ORG" --wait 30 --json 2>&1)
+    STATUS=$?
+    if [ "$STATUS" -eq 0 ]; then
+      allow "Auto-deploy: '${FILE}' → ${ORG} (${BUCKET}) succeeded."
+    else
+      allow "Auto-deploy: '${FILE}' → ${ORG} (${BUCKET}) FAILED (exit ${STATUS}). Fix and redeploy manually; auto-deploy will not retry."
+    fi
+    ;;
+
+  *)
+    echo "Unknown command: $COMMAND" >&2
+    echo "Usage: sf-deploy-gate [prod-check|destructive|auto-deploy|classify]" >&2
+    exit 1
+    ;;
+esac

@@ -1,0 +1,60 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "file_information",
+    "directory_location",
+    "fields",
+    "declarative_metadata_sample_definition"
+  ],
+  "title": "DocumentGenerationSetting - Metadata API",
+  "description": "Represents an org's settings for automatic document generation from templates. This type extends the Metadata metadata type and inherits its fullName field.",
+  "file_information": ".settings",
+  "directory_location": "documentGenerationSettings",
+  "fields_columns": [
+    "type",
+    "description"
+  ],
+  "fields": {
+    "documentTemplateLibraryName": {
+      "type": "String",
+      "description": "The name of the library that stores the document templates to which this setting applies.",
+      "required": true
+    },
+    "generationMechanism": {
+      "type": "GenerationMechanism (enumeration of type string)",
+      "description": "Specifies how and where a document is generated. Valid values are: ClientSide—Generates documents in the browser with an optional preview. ServerSide—Generates documents on the server and attaches them to the objects for which they're generated. The default is ClientSide."
+    },
+    "guestAccessNamedCredential": {
+      "type": "String",
+      "description": "Specifies the named credential that lets guest users generate documents."
+    },
+    "inProgDocGenRqstTmot": {
+      "type": "Integer",
+      "description": "The time interval (in hours) after which InProgress DocumentGenerationProcess records (single point or batch request) are terminated and the request status is updated to Failed. Specify a valid whole number between 1 and 24. The default value is set to 6."
+    },
+    "isInProgRqstTmotEnab": {
+      "type": "Boolean",
+      "description": "Indicates whether the InProgress DocGen Request Time Out (hrs) is enabled (true) or not (false)."
+    },
+    "isServerSideDocGenEnabled": {
+      "type": "Boolean",
+      "description": "Enables server-side document generation if the prerequisite license is present in the org."
+    },
+    "masterLabel": {
+      "type": "String",
+      "description": "Specifies a name for the setting, such as DocGen.",
+      "required": true
+    },
+    "previewType": {
+      "type": "PreviewType (enumeration of type string)",
+      "description": "Specifies the format of previews of generated documents. Valid values are: PDF—Displays how the generated document looks in PDF format. Thumbnail—Displays a miniature representation of the generated document. The default is PDF."
+    }
+  },
+  "declarative_metadata_sample_definition": [
+    {
+      "description": "The following is an example of a DocumentGenerationSetting component.",
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DocumentGenerationSetting xmlns=\"http://soap.sforce.com/2021/10/metadata\">\n   <documentTemplateLibraryName>DocgenDocumentTemplateLibrary</documentTemplateLibraryName>\n   <masterLabel>DocGen</masterLabel>\n</DocumentGenerationSetting>"
+    }
+  ]
+}

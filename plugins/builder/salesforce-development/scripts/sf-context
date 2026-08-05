@@ -1,0 +1,14 @@
+#!/bin/bash
+# sf-context — thin wrapper that delegates to sf_context.py.
+# All real logic lives in the Python module — bash here just resolves the
+# script directory and invokes Python with the user's args passed through.
+
+set -e
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if ! command -v python3 &> /dev/null; then
+  echo "sf-context: python3 not found on PATH — required by the salesforce-development plugin (see README Requirements)" >&2
+  exit 1
+fi
+
+exec python3 "$DIR/sf_context.py" "$@"
