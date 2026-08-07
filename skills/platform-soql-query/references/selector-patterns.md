@@ -41,7 +41,7 @@ public class AccountSelector {
             SELECT Id, Name, Industry
             FROM Account
             WHERE Id IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ];
     }
 }
@@ -89,7 +89,7 @@ public inherited sharing class AccountSelector {
             SELECT Id, Name, Industry, AnnualRevenue, OwnerId
             FROM Account
             WHERE Id IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ];
     }
 
@@ -101,7 +101,7 @@ public inherited sharing class AccountSelector {
             SELECT Id, Name, Industry, AnnualRevenue, OwnerId
             FROM Account
             WHERE OwnerId = :ownerId
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
             LIMIT 1000
         ];
     }
@@ -118,7 +118,7 @@ public inherited sharing class AccountSelector {
                     LIMIT 50)
             FROM Account
             WHERE Id IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ];
     }
 }
@@ -207,7 +207,7 @@ public inherited sharing class OpportunitySelector {
             SELECT Id, Name, StageName, Amount, CloseDate, AccountId
             FROM Opportunity
             WHERE AccountId IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ];
     }
 
@@ -402,7 +402,7 @@ public inherited sharing class BulkQueryHelper {
             SELECT Id, Name, Industry
             FROM Account
             WHERE Id IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ]);
     }
 
@@ -416,7 +416,7 @@ public inherited sharing class BulkQueryHelper {
             SELECT Id, FirstName, LastName, Email, AccountId
             FROM Contact
             WHERE AccountId IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ]) {
             if (!contactsByAccount.containsKey(c.AccountId)) {
                 contactsByAccount.put(c.AccountId, new List<Contact>());
@@ -456,15 +456,15 @@ for (Opportunity opp : Trigger.new) {
 
 ## Best Practices Summary
 
-| Practice | Benefit |
-|----------|---------|
+| Practice                       | Benefit |
+|--------------------------------|---------|
 | Centralize in Selector classes | One place to update field lists |
-| Use `WITH SECURITY_ENFORCED` | Automatic FLS enforcement |
-| Return empty List, not null | Prevents NullPointerException |
-| Use `inherited sharing` | Respects caller's sharing context |
-| Make fields list a constant | Easy to update across queries |
-| Add null/empty checks | Prevent unnecessary queries |
-| Support mocking in tests | Faster tests, no database dependencies |
+| Use `WITH USER_MODE`           | Respects sharing rules and FLS |
+| Return empty List, not null    | Prevents NullPointerException |
+| Use `inherited sharing`        | Respects caller's sharing context |
+| Make fields list a constant    | Easy to update across queries |
+| Add null/empty checks          | Prevent unnecessary queries |
+| Support mocking in tests       | Faster tests, no database dependencies |
 
 ---
 
