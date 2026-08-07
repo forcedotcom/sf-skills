@@ -1,3 +1,13 @@
+# [1.34.0](https://github.com/forcedotcom/sf-skills/compare/1.33.0...1.34.0) (2026-08-07)
+
+
+### Features
+
+* Fix plugin publish: force-add gitignored plugin artifacts in release-to-public workflow @W-23694342@ ([4bc39ed](https://github.com/forcedotcom/sf-skills/commit/4bc39ed386445987b3031675c960eb7f3f9cc3d9))
+* Release 79 updated skills @W-23536091@ ([7d5916d](https://github.com/forcedotcom/sf-skills/commit/7d5916d271809f7f375e3e40f0ffd3e4ec39f5e4))
+
+
+
 # [1.33.0](https://github.com/forcedotcom/sf-skills/compare/1.32.0...1.33.0) (2026-07-31)
 
 
