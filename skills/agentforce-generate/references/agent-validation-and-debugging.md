@@ -421,6 +421,29 @@ For each turn, verify in the trace:
 4. **Action outputs used correctly** — Compare `FunctionStep` outputs to the agent's final response. The agent should be using real data from the action, not inventing values.
 5. **Persisted state (live preview)** — For actions that write data (create records, update fields), query the backing SObject directly to confirm the write happened. This is ground truth. If no record exists, the action was not invoked regardless of what the trace or chat says — investigate the router first.
 
+> **Traces are only written on the authoring-bundle preview path.** A preview started with
+> `--api-name` (the published/activated agent) writes trace files containing exactly `{}` — no
+> `plan` array, no `FunctionStep`. Verified on API v67.0 with `sf` CLI 2.145.6. Only
+> `sf agent preview start --authoring-bundle <Name>` produces readable traces.
+>
+> This matters because the two are not always interchangeable: a **service** agent cannot always be
+> previewed via `--authoring-bundle` (that path can be unreachable on restricted networks), which
+> leaves `--api-name` as the only option — and it yields no trace. In that situation the
+> "read the trace after every utterance" rule above cannot be satisfied, so substitute
+> **discriminating-value testing**:
+>
+> - Query ground truth first, then ask the agent about records whose values an LLM could not guess.
+>   A response matching an arbitrary figure like `$48,077.20` exactly is strong evidence the action
+>   ran.
+> - Better still, target a record that exercises a **distinctive code path** in the action
+>   implementation. Example: an invocable that falls back to `Date.today().year()` when a record has
+>   no transactions — if the agent reports that fallback year for such a record, the Apex
+>   demonstrably executed.
+> - Cross-check writes by querying the SObject directly, per item 5 above.
+>
+> Record which method you used. "Verified by trace" and "verified by discriminating value" are
+> different strengths of evidence and should not be reported interchangeably.
+
 ### Behavioral Evaluation
 
 Evaluate the agent's behavior like a human would — does this feel like a natural, competent conversation?
@@ -452,6 +475,23 @@ Traces are stored locally at:
 Replace `<AGENT_NAME>` with your authoring bundle name (e.g., `Local_Info_Agent`). The `<SESSION_ID>` is the value returned by `sf agent preview start`. A separate trace file (identified by `<PLAN_ID>`) is written for each conversation turn.
 
 Traces are available immediately after each `send` — you do NOT need to end the session to read them.
+
+The **published-agent** preview path (`--api-name`) uses a different layout, keyed by **Bot ID**
+rather than agent name, and its `traces/*.json` files are empty (`{}`):
+
+```text
+.sfdx/agents/<BOT_ID>/sessions/<SESSION_ID>/
+├── metadata.json
+├── session-meta.json
+├── transcript.jsonl        # populated — the conversation is still readable
+├── turn-index.json
+└── traces/
+    └── <PLAN_ID>.json      # written, but contains only {}
+```
+
+`transcript.jsonl` is still usable there, so you can review the conversation — you just cannot
+confirm `FunctionStep` execution. Use the discriminating-value technique described under
+[Trace Evaluation](#trace-evaluation) instead.
 
 ### File Structure
 
