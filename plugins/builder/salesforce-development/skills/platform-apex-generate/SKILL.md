@@ -8,8 +8,9 @@ allowed-tools: |
   mcp__plugin_salesforce-development_salesforce-lsp__apex_documentSymbol
   mcp__plugin_salesforce-development_salesforce-lsp__refresh_org_schema
 metadata:
-  version: "1.0"
-  minApiVersion: "66.0"
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
   relatedSkills:
     - "platform-apex-test-generate"
   mcpTools:
@@ -26,9 +27,8 @@ metadata:
         - apex.documentSymbol
         - refresh_org_schema
       semver: ">=0.1.0"
-  cliTools:
-    - tool: ["sf"]
-      semver: ">=2.0.0"
+  version: "1.0"
+  minApiVersion: "66.0"
 ---
 
 # Generating Apex

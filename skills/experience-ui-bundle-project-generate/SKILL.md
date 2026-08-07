@@ -10,12 +10,12 @@ metadata:
     - "experience-ui-bundle-salesforce-data-access"
     - "experience-ui-bundle-deploy"
   cliTools:
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["npm"]
+      semver: ">=9.0.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
-    - tool: ["npm"]
-      semver: ">=7.0.0"
-    - tool: ["node"]
-      semver: ">=16.7.0"
 ---
 
 # Using a UI Bundle Template

@@ -4,7 +4,10 @@ description: "Generate EventSettings metadata to enable or disable Platform Trac
 metadata:
   version: "1.0"
   minApiVersion: "68.0"
-  relatedSkills: platform-tracing-agentforce-configure
+  relatedSkills:
+    - "integration-eventing-cdc-configure"
+    - "integration-eventing-subscription-configure"
+    - "platform-tracing-agentforce-configure"
 ---
 
 # Platform Tracing — Configure

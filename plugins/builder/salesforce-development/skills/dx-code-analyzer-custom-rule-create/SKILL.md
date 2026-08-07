@@ -4,8 +4,8 @@ description: "Create custom Code Analyzer rules for Regex (pattern matching), PM
 metadata:
   version: "1.0"
   relatedSkills:
-    - "dx-code-analyzer-configure"
     - "dx-code-analyzer-run"
+    - "dx-code-analyzer-configure"
   cliTools:
     - tool: ["git"]
       semver: ">=2.0.0"
@@ -102,7 +102,7 @@ These are non-negotiable rules. Violating any of them is a skill failure regardl
 
 \* **For ESLint:** ALWAYS check Tier 1 (built-in rules) and Tier 2 (configurable rules) BEFORE creating a custom plugin. See `references/eslint-rules-discovery.md`.
 
-**"Both could work → Regex first" NEVER applies to JavaScript/LWC/TypeScript files.** JS/LWC/TS patterns MUST use ESLint — Regex cannot distinguish code from comments/strings in JS and produces false positives. Do NOT rationalize Regex for JS files based on "simplicity" or "no npm dependencies."
+⚠️ **"Both could work → Regex first" NEVER applies to JavaScript/LWC/TypeScript files.** JS/LWC/TS patterns MUST use ESLint — Regex cannot distinguish code from comments/strings in JS and produces false positives. Do NOT rationalize Regex for JS files based on "simplicity" or "no npm dependencies."
 
 Tell the user which engine you chose and why. Respect their preference if they disagree.
 
@@ -116,7 +116,7 @@ When a rule should NOT apply to test classes, the approach differs by engine:
 | **Regex** | Use `ignores.files` in `code-analyzer.yml` with globs like `**/*Test.cls` | `regex_ignore` is per-LINE, not per-FILE — it CANNOT exclude entire test classes. Only use `regex_ignore` for per-line patterns like `// NOPMD` |
 | **ESLint** | Use `ignores` array in `eslint.config.js` | Standard ESLint file-level ignores |
 
-**`regex_ignore` is NOT file-level exclusion.** It only skips matches on lines that ALSO match the ignore pattern. Example: `regex_ignore: "/@isTest/i"` only suppresses violations on lines containing `@isTest` — a SOQL query on line 50 of a test class still flags because line 50 doesn't contain `@isTest`. To exclude test files from regex rules entirely, use:
+⚠️ **`regex_ignore` is NOT file-level exclusion.** It only skips matches on lines that ALSO match the ignore pattern. Example: `regex_ignore: "/@isTest/i"` only suppresses violations on lines containing `@isTest` — a SOQL query on line 50 of a test class still flags because line 50 doesn't contain `@isTest`. To exclude test files from regex rules entirely, use:
 ```yaml
 ignores:
   files:
@@ -124,7 +124,7 @@ ignores:
     - "**/*_Test.cls"
 ```
 
-**`ignores.files` is GLOBAL** — it affects ALL engines and ALL rules. If you need test-class exclusion for some rules but not others (e.g., exclude tests from SOQL rules but still scan tests for @AuraEnabled), use **PMD with XPath** for the rules that need selective exclusion. PMD's XPath can structurally check `@Test = true()` per-method or per-class — Regex cannot.
+⚠️ **`ignores.files` is GLOBAL** — it affects ALL engines and ALL rules. If you need test-class exclusion for some rules but not others (e.g., exclude tests from SOQL rules but still scan tests for @AuraEnabled), use **PMD with XPath** for the rules that need selective exclusion. PMD's XPath can structurally check `@Test = true()` per-method or per-class — Regex cannot.
 
 **Decision guide for Apex rules that should skip test classes:**
 - If the pattern is structural (method calls, annotations, nesting) → use PMD. XPath handles test-class exclusion natively.
@@ -180,7 +180,7 @@ When the user highlights a code block in their editor and asks to "catch this", 
      --name "<RuleName>" --regex "<pattern>" --description "<desc>" \
      --severity <1-5> --file-extensions ".cls,.trigger"
    ```
-   **ALWAYS use the script.** Do NOT manually write regex patterns into `code-analyzer.yml` — regex characters (quotes, backslashes, braces) inside YAML cause parsing failures. The script handles serialization correctly.
+   ⚠️ **ALWAYS use the script.** Do NOT manually write regex patterns into `code-analyzer.yml` — regex characters (quotes, backslashes, braces) inside YAML cause parsing failures. The script handles serialization correctly.
 4. **Validate** — `sf code-analyzer rules --rule-selector regex:<RuleName>`
 5. **Test positive** — `sf code-analyzer run --rule-selector regex:<RuleName> --target <violation-sample>` — must find violations
 6. **Test negative** — `sf code-analyzer run --rule-selector regex:<RuleName> --target <clean-sample>` — must find 0 violations. If it flags clean code, your regex is too broad — go back and tighten the pattern.
@@ -190,10 +190,10 @@ When the user highlights a code block in their editor and asks to "catch this", 
 ### For PMD/XPath Rules (Apex)
 
 1. **Write a minimal sample** (5-10 lines) demonstrating the violation. Write sample files inside the project workspace (e.g., a temporary `samples/` directory at the project root) so Code Analyzer can target them. **After both positive and negative tests pass, delete ALL sample files you created** — both the original samples and any copies made during testing. Do not leave temporary test fixtures in the user's project. For loop-based rules, the positive sample MUST include all 3 Apex loop types (`for-each`, traditional `for`, and `while`) — omitting any loop type means the XPath won't be validated against it and may silently miss violations.
-2. **MANDATORY: Dump the AST** — `sf code-analyzer ast-dump --file <sample.cls> --output-file <ast.xml>` — this step is NOT optional. Do NOT skip it even if you "already know" the node names. Run it, read the output, confirm the exact node names and attributes.
+2. **⚠️ MANDATORY: Dump the AST** — `sf code-analyzer ast-dump --file <sample.cls> --output-file <ast.xml>` — this step is NOT optional. Do NOT skip it even if you "already know" the node names. Run it, read the output, confirm the exact node names and attributes.
 3. **Read the AST output** — identify the target node and its attributes from the ACTUAL ast-dump output (not from memory). Use `references/apex-ast-reference.md` and `references/xpath-patterns.md` as supplementary context only.
 4. **Write XPath** — target the smallest stable node with discriminating attributes. Every node name in your XPath MUST appear verbatim in the ast-dump output you just read. Use `/Child` (direct child) vs `//Descendant` deliberately — check the ast-dump to understand which nodes are siblings vs nested.
-5. **BEFORE creating the rule: Write a SEPARATE negative sample file** (5-10 lines) showing code that is CORRECT and must NOT be flagged. This MUST be a distinct file from the positive sample — do NOT combine positive and negative cases into one file. For loop-based rules, include `for (x : [SELECT...])` idiom. Run `sf code-analyzer ast-dump` on this negative sample file too. Read the output and trace your XPath against it — confirm it does NOT match any node in the negative AST. If it would match, go back to step 4 and tighten the XPath BEFORE proceeding. Do NOT skip this step or defer it until after rule creation. The negative file will be used again in step 9 for an explicit zero-violation confirmation.
+5. **⚠️ BEFORE creating the rule: Write a SEPARATE negative sample file** (5-10 lines) showing code that is CORRECT and must NOT be flagged. This MUST be a distinct file from the positive sample — do NOT combine positive and negative cases into one file. For loop-based rules, include `for (x : [SELECT...])` idiom. Run `sf code-analyzer ast-dump` on this negative sample file too. Read the output and trace your XPath against it — confirm it does NOT match any node in the negative AST. If it would match, go back to step 4 and tighten the XPath BEFORE proceeding. Do NOT skip this step or defer it until after rule creation. The negative file will be used again in step 9 for an explicit zero-violation confirmation.
 6. **Create the rule** — run the script:
    ```bash
    node "<skill_dir>/scripts/create-pmd-rule.js" \
@@ -224,7 +224,7 @@ When the user highlights a code block in their editor and asks to "catch this", 
        file_extensions:
          xml: [".xml"]
    ```
-   Do NOT add compound extensions like `.permissionset-meta.xml` — Code Analyzer's validator rejects them (`/^[.][a-zA-Z0-9]+$/` pattern). Just `.xml` covers all Salesforce metadata files automatically.
+   ⚠️ Do NOT add compound extensions like `.permissionset-meta.xml` — Code Analyzer's validator rejects them (`/^[.][a-zA-Z0-9]+$/` pattern). Just `.xml` covers all Salesforce metadata files automatically.
 6. **Write a SEPARATE negative sample file** — same as Apex rules: create a metadata file that is correct and must NOT be flagged. Verify the XPath does not match it BEFORE creating the rule. Both positive and negative samples should be `.xml` extension files in the workspace so PMD can scan them directly.
 7. **Create the rule** — run the script:
    ```bash
@@ -265,7 +265,7 @@ ESLint has 200+ built-in rules plus thousands more from plugins. DO NOT attempt 
 
 ---
 
-0. **MANDATORY: Run the ESLint discovery workflow FIRST.** 90% of ESLint requests are solved by built-in rules (Tier 1) or configurable rules like `no-restricted-syntax` (Tier 2). Creating a custom plugin (Tier 3) is a LAST RESORT. Before proceeding:
+0. **⚠️ MANDATORY: Run the ESLint discovery workflow FIRST.** 90% of ESLint requests are solved by built-in rules (Tier 1) or configurable rules like `no-restricted-syntax` (Tier 2). Creating a custom plugin (Tier 3) is a LAST RESORT. Before proceeding:
    
    a) **Run:** `sf code-analyzer rules --rule-selector eslint`
    b) **Search** the output for keywords from the user's request (e.g., "console", "equal", "unused")
@@ -276,9 +276,9 @@ ESLint has 200+ built-in rules plus thousands more from plugins. DO NOT attempt 
    
    **Validation:** After configuration, run `sf code-analyzer rules --rule-selector eslint:<ruleName>` to confirm it appears. If it doesn't, the config is wrong.
    
-   **Skipping this discovery workflow and creating a custom plugin when a built-in rule exists is a skill failure**, regardless of whether the custom plugin works.
+   ⚠️ **Skipping this discovery workflow and creating a custom plugin when a built-in rule exists is a skill failure**, regardless of whether the custom plugin works.
 
-**Built-in ESLint rules vs. configurable ESLint rules:** Code Analyzer bundles a SUBSET of ESLint rules in its base config. Rules like `no-restricted-globals`, `no-restricted-syntax`, and `no-restricted-properties` are core ESLint rules but are NOT active until you enable them in an `eslint.config.js`. They WILL appear in `sf code-analyzer rules` output ONLY after you configure them. **Always validate** (step 4) to confirm the rule actually loaded — do NOT assume a rule exists just because it's a core ESLint rule.
+⚠️ **Built-in ESLint rules vs. configurable ESLint rules:** Code Analyzer bundles a SUBSET of ESLint rules in its base config. Rules like `no-restricted-globals`, `no-restricted-syntax`, and `no-restricted-properties` are core ESLint rules but are NOT active until you enable them in an `eslint.config.js`. They WILL appear in `sf code-analyzer rules` output ONLY after you configure them. **Always validate** (step 4) to confirm the rule actually loaded — do NOT assume a rule exists just because it's a core ESLint rule.
 
 1. **Install the ESLint plugin** (skip if using a built-in/core ESLint rule) — `npm install --save-dev eslint-plugin-<name>`
 2. **Create/update `eslint.config.js`** — add plugin and rule configuration (or just enable the built-in rule with `"error"` severity). **The file MUST exist** before configuring `engines.eslint.eslint_config_file` in `code-analyzer.yml` — Code Analyzer validates the path and fails if the file is missing.
@@ -300,26 +300,26 @@ For `no-restricted-globals`, `no-restricted-syntax`, and `no-restricted-properti
 - User: "Ban console.log in LWC"
 - Discovery: `sf code-analyzer rules --rule-selector eslint | grep console` → finds `no-console`
 - Action: Enable `no-console` in eslint.config.js
-- Result: Done in 2 minutes (no custom plugin needed)
+- Result: ✅ Done in 2 minutes (no custom plugin needed)
 
 **Example 2: Configurable rule (Tier 2)**
 - User: "Ban setTimeout in LWC"
 - Discovery: No built-in `no-setTimeout` rule
 - Action: Use `no-restricted-globals` with custom message
-- Result: Done in 5 minutes (no custom plugin needed)
+- Result: ✅ Done in 5 minutes (no custom plugin needed)
 
 **Example 3: LWC plugin rule (Tier 1)**
 - User: "Ban innerHTML for XSS prevention"
 - Discovery: `@lwc/lwc/no-inner-html` already exists
 - Action: Enable `@lwc/lwc/no-inner-html` in config
-- Result: Done in 2 minutes (no custom plugin needed)
+- Result: ✅ Done in 2 minutes (no custom plugin needed)
 
 **Example 4: Custom plugin justified (Tier 3)**
 - User: "Flag imperative Apex calls without error handling"
 - Discovery: No built-in rule for this pattern
 - Analysis: Pattern requires checking `import` + `.then()` without `.catch()` — multi-node traversal
 - Action: Create custom plugin with visitor pattern
-- Result: Custom plugin is justified (20+ minutes effort)
+- Result: ✅ Custom plugin is justified (20+ minutes effort)
 
 See `references/eslint-rules-discovery.md` for complete discovery workflow.
 
@@ -375,11 +375,11 @@ When creating multiple PMD rules, use the `create-pmd-rule.js` script for the fi
 
 ### What NOT to do
 
-- Do NOT rewrite the entire `code-analyzer.yml` to reorganize it
-- Do NOT create all rules in parallel then validate all at once
-- Do NOT create a PMD rule with an unverified XPath from the reference docs — ast-dump each pattern
-- Do NOT mix engine types in one creation step (e.g., creating regex + PMD rules simultaneously)
-- Do NOT add `engines.eslint.eslint_config_file` to `code-analyzer.yml` before the file exists
+- ❌ Do NOT rewrite the entire `code-analyzer.yml` to reorganize it
+- ❌ Do NOT create all rules in parallel then validate all at once
+- ❌ Do NOT create a PMD rule with an unverified XPath from the reference docs — ast-dump each pattern
+- ❌ Do NOT mix engine types in one creation step (e.g., creating regex + PMD rules simultaneously)
+- ❌ Do NOT add `engines.eslint.eslint_config_file` to `code-analyzer.yml` before the file exists
 
 ---
 
@@ -393,7 +393,7 @@ When creating multiple PMD rules, use the `create-pmd-rule.js` script for the fi
 | Always validate after creation | `sf code-analyzer rules --rule-selector <engine>:<name>` catches config errors |
 | Always test against sample code | Catches XPath/regex mismatches before full scan |
 | Use `@FullMethodName` for method calls in XPath | More reliable than `@Image` or `@MethodName` alone |
-| **NEVER skip `ast-dump`** | Run `ast-dump`, read output, THEN write XPath. No exceptions — even for "obvious" patterns. Using node names from memory without ast-dump verification is a skill failure. |
+| **⚠️ NEVER skip `ast-dump`** | Run `ast-dump`, read output, THEN write XPath. No exceptions — even for "obvious" patterns. Using node names from memory without ast-dump verification is a skill failure. |
 | **PMD 7 boolean attributes: use `= false()` XPath function** | In PMD 7, boolean attributes like `@WithSharing`, `@Abstract`, `@Final` are ALWAYS present on the node (never absent). Compare with `= false()` (XPath boolean function), NOT string `'false'`. `@WithSharing = false()` works. `@WithSharing='false'` (string) does NOT. `not(@WithSharing)` does NOT (attribute is always present). |
 | `code-analyzer.yml` at project root | Auto-discovered by CLI — placing it elsewhere causes silent failures for rule authors |
 | **XML rules MUST use `local-name()`** | Salesforce metadata namespace breaks bare element names |
@@ -451,11 +451,11 @@ node "<skill_dir>/scripts/create-regex-rule.js" \
   --name "RuleName" --regex "/pattern/flags" ...
 ```
 
-**DO NOT:**
-- Invent or generate script code yourself
-- Use bare relative paths like `node scripts/create-regex-rule.js` (won't resolve from user's CWD)
-- Use heredocs or inline script content
-- Skip resolving `<skill_dir>` — find the absolute path first
+⚠️ **DO NOT:**
+- ❌ Invent or generate script code yourself
+- ❌ Use bare relative paths like `node scripts/create-regex-rule.js` (won't resolve from user's CWD)
+- ❌ Use heredocs or inline script content
+- ❌ Skip resolving `<skill_dir>` — find the absolute path first
 
 ---
 

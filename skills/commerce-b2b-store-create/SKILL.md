@@ -4,7 +4,10 @@ description: "Interactive workflow to create Commerce B2B Stores and retrieve st
 compatibility: "Requires Commerce licenses, Experience Cloud, Salesforce CLI"
 metadata:
   version: "1.0"
-  category: "commerce"
+  minApiVersion: "56.0"
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # Commerce B2B Storefront Creation

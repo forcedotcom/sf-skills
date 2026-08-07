@@ -6,15 +6,15 @@ metadata:
   relatedSkills:
     - "data360-schema-get"
   cliTools:
-    - tool: ["sf"]
-      semver: ">=2.0.0"
-    - tool: ["pip"]
-      semver: ">=21.0.0"
-    - tool: ["python3"]
-      semver: ">=3.11.0"
     - tool: ["docker"]
       semver: ">=20.0.0"
-    - tool: ["git"]
+    - tool: ["pip"]
+      semver: ">=23.0.0"
+    - tool: ["python"]
+      semver: ">=3.11.0"
+    - tool: ["python3"]
+      semver: ">=3.11.0"
+    - tool: ["sf"]
       semver: ">=2.0.0"
 ---
 

@@ -2,6 +2,15 @@
 name: dx-devops-test-suite-assignments-configure
 description: "Recommends and manages DevOps Center test suite assignments for pipeline stages. Mode A analyzes a commit diff against assigned suite metadata to recommend relevant existing suites and flag coverage gaps (pure reasoning). Modes B-D assign a single suite, bulk-map multiple suites with a mandatory impact preview, or add/remove test classes with governance rules, via the testSuiteStages Connect API. Use this skill to recommend suites for a commit, assign or map suites to stages, or add/remove tests in a suite. TRIGGER when: the user asks which suites to run for a commit/diff or what covers their changes; a suite is unlinked and the user wants it assigned; the user wants to configure suite-to-stage mappings, assign multiple suites, or add/remove/sync tests in a suite. DO NOT TRIGGER when: configuring or syncing a test provider (use dx-devops-test-pipeline-configure), running suites (use dx-devops-test-suite-run), or authoring/running tests directly (use platform-apex-test-generate or platform-apex-test-run)."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.67.0"
+  relatedSkills:
+    - "dx-devops-test-failures-analyze"
+    - "dx-devops-test-pipeline-configure"
+    - "dx-devops-test-suite-run"
+    - "platform-apex-test-generate"
+    - "platform-apex-test-run"
   version: "1.0"
   minApiVersion: "67.0"
 ---

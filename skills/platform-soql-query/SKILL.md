@@ -2,6 +2,19 @@
 name: platform-soql-query
 description: "SOQL query generation, optimization, and analysis with 100-point scoring. Use this skill when the user needs SOQL/SOSL authoring or optimization: natural-language-to-query generation, relationship queries, aggregates, query-plan analysis, and performance or safety improvements for Salesforce queries. TRIGGER when: user writes, optimizes, or debugs SOQL/SOSL queries, touches .soql files, or asks about relationship queries, aggregates, or query performance. DO NOT TRIGGER when: bulk data operations (use platform-data-manage), Apex DML logic (use platform-apex-generate), or report/dashboard queries."
 metadata:
+  cliTools:
+    - tool: ["jq"]
+      semver: ">=1.6.0"
+    - tool: ["python3"]
+      semver: ">=3.10.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "experience-lwc-generate"
+    - "platform-apex-generate"
+    - "platform-apex-logs-debug"
+    - "platform-apex-test-run"
+    - "platform-data-manage"
   version: "1.1"
 ---
 

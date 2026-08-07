@@ -3,6 +3,8 @@ name: commerce-b2b-open-code-components-replace
 description: "Replace OOTB (out-of-the-box) B2B Commerce components with open source equivalents in site metadata content.json files, or look up the equivalent open code `site:` component for OOTB definitions. Use when users mention \"replace OOTB components\", \"replace commerce components with open code\", \"swap OOTB for open source\", \"replace commerce_builder:\", \"replace OOTB in site\", \"replace component in site metadata\", \"replace component definition\", \"find open code equivalent\", \"equivalent open code component\", \"OOTB to open code mapping\", \"what is the site component for\", components \"in this view\" or \"for a given view\", or a specific list of component names — and want to update or only discover mappings in their store metadata."
 allowed-tools: Bash(grep:*) Bash(ls:*) Read Write
 metadata:
+  relatedSkills:
+    - "commerce-b2b-open-code-components-integrate"
   version: "1.0"
 ---
 

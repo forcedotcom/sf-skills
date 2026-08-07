@@ -2,14 +2,6 @@
 name: platform-apex-test-run
 description: "Apex test execution, coverage analysis, and test-fix loops with 120-point scoring. Use when the user needs to run Apex tests, check code coverage, fix failing tests, or work with *Test.cls / *_Test.cls files. TRIGGER when: user runs Apex tests, checks code coverage, fixes failing tests, or touches *Test.cls / *_Test.cls files. DO NOT TRIGGER when: writing Apex production code (use platform-apex-generate), Agentforce agent testing (use agentforce-test), or Jest/LWC tests (use experience-lwc-generate)."
 metadata:
-  version: "1.1"
-  relatedSkills:
-    - "agentforce-test"
-    - "experience-lwc-generate"
-    - "platform-apex-generate"
-    - "platform-apex-logs-debug"
-    - "platform-data-manage"
-    - "platform-metadata-deploy"
   cliTools:
     - tool: ["jq"]
       semver: ">=1.6.0"
@@ -17,6 +9,14 @@ metadata:
       semver: ">=3.10.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
+  relatedSkills:
+    - "agentforce-test"
+    - "experience-lwc-generate"
+    - "platform-apex-generate"
+    - "platform-apex-logs-debug"
+    - "platform-data-manage"
+    - "platform-metadata-deploy"
+  version: "1.1"
 ---
 
 # platform-apex-test-run: Salesforce Test Execution & Coverage Analysis

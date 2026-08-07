@@ -2,6 +2,14 @@
 name: design-systems-slds-validate
 description: "Audit Lightning Web Components for SLDS compliance and produce a scored quality report. Runs the SLDS linter, analyzes CSS for theming hook usage and pairing, checks HTML for accessibility attributes, and scores findings across categories into an overall grade. Use when asked to \"score my component\", \"SLDS scorecard\", \"quality report\", \"audit SLDS compliance\", \"how good is my SLDS\", \"check component quality\", \"rate my component\", \"evaluate my component\", \"is this component ready to ship?\", \"look at my LWC for issues\", \"audit this before I submit\", \"review my component before code review\", or any time a user wants a quality assessment or production-readiness check on an LWC or SLDS component. Not for fixing violations (use design-systems-slds2-migrate) or building new components (use design-systems-slds-apply)."
 metadata:
+  cliTools:
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["npx"]
+      semver: ">=7.0.0"
+  relatedSkills:
+    - "design-systems-slds-apply"
+    - "design-systems-slds2-migrate"
   version: "1.0"
 ---
 

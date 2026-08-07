@@ -4,6 +4,11 @@ description: "ALWAYS USE THIS SKILL to retrieve metadata from an org to your loc
 compatibility: Salesforce CLI (sf) v2+
 metadata:
   version: "1.0"
+  relatedSkills:
+    - "platform-metadata-deploy"
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # platform-metadata-retrieve

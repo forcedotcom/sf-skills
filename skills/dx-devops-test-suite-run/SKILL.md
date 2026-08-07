@@ -2,6 +2,14 @@
 name: dx-devops-test-suite-run
 description: "Runs DevOps Center test suites on a pipeline stage (Pre-Promote, Post-Promote, or Review event) end to end: triggers async execution via the Connect API after an explicit confirmation gate, then polls by runId at provider-specific intervals until it completes, fails, or times out, and hands results to failure analysis. Also retriggers a quality gate after fixes, but only once coverage meets the threshold. Use this skill when a user wants to run, kick off, or launch test suites on a stage, re-run a quality gate, or watch an in-progress run to completion. TRIGGER when: the user wants to run/launch suites on a stage, execute tests before or after promotion, re-run a quality gate after fixing failures, unblock a blocked promotion after adding tests, or poll/watch an in-progress run. DO NOT TRIGGER when: running sf apex run test directly (use platform-apex-test-run), or configuring a NEW gate or threshold (use dx-devops-test-pipeline-configure)."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.67.0"
+  relatedSkills:
+    - "dx-devops-test-failures-analyze"
+    - "dx-devops-test-pipeline-configure"
+    - "dx-devops-test-suite-assignments-configure"
+    - "platform-apex-test-run"
   version: "1.0"
   minApiVersion: "67.0"
 ---

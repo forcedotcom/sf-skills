@@ -3,7 +3,24 @@ name: platform-lightning-app-coordinate
 description: "Build complete Salesforce Lightning Experience applications from natural language descriptions. Use this skill when a user requests a \"complete app\", \"Lightning app\", \"business solution\", \"management system\", or describes a scenario requiring multiple interconnected Salesforce components (objects, fields, pages, tabs, security). Orchestrates all required metadata types in proper dependency order to produce a deployable application."
 metadata:
   version: "1.0"
-  related-skills: platform-custom-object-generate, platform-custom-field-generate, platform-custom-tab-generate, platform-flexipage-generate, platform-custom-application-generate, automation-flow-generate, platform-validation-rule-generate, platform-list-view-generate, platform-permission-set-generate
+  minApiVersion: "60.0"
+  relatedSkills:
+    - "automation-flow-generate"
+    - "platform-custom-application-generate"
+    - "platform-custom-field-generate"
+    - "platform-custom-object-generate"
+    - "platform-custom-tab-generate"
+    - "platform-flexipage-generate"
+    - "platform-list-view-generate"
+    - "platform-permission-set-generate"
+    - "platform-validation-rule-generate"
+  mcpTools:
+    salesforce-api-context:
+      tools: ["get_metadata_type_sections", "get_metadata_type_context", "get_metadata_type_fields", "get_metadata_type_fields_properties", "search_metadata_types"]
+      semver: ">=1.0.0"
+    metadata-experts:
+      tools: ["execute_metadata_action"]
+      semver: ">=1.0.0"
 ---
 
 # Generating Lightning App

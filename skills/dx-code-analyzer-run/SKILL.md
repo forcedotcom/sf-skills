@@ -7,11 +7,19 @@ metadata:
     - "dx-code-analyzer-configure"
     - "dx-code-analyzer-custom-rule-create"
   cliTools:
-    - tool: ["sf"]
+    - tool: ["git"]
       semver: ">=2.0.0"
+    - tool: ["java"]
+      semver: ">=11.0.0"
+    - tool: ["jq"]
+      semver: ">=1.6.0"
     - tool: ["node"]
       semver: ">=18.0.0"
-    - tool: ["git"]
+    - tool: ["npm"]
+      semver: ">=9.0.0"
+    - tool: ["python3"]
+      semver: ">=3.9.0"
+    - tool: ["sf"]
       semver: ">=2.0.0"
 ---
 

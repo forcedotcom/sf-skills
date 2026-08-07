@@ -2,6 +2,14 @@
 name: platform-agentexchange-partner-offers-configure
 description: "Enable or disable the org preference that controls whether a Salesforce org can receive partner offers from the Transactable Marketplace. Use this skill when the user wants to turn partner offer reception on or off for an org. TRIGGER when: user asks to enable or disable partner offers, configure TransactableMarketplaceReceivePartnerOffers, configure enableTransactableMarketplaceReceivePartnerOffers, set up marketplace partner offer reception, toggle the TM partner offers setting, edit a TransactableMarketplacePrivateOffer.settings file, or configure org preferences related to transactable marketplace. DO NOT TRIGGER when: user needs to create or manage the partner offer records themselves, configure marketplace listing settings, or work with SfdcPartnerOffer objects (use platform-metadata-deploy or platform-apex-generate instead)."
 metadata:
+  cliTools:
+    - tool: ["jq"]
+      semver: ">=1.6.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "platform-apex-generate"
+    - "platform-metadata-deploy"
   version: "1.0"
   minApiVersion: "67.0"
 ---

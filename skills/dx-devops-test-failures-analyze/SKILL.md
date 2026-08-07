@@ -2,6 +2,14 @@
 name: dx-devops-test-failures-analyze
 description: "Analyzes DevOps Center test failures and Code Analyzer violations in plain language — failure category, offending file/class/method/line, rule violated, fix direction, and prioritized improvement suggestions (test-code vs production-code) — then optionally creates a tracked fix WorkItem on explicit request. Analysis is pure reasoning; work-item creation is a confirmation-gated write. Use this skill to explain failures or improvement suggestions, translate Code Analyzer violations, or track a fix as a work item. TRIGGER when: a run failed and the user wants root cause; a quality gate failure needs explaining; violations need translating; the user shares a failure payload and asks how to address it; wants to strengthen tests; or wants to create a fix work item, log a remediation, or assign a failure. DO NOT TRIGGER when: the user wants fix code written (use platform-apex-generate) or new test classes authored (use platform-apex-test-generate)."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.67.0"
+  relatedSkills:
+    - "dx-devops-test-suite-assignments-configure"
+    - "dx-devops-test-suite-run"
+    - "platform-apex-generate"
+    - "platform-apex-test-generate"
   version: "1.0"
   minApiVersion: "67.0"
 ---

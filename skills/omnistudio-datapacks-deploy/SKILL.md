@@ -2,6 +2,24 @@
 name: omnistudio-datapacks-deploy
 description: "Salesforce Industries DataPack deployment automation using Vlocity Build. TRIGGER when: user deploys or validates OmniStudio/Vlocity DataPacks with vlocity commands (packDeploy/packRetry/packExport/packGetDiffs), sets up DataPack CI/CD pipelines, or troubleshoots DataPack migration errors. DO NOT TRIGGER when: deploying Salesforce metadata with sf project deploy (use platform-metadata-deploy), authoring OmniStudio artifacts (use omnistudio-*-build), or writing Apex/LWC business logic (use platform-apex-generate/experience-lwc-generate)."
 metadata:
+  cliTools:
+    - tool: ["npm"]
+      semver: ">=9.0.0"
+    - tool: ["npx"]
+      semver: ">=9.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+    - tool: ["vlocity"]
+      semver: ">=1.16.0"
+  relatedSkills:
+    - "experience-lwc-generate"
+    - "omnistudio-epc-catalog-generate"
+    - "omnistudio-flexcard-generate"
+    - "omnistudio-integration-procedure-generate"
+    - "omnistudio-omniscript-generate"
+    - "platform-apex-generate"
+    - "platform-apex-logs-debug"
+    - "platform-metadata-deploy"
   version: "1.0"
 ---
 

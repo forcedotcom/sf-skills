@@ -3,7 +3,7 @@ name: sales-agentforce-pipeline-management-configure
 description: "Use to configure, set up, or repair the Sales Management agent and Agentforce Pipeline Management in a Salesforce org. Automates metadata creation for flows, prompt templates, permission sets, and data source configuration. TRIGGER when: user wants to enable Pipeline Management, configure Sales pipeline features, set up the Sales Management agent for opportunity field updates (including autonomous updates), connect enabled data sources like Einstein Conversation Insights or Einstein Activity Capture, customize opportunity stage descriptions, configure post-meeting suggestions, verify or audit configuration status, fix partially configured orgs, or troubleshoot Pipeline Management metadata issues. DO NOT TRIGGER when: user wants to build a custom agent (use agentforce-generate), configure general Agentforce tracing (use platform-tracing-agentforce-configure), work with non-Sales agents, or enable Einstein Conversation Insights or Einstein Activity Capture from scratch (provisioning is out of scope)."
 metadata:
   version: "1.0"
-  minApiVersion: "64.0"
+  minApiVersion: "67.0"
   relatedSkills:
     - "agentforce-generate"
     - "platform-tracing-agentforce-configure"
@@ -12,6 +12,8 @@ metadata:
       semver: ">=7.0.0"
     - tool: ["jq"]
       semver: ">=1.6.0"
+    - tool: ["python3"]
+      semver: ">=3.10.0"
     - tool: ["sf"]
       semver: ">=2.139.6"
 ---

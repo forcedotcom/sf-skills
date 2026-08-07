@@ -3,7 +3,6 @@ name: platform-list-view-generate
 description: "Use this skill when users need to create, generate, or validate Salesforce List View metadata. Trigger when users mention list views, filtered record lists, creating views, setting up record columns, filtering records by criteria, or ask about list view visibility. Also use when users say things like \"I need a view that shows...\", \"filter records by...\", \"create a list view for...\", or when they're working with ListView XML files and need validation or troubleshooting."
 metadata:
   version: "1.0"
-  minApiVersion: "51.0"
 ---
 
 ## When to Use This Skill

@@ -5,8 +5,9 @@ metadata:
   version: "1.1"
   minApiVersion: "68.0"
   relatedSkills:
-    - "platform-lightning-type-widget-coordinate"
+    - "platform-apex-generate"
     - "platform-custom-lightning-type-generate"
+    - "platform-lightning-type-widget-coordinate"
   mcpTools:
     metadata-experts:
       tools: ["execute_metadata_action"]

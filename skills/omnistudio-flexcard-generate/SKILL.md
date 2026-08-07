@@ -2,7 +2,18 @@
 name: omnistudio-flexcard-generate
 description: "OmniStudio FlexCard creation and validation with 130-point scoring. Use when building at-a-glance UI cards, configuring data source bindings to Integration Procedures, or reviewing existing FlexCard definitions for accessibility and performance. TRIGGER when: user creates FlexCards, configures data sources, designs card layouts, or asks about OmniUiCard metadata. DO NOT TRIGGER when: building OmniScripts (use omnistudio-omniscript-generate), creating Integration Procedures (use omnistudio-integration-procedure-generate), or analyzing dependencies (use omnistudio-dependencies-analyze)."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "experience-lwc-generate"
+    - "omnistudio-datamapper-generate"
+    - "omnistudio-dependencies-analyze"
+    - "omnistudio-integration-procedure-generate"
+    - "omnistudio-omniscript-generate"
+    - "platform-metadata-deploy"
   version: "1.0"
+  minApiVersion: "60.0"
 ---
 
 # omnistudio-flexcard-generate: OmniStudio FlexCard Creation and Validation

@@ -2,7 +2,22 @@
 name: omnistudio-epc-catalog-generate
 description: "Salesforce Industries CME EPC product-modeling skill for Product2-based catalog creation. Use when creating EPC products, configuring product attributes, building offer bundles with Product Child Items, or reviewing EPC DataPack JSON metadata for product catalog changes. TRIGGER when: user creates or updates Product2 EPC records, AttributeAssignment payloads, AttributeMetadata/AttributeDefaultValues, Offer bundles, or ProductChildItem relationships. DO NOT TRIGGER when: designing OmniScripts/FlexCards/Integration Procedures (use omnistudio-omniscript-generate, omnistudio-flexcard-generate, or omnistudio-integration-procedure-generate), implementing Apex business logic (use platform-apex-generate), or troubleshooting deployment pipelines (use platform-metadata-deploy)."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "omnistudio-callable-apex-generate"
+    - "omnistudio-dependencies-analyze"
+    - "omnistudio-flexcard-generate"
+    - "omnistudio-integration-procedure-generate"
+    - "omnistudio-omniscript-generate"
+    - "platform-apex-generate"
+    - "platform-custom-field-generate"
+    - "platform-custom-object-generate"
+    - "platform-metadata-deploy"
+    - "platform-soql-query"
   version: "1.0"
+  minApiVersion: "60.0"
 ---
 
 # omnistudio-epc-catalog-generate: CME EPC Product and Offer Modeling

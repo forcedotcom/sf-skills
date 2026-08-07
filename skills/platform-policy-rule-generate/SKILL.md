@@ -5,6 +5,8 @@ metadata:
   version: "1.0"
   minApiVersion: "64.0"
   cliTools:
+    - tool: ["jq"]
+      semver: ">=1.6.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
 ---

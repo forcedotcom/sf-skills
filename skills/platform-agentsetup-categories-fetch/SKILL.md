@@ -3,6 +3,9 @@ name: platform-agentsetup-categories-fetch
 description: "Fetch agentic setup prompt categories from a connected Salesforce org using the Connect API. Use this skill to call GET /agenticsetup/categories and return the list of prompt categories, optionally with their nested prompts. TRIGGER when: user asks to get, fetch, list, or show agentic setup categories, prompt categories, setup copilot categories, prompt library categories, available setup prompts, Agentforce prompt library, or copilot prompts. DO NOT TRIGGER when: user wants to create new categories, work with non-categories endpoints, or generate OpenAPI specs."
 allowed-tools: Bash Read
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
   version: "1.0"
   minApiVersion: "67.0"
 ---

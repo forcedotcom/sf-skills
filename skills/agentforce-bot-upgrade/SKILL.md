@@ -7,8 +7,6 @@ metadata:
   minApiVersion: "63.0"
   relatedSkills:
     - "agentforce-generate"
-    - "agentforce-test"
-    - "agentforce-observe"
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"

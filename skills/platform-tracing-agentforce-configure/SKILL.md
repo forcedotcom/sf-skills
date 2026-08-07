@@ -4,7 +4,11 @@ description: "Generate AgentforcePlatformTracingSettings metadata to enable or d
 metadata:
   version: "1.0"
   minApiVersion: "68.0"
-  relatedSkills: platform-tracing-configure
+  relatedSkills:
+    - "agentforce-observe"
+    - "integration-eventing-cdc-configure"
+    - "integration-eventing-subscription-configure"
+    - "platform-tracing-configure"
 ---
 
 # Platform Tracing — Agentforce Configure

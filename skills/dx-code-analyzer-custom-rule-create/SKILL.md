@@ -7,12 +7,14 @@ metadata:
     - "dx-code-analyzer-run"
     - "dx-code-analyzer-configure"
   cliTools:
-    - tool: ["sf"]
+    - tool: ["git"]
       semver: ">=2.0.0"
     - tool: ["node"]
       semver: ">=18.0.0"
     - tool: ["npm"]
       semver: ">=9.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # dx-code-analyzer-custom-rule-create: Custom Code Analyzer Rule Authoring

@@ -3,6 +3,16 @@ name: data360-query
 description: "Salesforce Data Cloud Retrieve phase. Use this skill when the user runs Data Cloud SQL, async queries, vector search, search-index workflows, or metadata introspection for Data Cloud objects. TRIGGER when: user runs Data Cloud SQL, describe, async queries, vector search, search-index workflows, or metadata introspection for Data Cloud objects. DO NOT TRIGGER when: the task is standard CRM SOQL (use platform-soql-query), segment creation or calculated insight design (use data360-segment), or STDM/session tracing/parquet analysis (use agentforce-observe)."
 compatibility: "Requires an external community sf data360 CLI plugin and a Data Cloud-enabled org"
 metadata:
+  cliTools:
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "agentforce-observe"
+    - "data360-orchestrate"
+    - "data360-segment"
+    - "platform-soql-query"
   version: "1.0"
 ---
 

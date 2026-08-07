@@ -2,6 +2,16 @@
 name: platform-models-api-configure
 description: "Configure (or troubleshoot) an AI coding agent or CLI to route through the Salesforce Models API using a signed OrgJWT. Use this skill when pointing an agent at the Salesforce model endpoint (api.salesforce.com/ai/gpt/v1), setting up OrgJWT / Bedrock-mode auth, wiring the agent's settings, API-key helper, and credentials file for the Salesforce endpoint, or fixing Models API 401 / 404 / \"model not available\" errors. DO NOT TRIGGER when the user needs to create or configure the Salesforce Connected App itself (use integration-connectivity-connected-app-configure) or set up Named Credentials / callout auth (use integration-connectivity-generate)."
 metadata:
+  cliTools:
+    - tool: ["curl"]
+      semver: ">=7.29.0"
+    - tool: ["jq"]
+      semver: ">=1.6.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "integration-connectivity-connected-app-configure"
+    - "integration-connectivity-generate"
   version: "1.0"
 ---
 

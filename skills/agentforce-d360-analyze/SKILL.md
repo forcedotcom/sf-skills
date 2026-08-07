@@ -2,7 +2,15 @@
 name: agentforce-d360-analyze
 description: "Data Cloud 360° view of a single Agentforce session. TRIGGER when user asks to trace, inspect, summarize, or describe a specific Agentforce session by session id (Agent Session UUID `019d…` or MessagingSession id `0Mw…`). Also triggers on session discovery — find/list/search sessions by time, agent, channel, outcome, or conversation text — when the user has no session id yet. DO NOT TRIGGER for design-time architecture questions (use agentforce-architecture-analyze instead) or for runtime perf/latency/SLO questions that require platform telemetry beyond Data Cloud."
 metadata:
+  cliTools:
+    - tool: ["python3"]
+      semver: ">=3.10.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "agentforce-architecture-analyze"
   version: "1.0"
+  minApiVersion: "66.0"
 ---
 
 # agentforce-d360-analyze — Data Cloud 360° session view

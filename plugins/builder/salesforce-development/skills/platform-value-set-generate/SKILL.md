@@ -4,15 +4,9 @@ description: "Use this skill when users need to create, generate, or validate a 
 metadata:
   version: "1.0"
   minApiVersion: "60.0"
-  relatedSkills:
-    - "platform-custom-field-generate"
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"
-  mcpTools:
-    metadata-grounding:
-      tools: ["search_metadata", "query_metadata"]
-      semver: ">=1.0.0"
 ---
 
 ## Overview

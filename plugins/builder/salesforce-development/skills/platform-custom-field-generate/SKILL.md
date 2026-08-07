@@ -3,10 +3,8 @@ name: platform-custom-field-generate
 description: "Use this skill when users need to create, generate, or validate Salesforce Custom Field metadata. Trigger when users mention custom fields, field types, Roll-up Summary fields, Master-Detail relationships, Lookup relationships, formula fields, picklists, dependent (controlling) picklists, referencing a value set from a field, or scoping/limiting picklist values for a specific record type. Also use when users encounter field deployment errors, especially around Roll-up Summary format, Master-Detail constraints, formula issues, or a record type that won't deploy without a business process. Use this skill for custom field metadata work, field generation, and field troubleshooting. DO NOT TRIGGER for creating or customizing the value set itself — defining a new GlobalValueSet, or modifying a StandardValueSet catalog like Industry or Lead Source — use platform-value-set-generate instead; this skill covers the field that references a value set, not the value set definition."
 metadata:
   version: "1.0"
-  minApiVersion: "51.0"
-  relatedSkills:
-    - "platform-validation-rule-generate"
-    - "platform-value-set-generate"
+  minApiVersion: "60.0"
+  relatedSkills: ["platform-value-set-generate", "platform-validation-rule-generate"]
 ---
 
 # Salesforce Custom Field Generator and Validator

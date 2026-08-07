@@ -2,7 +2,20 @@
 name: omnistudio-datamapper-generate
 description: "OmniStudio Data Mapper (formerly DataRaptor) creation and validation with 100-point scoring. Use when building Extract, Transform, Load, or Turbo Extract Data Mappers, mapping Salesforce object fields, or reviewing existing Data Mapper configurations. TRIGGER when: user creates Data Mappers, configures field mappings, works with OmniDataTransform metadata, or asks about DataRaptor/Data Mapper patterns. DO NOT TRIGGER when: building Integration Procedures (use omnistudio-integration-procedure-generate), authoring OmniScripts (use omnistudio-omniscript-generate), or analyzing cross-component dependencies (use omnistudio-dependencies-analyze)."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "omnistudio-dependencies-analyze"
+    - "omnistudio-flexcard-generate"
+    - "omnistudio-integration-procedure-generate"
+    - "omnistudio-omniscript-generate"
+    - "platform-custom-field-generate"
+    - "platform-custom-object-generate"
+    - "platform-metadata-deploy"
+    - "platform-soql-query"
   version: "1.0"
+  minApiVersion: "60.0"
 ---
 
 # omnistudio-datamapper-generate: OmniStudio Data Mapper Creation and Validation

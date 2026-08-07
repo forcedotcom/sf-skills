@@ -6,9 +6,13 @@ metadata:
   minApiVersion: "67.0"
   cliTools:
     - tool: ["jq"]
-      semver: ">=1.6"
+      semver: ">=1.6.0"
+    - tool: ["node"]
+      semver: ">=18.0.0"
     - tool: ["python3"]
-      semver: ">=3.8"
+      semver: ">=3.10.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # Salesforce Metadata API Skill

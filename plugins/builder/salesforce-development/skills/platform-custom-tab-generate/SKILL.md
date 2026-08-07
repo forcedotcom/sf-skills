@@ -3,7 +3,7 @@ name: platform-custom-tab-generate
 description: "Use this skill when users need to create or configure Salesforce Custom Tabs. Trigger when users mention tabs, navigation tabs, object tabs, web tabs, Visualforce tabs, Lightning component tabs, app page tabs, or tab configuration. Also use when users want to add navigation to custom objects, create tabs for external content, or set up Lightning page tabs. Always use this skill for any custom tab work."
 metadata:
   version: "1.0"
-  minApiVersion: "51.0"
+  minApiVersion: "60.0"
 ---
 
 ## When to Use This Skill
@@ -80,7 +80,7 @@ Also forbidden:
     <motif>Custom98: Truck</motif>
 </CustomTab>
 ```
-- **WRONG** — do NOT add `<sobjectName>`, `<name>`, `<fullName>`, or `<label>`:
+- **❌ WRONG** — do NOT add `<sobjectName>`, `<name>`, `<fullName>`, or `<label>`:
 ```xml
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
     <sobjectName>Space_Station__c</sobjectName>  <!-- DEPLOYMENT ERROR -->

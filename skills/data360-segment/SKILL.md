@@ -3,6 +3,17 @@ name: data360-segment
 description: "Salesforce Data Cloud Segment phase. Use this skill when the user creates or publishes segments, manages calculated insights, or troubleshoots audience SQL in Data Cloud. TRIGGER when: user creates or publishes segments, manages calculated insights, inspects segment counts or membership, or troubleshoots audience SQL in Data Cloud. DO NOT TRIGGER when: the task is DMO/mapping/identity-resolution work (use data360-harmonize), activation work (use data360-activate), query/search-index work (use data360-query), or Standard Data Model (STDM)/session tracing (use agentforce-observe)."
 compatibility: "Requires an external community sf data360 CLI plugin and a Data Cloud-enabled org"
 metadata:
+  cliTools:
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "agentforce-observe"
+    - "data360-activate"
+    - "data360-harmonize"
+    - "data360-orchestrate"
+    - "data360-query"
   version: "1.0"
 ---
 

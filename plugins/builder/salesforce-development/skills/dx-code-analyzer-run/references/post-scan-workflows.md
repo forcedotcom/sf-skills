@@ -82,7 +82,7 @@ When `--summary` is used, the `violations` array is omitted.
 
 Present query results using the same format as Step 5, but with a header indicating the active filter:
 
-```text
+```
 ## Filtered Results: [description of filter]
 
 **X matches** out of Y total violations.
@@ -192,7 +192,7 @@ node "<skill_dir>/scripts/describe-rule.js" "OperationWithLimitsInLoop"
 
 **For a successful lookup**, present:
 
-```text
+```
 ## Rule: ApexCRUDViolation
 
 | Property | Value |
@@ -219,7 +219,7 @@ Want me to show all violations of this rule in your scan results?
 
 **For multiple matches**, present:
 
-```text
+```
 I found multiple rules matching "CRUD":
 
 | # | Rule | Engine | Severity |
@@ -232,7 +232,7 @@ Which rule would you like details on?
 
 **For not found**, present:
 
-```text
+```
 I couldn't find a rule named "FakeRule". Would you like me to:
 - Search for similar rules? (I'll grep the full rule list)
 - List all rules for a specific engine or category?
@@ -253,7 +253,7 @@ Offer next steps:
 
 Present available rules in this format:
 
-```text
+```
 ## Available Rules: Security
 
 **Found X rules** across Y engines.

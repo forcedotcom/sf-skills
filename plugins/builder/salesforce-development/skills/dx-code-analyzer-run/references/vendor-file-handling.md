@@ -123,7 +123,7 @@ UMD/AMD/CommonJS wrapper       → 70% vendor
 
 ### Final Score
 
-```text
+```
 Weighted Score = (PathScore × 0.3) + (NameScore × 0.3) + (ContentScore × 0.4)
 
 > 70% = Vendor file
@@ -133,7 +133,7 @@ Weighted Score = (PathScore × 0.3) + (NameScore × 0.3) + (ContentScore × 0.4)
 
 ## Example Output
 
-```text
+```
 === INTELLIGENT VENDOR FILE DETECTION ===
 
 Original violations: 9714

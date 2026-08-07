@@ -2,6 +2,17 @@
 name: experience-ui-bundle-salesforce-data-access
 description: "MUST activate when a uiBundles/*/src/ project does ANY Salesforce record operation — reading, creating, updating, deleting, or caching/refreshing query results. Triggers: code importing @salesforce/platform-sdk, calls to sdk.graphql.query / sdk.graphql.mutate / sdk.fetch, *.graphql files, stale data needing a force-refresh, or wiring up a UI bundle's data layer to read, write, or refresh Salesforce records. The default for new read/write work is the Read/Write workflow with the current @salesforce/platform-sdk API; only follow the migration path when EXISTING code already uses the old @salesforce/sdk-data callable form. Not for building app shell/UI, styling, file upload, or auth/search scaffolding — use the other ui-bundle-* skills. DO NOT TRIGGER when: OAuth setup, schema changes, Bulk/Tooling/Metadata API, or declarative automation."
 metadata:
+  cliTools:
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["npm"]
+      semver: ">=9.0.0"
+    - tool: ["npx"]
+      semver: ">=9.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "platform-metadata-deploy"
   version: "2.1"
 ---
 

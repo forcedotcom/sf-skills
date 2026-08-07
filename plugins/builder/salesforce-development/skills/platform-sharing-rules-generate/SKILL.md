@@ -3,7 +3,7 @@ name: platform-sharing-rules-generate
 description: "Use this skill when users need to create, edit, delete, or manage Salesforce Sharing Rules metadata. TRIGGER when: users mention sharing rules, record sharing, criteria-based sharing, role-based sharing, guest user sharing, sharingRules, sharingCriteriaRules, sharingGuestRules, sharingOwnerRules, .sharingRules-meta.xml files, or ask to share records with specific roles or groups. Also trigger when users want to modify or remove existing sharing rules, or update sharing rule criteria or access levels. DO NOT TRIGGER when user needs permission sets or profiles (use platform-permission-set-generate), or needs object-level security rather than record-level sharing (use platform-permission-set-generate)."
 metadata:
   version: "1.2"
-  minApiVersion: "51.0"
+  minApiVersion: "60.0"
   relatedSkills:
     - "platform-custom-object-generate"
     - "platform-permission-set-generate"

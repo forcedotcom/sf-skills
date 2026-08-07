@@ -3,7 +3,15 @@ name: commerce-b2b-open-code-components-integrate
 description: "Integrate Salesforce B2B Commerce open source components from GitHub into B2B Commerce stores. Use when users mention \"integrate open code components\", \"open source B2B commerce\", \"add open code components\", \"forcedotcom/b2b-commerce-open-source-components\", or want to add open source commerce components to their store. Copies all components and labels so they become available in Experience Builder."
 allowed-tools: Bash(git clone:*) Bash(cp:*) Read
 metadata:
+  cliTools:
+    - tool: ["git"]
+      semver: ">=2.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "commerce-b2b-store-create"
   version: "1.0"
+  minApiVersion: "56.0"
 ---
 
 ## When to Use This Skill

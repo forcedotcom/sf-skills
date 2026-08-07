@@ -3,6 +3,17 @@ name: data360-harmonize
 description: "Salesforce Data Cloud Harmonize phase. Use this skill when the user works with DMOs, mappings, relationships, identity resolution, unified profiles, data graphs, or universal IDs. TRIGGER when: user works with DMOs, mappings, relationships, identity resolution, unified profiles, data graphs, or universal IDs. DO NOT TRIGGER when: the task is only about streams/DLOs (use data360-prepare), segments/insights (use data360-segment), retrieval/search (use data360-query), or STDM/session tracing (use agentforce-observe)."
 compatibility: "Requires an external community sf data360 CLI plugin and a Data Cloud-enabled org"
 metadata:
+  cliTools:
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "agentforce-observe"
+    - "data360-orchestrate"
+    - "data360-prepare"
+    - "data360-query"
+    - "data360-segment"
   version: "1.0"
 ---
 

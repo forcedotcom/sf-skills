@@ -2,7 +2,16 @@
 name: integration-eventing-cdc-configure
 description: "Use to enable Salesforce Change Data Capture (CDC) on a standard or custom object, configure a custom event channel, set a filter expression, or add enrichment fields. TRIGGER broadly on any of: 'enable CDC', 'enable Change Data Capture', 'turn on CDC', 'subscribe X to change events', 'only emit events for', 'filter change events', 'enrich change events', 'create a custom event channel'; or any mention of CDC, change events, PlatformEventChannel, PlatformEventChannelMember, EnrichedField, ChangeEvents channel, enrichment fields, change event filter; or when the user wants a downstream system to receive Salesforce data changes; or when the user touches .platformEventChannelMember-meta.xml / .platformEventChannel-meta.xml files. SKIP when publishing platform events, Pub/Sub API or REST/SOAP (use integration-connectivity-generate), or ManagedEventSubscription (out of scope for CDC). Always use this skill for CDC channel-membership metadata."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "integration-connectivity-generate"
+    - "platform-custom-field-generate"
+    - "platform-custom-object-generate"
+    - "platform-permission-set-generate"
   version: "1.0"
+  minApiVersion: "60.0"
 ---
 
 # Managing Change Data Capture Enablement

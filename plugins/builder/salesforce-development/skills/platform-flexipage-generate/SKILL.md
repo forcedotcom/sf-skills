@@ -4,16 +4,12 @@ description: "Use this skill when users need to create, generate, modify, or val
 allowed-tools: Bash Read Write
 metadata:
   version: "1.1"
-  minApiVersion: "51.0"
+  minApiVersion: "60.0"
   cliTools:
     - tool: ["python3"]
       semver: ">=3.10.0"
     - tool: ["sf"]
       semver: ">=2.126.4"
-  mcpTools:
-    metadata-experts:
-      tools: ["execute_metadata_action"]
-      semver: ">=1.0.0"
 ---
 
 ## When to Use This Skill

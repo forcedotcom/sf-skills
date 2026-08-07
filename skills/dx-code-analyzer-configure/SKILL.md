@@ -7,18 +7,18 @@ metadata:
     - "dx-code-analyzer-run"
     - "dx-code-analyzer-custom-rule-create"
   cliTools:
-    - tool: ["sf"]
-      semver: ">=2.0.0"
+    - tool: ["curl"]
+      semver: ">=7.0.0"
     - tool: ["java"]
       semver: ">=11.0.0"
     - tool: ["node"]
       semver: ">=18.0.0"
-    - tool: ["python3"]
-      semver: ">=3.10.0"
-    - tool: ["git"]
-      semver: ">=2.0.0"
     - tool: ["npm"]
       semver: ">=9.0.0"
+    - tool: ["python3"]
+      semver: ">=3.10.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # Configuring Code Analyzer Skill

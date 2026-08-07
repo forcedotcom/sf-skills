@@ -2,6 +2,13 @@
 name: dx-devops-test-pipeline-configure
 description: "Configures DevOps Center pipeline testing infrastructure: enables a test provider so its suites become available, re-syncs a configured provider to pull in new suites, or creates a quality gate with rules on a stage. Routes by intent across three modes after running shared prerequisite checks and an explicit confirmation gate. Use this skill when a user wants to set up, configure, enable, sync, or refresh a test provider, or set/configure a quality gate or coverage threshold on a DevOps Center pipeline stage. TRIGGER when: the user wants to configure/enable/add/set up a test provider, re-sync or refresh a provider's suite list, pull in new suites, or set/configure a quality gate, coverage threshold, or testing benchmark on a stage. DO NOT TRIGGER when: assigning existing suites to a stage (use dx-devops-test-suite-assignments-configure), running or retriggering a suite (use dx-devops-test-suite-run), or non-DevOps-Center work."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.67.0"
+  relatedSkills:
+    - "dx-devops-test-failures-analyze"
+    - "dx-devops-test-suite-assignments-configure"
+    - "dx-devops-test-suite-run"
   version: "1.0"
   minApiVersion: "67.0"
 ---

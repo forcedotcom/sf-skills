@@ -1,6 +1,6 @@
 --- a/SKILL.md
 +++ b/SKILL.md
-@@ -1,11 +1,31 @@
+@@ -1,12 +1,32 @@
  ---
  name: platform-apex-generate
  description: "Primary Apex authoring skill for class generation, refactoring, and review. ALWAYS ACTIVATE when the user mentions Apex, .cls, triggers, or asks to create/refactor a class (service, selector, domain, batch, queueable, schedulable, invocable, DTO, utility, interface, abstract, exception, REST resource). Use this skill for requests involving SObject CRUD, mapping collections, fetching related records, scheduled jobs, batch jobs, trigger design, @AuraEnabled controllers, @RestResource endpoints, custom REST APIs, or code review of existing Apex."
@@ -11,8 +11,9 @@
 +  mcp__plugin_salesforce-development_salesforce-lsp__apex_documentSymbol
 +  mcp__plugin_salesforce-development_salesforce-lsp__refresh_org_schema
  metadata:
-   version: "1.0"
-   minApiVersion: "66.0"
+   cliTools:
+     - tool: ["sf"]
+       semver: ">=2.0.0"
    relatedSkills:
      - "platform-apex-test-generate"
 +  mcpTools:
@@ -29,9 +30,9 @@
 +        - apex.documentSymbol
 +        - refresh_org_schema
 +      semver: ">=0.1.0"
-   cliTools:
-     - tool: ["sf"]
-       semver: ">=2.0.0"
+   version: "1.0"
+   minApiVersion: "66.0"
+ ---
 @@ -46,6 +66,7 @@
     - Service-Selector-Domain layering, logging utilities
     - Existing classes/triggers and current trigger framework or handler pattern

@@ -2,6 +2,13 @@
 name: data360-schema-get
 description: "Retrieve Data Lake Object (DLO) and Data Model Object (DMO) schema information from Salesforce Data Cloud using REST APIs. Use this skill when you need to inspect DLO or DMO field definitions, data types, or metadata. Takes org alias and optional DLO/DMO name as parameters."
 metadata:
+  cliTools:
+    - tool: ["pip"]
+      semver: ">=23.0.0"
+    - tool: ["python3"]
+      semver: ">=3.10.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
   version: "1.0"
 ---
 

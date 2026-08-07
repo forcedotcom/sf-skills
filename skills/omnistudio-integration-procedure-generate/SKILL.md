@@ -2,7 +2,18 @@
 name: omnistudio-integration-procedure-generate
 description: "OmniStudio Integration Procedure creation and validation with 110-point scoring. Use this skill when building server-side process orchestrations that combine Data Mapper actions, Apex Remote Actions, HTTP callouts, and conditional logic. TRIGGER when: user creates Integration Procedures, adds Data Mapper steps, configures Remote Actions, or reviews existing IP configurations. DO NOT TRIGGER when: building OmniScripts (use omnistudio-omniscript-generate), creating Data Mappers directly (use omnistudio-datamapper-generate), or analyzing cross-component dependencies (use omnistudio-dependencies-analyze)."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "omnistudio-datamapper-generate"
+    - "omnistudio-dependencies-analyze"
+    - "omnistudio-flexcard-generate"
+    - "omnistudio-omniscript-generate"
+    - "platform-apex-generate"
+    - "platform-metadata-deploy"
   version: "1.0"
+  minApiVersion: "60.0"
 ---
 
 # omnistudio-integration-procedure-generate: OmniStudio Integration Procedure Creation and Validation

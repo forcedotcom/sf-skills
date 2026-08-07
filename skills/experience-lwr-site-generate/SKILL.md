@@ -3,7 +3,7 @@ name: experience-lwr-site-generate
 description: "Creates, modifies, or manages Salesforce Experience Cloud LWR sites via DigitalExperience metadata. Always trigger when the tasks involve LWR sites configurations, e.g. creating/modifying pages/routes/views/theme layouts/branding sets, previewing sites, or creating/modifying guest sharing rule (metadata type sharingGuestRules)/guest user access/sharing records to guest users, or when user provides a guest user ID (15 or 18 characters starting with 005). NEVER trigger for React or any other ui bundle framework. LWR sites ONLY."
 metadata:
   version: "1.0"
-  minApiVersion: "51.0"
+  minApiVersion: "56.0"
   cliTools:
     - tool: ["node"]
       semver: ">=18.0.0"

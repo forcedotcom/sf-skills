@@ -2,6 +2,13 @@
 name: integration-eventing-subscription-configure
 description: "Create, read, update, and delete ManagedEventSubscription metadata in Salesforce. Use this skill for any work involving managed event subscriptions, platform event subscriptions, event channel subscribers, or .managedEventSubscription-meta.xml files. TRIGGER when: user asks to subscribe to a platform event, create a managed subscription, set up event replay, configure an event channel subscriber, update replay preset, activate or deactivate a subscription, delete a subscription, or manage ManagedEventSubscription metadata. SKIP when: user needs to create the platform event channel itself (use platform-custom-object-generate skill) or needs Flow-based event subscriptions (use automation-flow-generate skill)."
 metadata:
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "automation-flow-generate"
+    - "platform-custom-object-generate"
+    - "platform-metadata-deploy"
   version: "1.0"
 ---
 

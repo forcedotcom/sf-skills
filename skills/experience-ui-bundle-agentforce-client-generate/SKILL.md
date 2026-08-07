@@ -3,8 +3,11 @@ name: experience-ui-bundle-agentforce-client-generate
 description: "Use this skill when the user asks to add, embed, integrate, configure, style, or remove an agent, chatbot, chat widget, conversation client, or AI assistant in a UI Bundle project. TRIGGER when: project contains a uiBundles/*/src/ directory and the task involves adding or modifying a chat widget, chatbot, or conversational AI; files under uiBundles/*/src/ import AgentforceConversationClient; user asks to add any chat or agent functionality to a page. DO NOT TRIGGER when: user wants to create a custom agent, chatbot, or chat widget component from scratch; the project has no uiBundles directory."
 metadata:
   version: "1.1"
-  package: "@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client"
-  sdk-package: "@salesforce/agentforce-conversation-client"
+  cliTools:
+    - tool: ["npm"]
+      semver: ">=9.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # Managing Agentforce Conversation Client

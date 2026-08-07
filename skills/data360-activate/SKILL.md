@@ -3,6 +3,18 @@ name: data360-activate
 description: "Salesforce Data Cloud Act phase. Use this skill when the user manages activations, activation targets, data actions, or downstream delivery of Data Cloud audiences and data. TRIGGER when: user manages activations, activation targets, data actions, or downstream delivery of Data Cloud audiences and data. DO NOT TRIGGER when: the task is segment creation (use data360-segment), data retrieval/search work (use data360-query), or STDM/session tracing (use agentforce-observe)."
 compatibility: "Requires an external community sf data360 CLI plugin and a Data Cloud-enabled org"
 metadata:
+  cliTools:
+    - tool: ["node"]
+      semver: ">=18.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
+  relatedSkills:
+    - "agentforce-observe"
+    - "data360-connect"
+    - "data360-orchestrate"
+    - "data360-prepare"
+    - "data360-query"
+    - "data360-segment"
   version: "1.0"
 ---
 

@@ -2,7 +2,21 @@
 name: omnistudio-callable-apex-generate
 description: "Salesforce Industries Common Core (OmniStudio/Vlocity) Apex callable generation and review skill with 120-point scoring. Use when creating, reviewing, or migrating Industries callable Apex implementations. TRIGGER when: user creates or reviews System.Callable classes, migrates VlocityOpenInterface or VlocityOpenInterface2, or builds Industries callable extensions used by OmniStudio, Integration Procedures, or DataRaptors. DO NOT TRIGGER when: generic Apex classes or triggers (use platform-apex-generate), building Integration Procedures (use omnistudio-integration-procedure-generate), authoring OmniScripts (use omnistudio-omniscript-generate), configuring Data Mappers (use omnistudio-datamapper-generate), or analyzing namespace/dependency issues (use omnistudio-dependencies-analyze)."
 metadata:
+  relatedSkills:
+    - "external-diagram-mermaid-generate"
+    - "omnistudio-datamapper-generate"
+    - "omnistudio-dependencies-analyze"
+    - "omnistudio-integration-procedure-generate"
+    - "omnistudio-omniscript-generate"
+    - "platform-apex-generate"
+    - "platform-apex-test-run"
+    - "platform-custom-field-generate"
+    - "platform-custom-object-generate"
+    - "platform-data-manage"
+    - "platform-metadata-deploy"
+    - "platform-soql-query"
   version: "1.0"
+  minApiVersion: "60.0"
 ---
 
 # omnistudio-callable-apex-generate: Callable Apex for Salesforce Industries Common Core

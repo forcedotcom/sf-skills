@@ -3,6 +3,9 @@ name: agentforce-test
 description: "Write, run, and analyze structured test suites for Agentforce agents — functional AND security. TRIGGER when: user writes or modifies test spec YAML (AiEvaluationDefinition); runs sf agent test create, run, run-eval, or results commands; asks about test coverage strategy, metric selection, or custom evaluations; interprets test results or diagnoses test failures; asks about batch testing, regression suites, or CI/CD test integration; requests security testing, OWASP LLM Top 10, red-teaming, penetration testing, prompt-injection tests, a security grade, or a vulnerability assessment of an agent. DO NOT TRIGGER when: user creates, modifies, previews, or debugs .agent files (use agentforce-generate); deploys or publishes agents; writes Agent Script code; uses sf agent preview for development iteration; analyzes production session traces (use agentforce-observe); performs a static safety review of .agent file content (use agentforce-generate Section 15)."
 allowed-tools: Bash Read Write Edit Glob Grep
 metadata:
+  relatedSkills:
+    - "agentforce-generate"
+    - "agentforce-observe"
   version: "0.8"
   cliTools:
     - tool: ["curl"]
