@@ -186,7 +186,8 @@ Local Dev commands install just-in-time on first run. They are long-running proc
 - [assets/jest-test/componentName.test.js.example](assets/jest-test/componentName.test.js.example) — Jest test template (copy and rename, remove `.example` suffix)
 - [assets/message-channel/lmsPublisher.js](assets/message-channel/lmsPublisher.js) — LMS publisher pattern
 - [assets/message-channel/lmsSubscriber.js](assets/message-channel/lmsSubscriber.js) — LMS subscriber pattern
-- [assets/modal-component/modalComponent.js](assets/modal-component/modalComponent.js) — modal with focus trap and ESC handling
+- [assets/native-modal-component/nativeModalComponent.js](assets/native-modal-component/nativeModalComponent.js) — default modal pattern using the native `lightning/modal` service
+- [assets/modal-component/modalComponent.js](assets/modal-component/modalComponent.js) — custom composable modal (focus trap, ESC handling); only for cases `lightning/modal` can't cover
 - [assets/record-picker/recordPicker.js](assets/record-picker/recordPicker.js) — record picker with search
 - [assets/state-store/store.js](assets/state-store/store.js) — reactive state store for cross-component state
 - [assets/typescript-component/typescriptComponent.ts](assets/typescript-component/typescriptComponent.ts) — TypeScript-enabled component (Spring '26)
