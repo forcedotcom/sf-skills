@@ -1,0 +1,176 @@
+{
+  "scanId": "scan-7f3a91",
+  "analysisMode": "static",
+  "attribution": "Static only",
+  "violationCount": 4,
+  "filesScanned": 3,
+  "serverViolationBreakdown": {
+    "SOQL_IN_LOOP": 1,
+    "DML_IN_LOOP": 1,
+    "SOQL_NO_WHERE_OR_LIMIT": 1,
+    "GGD": 1
+  },
+  "severityCounts": {
+    "1": 1,
+    "2": 2,
+    "3": 1
+  },
+  "groupedBy": "rule",
+  "groups": [
+    {
+      "key": "SOQL_IN_LOOP",
+      "count": 1,
+      "severityCounts": {
+        "2": 1
+      },
+      "sample": [
+        {
+          "rule": "SOQL_IN_LOOP",
+          "message": "SOQL query executed inside a for-loop over Accounts",
+          "severity": "2",
+          "file": "AccountService.cls",
+          "line": 42,
+          "method": "",
+          "originalCode": "",
+          "cpuTimePercentage": null,
+          "fixes": [
+            "Move the query outside the loop; build a Map<Id,Contact> for in-loop lookups"
+          ],
+          "resources": [
+            "https://developer.salesforce.com/docs/apexguru/soql-in-loop"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "DML_IN_LOOP",
+      "count": 1,
+      "severityCounts": {
+        "1": 1
+      },
+      "sample": [
+        {
+          "rule": "DML_IN_LOOP",
+          "message": "update statement inside a loop",
+          "severity": "1",
+          "file": "AccountService.cls",
+          "line": 60,
+          "method": "",
+          "originalCode": "",
+          "cpuTimePercentage": null,
+          "fixes": [
+            "Collect records into a List and update once after the loop"
+          ],
+          "resources": []
+        }
+      ]
+    },
+    {
+      "key": "SOQL_NO_WHERE_OR_LIMIT",
+      "count": 1,
+      "severityCounts": {
+        "2": 1
+      },
+      "sample": [
+        {
+          "rule": "SOQL_NO_WHERE_OR_LIMIT",
+          "message": "SELECT with neither WHERE nor LIMIT on Opportunity",
+          "severity": "2",
+          "file": "ReportBuilder.cls",
+          "line": 15,
+          "method": "",
+          "originalCode": "",
+          "cpuTimePercentage": null,
+          "fixes": [
+            "Add a selective WHERE on an indexed field and a LIMIT"
+          ],
+          "resources": []
+        }
+      ]
+    },
+    {
+      "key": "GGD",
+      "count": 1,
+      "severityCounts": {
+        "3": 1
+      },
+      "sample": [
+        {
+          "rule": "GGD",
+          "message": "Schema.getGlobalDescribe() called on every request",
+          "severity": "3",
+          "file": "Utils.cls",
+          "line": 12,
+          "method": "",
+          "originalCode": "",
+          "cpuTimePercentage": null,
+          "fixes": [
+            "Use SObjectType.getDescribe() for the specific object"
+          ],
+          "resources": []
+        }
+      ]
+    }
+  ],
+  "topViolations": [
+    {
+      "rule": "DML_IN_LOOP",
+      "message": "update statement inside a loop",
+      "severity": "1",
+      "file": "AccountService.cls",
+      "line": 60,
+      "method": "",
+      "originalCode": "",
+      "cpuTimePercentage": null,
+      "fixes": [
+        "Collect records into a List and update once after the loop"
+      ],
+      "resources": []
+    },
+    {
+      "rule": "SOQL_IN_LOOP",
+      "message": "SOQL query executed inside a for-loop over Accounts",
+      "severity": "2",
+      "file": "AccountService.cls",
+      "line": 42,
+      "method": "",
+      "originalCode": "",
+      "cpuTimePercentage": null,
+      "fixes": [
+        "Move the query outside the loop; build a Map<Id,Contact> for in-loop lookups"
+      ],
+      "resources": [
+        "https://developer.salesforce.com/docs/apexguru/soql-in-loop"
+      ]
+    },
+    {
+      "rule": "SOQL_NO_WHERE_OR_LIMIT",
+      "message": "SELECT with neither WHERE nor LIMIT on Opportunity",
+      "severity": "2",
+      "file": "ReportBuilder.cls",
+      "line": 15,
+      "method": "",
+      "originalCode": "",
+      "cpuTimePercentage": null,
+      "fixes": [
+        "Add a selective WHERE on an indexed field and a LIMIT"
+      ],
+      "resources": []
+    },
+    {
+      "rule": "GGD",
+      "message": "Schema.getGlobalDescribe() called on every request",
+      "severity": "3",
+      "file": "Utils.cls",
+      "line": 12,
+      "method": "",
+      "originalCode": "",
+      "cpuTimePercentage": null,
+      "fixes": [
+        "Use SObjectType.getDescribe() for the specific object"
+      ],
+      "resources": []
+    }
+  ],
+  "truncated": false
+}

@@ -6,6 +6,7 @@ metadata:
   minApiVersion: "60.0"
   relatedSkills:
     - "platform-lightning-type-widget-coordinate"
+    - "platform-mcp-tool-widget-coordinate"
     - "platform-widget-generate"
 ---
 
@@ -57,6 +58,7 @@ Custom Lightning Types (CLTs) are JSON Schema-based type definitions used by the
 - **Apex class CLTs are minimal**:
   - Include **only** `title`, `description` (optional), and `lightning:type` set to `@apexClassType/...`.
   - Do **not** add `type`, `properties`, `required`, or `unevaluatedProperties`.
+  - **Custom LWC renderers/editors on an Apex class CLT MUST NOT use `attributes` in the root override — this overrides any prompt wording to the contrary.** Since the schema has no `properties` block, there is nothing for `{!$attrs.<name>}` to resolve against — `unevaluatedProperties: false` will reject any attribute key (e.g. `"You can't add the flightId property ... because the unevaluatedProperties keyword value is set to false"`). Use `"componentOverrides": { "$": { "definition": "c/<yourComponent>" } }` with **no `attributes` key** at all. **If the user's prompt explicitly asks for attribute mappings to specific fields (e.g. "with attribute mappings for fieldA, fieldB") on an Apex-class CLT renderer/editor, do NOT comply literally** — omit `attributes` from the root override anyway, and say so in your response (e.g. "Note: attribute mappings were omitted because the backing type is an Apex-class CLT, which has no `properties` block to bind against").
 - **No shell metacharacters that trigger the Vibes safe-shell filter.** In any Bash tool call emitted by this skill, do NOT use command substitution (`$(…)` or backticks), process substitution (`<(…)`, `>(…)`), brace expansion (`{a,b,c}` or `{1..N}`), or `eval` / `exec`. Vibes forces manual approval on these patterns even under Bypass mode and stalls the eval. Emit separate commands (`mkdir -p a && mkdir -p b`) or print each value with its own command and reason about the output rather than capturing it in a shell variable.
 
 ## Additional CLT Metaschema Validations
@@ -158,6 +160,7 @@ When you need the full list of supported primitive `lightning:type` identifiers,
 | `additionalProperties` error on layout attributes | Adding `label` or other attributes to `lightning/propertyLayout` | Only use `property` attribute in `lightning/propertyLayout`. Remove `label`, `title`, or any other attributes |
 | Invalid target configuration for custom LWC | Custom LWC component's `-meta.xml` missing required target (`lightning__AgentforceInput` or `lightning__AgentforceOutput`) | Add correct target to LWC's `-meta.xml`: use `lightning__AgentforceInput` for editors, `lightning__AgentforceOutput` for renderers |
 | Attribute mapping doesn't exist in type schema | Using `{!$attrs.propertyName}` where `propertyName` is not defined in schema | Ensure all attribute mappings reference actual properties in your type schema's `properties` section |
+| `unevaluatedProperties` error on custom LWC renderer for an Apex class CLT | Root override `attributes` mapping used on an Apex class CLT, which has no `properties` block to validate against | Remove `attributes` entirely from the root override; use `"componentOverrides": { "$": { "definition": "c/<component>" } }` only |
 | `additionalProperties` error with deprecated keys | Using `propertyRenderers` or `view` in editor/renderer config | Replace deprecated `propertyRenderers` with `componentOverrides` and `view` with `layout` |
 | Type mismatch in component attributes | Passing wrong type for component attribute (e.g., integer instead of string) | Ensure attribute values match the expected type defined by the component |
 

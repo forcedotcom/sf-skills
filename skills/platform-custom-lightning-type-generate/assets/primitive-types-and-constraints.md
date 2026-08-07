@@ -38,4 +38,4 @@ When strict validation is enabled (`unevaluatedProperties: false`), keep each pr
 - `const`, `enum`
 - `lightning:textIndexed`, `lightning:supportsPersonalization`, `lightning:localizable`
 - `lightning:uiOptions`, `lightning:allowedUrlSchemes`
-- `lightning:tags` (metaschema restricts values; currently `flow` is the only known allowed tag)
+- `lightning:tags` (metaschema restricts values; known allowed tags are `flow` and `mcp` — use `mcp` on object-based CLTs that model an MCP-tool envelope/response, per `platform-mcp-tool-widget-coordinate`)

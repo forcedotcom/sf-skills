@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Post-Copy Automation Config",
+  "description": "Array of declarative post-copy actions consumed by the Salesforce post-copy automation tool.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "ConfigurationName",
+      "Label",
+      "Fields",
+      "IsActive",
+      "ExecutionOrder"
+    ],
+    "allOf": [
+      {
+        "if": {
+          "properties": { "ConfigurationName": { "const": "RemoteSiteSettings" } }
+        },
+        "then": {
+          "properties": {
+            "Fields": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["RemoteSiteUrl"],
+              "properties": {
+                "RemoteSiteUrl": {
+                  "description": "The exact API field name for a Remote Site Setting URL. Must be spelled RemoteSiteUrl — Url, RemoteSiteURL, SiteUrl, and EndpointUrl are all invalid.",
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": { "ConfigurationName": { "const": "OutboundMessages" } }
+        },
+        "then": {
+          "properties": {
+            "Fields": {
+              "type": "object",
+              "required": ["Object"],
+              "anyOf": [
+                { "type": "object", "required": ["EndpointUrl"] },
+                { "type": "object", "required": ["Action"] }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "properties": {
+      "ConfigurationName": {
+        "description": "Salesforce configuration / metadata type. Must be one of the values listed in references/configuration_catalog.md.",
+        "type": "string",
+        "enum": [
+          "OutboundMessages",
+          "RemoteSiteSettings"
+        ]
+      },
+      "Label": {
+        "description": "The metadata Label or DeveloperName of the specific record being updated, exactly as it appears in the SOP.",
+        "type": "string",
+        "minLength": 1
+      },
+      "Fields": {
+        "description": "Map of API field name -> concrete value taken verbatim from the SOP. Do not include fields that are duplicated by Label (RemoteSiteName) or by the top-level IsActive flag.",
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": {
+          "type": ["string", "number", "boolean"]
+        },
+        "$comment": "Per-ConfigurationName key constraints are enforced by the allOf/if-then blocks above."
+      },
+      "IsActive": {
+        "description": "Whether the post-copy tool should execute this action. Default true.",
+        "type": "boolean"
+      },
+      "ExecutionOrder": {
+        "description": "Phase number. Entries with no dependency on each other share the same value and run in parallel; lower numbers run before higher.",
+        "type": "integer",
+        "minimum": 1
+      }
+    }
+  }
+}
